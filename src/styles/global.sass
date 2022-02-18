@@ -1,0 +1,1070 @@
+@import tailwind-variables
+@import "variables"
+@import "layout"
+
+$searchProductTop: 166px
+
+// namapovane na -> https://tailwindcss.com/docs/font-weight
+// font-thin
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 100
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-Thin.ttf') format('truetype')
+// font-extralight
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 200
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-ExtraLight.ttf') format('truetype')
+// font-light
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 300
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-Light.ttf') format('truetype')
+// font-normal
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 400
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-Regular.ttf') format('truetype')
+// font-medium
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 500
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-Medium.ttf') format('truetype')
+// font-semibold
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 600
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-SemiBold.ttf') format('truetype')
+// font-bold
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 700
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-Bold.ttf') format('truetype')
+// font-extrabold
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 800
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-ExtraBold.ttf') format('truetype')
+// font-black
+@font-face
+	font-family: 'PublicSans'
+	font-weight: 900
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-Black.ttf') format('truetype')
+
+@font-face
+	font-family: 'PublicSans'
+	font-weight: normal
+	src: local('PublicSans'), url('../assets/fonts/PublicSans-Regular.ttf') format('truetype')
+
+*
+	font-family: $font-family
+	font-feature-settings: normal!important
+	font-variant: normal!important
+
+html
+	scroll-behavior: smooth
+
+body
+	color: $textColor-gray-600
+	background: $backgroundColor-gray-50
+
+*:focus-visible
+	outline-color: $borderColor-blue-600
+	transition-property: outline-color
+	transition-duration: 0s
+
+.ant-layout
+	background: $backgroundColor-gray-50
+
+.ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover
+	color: $textColor-gray-600
+// Headings
+h2
+	font-size: 32px
+	font-weight: 700
+	color: $textColor-gray-900
+h3
+	font-size: 24px
+	font-weight: 700
+	color: $textColor-gray-900
+h4
+	font-size: 18px
+	font-weight: 700
+	color: $textColor-gray-900
+
+// Matus v Designe vo vacsine pripadov pouziva zmensenu formu ikony vo velkosti 16x16, tak staci aplikovat tuto pomocnu classku na <Ikona className={'small-icon'} />
+.small-icon
+	width: 16px
+	height: 16px
+.big-icon
+	width: 32px
+	height: 32px
+.text-bottom
+	display: inline-block
+	align-self: flex-end
+.hover-icon
+	filter: grayscale(100%)
+
+.hide
+	display: none !important
+
+.show
+	display: block !important
+
+.disabled-icon
+	filter: grayscale(100%)
+	opacity: .3
+.disabled-row
+	height: 50px
+	pointer-events: none
+	td
+		opacity: .4
+		background: $backgroundColor-gray-50 !important
+.disabled-state
+	pointer-events: none
+	position: relative
+	.ant-table-column-title // pre tabulky extra classa ktora niekedy neprebila title v tabulakch tymto disabled statom
+		color: $textColor-gray-900
+		opacity: .6
+	&:after
+		content: ''
+		background: $backgroundColor-gray-50
+		position: absolute
+		width: 100%
+		top: 0
+		opacity: .4
+		height: 100%
+
+.loading-spinner
+	animation: rotate 1.5s linear infinite
+	position: relative
+	background: transparent !important
+
+@keyframes rotate
+	to
+		transform: rotate(360deg)
+
+.ant-picker-dropdown
+	.ant-picker-cell-inner
+		text-align: center
+.ant-select-dropdown, .ant-picker-dropdown
+	z-index: $z-index-field-dropdown
+.horizontal-top-divider
+	border-top: 1px solid $borderColor-gray-200
+.horizontal-left-divider
+	border-left: 1px solid $borderColor-gray-200
+.horizontal-right-divider
+	border-right: 1px solid $borderColor-gray-200
+.vertical-divider
+	width: 100%
+	margin-bottom: 6px
+	margin-top: 6px
+	border-bottom: 1px solid $borderColor-gray-200
+.vertical-divider-px
+	width: 100%
+	height: 1px
+	background-color: $borderColor-gray-200
+.horizontal-divider
+	margin-left: 4px
+	margin-right: 4px
+	height: 60%
+	border-left: 1px solid $borderColor-gray-200
+.vertical-divider-lg
+	margin-bottom: 32px
+	margin-top: 32px
+	border-bottom: 1px solid $borderColor-gray-200
+
+.my-handle
+	cursor: move
+	cursor: -webkit-grabbing
+
+.ant-tabs-nav-add
+	position: relative
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left
+	border-right: 0
+
+.ant-menu-submenu.ant-menu-submenu-horizontal.ant-menu-submenu-selected
+	background-color: $textColor-primary
+	color: $textColor-white
+
+.tp-badge .ant-badge-count
+	display: flex
+	justify-content: center
+	background-color: $backgroundColor-gray-100
+	color: $textColor-gray-900
+	z-index: $zIndex-10
+.ant-radio-button-wrapper
+	// NOTE: important because of badge compoennt
+	border-left: 1px solid #d9d9d9 !important
+.readOnly
+	cursor: not-allowed
+	.tp-select-input,
+	.tp-input,
+	.tp-textarea,
+	.tp-date-input,
+	.tp-input-number
+		pointer-events: none
+.clickable-row
+	cursor: pointer
+	&:hover
+		transition: all 300ms linear
+		background: #FAFAFA
+.disabled-counter
+	// NOTE: importanty kvoli tomuz e tailwind prebija hover a cursor nastaveny v Counter komonente
+	background-color: $backgroundColor-gray-100
+	color: $textColor-gray-600
+	cursor: not-allowed !important
+	&:hover
+		background-color: $backgroundColor-gray-100 !important
+
+.ant-list-item-meta-description
+	font-size: 12px
+	color: $backgroundColor-gray-800
+
+.ant-list-item-meta
+	display: flex
+	align-items: center
+
+.stepper-wrapper
+	background: $textColor-white
+	height: 100%
+	position: relative
+	padding: 24px
+	.stepper-title
+		margin-bottom: 45px
+		&::after
+			content: ''
+			position: absolute
+			top: 73px
+			left: 50%
+			transform: translateX(-50%)
+			width: 100%
+			height: 1px
+			background-color: $textColor-gray-600
+.shadow-footer
+	box-shadow: 0px -16px 64px rgba(0, 0, 0, 0.06), 0px -12px 24px rgba(0, 0, 0, 0.04), 0px -6px 8px rgba(0, 0, 0, 0.02)
+.shadow-header
+	z-index: 5
+	box-shadow: 0px 16px 64px rgba(0, 0, 0, 0.06), 0px 12px 24px rgba(0, 0, 0, 0.04), 0px 6px 8px rgba(0, 0, 0, 0.02), inset 0px 1px 0px #E5E7EB
+
+.info-icon
+	height: 20px
+	font-size: 16px
+	margin-top: 7px
+	color: $textColor-primary
+
+.ant-steps-item-container
+	margin-bottom: 26px
+
+.ant-steps-vertical > .ant-steps-item > .ant-steps-item-container > .ant-steps-item-tail
+	height: 70px
+
+.ant-tag
+	min-width: 95px
+	text-align: center
+	padding: 3px
+
+.ant-tag.tag-rounded
+	display: flex
+	align-items: center
+	margin-right: 1px
+	margin-top: 1px
+	padding: 1px 8px
+	border-style: solid
+	border-radius: 16px
+	background: $textColor-gray-100
+	border-color: $textColor-gray-100
+	color: $textColor-gray-600
+	min-width: min-content
+	.ant-divider
+		margin: 0 4px
+		border-color: $textColor-gray-200
+	img
+		padding-bottom: 1px
+		filter: grayscale(100%)
+		opacity: .6
+.ant-tag.tag-rounded:hover
+	background: $textColor-gray-200
+	border-color: $textColor-gray-200
+	.ant-divider
+		border-color: $textColor-gray-300
+	img
+		filter: initial
+		opacity: 1
+
+.ant-tabs-nav-add
+	width: 40px
+	height: 50px
+
+.icon-size-20
+	font-size: 20px
+
+.center
+	margin: 0 auto
+
+.icon-size-25
+	font-size: 20px
+h4.ant-typography
+	margin-bottom: 0
+	font-size: 16px
+.flex-wrap
+	display: flex
+	flex-wrap: wrap
+
+.flex-center-align-left
+	height: 100%
+	display: flex
+	align-items: center
+	justify-content: left
+
+.hover-transition
+	transition: all 200ms linear
+	&:hover
+		transition: all 300ms linear
+		transform: scale(1.2)
+
+.small-input.ant-input,
+.small-input .ant-input-number-input
+	padding: 0 2px
+	height: 25px
+	font-size: 12px
+	margin: 0
+.ant-list-item-action
+	display: flex
+	align-items: center
+
+.rotate-180
+	transform: rotate(180deg)
+// Wrapper ak sa k suborom pristupuje z obrazovky galerii (destinacie, ubyt. zariadenie, sluzby)
+.gallery-wrapper
+	.folders-wrapper
+		height: calc(100vh - 374px)
+	.files-wrapper
+		height: calc(100vh - 519px)
+	.images-wrapper
+		height: calc(100vh - 380px)
+	.ant-tabs-tab
+		margin-bottom: 20px
+		font-size: 14px
+		color: $textColor-gray-600
+	.ant-tabs-nav
+		height: 48px
+		margin-bottom: 20px
+
+.file-title
+	height: 32px
+	display: flex
+	justify-content: space-between
+	align-items: center
+.list-buttons
+	display: flex
+	align-items: center
+	justify-content: space-between
+	width: 75px
+	.active
+		font-size: 28px
+.ant-list-item
+	&:hover
+		background: #FAFAFA
+.file
+	width: 133px
+	margin: 10px
+	padding: 5px
+	&:hover
+		cursor: pointer
+		background: $textColor-gray-600
+
+.ant-select-clear
+	background: none
+
+.folders-wrapper
+	border: 1px solid $textColor-gray-200
+	height: calc(100vh - 319px)
+	border-radius: 4px
+	overflow: auto
+	position: relative
+	padding: 8px
+	background-color: $backgroundColor-gray-50
+	.empty-folders
+		position: absolute
+		width: 100%
+		top: calc(50% - 130px)
+.files-wrapper
+	padding: 8px
+	border: 1px solid $textColor-gray-200
+	border-radius: 4px
+	height: calc(100vh - 464px)
+	overflow: auto
+	background-color: $backgroundColor-gray-50
+	position: relative
+
+.files-search-wrapper
+	border: 1px solid $textColor-gray-200
+	height: 100%
+	border-radius: 4px
+	background-color: $backgroundColor-gray-50
+	overflow: auto
+	position: relative
+	.empty-files
+		position: absolute
+		width: 100%
+		top: calc(50% - 70px)
+
+.address-name-width
+	width: calc(100% - 30px)
+
+#uploader > div
+	display: inline-block
+
+.images-wrapper
+	height: calc(100vh - 377px)
+	overflow: auto
+	position: relative
+	border-radius: 4px
+	border: 1px solid $borderColor-gray-200
+	background-color: $backgroundColor-gray-50
+	.placeholder
+		position: absolute
+		top: 50%
+		justify-content: center
+		width: 100%
+		.ant-typography
+			text-align: center
+		.anticon-drag
+			font-size: 70px
+			color: rgba(0, 0, 0, 0.45)
+
+.gallery
+	.total-images
+		height: 24px
+		line-height: 24px
+
+.files-component-wrapper
+	.ant-upload-picture-card-wrapper // horizontalny scroll
+		overflow: auto
+		background-color: $backgroundColor-gray-50
+		border-radius: 4px
+		border: 1px solid $textColor-gray-200
+	.ant-upload-list.ant-upload-list-picture-card
+		display: inline-flex
+		vertical-align: top
+	.ant-upload-select-picture-card
+		margin: 0
+		.ant-upload-list-picture-card-container
+			order: 2
+		.ant-upload-select
+			order: 1 // Uploader item na prvom mieste
+	// NOTE: disable hover on picture-card in Upload
+	.ant-upload-list-picture .ant-upload-list-item:hover, .ant-upload-list-picture-card .ant-upload-list-item:hover
+		.ant-upload-list-item-info::before
+			opacity: 0
+
+// antd descripotion
+.ant-descriptions-row
+	.ant-descriptions-item
+		padding-right: 7px
+
+.ant-tabs-nav
+	margin: 0
+
+.col-container
+	.ant-spin-nested-loading
+		height: 100%
+		.ant-spin
+			height: 100%
+	.ant-spin-container
+		height: 100%
+
+.files
+	flex-wrap: wrap
+
+.row-container
+	min-height: 110px
+.room-counter-item
+	&:first-child
+		margin-top: 0
+
+.thumbnails
+	position: relative
+	margin: 10px 10px 20px 10px
+	&.cursor-move
+		.ant-image-mask
+			cursor: move
+	.overlay
+		display: flex
+		border-radius: 4px
+		top: 0
+		left: 0
+		width: 100%
+		height: 100%
+		background: rgba(0, 0, 0, .7)
+		position: absolute
+		visibility: hidden
+		opacity: 0
+		z-index: 2
+		transition: all 300ms linear
+		&::after
+			content: ''
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translateX(-50%)
+			width: 80%
+			height: 1px
+			background-color: $backgroundColor-white
+		&::before
+			content: ''
+			position: absolute
+			top: 50%
+			left: 50%
+			transform: translateY(-50%)
+			height: 80%
+			width: 1px
+			background-color: $backgroundColor-white
+	.photo-item
+		width: 110px
+		height: 86px
+		img, .ant-image
+			border-radius: 4px
+			height: 100%
+			width: 100%
+			object-fit: cover
+			.ant-image-mask
+				border-radius: 4px
+			.ant-image-mask-info
+				display: none
+		.display-name
+			text-align: center
+			width: 100%
+	.unassing-icon
+		height: 24px
+		width: 24px
+		display: flex
+		justify-content: center
+		align-items: center
+		z-index: 5
+		right: -11px
+		top: -10px
+		border-radius: 50%
+		position: absolute
+		background: $backgroundColor-red-200
+		visibility: visible
+		opacity: 0
+		transition: all 300ms linear
+	.preview-icon
+		height: 24px
+		width: 24px
+		display: flex
+		justify-content: center
+		align-items: center
+		z-index: 5
+		right: -11px
+		top: 17px
+		border-radius: 50%
+		position: absolute
+		background: $backgroundColor-blue-200
+		visibility: visible
+		opacity: 0
+		transition: all 300ms linear
+	&:hover, &:focus, &:focus-within
+		.overlay, .unassing-icon, .preview-icon
+			opacity: 1
+			visibility: visible
+.ghost
+	.thumbnails
+		opacity: 0.6
+		position: relative
+		outline: 2px solid $borderColor-emerald-600
+.filtered
+	.thumbnails
+		opacity: 0.6
+		position: relative
+		outline: 2px solid $borderColor-red-600
+	.thumbnails
+		cursor: not-allowed
+// Components
+.breadcrumbs
+	margin: 10px 0 10px 0
+	width: 100%
+	.last
+		span
+			color: $textColor-gray-900 !important
+
+.suspense-loading-spinner
+	position: fixed
+	top: 0
+	left: 0
+	z-index: $z-index-spinner
+	background: $backgroundColor-gray-200
+	width: 100%
+	height: 100%
+	display: flex
+	justify-content: center
+	align-items: center
+// Pages
+.separator
+	border-right: 1px solid #d6d4d4 !important
+
+.ant-spin-blur
+	overflow: visible
+
+#header-container
+	position: fixed
+	z-index: $z-index-fixed-header
+	width: 100%
+// Fakovy checkbox kedze potrebujem simulovat onClick nad checkboxom a ten ho nema tak sa onClick bude robit nad tymto divkom
+.fake-checkbox
+	width: 24px
+	height: 24px
+	border: 1px solid #d9d9d9
+	border-radius: 4px
+	&:hover
+		border-color: $borderColor-gray-900
+.select-category
+	min-height: 280px
+	background-color: $backgroundColor-white
+	padding: 24px
+	border-radius: 4px
+	position: relative
+	box-shadow: 0px 16px 64px rgba(0, 0, 0, 0.06), 0px 12px 24px rgba(0, 0, 0, 0.04), 0px 6px 8px rgba(0, 0, 0, 0.02)
+	&.active
+		background-color: $backgroundColor-blue-600
+		.icon
+			color: $textColor-white
+		.title
+			color: $textColor-white
+		.price, .description
+			color: $textColor-blue-300
+	.icon
+		color: $textColor-blue-600
+	.price
+		color: $textColor-gray-600
+		font-size: 16px
+		font-weight: normal
+		width: 34%
+		text-align: right
+	.title
+		width: 64%
+		color: $textColor-gray-900
+		font-size: 16px
+		font-weight: 600
+	.description
+		width: 100%
+		margin-top: 10px
+		color: $textColor-gray-600
+		font-size: 14px
+		font-weight: normal
+	.additional-service-select
+		width: calc(100% - 48px)
+		position: absolute
+		bottom: 24px
+
+.ant-table-thead > tr > th
+	background-color: $textColor-white
+	color: $textColor-gray-900
+	font-weight: 500
+
+// NOTE: Ak v hlavičke jedna bunka pod seba groupuje jednu bunku odstráň border, ant s týmto prípadom nepočíta
+.ant-table-thead > tr:not(:last-child) > th:not([colspan])
+	border-bottom: 0
+
+.ant-table-column-sorters
+	padding: 0 0 0 5px
+
+.ant-table
+	thead
+		tr
+			th
+				height: 25px
+	th.ant-table-column-sort
+		background: none
+.margin-0
+	margin: 0
+.search-result-table
+	.ant-table-column-sorters
+		&:hover
+			.ant-table-column-title
+				color: $textColor-gray-900 !important
+
+	.ant-checkbox-inner
+		width: 24px
+		height: 24px
+	.ant-table-cell
+		&:before
+			content: none !important
+	table
+		border-spacing: 0 4px // TODO: tento spacing bude na kazdej tabulke ked bude kazda border less
+	.ant-table-row
+		border-radius: 4px
+		td:first-child
+			border-top-left-radius: 4px
+			border-bottom-left-radius: 4px
+		td:last-child
+			border-top-right-radius: 4px
+			border-bottom-right-radius: 4px
+	tr.ant-table-row-selected
+		border-radius: 4px
+		td:first-child
+			border-top-left-radius: 4px
+			border-bottom-left-radius: 4px
+		td:last-child
+			border-top-right-radius: 4px
+			border-bottom-right-radius: 4px
+		td
+			background: $backgroundColor-gray-100
+		&:hover
+			td
+				background: $backgroundColor-gray-100
+	.ant-table-tbody
+		tr.ant-table-row-selected
+			td
+				.template-name-title
+					span, svg
+						color: $textColor-blue-600
+
+	.ant-table-thead
+		font-weight: bold
+		color: $textColor-gray-900
+		tr
+			th
+				font-weight: 700
+				font-size: 12px
+				border-bottom: 1px solid $borderColor-gray-200
+			th.ant-table-column-has-sorters
+				&:hover
+					background: none
+	tr:hover
+		td:first-child, h5, path
+			color: $textColor-gray-900
+	// TODO: border pre td zrusit gloalne pre kazdu tabulku
+	tr
+		td
+			height: 35px
+			border: none
+		td:first-child, th:first-child
+			text-align: left!important
+	tr:not(.ant-table-row-selected)
+		td.ant-table-column-sort
+			background: none // zmaze sede pozadie ak ma sltpec sorter
+
+	.ant-table-row-selected
+		td:first-child, h5, path
+			color: $textColor-blue-600
+	.ant-table-thead th.ant-table-column-has-sorters
+		cursor: default
+	.ant-checkbox-inner
+		border-radius: 4px
+	.ant-checkbox-checked::after
+		border-radius: 4px
+	.ant-table-column-sorter
+		.ant-table-column-sorter-inner
+			display: none
+
+.ant-table-thead > tr > th,
+.ant-table-tbody > tr > td,
+.ant-table tfoot > tr > th,
+.ant-table tfoot > tr > td
+	padding: 6px
+
+// Riadok trasa v AIR / BUS zastavok
+td.ant-table-cell.track
+	.pin.last:after
+		content: none
+	.pin:after
+		content: ''
+		position: absolute
+		top: 14px
+		right: 5px
+		width: 1px
+		height: 31px
+		z-index: $z-index-five
+		border: 1px dashed $borderColor-gray-200
+
+.ant-table-row-dragging
+	background: $textColor-gray-200
+	border: 1px solid $textColor-gray-600
+	td
+		padding: 6px
+		visibility: hidden
+	.drag-visible:first-of-type
+		width: 32px
+	.drag-visible
+		visibility: visible
+
+.ant-select-dropdown
+	padding: 0px
+
+.user-header
+	color: #fff !important
+	width: 100%
+	margin: 4px 0 0 10px
+	font-size: 0.9rem
+	max-width: 210px
+
+.rc-virtual-list
+	overflow-y: auto
+
+.ant-collapse > .ant-collapse-item
+	border-bottom: none
+
+.room-index
+	display: flex
+	align-items: center
+	justify-content: center
+	width: 20px
+	height: 20px
+	color: $textColor-gray-600
+	font-size: 10px
+	border: 2px solid $borderColor-gray-600
+	border-radius: 999px
+.ghost-filters.ant-collapse > .ant-collapse-item.ant-collapse-no-arrow > .ant-collapse-header
+	padding: 0
+
+.ghost-filters.ant-collapse > .ant-collapse-item > .ant-collapse-header
+	cursor: default
+
+.ghost-filters .ant-collapse-content > .ant-collapse-content-box
+	padding-left: 0
+
+.ghost-filters.ant-collapse-ghost > .ant-collapse-item > .ant-collapse-content > .ant-collapse-content-box
+	padding: 0
+
+.text-description-row
+	flex-wrap: nowrap
+
+	.ant-col + .ant-col
+		margin-left: 8px
+
+.term-serial-section
+	.ant-collapse-header
+		display: inline-block
+
+.destinations-tree
+	&.ant-tree
+		.ant-tree-node-content-body
+			&.ant-tree-node-selected
+				background-color: $textColor-white
+				color: $textColor-primary
+			&.ant-tree-node-content-body-normal, &.ant-tree-node-content-body-open, &.ant-tree-node-content-body-close
+				&:hover
+					background-color: $textColor-white
+					color: $textColor-primary
+
+// NOTE: NOVY DESIGN -----------------------------------------
+.vertical
+	display: flex
+	flex-direction: column
+
+// multiselect
+.multiselect-dropdown-lg
+	top: 210px!important
+	border-radius: 0 0 4px 4px
+	.ant-select-item
+		&.ant-select-item-group:first-child
+			min-height: 0
+			background: white
+			border-style: solid
+			border-width: 0
+			border-top-width: 4px
+			border-color: white
+		&.ant-select-item-group
+			box-sizing: content-box
+			min-height: 1px
+			margin-left: 8px
+			margin-right: 8px
+			padding: 0
+			background: $textColor-gray-200
+			opacity: .5
+			border-style: solid
+			border-width: 0
+			border-top-width: 8px
+			border-bottom-width: 4px
+			border-color: white
+		&.ant-select-item-option
+			height: 16px !important
+			border-top-width: 4px !important
+			span // option label
+				color: $textColor-gray-600
+			&:after
+				content: url('../assets/icons/checkbox-default.svg')
+				transition-property: opacity
+				transition-duration: 500ms
+				opacity: 0
+				line-height: 0
+			&.ant-select-item-option-active
+				color: $textColor-gray-900
+				background: $textColor-gray-100
+				border-radius: 4px
+				img.icon
+					opacity: 1
+			&.ant-select-item-option-active:after
+				opacity: 1
+			&.ant-select-item-option-selected
+				color: $textColor-blue-600
+				border-radius: 4px
+				background: $textColor-gray-100
+				font-weight: initial
+				display: flex
+				align-items: center
+				span // option label
+					color: $textColor-blue-600
+			&.ant-select-item-option-selected:after
+				content: url('../assets/icons/checkbox-active.svg')
+				opacity: 1
+			&:hover
+				span // option label
+					color: $textColor-gray-900
+
+.products-destinations-filter, .product-dates-filter, .products-transport-filter, .product-rooms-filter
+	border-width: 2px
+	border-color: white
+	border-style: solid
+	border-bottom-left-radius: 4px
+	border-top-left-radius: 4px
+	&:not(.product-rooms-filter)
+		border-right: 1px solid $borderColor-gray-200
+	label
+		display: block
+		font-weight: 700
+		color: $textColor-gray-900
+		font-size: 12px
+		padding-top: 12px
+		padding-left: 12px
+		padding-bottom: 0
+		position: relative
+	.ant-form-item
+		position: relative
+		margin-bottom: 0
+	.ant-form-item:after
+		content: ''
+		position: absolute
+		left: 8px
+		bottom: 0
+		width: calc(100% - 8px)
+		height: 30px
+		background: rgb(255,255,255)
+		background: linear-gradient(0deg, white 0%, rgba(255,255,255,0) 100%)
+		pointer-events: none
+	input
+		color: $textColor-gray-900
+		&::placeholder
+			color: $textColor-gray-600
+	// Select
+	.ant-tag
+		color: $textColor-gray-900
+	.ant-form-item-control
+		height: 49px
+		overflow: auto
+	.ant-form-item-control-input
+		align-items: baseline
+	.ant-select-selector
+		padding-left: 22px
+	.ant-select-selection-placeholder
+		color: $textColor-gray-600
+		padding-left: 12px
+	.ant-select-selection-search
+		margin-inline-start: 2px
+		-webkit-margin-inline-start: 2px
+		z-index: 1
+	// Date range
+	.ant-picker-range
+		padding-left: 23px
+		padding-right: 38px
+		.ant-picker-input
+			padding: 2px
+		.ant-picker-input:hover
+			background: $backgroundColor-gray-100
+			border-radius: 4px
+		&.ant-picker-focused
+			.ant-picker-input.ant-picker-input-active
+				background: $backgroundColor-blue-600
+				border-radius: 4px
+				input
+					color: $textColor-white
+				input::placeholder
+					color: $textColor-white
+	.ant-picker-range
+		width: 100%
+		border: none
+		box-shadow: none
+		.ant-picker-active-bar
+			display: none
+.products-filter-date-range-dropdown
+	top: $searchProductTop !important
+	padding: 0
+	.ant-picker-range-arrow
+		display: none
+.products-filter-rooms-dropdown, .destination-transport-filter, .destination-product-filter
+	z-index: $z-index-field-dropdown
+	top: $searchProductTop !important
+	.ant-picker-panel-container
+		border-radius: 0 0 4px 4px
+	.ant-picker-range-arrow
+		display: none
+	.counter-divider
+		position: relative
+		min-width: 284px
+		width: 1000%
+		&:not(:last-child)
+			margin-right: 48px
+		&:not(:last-child):after
+			content: ''
+			position: absolute
+			top: 0
+			right: -24px
+			width: 1px
+			height: 90%
+			background-color: $borderColor-gray-200
+	.ant-dropdown-menu
+		padding-bottom: 0
+		border-radius: 0 0 4px 4px
+		.ant-dropdown-menu-item
+			background: none
+			cursor: unset
+.products-filter-rooms-dropdown
+	min-width: 370px !important
+	.ant-dropdown-menu-title-content
+		width: 100%
+
+// active filter state
+.products-destinations-filter.active,
+.product-dates-filter.active,
+.product-rooms-filter.active,
+.products-transport-filter.active
+	height: 100%
+	border-width: 2px
+	border-color: $textColor-blue-600
+	label
+		color: $textColor-blue-600
+	.ant-picker-focused
+		.ant-picker-range-separator
+			color: $textColor-blue-600
+
+.product-dates-filter.active,
+.products-transport-filter.active,
+.product-rooms-filter.active,
+.products-transport-filter.active
+	border-bottom-left-radius: unset
+	border-top-left-radius: unset
+
+.product-rooms-filter.active
+	border-bottom-right-radius: 4px
+	border-top-right-radius: 4px
+
+.advanced-filters-list
+	.ant-collapse-item
+		.ant-collapse-header
+			text-align: center
+			color: $textColor-blue-600
+			span.anticon
+				position: absolute
+				left: calc(50% + 90px)
+
+.advanced-filters-dropdown
+	.ant-collapse-item
+		.ant-collapse-header
+			padding: 0
+		.ant-collapse-content
+			.ant-collapse-content-box
+				padding: 24px

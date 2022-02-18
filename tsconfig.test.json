@@ -1,0 +1,22 @@
+{
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"target": "es6",
+		"module": "commonjs",
+		"outDir": "./dist",
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"noImplicitAny": true,
+		"typeRoots" : [
+			"./src/types",
+			"./tests/types",
+			"node_modules/@types"
+		]
+	},
+	"include": [
+		"./tests/**/*"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

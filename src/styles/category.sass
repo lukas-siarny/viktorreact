@@ -1,0 +1,34 @@
+@import tailwind-variables
+
+.category-field
+	.ant-form-item-control-input-content
+		display: flex
+	.ant-tag
+		min-width: 45px
+		padding: 0 8px 8px 8px
+		width: max-content
+		display: flex
+		align-items: center
+		padding: 0
+		padding-left: 8px
+		padding-right: 8px
+		color: $textColor-gray-600
+	.ant-tag-checkable
+		margin-bottom: 5px
+		height: 24px
+		border-radius: 64px
+		background-color: $textColor-gray-100
+		img
+			filter: grayscale(100%)
+			opacity: .5
+		&:hover
+			background-color: $textColor-gray-200
+			color: $textColor-gray-900
+			img
+				opacity: .8
+	.ant-tag-checkable.ant-tag-checkable-checked
+		background-color: $textColor-gray-300
+		color: $textColor-gray-900
+		img
+			filter: grayscale(0%)
+			opacity: 1

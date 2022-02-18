@@ -1,0 +1,14 @@
+{
+    "*.jsx": [
+      "eslint"
+    ],
+	"*.js": [
+      "eslint"
+    ],
+	"*.tsx": [
+      "eslint"
+    ],
+	"*.ts": [
+      "eslint"
+    ]
+}

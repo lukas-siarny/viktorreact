@@ -1,0 +1,14 @@
+image: node:16.14.0
+options:
+    max-time: 20 # configure default 20 minute timeout
+pipelines:
+    pull-requests:
+        'NOTINO-*':
+            - step:
+                  name: Lint test + build test code
+                  script:
+                      - npm install --legacy-peer-deps
+                      - npm run lint
+                      - CI=false npm run build
+                  caches:
+                      - node

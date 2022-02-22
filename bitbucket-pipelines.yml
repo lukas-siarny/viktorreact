@@ -38,7 +38,7 @@ pipelines:
       - step:
           name: Lint test + build test code
           script:
-            - npm install --legacy-peer-deps --legacy-peer-deps
+            - npm install --legacy-peer-deps
             - npm run lint
             - CI=false npm run build
           caches:

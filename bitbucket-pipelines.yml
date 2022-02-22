@@ -1,14 +1,53 @@
-image: node:16.14.0
-options:
-    max-time: 20 # configure default 20 minute timeout
+image: node:16.14.0-alpine
 pipelines:
-    pull-requests:
-        'NOTINO-*':
-            - step:
-                  name: Lint test + build test code
-                  script:
-                      - npm install --legacy-peer-deps
-                      - npm run lint
-                      - CI=false npm run build
-                  caches:
-                      - node
+	branches:
+		development:
+      - step:
+					script:
+						- npm install
+					deployment: development
+					name: Install npm modules
+					caches:
+						- node
+					artifacts:
+						- node_modules/**
+			- step:
+					name: Build and push docker image
+					script:
+						- docker build -t registry.goodrequest.com/notino-b2b-web:development -f docker/development/Dockerfile.web .
+						- docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
+						- docker push registry.goodrequest.com/notino-b2b-web:development
+		test:
+      - step:
+					script:
+						- npm install
+					deployment: development
+					name: Install npm modules
+					caches:
+						- node
+					artifacts:
+						- node_modules/**
+			- step:
+					name: Build and push docker image
+					script:
+						- docker build -t registry.goodrequest.com/notino-b2b-web:test -f docker/test/Dockerfile.web .
+						- docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
+						- docker push registry.goodrequest.com/notino-b2b-web:test
+	pull-requests:
+    'NOTINO-*':
+			- step:
+					name: Lint test + build test code
+					script:
+						- npm install --legacy-peer-deps
+						- npm run lint
+						- CI=false npm run build
+					caches:
+						- node
+definitions:
+  services:
+    docker:
+			memory: 4096
+options:
+  docker: true
+  max-time: 20
+  size: 2x

@@ -1,60 +1,12 @@
 @import tailwind-variables
 @import "variables"
+@import "typography"
 @import "layout"
+@import "carousel"
+@import "form"
+@import "button"
 
 $searchProductTop: 166px
-
-// namapovane na -> https://tailwindcss.com/docs/font-weight
-// font-thin
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 100
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-Thin.ttf') format('truetype')
-// font-extralight
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 200
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-ExtraLight.ttf') format('truetype')
-// font-light
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 300
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-Light.ttf') format('truetype')
-// font-normal
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 400
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-Regular.ttf') format('truetype')
-// font-medium
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 500
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-Medium.ttf') format('truetype')
-// font-semibold
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 600
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-SemiBold.ttf') format('truetype')
-// font-bold
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 700
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-Bold.ttf') format('truetype')
-// font-extrabold
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 800
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-ExtraBold.ttf') format('truetype')
-// font-black
-@font-face
-	font-family: 'PublicSans'
-	font-weight: 900
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-Black.ttf') format('truetype')
-
-@font-face
-	font-family: 'PublicSans'
-	font-weight: normal
-	src: local('PublicSans'), url('../assets/fonts/PublicSans-Regular.ttf') format('truetype')
 
 *
 	font-family: $font-family
@@ -64,33 +16,18 @@ $searchProductTop: 166px
 html
 	scroll-behavior: smooth
 
-body
-	color: $textColor-gray-600
-	background: $backgroundColor-gray-50
+body, .ant-layout
+	color: $textColor-black
+	background: $backgroundColor-notino-grayLighter
+	font-size: initial
 
 *:focus-visible
 	outline-color: $borderColor-blue-600
 	transition-property: outline-color
 	transition-duration: 0s
 
-.ant-layout
-	background: $backgroundColor-gray-50
-
 .ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover
 	color: $textColor-gray-600
-// Headings
-h2
-	font-size: 32px
-	font-weight: 700
-	color: $textColor-gray-900
-h3
-	font-size: 24px
-	font-weight: 700
-	color: $textColor-gray-900
-h4
-	font-size: 18px
-	font-weight: 700
-	color: $textColor-gray-900
 
 // Matus v Designe vo vacsine pripadov pouziva zmensenu formu ikony vo velkosti 16x16, tak staci aplikovat tuto pomocnu classku na <Ikona className={'small-icon'} />
 .small-icon
@@ -1068,3 +1005,8 @@ td.ant-table-cell.track
 		.ant-collapse-content
 			.ant-collapse-content-box
 				padding: 24px
+
+
+.notino-ad-banner
+	max-width: calc(50vw - (2 * #{$simple-layout-left-inner-padding})
+	max-height: calc(100vh - 17rem) // TODO

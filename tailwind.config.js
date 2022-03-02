@@ -16,17 +16,27 @@ module.exports = {
 	theme: {
 		screens: {
 			sm: '640px',
-			md: '768px',
+			md: '744px', // minimal supported resolution by Figma design
 			lg: '1024px',
 			xl: '1280px',
-			'2xl': '1536px'
+			'2xl': '1536px',
+			'3xl': '1920px'
 		},
 		colors: {
-			// Base colors
+			// specific colors
 			transparent: 'transparent',
 			current: 'currentColor',
 			primary: '#2563EB', // blue-600
-			danger: '#DC2626', //
+			danger: '#DC2626',
+			notino: {
+				black: colors.black,
+				grayDarker: '#404040', // trueGray-700
+				grayDark: '#808080',
+				gray: '#BFBFBF',
+				grayLight: '#E6E6E6',
+				grayLighter: '#F5F5F5', // trueGray-100
+				white: colors.white
+			},
 			// Tailwind colors
 			black: colors.black,
 			white: colors.white,
@@ -38,7 +48,8 @@ module.exports = {
 			indigo: colors.indigo,
 			purple: colors.violet,
 			pink: colors.pink,
-			emerald: colors.emerald
+			emerald: colors.emerald,
+			trueGray: colors.trueGray
 		},
 		spacing: {
 			px: '1px',
@@ -62,6 +73,7 @@ module.exports = {
 			14: '3.5rem',
 			16: '4rem',
 			20: '5rem',
+			21: '5.25rem',
 			24: '6rem',
 			28: '7rem',
 			32: '8rem',
@@ -77,6 +89,7 @@ module.exports = {
 			80: '20rem',
 			96: '24rem',
 			'25px': '25px',
+			'45px': '2.813rem',
 			'284px': '17.75rem', // 284 px
 			'100px': '6.25rem', // 100px
 			'109px': '6.8125rem' // 109px subheader height

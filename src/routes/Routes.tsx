@@ -24,6 +24,7 @@ import SimpleLayout from '../layouts/SimpleLayout'
 import LoginPage from '../pages/LoginPage/LoginPage'
 import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
+import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 
 // accommodationFacilities
 // import AccommodationFacilitiesPage from '../pages/AccommodationFacilityPage/AccommodationFacilitiesPage'
@@ -77,6 +78,7 @@ const Routes: FC = (props) => {
 				submenuParent={SUBMENU_PARENT_ITEMS().SALES}
 			/> */}
 			<PublicRoute {...props} exact path={t('paths:prihlasenie')} component={LoginPage} layout={SimpleLayout} />
+			<PublicRoute {...props} exact path={t('paths:registracia')} component={RegistrationPage} layout={SimpleLayout} />
 			<PublicRoute {...props} exact path={t('paths:zabudnute-heslo')} component={ForgotPasswordPage} layout={SimpleLayout} />
 			<CreatePasswordRoute exact path={t('paths:obnovenie-hesla')} translatePathKey={'paths:obnovenie-hesla'} component={CreatePasswordPage} layout={SimpleLayout} />
 			{/* <CreatePasswordRoute

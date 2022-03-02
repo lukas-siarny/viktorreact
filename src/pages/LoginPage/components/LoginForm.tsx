@@ -18,31 +18,42 @@ import { FORM } from '../../../utils/enums'
 import validateLoginForm from './validateLoginForm'
 import InputPasswordField from '../../../atoms/InputPasswordField'
 
-type ComponentProps = {}
+type ComponentProps = {
+	showForgottenPasswordModal: () => void
+}
 
 type Props = InjectedFormProps<ILoginForm, ComponentProps> & ComponentProps
 
 const LoginForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, form } = props
+	const { handleSubmit, submitting, showForgottenPasswordModal } = props
 
 	return (
-		<Form layout={'vertical'} className={'login-form'} onSubmitCapture={handleSubmit}>
-			<h3>{t('loc:Prihláste sa do TIP travel')}</h3>
-			<Space className={'w-full'} direction={'vertical'} size={20}>
-				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
-				<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} required />
-				<Button type={'primary'} block size={'large'} className={`tp-btn square ${form}`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+		<Form layout={'vertical'} className={'form h-full'} onSubmitCapture={handleSubmit}>
+			<Space className={'w-full'} direction={'vertical'} size={26}>
+				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
+				<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} />
+			</Space>
+			<Row justify={'end'} className=''>
+				{/* <Link to={t('paths:zabudnute-heslo') as string}> */}
+				<Button style={{ paddingRight: 0 }} className={'noti-btn text-notino-black'} onClick={showForgottenPasswordModal} type={'link'} htmlType={'button'}>
+					{t('loc:Zabudnuté heslo')}
+				</Button>
+				{/* </Link> */}
+			</Row>
+			<div className='absolute bottom-0 left-0 right-0'>
+				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Prihlásiť sa')}
 				</Button>
-				<Row justify={'end'}>
-					<Link to={t('paths:zabudnute-heslo') as string}>
-						<Button style={{ paddingRight: 0 }} block className={'tp-btn'} type={'link'} htmlType={'button'}>
-							{t('loc:Zabudli ste heslo?')}
+				<span className='table m-auto text-notino-black'>
+					{t('loc:Ešte nemáte účet?')}
+					<Link to={t('paths:registracia') as string} className='inline-block'>
+						<Button style={{ paddingRight: 0 }} type={'link'} htmlType={'button'}>
+							{t('loc:Registrovať sa')}
 						</Button>
 					</Link>
-				</Row>
-			</Space>
+				</span>
+			</div>
 		</Form>
 	)
 }

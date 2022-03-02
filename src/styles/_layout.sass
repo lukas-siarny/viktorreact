@@ -4,13 +4,31 @@
 $vertical-header-spacing: 8px
 $right-left-layout-spacig: 16px
 
+/*md: '744px', // minimal supported resolution by Figma design
+			lg: '1024px',
+			xl: '1280px',
+			'2xl': '1536px',
+			'3xl': '1920px' */
+
 // Simple layout - Landing page
 .simple-layout
 	position: relative
 	overflow: auto
 	width: 100vw
 	height: 100vh
-	background: $backgroundColor-gray-50
+
+	@media (min-width: 1536px)
+		.left-column
+			padding-left: calc(4vw + #{$simple-layout-left-inner-padding}) !important
+		.right-column
+			padding-right: 4vw
+
+	@media (min-width: 1920px)
+		.left-column
+			padding-left: calc(20vw + #{$simple-layout-left-inner-padding}) !important
+		.right-column
+			padding-right: 20vw
+
 	.cover
 		object-fit: cover
 		width: 100%

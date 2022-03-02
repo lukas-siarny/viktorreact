@@ -1,65 +1,74 @@
 @import tailwind-variables
 @import "variables"
+@import "typography"
 
-
-// Forms
 .form
-	width: calc(420px + 10%)
-	min-height: 100px
-	border-radius: 2px
-	background: $textColor-white
-
-.login-form,
-.create-password-form,
-.forgot-password-form,
-.create-user-form,
-.confirm-user-form,
-.update-user-form
-	width: 518px
-	padding: 25px
-	min-height: 100px
-	border-radius: 4px
-	background: $backgroundColor-gray-50
-
+	min-width: 296px
+	position: relative
+	
 // Label
 .ant-form-item-label
-	padding-bottom: 0 !important
-.ant-form-item
-	margin-bottom: 6px
+	label
+		@extend .m-bold
 
-.ant-form-item-label label,
-.tp-input-label
-	margin-left: 3px
-	color: $textColor-gray-900
-	font-weight: 600
-	padding: 2px
-	&.required:before
-		display: inline-block
-		margin-right: 4px
-		color: #ff4d4f // ant required color
-		font-size: 14px
-		font-family: SimSun, sans-serif
-		line-height: 1
-		content: '* '
-		vertical-align: text-top
+// Forms
+// .form
+// 	width: calc(420px + 10%)
+// 	min-height: 100px
+// 	border-radius: 2px
+// 	background: $textColor-white
 
-.form-floating-item
-	height: 40px
-	width: calc(100% + 48px)
-	margin: -24px
-	padding: 12px 24px
-	background-color: $backgroundColor-gray-200
-// Error form item
-.ant-form-item-control
-	.ant-form-item-explain.ant-form-item-explain-error
-		padding-top: 0
-		min-height: 16px
+// .login-form,
+// .create-password-form,
+// .forgot-password-form,
+// .create-user-form,
+// .confirm-user-form,
+// .update-user-form
+// 	width: 518px
+// 	padding: 25px
+// 	min-height: 100px
+// 	border-radius: 4px
+// 	background: $backgroundColor-gray-50
 
-.language-content-2
-	position: absolute
-	right: 4px
-	top: 4px
-	display: flex
-	align-items: center
-	justify-content: end
-	cursor: pointer
+// // Label
+// .ant-form-item-label
+// 	padding-bottom: 0 !important
+// .ant-form-item
+// 	margin-bottom: 6px
+
+// .ant-form-item-label label,
+// .tp-input-label
+// 	margin-left: 3px
+// 	color: $textColor-gray-900
+// 	font-weight: 600
+// 	padding: 2px
+// 	&.required:before
+// 		display: inline-block
+// 		margin-right: 4px
+// 		color: #ff4d4f // ant required color
+// 		font-size: 14px
+// 		font-family: SimSun, sans-serif
+// 		line-height: 1
+// 		content: '* '
+// 		vertical-align: text-top
+
+// .form-floating-item
+// 	height: 40px
+// 	width: calc(100% + 48px)
+// 	margin: -24px
+// 	padding: 12px 24px
+// 	background-color: $backgroundColor-gray-200
+// // Error form item
+// .ant-form-item-control
+// 	.ant-form-item-explain.ant-form-item-explain-error
+// 		padding-top: 0
+// 		min-height: 16px
+
+// .language-content-2
+// 	position: absolute
+// 	right: 4px
+// 	top: 4px
+// 	display: flex
+// 	align-items: center
+// 	justify-content: end
+// 	cursor: pointer

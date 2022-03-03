@@ -40,26 +40,27 @@ const AuthRoute: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 
-	useEffect(() => {
-		if (!isLoggedIn()) {
-			dispatch(UserActions.logOutUser())
-			return
-		}
-		heartbeatInterval = setInterval(dispatch(UserActions.ping), 1000 * 60 * 10) // every 10 minute
+	// TODO enable when login in implemented
+	// useEffect(() => {
+	// 	if (!isLoggedIn()) {
+	// 		dispatch(UserActions.logOutUser())
+	// 		return
+	// 	}
+	// 	heartbeatInterval = setInterval(dispatch(UserActions.ping), 1000 * 60 * 10) // every 10 minute
 
-		dispatch(UserActions.getAuthUserProfile())
+	// 	dispatch(UserActions.getAuthUserProfile())
 
-		// eslint-disable-next-line consistent-return
-		return () => {
-			if (heartbeatInterval) {
-				clearInterval(heartbeatInterval)
-			}
-		}
-	}, [t, dispatch])
+	// 	// eslint-disable-next-line consistent-return
+	// 	return () => {
+	// 		if (heartbeatInterval) {
+	// 			clearInterval(heartbeatInterval)
+	// 		}
+	// 	}
+	// }, [t, dispatch])
 
-	if (!isLoggedIn()) {
-		return <Redirect to={t('paths:prihlasenie')} />
-	}
+	// if (!isLoggedIn()) {
+	// 	return <Redirect to={t('paths:prihlasenie')} />
+	// }
 	return (
 		<>
 			{/* NOTE: prevent to have cached app version */}

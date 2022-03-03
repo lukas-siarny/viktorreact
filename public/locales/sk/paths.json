@@ -6,8 +6,11 @@
   "obecne": "/obecne",
   "obnovenie-hesla": "/obnovenie-hesla",
   "predaj": "/predaj",
+  "prehlad": "/prehlad",
   "prihlasenie": "/prihlasenie",
   "produkty": "/produkty",
   "registracia": "/registracia",
+  "salon": "/salon",
+  "sluzby": "/sluzby",
   "zabudnute-heslo": "/zabudnute-heslo"
 }

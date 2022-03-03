@@ -27,7 +27,7 @@
     "type-check": "tsc --noEmit",
     "normalize-apidoc": "node scripts/normalizeApidoc.js",
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
-    "download:apidoc": "cross-env APIDOC=http://localhost:3001/apidoc/data.json node scripts/downloadApidoc.js",
+    "download:apidoc": "cross-env APIDOC=https://notino-development.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen"
   },
   "dependencies": {

@@ -27,7 +27,7 @@
     "type-check": "tsc --noEmit",
     "normalize-apidoc": "node scripts/normalizeApidoc.js",
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
-    "download:apidoc": "cross-env APIDOC=http://localhost:3001/apidoc/data.json node scripts/downloadApidoc.js",
+    "download:apidoc": "cross-env APIDOC=https://notino-development.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen"
   },
   "dependencies": {
@@ -50,6 +50,7 @@
     "history": "4.10.1",
     "http-proxy-middleware": "2.0.1",
     "i18next": "21.4.2",
+    "i18next-browser-languagedetector": "6.1.3",
     "i18next-chained-backend": "3.0.2",
     "i18next-localstorage-backend": "3.1.3",
     "i18next-scanner": "3.1.0",

@@ -39,7 +39,8 @@ Sentry.init({
 	enabled: process.env.NODE_ENV !== 'development',
 	dsn: 'https://43d96832642646f18b3166843778106c@sentry.goodrequest.dev/35',
 	integrations: [new TracingIntegrations.BrowserTracing()] as any,
-	tracesSampleRate: 0.05
+	tracesSampleRate: 0.05,
+	environment: process.env.HOST
 })
 
 const app = (

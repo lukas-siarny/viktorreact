@@ -37,7 +37,7 @@ dayjs.locale('sk')
 Sentry.init({
 	release: process.env.REACT_APP_VERSION,
 	enabled: process.env.NODE_ENV !== 'development',
-	dsn: 'https://defb4c2f76d24d739a3125980ca505ef@sentry.goodrequest.dev/4s',
+	dsn: 'https://43d96832642646f18b3166843778106c@sentry.goodrequest.dev/35',
 	integrations: [new TracingIntegrations.BrowserTracing()] as any,
 	tracesSampleRate: 0.05
 })

@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Field, reduxForm, InjectedFormProps } from 'redux-form'
-import { Space, Row, Form, Button } from 'antd'
+import { Form, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 // atoms
@@ -25,13 +25,11 @@ const ForgottenPasswordForm: FC<Props> = (props) => {
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
-			{/* <Space className={'w-full'} direction='vertical' size={8}> */}
-				<span className={'text-gray-600'}>{t('loc:Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.')}</span>
-				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
-				<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
-					{t('loc:Odoslať email')}
-				</Button>
-			{/* </Space> */}
+			<p className={'base-regular mb-7'}>{t('loc:Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.')}</p>
+			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
+			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
+				{t('loc:Odoslať email')}
+			</Button>
 		</Form>
 	)
 }

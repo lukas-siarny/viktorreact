@@ -5,11 +5,16 @@
 .form
 	min-width: 296px
 	position: relative
-	
+
+.ant-form
+	color: $textColor-notino-black
+
 // Label
-.ant-form-item-label
+.ant-form-item-label,
+.ant-form-vertical .ant-form-item-label // this is for higher specificity so it can override the original style
+	padding-bottom: 4px
 	label
-		@extend .m-bold
+		color: $textColor-notino-black
 
 // Forms
 // .form

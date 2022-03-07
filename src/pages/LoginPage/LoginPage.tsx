@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Modal, Button } from 'antd'
+import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
 // import { get } from 'lodash'
 import { useDispatch } from 'react-redux'
@@ -24,11 +24,6 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 type Props = {}
 
-function Test(props: any) {
-	console.log(props)
-	return <div>a</div>
-}
-
 const LoginPage: FC<Props> = () => {
 	const [modalVisible, setModalVisible] = useState(false)
 	const [t] = useTranslation()
@@ -38,7 +33,6 @@ const LoginPage: FC<Props> = () => {
 	const handleSubmit = (values: any) => console.log('🚀 ~ file: LoginPage.tsx ~ line 21 ~ values', values)
 
 	const handleForgottenPassSubmit = async (values: IForgotPasswordForm) => {
-		// console.log(values)
 		try {
 			const reqData = {
 				email: values.email
@@ -65,6 +59,7 @@ const LoginPage: FC<Props> = () => {
 				footer={null}
 				onCancel={() => setModalVisible(false)}
 				closeIcon={<CloseIcon />}
+				width={394}
 			>
 				<ForgottenPasswordForm onSubmit={handleForgottenPassSubmit} />
 			</Modal>

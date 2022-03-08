@@ -9,6 +9,7 @@ module.exports = {
     "@storybook/addon-interactions",
     "@storybook/preset-create-react-app",
 	"storybook-addon-designs",
+	"storybook-addon-customize-antd-theme"
   ],
   "framework": "@storybook/react"
 }

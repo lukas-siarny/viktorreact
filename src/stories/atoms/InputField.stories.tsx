@@ -6,7 +6,7 @@ import { ComponentStory } from '@storybook/react'
 import InputField from '../../atoms/InputField'
 
 export default {
-	title: 'Fields/InputField',
+	title: 'Fields/Input',
 	component: InputField,
 	decorators: [withDesign],
 	args: {

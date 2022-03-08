@@ -1,10 +1,10 @@
 import { withDesign } from 'storybook-addon-designs'
+import { Form } from 'antd'
+
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory } from '@storybook/react'
 import React from 'react'
 import InputField from '../../atoms/InputField'
-// import InputField from './InputField'
-// import departureIcon from '../../assets/icons/departure-icon.svg'
 
 export default {
 	title: 'Fields/Input',
@@ -25,7 +25,11 @@ export default {
 	}
 }
 
-const Template: ComponentStory<typeof InputField> = (args) => <InputField {...args} />
+const Template: ComponentStory<typeof InputField> = (args) => (
+	<Form layout='vertical'>
+		<InputField {...args} />
+	</Form>
+)
 
 export const InputFieldWithLabel = Template.bind({})
 export const InputFieldWithoutLabel = Template.bind({})

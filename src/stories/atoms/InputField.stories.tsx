@@ -29,12 +29,21 @@ const Template: ComponentStory<typeof InputField> = (args) => (
 	</Form>
 )
 
+// stories
 export const InputFieldWithLabel = Template.bind({})
+export const InputFieldRequired = Template.bind({})
+export const InputFieldError = Template.bind({})
 export const InputFieldWithoutLabel = Template.bind({})
 export const InputFieldFilled = Template.bind({})
 
+// arguments
 InputFieldWithLabel.args = {
 	label: 'Label'
+}
+
+InputFieldRequired.args = {
+	label: 'Label',
+	required: true
 }
 
 InputFieldFilled.args = {
@@ -43,6 +52,15 @@ InputFieldFilled.args = {
 	} as any
 }
 
+InputFieldError.args = {
+	label: 'Label',
+	meta: {
+		error: 'Error message',
+		touched: true
+	} as any
+}
+
+// parameters
 InputFieldWithLabel.parameters = {
 	design: {
 		type: 'figma',

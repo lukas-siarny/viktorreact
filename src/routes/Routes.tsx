@@ -88,8 +88,8 @@ const Routes: FC = (props) => {
 				component={AdminConfirmUserPage}
 				layout={SimpleLayout}
 			/> */}
-			{/* <AuthRoute {...props} exact path={t('paths:index')} component={EntryPage} page={PAGE.ENTRY} translatePathKey={'paths:index'} layout={MainLayout} /> */}
-			<PublicRoute {...props} exact path={t('paths:index')} component={EntryPage} layout={SimpleLayout} />
+			<AuthRoute {...props} exact path={t('paths:index')} component={EntryPage} translatePathKey={'paths:index'} layout={MainLayout} />
+			{/* <PublicRoute {...props} exact path={t('paths:index')} component={EntryPage} layout={SimpleLayout} /> */}
 
 			{/* <AuthRoute
 				{...props}

@@ -28,12 +28,22 @@
     "normalize-apidoc": "node scripts/normalizeApidoc.js",
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
     "download:apidoc": "cross-env APIDOC=https://notino-development.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
-    "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen"
+    "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
+    "storybook": "start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public"
   },
   "dependencies": {
     "@sentry/cli": "1.71.0",
     "@sentry/react": "6.14.1",
     "@sentry/tracing": "6.14.1",
+    "@storybook/addon-actions": "^6.4.19",
+    "@storybook/addon-essentials": "^6.4.19",
+    "@storybook/addon-interactions": "^6.4.19",
+    "@storybook/addon-links": "^6.4.19",
+    "@storybook/node-logger": "^6.4.19",
+    "@storybook/preset-create-react-app": "^3.2.0",
+    "@storybook/react": "^6.4.19",
+    "@storybook/testing-library": "^0.0.9",
     "antd": "4.16.13",
     "antd-dayjs-webpack-plugin": "1.0.6",
     "autoprefixer": "10.4.0",
@@ -88,6 +98,7 @@
     "redux-thunk": "2.4.0",
     "regenerator-runtime": "0.13.9",
     "slugify": "1.6.2",
+    "storybook-addon-designs": "6.2.1",
     "tailwindcss": "2.2.19",
     "tailwindcss-export-config": "2.3.0",
     "use-query-params": "1.2.3"
@@ -113,6 +124,7 @@
     "@types/redux-logger": "3.0.9",
     "@types/selenium-webdriver": "4.0.16",
     "@types/sortablejs": "1.10.7",
+    "babel-loader": "8.1.0",
     "chai": "4.3.4",
     "chromedriver": "95.0.0",
     "eslint-plugin-chai-friendly": "0.7.2",
@@ -143,5 +155,17 @@
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
     "react-error-overlay": "6.0.10"
+  },
+  "eslintConfig": {
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
+    ]
   }
 }

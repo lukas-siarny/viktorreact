@@ -1,27 +1,25 @@
+import React from 'react'
 import { withDesign } from 'storybook-addon-designs'
 import { Form } from 'antd'
-
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory } from '@storybook/react'
-import React from 'react'
 import InputField from '../../atoms/InputField'
 
 export default {
-	title: 'Fields/Input',
+	title: 'Fields/InputField',
 	component: InputField,
 	decorators: [withDesign],
 	args: {
 		input: {
 			form: undefined,
 			error: null,
-			touched: false
+			touched: false,
+			onBlur: () => {},
+			onChange: () => {}
 		} as any,
-		style: {
-			display: 'flex',
-			flexDirection: 'column'
-		},
 		placeholder: 'Placeholder',
-		meta: {}
+		meta: {},
+		size: 'large'
 	}
 }
 
@@ -33,58 +31,35 @@ const Template: ComponentStory<typeof InputField> = (args) => (
 
 export const InputFieldWithLabel = Template.bind({})
 export const InputFieldWithoutLabel = Template.bind({})
-// export const InputFieldWithPrefixIcon = Template.bind({})
-// export const InputFieldFilled = Template.bind({})
-// export const InputFieldFilledWithIcon = Template.bind({})
+export const InputFieldFilled = Template.bind({})
 
 InputFieldWithLabel.args = {
 	label: 'Label'
 }
 
-// InputFieldWithPrefixIcon.args = {
-// 	customPrefixIconSrc: departureIcon
-// }
+InputFieldFilled.args = {
+	input: {
+		value: 'Filled text'
+	} as any
+}
 
-// InputFieldFilled.args = {
-// 	input: {
-// 		value: 'Filled text'
-// 	}
-// }
-// InputFieldFilledWithIcon.args = {
-// 	input: {
-// 		value: 'Filled text'
-// 	},
-// 	label: 'Label'
-// 	// customPrefixIconSrc: departureIcon
-// }
 InputFieldWithLabel.parameters = {
 	design: {
 		type: 'figma',
-		url: 'https://www.figma.com/file/JXXVzst0EN8l4rvlI6ZD88/Tiptravel-web?node-id=1711%3A30007'
+		url: 'https://www.figma.com/file/HL0lsNm8yCHGGCkL1c3euX/Notino-B2B-Desktop-app?node-id=68%3A2693'
 	}
 }
 
 InputFieldWithoutLabel.parameters = {
 	design: {
 		type: 'figma',
-		url: 'https://www.figma.com/file/JXXVzst0EN8l4rvlI6ZD88/Tiptravel-web?node-id=1711%3A29405'
+		url: 'https://www.figma.com/file/HL0lsNm8yCHGGCkL1c3euX/Notino-B2B-Desktop-app?node-id=68%3A2662'
 	}
 }
-// InputFieldWithPrefixIcon.parameters = {
-// 	design: {
-// 		type: 'figma',
-// 		url: 'https://www.figma.com/file/JXXVzst0EN8l4rvlI6ZD88/Tiptravel-web?node-id=1711%3A29413'
-// 	}
-// }
-// InputFieldFilled.parameters = {
-// 	design: {
-// 		type: 'figma',
-// 		url: 'https://www.figma.com/file/JXXVzst0EN8l4rvlI6ZD88/Tiptravel-web?node-id=1711%3A29410'
-// 	}
-// }
-// InputFieldFilledWithIcon.parameters = {
-// 	design: {
-// 		type: 'figma',
-// 		url: 'https://www.figma.com/file/JXXVzst0EN8l4rvlI6ZD88/Tiptravel-web?node-id=1711%3A29419'
-// 	}
-// }
+
+InputFieldFilled.parameters = {
+	design: {
+		type: 'figma',
+		url: 'https://www.figma.com/file/HL0lsNm8yCHGGCkL1c3euX/Notino-B2B-Desktop-app?node-id=68%3A2662'
+	}
+}

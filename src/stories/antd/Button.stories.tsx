@@ -6,7 +6,7 @@ import { ComponentStory } from '@storybook/react'
 import { ReactComponent as SearchIcon } from '../../assets/icons/search-icon.svg'
 
 export default {
-	title: 'Fields/Button',
+	title: 'Antd/Button',
 	component: Button,
 	decorators: [withDesign],
 	args: {

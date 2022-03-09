@@ -10,7 +10,6 @@ export default {
 	component: Button,
 	decorators: [withDesign],
 	args: {
-		size: 'large',
 		className: 'noti-btn m-regular'
 	}
 }

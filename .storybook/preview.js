@@ -1,5 +1,5 @@
 import 'antd/dist/antd.css'
-// import '../src/styles/main.css'
+import '../src/styles/main.css'
 import '../src/styles/global.sass'
 
 export const parameters = {
@@ -24,6 +24,7 @@ export const parameters = {
     },
   },
   customizeAntdTheme: {
+	  default: false,
     modifyVars: {
 	  'primary-color': '#000000', // black
 	  'link-color': '#E11D48', // pink-600

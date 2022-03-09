@@ -13,12 +13,11 @@ export default {
 		input: {
 			form: undefined,
 			error: null,
-			touched: false,
 			onBlur: () => {},
 			onChange: () => {}
 		} as any,
 		placeholder: 'Placeholder',
-		meta: {},
+		meta: { touched: false },
 		size: 'large'
 	}
 }

@@ -21,20 +21,26 @@ import { RootState } from '../../reducers'
 import { getUserAccountDetails } from '../../reducers/users/userActions'
 
 
-type Props = {}
+type Props = {
+	userID?: number
+}
 
-const UserAccountPage: FC<Props> = () => {
+const UserAccountPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const { userID } = props
 	const dispatch = useDispatch()
 	const token: string = getAccessToken() || ''
 
 	const userAccountDetail = useSelector((state: RootState) => state.user.user)
 
 	useEffect(() => {
-		const payload = decode(token)
-		const uid = get(payload, 'uid')
+		let uid: number = userID || -1
+		if (!userID) {
+			const payload = decode(token)
+			uid = get(payload, 'uid')
+		}
 		dispatch(getUserAccountDetails(uid))
-	}, [])
+	}, [userID])
 
 	// init forms
 	useEffect(() => {

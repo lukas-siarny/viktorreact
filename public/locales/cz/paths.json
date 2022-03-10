@@ -2,6 +2,8 @@
   "home": "/home",
   "index": "/",
   "login": "/login",
+  "my-account": "/my-account",
+  "prihlasenie": "/prihlasenie",
   "reset-password": "/reset-password",
   "signup": "/signup"
 }

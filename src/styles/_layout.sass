@@ -25,84 +25,38 @@ $inner-padding: 45px
 		height: 100%
 
 	.content
-  		background-color: rgba(255,255,255,.8)
-  		border-radius: .25em
-  		box-shadow: 0 0 .25em rgba(0,0,0,.25)
-  		box-sizing: border-box
-  		left: 50%
-  		padding: 10vmin
-  		position: fixed
-  		text-align: center
-  		top: 50%
-  		transform: translate(-50%, -50%)
+		background-color: rgba(255,255,255,.8)
+		border-radius: .25em
+		box-shadow: 0 0 .25em rgba(0,0,0,.25)
+		box-sizing: border-box
+		left: 50%
+		padding: 10vmin
+		position: fixed
+		text-align: center
+		top: 50%
+		transform: translate(-50%, -50%)
 
 // Main layout
 .ant-layout.noti-main-layout
 	.noti-sider-menu
 		.ant-menu-item
 			color: $textColor-notino-black
+
 			&.ant-menu-item-selected
 				color: $textColor-notino-white
 				background-color: $backgroundColor-notino-black
 			&:active
 				color: $textColor-notino-white
 
-		&.ant-menu-inline .ant-menu-item:not(:last-child)
-			margin-bottom: 4px
+		&.ant-menu-inline, &.ant-menu-inline-collapsed
+			.ant-menu-item, .ant-menu-submenu .ant-menu-submenu-title
+				display: flex
+				align-items: center
 
-// .ant-layout.noti-layout
-// 	min-height: 100vh
-// 	background-color: $backgroundColor-gray-50
-// 	.noti-layout-header
-// 		z-index: $z-index-fixed-header
-// 		position: relative
-// 		padding: $vertical-header-spacing
-// 		border-bottom: 1px solid $borderColor-gray-100
-// 		height: $header-height
-// 		background-color: $backgroundColor-white
-// 		.header-logo
-// 			z-index: $zIndex-10
-// 			position: absolute
-// 		.menu-dropdown-wrapper
-// 			padding: 0px 8px
-// 			border-radius: 44px
-// 			display: inline-flex
-// 			&:hover,
-// 			&.ant-dropdown-open
-// 				cursor: pointer
-// 				background-color: $backgroundColor-gray-200
-// 				svg.chevron
-// 					color: $textColor-blue-600 !important
-// 		// Menu
-// 		.noti-layout-menu
-// 			background-color: $backgroundColor-white
-// 			color: $textColor-gray-600
-// 			font-size: 14px
-// 			font-weight: 600
-// 			border-bottom: none
-// 			margin-top: 7px
-// 			&.ant-menu-horizontal
-// 				line-height: 15px
-// 			.ant-menu-submenu
-// 				.ant-menu-submenu-title
-// 					padding-bottom: 10px
-// 			ul.ant-menu
-// 				border-bottom: none
-// 				height: $header-height
-// 				margin-top: -16px
-// 			li.ant-menu-overflow-item
-// 				display: flex
-// 				align-items: center
-// 				&:hover
-// 					color: $textColor-gray-900
-// 			.ant-menu-submenu-title
-// 				&:hover
-// 					color: $textColor-gray-900
-// 			.ant-menu-submenu-active,
-// 			.ant-menu-submenu-selected
-// 				background: none
-// 				.ant-menu-submenu-title
-// 					color: $textColor-gray-900
+			.ant-menu-item:not(:last-child)
+				margin-bottom: 4px
+	.ant-layout-sider-zero-width-trigger
+		background-color: $backgroundColor-notino-black
 
 // 	.noti-content
 // 		padding: $header-height $right-left-layout-spacig 0 $right-left-layout-spacig

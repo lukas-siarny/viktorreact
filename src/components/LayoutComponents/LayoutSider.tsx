@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu } from 'antd'
+import { Layout, Menu, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -46,7 +46,10 @@ const LayoutSider = (props: Props) => {
 					</Menu>
 				</div>
 
-				<div className='p-2'>user</div>
+				<div className='p-2 pb-4'>
+					<p>User detail</p>
+					<Button block>{t('loc:Odhlásiť')}</Button>
+				</div>
 			</div>
 		</Sider>
 	)

@@ -12,7 +12,7 @@ module.exports = {
 		sort: true,
 		trans: false,
 		removeUnusedKeys: true,
-		lngs: ['sk'],
+		lngs: ['sk', 'cz', 'en'],
 		ns: [
 			'paths',
 			'loc'
@@ -20,12 +20,10 @@ module.exports = {
 		defaultLng: 'sk',
 		defaultNs: 'keep-empty',
 		defaultValue(lng, ns, key) {
-			if (lng === 'sk') {
-				if (ns === 'paths') {
-					return `/${key}`
-				}
-				return key
+			if (ns === 'paths') {
+				return `/${key}`
 			}
+			return key
 			return '_NEPRELOZENE_'
 		},
 		resource: {
@@ -35,6 +33,6 @@ module.exports = {
 			lineEnding: '\n'
 		},
 		nsSeparator: ':',
-		keySeparator: '|'
+		keySeparator: '.'
 	}
 }

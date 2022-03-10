@@ -117,7 +117,7 @@ const DateField = (props: Props) => {
 			<DatePicker
 				id={formFieldID(form, input.name)}
 				{...input}
-				className={cx('tp-date-input w-full', { 'rounded-full': rounded, 'allow-clear': allowClear })}
+				className={cx('noti-date-input w-full', { 'rounded-full': rounded, 'allow-clear': allowClear })}
 				dropdownAlign={DROPDOWN_POSITION.BOTTOM_LEFT}
 				onBlur={() => {}}
 				onChange={(val) => {

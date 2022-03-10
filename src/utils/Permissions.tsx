@@ -122,7 +122,7 @@ const Permissions: FC<Props> = (props) => {
 	// 					status='warning'
 	// 					title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
 	// 					extra={
-	// 						<Button className={'tp-btn'} onClick={() => setVisibleModal(false)} type='primary'>
+	// 						<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
 	// 							{t('loc:Zatvoriť')}
 	// 						</Button>
 	// 					}

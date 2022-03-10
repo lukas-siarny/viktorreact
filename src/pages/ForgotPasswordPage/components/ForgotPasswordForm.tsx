@@ -28,7 +28,7 @@ const ForgotPasswordForm: FC<Props> = (props) => {
 		<Form layout='vertical' className={'forgot-password-form '} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={20}>
 				<Link to={getPath(t('paths:login'))}>
-					<Button icon={<BackIcon />} type={'link'} className={'tp-btn'} htmlType={'button'}>
+					<Button icon={<BackIcon />} type={'link'} className={'noti-btn'} htmlType={'button'}>
 						{t('loc:Späť na prihlásenie')}
 					</Button>
 				</Link>
@@ -41,7 +41,7 @@ const ForgotPasswordForm: FC<Props> = (props) => {
 					</span>
 				</Row>
 				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name='email' required />
-				<Button block size='large' type='primary' className={'tp-btn square'} htmlType='submit' disabled={submitting} loading={submitting}>
+				<Button block size='large' type='primary' className={'noti-btn square'} htmlType='submit' disabled={submitting} loading={submitting}>
 					{t('loc:Odoslať email')}
 				</Button>
 			</Space>

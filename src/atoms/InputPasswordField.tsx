@@ -92,7 +92,7 @@ const InputPasswordField = (props: Props) => {
 			<Input.Password
 				{...input}
 				id={formFieldID(form, input.name)}
-				className={cx('tp-input-password')}
+				className={cx('noti-input-password')}
 				onChange={onChange}
 				onBlur={onBlur}
 				size={size || 'middle'}

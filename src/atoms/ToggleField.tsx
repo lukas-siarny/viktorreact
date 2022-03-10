@@ -25,7 +25,15 @@ const ToggleField = (props: Props) => {
 
 	return (
 		<Item required={required} label={label} help={touched && error} validateStatus={error && touched ? 'error' : undefined} style={style}>
-			<Radio.Group optionType='button' size={size} className={'tp-toggle-btn'} buttonStyle={'solid'} value={input.value || []} options={options} onChange={input.onChange} />
+			<Radio.Group
+				optionType='button'
+				size={size}
+				className={'noti-toggle-btn'}
+				buttonStyle={'solid'}
+				value={input.value || []}
+				options={options}
+				onChange={input.onChange}
+			/>
 		</Item>
 	)
 }

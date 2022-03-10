@@ -77,7 +77,7 @@ class CreatePasswordForm extends PureComponent<Props> {
 						}}
 					/>
 					<Field component={InputField} label={t('loc:Zopakujte heslo')} placeholder={t('loc:Zopakujte nové heslo')} type='password' name='confirmPassword' required />
-					<Button block size='large' type='primary' className={'tp-btn square'} htmlType='submit' disabled={submitting} loading={submitting}>
+					<Button block size='large' type='primary' className={'noti-btn square'} htmlType='submit' disabled={submitting} loading={submitting}>
 						{t('loc:Vytvoriť heslo')}
 					</Button>
 				</Space>

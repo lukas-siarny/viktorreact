@@ -83,7 +83,7 @@ class DateRangeField extends React.Component<Props> {
 						>
 							<DatePicker
 								{...input}
-								className={cx('w-full tp-date-input', { 'allow-clear': allowClear })}
+								className={cx('w-full noti-date-input', { 'allow-clear': allowClear })}
 								onBlur={() => {}}
 								place
 								onChange={(val) => {

@@ -50,7 +50,7 @@ const RadioGroupField = (props: Props) => {
 			help={touched && error}
 			validateStatus={error && touched ? 'error' : undefined}
 			style={style}
-			className={cx(className, 'tp-radio', { 'tp-radio-has-error': error && touched })}
+			className={cx(className, 'noti-radio', { 'noti-radio-has-error': error && touched })}
 		>
 			<Radio.Group value={input.value || []} onChange={input.onChange} className={cx({ flex: direction === 'horizontal', block: direction === 'vertical' })}>
 				{radioOptions}

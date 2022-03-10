@@ -11,7 +11,7 @@ import CreatePasswordForm from './components/CreatePasswordForm'
 import { ICreatePasswordForm } from '../../types/interfaces'
 
 // utils
-import { history } from '../../utils/history'
+import { history, getPath } from '../../utils/history'
 import { postReq } from '../../utils/request'
 import { NOTIFICATION_TYPE } from '../../utils/enums'
 
@@ -32,7 +32,7 @@ class CreatePasswordPage extends Component<Props> {
 
 		// 	const res = await postReq('/api/v1/authorization/reset-password', undefined, data, { headers }, NOTIFICATION_TYPE.NOTIFICATION, true)
 
-		// 	history.push(this.props.t('paths:prihlasenie'))
+		// history.push(getPath(this.props.t('paths:login')))
 
 		// 	return res
 		// } catch (e) {

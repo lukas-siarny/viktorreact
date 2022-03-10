@@ -1,6 +1,9 @@
 import { capitalize, filter, orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
+import en_GB from 'antd/lib/locale-provider/en_GB'
+import sk_SK from 'antd/lib/locale-provider/sk_SK'
+import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -9,6 +12,29 @@ export enum KEYBOARD_KEY {
 export enum NAMESPACE {
 	PATHS = 'paths',
 	LOC = 'loc'
+}
+
+export enum LANGUAGE {
+	SK = 'sk',
+	CZ = 'cz',
+	EN = 'en'
+}
+
+export const DEFAULT_LANGUAGE = LANGUAGE.SK
+
+export const LOCALES = {
+	[LANGUAGE.SK]: {
+		ISO_639: 'sk',
+		antD: sk_SK
+	},
+	[LANGUAGE.CZ]: {
+		ISO_639: 'cs',
+		antD: cs_CZ
+	},
+	[LANGUAGE.EN]: {
+		ISO_639: 'en',
+		antD: en_GB
+	}
 }
 
 export enum NOTIFICATION_TYPE {
@@ -37,6 +63,8 @@ export enum TABS_TYPE {
 export const ROW_GUTTER_X_DEFAULT = [4, 0] as Gutter
 export const ROW_GUTTER_X_M = [16, 0] as Gutter
 export const ROW_GUTTER_X_L = [32, 0] as Gutter
+
+export const ROUTE_PREFIX = '/b2b'
 
 export const DROPDOWN_POSITION = {
 	BOTTOM_LEFT: {
@@ -367,10 +395,6 @@ export enum WEB_PROJECT_CODE {
 	HECHTER = 'HECHTER',
 	KOALA = 'KOALA',
 	COMMON = 'COMMON'
-}
-
-export enum LANGUAGE {
-	DEFAULT = 'DEFAULT'
 }
 
 export enum PRODUCT_SEARCH_FILTER {

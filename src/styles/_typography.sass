@@ -5,92 +5,95 @@ $medium-weight: 500
 $semi-bold-weight: 600
 $bold-weight: 700
 
+$bigLineHeight: 120%
+$mediumLineHeight: 117.5%
+$smallLineHeight: 100%
+
 // namapovane na -> https://tailwindcss.com/docs/font-weight
 // Roboto doesn't include font weights: font-extralight (200), font-semibold (600), font-extrabold (800)
 
-// font-thin
 @font-face
-    font-family: $font-family
-    font-weight: 100
-    src: local($font-family), url('../assets/fonts/Roboto-Thin.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 100
+	src: local($font-family), url('../assets/fonts/PublicSans-Thin.ttf') format('truetype')
 // font-extralight
 @font-face
-    font-family: $font-family
-    font-weight: 200
-    src: local($font-family), url('../assets/fonts/Roboto-Thin.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 200
+	src: local($font-family), url('../assets/fonts/PublicSans-ExtraLight.ttf') format('truetype')
 // font-light
 @font-face
-    font-family: $font-family
-    font-weight: 300
-    src: local($font-family), url('../assets/fonts/Roboto-Light.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 300
+	src: local($font-family), url('../assets/fonts/PublicSans-Light.ttf') format('truetype')
 // font-normal
 @font-face
-    font-family: $font-family
-    font-weight: 400
-    src: local($font-family), url('../assets/fonts/Roboto-Regular.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 400
+	src: local($font-family), url('../assets/fonts/PublicSans-Regular.ttf') format('truetype')
 // font-medium
 @font-face
-    font-family: $font-family
-    font-weight: 500
-    src: local($font-family), url('../assets/fonts/Roboto-Medium.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 500
+	src: local($font-family), url('../assets/fonts/PublicSans-Medium.ttf') format('truetype')
 // font-semibold
 @font-face
-    font-family: $font-family
-    font-weight: 600
-    src: local($font-family), url('../assets/fonts/Roboto-Medium.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 600
+	src: local($font-family), url('../assets/fonts/PublicSans-SemiBold.ttf') format('truetype')
 // font-bold
 @font-face
-    font-family: $font-family
-    font-weight: 700
-    src: local($font-family), url('../assets/fonts/Roboto-Bold.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 700
+	src: local($font-family), url('../assets/fonts/PublicSans-Bold.ttf') format('truetype')
 // font-extrabold
 @font-face
-    font-family: $font-family
-    font-weight: 800
-    src: local($font-family), url('../assets/fonts/Roboto-Bold.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 800
+	src: local($font-family), url('../assets/fonts/PublicSans-ExtraBold.ttf') format('truetype')
 // font-black
 @font-face
-    font-family: $font-family
-    font-weight: 900
-    src: local($font-family), url('../assets/fonts/Roboto-Black.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: 900
+	src: local($font-family), url('../assets/fonts/PublicSans-Black.ttf') format('truetype')
 
 @font-face
-    font-family: $font-family
-    font-weight: normal
-    src: local($font-family), url('../assets/fonts/Roboto-Regular.ttf') format('truetype')
+	font-family: $font-family
+	font-weight: normal
+	src: local($font-family), url('../assets/fonts/PublicSans-Regular.ttf') format('truetype')
 
 // Title + headings
 
-.text-xl, h1, h2, h3, h4
-    line-height: 120%
+.text-xl, h1, h2, h3, h4, .heading-*
+    line-height: $bigLineHeight
 
 .text-xl
-    font-size: 64px
+    font-size: 4rem
     font-weight: 900
     letter-spacing: -1px
 
-h1
-    font-size: 40px
+h1, .heading-1
+    font-size: 2.5rem
     font-weight: 800
     letter-spacing: -1px
-h2
-    font-size: 32px
+h2, .heading-2
+    font-size: 2rem
     font-weight: 700
     letter-spacing: -0.5px
-h3
-    font-size: 24px
+h3, .heading-3
+    font-size: 1.5rem
     font-weight: 700
     letter-spacing: -0.5px
-h4
-    font-size: 18px
+h4, .heading-4
+    font-size: 1.125rem
     font-weight: 700
     letter-spacing: -0.2px
 
 // Base text
 
 @mixin base($weight)
-    font-size: 16px
-    line-height: 19px
+    font-size: 1rem
+    line-height: $mediumLineHeight
     font-weight: $weight
 
 .base-regular
@@ -108,8 +111,8 @@ h4
 // M text
 
 @mixin M($weight)
-    font-size: 14px
-    line-height: 16px
+    font-size: 0.875rem
+    line-height: $mediumLineHeight
     font-weight: $weight
 
 .m-regular
@@ -127,8 +130,8 @@ h4
 // S text
 
 @mixin S($weight)
-    font-size: 12px
-    line-height: 100%
+    font-size: 0.75rem
+    line-height: $smallLineHeight
     font-weight: $weight
 
 .s-regular
@@ -145,8 +148,8 @@ h4
 
 // XS text
 @mixin XS($weight)
-    font-size: 10px
-    line-height: 100%
+    font-size: 0.625rem
+    line-height: $smallLineHeight
     font-weight: $weight
 
 .xs-regular

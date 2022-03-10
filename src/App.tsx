@@ -29,7 +29,7 @@ const App = () => {
 		<Suspense
 			fallback={
 				<div className={'suspense-loading-spinner'}>
-					<Spin tip='Načítavam...' />
+					<Spin size='large' />
 				</div>
 			}
 		>
@@ -37,7 +37,7 @@ const App = () => {
 				<PersistGate
 					loading={
 						<div className={'suspense-loading-spinner'}>
-							<Spin tip='Načítavam...' />
+							<Spin size='large' />
 						</div>
 					}
 					persistor={persistor}

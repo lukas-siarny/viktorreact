@@ -300,9 +300,9 @@ const ImgUploadField: FC<Props> = (props) => {
 							/>
 						</div>
 						<div className='flex justify-between items-center mt-4'>
-							<Button onClick={subZoomVal} disabled={isMinZoom} shape={'circle'} size={'small'} className='tp-btn' icon={<UnassignIcon />} />
+							<Button onClick={subZoomVal} disabled={isMinZoom} shape={'circle'} size={'small'} className='noti-btn' icon={<UnassignIcon />} />
 							<Slider className={'w-full mx-3'} min={minZoom} max={maxZoom} step={ZOOM_STEP} value={zoom} onChange={handleZoomChange} />
-							<Button onClick={addZoomVal} disabled={isMaxZoom} shape={'circle'} size={'small'} className='tp-btn' icon={<AssignIcon />} />
+							<Button onClick={addZoomVal} disabled={isMaxZoom} shape={'circle'} size={'small'} className='noti-btn' icon={<AssignIcon />} />
 						</div>
 						<div className={'text-center -mt-1-5'}>Veľkosť obrázka</div>
 					</>

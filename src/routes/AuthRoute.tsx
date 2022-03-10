@@ -9,7 +9,7 @@ import { Dictionary } from 'lodash'
 import BaseRoute from './BaseRoute'
 
 // redux
-import * as UserActions from '../reducers/users/userActions'
+// import * as UserActions from '../reducers/users/userActions'
 
 // utils
 import { isLoggedIn } from '../utils/auth'
@@ -28,7 +28,6 @@ type Props = RouteProps & {
 	/** e.g. tabKey or other extra props for page */
 	extra?: Dictionary<any>
 }
-let heartbeatInterval = null as number | null
 
 const onIdle = () => {
 	document.location.reload()
@@ -40,23 +39,14 @@ const AuthRoute: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 
-	// TODO enable when login in implemented
-	// useEffect(() => {
-	// 	if (!isLoggedIn()) {
-	// 		dispatch(UserActions.logOutUser())
-	// 		return
-	// 	}
-	// 	heartbeatInterval = setInterval(dispatch(UserActions.ping), 1000 * 60 * 10) // every 10 minute
+	useEffect(() => {
+		if (!isLoggedIn()) {
+			// dispatch(UserActions.logOutUser())
+			console.log('User is not logged...')
+		}
 
-	// 	dispatch(UserActions.getAuthUserProfile())
-
-	// 	// eslint-disable-next-line consistent-return
-	// 	return () => {
-	// 		if (heartbeatInterval) {
-	// 			clearInterval(heartbeatInterval)
-	// 		}
-	// 	}
-	// }, [t, dispatch])
+		// dispatch(UserActions.getAuthUserProfile())
+	}, [t, dispatch])
 
 	// if (!isLoggedIn()) {
 	// 	return <Redirect to={t('paths:prihlasenie')} />

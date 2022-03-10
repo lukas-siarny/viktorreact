@@ -1,33 +1,23 @@
 @import tailwind-variables
-@import "variables"
 
 $vertical-header-spacing: 8px
 $right-left-layout-spacig: 16px
-
-/*md: '744px', // minimal supported resolution by Figma design
-			lg: '1024px',
-			xl: '1280px',
-			'2xl': '1536px',
-			'3xl': '1920px' */
+$layout-height: 720px
+$inner-padding: 45px
 
 // Simple layout - Landing page
 .simple-layout
-	position: relative
 	overflow: auto
-	width: 100vw
-	height: 100vh
+	background: $backgroundColor-notino-grayLight
 
-	@media (min-width: 1536px)
-		.left-column
-			padding-left: calc(4vw + #{$simple-layout-left-inner-padding}) !important
-		.right-column
-			padding-right: 4vw
+	.layout-content
+		box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.21)
+		height: $layout-height
+		max-width: 1280px
+		min-width: 744px
 
-	@media (min-width: 1920px)
-		.left-column
-			padding-left: calc(20vw + #{$simple-layout-left-inner-padding}) !important
-		.right-column
-			padding-right: 20vw
+	.ant-carousel
+		height: calc(#{$layout-height} - (2*#{$inner-padding})) // 630px
 
 	.cover
 		object-fit: cover
@@ -47,10 +37,10 @@ $right-left-layout-spacig: 16px
   		transform: translate(-50%, -50%)
 
 // Main layout
-.ant-layout.tp-layout
+.ant-layout.noti-layout
 	min-height: 100vh
 	background-color: $backgroundColor-gray-50
-	.tp-layout-header
+	.noti-layout-header
 		z-index: $z-index-fixed-header
 		position: relative
 		padding: $vertical-header-spacing
@@ -71,7 +61,7 @@ $right-left-layout-spacig: 16px
 				svg.chevron
 					color: $textColor-blue-600 !important
 		// Menu
-		.tp-layout-menu
+		.noti-layout-menu
 			background-color: $backgroundColor-white
 			color: $textColor-gray-600
 			font-size: 14px
@@ -101,7 +91,7 @@ $right-left-layout-spacig: 16px
 				.ant-menu-submenu-title
 					color: $textColor-gray-900
 
-	.tp-content
+	.noti-content
 		padding: $header-height $right-left-layout-spacig 0 $right-left-layout-spacig
 		.content-header
 			// NOTE: ak by v headeri bol niekedy nejaky koncet ktory musi byt vedla seba a nie pod seba ako je takto defaultne tak pretazit nejakou classou flex-direction na row
@@ -163,11 +153,11 @@ $right-left-layout-spacig: 16px
 				background: $backgroundColor-gray-50
 				padding: 10px 24px 10px 24px
 				z-index: $z-index-five
-.tp-dropdown-header
+.noti-dropdown-header
 	top: $header-height !important
 	box-shadow: $boxShadow-lg
 // Dropdown pre MENU
-.tp-layout-popup
+.noti-layout-popup
 	.ant-menu.ant-menu-sub
 		border-radius: 0 0 4px 4px
 		background: $backgroundColor-white

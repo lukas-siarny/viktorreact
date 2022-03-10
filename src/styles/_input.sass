@@ -1,0 +1,18 @@
+@import tailwind-variables
+@import "variables"
+
+.ant-form-item
+	.ant-input.noti-input
+		border-radius: 8px
+
+.ant-form-item:not(.ant-form-item-has-error)
+	// Normal state
+	.ant-input.noti-input
+		border: 1px solid $borderColor-notino-grayLight
+		&:hover
+			border: 1px solid $borderColor-notino-grayDark
+		&:focus
+			border: 1px solid $borderColor-notino-black
+			box-shadow: $field-shadow-focus-default
+		&::placeholder
+			color: $borderColor-notino-gray

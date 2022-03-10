@@ -1,4 +1,5 @@
 const http = require('http')
+const https = require('https')
 const fs = require('fs')
 const path = require('path')
 
@@ -11,7 +12,8 @@ if(!fs.existsSync(apidocPath)) {
 
 const download = function(url, dest, cb) {
 	const file = fs.createWriteStream(dest);
-	http.get(url, function(response) {
+  const protocol = url.startsWith('https') ? https : http
+	protocol.get(url, function(response) {
     response.pipe(file);
     file.on('finish', function() {
       file.close(cb);  // close() is async, call cb after close completes.

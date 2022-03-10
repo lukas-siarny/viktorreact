@@ -1,6 +1,7 @@
 import i18n from 'i18next'
 import Backend from 'i18next-chained-backend'
 import LocalStorageBackend from 'i18next-localstorage-backend'
+import LanguageDetector from 'i18next-browser-languagedetector'
 import XHR from 'i18next-xhr-backend'
 import { initReactI18next } from 'react-i18next'
 
@@ -8,6 +9,7 @@ import { NAMESPACE } from './enums'
 
 i18n.use(Backend)
 	.use(initReactI18next)
+	.use(LanguageDetector)
 	.init({
 		backend: {
 			backendOptions: [
@@ -26,16 +28,23 @@ i18n.use(Backend)
 			]
 		},
 		debug: process.env.NODE_ENV === 'development',
+		detection: {
+			// order and from where user language should be detected
+			order: ['querystring', 'path', 'navigator'],
+			// keys or params to lookup language from
+			lookupFromPathIndex: 0,
+			lookupQuerystring: 'lang'
+		},
 		defaultNS: 'keep-empty',
 		fallbackLng: 'sk',
 		interpolation: {
 			escapeValue: false
 		},
-		lng: 'sk',
 		load: 'languageOnly',
+		supportedLngs: ['sk', 'en'],
 		ns: Object.values(NAMESPACE),
 		nsSeparator: ':',
-		keySeparator: '|',
+		keySeparator: '.',
 		react: {
 			bindI18n: 'languageChanged loaded',
 			bindI18nStore: 'added removed',

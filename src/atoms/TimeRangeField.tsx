@@ -108,8 +108,8 @@ const TimeRangeField = (props: Props) => {
 								onChange={onClear}
 								format={timeFormat}
 								value={pickerValue}
-								className={'w-full tp-date-input tp-time-input'}
-								popupClassName={'tp-time-dropdown'}
+								className={'w-full noti-date-input noti-time-input'}
+								popupClassName={'noti-time-dropdown'}
 								size={size}
 								suffixIcon={<TimerIcon className={'text-blue-600'} />}
 								placeholder={placeholders[index] as any}

@@ -91,7 +91,7 @@ const TextareaField = (props: Props) => {
 				onFocus={onFocus}
 				onBlur={onBlur}
 				onChange={onChange}
-				className={'tp-textarea'}
+				className={'noti-textarea'}
 				value={input.value}
 				placeholder={placeholder}
 				prefix={prefix}

@@ -1,16 +1,8 @@
-FROM node:16.14.0 AS builder
-
-RUN mkdir -p /home/app
-WORKDIR /home/app
-COPY . /home/app
-
-RUN npm run build
-
 FROM nginx
 USER root
 
-COPY --from=builder /home/app/build /usr/share/nginx/html
-COPY --from=builder /home/app/docker/development/nginx.conf /etc/nginx
+COPY ./build /usr/share/nginx/html
+COPY  ./docker/development/nginx.conf /etc/nginx
 
 STOPSIGNAL SIGTERM
 

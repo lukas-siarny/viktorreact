@@ -1,16 +1,7 @@
 {
-  "dokoncenie-registracie": "/dokoncenie-registracie",
+  "home": "/home",
   "index": "/",
-  "inventar": "/inventar",
-  "inventar/ubytovacie-zariadenia": "/inventar/ubytovacie-zariadenia",
-  "obecne": "/obecne",
-  "obnovenie-hesla": "/obnovenie-hesla",
-  "predaj": "/predaj",
-  "prehlad": "/prehlad",
-  "prihlasenie": "/prihlasenie",
-  "produkty": "/produkty",
-  "registracia": "/registracia",
-  "salon": "/salon",
-  "sluzby": "/sluzby",
-  "zabudnute-heslo": "/zabudnute-heslo"
+  "login": "/auth/login",
+  "reset-password": "/auth/reset-password",
+  "signup": "/auth/signup"
 }

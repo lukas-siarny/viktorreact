@@ -16,10 +16,6 @@ type Props = {
 const MainLayout: FC<Props> = (props) => {
 	const { children, page } = props
 	return (
-		// <Layout className={'tp-layout'}>
-		// 	{/* <LayoutHeader page={page} /> */}
-		// 	<Layout className={'tp-content'}>{children}</Layout>
-		// </Layout>
 		<Layout className='min-h-screen noti-main-layout' hasSider>
 			<LayoutSider page={page} />
 			<Layout>

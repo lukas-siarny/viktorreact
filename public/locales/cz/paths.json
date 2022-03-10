@@ -1,13 +1,9 @@
 {
-  "dokoncenie-registracie": "/complete-registration",
+  "home": "/home",
   "index": "/",
-  "inventar": "/inventory",
-  "inventar/ubytovacie-zariadenia": "/inventory/accomodation",
-  "obecne": "/general",
-  "obnovenie-hesla": "/reset-password",
-  "predaj": "/sale",
+  "login": "/login",
+  "my-account": "/my-account",
   "prihlasenie": "/login",
-  "produkty": "/products",
-  "registracia": "/signup",
-  "zabudnute-heslo": "/forgot-password"
+  "reset-password": "/reset-password",
+  "signup": "/signup"
 }

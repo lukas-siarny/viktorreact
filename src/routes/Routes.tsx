@@ -18,6 +18,7 @@ import SimpleLayout from '../layouts/SimpleLayout'
 // utils
 import { getPath } from '../utils/history'
 // import { SUBMENU_PARENT_ITEMS } from '../utils/helper'
+import { PAGE } from '../utils/enums'
 
 // import SubMenuPage from '../components/SubMenuPage'
 
@@ -50,7 +51,16 @@ const Routes: FC = (props) => {
 			{/* NOTE: only for DEV purposes, redirect from / -> /b2b/  */}
 			{devMode && <AuthRoute exact path={t('paths:index')} redirectTo={getPath(t('paths:index'))} component={NotFoundPage} layout={MainLayout} />}
 			<AuthRoute {...props} exact path={getPath(t('paths:index'))} component={EntryPage} translatePathKey={getPath(t('paths:index'))} layout={MainLayout} />
-			<AuthRoute {...props} exact path={getPath(t('paths:home'))} component={HomePage} translatePathKey={getPath(t('paths:home'))} layout={MainLayout} />
+			<AuthRoute {...props} exact path={getPath(t('paths:home'))} component={HomePage} translatePathKey={getPath(t('paths:home'))} layout={MainLayout} page={PAGE.HOME} />
+			<AuthRoute
+				{...props}
+				exact
+				path={getPath(t('paths:my-account'))}
+				component={EntryPage}
+				translatePathKey={getPath(t('paths:my-account'))}
+				layout={MainLayout}
+				page={PAGE.MY_ACCOUNT}
+			/>
 			{/* IMPORTANT: add all private routes before this declaration */}
 			<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
 			<AuthRoute

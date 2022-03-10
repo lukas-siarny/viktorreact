@@ -8,7 +8,7 @@ import { ReactComponent as ThumbnailIcon } from '../../assets/icons/thumbail-ico
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
 
 // utils
-import { history } from '../../utils/history'
+import { history, getPath } from '../../utils/history'
 import { PAGE } from '../../utils/enums'
 
 // redux
@@ -34,14 +34,11 @@ const LayoutSider = (props: Props) => {
 
 				<div className='px-2 flex flex-col flex-grow overflow-y-auto'>
 					<Menu mode='inline' selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
-						<Menu.Item key={PAGE.OVERVIEW} onClick={() => history.push(t('paths:prehlad'))} icon={<ThumbnailIcon />}>
-							{t('loc:Prehľad')}
+						<Menu.Item key={PAGE.HOME} onClick={() => history.push(getPath(t('paths:home')))} icon={<ThumbnailIcon />}>
+							{t('loc:Home')}
 						</Menu.Item>
-						<Menu.Item key={PAGE.SERVICES} onClick={() => history.push(t('paths:sluzby'))} icon={<ThumbnailIcon />}>
-							{t('loc:Služby')}
-						</Menu.Item>
-						<Menu.Item key={PAGE.SALON} onClick={() => history.push(t('paths:salon'))} icon={<ThumbnailIcon />}>
-							{t('loc:Salón')}
+						<Menu.Item key={PAGE.MY_ACCOUNT} onClick={() => history.push(getPath(t('paths:my-account')))} icon={<ThumbnailIcon />}>
+							{t('loc:Môj účet')}
 						</Menu.Item>
 					</Menu>
 				</div>

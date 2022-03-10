@@ -5,11 +5,11 @@ import i18next from 'i18next'
 import { ThunkResult } from '../index'
 import { ILoginForm } from '../../types/interfaces'
 import { AUTH_USER } from './userTypes'
-import { IResetStore } from '../generalTypes'
+import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
 // utils
-import { setAccessToken } from '../../utils/auth'
+import { setAccessToken, clearAccessToken } from '../../utils/auth'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
 
@@ -42,3 +42,13 @@ export const logInUser =
 			return e
 		}
 	}
+
+export const logOutUser = (): ThunkResult<void> => (dispatch) => {
+	clearAccessToken()
+
+	dispatch({
+		type: RESET_STORE
+	})
+
+	history.push(i18next.t('paths:prihlasenie'))
+}

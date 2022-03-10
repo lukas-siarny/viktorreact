@@ -12,7 +12,7 @@ import { history } from '../../utils/history'
 import { PAGE } from '../../utils/enums'
 
 // redux
-// import { logOutUser } from '../../reducers/users/userActions'
+import { logOutUser } from '../../reducers/users/userActions'
 
 const { Sider } = Layout
 
@@ -48,7 +48,9 @@ const LayoutSider = (props: Props) => {
 
 				<div className='p-2 pb-4'>
 					<p>User detail</p>
-					<Button block>{t('loc:Odhlásiť')}</Button>
+					<Button block onClick={() => dispatch(logOutUser())}>
+						{t('loc:Odhlásiť')}
+					</Button>
 				</div>
 			</div>
 		</Sider>

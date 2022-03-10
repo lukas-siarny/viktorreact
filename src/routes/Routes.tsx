@@ -33,11 +33,6 @@ import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
-// TODO remove test page
-function TestPage() {
-	return <div style={{ height: '1000px' }}>hello</div>
-}
-
 const Routes: FC = (props) => {
 	const [t] = useTranslation()
 	return (
@@ -105,9 +100,9 @@ const Routes: FC = (props) => {
 				page={PAGE.ACCOMMODATION_FACILITIES}
 				layout={MainLayout}
 			/> */}
-			<AuthRoute {...props} exact path={t('paths:prehlad')} translatePathKey='paths:prehlad' component={TestPage} layout={MainLayout} page={PAGE.OVERVIEW} />
-			<AuthRoute {...props} exact path={t('paths:sluzby')} translatePathKey='paths:sluzby' component={TestPage} layout={MainLayout} page={PAGE.SERVICES} />
-			<AuthRoute {...props} exact path={t('paths:salon')} translatePathKey='paths:salon' component={TestPage} layout={MainLayout} page={PAGE.SALON} />
+			<AuthRoute {...props} exact path={t('paths:prehlad')} translatePathKey='paths:prehlad' component={EntryPage} layout={MainLayout} page={PAGE.OVERVIEW} />
+			<AuthRoute {...props} exact path={t('paths:sluzby')} translatePathKey='paths:sluzby' component={EntryPage} layout={MainLayout} page={PAGE.SERVICES} />
+			<AuthRoute {...props} exact path={t('paths:salon')} translatePathKey='paths:salon' component={EntryPage} layout={MainLayout} page={PAGE.SALON} />
 
 			<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
 			<AuthRoute

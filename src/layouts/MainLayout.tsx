@@ -11,9 +11,9 @@ type Props = {
 const MainLayout: FC<Props> = (props) => {
 	const { children, page } = props
 	return (
-		<Layout className={'tp-layout'}>
+		<Layout className={'noti-layout'}>
 			{/* <LayoutHeader page={page} /> */}
-			<Layout className={'tp-content'}>{children}</Layout>
+			<Layout className={'noti-content'}>{children}</Layout>
 		</Layout>
 	)
 }

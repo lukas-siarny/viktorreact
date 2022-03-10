@@ -51,7 +51,7 @@ const LoginPage: FC<Props> = () => {
 		<>
 			<LoginForm onSubmit={handleLoginSubmit} showForgottenPasswordModal={() => setModalVisible(true)} />
 			<Modal
-				className='rounded-fields n-modal'
+				className='rounded-fields'
 				title={t('loc:Zabudnuté heslo')}
 				centered
 				visible={modalVisible}

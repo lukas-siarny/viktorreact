@@ -41,7 +41,7 @@ const InputMaskedField = (props: Props) => {
 
 	return (
 		<Item label={label} required={required} style={style} help={touched && error} validateStatus={error && touched ? 'error' : undefined}>
-			<InputMask {...input} className='ant-input tp-input' mask={mask} onChange={handleChange} value={input.value} disabled={disabled} placeholder={placeholder} />
+			<InputMask {...input} className='ant-input noti-input' mask={mask} onChange={handleChange} value={input.value} disabled={disabled} placeholder={placeholder} />
 		</Item>
 	)
 }

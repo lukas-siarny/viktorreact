@@ -15,6 +15,7 @@ import BaseRoute from './BaseRoute'
 import { isLoggedIn } from '../utils/auth'
 import { PAGE, ENUMERATIONS_KEYS, SUBMENU_PARENT } from '../utils/enums'
 import { RootState } from '../reducers'
+import { getPath } from '../utils/history'
 
 type Props = RouteProps & {
 	layout: React.ReactNode
@@ -27,6 +28,7 @@ type Props = RouteProps & {
 	}
 	/** e.g. tabKey or other extra props for page */
 	extra?: Dictionary<any>
+	redirectTo?: string
 }
 
 const onIdle = () => {
@@ -38,6 +40,7 @@ const AuthRoute: FC<Props> = (props) => {
 	const user = useSelector((state: RootState) => state.user) // NOTE: auth Route has to listen on change user state cause of log in action
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
+	const { redirectTo } = props
 
 	useEffect(() => {
 		if (!isLoggedIn()) {
@@ -49,8 +52,13 @@ const AuthRoute: FC<Props> = (props) => {
 	}, [t, dispatch])
 
 	if (!isLoggedIn()) {
-		return <Redirect to={t('paths:prihlasenie')} />
+		return <Redirect to={getPath(t('paths:login'))} />
 	}
+
+	if (redirectTo) {
+		return <Redirect to={redirectTo} />
+	}
+
 	return (
 		<>
 			{/* NOTE: prevent to have cached app version */}

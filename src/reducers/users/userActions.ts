@@ -10,7 +10,7 @@ import { Paths } from '../../types/api'
 
 // utils
 import { setAccessToken } from '../../utils/auth'
-import { history } from '../../utils/history'
+import { history, getPath } from '../../utils/history'
 import { postReq } from '../../utils/request'
 
 export type IUserActions = IResetStore | IGetAuthUser
@@ -33,10 +33,10 @@ export const logInUser =
 
 			setAccessToken(data.accessToken)
 
-			history.push(i18next.t('paths:index'))
+			history.push(getPath(i18next.t('paths:index')))
 			return null
 		} catch (e) {
-			history.push(i18next.t('paths:prihlasenie'))
+			history.push(getPath(i18next.t('paths:login')))
 			// eslint-disable-next-line no-console
 			console.log(e)
 			return e

@@ -28,7 +28,7 @@ const LayoutSider = (props: Props) => {
 	return (
 		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0'>
 			<div className='sticky top-0 flex flex-col h-screen'>
-				<Link className='flex justify-center pt-4 pb-6' to={t('paths:index') as string}>
+				<Link className='flex justify-center pt-4 pb-6' to={getPath(t('paths:index')) as string}>
 					<LogoIcon className='h-8' />
 				</Link>
 

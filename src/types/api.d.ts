@@ -4,7 +4,7 @@ import type {
   UnknownParamsObject,
   OperationResponse,
   AxiosRequestConfig,
-} from 'openapi-client-axios'; 
+} from 'openapi-client-axios';
 
 declare namespace Paths {
     namespace GetApiB2BAdminEnumsCountries {
@@ -632,7 +632,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthRefreshToken'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
   /**
    * postApiB2BAdminAuthLogout - PERMISSION: NO
@@ -640,7 +640,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthLogout'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
   /**
    * postApiB2BAdminAuthForgotPassword - PERMISSION: NO
@@ -648,7 +648,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthForgotPassword'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
   /**
    * postApiB2BAdminAuthResetPassword - PERMISSION: NO
@@ -656,7 +656,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthResetPassword'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   /**
    * getApiB2BAdminUsersUserId - PERMISSION: NO
@@ -664,7 +664,7 @@ export interface OperationMethods {
   'getApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
   /**
    * patchApiB2BAdminUsersUserId - PERMISSION: NO
@@ -672,7 +672,7 @@ export interface OperationMethods {
   'patchApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters> | null,
     data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
   /**
    * postApiB2BAdminUsersRegistration - PERMISSION: NO
@@ -680,7 +680,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersRegistration'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
   /**
    * postApiB2BAdminUsersActivation - PERMISSION: NO
@@ -688,7 +688,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersActivation'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
   /**
    * postApiB2BAdminUsersActivationResend - PERMISSION: NO
@@ -696,7 +696,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersActivationResend'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   /**
    * patchApiB2BAdminUsersUserIdCompanyProfile - PERMISSION: NO
@@ -704,7 +704,7 @@ export interface OperationMethods {
   'patchApiB2BAdminUsersUserIdCompanyProfile'(
     parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.PathParameters> | null,
     data?: Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.Responses.$200>
   /**
    * getApiB2BAdminEnumsCountries - PERMISSION: NO
@@ -712,7 +712,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCountries'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
   /**
    * getApiB2BAdminEnumsCurrencies - PERMISSION: NO
@@ -720,7 +720,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCurrencies'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   /**
    * postApiB2BV1AuthLogin - PERMISSION: NO
@@ -728,7 +728,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthLogin'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
   /**
    * postApiB2BV1AuthRefreshToken - PERMISSION: NO
@@ -736,7 +736,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthRefreshToken'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
   /**
    * postApiB2BV1AuthLogout - PERMISSION: NO
@@ -744,7 +744,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthLogout'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
   /**
    * postApiB2BV1AuthForgotPassword - PERMISSION: NO
@@ -752,7 +752,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthForgotPassword'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
   /**
    * postApiB2BV1AuthResetPassword - PERMISSION: NO
@@ -760,7 +760,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthResetPassword'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
   /**
    * getApiB2BV1UsersUserId - PERMISSION: NO
@@ -768,7 +768,7 @@ export interface OperationMethods {
   'getApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
   /**
    * patchApiB2BV1UsersUserId - PERMISSION: NO
@@ -776,7 +776,7 @@ export interface OperationMethods {
   'patchApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters> | null,
     data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
   /**
    * postApiB2BV1UsersRegistration - PERMISSION: NO
@@ -784,7 +784,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersRegistration'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
   /**
    * postApiB2BV1UsersActivation - PERMISSION: NO
@@ -792,7 +792,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersActivation'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
   /**
    * postApiB2BV1UsersActivationResend - PERMISSION: NO
@@ -800,7 +800,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersActivationResend'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   /**
    * patchApiB2BV1UsersUserIdCompanyProfile - PERMISSION: NO
@@ -808,7 +808,7 @@ export interface OperationMethods {
   'patchApiB2BV1UsersUserIdCompanyProfile'(
     parameters?: Parameters<Paths.PatchApiB2BV1UsersUserIdCompanyProfile.PathParameters> | null,
     data?: Paths.PatchApiB2BV1UsersUserIdCompanyProfile.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BV1UsersUserIdCompanyProfile.Responses.$200>
   /**
    * getApiB2BV1EnumsCountries - PERMISSION: NO
@@ -816,7 +816,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCountries'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
   /**
    * getApiB2BV1EnumsCurrencies - PERMISSION: NO
@@ -824,7 +824,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCurrencies'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   /**
    * postApiB2BAdminAuthLogin - PERMISSION: NO
@@ -832,7 +832,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthLogin'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
 }
 
@@ -844,7 +844,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
   }
   ['/api/b2b/admin/auth/logout']: {
@@ -854,7 +854,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
   }
   ['/api/b2b/admin/auth/forgot-password']: {
@@ -864,7 +864,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
   }
   ['/api/b2b/admin/auth/reset-password']: {
@@ -874,7 +874,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   }
   ['/api/b2b/admin/users/{userID}']: {
@@ -884,7 +884,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
     /**
      * patchApiB2BAdminUsersUserId - PERMISSION: NO
@@ -892,7 +892,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters> | null,
       data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
   }
   ['/api/b2b/admin/users/registration']: {
@@ -902,7 +902,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
   }
   ['/api/b2b/admin/users/activation']: {
@@ -912,7 +912,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
   }
   ['/api/b2b/admin/users/activation-resend']: {
@@ -922,7 +922,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   }
   ['/api/b2b/admin/users/{userID}/company-profile']: {
@@ -932,7 +932,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.PathParameters> | null,
       data?: Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.Responses.$200>
   }
   ['/api/b2b/admin/enums/countries']: {
@@ -942,7 +942,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
   }
   ['/api/b2b/admin/enums/currencies']: {
@@ -952,7 +952,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   }
   ['/api/b2b/v1/auth/login']: {
@@ -962,7 +962,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
   }
   ['/api/b2b/v1/auth/refresh-token']: {
@@ -972,7 +972,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
   }
   ['/api/b2b/v1/auth/logout']: {
@@ -982,7 +982,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
   }
   ['/api/b2b/v1/auth/forgot-password']: {
@@ -992,7 +992,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
   }
   ['/api/b2b/v1/auth/reset-password']: {
@@ -1002,7 +1002,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
   }
   ['/api/b2b/v1/users/{userID}']: {
@@ -1012,7 +1012,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
     /**
      * patchApiB2BV1UsersUserId - PERMISSION: NO
@@ -1020,7 +1020,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters> | null,
       data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
   }
   ['/api/b2b/v1/users/registration']: {
@@ -1030,7 +1030,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
   }
   ['/api/b2b/v1/users/activation']: {
@@ -1040,7 +1040,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
   }
   ['/api/b2b/v1/users/activation-resend']: {
@@ -1050,7 +1050,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   }
   ['/api/b2b/v1/users/{userID}/company-profile']: {
@@ -1060,7 +1060,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1UsersUserIdCompanyProfile.PathParameters> | null,
       data?: Paths.PatchApiB2BV1UsersUserIdCompanyProfile.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BV1UsersUserIdCompanyProfile.Responses.$200>
   }
   ['/api/b2b/v1/enums/countries']: {
@@ -1070,7 +1070,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
   }
   ['/api/b2b/v1/enums/currencies']: {
@@ -1080,7 +1080,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   }
   ['/api/b2b/admin/auth/login']: {
@@ -1090,7 +1090,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
   }
 }

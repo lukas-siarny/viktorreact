@@ -32,6 +32,7 @@ import LoginPage from '../pages/LoginPage/LoginPage'
 import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
+import UserAccountPage from '../pages/UserAccountPage/UserAccountPage'
 
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
@@ -61,6 +62,13 @@ const Routes: FC = (props) => {
 				translatePathKey={getPath(t('paths:reset-password'))}
 				component={CreatePasswordPage}
 				layout={SimpleLayout}
+			/>
+			<AuthRoute
+				{...props}
+				path={t('paths:b2b/my-account')}
+				translatePathKey={'paths:b2b/my-account'}
+				component={UserAccountPage}
+				layout={MainLayout}
 			/>
 			<AuthRoute {...props} exact path={getPath(t('paths:index'))} component={EntryPage} translatePathKey={getPath(t('paths:index'))} layout={MainLayout} />
 			<AuthRoute {...props} exact path={getPath(t('paths:home'))} component={HomePage} translatePathKey={getPath(t('paths:home'))} layout={MainLayout} page={PAGE.HOME} />

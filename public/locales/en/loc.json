@@ -43,6 +43,7 @@
   "Email": "EN_Email",
   "Expirácia rezervácie": "EN_Expirácia rezervácie",
   "Ešte nemáte účet?": "EN_Ešte nemáte účet?",
+  "Firma": "Firma",
   "Fyzická osoba": "EN_Fyzická osoba",
   "Hesla sa nezhodujú": "EN_Hesla sa nezhodujú",
   "Heslo": "EN_Heslo",
@@ -72,6 +73,8 @@
     " váha batožiny [kg]": "_NEPRELOZENE_"
   },
   "Mena": "EN_Mena",
+  "Meno": "Meno",
+  "Mesto": "Mesto",
   "Môj účet": "Môj účet",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "EN_Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
   "Na vašu adresu odošleme link na obnovenie hesla": {
@@ -102,6 +105,8 @@
   "Odoslať email": "EN_Odoslať email",
   "Odstránený": "EN_Odstránený",
   "Odstrániť {{entity}}": "EN_Odstrániť {{entity}}",
+  "Osobné údaje": "Osobné údaje",
+  "PSČ": "PSČ",
   "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov": {
     "": "_NEPRELOZENE_"
   },
@@ -116,7 +121,9 @@
     "": "_NEPRELOZENE_"
   },
   "Predajné kanály": "EN_Predajné kanály",
+  "Predvoľba": "Predvoľba",
   "Pridať {{entity}}": "EN_Pridať {{entity}}",
+  "Priezvisko": "Priezvisko",
   "Prihlásiť sa": "EN_Prihlásiť sa",
   "Priradiť {{entity}}": "EN_Priradiť {{entity}}",
   "Právnická osoba": "EN_Právnická osoba",
@@ -132,6 +139,7 @@
   "Súbor je príliš veľký (max": {
     " {{size}} {{unit}})": "_NEPRELOZENE_"
   },
+  "Telefónne číslo": "Telefónne číslo",
   "Textové popisy": "EN_Textové popisy",
   "Toto pole je povinné": "EN_Toto pole je povinné",
   "Typ osoby": "EN_Typ osoby",
@@ -139,6 +147,7 @@
   "Typ stravy": "EN_Typ stravy",
   "Typ ubytovania": "EN_Typ ubytovania",
   "Ubytovanie": "EN_Ubytovanie",
+  "Ulica": "Ulica",
   "Uložiť {{entity}}": "EN_Uložiť {{entity}}",
   "Umiestnite pečiatku s podpisom do modrého rámu": {
     "": "_NEPRELOZENE_"
@@ -148,6 +157,7 @@
   "Ups niečo sa pokazilo": "EN_Ups niečo sa pokazilo",
   "Vlastnosti vzoru jednotky": "EN_Vlastnosti vzoru jednotky",
   "Vlastnosti zariadenia": "EN_Vlastnosti zariadenia",
+  "Vyber predvoľbu": "Vyber predvoľbu",
   "Vyberte aspoň jednu z možností": "EN_Vyberte aspoň jednu z možností",
   "Vyberte {{entity}}": "EN_Vyberte {{entity}}",
   "Vyhľadajte podľa {{entity}}": "EN_Vyhľadajte podľa {{entity}}",
@@ -167,10 +177,17 @@
     }
   },
   "Zadajte email": "EN_Zadajte email",
+  "Zadajte firmu": "Zadajte firmu",
   "Zadajte heslo": "EN_Zadajte heslo",
   "Zadajte maximálne {{max}}": "EN_Zadajte maximálne {{max}}",
+  "Zadajte meno": "Zadajte meno",
+  "Zadajte mesto": "Zadajte mesto",
   "Zadajte minimálne {{min}}": "EN_Zadajte minimálne {{min}}",
   "Zadajte nové heslo": "EN_Zadajte nové heslo",
+  "Zadajte priezvisko": "Zadajte priezvisko",
+  "Zadajte smerovacie číslo": "Zadajte smerovacie číslo",
+  "Zadajte telefónne číslo": "Zadajte telefónne číslo",
+  "Zadajte ulicu": "Zadajte ulicu",
   "Zadajte zraz na letisku pred odletom": "EN_Zadajte zraz na letisku pred odletom",
   "Zadajte zraz pred cestou": "EN_Zadajte zraz pred cestou",
   "Zadajte {{entity}}": "EN_Zadajte {{entity}}",

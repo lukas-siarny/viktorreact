@@ -5,7 +5,12 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import XHR from 'i18next-xhr-backend'
 import { initReactI18next } from 'react-i18next'
 
-import { NAMESPACE } from './enums'
+// locales
+import 'dayjs/locale/sk'
+import 'dayjs/locale/cs'
+import 'dayjs/locale/en'
+
+import { NAMESPACE, LANGUAGE, DEFAULT_LANGUAGE } from './enums'
 
 i18n.use(Backend)
 	.use(initReactI18next)
@@ -36,12 +41,12 @@ i18n.use(Backend)
 			lookupQuerystring: 'lang'
 		},
 		defaultNS: 'keep-empty',
-		fallbackLng: 'sk',
+		fallbackLng: DEFAULT_LANGUAGE,
 		interpolation: {
 			escapeValue: false
 		},
 		load: 'languageOnly',
-		supportedLngs: ['sk', 'en'],
+		supportedLngs: Object.values(LANGUAGE),
 		ns: Object.values(NAMESPACE),
 		nsSeparator: ':',
 		keySeparator: '.',
@@ -52,5 +57,7 @@ i18n.use(Backend)
 			useSuspense: true
 		}
 	})
+
+// export const ACCEPT_LANGUAGE_HEADER = () => currentLocale.ISO_639
 
 export default i18n

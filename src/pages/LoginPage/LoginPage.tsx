@@ -10,10 +10,10 @@ import LoginForm from './components/LoginForm'
 import ForgottenPasswordForm from './components/ForgottenPasswordForm'
 
 // interfaces
-import { IForgotPasswordForm } from '../../types/interfaces'
+import { ILoginForm, IForgotPasswordForm } from '../../types/interfaces'
 
 // // actions
-// import * as UserActions from '../../reducers/users/userActions'
+import * as UserActions from '../../reducers/users/userActions'
 
 // utils
 import { postReq } from '../../utils/request'
@@ -29,8 +29,7 @@ const LoginPage: FC<Props> = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	// const handleSubmit = async (values: ILoginForm) => dispatch(UserActions.logInUser(get(values, 'email'), get(values, 'password')))
-	const handleSubmit = (values: any) => console.log('🚀 ~ file: LoginPage.tsx ~ line 21 ~ values', values)
+	const handleLoginSubmit = async (values: ILoginForm) => dispatch(UserActions.logInUser(values))
 
 	const handleForgottenPassSubmit = async (values: IForgotPasswordForm) => {
 		try {
@@ -50,7 +49,7 @@ const LoginPage: FC<Props> = () => {
 
 	return (
 		<>
-			<LoginForm onSubmit={handleSubmit as any} showForgottenPasswordModal={() => setModalVisible(true)} />
+			<LoginForm onSubmit={handleLoginSubmit} showForgottenPasswordModal={() => setModalVisible(true)} />
 			<Modal
 				className='rounded-fields n-modal'
 				title={t('loc:Zabudnuté heslo')}

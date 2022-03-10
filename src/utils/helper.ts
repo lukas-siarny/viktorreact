@@ -105,8 +105,6 @@ import docLogoPath from '../assets/icons/doc-icon.svg'
 import xlsLogoPath from '../assets/icons/xls-icon.svg'
 import unknownDocumentPath from '../assets/icons/unknown-document-icon.svg'
 
-import { UserPermission } from '../reducers/users/userActions'
-
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
 /**

@@ -1,33 +1,23 @@
 @import tailwind-variables
-@import "variables"
 
 $vertical-header-spacing: 8px
 $right-left-layout-spacig: 16px
-
-/*md: '744px', // minimal supported resolution by Figma design
-			lg: '1024px',
-			xl: '1280px',
-			'2xl': '1536px',
-			'3xl': '1920px' */
+$layout-height: 720px
+$inner-padding: 45px
 
 // Simple layout - Landing page
 .simple-layout
-	position: relative
 	overflow: auto
-	width: 100vw
-	height: 100vh
+	background: $backgroundColor-notino-grayLight
 
-	@media (min-width: 1536px)
-		.left-column
-			padding-left: calc(4vw + #{$simple-layout-left-inner-padding}) !important
-		.right-column
-			padding-right: 4vw
+	.layout-content
+		box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.21)
+		height: $layout-height
+		max-width: 1280px
+		min-width: 744px
 
-	@media (min-width: 1920px)
-		.left-column
-			padding-left: calc(20vw + #{$simple-layout-left-inner-padding}) !important
-		.right-column
-			padding-right: 20vw
+	.ant-carousel
+		height: calc(#{$layout-height} - (2*#{$inner-padding})) // 630px
 
 	.cover
 		object-fit: cover

@@ -36,7 +36,7 @@ const RegistrationForm: FC<Props> = () => {
 	// 			<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} />
 	// 		</Space>
 	// 		<Row justify={'end'} className=''>
-	// 			<Link to={t('paths:zabudnute-heslo') as string}>
+	// 			<Link to='paths:zabudnute-heslo'>
 	// 				<Button style={{ paddingRight: 0 }} block className={'noti-btn text-notino-black'} type={'link'} htmlType={'button'}>
 	// 					{t('loc:Zabudnuté heslo')}
 	// 				</Button>
@@ -48,7 +48,7 @@ const RegistrationForm: FC<Props> = () => {
 	// 			</Button>
 	// 			<span className='table m-auto text-notino-black'>
 	// 				{t('loc:Ešte nemáte účet?')}
-	// 				<Link to={t('paths:zabudnute-heslo') as string} className='inline-block'>
+	// 				<Link to='paths:zabudnute-heslo' className='inline-block'>
 	// 					<Button style={{ paddingRight: 0 }} type={'link'} htmlType={'button'}>
 	// 						{t('loc:Registrovať sa')}
 	// 					</Button>

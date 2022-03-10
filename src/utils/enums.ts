@@ -38,6 +38,8 @@ export const ROW_GUTTER_X_DEFAULT = [4, 0] as Gutter
 export const ROW_GUTTER_X_M = [16, 0] as Gutter
 export const ROW_GUTTER_X_L = [32, 0] as Gutter
 
+export const ROUTE_PREFIX = '/b2b'
+
 export const DROPDOWN_POSITION = {
 	BOTTOM_LEFT: {
 		points: ['tl', 'bl'],

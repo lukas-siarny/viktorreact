@@ -8,7 +8,7 @@ import rootReducer from '../reducers'
 import { getAccessToken, isLoggedIn } from './auth'
 import { MSG_TYPE, NOTIFICATION_TYPE } from './enums'
 import configureStore from './configureStore'
-import { history } from './history'
+import { history, getPath } from './history'
 
 // types
 import { IErrorMessage } from '../types/interfaces'
@@ -51,7 +51,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 		}
 		showNotifications(messages, typeNotification)
 		// logOutUser()(store.dispatch, store.getState, undefined)
-		history.push(i18next.t('paths:prihlasenie'))
+		history.push(getPath('login'))
 	} else if (get(error, 'response.status') === 504 || get(error, 'response') === undefined || get(error, 'message') === 'Network Error') {
 		messages = [
 			{

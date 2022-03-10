@@ -12,7 +12,7 @@ module.exports = {
 		sort: true,
 		trans: false,
 		removeUnusedKeys: true,
-		lngs: ['sk'],
+		lngs: ['sk', 'en'],
 		ns: [
 			'paths',
 			'loc'
@@ -35,6 +35,6 @@ module.exports = {
 			lineEnding: '\n'
 		},
 		nsSeparator: ':',
-		keySeparator: '|'
+		keySeparator: '.'
 	}
 }

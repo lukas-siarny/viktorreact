@@ -12,6 +12,7 @@ import { IForgotPasswordForm } from '../../../types/interfaces'
 
 // utils
 import { FORM } from '../../../utils/enums'
+import { getPath } from '../../../utils/history'
 
 // validate
 import validateForgotPasswordForm from './validateForgotPasswordForm'
@@ -26,7 +27,7 @@ const ForgotPasswordForm: FC<Props> = (props) => {
 	return (
 		<Form layout='vertical' className={'forgot-password-form '} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={20}>
-				<Link to={t('paths:prihlasenie') as string}>
+				<Link to={getPath(t('paths:login'))}>
 					<Button icon={<BackIcon />} type={'link'} className={'tp-btn'} htmlType={'button'}>
 						{t('loc:Späť na prihlásenie')}
 					</Button>

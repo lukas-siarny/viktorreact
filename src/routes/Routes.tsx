@@ -31,8 +31,6 @@ import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
-const devMode = process.env.NODE_ENV === 'development'
-
 const Routes: FC = (props) => {
 	const [t] = useTranslation()
 
@@ -47,11 +45,9 @@ const Routes: FC = (props) => {
 				component={CreatePasswordPage}
 				layout={SimpleLayout}
 			/>
-			{/* NOTE: only for DEV purposes, redirect from / -> /b2b/  */}
-			{devMode && <AuthRoute exact path={t('paths:index')} redirectTo={getPath(t('paths:index'))} component={NotFoundPage} layout={MainLayout} />}
 			<AuthRoute {...props} exact path={getPath(t('paths:index'))} component={EntryPage} translatePathKey={getPath(t('paths:index'))} layout={MainLayout} />
 			<AuthRoute {...props} exact path={getPath(t('paths:home'))} component={HomePage} translatePathKey={getPath(t('paths:home'))} layout={MainLayout} />
-			{/* IMPORTANT: add all private routes before this declaration */}
+			{/* NOTE: add all private routes before this declaration */}
 			<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
 			<AuthRoute
 				{...props}

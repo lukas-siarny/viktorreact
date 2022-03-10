@@ -1,7 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react'
 import { withDesign } from 'storybook-addon-designs'
 import { Modal, Button } from 'antd'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory } from '@storybook/react'
 
 export default {

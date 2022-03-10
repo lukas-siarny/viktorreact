@@ -1,6 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react'
 import { withDesign } from 'storybook-addon-designs'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { ComponentStory } from '@storybook/react'
 import SimpleLayout from '../../layouts/SimpleLayout'
 

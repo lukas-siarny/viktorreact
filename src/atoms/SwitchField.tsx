@@ -52,7 +52,7 @@ const SwitchField = (props: Props) => {
 		<Item help={touched && error} validateStatus={error && touched ? 'error' : undefined} style={style} className={cx(className, { 'pt-25px': offsetLabel })}>
 			{label ? (
 				<div
-					className={cx('tp-switch', { 'pointer-events-none': disabled, 'bg-gray-50': disabled })}
+					className={cx('noti-switch', { 'pointer-events-none': disabled, 'bg-gray-50': disabled })}
 					onClick={() => {
 						onChange(!checkedState)
 					}}

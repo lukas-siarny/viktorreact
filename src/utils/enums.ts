@@ -354,7 +354,7 @@ export enum PAGE_DESTINATION_SEASON_TABS {
 	GENERAL_PRICELIST_ITEMS = 'GENERAL_PRICELIST_ITEMS'
 }
 
-export const TAB_ID_PREFIX = 'tp-tabs'
+export const TAB_ID_PREFIX = 'noti-tabs'
 
 export enum PAGE_BUSINESS_CASE_TABS {
 	TRAVELERS = 'TRAVELERS',

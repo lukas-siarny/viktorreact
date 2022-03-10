@@ -41,7 +41,7 @@ const LoginForm: FC<Props> = (props) => {
 				</Button>
 				{/* </Link> */}
 			</Row>
-			<div className='absolute bottom-0 left-0 right-0'>
+			<div className='mt-6'>
 				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Prihlásiť sa')}
 				</Button>

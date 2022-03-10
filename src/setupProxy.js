@@ -4,7 +4,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware')
 module.exports = (app) => {
 	app.use(
 		createProxyMiddleware('/api', {
-			target: process.env.PROXY || 'http://localhost:3001',
+			target: 'https://notino-development.goodrequest.dev',
 			changeOrigin: true
 		})
 	)

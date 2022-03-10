@@ -1,5 +1,5 @@
 import React, { ReactNode, useRef, useCallback } from 'react'
-import { Row, Col, Carousel } from 'antd'
+import { Carousel } from 'antd'
 import { CarouselRef } from 'antd/lib/carousel'
 
 import { ReactComponent as Logo } from '../assets/images/logo.svg'
@@ -38,13 +38,13 @@ const SimpleLayout = (props: Props) => {
 	}, [carouselRef])
 
 	return (
-		<div className='simple-layout'>
-			<Row className='min-h-screen'>
-				<Col span={12} className={'bg-white p-45px left-column'}>
+		<div className='simple-layout grid place-items-center h-screen w-screen'>
+			<div className='layout-content grid md:grid-cols-2 grid-cols-1 gap-0'>
+				<div className='bg-white p-45px relative md:block hidden'>
 					<Carousel ref={carouselRef}>
 						{mock.map((item, index) => (
-							<div key={index} className='content-wrapper rounded-3xl flex flex-col justify-between'>
-								<img src={item.src} alt={item.title} className='notino-ad-banner rounded-3xl' />
+							<div key={index} className='carousel-content rounded-3xl flex flex-col justify-between'>
+								<img src={item.src} alt={item.title} className='rounded-3xl' />
 								<div>
 									<h4 className='mt-11'>{item.title}</h4>
 									<div className='mt-3 mb-12 base-regular'>{item.description}</div>
@@ -53,12 +53,12 @@ const SimpleLayout = (props: Props) => {
 						))}
 					</Carousel>
 					<Chevron onClick={handleNext} className='absolute bottom-45px right-45px cursor-pointer' />
-				</Col>
-				<Col span={12} className='pt-21 pb-12 flex flex-col items-center right-column'>
+				</div>
+				<div className='bg-notino-grayLighter pt-21 pb-12 flex flex-col items-center'>
 					<Logo />
 					<div className='mt-16 flex-auto'>{props.children}</div>
-				</Col>
-			</Row>
+				</div>
+			</div>
 		</div>
 	)
 }

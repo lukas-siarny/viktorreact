@@ -19,24 +19,25 @@ type Props = WithTranslation & RouteProps
 
 class CreatePasswordPage extends Component<Props> {
 	handleSubmit = async (values: ICreatePasswordForm) => {
-		try {
-			const data = {
-				password: get(values, 'password')
-			}
-			const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
+		console.log(' CreatePasswordPage.tsx ~ line 22 ~ handleSubmit= ~ values', values)
+		// try {
+		// 	const data = {
+		// 		password: get(values, 'password')
+		// 	}
+		// 	const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
 
-			const headers = {
-				Authorization: `Bearer ${t}`
-			}
+		// 	const headers = {
+		// 		Authorization: `Bearer ${t}`
+		// 	}
 
-			const res = await postReq('/api/v1/authorization/reset-password', undefined, data, { headers }, NOTIFICATION_TYPE.NOTIFICATION, true)
+		// 	const res = await postReq('/api/v1/authorization/reset-password', undefined, data, { headers }, NOTIFICATION_TYPE.NOTIFICATION, true)
 
-			history.push(this.props.t('paths:prihlasenie'))
+		// 	history.push(this.props.t('paths:prihlasenie'))
 
-			return res
-		} catch (e) {
-			return e
-		}
+		// 	return res
+		// } catch (e) {
+		// 	return e
+		// }
 	}
 
 	render() {

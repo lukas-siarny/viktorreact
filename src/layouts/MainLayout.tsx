@@ -20,7 +20,7 @@ const MainLayout: FC<Props> = (props) => {
 		// 	{/* <LayoutHeader page={page} /> */}
 		// 	<Layout className={'tp-content'}>{children}</Layout>
 		// </Layout>
-		<Layout className='min-h-screen' hasSider>
+		<Layout className='min-h-screen noti-main-layout' hasSider>
 			<LayoutSider page={page} />
 			<Layout>
 				<Content className='p-4'>{children}</Content>

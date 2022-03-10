@@ -11,7 +11,7 @@ import { history } from '../../utils/history'
 import { PAGE } from '../../utils/enums'
 
 // redux
-import { logOutUser } from '../../reducers/users/userActions'
+// import { logOutUser } from '../../reducers/users/userActions'
 
 const { Sider } = Layout
 
@@ -25,22 +25,24 @@ const LayoutSider = (props: Props) => {
 	const dispatch = useDispatch()
 
 	return (
-		<Sider collapsible className='bg-white shadow-md '>
-			<div className='sticky top-0'>
-				<Link to={t('paths:index') as string}>dddfs</Link>
-
-				<Menu mode='vertical' selectedKeys={[page as string]} className='sticky top-0'>
-					<Menu.Divider />
-					<Menu.Item key={PAGE.OVERVIEW} onClick={() => history.push(t('paths:prehlad'))} icon={<ThumbnailIcon />}>
-						{t('loc:Prehľad')}
-					</Menu.Item>
-					<Menu.Item key={PAGE.SERVICES} onClick={() => history.push(t('paths:sluzby'))} icon={<ThumbnailIcon />}>
-						{t('loc:Služby')}
-					</Menu.Item>
-					<Menu.Item key={PAGE.SALON} onClick={() => history.push(t('paths:salon'))} icon={<ThumbnailIcon />}>
-						{t('loc:Salón')}
-					</Menu.Item>
-				</Menu>
+		<Sider className='bg-white shadow-md '>
+			<div className='sticky top-0 flex flex-col h-screen'>
+				<Link to={t('paths:index') as string}>logo</Link>
+				<div className='px-2 flex flex-col flex-grow overflow-y-auto'>
+					<Menu mode='inline' selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
+						<Menu.Divider />
+						<Menu.Item key={PAGE.OVERVIEW} onClick={() => history.push(t('paths:prehlad'))} icon={<ThumbnailIcon />}>
+							{t('loc:Prehľad')}
+						</Menu.Item>
+						<Menu.Item key={PAGE.SERVICES} onClick={() => history.push(t('paths:sluzby'))} icon={<ThumbnailIcon />}>
+							{t('loc:Služby')}
+						</Menu.Item>
+						<Menu.Item key={PAGE.SALON} onClick={() => history.push(t('paths:salon'))} icon={<ThumbnailIcon />}>
+							{t('loc:Salón')}
+						</Menu.Item>
+					</Menu>
+				</div>
+				<div className='p-2'>user</div>
 			</div>
 		</Sider>
 	)

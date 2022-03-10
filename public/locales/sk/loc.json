@@ -54,13 +54,18 @@
   "Katalóg produktov": "Katalóg produktov",
   "Kategória hotela": "Kategória hotela",
   "Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne": {
+<<<<<<< HEAD
     "": "_NEPRELOZENE_"
+=======
+    "": ""
+>>>>>>> bb7af2ab7a98f127ade1d3a0047bc226bf789f67
   },
   "Krajiny": "Krajiny",
   "Kód jazdy": "Kód jazdy",
   "Kód letu": "Kód letu",
   "Letecká doprava": "Letecká doprava",
   "Lorem ipsium": {
+<<<<<<< HEAD
     "": "_NEPRELOZENE_"
   },
   "Lorem ipsum": {
@@ -69,12 +74,26 @@
   "Max": {
     " počet znakov je {{max}}": "_NEPRELOZENE_",
     " váha batožiny [kg]": "_NEPRELOZENE_"
+=======
+    "": ""
+  },
+  "Lorem ipsum": {
+    "": ""
+  },
+  "Max": {
+    " počet znakov je {{max}}": " počet znakov je {{max}}",
+    " váha batožiny [kg]": " váha batožiny [kg]"
+>>>>>>> bb7af2ab7a98f127ade1d3a0047bc226bf789f67
   },
   "Mena": "Mena",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
   "Na vašu adresu odošleme link na obnovenie hesla": {
     " Prosím zadajte svoju adresu": {
+<<<<<<< HEAD
       "": "_NEPRELOZENE_"
+=======
+      "": ""
+>>>>>>> bb7af2ab7a98f127ade1d3a0047bc226bf789f67
     }
   },
   "Nahrajte pečiatku": "Nahrajte pečiatku",
@@ -83,7 +102,7 @@
   "Načítavam": {
     "": {
       "": {
-        "": "_NEPRELOZENE_"
+        "": ""
       }
     }
   },
@@ -100,7 +119,7 @@
   "Odstránený": "Odstránený",
   "Odstrániť {{entity}}": "Odstrániť {{entity}}",
   "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov": {
-    "": "_NEPRELOZENE_"
+    "": ""
   },
   "Poistenie": "Poistenie",
   "Poisťovne": "Poisťovne",
@@ -110,7 +129,7 @@
   "Počet znakov musí byť {{length}}": "Počet znakov musí byť {{length}}",
   "Pre prístup potvrďte základné údaje": "Pre prístup potvrďte základné údaje",
   "Pre túto akciu nemáte dostatočné oprávnenia": {
-    "": "_NEPRELOZENE_"
+    "": ""
   },
   "Predajné kanály": "Predajné kanály",
   "Pridať {{entity}}": "Pridať {{entity}}",
@@ -127,7 +146,7 @@
   "Stanice": "Stanice",
   "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás",
   "Súbor je príliš veľký (max": {
-    " {{size}} {{unit}})": "_NEPRELOZENE_"
+    " {{size}} {{unit}})": " {{size}} {{unit}})"
   },
   "Textové popisy": "Textové popisy",
   "Toto pole je povinné": "Toto pole je povinné",
@@ -138,7 +157,7 @@
   "Ubytovanie": "Ubytovanie",
   "Uložiť {{entity}}": "Uložiť {{entity}}",
   "Umiestnite pečiatku s podpisom do modrého rámu": {
-    "": "_NEPRELOZENE_"
+    "": ""
   },
   "Upozornenie": "Upozornenie",
   "Upraviť {{entity}}": "Upraviť {{entity}}",
@@ -160,7 +179,7 @@
   "Zabudnuté heslo": "Zabudnuté heslo",
   "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet": {
     " Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla": {
-      "": "_NEPRELOZENE_"
+      "": ""
     }
   },
   "Zadajte email": "Zadajte email",
@@ -183,7 +202,7 @@
   "Zľava na zájazd": "Zľava na zájazd",
   "Zľava pre nových klientov": "Zľava pre nových klientov",
   "Zľava pre presný počet zájazdov, izeb, alebo leteniek": {
-    "": "_NEPRELOZENE_"
+    "": ""
   },
   "Zľava pre prvých XY leteniek alebo izieb": "Zľava pre prvých XY leteniek alebo izieb",
   "Zľava pre stálych klientov": "Zľava pre stálych klientov",

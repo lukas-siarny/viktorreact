@@ -9,7 +9,7 @@ import { Dictionary } from 'lodash'
 import BaseRoute from './BaseRoute'
 
 // redux
-import * as UserActions from '../reducers/users/userActions'
+// import * as UserActions from '../reducers/users/userActions'
 
 // utils
 import { isLoggedIn } from '../utils/auth'
@@ -28,7 +28,6 @@ type Props = RouteProps & {
 	/** e.g. tabKey or other extra props for page */
 	extra?: Dictionary<any>
 }
-let heartbeatInterval = null as number | null
 
 const onIdle = () => {
 	document.location.reload()
@@ -42,19 +41,11 @@ const AuthRoute: FC<Props> = (props) => {
 
 	useEffect(() => {
 		if (!isLoggedIn()) {
-			dispatch(UserActions.logOutUser())
-			return
+			// dispatch(UserActions.logOutUser())
+			console.log('User is not logged...')
 		}
-		heartbeatInterval = setInterval(dispatch(UserActions.ping), 1000 * 60 * 10) // every 10 minute
 
-		dispatch(UserActions.getAuthUserProfile())
-
-		// eslint-disable-next-line consistent-return
-		return () => {
-			if (heartbeatInterval) {
-				clearInterval(heartbeatInterval)
-			}
-		}
+		// dispatch(UserActions.getAuthUserProfile())
 	}, [t, dispatch])
 
 	if (!isLoggedIn()) {

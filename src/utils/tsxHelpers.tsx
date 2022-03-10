@@ -37,7 +37,7 @@ const showNotifications = (messages: IErrorMessage[], typeNotification: NOTIFICA
 					closeIcon: <NotifCloseIcon className={'text-gray-100 hover:text-gray-200'} />,
 					message: translateMessageType(message.type),
 					description: message.message,
-					className: 'tp-notification'
+					className: 'noti-notification'
 				})
 			})
 		} else if (typeNotification === NOTIFICATION_TYPE.MODAL) {

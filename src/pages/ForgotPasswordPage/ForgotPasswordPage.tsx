@@ -18,17 +18,18 @@ type Props = {}
 const ForgotPasswordPage: FC<Props> = () => {
 	const dispatch = useDispatch()
 	const handleSubmit = async (values: IForgotPasswordForm) => {
-		try {
-			const reqData = {
-				email: get(values, 'email')
-			}
+		console.log('ForgotPasswordPage.tsx ~ line 21 ~ values', values)
+		// try {
+		// 	const reqData = {
+		// 		email: get(values, 'email')
+		// 	}
 
-			const res = await postReq('/api/v1/authorization/forgot-password', null, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			dispatch(reset(FORM.FORGOT_PASSWORD))
-			return res
-		} catch (e) {
-			return e
-		}
+		// 	const res = await postReq('/api/v1/authorization/forgot-password', null, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+		// 	dispatch(reset(FORM.FORGOT_PASSWORD))
+		// 	return res
+		// } catch (e) {
+		// 	return e
+		// }
 	}
 	return <ForgotPasswordForm onSubmit={handleSubmit} />
 }

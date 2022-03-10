@@ -92,7 +92,7 @@ const InputField = (props: Props) => {
 			<Input
 				{...input}
 				id={formFieldID(form, input.name)}
-				className={cx('tp-input', { 'tp-input-filter': fieldMode === FIELD_MODE.FILTER })}
+				className={cx('noti-input', { 'noti-input-filter': fieldMode === FIELD_MODE.FILTER })}
 				onChange={onChange}
 				onBlur={onBlur}
 				size={size || 'middle'}

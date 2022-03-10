@@ -53,21 +53,40 @@
   "Jednotlivci": "EN_Jednotlivci",
   "Katalóg produktov": "EN_Katalóg produktov",
   "Kategória hotela": "EN_Kategória hotela",
-  "Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne.": "EN_Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne.",
+  "Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne": {
+    "": "_NEPRELOZENE_"
+  },
   "Krajiny": "EN_Krajiny",
   "Kód jazdy": "EN_Kód jazdy",
   "Kód letu": "EN_Kód letu",
   "Letecká doprava": "EN_Letecká doprava",
-  "Lorem ipsium.": "EN_Lorem ipsium.",
-  "Lorem ipsum.": "EN_Lorem ipsum.",
-  "Max. počet znakov je {{max}}": "EN_Max. počet znakov je {{max}}",
-  "Max. váha batožiny [kg]": "EN_Max. váha batožiny [kg]",
+  "Lorem ipsium": {
+    "": "_NEPRELOZENE_"
+  },
+  "Lorem ipsum": {
+    "": "_NEPRELOZENE_"
+  },
+  "Max": {
+    " počet znakov je {{max}}": "_NEPRELOZENE_",
+    " váha batožiny [kg]": "_NEPRELOZENE_"
+  },
   "Mena": "EN_Mena",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "EN_Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
+  "Na vašu adresu odošleme link na obnovenie hesla": {
+    " Prosím zadajte svoju adresu": {
+      "": "_NEPRELOZENE_"
+    }
+  },
   "Nahrajte pečiatku": "EN_Nahrajte pečiatku",
   "Nahrať": "EN_Nahrať",
   "Naozaj chcete odstrániť {{entity}} ?": "EN_Naozaj chcete odstrániť {{entity}} ?",
-  "Načítavam...": "EN_Načítavam...",
+  "Načítavam": {
+    "": {
+      "": {
+        "": "_NEPRELOZENE_"
+      }
+    }
+  },
   "Nepovinný príplatok": "EN_Nepovinný príplatok",
   "Nesprávny formát emailovej adresy": "EN_Nesprávny formát emailovej adresy",
   "Nie je validná IP": "EN_Nie je validná IP",
@@ -80,7 +99,9 @@
   "Odoslať email": "EN_Odoslať email",
   "Odstránený": "EN_Odstránený",
   "Odstrániť {{entity}}": "EN_Odstrániť {{entity}}",
-  "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov.": "EN_Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov.",
+  "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov": {
+    "": "_NEPRELOZENE_"
+  },
   "Poistenie": "EN_Poistenie",
   "Poisťovne": "EN_Poisťovne",
   "Používateľovi chýbajú oprávnenia na akciu": "EN_Používateľovi chýbajú oprávnenia na akciu",
@@ -88,7 +109,9 @@
   "Počet nocí": "EN_Počet nocí",
   "Počet znakov musí byť {{length}}": "EN_Počet znakov musí byť {{length}}",
   "Pre prístup potvrďte základné údaje": "EN_Pre prístup potvrďte základné údaje",
-  "Pre túto akciu nemáte dostatočné oprávnenia.": "EN_Pre túto akciu nemáte dostatočné oprávnenia.",
+  "Pre túto akciu nemáte dostatočné oprávnenia": {
+    "": "_NEPRELOZENE_"
+  },
   "Predajné kanály": "EN_Predajné kanály",
   "Pridať {{entity}}": "EN_Pridať {{entity}}",
   "Prihlásiť sa": "EN_Prihlásiť sa",
@@ -103,7 +126,9 @@
   "Späť na prihlásenie": "EN_Späť na prihlásenie",
   "Stanice": "EN_Stanice",
   "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "EN_Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás",
-  "Súbor je príliš veľký (max. {{size}} {{unit}})": "EN_Súbor je príliš veľký (max. {{size}} {{unit}})",
+  "Súbor je príliš veľký (max": {
+    " {{size}} {{unit}})": "_NEPRELOZENE_"
+  },
   "Textové popisy": "EN_Textové popisy",
   "Toto pole je povinné": "EN_Toto pole je povinné",
   "Typ osoby": "EN_Typ osoby",
@@ -112,7 +137,9 @@
   "Typ ubytovania": "EN_Typ ubytovania",
   "Ubytovanie": "EN_Ubytovanie",
   "Uložiť {{entity}}": "EN_Uložiť {{entity}}",
-  "Umiestnite pečiatku s podpisom do modrého rámu.": "EN_Umiestnite pečiatku s podpisom do modrého rámu.",
+  "Umiestnite pečiatku s podpisom do modrého rámu": {
+    "": "_NEPRELOZENE_"
+  },
   "Upozornenie": "EN_Upozornenie",
   "Upraviť {{entity}}": "EN_Upraviť {{entity}}",
   "Ups niečo sa pokazilo": "EN_Ups niečo sa pokazilo",
@@ -131,7 +158,11 @@
   "Výška zľavy": "EN_Výška zľavy",
   "Webové projekty": "EN_Webové projekty",
   "Zabudnuté heslo": "EN_Zabudnuté heslo",
-  "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet. Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla.": "EN_Zadajte e-mailovú adresu, na ktorú máte registrovaný účet. Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla.",
+  "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet": {
+    " Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla": {
+      "": "_NEPRELOZENE_"
+    }
+  },
   "Zadajte email": "EN_Zadajte email",
   "Zadajte heslo": "EN_Zadajte heslo",
   "Zadajte maximálne {{max}}": "EN_Zadajte maximálne {{max}}",
@@ -151,7 +182,9 @@
   "Základna cena": "EN_Základna cena",
   "Zľava na zájazd": "EN_Zľava na zájazd",
   "Zľava pre nových klientov": "EN_Zľava pre nových klientov",
-  "Zľava pre presný počet zájazdov, izeb, alebo leteniek.": "EN_Zľava pre presný počet zájazdov, izeb, alebo leteniek.",
+  "Zľava pre presný počet zájazdov, izeb, alebo leteniek": {
+    "": "_NEPRELOZENE_"
+  },
   "Zľava pre prvých XY leteniek alebo izieb": "EN_Zľava pre prvých XY leteniek alebo izieb",
   "Zľava pre stálych klientov": "EN_Zľava pre stálych klientov",
   "jazda": "EN_jazda",

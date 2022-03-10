@@ -13,7 +13,7 @@ import { history, getPath } from './history'
 // types
 import { IErrorMessage } from '../types/interfaces'
 
-// import { logOutUser } from '../reducers/users/userActions'
+import { logOutUser } from '../reducers/users/userActions'
 import showNotifications from './tsxHelpers'
 import { PathsDictionary } from '../types/api'
 
@@ -35,7 +35,7 @@ type DeleteUrls = {
 	[Q in FilteredKeys<PathsDictionary, { delete: any }>]: PathsDictionary[Q]
 }
 
-// const { store } = configureStore(rootReducer)
+const { store } = configureStore(rootReducer)
 
 export const showErrorNotifications = (error: AxiosError | Error | unknown, typeNotification = NOTIFICATION_TYPE.NOTIFICATION) => {
 	let messages = get(error, 'response.data.messages')
@@ -50,8 +50,8 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			]
 		}
 		showNotifications(messages, typeNotification)
-		// logOutUser()(store.dispatch, store.getState, undefined)
-		history.push(getPath('login'))
+		logOutUser()(store.dispatch, store.getState, undefined)
+		history.push(getPath(i18next.t('paths:login')))
 	} else if (get(error, 'response.status') === 504 || get(error, 'response') === undefined || get(error, 'message') === 'Network Error') {
 		messages = [
 			{

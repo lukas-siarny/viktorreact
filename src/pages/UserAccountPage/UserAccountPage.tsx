@@ -35,8 +35,8 @@ const UserAccountPage: FC<Props> = (props) => {
 	const userAccountDetail = useSelector((state: RootState) => state.user.user)
 
 	useEffect(() => {
-		let uid: number = userID || -1
-		if (!userID) {
+		let uid: number  = userID || -1
+		if (uid === undefined || uid === null || uid < 0) {
 			// decompose uid from token
 			const payload = decode(token)
 			uid = get(payload, 'uid')

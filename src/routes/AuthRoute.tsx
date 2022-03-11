@@ -1,16 +1,20 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Redirect, RouteProps } from 'react-router-dom'
 import IdleTimer from 'react-idle-timer'
 import { Dictionary } from 'lodash'
+import { useDispatch } from 'react-redux'
 
 // routes
 import BaseRoute from './BaseRoute'
 
 // utils
 import { isLoggedIn } from '../utils/auth'
-import { PAGE, SUBMENU_PARENT } from '../utils/enums'
+import { PAGE, SUBMENU_PARENT, REFRESH_TOKEN_INTERVAL, REFRESH_PAGE_INTERVAL } from '../utils/enums'
 import { getPath } from '../utils/history'
+
+// redux
+import { refreshToken } from '../reducers/users/userActions'
 
 type Props = RouteProps & {
 	layout: React.ReactNode
@@ -32,7 +36,18 @@ const onIdle = () => {
 
 const AuthRoute: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const { redirectTo } = props
+
+	useEffect(() => {
+		const refreshInterval = setInterval(dispatch(refreshToken), REFRESH_TOKEN_INTERVAL)
+
+		return () => {
+			if (refreshInterval) {
+				clearInterval(refreshInterval)
+			}
+		}
+	}, [dispatch])
 
 	if (!isLoggedIn()) {
 		return <Redirect to={getPath(t('paths:login'))} />
@@ -49,7 +64,7 @@ const AuthRoute: FC<Props> = (props) => {
 				element={document}
 				onIdle={onIdle}
 				debounce={250}
-				timeout={1000 * 60 * 60 * 4} // refresh page if user is more than 4 hours inactive
+				timeout={REFRESH_PAGE_INTERVAL} // refresh page if user is longer time inactive
 			/>
 			<BaseRoute {...(props as any)} />
 		</>

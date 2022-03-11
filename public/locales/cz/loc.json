@@ -47,6 +47,7 @@
   "Hesla sa nezhodujú": "CZ_Hesla sa nezhodujú",
   "Heslo": "CZ_Heslo",
   "Hlavná stránka": "CZ_Hlavná stránka",
+  "Home": "Home",
   "Individuálna doprava": "CZ_Individuálna doprava",
   "Info": "CZ_Info",
   "Jazyky": "CZ_Jazyky",
@@ -71,6 +72,7 @@
     " váha batožiny [kg]": " váha batožiny [kg]"
   },
   "Mena": "CZ_Mena",
+  "Môj účet": "Môj účet",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "CZ_Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
   "Na vašu adresu odošleme link na obnovenie hesla": {
     " Prosím zadajte svoju adresu": {
@@ -96,6 +98,7 @@
   "Názov musí byť vyplnení pre aspoň jeden jazyk": "CZ_Názov musí byť vyplnení pre aspoň jeden jazyk",
   "Obnova hesla": "CZ_Obnova hesla",
   "Obsadenosť": "CZ_Obsadenosť",
+  "Odhlásiť": "Odhlásiť",
   "Odoslať email": "CZ_Odoslať email",
   "Odstránený": "CZ_Odstránený",
   "Odstrániť {{entity}}": "CZ_Odstrániť {{entity}}",

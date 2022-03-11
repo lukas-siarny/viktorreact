@@ -15,7 +15,7 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as IUserPayload & ILoadingAndFailure,
+	} as IUserPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last

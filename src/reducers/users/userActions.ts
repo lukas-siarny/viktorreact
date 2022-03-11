@@ -85,14 +85,16 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async () => {
 	}
 }
 
-export const getUserAccountDetails = (userID: number): ThunkResult<Promise<void>> => async (dispatch) => {
-	try {
-		dispatch({ type: USER.USER_LOAD_START })
-		const data = await getReq('/api/b2b/admin/users/{userID}', {userID})
-		dispatch({ type: USER.USER_LOAD_DONE, payload: data })
-	} catch (err) {
-		dispatch({ type: USER.USER_LOAD_FAIL })
-		// eslint-disable-next-line no-console
-		console.error(err)
+export const getUserAccountDetails =
+	(userID: number): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: USER.USER_LOAD_START })
+			const data = await getReq('/api/b2b/admin/users/{userID}', { userID })
+			dispatch({ type: USER.USER_LOAD_DONE, payload: data })
+		} catch (err) {
+			dispatch({ type: USER.USER_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
 	}
-}

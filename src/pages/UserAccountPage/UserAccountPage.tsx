@@ -35,7 +35,7 @@ const UserAccountPage: FC<Props> = (props) => {
 	const userAccountDetail = useSelector((state: RootState) => state.user.user)
 
 	useEffect(() => {
-		let uid: number  = userID || -1
+		let uid: number = userID || -1
 		if (uid === undefined || uid === null || uid < 0) {
 			// decompose uid from token
 			const payload = decode(token)
@@ -47,28 +47,38 @@ const UserAccountPage: FC<Props> = (props) => {
 
 	// init forms
 	useEffect(() => {
-		dispatch(initialize(FORM.USER_ACCOUNT_FORM, { ...userAccountDetail.data?.user, ...userAccountDetail.data?.user?.company}))
+		dispatch(initialize(FORM.USER_ACCOUNT_FORM, { ...userAccountDetail.data?.user, ...userAccountDetail.data?.user?.company }))
 	}, [userAccountDetail.data])
 
 	const handleUserAccountFormSubmit = async (data: any) => {
 		try {
 			if (userId !== undefined && userId !== null && userId >= 0) {
 				setSubmitting(true)
-				await Promise.all([ patchReq('/api/b2b/admin/users/{userID}', { userID: userId }, {
-					firstName: data?.firstName,
-					lastName: data?.lastName,
-					phonePrefixCountryCode: data?.phonePrefixCountryCode,
-					phone: data?.phone
-				}),
-				patchReq('/api/b2b/admin/users/{userID}/company-profile', { userID: userId }, {
-					businessID: data?.businessID,
-					vatID: data?.vatID,
-					companyName: data?.companyName,
-					zipCode: data?.zipCode,
-					city: data?.city,
-					street: data?.street,
-					countryCode: data?.countryCode
-				}) ])
+				await Promise.all([
+					patchReq(
+						'/api/b2b/admin/users/{userID}',
+						{ userID: userId },
+						{
+							firstName: data?.firstName,
+							lastName: data?.lastName,
+							phonePrefixCountryCode: data?.phonePrefixCountryCode,
+							phone: data?.phone
+						}
+					),
+					patchReq(
+						'/api/b2b/admin/users/{userID}/company-profile',
+						{ userID: userId },
+						{
+							businessID: data?.businessID,
+							vatID: data?.vatID,
+							companyName: data?.companyName,
+							zipCode: data?.zipCode,
+							city: data?.city,
+							street: data?.street,
+							countryCode: data?.countryCode
+						}
+					)
+				])
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -78,25 +88,27 @@ const UserAccountPage: FC<Props> = (props) => {
 		}
 	}
 
-
-	return <div className='content-body small'>
-		<UserAccountFrom onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(userAccountDetail.data?.user?.company)}/>
-		<Row justify='center'>
-			<Button
-				type={'primary'}
-				block size={'large'}
-				className={`not-btn m-regular mt-4 mb-4 w-1/3`}
-				htmlType={'submit'}
-				onClick={() => {
-					dispatch(submit(FORM.USER_ACCOUNT_FORM))
-				}}
-				disabled={submitting}
-				loading={submitting}
-			>
-				{t('loc:Uložiť')}
-			</Button>
-		</Row>
-	</div>
+	return (
+		<div className='content-body small'>
+			<UserAccountFrom onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(userAccountDetail.data?.user?.company)} />
+			<Row justify='center'>
+				<Button
+					type={'primary'}
+					block
+					size={'large'}
+					className={`not-btn m-regular mt-4 mb-4 w-1/3`}
+					htmlType={'submit'}
+					onClick={() => {
+						dispatch(submit(FORM.USER_ACCOUNT_FORM))
+					}}
+					disabled={submitting}
+					loading={submitting}
+				>
+					{t('loc:Uložiť')}
+				</Button>
+			</Row>
+		</div>
+	)
 }
 
 export default UserAccountPage

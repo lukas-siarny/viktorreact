@@ -9,7 +9,7 @@ import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
 // utils
-import { setAccessToken, clearAccessToken } from '../../utils/auth'
+import { setAccessToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
 import { postReq } from '../../utils/request'
 
@@ -43,12 +43,4 @@ export const logInUser =
 		}
 	}
 
-export const logOutUser = (): ThunkResult<void> => (dispatch) => {
-	clearAccessToken()
-
-	dispatch({
-		type: RESET_STORE
-	})
-
-	history.push(i18next.t('paths:prihlasenie'))
-}
+export const logOutUser = (): ThunkResult<void> => (dispatch) => {}

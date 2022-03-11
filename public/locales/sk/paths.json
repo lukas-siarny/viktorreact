@@ -3,7 +3,6 @@
   "index": "/",
   "login": "/auth/login",
   "my-account": "/my-account",
-  "prihlasenie": "/prihlasenie",
   "reset-password": "/auth/reset-password",
   "signup": "/auth/signup"
 }

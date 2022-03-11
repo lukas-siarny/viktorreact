@@ -9,7 +9,7 @@ import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
 // utils
-import { setAccessToken } from '../../utils/auth'
+import { setAccessToken, clearAccessToken, clearRefreshToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
 import { postReq } from '../../utils/request'
 
@@ -43,4 +43,22 @@ export const logInUser =
 		}
 	}
 
-export const logOutUser = (): ThunkResult<void> => (dispatch) => {}
+export const logOutUser = (): ThunkResult<void> => async (dispatch) => {
+	try {
+		await postReq('/api/b2b/admin/auth/logout', null, undefined)
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.log(error)
+	}
+
+	clearAccessToken()
+	clearRefreshToken()
+
+	dispatch({
+		type: RESET_STORE
+	})
+
+	history.push(getPath(i18next.t('paths:login')))
+
+	return null
+}

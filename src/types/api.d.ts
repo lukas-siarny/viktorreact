@@ -13,17 +13,299 @@ declare namespace Paths {
                 countries: {
                     code: string;
                     currencyCode: string;
-                    flag: string | null;
+                    flag: string;
                     phonePrefix: string;
                 }[];
             }
         }
     }
-    namespace PatchApiB2BV1UsersWelcomeScreen {
-        export interface RequestBody {
+    namespace GetApiB2BAdminEnumsCurrencies {
+        namespace Responses {
+            export interface $200 {
+                currencies: {
+                    code: string;
+                    symbol: string;
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BAdminUsersUserId {
+        namespace Parameters {
+            export type UserID = number;
+        }
+        export interface PathParameters {
+            userID: Parameters.UserID;
         }
         namespace Responses {
             export interface $200 {
+                user: {
+                    id: number;
+                    email: string;
+                    lastAccess?: string; // date-time
+                    activateAt?: string; // date-time
+                    firstName?: string;
+                    lastName?: string;
+                    phonePrefixCountryCode: string;
+                    phone: string; // ^\d+$
+                    company?: {
+                        id: number;
+                        businessID: string;
+                        vatID?: string;
+                        companyName: string;
+                        zipCode: string;
+                        city: string;
+                        street: string;
+                        countryCode: string;
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2BV1EnumsCountries {
+        namespace Responses {
+            export interface $200 {
+                countries: {
+                    code: string;
+                    currencyCode: string;
+                    flag: string;
+                    phonePrefix: string;
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1EnumsCurrencies {
+        namespace Responses {
+            export interface $200 {
+                currencies: {
+                    code: string;
+                    symbol: string;
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1UsersUserId {
+        namespace Parameters {
+            export type UserID = number;
+        }
+        export interface PathParameters {
+            userID: Parameters.UserID;
+        }
+        namespace Responses {
+            export interface $200 {
+                user: {
+                    id: number;
+                    email: string;
+                    lastAccess?: string; // date-time
+                    activateAt?: string; // date-time
+                    firstName?: string;
+                    lastName?: string;
+                    phonePrefixCountryCode: string;
+                    phone: string; // ^\d+$
+                    company?: {
+                        id: number;
+                        businessID: string;
+                        vatID?: string;
+                        companyName: string;
+                        zipCode: string;
+                        city: string;
+                        street: string;
+                        countryCode: string;
+                    };
+                };
+            }
+        }
+    }
+    namespace PatchApiB2BAdminUsersUserId {
+        namespace Parameters {
+            export type UserID = number;
+        }
+        export interface PathParameters {
+            userID: Parameters.UserID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Janko
+             */
+            firstName?: string | null;
+            /**
+             * example:
+             * Hráško
+             */
+            lastName?: string | null;
+            /**
+             * example:
+             * SK
+             */
+            phonePrefixCountryCode: string;
+            /**
+             * example:
+             * 906047188
+             */
+            phone: string; // ^\d+$
+        }
+        namespace Responses {
+            export interface $200 {
+                user: {
+                    id: number;
+                    email: string;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminUsersUserIdCompanyProfile {
+        namespace Parameters {
+            export type UserID = number;
+        }
+        export interface PathParameters {
+            userID: Parameters.UserID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 01234567
+             */
+            businessID: string;
+            /**
+             * example:
+             * SK2012345678
+             */
+            vatID?: string | null;
+            /**
+             * example:
+             * Company
+             */
+            companyName: string;
+            /**
+             * example:
+             * 010 01
+             */
+            zipCode: string;
+            /**
+             * example:
+             * Žilina
+             */
+            city: string;
+            /**
+             * example:
+             * Framborska 58
+             */
+            street: string;
+            /**
+             * example:
+             * SK
+             */
+            countryCode: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                user: {
+                    id: number;
+                    email: string;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1UsersUserId {
+        namespace Parameters {
+            export type UserID = number;
+        }
+        export interface PathParameters {
+            userID: Parameters.UserID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Janko
+             */
+            firstName?: string | null;
+            /**
+             * example:
+             * Hráško
+             */
+            lastName?: string | null;
+            /**
+             * example:
+             * SK
+             */
+            phonePrefixCountryCode: string;
+            /**
+             * example:
+             * 906047188
+             */
+            phone: string; // ^\d+$
+        }
+        namespace Responses {
+            export interface $200 {
+                user: {
+                    id: number;
+                    email: string;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1UsersUserIdCompanyProfile {
+        namespace Parameters {
+            export type UserID = number;
+        }
+        export interface PathParameters {
+            userID: Parameters.UserID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 01234567
+             */
+            businessID: string;
+            /**
+             * example:
+             * SK2012345678
+             */
+            vatID?: string | null;
+            /**
+             * example:
+             * Company
+             */
+            companyName: string;
+            /**
+             * example:
+             * 010 01
+             */
+            zipCode: string;
+            /**
+             * example:
+             * Žilina
+             */
+            city: string;
+            /**
+             * example:
+             * Framborska 58
+             */
+            street: string;
+            /**
+             * example:
+             * SK
+             */
+            countryCode: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                user: {
+                    id: number;
+                    email: string;
+                };
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -153,12 +435,12 @@ declare namespace Paths {
              * example:
              * SK
              */
-            countryCode: string;
+            phonePrefixCountryCode: string;
             /**
              * example:
-             * xxx xxx xxx
+             * 906047188
              */
-            phone: string;
+            phone: string; // ^\d+$
             /**
              * example:
              * true
@@ -308,12 +590,12 @@ declare namespace Paths {
              * example:
              * SK
              */
-            countryCode: string;
+            phonePrefixCountryCode: string;
             /**
              * example:
-             * xxx xxx xxx
+             * 906047188
              */
-            phone: string;
+            phone: string; // ^\d+$
             /**
              * example:
              * true
@@ -377,6 +659,22 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   /**
+   * getApiB2BAdminUsersUserId - PERMISSION: NO
+   */
+  'getApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * patchApiB2BAdminUsersUserId - PERMISSION: NO
+   */
+  'patchApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters> | null,
+    data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
+  /**
    * postApiB2BAdminUsersRegistration - PERMISSION: NO
    */
   'postApiB2BAdminUsersRegistration'(
@@ -401,6 +699,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   /**
+   * patchApiB2BAdminUsersUserIdCompanyProfile - PERMISSION: NO
+   */
+  'patchApiB2BAdminUsersUserIdCompanyProfile'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.PathParameters> | null,
+    data?: Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.Responses.$200>
+  /**
    * getApiB2BAdminEnumsCountries - PERMISSION: NO
    */
   'getApiB2BAdminEnumsCountries'(
@@ -408,6 +714,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
+  /**
+   * getApiB2BAdminEnumsCurrencies - PERMISSION: NO
+   */
+  'getApiB2BAdminEnumsCurrencies'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   /**
    * postApiB2BV1AuthLogin - PERMISSION: NO
    */
@@ -449,6 +763,22 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
   /**
+   * getApiB2BV1UsersUserId - PERMISSION: NO
+   */
+  'getApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
+  /**
+   * patchApiB2BV1UsersUserId - PERMISSION: NO
+   */
+  'patchApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters> | null,
+    data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
+  /**
    * postApiB2BV1UsersRegistration - PERMISSION: NO
    */
   'postApiB2BV1UsersRegistration'(
@@ -473,13 +803,29 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   /**
-   * patchApiB2BV1UsersWelcomeScreen - PERMISSION: NO
+   * patchApiB2BV1UsersUserIdCompanyProfile - PERMISSION: NO
    */
-  'patchApiB2BV1UsersWelcomeScreen'(
-    parameters?: Parameters<UnknownParamsObject> | null,
-    data?: Paths.PatchApiB2BV1UsersWelcomeScreen.RequestBody,
+  'patchApiB2BV1UsersUserIdCompanyProfile'(
+    parameters?: Parameters<Paths.PatchApiB2BV1UsersUserIdCompanyProfile.PathParameters> | null,
+    data?: Paths.PatchApiB2BV1UsersUserIdCompanyProfile.RequestBody,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1UsersWelcomeScreen.Responses.$200>
+  ): OperationResponse<Paths.PatchApiB2BV1UsersUserIdCompanyProfile.Responses.$200>
+  /**
+   * getApiB2BV1EnumsCountries - PERMISSION: NO
+   */
+  'getApiB2BV1EnumsCountries'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
+  /**
+   * getApiB2BV1EnumsCurrencies - PERMISSION: NO
+   */
+  'getApiB2BV1EnumsCurrencies'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   /**
    * postApiB2BAdminAuthLogin - PERMISSION: NO
    */
@@ -531,6 +877,24 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   }
+  ['/api/b2b/admin/users/{userID}']: {
+    /**
+     * getApiB2BAdminUsersUserId - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
+    /**
+     * patchApiB2BAdminUsersUserId - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters> | null,
+      data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
+  }
   ['/api/b2b/admin/users/registration']: {
     /**
      * postApiB2BAdminUsersRegistration - PERMISSION: NO
@@ -561,6 +925,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   }
+  ['/api/b2b/admin/users/{userID}/company-profile']: {
+    /**
+     * patchApiB2BAdminUsersUserIdCompanyProfile - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.PathParameters> | null,
+      data?: Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdCompanyProfile.Responses.$200>
+  }
   ['/api/b2b/admin/enums/countries']: {
     /**
      * getApiB2BAdminEnumsCountries - PERMISSION: NO
@@ -570,6 +944,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/currencies']: {
+    /**
+     * getApiB2BAdminEnumsCurrencies - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   }
   ['/api/b2b/v1/auth/login']: {
     /**
@@ -621,6 +1005,24 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
   }
+  ['/api/b2b/v1/users/{userID}']: {
+    /**
+     * getApiB2BV1UsersUserId - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
+    /**
+     * patchApiB2BV1UsersUserId - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters> | null,
+      data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
+  }
   ['/api/b2b/v1/users/registration']: {
     /**
      * postApiB2BV1UsersRegistration - PERMISSION: NO
@@ -651,15 +1053,35 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   }
-  ['/api/b2b/v1/users/welcome-screen']: {
+  ['/api/b2b/v1/users/{userID}/company-profile']: {
     /**
-     * patchApiB2BV1UsersWelcomeScreen - PERMISSION: NO
+     * patchApiB2BV1UsersUserIdCompanyProfile - PERMISSION: NO
      */
     'patch'(
-      parameters?: Parameters<UnknownParamsObject> | null,
-      data?: Paths.PatchApiB2BV1UsersWelcomeScreen.RequestBody,
+      parameters?: Parameters<Paths.PatchApiB2BV1UsersUserIdCompanyProfile.PathParameters> | null,
+      data?: Paths.PatchApiB2BV1UsersUserIdCompanyProfile.RequestBody,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1UsersWelcomeScreen.Responses.$200>
+    ): OperationResponse<Paths.PatchApiB2BV1UsersUserIdCompanyProfile.Responses.$200>
+  }
+  ['/api/b2b/v1/enums/countries']: {
+    /**
+     * getApiB2BV1EnumsCountries - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
+  }
+  ['/api/b2b/v1/enums/currencies']: {
+    /**
+     * getApiB2BV1EnumsCurrencies - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   }
   ['/api/b2b/admin/auth/login']: {
     /**

@@ -51,6 +51,8 @@
   "Home": "Home",
   "Individuálna doprava": "Individuálna doprava",
   "Info": "Info",
+  "IČ DPH": "IČ DPH",
+  "IČO": "IČO",
   "Jazyky": "Jazyky",
   "Jednotlivci": "Jednotlivci",
   "Katalóg produktov": "Katalóg produktov",
@@ -121,7 +123,6 @@
     "": ""
   },
   "Predajné kanály": "Predajné kanály",
-  "Predvoľba": "Predvoľba",
   "Pridať {{entity}}": "Pridať {{entity}}",
   "Priezvisko": "Priezvisko",
   "Prihlásiť sa": "Prihlásiť sa",
@@ -148,6 +149,7 @@
   "Typ ubytovania": "Typ ubytovania",
   "Ubytovanie": "Ubytovanie",
   "Ulica": "Ulica",
+  "Uložiť": "Uložiť",
   "Uložiť {{entity}}": "Uložiť {{entity}}",
   "Umiestnite pečiatku s podpisom do modrého rámu": {
     "": ""
@@ -157,6 +159,7 @@
   "Ups niečo sa pokazilo": "Ups niečo sa pokazilo",
   "Vlastnosti vzoru jednotky": "Vlastnosti vzoru jednotky",
   "Vlastnosti zariadenia": "Vlastnosti zariadenia",
+  "Vyber krajinu": "Vyber krajinu",
   "Vyber predvoľbu": "Vyber predvoľbu",
   "Vyberte aspoň jednu z možností": "Vyberte aspoň jednu z možností",
   "Vyberte {{entity}}": "Vyberte {{entity}}",
@@ -179,6 +182,8 @@
   "Zadajte email": "Zadajte email",
   "Zadajte firmu": "Zadajte firmu",
   "Zadajte heslo": "Zadajte heslo",
+  "Zadajte ič dph": "Zadajte ič dph",
+  "Zadajte ičo": "Zadajte ičo",
   "Zadajte maximálne {{max}}": "Zadajte maximálne {{max}}",
   "Zadajte meno": "Zadajte meno",
   "Zadajte mesto": "Zadajte mesto",
@@ -211,5 +216,6 @@
   "jazdu": "jazdu",
   "let": "let",
   "slovensky": "slovensky",
-  "Úspešné": "Úspešné"
+  "Úspešné": "Úspešné",
+  "Štát": "Štát"
 }

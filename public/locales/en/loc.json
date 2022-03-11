@@ -43,7 +43,7 @@
   "Email": "EN_Email",
   "Expirácia rezervácie": "EN_Expirácia rezervácie",
   "Ešte nemáte účet?": "EN_Ešte nemáte účet?",
-  "Firma": "Firma",
+  "Firma": "EN_Firma",
   "Fyzická osoba": "EN_Fyzická osoba",
   "Hesla sa nezhodujú": "EN_Hesla sa nezhodujú",
   "Heslo": "EN_Heslo",
@@ -51,6 +51,8 @@
   "Home": "Home",
   "Individuálna doprava": "EN_Individuálna doprava",
   "Info": "EN_Info",
+  "IČ DPH": "EN_IČ DPH",
+  "IČO": "EN_IČO",
   "Jazyky": "EN_Jazyky",
   "Jednotlivci": "EN_Jednotlivci",
   "Katalóg produktov": "EN_Katalóg produktov",
@@ -73,8 +75,8 @@
     " váha batožiny [kg]": "_NEPRELOZENE_"
   },
   "Mena": "EN_Mena",
-  "Meno": "Meno",
-  "Mesto": "Mesto",
+  "Meno": "EN_Meno",
+  "Mesto": "EN_Mesto",
   "Môj účet": "Môj účet",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "EN_Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
   "Na vašu adresu odošleme link na obnovenie hesla": {
@@ -105,8 +107,8 @@
   "Odoslať email": "EN_Odoslať email",
   "Odstránený": "EN_Odstránený",
   "Odstrániť {{entity}}": "EN_Odstrániť {{entity}}",
-  "Osobné údaje": "Osobné údaje",
-  "PSČ": "PSČ",
+  "Osobné údaje": "EN_Osobné údaje",
+  "PSČ": "EN_PSČ",
   "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov": {
     "": "_NEPRELOZENE_"
   },
@@ -121,9 +123,8 @@
     "": "_NEPRELOZENE_"
   },
   "Predajné kanály": "EN_Predajné kanály",
-  "Predvoľba": "Predvoľba",
   "Pridať {{entity}}": "EN_Pridať {{entity}}",
-  "Priezvisko": "Priezvisko",
+  "Priezvisko": "EN_Priezvisko",
   "Prihlásiť sa": "EN_Prihlásiť sa",
   "Priradiť {{entity}}": "EN_Priradiť {{entity}}",
   "Právnická osoba": "EN_Právnická osoba",
@@ -139,7 +140,7 @@
   "Súbor je príliš veľký (max": {
     " {{size}} {{unit}})": "_NEPRELOZENE_"
   },
-  "Telefónne číslo": "Telefónne číslo",
+  "Telefónne číslo": "EN_Telefónne číslo",
   "Textové popisy": "EN_Textové popisy",
   "Toto pole je povinné": "EN_Toto pole je povinné",
   "Typ osoby": "EN_Typ osoby",
@@ -147,7 +148,8 @@
   "Typ stravy": "EN_Typ stravy",
   "Typ ubytovania": "EN_Typ ubytovania",
   "Ubytovanie": "EN_Ubytovanie",
-  "Ulica": "Ulica",
+  "Ulica": "EN_Ulica",
+  "Uložiť": "EN_Uložiť",
   "Uložiť {{entity}}": "EN_Uložiť {{entity}}",
   "Umiestnite pečiatku s podpisom do modrého rámu": {
     "": "_NEPRELOZENE_"
@@ -157,7 +159,8 @@
   "Ups niečo sa pokazilo": "EN_Ups niečo sa pokazilo",
   "Vlastnosti vzoru jednotky": "EN_Vlastnosti vzoru jednotky",
   "Vlastnosti zariadenia": "EN_Vlastnosti zariadenia",
-  "Vyber predvoľbu": "Vyber predvoľbu",
+  "Vyber krajinu": "EN_Vyber krajinu",
+  "Vyber predvoľbu": "EN_Vyber predvoľbu",
   "Vyberte aspoň jednu z možností": "EN_Vyberte aspoň jednu z možností",
   "Vyberte {{entity}}": "EN_Vyberte {{entity}}",
   "Vyhľadajte podľa {{entity}}": "EN_Vyhľadajte podľa {{entity}}",
@@ -179,15 +182,17 @@
   "Zadajte email": "EN_Zadajte email",
   "Zadajte firmu": "Zadajte firmu",
   "Zadajte heslo": "EN_Zadajte heslo",
+  "Zadajte ič dph": "EN_Zadajte ič dph",
+  "Zadajte ičo": "EN_Zadajte ičo",
   "Zadajte maximálne {{max}}": "EN_Zadajte maximálne {{max}}",
-  "Zadajte meno": "Zadajte meno",
-  "Zadajte mesto": "Zadajte mesto",
+  "Zadajte meno": "EN_Zadajte meno",
+  "Zadajte mesto": "EN_Zadajte mesto",
   "Zadajte minimálne {{min}}": "EN_Zadajte minimálne {{min}}",
   "Zadajte nové heslo": "EN_Zadajte nové heslo",
-  "Zadajte priezvisko": "Zadajte priezvisko",
-  "Zadajte smerovacie číslo": "Zadajte smerovacie číslo",
-  "Zadajte telefónne číslo": "Zadajte telefónne číslo",
-  "Zadajte ulicu": "Zadajte ulicu",
+  "Zadajte priezvisko": "EN_Zadajte priezvisko",
+  "Zadajte smerovacie číslo": "EN_Zadajte smerovacie číslo",
+  "Zadajte telefónne číslo": "EN_Zadajte telefónne číslo",
+  "Zadajte ulicu": "EN_Zadajte ulicu",
   "Zadajte zraz na letisku pred odletom": "EN_Zadajte zraz na letisku pred odletom",
   "Zadajte zraz pred cestou": "EN_Zadajte zraz pred cestou",
   "Zadajte {{entity}}": "EN_Zadajte {{entity}}",
@@ -211,5 +216,6 @@
   "jazdu": "EN_jazdu",
   "let": "EN_let",
   "slovensky": "EN_slovensky",
-  "Úspešné": "EN_Úspešné"
+  "Úspešné": "EN_Úspešné",
+  "Štát": "EN_Štát"
 }

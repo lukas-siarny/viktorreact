@@ -45,7 +45,7 @@ export const logInUser =
 
 export const logOutUser = (): ThunkResult<void> => async (dispatch) => {
 	try {
-		await postReq('/api/b2b/admin/auth/logout', null, undefined)
+		await postReq('/api/b2b/admin/auth/logout', null, undefined, undefined, false)
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.log(error)

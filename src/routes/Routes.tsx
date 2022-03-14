@@ -63,7 +63,7 @@ const Routes: FC = (props) => {
 				component={CreatePasswordPage}
 				layout={SimpleLayout}
 			/>
-			<AuthRoute {...props} path={t('paths:b2b/my-account')} translatePathKey={'paths:b2b/my-account'} component={UserAccountPage} layout={MainLayout} />
+			<AuthRoute {...props} exact path={getPath(t('paths:my-account'))} translatePathKey={getPath(t('paths:my-account'))} component={UserAccountPage} layout={MainLayout} />
 			<AuthRoute {...props} exact path={getPath(t('paths:index'))} component={EntryPage} translatePathKey={getPath(t('paths:index'))} layout={MainLayout} />
 			<AuthRoute {...props} exact path={getPath(t('paths:home'))} component={HomePage} translatePathKey={getPath(t('paths:home'))} layout={MainLayout} page={PAGE.HOME} />
 			<AuthRoute

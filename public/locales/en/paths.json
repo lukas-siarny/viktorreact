@@ -1,5 +1,4 @@
 {
-  "b2b/my-account": "/b2b/my-account",
   "home": "/home",
   "index": "/",
   "login": "/auth/login",

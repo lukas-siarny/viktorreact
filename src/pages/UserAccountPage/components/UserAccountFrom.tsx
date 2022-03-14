@@ -69,7 +69,7 @@ const UserAccountForm: FC<Props> = (props) => {
 						<Field component={InputField} label={t('loc:Firma')} placeholder={t('loc:Zadajte firmu')} name={'companyName'} size={'large'} required />
 						<Row justify={'space-between'}>
 							<Field
-								style={{ width: '48%' }}
+								className={'w-12/25'}
 								component={InputField}
 								label={t('loc:IČO')}
 								placeholder={t('loc:Zadajte ičo')}
@@ -77,21 +77,13 @@ const UserAccountForm: FC<Props> = (props) => {
 								size={'large'}
 								required
 							/>
-							<Field style={{ width: '48%' }} component={InputField} label={t('loc:IČ DPH')} placeholder={t('loc:Zadajte ič dph')} name={'vatID'} size={'large'} />
+							<Field className={'w-12/25'} component={InputField} label={t('loc:IČ DPH')} placeholder={t('loc:Zadajte ič dph')} name={'vatID'} size={'large'} />
 						</Row>
 						<Field component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} required />
 						<Row justify={'space-between'}>
+							<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} required />
 							<Field
-								style={{ width: '48%' }}
-								component={InputField}
-								label={t('loc:Mesto')}
-								placeholder={t('loc:Zadajte mesto')}
-								name={'city'}
-								size={'large'}
-								required
-							/>
-							<Field
-								style={{ width: '48%' }}
+								className={'w-12/25'}
 								component={InputField}
 								label={t('loc:PSČ')}
 								placeholder={t('loc:Zadajte smerovacie číslo')}

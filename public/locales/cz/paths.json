@@ -6,4 +6,5 @@
   "my-account": "/my-account",
   "reset-password": "/auth/reset-password",
   "signup": "/auth/signup"
+  "users": "/users"
 }

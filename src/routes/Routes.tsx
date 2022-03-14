@@ -32,6 +32,7 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import UserAccountPage from '../pages/UserAccountPage/UserAccountPage'
+import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
 
 // 404, 403
@@ -74,6 +75,7 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.ACTIVATION}
 			/>
+			<AuthRoute {...props} exact path={getPath(t('paths:users'))} component={AdminUsersPage} translatePathKey={getPath(t('paths:users'))} layout={MainLayout} />
 			<AuthRoute
 				{...props}
 				exact

@@ -4,8 +4,8 @@ import decode from 'jwt-decode'
 
 // types
 import { ThunkResult } from '../index'
-import { ILoginForm, IJwtPayload } from '../../types/interfaces'
-import { AUTH_USER, USER } from './userTypes'
+import { ILoginForm, IResponsePagination, IJwtPayload } from '../../types/interfaces'
+import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
@@ -13,6 +13,7 @@ import { Paths } from '../../types/api'
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
 import { getReq, postReq } from '../../utils/request'
+import { normalizeQueryParams } from '../../utils/helper'
 
 export type IUserActions = IResetStore | IGetAuthUser | IGetUser
 
@@ -33,6 +34,11 @@ export interface IUserPayload {
 	data: Paths.GetApiB2BV1UsersUserId.Responses.$200 | null
 }
 
+export interface IUsersPayload {
+	data: Paths.GetApiB2BAdminUsers.Responses.$200 | null
+}
+
+// eslint-disable-next-line import/prefer-default-export
 export const logInUser =
 	(input: ILoginForm): ThunkResult<void> =>
 	async (dispatch) => {
@@ -113,3 +119,34 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 		}
 	}
 }
+
+export const getUserAccountDetails =
+	(userID: number): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: USER.USER_LOAD_START })
+			const data = await getReq('/api/b2b/admin/users/{userID}', { userID })
+			dispatch({ type: USER.USER_LOAD_DONE, payload: data })
+		} catch (err) {
+			dispatch({ type: USER.USER_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+	}
+
+export const getUsers =
+	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: USERS.USERS_LOAD_START })
+			const pageLimit = limit
+
+			const data = await getReq('/api/b2b/admin/users/', { page: page || 1, limit, order, search })
+
+			dispatch({ type: USERS.USERS_LOAD_DONE, payload: data })
+		} catch (err) {
+			dispatch({ type: USERS.USERS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+	}

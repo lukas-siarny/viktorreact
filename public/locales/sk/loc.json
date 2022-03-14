@@ -114,14 +114,17 @@
   "Registrovať": "Registrovať",
   "Registrovať sa": "Registrovať sa",
   "Registrácia": "Registrácia",
+  "Rola": "Rola",
   "Sadzba DPH": "Sadzba DPH",
   "Sezóny": "Sezóny",
   "Skupina": "Skupina",
+  "Spoločnosť": "Spoločnosť",
   "Späť na prihlásenie": "Späť na prihlásenie",
   "Stanice": "Stanice",
   "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás",
   "Súbor je príliš veľký (max. {{size}} {{unit}})": "Súbor je príliš veľký (max. {{size}} {{unit}})",
   "Telefónne číslo": "Telefónne číslo",
+  "Telefón": "Telefón",
   "Textové popisy": "Textové popisy",
   "Toto pole je povinné": "Toto pole je povinné",
   "Typ osoby": "Typ osoby",
@@ -145,6 +148,7 @@
   "Vyber predvoľbu": "Vyber predvoľbu",
   "Vyberte aspoň jednu z možností": "Vyberte aspoň jednu z možností",
   "Vyberte {{entity}}": "Vyberte {{entity}}",
+  "Vyhľadajte podľa názvu": "Vyhľadajte podľa názvu",
   "Vyhlasujem, že som sa oboznámil s": "Vyhlasujem, že som sa oboznámil s",
   "Vyhlasujem, že som sa oboznámil so": "Vyhlasujem, že som sa oboznámil so",
   "Vyhľadajte podľa {{entity}}": "Vyhľadajte podľa {{entity}}",
@@ -201,5 +205,6 @@
   "let": "let",
   "slovensky": "slovensky",
   "Úspešné": "Úspešné",
-  "Štát": "Štát"
+  "Štát": "Štát",
+  "{{from}} - {{to}} z {{total}} záznamov": "{{from}} - {{to}} z {{total}} záznamov"
 }

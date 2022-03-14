@@ -2,7 +2,7 @@ import React from 'react'
 import SelectField, { Props as SelectProps } from './SelectField'
 
 type Props = SelectProps & {
-	flagField?: string
+	flagField?: string // flag field name in itemData
 }
 
 /**

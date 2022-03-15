@@ -21,9 +21,8 @@ import * as UserActions from '../reducers/users/userActions'
 
 // utils
 import { getPath } from '../utils/history'
-import { REFRESH_TOKEN_INTERVAL } from '../utils/enums'
+import { REFRESH_TOKEN_INTERVAL, PAGE } from '../utils/enums'
 // import { SUBMENU_PARENT_ITEMS } from '../utils/helper'
-import { PAGE } from '../utils/enums'
 
 // import SubMenuPage from '../components/SubMenuPage'
 

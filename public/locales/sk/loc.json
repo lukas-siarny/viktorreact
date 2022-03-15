@@ -43,6 +43,7 @@
   "Email": "Email",
   "Expirácia rezervácie": "Expirácia rezervácie",
   "Ešte nemáte účet?": "Ešte nemáte účet?",
+  "Firma": "Firma",
   "Fyzická osoba": "Fyzická osoba",
   "Hesla sa nezhodujú": "Hesla sa nezhodujú",
   "Heslo": "Heslo",
@@ -50,6 +51,8 @@
   "Home": "Home",
   "Individuálna doprava": "Individuálna doprava",
   "Info": "Info",
+  "IČ DPH": "IČ DPH",
+  "IČO": "IČO",
   "Jazyky": "Jazyky",
   "Jednotlivci": "Jednotlivci",
   "Katalóg produktov": "Katalóg produktov",
@@ -72,6 +75,8 @@
     " váha batožiny [kg]": " váha batožiny [kg]"
   },
   "Mena": "Mena",
+  "Meno": "Meno",
+  "Mesto": "Mesto",
   "Môj účet": "Môj účet",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
   "Na vašu adresu odošleme link na obnovenie hesla": {
@@ -102,6 +107,8 @@
   "Odoslať email": "Odoslať email",
   "Odstránený": "Odstránený",
   "Odstrániť {{entity}}": "Odstrániť {{entity}}",
+  "Osobné údaje": "Osobné údaje",
+  "PSČ": "PSČ",
   "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov": {
     "": ""
   },
@@ -117,6 +124,7 @@
   },
   "Predajné kanály": "Predajné kanály",
   "Pridať {{entity}}": "Pridať {{entity}}",
+  "Priezvisko": "Priezvisko",
   "Prihlásiť sa": "Prihlásiť sa",
   "Priradiť {{entity}}": "Priradiť {{entity}}",
   "Právnická osoba": "Právnická osoba",
@@ -132,6 +140,7 @@
   "Súbor je príliš veľký (max": {
     " {{size}} {{unit}})": " {{size}} {{unit}})"
   },
+  "Telefónne číslo": "Telefónne číslo",
   "Textové popisy": "Textové popisy",
   "Toto pole je povinné": "Toto pole je povinné",
   "Typ osoby": "Typ osoby",
@@ -139,6 +148,8 @@
   "Typ stravy": "Typ stravy",
   "Typ ubytovania": "Typ ubytovania",
   "Ubytovanie": "Ubytovanie",
+  "Ulica": "Ulica",
+  "Uložiť": "Uložiť",
   "Uložiť {{entity}}": "Uložiť {{entity}}",
   "Umiestnite pečiatku s podpisom do modrého rámu": {
     "": ""
@@ -148,6 +159,8 @@
   "Ups niečo sa pokazilo": "Ups niečo sa pokazilo",
   "Vlastnosti vzoru jednotky": "Vlastnosti vzoru jednotky",
   "Vlastnosti zariadenia": "Vlastnosti zariadenia",
+  "Vyber krajinu": "Vyber krajinu",
+  "Vyber predvoľbu": "Vyber predvoľbu",
   "Vyberte aspoň jednu z možností": "Vyberte aspoň jednu z možností",
   "Vyberte {{entity}}": "Vyberte {{entity}}",
   "Vyhľadajte podľa {{entity}}": "Vyhľadajte podľa {{entity}}",
@@ -167,10 +180,19 @@
     }
   },
   "Zadajte email": "Zadajte email",
+  "Zadajte firmu": "Zadajte firmu",
   "Zadajte heslo": "Zadajte heslo",
+  "Zadajte ič dph": "Zadajte ič dph",
+  "Zadajte ičo": "Zadajte ičo",
   "Zadajte maximálne {{max}}": "Zadajte maximálne {{max}}",
+  "Zadajte meno": "Zadajte meno",
+  "Zadajte mesto": "Zadajte mesto",
   "Zadajte minimálne {{min}}": "Zadajte minimálne {{min}}",
   "Zadajte nové heslo": "Zadajte nové heslo",
+  "Zadajte priezvisko": "Zadajte priezvisko",
+  "Zadajte smerovacie číslo": "Zadajte smerovacie číslo",
+  "Zadajte telefónne číslo": "Zadajte telefónne číslo",
+  "Zadajte ulicu": "Zadajte ulicu",
   "Zadajte zraz na letisku pred odletom": "Zadajte zraz na letisku pred odletom",
   "Zadajte zraz pred cestou": "Zadajte zraz pred cestou",
   "Zadajte {{entity}}": "Zadajte {{entity}}",
@@ -194,5 +216,6 @@
   "jazdu": "jazdu",
   "let": "let",
   "slovensky": "slovensky",
-  "Úspešné": "Úspešné"
+  "Úspešné": "Úspešné",
+  "Štát": "Štát"
 }

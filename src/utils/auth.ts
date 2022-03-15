@@ -11,9 +11,23 @@ export const clearRefreshToken = () => localStorage.removeItem(REFRESH_TOKEN_KEY
 export const getRefreshToken = () => localStorage.getItem(REFRESH_TOKEN_KEY)
 export const setRefreshToken = (token: string) => localStorage.setItem(REFRESH_TOKEN_KEY, token)
 
-export const isLoggedIn = () => {
+export const isLoggedIn = (): boolean => {
 	try {
 		const token = getAccessToken()
+		if (!token) {
+			return false
+		}
+		decode(token)
+
+		return true
+	} catch (error) {
+		return false
+	}
+}
+
+export const hasRefreshToken = (): boolean => {
+	try {
+		const token = getRefreshToken()
 		if (!token) {
 			return false
 		}

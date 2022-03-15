@@ -1,6 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Switch } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
 // authorized pages
 import EntryPage from '../pages/EntryPage/EntryPage'
@@ -15,8 +16,12 @@ import CreatePasswordRoute from './CreatePasswordRoute'
 import MainLayout from '../layouts/MainLayout'
 import SimpleLayout from '../layouts/SimpleLayout'
 
+// redux
+import * as UserActions from '../reducers/users/userActions'
+
 // utils
 import { getPath } from '../utils/history'
+import { REFRESH_TOKEN_INTERVAL } from '../utils/enums'
 // import { SUBMENU_PARENT_ITEMS } from '../utils/helper'
 import { PAGE } from '../utils/enums'
 
@@ -34,6 +39,17 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
 const Routes: FC = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		const refreshInterval = setInterval(dispatch(UserActions.refreshToken), REFRESH_TOKEN_INTERVAL)
+
+		return () => {
+			if (refreshInterval) {
+				clearInterval(refreshInterval)
+			}
+		}
+	}, [dispatch])
 
 	return (
 		<Switch>

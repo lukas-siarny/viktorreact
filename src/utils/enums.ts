@@ -20,6 +20,10 @@ export enum LANGUAGE {
 	EN = 'en'
 }
 
+export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
+
+export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hurs
+
 export const DEFAULT_LANGUAGE = LANGUAGE.SK
 
 export const LOCALES = {

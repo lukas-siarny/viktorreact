@@ -634,32 +634,32 @@ export enum BACK_ENTITY {
 }
 
 export enum ENUMERATIONS_KEYS {
-	WEB_PROJECTS = 'webProjects',
-	LANGUAGES = 'languages',
-	FACILITY_TYPES = 'facilityTypes',
-	VAT_RATES = 'vatRates',
-	CURRENCIES = 'currencies',
-	COUNTRIES = 'countries',
-	UNIT_TEMPLATES = 'unitTemplates',
-	UNIT_TEMPLATE_PROPERTIES = 'unitTemplateProperties',
-	STATIONS = 'stations',
-	TEXT_TEMPLATES = 'textTemplates',
-	TIME_ZONES = 'timeZones',
-	PROPERTIES = 'properties',
-	SEASONS = 'seasons',
-	PRODUCT_TYPES = 'productTypes',
-	PRODUCT_CATALOGUES = 'productCatalogues',
-	PERSON_TYPES = 'personTypes',
-	MEAL_PLANS = 'mealPlans',
-	PRICELIST_ITEMS = 'pricelistItems',
-	PRICE_GROUPS = 'priceGroups',
-	EXCHANGE_RATES = 'exchangeRates',
-	CARRIERS = 'carriers',
-	SALES_CHANNELS = 'salesChannels',
-	DISCOUNT_MARKS = 'discountMarks',
-	RESERVATION_EXPIRATION_TIMES = 'reservationExpirationTimes',
-	INSURANCE_COMPANIES = 'insuranceCompanies',
-	DEPOSIT_AMOUNTS = 'depositAmounts'
+	// WEB_PROJECTS = 'webProjects',
+	// LANGUAGES = 'languages',
+	// FACILITY_TYPES = 'facilityTypes',
+	// VAT_RATES = 'vatRates',
+	// CURRENCIES = 'currencies',
+	COUNTRIES = 'countries'
+	// UNIT_TEMPLATES = 'unitTemplates',
+	// UNIT_TEMPLATE_PROPERTIES = 'unitTemplateProperties',
+	// STATIONS = 'stations',
+	// TEXT_TEMPLATES = 'textTemplates',
+	// TIME_ZONES = 'timeZones',
+	// PROPERTIES = 'properties',
+	// SEASONS = 'seasons',
+	// PRODUCT_TYPES = 'productTypes',
+	// PRODUCT_CATALOGUES = 'productCatalogues',
+	// PERSON_TYPES = 'personTypes',
+	// MEAL_PLANS = 'mealPlans',
+	// PRICELIST_ITEMS = 'pricelistItems',
+	// PRICE_GROUPS = 'priceGroups',
+	// EXCHANGE_RATES = 'exchangeRates',
+	// CARRIERS = 'carriers',
+	// SALES_CHANNELS = 'salesChannels',
+	// DISCOUNT_MARKS = 'discountMarks',
+	// RESERVATION_EXPIRATION_TIMES = 'reservationExpirationTimes',
+	// INSURANCE_COMPANIES = 'insuranceCompanies',
+	// DEPOSIT_AMOUNTS = 'depositAmounts'
 }
 
 export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBYEtWbN4XE4lcmntowheFqUGKpUKORwZ0&libraries=places&language=sk'
@@ -897,131 +897,131 @@ export const GENERAL_PRICELIST_ITEMS_OPTIONS = () => [
 export const ENUMERATIONS_OPTIONS = () =>
 	orderBy(
 		[
-			{
-				label: i18next.t('loc:Webové projekty'),
-				key: ENUMERATIONS_KEYS.WEB_PROJECTS,
-				url: ENUMERATIONS_PATHS.WEB_PROJECTS
-			},
-			{
-				label: i18next.t('loc:Jazyky'),
-				key: ENUMERATIONS_KEYS.LANGUAGES,
-				url: ENUMERATIONS_PATHS.LANGUAGES
-			},
-			{
-				label: i18next.t('loc:Stanice'),
-				key: ENUMERATIONS_KEYS.STATIONS,
-				url: ENUMERATIONS_PATHS.STATIONS
-			},
-			{
-				label: i18next.t('loc:Typ ubytovania'),
-				key: ENUMERATIONS_KEYS.FACILITY_TYPES,
-				url: ENUMERATIONS_PATHS.FACILITY_TYPES
-			},
-			{
-				label: i18next.t('loc:Sadzba DPH'),
-				key: ENUMERATIONS_KEYS.VAT_RATES,
-				url: ENUMERATIONS_PATHS.VAT_RATES
-			},
-			{
-				label: i18next.t('loc:Mena'),
-				key: ENUMERATIONS_KEYS.CURRENCIES,
-				url: ENUMERATIONS_PATHS.CURRENCIES
-			},
+			// {
+			// 	label: i18next.t('loc:Webové projekty'),
+			// 	key: ENUMERATIONS_KEYS.WEB_PROJECTS,
+			// 	url: ENUMERATIONS_PATHS.WEB_PROJECTS
+			// },
+			// {
+			// 	label: i18next.t('loc:Jazyky'),
+			// 	key: ENUMERATIONS_KEYS.LANGUAGES,
+			// 	url: ENUMERATIONS_PATHS.LANGUAGES
+			// },
+			// {
+			// 	label: i18next.t('loc:Stanice'),
+			// 	key: ENUMERATIONS_KEYS.STATIONS,
+			// 	url: ENUMERATIONS_PATHS.STATIONS
+			// },
+			// {
+			// 	label: i18next.t('loc:Typ ubytovania'),
+			// 	key: ENUMERATIONS_KEYS.FACILITY_TYPES,
+			// 	url: ENUMERATIONS_PATHS.FACILITY_TYPES
+			// },
+			// {
+			// 	label: i18next.t('loc:Sadzba DPH'),
+			// 	key: ENUMERATIONS_KEYS.VAT_RATES,
+			// 	url: ENUMERATIONS_PATHS.VAT_RATES
+			// },
+			// {
+			// 	label: i18next.t('loc:Mena'),
+			// 	key: ENUMERATIONS_KEYS.CURRENCIES,
+			// 	url: ENUMERATIONS_PATHS.CURRENCIES
+			// },
 			{
 				label: i18next.t('loc:Krajiny'),
 				key: ENUMERATIONS_KEYS.COUNTRIES,
 				url: ENUMERATIONS_PATHS.COUNTRIES
-			},
-			{
-				label: i18next.t('loc:Vzory jednotiek'),
-				key: ENUMERATIONS_KEYS.UNIT_TEMPLATES,
-				url: ENUMERATIONS_PATHS.UNIT_TEMPLATES
-			},
-			{
-				label: i18next.t('loc:Vlastnosti vzoru jednotky'),
-				key: ENUMERATIONS_KEYS.UNIT_TEMPLATE_PROPERTIES,
-				url: ENUMERATIONS_PATHS.UNIT_TEMPLATE_PROPERTIES
-			},
-			{
-				label: i18next.t('loc:Textové popisy'),
-				key: ENUMERATIONS_KEYS.TEXT_TEMPLATES,
-				url: ENUMERATIONS_PATHS.TEXT_TEMPLATES
-			},
-			{
-				label: i18next.t('loc:Vlastnosti zariadenia'),
-				key: ENUMERATIONS_KEYS.PROPERTIES,
-				url: ENUMERATIONS_PATHS.PROPERTIES
-			},
-			{
-				label: i18next.t('loc:Sezóny'),
-				key: ENUMERATIONS_KEYS.SEASONS,
-				url: ENUMERATIONS_PATHS.SEASONS
-			},
-			{
-				label: i18next.t('loc:Typ produktu'),
-				key: ENUMERATIONS_KEYS.PRODUCT_TYPES,
-				url: ENUMERATIONS_PATHS.PRODUCT_TYPES
-			},
-			{
-				label: i18next.t('loc:Katalóg produktov'),
-				key: ENUMERATIONS_KEYS.PRODUCT_CATALOGUES,
-				url: ENUMERATIONS_PATHS.PRODUCT_CATALOGUES
-			},
-			{
-				label: i18next.t('loc:Typ osoby'),
-				key: ENUMERATIONS_KEYS.PERSON_TYPES,
-				url: ENUMERATIONS_PATHS.PERSON_TYPES
-			},
-			{
-				label: i18next.t('loc:Typ stravy'),
-				key: ENUMERATIONS_KEYS.MEAL_PLANS,
-				url: ENUMERATIONS_PATHS.MEAL_PLANS
-			},
-			{
-				label: i18next.t('loc:Cenníková položka'),
-				key: ENUMERATIONS_KEYS.PRICELIST_ITEMS,
-				url: ENUMERATIONS_PATHS.PRICELIST_ITEMS
-			},
-			{
-				label: i18next.t('loc:Cenová skupina'),
-				key: ENUMERATIONS_KEYS.PRICE_GROUPS,
-				url: ENUMERATIONS_PATHS.PRICE_GROUPS
-			},
-			{
-				label: i18next.t('loc:Výmenný menový kurz'),
-				key: ENUMERATIONS_KEYS.EXCHANGE_RATES,
-				url: ENUMERATIONS_PATHS.EXCHANGE_RATES
-			},
-			{
-				label: i18next.t('loc:Dopravcovia'),
-				key: ENUMERATIONS_KEYS.CARRIERS,
-				url: ENUMERATIONS_PATHS.CARRIERS
-			},
-			{
-				label: i18next.t('loc:Predajné kanály'),
-				key: ENUMERATIONS_KEYS.SALES_CHANNELS,
-				url: ENUMERATIONS_PATHS.SALES_CHANNELS
-			},
-			{
-				label: i18next.t('loc:Príznak zľavy'),
-				key: ENUMERATIONS_KEYS.DISCOUNT_MARKS,
-				url: ENUMERATIONS_PATHS.DISCOUNT_MARKS
-			},
-			{
-				label: i18next.t('loc:Expirácia rezervácie'),
-				key: ENUMERATIONS_KEYS.RESERVATION_EXPIRATION_TIMES,
-				url: ENUMERATIONS_PATHS.RESERVATION_EXPIRATION_TIMES
-			},
-			{
-				label: i18next.t('loc:Poisťovne'),
-				key: ENUMERATIONS_KEYS.INSURANCE_COMPANIES,
-				url: ENUMERATIONS_PATHS.INSURANCE_COMPANIES
-			},
-			{
-				label: i18next.t('loc:Výška zálohy'),
-				key: ENUMERATIONS_KEYS.DEPOSIT_AMOUNTS,
-				url: ENUMERATIONS_PATHS.DEPOSIT_AMOUNTS
 			}
+			// {
+			// 	label: i18next.t('loc:Vzory jednotiek'),
+			// 	key: ENUMERATIONS_KEYS.UNIT_TEMPLATES,
+			// 	url: ENUMERATIONS_PATHS.UNIT_TEMPLATES
+			// },
+			// {
+			// 	label: i18next.t('loc:Vlastnosti vzoru jednotky'),
+			// 	key: ENUMERATIONS_KEYS.UNIT_TEMPLATE_PROPERTIES,
+			// 	url: ENUMERATIONS_PATHS.UNIT_TEMPLATE_PROPERTIES
+			// },
+			// {
+			// 	label: i18next.t('loc:Textové popisy'),
+			// 	key: ENUMERATIONS_KEYS.TEXT_TEMPLATES,
+			// 	url: ENUMERATIONS_PATHS.TEXT_TEMPLATES
+			// },
+			// {
+			// 	label: i18next.t('loc:Vlastnosti zariadenia'),
+			// 	key: ENUMERATIONS_KEYS.PROPERTIES,
+			// 	url: ENUMERATIONS_PATHS.PROPERTIES
+			// },
+			// {
+			// 	label: i18next.t('loc:Sezóny'),
+			// 	key: ENUMERATIONS_KEYS.SEASONS,
+			// 	url: ENUMERATIONS_PATHS.SEASONS
+			// },
+			// {
+			// 	label: i18next.t('loc:Typ produktu'),
+			// 	key: ENUMERATIONS_KEYS.PRODUCT_TYPES,
+			// 	url: ENUMERATIONS_PATHS.PRODUCT_TYPES
+			// },
+			// {
+			// 	label: i18next.t('loc:Katalóg produktov'),
+			// 	key: ENUMERATIONS_KEYS.PRODUCT_CATALOGUES,
+			// 	url: ENUMERATIONS_PATHS.PRODUCT_CATALOGUES
+			// },
+			// {
+			// 	label: i18next.t('loc:Typ osoby'),
+			// 	key: ENUMERATIONS_KEYS.PERSON_TYPES,
+			// 	url: ENUMERATIONS_PATHS.PERSON_TYPES
+			// },
+			// {
+			// 	label: i18next.t('loc:Typ stravy'),
+			// 	key: ENUMERATIONS_KEYS.MEAL_PLANS,
+			// 	url: ENUMERATIONS_PATHS.MEAL_PLANS
+			// },
+			// {
+			// 	label: i18next.t('loc:Cenníková položka'),
+			// 	key: ENUMERATIONS_KEYS.PRICELIST_ITEMS,
+			// 	url: ENUMERATIONS_PATHS.PRICELIST_ITEMS
+			// },
+			// {
+			// 	label: i18next.t('loc:Cenová skupina'),
+			// 	key: ENUMERATIONS_KEYS.PRICE_GROUPS,
+			// 	url: ENUMERATIONS_PATHS.PRICE_GROUPS
+			// },
+			// {
+			// 	label: i18next.t('loc:Výmenný menový kurz'),
+			// 	key: ENUMERATIONS_KEYS.EXCHANGE_RATES,
+			// 	url: ENUMERATIONS_PATHS.EXCHANGE_RATES
+			// },
+			// {
+			// 	label: i18next.t('loc:Dopravcovia'),
+			// 	key: ENUMERATIONS_KEYS.CARRIERS,
+			// 	url: ENUMERATIONS_PATHS.CARRIERS
+			// },
+			// {
+			// 	label: i18next.t('loc:Predajné kanály'),
+			// 	key: ENUMERATIONS_KEYS.SALES_CHANNELS,
+			// 	url: ENUMERATIONS_PATHS.SALES_CHANNELS
+			// },
+			// {
+			// 	label: i18next.t('loc:Príznak zľavy'),
+			// 	key: ENUMERATIONS_KEYS.DISCOUNT_MARKS,
+			// 	url: ENUMERATIONS_PATHS.DISCOUNT_MARKS
+			// },
+			// {
+			// 	label: i18next.t('loc:Expirácia rezervácie'),
+			// 	key: ENUMERATIONS_KEYS.RESERVATION_EXPIRATION_TIMES,
+			// 	url: ENUMERATIONS_PATHS.RESERVATION_EXPIRATION_TIMES
+			// },
+			// {
+			// 	label: i18next.t('loc:Poisťovne'),
+			// 	key: ENUMERATIONS_KEYS.INSURANCE_COMPANIES,
+			// 	url: ENUMERATIONS_PATHS.INSURANCE_COMPANIES
+			// },
+			// {
+			// 	label: i18next.t('loc:Výška zálohy'),
+			// 	key: ENUMERATIONS_KEYS.DEPOSIT_AMOUNTS,
+			// 	url: ENUMERATIONS_PATHS.DEPOSIT_AMOUNTS
+			// }
 		],
 		['label'],
 		['asc']

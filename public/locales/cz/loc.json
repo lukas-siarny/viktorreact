@@ -43,12 +43,16 @@
   "Email": "CZ_Email",
   "Expirácia rezervácie": "CZ_Expirácia rezervácie",
   "Ešte nemáte účet?": "CZ_Ešte nemáte účet?",
+  "Firma": "CZ_Firma",
   "Fyzická osoba": "CZ_Fyzická osoba",
   "Hesla sa nezhodujú": "CZ_Hesla sa nezhodujú",
   "Heslo": "CZ_Heslo",
   "Hlavná stránka": "CZ_Hlavná stránka",
+  "Home": "Home",
   "Individuálna doprava": "CZ_Individuálna doprava",
   "Info": "CZ_Info",
+  "IČ DPH": "CZ_IČ DPH",
+  "IČO": "CZ_IČO",
   "Jazyky": "CZ_Jazyky",
   "Jednotlivci": "CZ_Jednotlivci",
   "Katalóg produktov": "CZ_Katalóg produktov",
@@ -71,6 +75,9 @@
     " váha batožiny [kg]": " váha batožiny [kg]"
   },
   "Mena": "CZ_Mena",
+  "Meno": "CZ_Meno",
+  "Mesto": "CZ_Mesto",
+  "Môj účet": "Môj účet",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "CZ_Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
   "Na vašu adresu odošleme link na obnovenie hesla": {
     " Prosím zadajte svoju adresu": {
@@ -96,9 +103,12 @@
   "Názov musí byť vyplnení pre aspoň jeden jazyk": "CZ_Názov musí byť vyplnení pre aspoň jeden jazyk",
   "Obnova hesla": "CZ_Obnova hesla",
   "Obsadenosť": "CZ_Obsadenosť",
+  "Odhlásiť": "Odhlásiť",
   "Odoslať email": "CZ_Odoslať email",
   "Odstránený": "CZ_Odstránený",
   "Odstrániť {{entity}}": "CZ_Odstrániť {{entity}}",
+  "Osobné údaje": "CZ_Osobné údaje",
+  "PSČ": "CZ_PSČ",
   "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov": {
     "": ""
   },
@@ -114,6 +124,7 @@
   },
   "Predajné kanály": "CZ_Predajné kanály",
   "Pridať {{entity}}": "CZ_Pridať {{entity}}",
+  "Priezvisko": "CZ_Priezvisko",
   "Prihlásiť sa": "CZ_Prihlásiť sa",
   "Priradiť {{entity}}": "CZ_Priradiť {{entity}}",
   "Právnická osoba": "CZ_Právnická osoba",
@@ -129,6 +140,7 @@
   "Súbor je príliš veľký (max": {
     " {{size}} {{unit}})": " {{size}} {{unit}})"
   },
+  "Telefónne číslo": "CZ_Telefónne číslo",
   "Textové popisy": "CZ_Textové popisy",
   "Toto pole je povinné": "CZ_Toto pole je povinné",
   "Typ osoby": "CZ_Typ osoby",
@@ -136,6 +148,8 @@
   "Typ stravy": "CZ_Typ stravy",
   "Typ ubytovania": "CZ_Typ ubytovania",
   "Ubytovanie": "CZ_Ubytovanie",
+  "Ulica": "CZ_Ulica",
+  "Uložiť": "CZ_Uložiť",
   "Uložiť {{entity}}": "CZ_Uložiť {{entity}}",
   "Umiestnite pečiatku s podpisom do modrého rámu": {
     "": ""
@@ -145,6 +159,8 @@
   "Ups niečo sa pokazilo": "CZ_Ups niečo sa pokazilo",
   "Vlastnosti vzoru jednotky": "CZ_Vlastnosti vzoru jednotky",
   "Vlastnosti zariadenia": "CZ_Vlastnosti zariadenia",
+  "Vyber krajinu": "CZ_Vyber krajinu",
+  "Vyber predvoľbu": "CZ_Vyber predvoľbu",
   "Vyberte aspoň jednu z možností": "CZ_Vyberte aspoň jednu z možností",
   "Vyberte {{entity}}": "CZ_Vyberte {{entity}}",
   "Vyhľadajte podľa {{entity}}": "CZ_Vyhľadajte podľa {{entity}}",
@@ -164,10 +180,19 @@
     }
   },
   "Zadajte email": "CZ_Zadajte email",
+  "Zadajte firmu": "CZ_Zadajte firmu",
   "Zadajte heslo": "CZ_Zadajte heslo",
+  "Zadajte ič dph": "CZ_Zadajte ič dph",
+  "Zadajte ičo": "CZ_Zadajte ičo",
   "Zadajte maximálne {{max}}": "CZ_Zadajte maximálne {{max}}",
+  "Zadajte meno": "CZ_Zadajte meno",
+  "Zadajte mesto": "CZ_Zadajte mesto",
   "Zadajte minimálne {{min}}": "CZ_Zadajte minimálne {{min}}",
   "Zadajte nové heslo": "CZ_Zadajte nové heslo",
+  "Zadajte priezvisko": "CZ_Zadajte priezvisko",
+  "Zadajte smerovacie číslo": "CZ_Zadajte smerovacie číslo",
+  "Zadajte telefónne číslo": "CZ_Zadajte telefónne číslo",
+  "Zadajte ulicu": "CZ_Zadajte ulicu",
   "Zadajte zraz na letisku pred odletom": "CZ_Zadajte zraz na letisku pred odletom",
   "Zadajte zraz pred cestou": "CZ_Zadajte zraz pred cestou",
   "Zadajte {{entity}}": "CZ_Zadajte {{entity}}",
@@ -191,5 +216,6 @@
   "jazdu": "CZ_jazdu",
   "let": "CZ_let",
   "slovensky": "CZ_slovensky",
-  "Úspešné": "CZ_Úspešné"
+  "Úspešné": "CZ_Úspešné",
+  "Štát": "CZ_Štát"
 }

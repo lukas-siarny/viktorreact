@@ -20,6 +20,10 @@ export enum LANGUAGE {
 	EN = 'en'
 }
 
+export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
+
+export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hurs
+
 export const DEFAULT_LANGUAGE = LANGUAGE.SK
 
 export const LOCALES = {
@@ -78,6 +82,7 @@ export const DROPDOWN_POSITION = {
 }
 
 export enum FORM {
+	USER_ACCOUNT_FORM = 'USER_ACCOUNT_FORM',
 	LOGIN = 'LOGIN',
 	FORGOT_PASSWORD = 'FORGOT_PASSWORD',
 	CREATE_PASSWORD = 'CREATE_PASSWORD',
@@ -287,7 +292,9 @@ export enum PAGE {
 	PRODUCTS = 'PRODUCTS',
 	SALES = 'SALES',
 	COMMISIONS = 'COMMISIONS',
-	ENTRY = 'ENTRY'
+	ENTRY = 'ENTRY',
+	HOME = 'HOME',
+	MY_ACCOUNT = 'MY_ACCOUNT'
 }
 
 export enum PAGE_ACCOMMODATION_FACILITY_TABS {
@@ -1519,6 +1526,13 @@ export const customerTypeOptions = () => [
 export enum PAGE_PAYMENT_TABS {
 	INFO = 'INFO',
 	LOGS = 'LOGS'
+}
+
+export enum VALIDATION_MAX_LENGTH {
+	LENGTH_255 = 255,
+	LENGTH_100 = 100,
+	LENGTH_20 = 20,
+	LENGTH_10 = 10
 }
 
 export const OCCUPANCY_ALL_PERSONS_EXTRA_BED = 'OCCUPANCY_ALL_PERSONS_EXTRA_BED'

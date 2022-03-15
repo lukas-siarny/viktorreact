@@ -9,7 +9,7 @@ import BaseRoute from './BaseRoute'
 
 // utils
 import { isLoggedIn } from '../utils/auth'
-import { PAGE, SUBMENU_PARENT } from '../utils/enums'
+import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
 import { getPath } from '../utils/history'
 
 type Props = RouteProps & {
@@ -23,7 +23,6 @@ type Props = RouteProps & {
 	}
 	/** e.g. tabKey or other extra props for page */
 	extra?: Dictionary<any>
-	redirectTo?: string
 }
 
 const onIdle = () => {
@@ -32,14 +31,9 @@ const onIdle = () => {
 
 const AuthRoute: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { redirectTo } = props
 
 	if (!isLoggedIn()) {
 		return <Redirect to={getPath(t('paths:login'))} />
-	}
-
-	if (redirectTo) {
-		return <Redirect to={redirectTo} />
 	}
 
 	return (
@@ -49,7 +43,7 @@ const AuthRoute: FC<Props> = (props) => {
 				element={document}
 				onIdle={onIdle}
 				debounce={250}
-				timeout={1000 * 60 * 60 * 4} // refresh page if user is more than 4 hours inactive
+				timeout={REFRESH_PAGE_INTERVAL} // refresh page if user is longer time inactive
 			/>
 			<BaseRoute {...(props as any)} />
 		</>

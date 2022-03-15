@@ -36,6 +36,16 @@ export interface ILoginForm {
 	password: string
 }
 
+export interface IRegistrationForm {
+	email: string
+	password: string
+	phonePrefixCountryCode: string
+	phone: string
+	gdpr: boolean
+	gtc: boolean
+	marketing: boolean
+}
+
 export interface IForgotPasswordForm {
 	email: string
 }

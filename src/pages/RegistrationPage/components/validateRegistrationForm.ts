@@ -19,6 +19,19 @@ export default (values: any /* ILoginForm */) => {
 	if (!get(values, 'password')) {
 		errors.password = i18next.t('loc:Toto pole je povinné')
 	}
+	if (!get(values, 'phonePrefixCountryCode')) {
+		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
+	}
+	if (!get(values, 'phone')) {
+		errors.phone = i18next.t('loc:Toto pole je povinné')
+	}
+	if (!get(values, 'gdpr')) {
+		errors.gdpr = i18next.t('loc:Toto pole je povinné')
+	}
+	if (!get(values, 'gtc')) {
+		errors.gtc = i18next.t('loc:Toto pole je povinné')
+	}
+
 
 	return errors
 }

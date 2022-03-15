@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Tooltip } from 'antd'
+import { Col, Row, Tooltip } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import cx from 'classnames'
@@ -9,14 +9,18 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // components
 import CustomTable from '../../components/CustomTable'
+import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { PAGINATION } from '../../utils/enums'
+import { PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { history } from '../../utils/history'
+import { getPath, history } from '../../utils/history'
 import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 import AdminUsersFilter from './components/AdminUsersFilter'
+
+// types
+import { IBreadcrumbs } from '../../types/interfaces'
 
 type Props = {}
 
@@ -64,8 +68,6 @@ const AdminUsersPage = () => {
 		}
 		setQuery(newQuery)
 	}
-
-	const createUser = () => {}
 
 	const columns: Columns = [
 		{
@@ -125,35 +127,51 @@ const AdminUsersPage = () => {
 		}
 	]
 
+	// View
+	const breadcrumbs: IBreadcrumbs = {
+		items: [
+			{
+				name: t('loc:Zoznam používateľov')
+			}
+		]
+	}
+
 	return (
-		<Col span={24}>
-			<div className='content-body'>
-				<AdminUsersFilter createUser={createUser} onSubmit={handleSubmit} />
-				<CustomTable
-					className='table-fixed'
-					onChange={onChangeTable}
-					columns={columns}
-					dataSource={users?.data?.users}
-					rowClassName={(record) => cx('clickable-row', { 'deleted-table-item': record.deletedAt })}
-					loading={users?.isLoading}
-					twoToneRows
-					onRow={(record) => ({
-						onClick: () => {
-							history.push(t('paths:obecne/pouzivatelia/{{userID}}/detail', { userID: record.id }) as string)
-						}
-					})}
-					pagination={{
-						showTotal: (total, [from, to]) => t('loc:{{from}} - {{to}} z {{total}} záznamov', { total, from, to }),
-						defaultPageSize: PAGINATION.defaultPageSize,
-						pageSizeOptions: PAGINATION.pageSizeOptions,
-						pageSize: users?.data?.pagination?.limit,
-						showSizeChanger: true,
-						total: users?.data?.pagination?.totalPages,
-						current: users?.data?.pagination?.page
-					}}
-				/>
-			</div>
-		</Col>
+		<>
+			<Row>
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:home'))} />
+			</Row>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body'>
+						<AdminUsersFilter createUser={() => history.push(getPath(t('paths:user/create')))} onSubmit={handleSubmit} />
+						<CustomTable
+							className='table-fixed'
+							onChange={onChangeTable}
+							columns={columns}
+							dataSource={users?.data?.users}
+							rowClassName={(record) => cx('clickable-row', { 'deleted-table-item': record.deletedAt })}
+							loading={users?.isLoading}
+							twoToneRows
+							onRow={(record) => ({
+								onClick: () => {
+									history.push(getPath(t('paths:user-detail/{{userID}}', { userID: record.id })))
+								}
+							})}
+							pagination={{
+								showTotal: (total, [from, to]) => t('loc:{{from}} - {{to}} z {{total}} záznamov', { total, from, to }),
+								defaultPageSize: PAGINATION.defaultPageSize,
+								pageSizeOptions: PAGINATION.pageSizeOptions,
+								pageSize: users?.data?.pagination?.limit,
+								showSizeChanger: true,
+								total: users?.data?.pagination?.totalPages,
+								current: users?.data?.pagination?.page
+							}}
+						/>
+					</div>
+				</Col>
+			</Row>
+		</>
 	)
 }
 

@@ -77,3 +77,21 @@ export interface IConfirmUserForm extends ICreatePasswordForm {
 	name: string
 	surname: string
 }
+
+export interface IComputedMatch<Params> {
+	isExact: boolean
+	params: Params
+	path: string
+	url: string
+}
+
+export interface IBreadcrumbItem {
+	name: string
+	link?: string
+	action?: any
+	titleName?: string | null | undefined
+}
+
+export interface IBreadcrumbs {
+	items: IBreadcrumbItem[]
+}

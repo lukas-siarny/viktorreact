@@ -13,9 +13,8 @@ import { Paths } from '../../types/api'
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
 import { getReq, postReq } from '../../utils/request'
-import { normalizeQueryParams } from '../../utils/helper'
 
-export type IUserActions = IResetStore | IGetAuthUser | IGetUser
+export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers
 
 interface IGetAuthUser {
 	type: AUTH_USER
@@ -25,6 +24,11 @@ interface IGetAuthUser {
 interface IGetUser {
 	type: USER
 	payload: IUserPayload
+}
+
+interface IGetUsers {
+	type: USERS
+	payload: IUsersPayload
 }
 
 export interface IAuthUserPayload {

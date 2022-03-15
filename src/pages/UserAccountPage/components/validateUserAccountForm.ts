@@ -23,6 +23,10 @@ export default (values: any) => {
 		})
 	}
 
+	if (values?.phone && !values?.phonePrefixCountryCode) {
+		errors.phone = i18next.t('loc:Toto pole je povinné')
+	}
+
 	if (!values.companyName) {
 		errors.companyName = i18next.t('loc:Toto pole je povinné')
 	}

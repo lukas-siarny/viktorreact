@@ -4,8 +4,9 @@
   "index": "/",
   "login": "/auth/login",
   "my-account": "/my-account",
-  "obecne/pouzivatelia/{{userID}}/detail": "/obecne/pouzivatelia/{{userID}}/detail",
   "reset-password": "/auth/reset-password",
   "signup": "/auth/signup",
+  "user-detail/{{userID}}": "/user-detail/{{userID}}",
+  "user/create": "/user/create",
   "users": "/users"
 }

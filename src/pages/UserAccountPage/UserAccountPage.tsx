@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
@@ -7,19 +7,36 @@ import { initialize, submit } from 'redux-form'
 
 // components
 import UserAccountFrom from './components/UserAccountFrom'
+import DeleteButton from '../../components/DeleteButton'
+import Breadcrumbs from '../../components/Breadcrumbs'
 
 // enums
-import { FORM } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getCurrentUser } from '../../reducers/users/userActions'
-import { patchReq } from '../../utils/request'
+import { getCurrentUser, getUserAccountDetails } from '../../reducers/users/userActions'
 
-const UserAccountPage = () => {
+// types
+import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+
+// utils
+import { getAccessToken } from '../../utils/auth'
+import { deleteReq, patchReq } from '../../utils/request'
+import { getPath, history } from '../../utils/history'
+
+type Props = {
+	computedMatch: IComputedMatch<{ userID: number }>
+}
+
+const UserAccountPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const { computedMatch } = props
+	const { userID } = computedMatch.params
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
+	const [isRemoving, setIsRemoving] = useState<boolean>(false)
+	const token: string = getAccessToken() || ''
 
 	const userAccountDetail = useSelector((state: RootState) => state.user.authUser)
 
@@ -70,26 +87,71 @@ const UserAccountPage = () => {
 		}
 	}
 
+	// View
+	const breadcrumbs: IBreadcrumbs = {
+		items: [
+			{
+				name: t('loc:Zoznam používateľov'),
+				link: getPath(t('paths:users'))
+			},
+			{
+				name: t('loc:Detail používateľa'),
+				titleName:
+					userAccountDetail.data?.user?.firstName && userAccountDetail.data?.user?.lastName
+						? `${userAccountDetail.data?.user?.firstName} ${userAccountDetail.data?.user?.lastName}`
+						: userAccountDetail.data?.user?.email
+			}
+		]
+	}
+
+	const deleteUser = async () => {
+		if (isRemoving) {
+			return
+		}
+		try {
+			setIsRemoving(true)
+			await deleteReq('/api/b2b/admin/users/{userID}', { userID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			history.push(getPath(t('paths:users')))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setIsRemoving(false)
+		}
+	}
+
 	return (
-		<div className='content-body small'>
-			<UserAccountFrom onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(userAccountDetail.data?.company)} />
-			<Row justify='center'>
-				<Button
-					type={'primary'}
-					block
-					size={'large'}
-					className={`not-btn m-regular mt-4 mb-4 w-1/3`}
-					htmlType={'submit'}
-					onClick={() => {
-						dispatch(submit(FORM.USER_ACCOUNT_FORM))
-					}}
-					disabled={submitting}
-					loading={submitting}
-				>
-					{t('loc:Uložiť')}
-				</Button>
+		<>
+			<Row>
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:users'))} />
 			</Row>
-		</div>
+			<div className='content-body small'>
+				<UserAccountFrom onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(userAccountDetail.data?.user?.company)} />
+				<Row justify='space-between'>
+					<DeleteButton
+						className={`mt-2 mb-2 w-1/3`}
+						onConfirm={deleteUser}
+						entityName={t('loc:používateľa')}
+						type={'default'}
+						getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+					/>
+					<Button
+						type={'primary'}
+						block
+						size={'middle'}
+						className={`noti-btn m-regular mt-2 mb-2 w-1/3`}
+						htmlType={'submit'}
+						onClick={() => {
+							dispatch(submit(FORM.USER_ACCOUNT_FORM))
+						}}
+						disabled={submitting}
+						loading={submitting}
+					>
+						{t('loc:Uložiť')}
+					</Button>
+				</Row>
+			</div>
+		</>
 	)
 }
 

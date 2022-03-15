@@ -11,7 +11,7 @@
 	border: none
 	height: 40px
 	font-size: 14px
-	border-radius: 64px
+	border-radius: 4px
 	background-color: $textColor-gray-100
 	color: $textColor-gray-600
 	padding: 0 16px
@@ -67,11 +67,11 @@
 	&.ant-btn-primary
 		box-shadow: none
 		color: $backgroundColor-white
-		background-color: $backgroundColor-blue-600
+		background-color: $backgroundColor-notino-black
 		&:disabled
 			opacity: .4
 		&:not(:disabled):hover
-			background-color: $backgroundColor-blue-700
+			background-color: $backgroundColor-notino-black
 			color: #fff
 			z-index: $z-index-box-shadow
 			box-shadow: 0px 8px 24px rgba(37, 99, 235, 0.24), 0px 4px 14px rgba(37, 99, 235, 0.14), 0px 2px 4px rgba(37, 99, 235, 0.16)
@@ -90,15 +90,15 @@
 	// Ghost
 	&.ant-btn-background-ghost
 		background-color: transparent
-		border: 1px solid $borderColor-blue-600
-		color: $textColor-blue-600
+		border: 1px solid $borderColor-notino-black
+		color: $textColor-notino-black
 		z-index: 5
 		position: relative
 		&:disabled
 			color: $textColor-gray-900
 			border-color: $borderColor-gray-400
 		&:not(:disabled):hover
-			color: $textColor-blue-600
+			color: $textColor-notino-black
 			background-color: transparent
 			z-index: 4
 			position: relative
@@ -106,20 +106,20 @@
 	// Link
 	&.ant-btn-link
 		background-color: transparent
-		color: $textColor-blue-600
+		color: $textColor-notino-black
 		height: 16px
 		display: flex
 		align-items: center
 		&:hover
 			background-color: transparent
-			color: $textColor-blue-600
+			color: $textColor-notino-black
 			opacity: .8
 		span
 			font-size: 14px
 			font-weight: 500
 			margin-right: 8px
 		&:active
-			color: $textColor-blue-800
+			color: $textColor-notino-black
 	// Danger (delete button)
 	&.ant-btn-dangerous:not(.ant-btn-icon-only)
 		color: $textColor-red-600
@@ -199,11 +199,11 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 		&:before
 			display: none
 		&:hover
-			color: $textColor-blue-600
+			color: $textColor-notino-black
 	.ant-radio-button-wrapper.ant-radio-button-wrapper-checked
-		background: $backgroundColor-blue-600
+		background: $backgroundColor-notino-black
 		border-radius: 4px
 		box-shadow: $boxShadow-xl !important
 		&:hover
 			border-radius: 4px
-			background: $backgroundColor-blue-600
+			background: $backgroundColor-notino-black

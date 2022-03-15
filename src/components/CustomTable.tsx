@@ -17,10 +17,11 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	withoutIDColumn?: boolean
 	IDColumnDataIndex?: Array<string>
 	disabled?: boolean
+	onRow?: Function
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, columns } = props
+	const { disabled = false, className, columns, onRow } = props
 
 	const onClickOptionSizeChanger = useCallback(
 		(e: any) => {
@@ -82,28 +83,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	const loadingWrap = props.loading
 
-	const onRow = (record: any, index?: number) => {
-		const onRowProp = props?.onRow?.(record, index)
-		const rowProps: any = {
-			...onRowProp,
-			onClick: onRowProp?.onClick
-				? (e: React.MouseEvent<HTMLElement>) => {
-						const { target } = e as any
-						const ignoreCellClick = target ? !!target.closest('.ignore-cell-click') : false
-
-						// NOTE: Kliknutie vo vnútri delete popconfirmu sposobovalo otvorenie detailu (kliknutie mimo riadok)
-						let clickInsideRow
-						if (target.closest('.ant-table-row')) {
-							clickInsideRow = true
-						}
-				  }
-				: undefined,
-			index
-		}
-
-		return rowProps
-	}
-
 	return (
 		<div className={cx({ 'disabled-state': disabled })}>
 			<Table
@@ -112,7 +91,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				loading={loadingWrap}
 				defaultExpandAllRows
 				className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows })}
-				onRow={onRow as any}
+				onRow={onRow}
 				pagination={
 					props.pagination &&
 					({

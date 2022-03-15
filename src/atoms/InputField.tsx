@@ -43,7 +43,8 @@ const InputField = (props: Props) => {
 		className,
 		customOnChange,
 		allowClear,
-		suffix
+		suffix,
+		addonBefore
 	} = props
 	const onChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -95,6 +96,7 @@ const InputField = (props: Props) => {
 				className={cx('noti-input', { 'noti-input-filter': fieldMode === FIELD_MODE.FILTER })}
 				onChange={onChange}
 				onBlur={onBlur}
+				addonBefore={addonBefore}
 				size={size || 'middle'}
 				onFocus={onFocus}
 				value={input.value}

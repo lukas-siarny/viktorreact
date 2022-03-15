@@ -65,6 +65,8 @@ const AdminUsersPage = () => {
 		setQuery(newQuery)
 	}
 
+	const createUser = () => {}
+
 	const columns: Columns = [
 		{
 			title: t('loc:Meno'),
@@ -126,7 +128,7 @@ const AdminUsersPage = () => {
 	return (
 		<Col span={24}>
 			<div className='content-body'>
-				<AdminUsersFilter onSubmit={handleSubmit} />
+				<AdminUsersFilter createUser={createUser} onSubmit={handleSubmit} />
 				<CustomTable
 					className='table-fixed'
 					onChange={onChangeTable}

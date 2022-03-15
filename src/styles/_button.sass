@@ -2,6 +2,208 @@
 @import "variables"
 @import "typography"
 
-.noti-btn.ant-btn
-    height: 44px
-    border-radius: 6px
+// Buttons
+
+// Secondary (DEFAULT
+.ant-btn.noti-btn,
+.ant-btn.ant-popover-disabled-compatible-wrapper > button // kvoli delete buttonu ktory je v pop confirme disablnuty
+	// Medium (DEFAULT)
+	border: none
+	height: 40px
+	font-size: 14px
+	border-radius: 64px
+	background-color: $textColor-gray-100
+	color: $textColor-gray-600
+	padding: 0 16px
+	box-shadow: none
+	&.square // aby nebol button zaobleny ale hranaty (eg. v SimpleLayoute)
+		border-radius: 4px
+	// Small
+	&.ant-btn-sm
+		height: 24px
+		font-size: 12px
+		padding: 0 8px
+		line-height: 0
+		&.ant-btn-circle
+			min-width: 24px
+		>svg:first-child
+			left: 11px // same as button padding
+		>svg:first-child+span
+			padding-left: 20px // 16px icon + 4px text padding
+	// Large
+	&.ant-btn-lg
+		height: 52px
+		font-size: 14px
+		padding: 0 28px
+		>svg:first-child
+			left: 24px // same as button padding
+		>svg:first-child+span
+			padding-left: 28px // 24px icon + 4px text padding
+	&[ant-click-animating-without-extra-node]:after
+		animation: 0s !important // Vypni ant animaciu okolo buttonu
+	>svg:first-child
+		position: absolute
+		top: 50%
+		transform: translateY(-50%)
+		left: 16px // same as button padding
+	>svg:first-child+span
+		padding-left: 28px // 24px icon + 4px text padding
+	&.ant-btn-icon-only > svg:first-child
+	//left: 4px
+	// NOTE: 	svg ikona nesmie mať filter: grayscale(100%) pre možnosť nastavenia farby z vrchu
+	// 			svg ikona musí byť uložená v gride 16px/24px a používať "currentColor"
+	>svg
+		opacity: 1
+	// Disabled state
+	&:disabled
+		opacity: .4
+		background-color: $backgroundColor-gray-100
+	&:not(:disabled):hover
+		background-color: $textColor-gray-200
+		color: $textColor-gray-900
+	&:active
+		background-color: $textColor-gray-300
+	// Primary
+	&.ant-btn-primary
+		box-shadow: none
+		color: $backgroundColor-white
+		background-color: $backgroundColor-blue-600
+		&:disabled
+			opacity: .4
+		&:not(:disabled):hover
+			background-color: $backgroundColor-blue-700
+			color: #fff
+			z-index: $z-index-box-shadow
+			box-shadow: 0px 8px 24px rgba(37, 99, 235, 0.24), 0px 4px 14px rgba(37, 99, 235, 0.14), 0px 2px 4px rgba(37, 99, 235, 0.16)
+	// block style
+	&.ant-btn-block
+		display: flex
+		align-items: center
+		justify-content: center
+		svg
+			left: 25px
+			top: calc(50% - 10px)
+			position: relative
+		&.ant-btn-lg
+			svg
+				top: calc(50% - 14px)
+	// Ghost
+	&.ant-btn-background-ghost
+		background-color: transparent
+		border: 1px solid $borderColor-blue-600
+		color: $textColor-blue-600
+		z-index: 5
+		position: relative
+		&:disabled
+			color: $textColor-gray-900
+			border-color: $borderColor-gray-400
+		&:not(:disabled):hover
+			color: $textColor-blue-600
+			background-color: transparent
+			z-index: 4
+			position: relative
+			box-shadow: 0px 8px 24px rgba(37, 99, 235, 0.24), 0px 4px 14px rgba(37, 99, 235, 0.14), 0px 2px 4px rgba(37, 99, 235, 0.16)
+	// Link
+	&.ant-btn-link
+		background-color: transparent
+		color: $textColor-blue-600
+		height: 16px
+		display: flex
+		align-items: center
+		&:hover
+			background-color: transparent
+			color: $textColor-blue-600
+			opacity: .8
+		span
+			font-size: 14px
+			font-weight: 500
+			margin-right: 8px
+		&:active
+			color: $textColor-blue-800
+	// Danger (delete button)
+	&.ant-btn-dangerous:not(.ant-btn-icon-only)
+		color: $textColor-red-600
+		background-color: $backgroundColor-red-100
+		&.ant-btn-icon-only
+			background-color: transparent
+		&:hover
+			background-color: $backgroundColor-red-200
+			color: $textColor-red-600
+	// disabled state pre delete button ktory je v pop confirme
+	&.ant-popover-disabled-compatible-wrapper
+		display: flex !important
+		align-items: center
+		background: none
+		padding: 0
+		&:hover
+			background: none
+		.ant-btn-dangerous
+			pointer-events: none
+			background-color: transparent
+			svg
+				color: $textColor-red-600 !important
+	// Table action button
+	&.noti-table-btn
+		width: 16px
+		height: 16px
+		&:hover
+			svg
+				color: $textColor-gray-900 !important
+				background-color: transparent
+		svg
+			color: $textColor-gray-600 !important
+	// Circle
+	&.ant-btn-circle
+		min-width: 40px
+		padding-right: 0
+		padding-left: 0
+		text-align: center
+		border-radius: 50%
+	// only icon btn
+	&.ant-btn-icon-only
+		width: 32px
+		height: 32px
+		&:hover
+			box-shadow: none !important
+		&.ant-btn-sm
+			height: 24px
+			width: 24px
+			svg
+				left: calc((24px - 16px) / 2)
+		svg
+			left: 8px
+	// Filter btn v tabulke
+	&.filter-btn
+		height: 22px
+		width: 22px
+		svg
+			left: 4px !important
+// anchor button
+a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vycentrovat
+	display: flex
+	align-items: center
+.noti-segmented-btn
+	display: flex
+	// Ak ma classu block-style znamena to ze su len 2 optiony, ktore si rozdelia priestor na 50 a 50 percent eg. ProducDrawer, ak budu tri tak na 33 33 33 atd...
+	&.block-style
+		width: 100%
+		.ant-radio-button-wrapper
+			width: 50%
+	.ant-radio-button-wrapper
+		// TODO: ak bude treba tak spravit variacie pre sizes
+		height: 44px
+		display: flex
+		border-radius: 4px
+		align-items: center
+		border: none !important
+		&:before
+			display: none
+		&:hover
+			color: $textColor-blue-600
+	.ant-radio-button-wrapper.ant-radio-button-wrapper-checked
+		background: $backgroundColor-blue-600
+		border-radius: 4px
+		box-shadow: $boxShadow-xl !important
+		&:hover
+			border-radius: 4px
+			background: $backgroundColor-blue-600

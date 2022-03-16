@@ -1,0 +1,20 @@
+.ant-form-item
+	.ant-select.noti-select-input
+		.ant-select-selector
+			border-radius: 8px
+
+.ant-form-item:not(.ant-form-item-has-error)
+	// Normal state
+	.ant-select.noti-select-input
+		.ant-select-selector
+			border: 1px solid $borderColor-notino-grayLight
+		&.ant-select-focused .ant-select-selector
+			border: 1px solid $borderColor-notino-black
+			box-shadow: $field-shadow-focus-default
+		&:hover .ant-select-selector
+			border: 1px solid $borderColor-notino-grayDark
+
+.ant-select-dropdown.noti-select-dropdown
+	.ant-select-item.ant-select-item-option-selected
+		color: $textColor-white
+		font-weight: $fontWeight-normal

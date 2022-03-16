@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 
 // components
 import ActivationForm from './components/ActivationForm'
@@ -10,23 +10,31 @@ import ActivationForm from './components/ActivationForm'
 import { postReq } from '../../utils/request'
 import { history, getPath } from '../../utils/history'
 
-// reducers
+// redux
 import { RootState } from '../../reducers'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // interfaces
 import { IActivationForm } from '../../types/interfaces'
 
 const ActivationPage = () => {
 	const { t } = useTranslation()
+	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
-	const userMail = useSelector((state: RootState) => state.user.authUser.data?.email)
+	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
+
+	useEffect(() => {
+		if (currentUser?.activateAt) {
+			history.push(getPath(t('paths:index')))
+		}
+	}, [t, currentUser])
 
 	const handleSubmit = async (values: IActivationForm) => {
 		setSubmitting(true)
 
 		try {
 			await postReq('/api/b2b/admin/users/activation', undefined, values)
-			history.push(getPath(t('paths:index')))
+			dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.log(error.message)
@@ -54,7 +62,7 @@ const ActivationPage = () => {
 				<p className='base-regular mt-7 mb-14'>
 					<span className='base-bold'>{t('loc:Zadajte PIN')}</span>{' '}
 					{t('loc:ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}', {
-						email: userMail
+						email: currentUser?.email
 					})}
 				</p>
 				<ActivationForm onSubmit={handleSubmit} submitting={submitting} />

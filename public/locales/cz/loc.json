@@ -23,6 +23,7 @@
   "8 rokov": "CZ_8 rokov",
   "9 rokov": "CZ_9 rokov",
   "Aktivovaný": "CZ_Aktivovaný",
+  "Aktivovať": "CZ_Aktivovať",
   "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak": "CZ_Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak",
   "Autobusová doprava": "CZ_Autobusová doprava",
   "Boli ste automaticky odhlásený": "CZ_Boli ste automaticky odhlásený",
@@ -157,6 +158,7 @@
   "Upozornenie": "CZ_Upozornenie",
   "Upraviť {{entity}}": "CZ_Upraviť {{entity}}",
   "Ups niečo sa pokazilo": "CZ_Ups niečo sa pokazilo",
+  "Verifikácia": "CZ_Verifikácia",
   "Vlastnosti vzoru jednotky": "CZ_Vlastnosti vzoru jednotky",
   "Vlastnosti zariadenia": "CZ_Vlastnosti zariadenia",
   "Vyber krajinu": "CZ_Vyber krajinu",
@@ -174,6 +176,8 @@
   "Výška zľavy": "CZ_Výška zľavy",
   "Webové projekty": "CZ_Webové projekty",
   "Zabudnuté heslo": "CZ_Zabudnuté heslo",
+  "Zadajte PIN": "CZ_Zadajte PIN",
+  "Zadajte celý PIN": "CZ_Zadajte celý PIN",
   "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet": {
     " Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla": {
       "": ""
@@ -198,6 +202,7 @@
   "Zadajte {{entity}}": "CZ_Zadajte {{entity}}",
   "Zadajte {{label}}": "CZ_Zadajte {{label}}",
   "Zatvoriť": "CZ_Zatvoriť",
+  "Znovu vyžiadať PIN": "CZ_Znovu vyžiadať PIN",
   "Zopakujte heslo": "CZ_Zopakujte heslo",
   "Zopakujte nové heslo": "CZ_Zopakujte nové heslo",
   "Zraz na letisku [min] pred odletom": "CZ_Zraz na letisku [min] pred odletom",
@@ -214,6 +219,7 @@
   "Zľava pre stálych klientov": "CZ_Zľava pre stálych klientov",
   "jazda": "CZ_jazda",
   "jazdu": "CZ_jazdu",
+  "ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}": "CZ_ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}",
   "let": "CZ_let",
   "slovensky": "CZ_slovensky",
   "Úspešné": "CZ_Úspešné",

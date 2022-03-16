@@ -23,6 +23,7 @@
   "8 rokov": "EN_8 rokov",
   "9 rokov": "EN_9 rokov",
   "Aktivovaný": "EN_Aktivovaný",
+  "Aktivovať": "EN_Aktivovať",
   "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak": "EN_Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak",
   "Autobusová doprava": "EN_Autobusová doprava",
   "Boli ste automaticky odhlásený": "EN_Boli ste automaticky odhlásený",
@@ -157,6 +158,7 @@
   "Upozornenie": "EN_Upozornenie",
   "Upraviť {{entity}}": "EN_Upraviť {{entity}}",
   "Ups niečo sa pokazilo": "EN_Ups niečo sa pokazilo",
+  "Verifikácia": "EN_Verifikácia",
   "Vlastnosti vzoru jednotky": "EN_Vlastnosti vzoru jednotky",
   "Vlastnosti zariadenia": "EN_Vlastnosti zariadenia",
   "Vyber krajinu": "EN_Vyber krajinu",
@@ -174,6 +176,8 @@
   "Výška zľavy": "EN_Výška zľavy",
   "Webové projekty": "EN_Webové projekty",
   "Zabudnuté heslo": "EN_Zabudnuté heslo",
+  "Zadajte PIN": "EN_Zadajte PIN",
+  "Zadajte celý PIN": "EN_Zadajte celý PIN",
   "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet": {
     " Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla": {
       "": "_NEPRELOZENE_"
@@ -198,6 +202,7 @@
   "Zadajte {{entity}}": "EN_Zadajte {{entity}}",
   "Zadajte {{label}}": "EN_Zadajte {{label}}",
   "Zatvoriť": "EN_Zatvoriť",
+  "Znovu vyžiadať PIN": "EN_Znovu vyžiadať PIN",
   "Zopakujte heslo": "EN_Zopakujte heslo",
   "Zopakujte nové heslo": "EN_Zopakujte nové heslo",
   "Zraz na letisku [min] pred odletom": "EN_Zraz na letisku [min] pred odletom",
@@ -214,6 +219,7 @@
   "Zľava pre stálych klientov": "EN_Zľava pre stálych klientov",
   "jazda": "EN_jazda",
   "jazdu": "EN_jazdu",
+  "ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}": "EN_ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}",
   "let": "EN_let",
   "slovensky": "EN_slovensky",
   "Úspešné": "EN_Úspešné",

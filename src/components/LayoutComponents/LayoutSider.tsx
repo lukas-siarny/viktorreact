@@ -16,12 +16,14 @@ import { logOutUser } from '../../reducers/users/userActions'
 
 const { Sider } = Layout
 
-type Props = {
+export type LayoutSiderProps = {
 	page?: PAGE
+	showNavigation?: boolean
 }
 
-const LayoutSider = (props: Props) => {
-	const { page } = props
+const LayoutSider = (props: LayoutSiderProps) => {
+	const { page, showNavigation = true } = props
+
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 
@@ -33,14 +35,16 @@ const LayoutSider = (props: Props) => {
 				</Link>
 
 				<div className='px-2 flex flex-col flex-grow overflow-y-auto'>
-					<Menu mode='inline' selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
-						<Menu.Item key={PAGE.HOME} onClick={() => history.push(getPath(t('paths:home')))} icon={<ThumbnailIcon />}>
-							{t('loc:Home')}
-						</Menu.Item>
-						<Menu.Item key={PAGE.MY_ACCOUNT} onClick={() => history.push(getPath(t('paths:my-account')))} icon={<ThumbnailIcon />}>
-							{t('loc:Môj účet')}
-						</Menu.Item>
-					</Menu>
+					{showNavigation && (
+						<Menu mode='inline' selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
+							<Menu.Item key={PAGE.HOME} onClick={() => history.push(getPath(t('paths:home')))} icon={<ThumbnailIcon />}>
+								{t('loc:Home')}
+							</Menu.Item>
+							<Menu.Item key={PAGE.MY_ACCOUNT} onClick={() => history.push(getPath(t('paths:my-account')))} icon={<ThumbnailIcon />}>
+								{t('loc:Môj účet')}
+							</Menu.Item>
+						</Menu>
+					)}
 				</div>
 
 				<div className='p-2 pb-4'>

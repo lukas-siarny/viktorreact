@@ -3,9 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { Redirect, RouteProps } from 'react-router-dom'
 import IdleTimer from 'react-idle-timer'
 import { Dictionary } from 'lodash'
+import { useSelector } from 'react-redux'
 
 // routes
 import BaseRoute from './BaseRoute'
+
+// reducers
+import { RootState } from '../reducers'
 
 // utils
 import { isLoggedIn } from '../utils/auth'
@@ -30,10 +34,23 @@ const onIdle = () => {
 }
 
 const AuthRoute: FC<Props> = (props) => {
+	const { page } = props
 	const [t] = useTranslation()
+	const currentUser = useSelector((state: RootState) => state.user.authUser)
+	const isActivated = currentUser.data?.activateAt
 
 	if (!isLoggedIn()) {
 		return <Redirect to={getPath(t('paths:login'))} />
+	}
+
+	// account is not activated, redirect to route '/activation'
+	if (!isActivated && page !== PAGE.ACTIVATION) {
+		return currentUser.isLoading || !currentUser.data ? <></> : <Redirect to={getPath(t('paths:activation'))} />
+	}
+
+	// account is activated, disabled route '/activation'
+	if (!!isActivated && page === PAGE.ACTIVATION) {
+		return <Redirect to={getPath(t('paths:index'))} />
 	}
 
 	return (
@@ -45,7 +62,7 @@ const AuthRoute: FC<Props> = (props) => {
 				debounce={250}
 				timeout={REFRESH_PAGE_INTERVAL} // refresh page if user is longer time inactive
 			/>
-			<BaseRoute {...(props as any)} />
+			<BaseRoute {...(props as any)} showNavigation={page !== PAGE.ACTIVATION} />
 		</>
 	)
 }

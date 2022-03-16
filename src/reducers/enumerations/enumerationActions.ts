@@ -54,7 +54,7 @@ export interface IEnumerationsPayload {
 export type EnumerationData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200
 
 export const getEnumerations =
-	(enumType: ENUMERATIONS_KEYS): ThunkResult<void> =>
+	(enumType: ENUMERATIONS_KEYS): ThunkResult<Promise<IEnumerationsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IEnumerationsPayload
 		try {
@@ -73,9 +73,9 @@ export const getEnumerations =
 			switch (enumType) {
 				case ENUMERATIONS_KEYS.COUNTRIES:
 					enumerationsOptions = map(data, (item) => ({
-						key: item.currencyCode,
+						key: item.code,
 						label: item.phonePrefix,
-						value: item.currencyCode,
+						value: item.code,
 						flag: item.flag
 					}))
 					break

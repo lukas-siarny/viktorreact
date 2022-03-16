@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useEffect } from 'react'
 import { Field, reduxForm, InjectedFormProps } from 'redux-form'
 import { Space, Row, Form, Button, Col } from 'antd'
 import { Link } from 'react-router-dom'
@@ -21,6 +21,8 @@ import { FORM, ENUMERATIONS_KEYS } from '../../../utils/enums'
 // eslint-disable-next-line import/no-cycle
 import validateRegistrationForm from './validateRegistrationForm'
 
+// reducers
+import { RootState } from '../../../reducers'
 import { getEnumerations } from '../../../reducers/enumerations/enumerationActions'
 
 type ComponentProps = {}
@@ -28,24 +30,25 @@ type ComponentProps = {}
 type Props = InjectedFormProps<IRegistrationForm, ComponentProps> & ComponentProps
 // type Props = {}
 
-const opitons = [
-	{
-		key: '1',
-		label: '+421',
-		value: 'SK',
-		flag: 'https://flagcdn.com/h20/sk.png'
-	},
-	{
-		key: '2',
-		label: '+420',
-		value: 'CZ',
-		flag: 'https://flagcdn.com/h20/cz.png'
-	}
-]
+// const opitons = [
+// 	{
+// 		key: '1',
+// 		label: '+421',
+// 		value: 'SK',
+// 		flag: 'https://flagcdn.com/h20/sk.png'
+// 	},
+// 	{
+// 		key: '2',
+// 		label: '+420',
+// 		value: 'CZ',
+// 		flag: 'https://flagcdn.com/h20/cz.png'
+// 	}
+// ]
 
 const RegistrationForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, submitting, form } = props
+	const prefixOptions = useSelector((state: RootState) => state.enumerationsStore.countries)
 	const dispatch = useDispatch()
 
 	const onSearchCountries = useCallback(() => dispatch(getEnumerations(ENUMERATIONS_KEYS.COUNTRIES)), [])
@@ -61,23 +64,14 @@ const RegistrationForm: FC<Props> = (props) => {
 						<Col flex='102px'>
 							<Field
 								component={PhonePrefixField}
-								// label={t('loc:Prefix')}
-								// placeholder={t('loc:Zadajte predvolbu')}
 								name={'phonePrefixCountryCode'}
 								size={'large'}
-								// options={opitons}
-								onSearch={onSearchCountries}
-								dataSourcePath='enumerationsOptions'
+								options={prefixOptions.enumerationsOptions}
+								onFocus={onSearchCountries}
 							/>
 						</Col>
 						<Col flex='auto'>
-							<Field
-								component={InputField}
-								// label={t('loc:Telefón')}
-								placeholder={t('loc:Zadajte telefón')}
-								name={'phone'}
-								size={'large'}
-							/>
+							<Field component={InputField} placeholder={t('loc:Zadajte telefón')} name={'phone'} size={'large'} />
 						</Col>
 					</Row>
 				</Form.Item>

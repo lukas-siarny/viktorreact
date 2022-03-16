@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { reset } from 'redux-form'
+import { reset, initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 
 // components
@@ -8,12 +8,15 @@ import RegistrationForm from './components/RegistrationForm'
 
 // utils
 import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE, FORM } from '../../utils/enums'
+import { NOTIFICATION_TYPE, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { setAccessToken, setRefreshToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
 
 // interfaces
 import { ILoginForm, IRegistrationForm } from '../../types/interfaces'
+
+// reducers
+import { getEnumerations } from '../../reducers/enumerations/enumerationActions'
 
 type Props = {}
 
@@ -53,6 +56,22 @@ const RegistrationPage: FC<Props> = () => {
 			return e
 		}
 	}
+
+	const fetchData = async () => {
+		const prefixData = await dispatch(getEnumerations(ENUMERATIONS_KEYS.COUNTRIES)) // save data to redux and return prefix data
+		let initData: any
+		if (prefixData.data) {
+			initData = {
+				phonePrefixCountryCode: 'SK'
+			}
+		}
+		dispatch(initialize(FORM.REGISTRATION, initData || {}))
+	}
+
+	useEffect(() => {
+		fetchData()
+	}, [])
+
 	// return <RegistrationForm onSubmit={handleSubmit as any} />
 	return <RegistrationForm onSubmit={handleSubmit} />
 }

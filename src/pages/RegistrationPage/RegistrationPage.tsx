@@ -16,7 +16,7 @@ import { history, getPath } from '../../utils/history'
 import { IRegistrationForm } from '../../types/interfaces'
 
 // reducers
-import { getEnumerations } from '../../reducers/enumerations/enumerationActions'
+import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 type Props = {}
 
@@ -50,7 +50,7 @@ const RegistrationPage: FC<Props> = () => {
 	}
 
 	const fetchData = async () => {
-		const prefixData = await dispatch(getEnumerations(ENUMERATIONS_KEYS.COUNTRIES)) // save data to redux and return prefix data
+		const prefixData = await dispatch(getCountries(ENUMERATIONS_KEYS.COUNTRIES)) // save data to redux and return prefix data
 		let initData: any
 		if (prefixData.data) {
 			initData = {

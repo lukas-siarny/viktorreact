@@ -52,37 +52,28 @@ export interface IEnumerationsPayload {
 }
 
 export type EnumerationData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
-// export type ResponseData = {
-// 	key: number
-// } & EnumerationData
 
-export const getEnumerations =
+export const getCountries =
 	(enumType: ENUMERATIONS_KEYS): ThunkResult<Promise<IEnumerationsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IEnumerationsPayload
 		try {
 			dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType })
-			const enumItem = find(ENUMERATIONS_OPTIONS(), { key: enumType })
 			let enumerationsOptions: ISelectOptionItem[] = []
 
-			const response = await getReq(`/api/b2b/admin/enums/${enumItem?.url}` as any, undefined, undefined, undefined, undefined, true)
+			const response = await getReq('/api/b2b/admin/enums/countries', undefined, undefined, undefined, undefined, true)
 			const data: any[] = map(get(response, `data.${enumType}`, []), (item, index) => ({
 				key: index + 1,
 				...item
 			}))
 
-			switch (enumType) {
-				case ENUMERATIONS_KEYS.COUNTRIES:
-					enumerationsOptions = map(data, (item: any) => ({
-						key: item.code,
-						label: item.phonePrefix,
-						value: item.code,
-						flag: item.flag
-					}))
-					break
-				default:
-					break
-			}
+			enumerationsOptions = map(data, (item) => ({
+				key: item.code,
+				label: item.phonePrefix,
+				value: item.code,
+				flag: item.flag
+			}))
+
 			payload = {
 				data,
 				enumerationsOptions,

@@ -79,8 +79,7 @@ export const withPermissions =
 			}
 		}
 		const mapStateToProps = (state: RootState) => ({
-			// TODO - add state.user.authUser?.data?.roles
-			authUserPermissions: [PERMISSION.ADMIN]
+			authUserPermissions: state.user.authUser?.data?.uniqPermissions
 		})
 
 		const mapDispatchToProps = (dispatch: any) => ({
@@ -98,8 +97,7 @@ type Props = {
 
 const Permissions: FC<Props> = (props) => {
 	const { render, allowed, except, children } = props
-	// TODO - add state.user.authUser?.data?.roles
-	const authUserPermissions = useSelector((state: RootState) => [PERMISSION.ADMIN])
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const hasPermissions = checkPermissions(authUserPermissions, allowed, except)
 	const [visibleModal, setVisibleModal] = useState(false)
 	const [t] = useTranslation()

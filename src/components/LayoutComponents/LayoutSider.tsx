@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout, Menu, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { ReactComponent as ThumbnailIcon } from '../../assets/icons/thumbail-icon.svg'
@@ -9,10 +9,12 @@ import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
 
 // utils
 import { history, getPath } from '../../utils/history'
-import { PAGE } from '../../utils/enums'
+import { PAGE, PERMISSION } from '../../utils/enums'
 
 // redux
 import { logOutUser } from '../../reducers/users/userActions'
+import { checkPermissions } from '../../utils/Permissions'
+import { RootState } from '../../reducers'
 
 const { Sider } = Layout
 
@@ -23,6 +25,7 @@ export type LayoutSiderProps = {
 
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true } = props
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
@@ -43,9 +46,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							<Menu.Item key={PAGE.MY_ACCOUNT} onClick={() => history.push(getPath(t('paths:my-account')))} icon={<ThumbnailIcon />}>
 								{t('loc:Môj účet')}
 							</Menu.Item>
-							<Menu.Item key={PAGE.USERS} onClick={() => history.push(getPath(t('paths:users')))} icon={<ThumbnailIcon />}>
-								{t('loc:Používatelia')}
-							</Menu.Item>
+							{checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]) ? (
+								<Menu.Item key={PAGE.USERS} onClick={() => history.push(getPath(t('paths:users')))} icon={<ThumbnailIcon />}>
+									{t('loc:Používatelia')}
+								</Menu.Item>
+							) : undefined}
 						</Menu>
 					)}
 				</div>

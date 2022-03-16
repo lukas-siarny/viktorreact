@@ -94,7 +94,6 @@ export default (state = initState, action: IUserActions) => {
 				}
 			}
 		case USERS.USERS_LOAD_DONE:
-			console.log(action.payload.data)
 			return {
 				...state,
 				users: {

@@ -57,43 +57,25 @@
   "Jednotlivci": "CZ_Jednotlivci",
   "Katalóg produktov": "CZ_Katalóg produktov",
   "Kategória hotela": "CZ_Kategória hotela",
-  "Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne": {
-    "": ""
-  },
+  "Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne.": "_NEPRELOZENE_",
   "Krajiny": "CZ_Krajiny",
   "Kód jazdy": "CZ_Kód jazdy",
   "Kód letu": "CZ_Kód letu",
   "Letecká doprava": "CZ_Letecká doprava",
-  "Lorem ipsium": {
-    "": ""
-  },
-  "Lorem ipsum": {
-    "": ""
-  },
-  "Max": {
-    " počet znakov je {{max}}": " počet znakov je {{max}}",
-    " váha batožiny [kg]": " váha batožiny [kg]"
-  },
+  "Lorem ipsium.": "_NEPRELOZENE_",
+  "Lorem ipsum.": "_NEPRELOZENE_",
+  "Max. počet znakov je {{max}}": "_NEPRELOZENE_",
+  "Max. váha batožiny [kg]": "_NEPRELOZENE_",
   "Mena": "CZ_Mena",
   "Meno": "CZ_Meno",
   "Mesto": "CZ_Mesto",
   "Môj účet": "Môj účet",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "CZ_Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
-  "Na vašu adresu odošleme link na obnovenie hesla": {
-    " Prosím zadajte svoju adresu": {
-      "": ""
-    }
-  },
+  "Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.": "_NEPRELOZENE_",
   "Nahrajte pečiatku": "CZ_Nahrajte pečiatku",
   "Nahrať": "CZ_Nahrať",
   "Naozaj chcete odstrániť {{entity}} ?": "CZ_Naozaj chcete odstrániť {{entity}} ?",
-  "Načítavam": {
-    "": {
-      "": {
-        "": ""
-      }
-    }
-  },
+  "Načítavam...": "_NEPRELOZENE_",
   "Nepovinný príplatok": "CZ_Nepovinný príplatok",
   "Nesprávny formát emailovej adresy": "CZ_Nesprávny formát emailovej adresy",
   "Nie je validná IP": "CZ_Nie je validná IP",
@@ -109,9 +91,7 @@
   "Odstrániť {{entity}}": "CZ_Odstrániť {{entity}}",
   "Osobné údaje": "CZ_Osobné údaje",
   "PSČ": "CZ_PSČ",
-  "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov": {
-    "": ""
-  },
+  "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov.": "_NEPRELOZENE_",
   "Poistenie": "CZ_Poistenie",
   "Poisťovne": "CZ_Poisťovne",
   "Používateľovi chýbajú oprávnenia na akciu": "CZ_Používateľovi chýbajú oprávnenia na akciu",
@@ -119,9 +99,7 @@
   "Počet nocí": "CZ_Počet nocí",
   "Počet znakov musí byť {{length}}": "CZ_Počet znakov musí byť {{length}}",
   "Pre prístup potvrďte základné údaje": "CZ_Pre prístup potvrďte základné údaje",
-  "Pre túto akciu nemáte dostatočné oprávnenia": {
-    "": ""
-  },
+  "Pre túto akciu nemáte dostatočné oprávnenia.": "_NEPRELOZENE_",
   "Predajné kanály": "CZ_Predajné kanály",
   "Pridať {{entity}}": "CZ_Pridať {{entity}}",
   "Priezvisko": "CZ_Priezvisko",
@@ -137,9 +115,7 @@
   "Späť na prihlásenie": "CZ_Späť na prihlásenie",
   "Stanice": "CZ_Stanice",
   "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "CZ_Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás",
-  "Súbor je príliš veľký (max": {
-    " {{size}} {{unit}})": " {{size}} {{unit}})"
-  },
+  "Súbor je príliš veľký (max. {{size}} {{unit}})": "_NEPRELOZENE_",
   "Telefónne číslo": "CZ_Telefónne číslo",
   "Textové popisy": "CZ_Textové popisy",
   "Toto pole je povinné": "CZ_Toto pole je povinné",
@@ -151,9 +127,7 @@
   "Ulica": "CZ_Ulica",
   "Uložiť": "CZ_Uložiť",
   "Uložiť {{entity}}": "CZ_Uložiť {{entity}}",
-  "Umiestnite pečiatku s podpisom do modrého rámu": {
-    "": ""
-  },
+  "Umiestnite pečiatku s podpisom do modrého rámu.": "_NEPRELOZENE_",
   "Upozornenie": "CZ_Upozornenie",
   "Upraviť {{entity}}": "CZ_Upraviť {{entity}}",
   "Ups niečo sa pokazilo": "CZ_Ups niečo sa pokazilo",
@@ -174,11 +148,7 @@
   "Výška zľavy": "CZ_Výška zľavy",
   "Webové projekty": "CZ_Webové projekty",
   "Zabudnuté heslo": "CZ_Zabudnuté heslo",
-  "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet": {
-    " Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla": {
-      "": ""
-    }
-  },
+  "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet. Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla.": "_NEPRELOZENE_",
   "Zadajte email": "CZ_Zadajte email",
   "Zadajte firmu": "CZ_Zadajte firmu",
   "Zadajte heslo": "CZ_Zadajte heslo",
@@ -207,9 +177,7 @@
   "Základna cena": "CZ_Základna cena",
   "Zľava na zájazd": "CZ_Zľava na zájazd",
   "Zľava pre nových klientov": "CZ_Zľava pre nových klientov",
-  "Zľava pre presný počet zájazdov, izeb, alebo leteniek": {
-    "": ""
-  },
+  "Zľava pre presný počet zájazdov, izeb, alebo leteniek.": "_NEPRELOZENE_",
   "Zľava pre prvých XY leteniek alebo izieb": "CZ_Zľava pre prvých XY leteniek alebo izieb",
   "Zľava pre stálych klientov": "CZ_Zľava pre stálych klientov",
   "jazda": "CZ_jazda",

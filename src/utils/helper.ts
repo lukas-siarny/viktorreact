@@ -383,3 +383,8 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 		}
 	}
 }
+
+export function setIntervalImmediately(func: Function, interval: number) {
+	func()
+	return setInterval(func, interval)
+}

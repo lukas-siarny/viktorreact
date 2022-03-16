@@ -27,7 +27,7 @@ const mock = [
 	}
 ]
 
-const SimpleLayout = (props: Props) => {
+const PublicLayout = (props: Props) => {
 	const carouselRef = useRef(null)
 
 	const handleNext = useCallback(() => {
@@ -63,4 +63,4 @@ const SimpleLayout = (props: Props) => {
 	)
 }
 
-export default SimpleLayout
+export default PublicLayout

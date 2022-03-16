@@ -51,7 +51,10 @@ export interface IEnumerationsPayload {
 	enumerationsOptions: IEnumerationOptions[]
 }
 
-export type EnumerationData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200
+export type EnumerationData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
+// export type ResponseData = {
+// 	key: number
+// } & EnumerationData
 
 export const getEnumerations =
 	(enumType: ENUMERATIONS_KEYS): ThunkResult<Promise<IEnumerationsPayload>> =>
@@ -59,20 +62,18 @@ export const getEnumerations =
 		let payload = {} as IEnumerationsPayload
 		try {
 			dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType })
-			const enumItem = find(ENUMERATIONS_OPTIONS(), { key: enumType }) || { url: 'currencies' }
+			const enumItem = find(ENUMERATIONS_OPTIONS(), { key: enumType })
 			let enumerationsOptions: ISelectOptionItem[] = []
-			let data = []
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			const response = await getReq(`/api/b2b/admin/enums/${enumType}`, undefined, undefined, undefined, undefined, true)
-			data = map(get(response, `data.${enumType}`, []), (item, index) => ({
+
+			const response = await getReq(`/api/b2b/admin/enums/${enumItem?.url}` as any, undefined, undefined, undefined, undefined, true)
+			const data: any[] = map(get(response, `data.${enumType}`, []), (item, index) => ({
 				key: index + 1,
 				...item
 			}))
 
 			switch (enumType) {
 				case ENUMERATIONS_KEYS.COUNTRIES:
-					enumerationsOptions = map(data, (item) => ({
+					enumerationsOptions = map(data, (item: any) => ({
 						key: item.code,
 						label: item.phonePrefix,
 						value: item.code,
@@ -83,8 +84,6 @@ export const getEnumerations =
 					break
 			}
 			payload = {
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				data,
 				enumerationsOptions,
 				pagination: get(response, 'data.pagination')

@@ -49,9 +49,6 @@ const RegistrationForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, submitting, form } = props
 	const prefixOptions = useSelector((state: RootState) => state.enumerationsStore.countries)
-	const dispatch = useDispatch()
-
-	const onSearchCountries = useCallback(() => dispatch(getEnumerations(ENUMERATIONS_KEYS.COUNTRIES)), [])
 
 	return (
 		<Form layout={'vertical'} className={'form h-full'} onSubmitCapture={handleSubmit}>
@@ -67,7 +64,7 @@ const RegistrationForm: FC<Props> = (props) => {
 								name={'phonePrefixCountryCode'}
 								size={'large'}
 								options={prefixOptions.enumerationsOptions}
-								onFocus={onSearchCountries}
+								loading={prefixOptions.isLoading}
 							/>
 						</Col>
 						<Col flex='auto'>
@@ -75,29 +72,6 @@ const RegistrationForm: FC<Props> = (props) => {
 						</Col>
 					</Row>
 				</Form.Item>
-
-				{/* <Row>
-					<Field
-						component={PhonePrefixField}
-						label={t('loc:Prefix')}
-						placeholder={t('loc:Zadajte predvolbu')}
-						name={'phonePrefixCountryCode'}
-						size={'large'}
-						options={opitons}
-					/>
-					<Field component={InputField} label={t('loc:Telefón')} placeholder={t('loc:Zadajte telefón')} name={'phone'} size={'large'} />
-				</Row> */}
-				{/* <Field component={PhonePrefixField} label={t('loc:Prefix')} placeholder={t('loc:Zadajte predvolbu')} name={'phonePrefixCountryCode'} size={'large'} /> */}
-				{/* <Field
-					component={InputField}
-					label={t('loc:Telefón')}
-					placeholder={t('loc:Zadajte telefón')}
-					name={'phone'}
-					size={'large'}
-					// addonBefore={
-					// 	<Field component={PhonePrefixField} placeholder={t('loc:Zadajte predvolbu')} name={'phonePrefixCountryCode'} size={'large'} />
-					// }
-				/> */}
 
 				<Field component={SwitchField} label={t('loc:GDPR Lorem i')} name={'gdpr'} size={'large'} />
 				<Field component={SwitchField} name={'gtc'} label='gtc asdf asdfasd fadf s' size={'large'} />

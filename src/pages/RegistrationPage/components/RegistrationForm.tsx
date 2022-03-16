@@ -4,6 +4,9 @@ import { Space, Row, Form, Button, Col } from 'antd'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
+// assets
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-16.svg'
+
 // atoms
 import InputField from '../../../atoms/InputField'
 import InputPasswordField from '../../../atoms/InputPasswordField'
@@ -33,7 +36,15 @@ const RegistrationForm: FC<Props> = (props) => {
 		<Form layout={'vertical'} className={'form h-full max-w-48 flex flex-col'} onSubmitCapture={handleSubmit}>
 			<h3>{t('loc:Registrácia')}</h3>
 			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
-			<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} />
+			<Field
+				component={InputPasswordField}
+				label={t('loc:Heslo')}
+				placeholder={t('loc:Zadajte heslo')}
+				type={'password'}
+				size={'large'}
+				name={'password'}
+				tooltip={{ title: t('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'), icon: <InfoIcon /> }}
+			/>
 			<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
 
 			<Field

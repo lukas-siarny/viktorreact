@@ -66,7 +66,7 @@ const UserAccountPage: FC<Props> = (props) => {
 						}
 					),
 					patchReq(
-						'/api/b2b/admin/users/{userID}/company-profile',
+						'/api/b2b/admin/users/{userID}/company-profile' as any,
 						{ userID: userId },
 						{
 							businessID: data?.businessID,

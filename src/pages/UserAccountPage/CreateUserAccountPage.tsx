@@ -12,10 +12,11 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import { IBreadcrumbs } from '../../types/interfaces'
 
 // utils
-import { getPath } from '../../utils/history'
-import { FORM } from '../../utils/enums'
+import { getPath, history } from '../../utils/history'
+import { FORM, PERMISSION } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { getRoles } from '../../reducers/roles/rolesActions'
+import Permissions from '../../utils/Permissions'
 
 const CreateUserAccountPage = () => {
 	const [t] = useTranslation()
@@ -47,6 +48,7 @@ const CreateUserAccountPage = () => {
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
 				roleID: data?.roleID
 			})
+			history.push(getPath(t('paths:users')))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -57,29 +59,42 @@ const CreateUserAccountPage = () => {
 
 	return (
 		<>
-			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:users'))} />
-			</Row>
-			<div className='content-body small'>
-				<CreateUserAccountForm onSubmit={createUser} />
-				<Row justify='center'>
-					<Button
-						type={'primary'}
-						block
-						size={'middle'}
-						className={`noti-btn m-regular mb-2 w-1/3`}
-						htmlType={'submit'}
-						onClick={() => {
-							dispatch(submit(FORM.ADMIN_CREATE_USER))
-						}}
-						disabled={submitting}
-						loading={submitting}
-					>
-						{t('loc:Uložiť')}
-					</Button>
-				</Row>
-			</div>
+			<Permissions
+				allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE]}
+				render={(hasPermission) => {
+					if (hasPermission) {
+						return (
+							<>
+								<Row>
+									<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:users'))} />
+								</Row>
+								<div className='content-body small'>
+									<CreateUserAccountForm onSubmit={createUser} />
+									<Row justify='center'>
+										<Button
+											type={'primary'}
+											block
+											size={'middle'}
+											className={`noti-btn m-regular mb-2 w-1/3`}
+											htmlType={'submit'}
+											onClick={() => {
+												dispatch(submit(FORM.ADMIN_CREATE_USER))
+											}}
+											disabled={submitting}
+											loading={submitting}
+										>
+											{t('loc:Uložiť')}
+										</Button>
+									</Row>
+								</div>
+							</>
+						)
+					}
+					return undefined
+				}}
+			/>
 		</>
 	)
 }
+
 export default CreateUserAccountPage

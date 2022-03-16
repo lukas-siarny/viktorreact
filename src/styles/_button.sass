@@ -72,9 +72,9 @@
 			opacity: .4
 		&:not(:disabled):hover
 			background-color: $backgroundColor-notino-black
-			color: #fff
+			color: $textColor-notino-white
 			z-index: $z-index-box-shadow
-			box-shadow: 0px 8px 24px rgba(37, 99, 235, 0.24), 0px 4px 14px rgba(37, 99, 235, 0.14), 0px 2px 4px rgba(37, 99, 235, 0.16)
+			box-shadow: $btn-shadow-hover-default
 	// block style
 	&.ant-btn-block
 		display: flex
@@ -102,7 +102,7 @@
 			background-color: transparent
 			z-index: 4
 			position: relative
-			box-shadow: 0px 8px 24px rgba(37, 99, 235, 0.24), 0px 4px 14px rgba(37, 99, 235, 0.14), 0px 2px 4px rgba(37, 99, 235, 0.16)
+			box-shadow: $btn-shadow-hover-default
 	// Link
 	&.ant-btn-link
 		background-color: transparent

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
-import React, { useCallback, useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React, { useCallback, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 import { forEach, includes } from 'lodash'
@@ -95,7 +95,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				pagination={
 					props.pagination &&
 					({
-						// userSettings.data?.pagination
 						pageSize: 1,
 						...props.pagination,
 						onChange,

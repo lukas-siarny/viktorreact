@@ -36,8 +36,8 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row className={`${editClass} mx-9 h-full block`} justify='center'>
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
-					<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
+					<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} />
+					<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} />
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled />
 					<Field
 						component={InputField}
@@ -56,17 +56,15 @@ const UserAccountForm: FC<Props> = (props) => {
 								]}
 								name={'phonePrefixCountryCode'}
 								size={'large'}
-								required
 							/>
 						}
-						required
 					/>
 				</Row>
 				{isCompany ? (
 					<Row className={'mx-9 w-2/4 h-full block'} justify='center'>
 						<h3 className={'mb-0 mt-3'}>{t('loc:Firma')}</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Field component={InputField} label={t('loc:Firma')} placeholder={t('loc:Zadajte firmu')} name={'companyName'} size={'large'} required />
+						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'companyName'} size={'large'} required />
 						<Row justify={'space-between'}>
 							<Field
 								className={'w-12/25'}

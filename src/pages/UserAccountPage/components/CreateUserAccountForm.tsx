@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Form, Row } from 'antd'
+import { Col, Divider, Form, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
 // enums
@@ -33,6 +33,8 @@ const CreateUserAccountForm: FC<Props> = (props) => {
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
+					<h3 className={'mb-0 mt-3'}>{t('loc:Vytvoriť používateľa')}</h3>
+					<Divider className={'mb-3 mt-3'} />
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
 					<Field
 						component={InputField}

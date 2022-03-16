@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row, Tooltip } from 'antd'
+import { Col, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
-import cx from 'classnames'
 import { useDispatch, useSelector } from 'react-redux'
+import { initialize } from 'redux-form'
 
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
+import AdminUsersFilter from './components/AdminUsersFilter'
 
 // utils
-import { PAGINATION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { getPath, history } from '../../utils/history'
 import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
-import AdminUsersFilter from './components/AdminUsersFilter'
+import Permissions from '../../utils/Permissions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
@@ -44,6 +45,7 @@ const AdminUsersPage = () => {
 	})
 
 	useEffect(() => {
+		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search }))
 		dispatch(getUsers(query.page, query.limit, query.order, query.search))
 	}, [dispatch, query.page, query.limit, query.search, query.order])
 
@@ -111,7 +113,9 @@ const AdminUsersPage = () => {
 				showTitle: false
 			},
 			render(value) {
-				return <Tooltip title={value}>{value}</Tooltip>
+				return value.map((role: any) => {
+					return role?.name
+				})
 			}
 		},
 		{
@@ -138,39 +142,65 @@ const AdminUsersPage = () => {
 
 	return (
 		<>
-			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:home'))} />
-			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body'>
-						<AdminUsersFilter createUser={() => history.push(getPath(t('paths:user/create')))} onSubmit={handleSubmit} />
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={users?.data?.users}
-							rowClassName={(record) => cx('clickable-row', { 'deleted-table-item': record.deletedAt })}
-							loading={users?.isLoading}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(getPath(t('paths:user-detail/{{userID}}', { userID: record.id })))
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) => t('loc:{{from}} - {{to}} z {{total}} záznamov', { total, from, to }),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: users?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: users?.data?.pagination?.totalPages,
-								current: users?.data?.pagination?.page
-							}}
-						/>
-					</div>
-				</Col>
-			</Row>
+			<Permissions
+				allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]}
+				render={(hasPermission, { checkPermissions }) => {
+					if (hasPermission) {
+						return (
+							<>
+								<Row>
+									<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:home'))} />
+								</Row>
+								<Row gutter={ROW_GUTTER_X_DEFAULT}>
+									<Col span={24}>
+										<div className='content-body'>
+											<AdminUsersFilter
+												createUser={() => {
+													if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE])) {
+														history.push(getPath(t('paths:user/create')))
+													}
+												}}
+												onSubmit={handleSubmit}
+											/>
+											<CustomTable
+												className='table-fixed'
+												onChange={onChangeTable}
+												columns={columns}
+												dataSource={users?.data?.users}
+												rowClassName={'clickable-row'}
+												loading={users?.isLoading}
+												twoToneRows
+												onRow={(record) => ({
+													onClick: () => {
+														if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
+															history.push(getPath(t('paths:user-detail/{{userID}}', { userID: record.id })))
+														}
+													}
+												})}
+												pagination={{
+													showTotal: (total, [from, to]) =>
+														t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+															total,
+															from,
+															to
+														}),
+													defaultPageSize: PAGINATION.defaultPageSize,
+													pageSizeOptions: PAGINATION.pageSizeOptions,
+													pageSize: users?.data?.pagination?.limit,
+													showSizeChanger: true,
+													total: users?.data?.pagination?.totalPages,
+													current: users?.data?.pagination?.page
+												}}
+											/>
+										</div>
+									</Col>
+								</Row>
+							</>
+						)
+					}
+					return undefined
+				}}
+			/>
 		</>
 	)
 }

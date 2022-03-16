@@ -145,7 +145,7 @@ export const getUsers =
 			dispatch({ type: USERS.USERS_LOAD_START })
 			const pageLimit = limit
 
-			const data = await getReq('/api/b2b/admin/users/', { page: page || 1, limit, order, search })
+			const data = await getReq('/api/b2b/admin/users/', { page: page || 1, limit: pageLimit, order, search })
 
 			dispatch({ type: USERS.USERS_LOAD_DONE, payload: data })
 		} catch (err) {

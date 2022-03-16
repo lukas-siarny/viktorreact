@@ -13,7 +13,7 @@ import { setAccessToken, setRefreshToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
 
 // interfaces
-import { ILoginForm, IRegistrationForm } from '../../types/interfaces'
+import { IRegistrationForm } from '../../types/interfaces'
 
 // reducers
 import { getEnumerations } from '../../reducers/enumerations/enumerationActions'
@@ -24,13 +24,8 @@ const RegistrationPage: FC<Props> = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 
-	// const handleSubmit = async (values: ILoginForm) => dispatch(UserActions.logInUser(get(values, 'email'), get(values, 'password')))
 	const handleSubmit = async (values: IRegistrationForm) => {
 		try {
-			// const reqData = {
-			// 	email: values.email
-			// }
-
 			const reqData = {
 				email: values.email,
 				password: values.password,
@@ -41,15 +36,12 @@ const RegistrationPage: FC<Props> = () => {
 				agreeGTC: values.gtc
 			}
 
-			console.log(reqData)
 			const res = await postReq('/api/b2b/admin/users/registration', null, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			dispatch(reset(FORM.REGISTRATION))
 			const { accessToken, refreshToken } = res.data
-			console.log(res.data)
 			setAccessToken(accessToken)
 			setRefreshToken(refreshToken)
 			history.push(getPath(t('paths:home')))
-			// setModalVisible(false)
 			return res
 		} catch (e) {
 			console.log(e)
@@ -70,10 +62,15 @@ const RegistrationPage: FC<Props> = () => {
 
 	useEffect(() => {
 		fetchData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	// return <RegistrationForm onSubmit={handleSubmit as any} />
-	return <RegistrationForm onSubmit={handleSubmit} />
+	return (
+		<>
+			<h3>{t('loc:Registrácia')}</h3>
+			<RegistrationForm onSubmit={handleSubmit} />
+		</>
+	)
 }
 
 export default RegistrationPage

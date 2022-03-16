@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect } from 'react'
 import { Space, Row, Form, Button, Col } from 'antd'
-import { Field, reduxForm, InjectedFormProps } from 'redux-form'
+import { Field, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 
 // atoms
@@ -23,16 +23,14 @@ const PhoneWithPrefixField = (props: Props) => {
 	const prefixOptions = useSelector((state: RootState) => state.enumerationsStore.countries)
 
 	return (
-		<Form.Item label={label}>
-			<Row gutter={8}>
-				<Col flex='102px'>
-					<Field component={PhonePrefixField} name={prefixName} size={size} options={prefixOptions.enumerationsOptions} loading={prefixOptions.isLoading} />
-				</Col>
-				<Col flex='auto'>
-					<Field component={InputField} placeholder={placeholder} name={phoneName} size={size} />
-				</Col>
-			</Row>
-		</Form.Item>
+		<Row gutter={8} wrap={false}>
+			<Col flex='102px'>
+				<Field label={label} component={PhonePrefixField} name={prefixName} size={size} options={prefixOptions.enumerationsOptions} loading={prefixOptions.isLoading} />
+			</Col>
+			<Col flex='auto'>
+				<Field label={label ? ' ' : undefined} component={InputField} placeholder={placeholder} name={phoneName} size={size} />
+			</Col>
+		</Row>
 	)
 }
 

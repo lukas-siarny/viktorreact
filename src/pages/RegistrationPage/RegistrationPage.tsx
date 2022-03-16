@@ -65,12 +65,7 @@ const RegistrationPage: FC<Props> = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	return (
-		<>
-			<h3>{t('loc:Registrácia')}</h3>
-			<RegistrationForm onSubmit={handleSubmit} />
-		</>
-	)
+	return <RegistrationForm onSubmit={handleSubmit} />
 }
 
 export default RegistrationPage

@@ -3,12 +3,14 @@ import { isEmail } from 'lodash-checkit'
 import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 
-// types
-// import { ILoginForm } from '../../../types/interfaces'
+// utils
+import passwordRegEx from '../../../utils/regex'
 
-export default (values: any /* ILoginForm */) => {
-	// const errors: FormErrors<ILoginForm> = {}
-	const errors: FormErrors<any> = {}
+// types
+import { IRegistrationForm } from '../../../types/interfaces'
+
+export default (values: IRegistrationForm) => {
+	const errors: FormErrors<IRegistrationForm> = {}
 
 	if (get(values, 'email') && !isEmail(get(values, 'email'))) {
 		errors.email = i18next.t('loc:Nesprávny formát emailovej adresy')
@@ -18,6 +20,9 @@ export default (values: any /* ILoginForm */) => {
 	}
 	if (!get(values, 'password')) {
 		errors.password = i18next.t('loc:Toto pole je povinné')
+	}
+	if (values.password && !passwordRegEx.test(values.password)) {
+		errors.password = i18next.t('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak')
 	}
 	if (!get(values, 'phonePrefixCountryCode')) {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
@@ -31,7 +36,6 @@ export default (values: any /* ILoginForm */) => {
 	if (!get(values, 'gtc')) {
 		errors.gtc = i18next.t('loc:Toto pole je povinné')
 	}
-
 
 	return errors
 }

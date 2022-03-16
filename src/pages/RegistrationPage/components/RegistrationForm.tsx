@@ -28,10 +28,10 @@ type Props = InjectedFormProps<IRegistrationForm, ComponentProps> & ComponentPro
 
 const RegistrationForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, form } = props
-
+	const { handleSubmit, submitting } = props
 	return (
-		<Form layout={'vertical'} className={'form h-full max-w-48'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form h-full max-w-48 flex flex-col'} onSubmitCapture={handleSubmit}>
+			<h3>{t('loc:Registrácia')}</h3>
 			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 			<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} />
 			<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
@@ -39,31 +39,38 @@ const RegistrationForm: FC<Props> = (props) => {
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
-				longLabel={t('loc:GDPR Lorem ipsum dolor sit amet, consectetur adipiscing elit GDPR Lorem ipsum dolor sit amet, consectetur adipiscing elit')}
+				longLabel={t('loc:GDPR Lorem ipsum dolor sit amet, consectetur adipiscing elit')}
 				name={'gdpr'}
 				size={'large'}
 			/>
-			<Field className='noti-registration-switch' component={SwitchField} name={'gtc'} longLabel='gtc asdf asdfasd fadf s' size={'large'} />
-			<Field className='noti-registration-switch' component={SwitchField} name={'marketing'} longLabel='marketing asdf asdfasd fadf s' size={'large'} />
-			<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
-				{t('loc:Registrovať')}
-			</Button>
-			{/* <div className='absolute bottom-0 left-0 right-0'>
+			<Field
+				className='noti-registration-switch'
+				component={SwitchField}
+				name={'gtc'}
+				longLabel='Obchodne Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+				size={'large'}
+			/>
+			<Field
+				className='noti-registration-switch'
+				component={SwitchField}
+				name={'marketing'}
+				longLabel='Marketing Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+				size={'large'}
+			/>
+			<div className='mt-auto'>
 				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Registrovať')}
 				</Button>
 
-
-
-				<span className='table m-auto text-notino-black'>
+				<span className='flex items-center justify-center text-notino-black'>
 					{t('loc:Už ste registrovaný? ')}
-					<Link to='paths:zabudnute-heslo' className='inline-block'>
-						<Button style={{ paddingRight: 0 }} type={'link'} htmlType={'button'}>
+					<Link to='paths:zabudnute-heslo'>
+						<Button className='p-0 ml-1' type={'link'} htmlType={'button'}>
 							{t('loc:Prihlásiť sa')}
 						</Button>
 					</Link>
 				</span>
-			</div> */}
+			</div>
 		</Form>
 	)
 }

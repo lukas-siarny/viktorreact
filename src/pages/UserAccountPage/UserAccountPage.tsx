@@ -26,6 +26,7 @@ import { deleteReq, patchReq } from '../../utils/request'
 import { getPath, history } from '../../utils/history'
 import { checkPermissions } from '../../utils/Permissions'
 import showNotifications from '../../utils/tsxHelpers'
+import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 type Props = {
 	computedMatch: IComputedMatch<{ userID: number }>
@@ -47,6 +48,7 @@ const UserAccountPage: FC<Props> = (props) => {
 		authUser.data?.id !== userAccountDetail.data?.id && checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE])
 
 	useEffect(() => {
+		dispatch(getCountries())
 		if (userID) {
 			dispatch(getUserAccountDetails(userID))
 		}

@@ -614,6 +614,7 @@ export enum ENUMERATIONS_KEYS {
 	// FACILITY_TYPES = 'facilityTypes',
 	// VAT_RATES = 'vatRates',
 	// CURRENCIES = 'currencies',
+	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries'
 	// UNIT_TEMPLATES = 'unitTemplates',
 	// UNIT_TEMPLATE_PROPERTIES = 'unitTemplateProperties',
@@ -904,7 +905,7 @@ export const ENUMERATIONS_OPTIONS = () =>
 			// },
 			{
 				label: i18next.t('loc:Krajiny'),
-				key: ENUMERATIONS_KEYS.COUNTRIES,
+				key: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX,
 				url: ENUMERATIONS_PATHS.COUNTRIES
 			}
 			// {
@@ -1509,6 +1510,13 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_100 = 100,
 	LENGTH_20 = 20,
 	LENGTH_10 = 10
+}
+
+export const getTranslatedCountryLabel = (): any => {
+	return {
+		SK: `${i18next.t('loc:Slovenská republika')}`,
+		CZ: `${i18next.t('loc:Česká republika')}`
+	} as any
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'

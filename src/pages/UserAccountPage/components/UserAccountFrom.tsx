@@ -5,7 +5,8 @@ import { Col, Divider, Form, Row } from 'antd'
 import cx from 'classnames'
 
 // enums
-import { FORM } from '../../../utils/enums'
+import { useSelector } from 'react-redux'
+import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
 
 // types
 import { ILoginForm } from '../../../types/interfaces'
@@ -19,6 +20,7 @@ import SelectField from '../../../atoms/SelectField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import { RootState } from '../../../reducers'
 
 type ComponentProps = {
 	isCompany: boolean
@@ -29,6 +31,7 @@ type Props = InjectedFormProps<ILoginForm, ComponentProps> & ComponentProps
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, isCompany } = props
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const editClass = cx({
 		'w-2/4': isCompany,
@@ -80,12 +83,10 @@ const UserAccountForm: FC<Props> = (props) => {
 							component={SelectField}
 							label={t('loc:Štát')}
 							placeholder={t('loc:Vyber krajinu')}
-							options={[
-								{ label: 'Slovakia', value: 'SK' },
-								{ label: 'Czechia', value: 'CZ' }
-							]}
+							options={countries?.enumerationsOptions || []}
 							name={'countryCode'}
 							size={'large'}
+							loading={countries?.isLoading}
 							required
 						/>
 					</Row>

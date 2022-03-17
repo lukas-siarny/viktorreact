@@ -20,6 +20,7 @@ import { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { getRoles } from '../../reducers/roles/rolesActions'
+import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 const CreateUserAccountPage = () => {
 	const [t] = useTranslation()
@@ -40,6 +41,7 @@ const CreateUserAccountPage = () => {
 
 	useEffect(() => {
 		dispatch(getRoles())
+		dispatch(getCountries())
 	}, [dispatch])
 
 	const createUser = async (data: any) => {

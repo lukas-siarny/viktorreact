@@ -8,6 +8,13 @@ import { ENUMERATIONS_KEYS } from '../../utils/enums'
 import { ILoadingAndFailure } from '../../types/interfaces'
 
 export const initState = {
+	[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]: {
+		data: null,
+		enumerationsOptions: [],
+		pagination: null,
+		isLoading: false,
+		isFailure: false
+	} as IEnumerationsPayload & ILoadingAndFailure,
 	[ENUMERATIONS_KEYS.COUNTRIES]: {
 		data: null,
 		enumerationsOptions: [],

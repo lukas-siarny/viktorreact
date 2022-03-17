@@ -1,7 +1,7 @@
-import React, { FC, useCallback, useEffect } from 'react'
-import { Space, Row, Form, Button, Col } from 'antd'
-import { Field, reduxForm } from 'redux-form'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
+import { Row, Col } from 'antd'
+import { Field } from 'redux-form'
+import { useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../atoms/InputField'

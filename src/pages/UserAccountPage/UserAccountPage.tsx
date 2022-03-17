@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { isEmpty } from 'lodash'
 import { initialize, submit } from 'redux-form'
 import cx from 'classnames'
 
@@ -40,7 +39,7 @@ const UserAccountPage: FC<Props> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 
-	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+	const authUserPermissions = authUser?.data?.uniqPermissions || []
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
 
 	const showDeleteBtn: boolean =
@@ -133,13 +132,14 @@ const UserAccountPage: FC<Props> = (props) => {
 		'justify-center': !showDeleteBtn
 	})
 
+	// authUser?.data?.roles?.findIndex((role) => role?.name === PERMISSION.PARTNER)
 	return (
 		<>
 			<Row className={hideClass}>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:users'))} />
 			</Row>
 			<div className='content-body small'>
-				<UserAccountFrom onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(userAccountDetail.data?.company)} />
+				<UserAccountFrom onSubmit={handleUserAccountFormSubmit} isCompany={true} />
 				<Row className={rowClass}>
 					{showDeleteBtn ? (
 						<DeleteButton

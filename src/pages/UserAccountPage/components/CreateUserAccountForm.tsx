@@ -19,6 +19,7 @@ import validateCreateUserAccountForm from './validateCreateUserAccountForm'
 
 // reducers
 import { RootState } from '../../../reducers'
+import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 type ComponentProps = {}
 
@@ -36,27 +37,13 @@ const CreateUserAccountForm: FC<Props> = (props) => {
 					<h3 className={'mb-0 mt-3'}>{t('loc:Vytvoriť používateľa')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
-					<Field
-						component={InputField}
-						label={t('loc:Telefónne číslo')}
-						placeholder={t('loc:Zadajte telefónne číslo')}
-						name={'phone'}
+					<PhoneWithPrefixField
+						label={'Telefón'}
+						placeholder={t('loc:Zadajte telefón')}
 						size={'large'}
-						addonBefore={
-							<Field
-								className={'addon-before'}
-								component={SelectField}
-								placeholder={t('loc:Vyber predvoľbu')}
-								options={[
-									{ label: '+421', value: 'SK' },
-									{ label: '+420', value: 'CZ' }
-								]}
-								name={'phonePrefixCountryCode'}
-								size={'large'}
-								required
-							/>
-						}
-						required
+						prefixName={'phonePrefixCountryCode'}
+						phoneName={'phone'}
+						required={true}
 					/>
 					<Field
 						component={SelectField}

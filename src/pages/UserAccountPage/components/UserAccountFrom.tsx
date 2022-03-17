@@ -12,8 +12,13 @@ import { ILoginForm } from '../../../types/interfaces'
 
 // validate
 import validateUserAccountForm from './validateUserAccountForm'
+
+// atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
+
+// components
+import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 type ComponentProps = {
 	isCompany: boolean
@@ -39,26 +44,7 @@ const UserAccountForm: FC<Props> = (props) => {
 					<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} />
 					<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} />
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled />
-					<Field
-						component={InputField}
-						label={t('loc:Telefónne číslo')}
-						placeholder={t('loc:Zadajte telefónne číslo')}
-						name={'phone'}
-						size={'large'}
-						addonBefore={
-							<Field
-								className={'addon-before'}
-								component={SelectField}
-								placeholder={t('loc:Vyber predvoľbu')}
-								options={[
-									{ label: '+421', value: 'SK' },
-									{ label: '+420', value: 'CZ' }
-								]}
-								name={'phonePrefixCountryCode'}
-								size={'large'}
-							/>
-						}
-					/>
+					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
 				</Row>
 				{isCompany ? (
 					<Row className={'mx-9 w-2/4 h-full block'} justify='center'>

@@ -13,7 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import AdminUsersFilter from './components/AdminUsersFilter'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { getPath, history } from '../../utils/history'
 import { getUsers } from '../../reducers/users/userActions'
@@ -22,6 +22,7 @@ import Permissions from '../../utils/Permissions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
+import showNotifications from '../../utils/tsxHelpers'
 
 type Props = {}
 
@@ -158,6 +159,11 @@ const AdminUsersPage = () => {
 												createUser={() => {
 													if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE])) {
 														history.push(getPath(t('paths:user/create')))
+													} else {
+														showNotifications(
+															[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
+															NOTIFICATION_TYPE.NOTIFICATION
+														)
 													}
 												}}
 												onSubmit={handleSubmit}
@@ -174,6 +180,11 @@ const AdminUsersPage = () => {
 													onClick: () => {
 														if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
 															history.push(getPath(t('paths:user-detail/{{userID}}', { userID: record.id })))
+														} else {
+															showNotifications(
+																[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
+																NOTIFICATION_TYPE.NOTIFICATION
+															)
 														}
 													}
 												})}

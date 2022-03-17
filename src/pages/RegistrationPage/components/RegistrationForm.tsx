@@ -14,6 +14,7 @@ import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import SwitchLabel from './SwitchLabel'
 
 // // interfaces
 import { IRegistrationForm } from '../../../types/interfaces'
@@ -50,7 +51,13 @@ const RegistrationForm: FC<Props> = (props) => {
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
-				longLabel={t('loc:GDPR Lorem ipsum dolor sit amet, consectetur adipiscing elit')}
+				customLabel={
+					<SwitchLabel
+						label={t('loc:Vyhlasujem, že som sa oboznámil so')}
+						anchorText={t('loc:Zásadami spracovania osobných údajov')}
+						href={'https://www.notino.sk/ochrana-osobnych-udajov/'}
+					/>
+				}
 				name={'gdpr'}
 				size={'large'}
 			/>
@@ -58,14 +65,22 @@ const RegistrationForm: FC<Props> = (props) => {
 				className='noti-registration-switch'
 				component={SwitchField}
 				name={'gtc'}
-				longLabel='Obchodne Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+				customLabel={
+					<SwitchLabel
+						label={t('loc:Vyhlasujem, že som sa oboznámil s')}
+						anchorText={t('loc:Obchodnými podmienkami')}
+						href={'https://www.notino.sk/obchodne-podmienky-vip/'}
+					/>
+				}
 				size={'large'}
 			/>
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
 				name={'marketing'}
-				longLabel='Marketing Lorem ipsum dolor sit amet, consectetur adipiscing elit'
+				customLabel={
+					<SwitchLabel label={t('loc:Udeľujem súhlas so spracúvaním osobných údajov na')} anchorText={t('loc:Marketingové účely')} href={'https://www.notino.sk/'} />
+				}
 				size={'large'}
 			/>
 			<div className='mt-auto'>

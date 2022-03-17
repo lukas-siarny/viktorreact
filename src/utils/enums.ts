@@ -1538,6 +1538,10 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_10 = 10
 }
 
+export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
+export const GTC_URL = 'https://www.notino.sk/obchodne-podmienky-vip/'
+export const MARKETING_URL = 'https://www.notino.sk/'
+
 export const OCCUPANCY_ALL_PERSONS_EXTRA_BED = 'OCCUPANCY_ALL_PERSONS_EXTRA_BED'
 export const OCCUPANCY_ALL_PERSONS_WITHOUT_BED = 'OCCUPANCY_ALL_PERSONS_WITHOUT_BED'
 export const COST_SEASON_ALL_TERMS_KEY = 'COST_SEASON_ALL_TERMS_KEY'

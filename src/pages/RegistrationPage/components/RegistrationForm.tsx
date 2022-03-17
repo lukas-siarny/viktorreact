@@ -20,7 +20,7 @@ import SwitchLabel from './SwitchLabel'
 import { IRegistrationForm } from '../../../types/interfaces'
 
 // // utils
-import { FORM } from '../../../utils/enums'
+import { FORM, GDPR_URL, GTC_URL, MARKETING_URL } from '../../../utils/enums'
 
 // validate
 // eslint-disable-next-line import/no-cycle
@@ -51,13 +51,7 @@ const RegistrationForm: FC<Props> = (props) => {
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
-				customLabel={
-					<SwitchLabel
-						label={t('loc:Vyhlasujem, že som sa oboznámil so')}
-						anchorText={t('loc:Zásadami spracovania osobných údajov')}
-						href={'https://www.notino.sk/ochrana-osobnych-udajov/'}
-					/>
-				}
+				customLabel={<SwitchLabel label={t('loc:Vyhlasujem, že som sa oboznámil so')} anchorText={t('loc:Zásadami spracovania osobných údajov')} href={GDPR_URL} />}
 				name={'gdpr'}
 				size={'large'}
 			/>
@@ -65,22 +59,14 @@ const RegistrationForm: FC<Props> = (props) => {
 				className='noti-registration-switch'
 				component={SwitchField}
 				name={'gtc'}
-				customLabel={
-					<SwitchLabel
-						label={t('loc:Vyhlasujem, že som sa oboznámil s')}
-						anchorText={t('loc:Obchodnými podmienkami')}
-						href={'https://www.notino.sk/obchodne-podmienky-vip/'}
-					/>
-				}
+				customLabel={<SwitchLabel label={t('loc:Vyhlasujem, že som sa oboznámil s')} anchorText={t('loc:Obchodnými podmienkami')} href={GTC_URL} />}
 				size={'large'}
 			/>
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
 				name={'marketing'}
-				customLabel={
-					<SwitchLabel label={t('loc:Udeľujem súhlas so spracúvaním osobných údajov na')} anchorText={t('loc:Marketingové účely')} href={'https://www.notino.sk/'} />
-				}
+				customLabel={<SwitchLabel label={t('loc:Udeľujem súhlas so spracúvaním osobných údajov na')} anchorText={t('loc:Marketingové účely')} href={MARKETING_URL} />}
 				size={'large'}
 			/>
 			<div className='mt-auto'>

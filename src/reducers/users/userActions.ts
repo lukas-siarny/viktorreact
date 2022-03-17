@@ -113,3 +113,28 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 		}
 	}
 }
+
+export const registerUser =
+	(input: Paths.PostApiB2BAdminUsersRegistration.RequestBody): ThunkResult<void> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
+			const { data } = await postReq('/api/b2b/admin/users/registration', null, input)
+
+			setAccessToken(data.accessToken)
+			setRefreshToken(data.refreshToken)
+
+			dispatch({
+				type: AUTH_USER.AUTH_USER_LOAD_DONE,
+				payload: { data: data.user }
+			})
+
+			history.push(getPath(i18next.t('paths:index')))
+			return data
+		} catch (e) {
+			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.log(e)
+			return e
+		}
+	}

@@ -9,7 +9,7 @@ import RegistrationForm from './components/RegistrationForm'
 
 // utils
 import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { NOTIFICATION_TYPE, FORM, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import { setAccessToken, setRefreshToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
 import { getPrefixCountryCode } from '../../utils/helper'
@@ -55,7 +55,7 @@ const RegistrationPage: FC<Props> = () => {
 		const { data } = await dispatch(getCountries(ENUMERATIONS_KEYS.COUNTRIES)) // save data to redux and return prefix data
 		const phonePrefixCountryCode = getPrefixCountryCode(
 			map(data, (item) => item.code),
-			'SK'
+			LANGUAGE.SK.toUpperCase()
 		)
 
 		const initData = {

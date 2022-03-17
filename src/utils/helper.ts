@@ -386,7 +386,7 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 }
 
 export const getPrefixCountryCode = (options: string[], fallback: string) => {
-	const locale = split(lowerCase(i18next.language))
+	const locale = split(lowerCase(i18next.language), '-')
 	const language = locale[1] || locale[0]
 	let prefix = fallback
 

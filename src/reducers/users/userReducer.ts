@@ -46,6 +46,7 @@ export default (state = initState, action: IUserActions) => {
 					data: action.payload.data
 				}
 			}
+		// User detail
 		case USER.USER_LOAD_START:
 			return {
 				...state,

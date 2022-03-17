@@ -23,7 +23,7 @@ module.exports = {
 			if (ns === 'paths') {
 				return `/${key}`
 			}
-			return key
+
 			return '_NEPRELOZENE_'
 		},
 		resource: {
@@ -33,6 +33,6 @@ module.exports = {
 			lineEnding: '\n'
 		},
 		nsSeparator: ':',
-		keySeparator: '.'
+		keySeparator: '|'
 	}
 }

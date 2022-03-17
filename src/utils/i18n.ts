@@ -49,7 +49,7 @@ i18n.use(Backend)
 		supportedLngs: Object.values(LANGUAGE),
 		ns: Object.values(NAMESPACE),
 		nsSeparator: ':',
-		keySeparator: '.',
+		keySeparator: '|',
 		react: {
 			bindI18n: 'languageChanged loaded',
 			bindI18nStore: 'added removed',

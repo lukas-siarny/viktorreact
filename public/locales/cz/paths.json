@@ -1,8 +1,9 @@
 {
+  "activation": "/activation",
   "home": "/home",
   "index": "/",
-  "login": "/login",
+  "login": "/auth/login",
   "my-account": "/my-account",
-  "reset-password": "/reset-password",
-  "signup": "/signup"
+  "reset-password": "/auth/reset-password",
+  "signup": "/auth/signup"
 }

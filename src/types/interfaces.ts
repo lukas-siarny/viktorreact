@@ -50,6 +50,10 @@ export interface IForgotPasswordForm {
 	email: string
 }
 
+export interface IActivationForm {
+	code: string
+}
+
 export interface IJwtPayload {
 	aud: string
 	exp: number

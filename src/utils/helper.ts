@@ -397,4 +397,8 @@ export const getPrefixCountryCode = (options: string[], fallback: string) => {
 	})
 
 	return prefix
+
+export function setIntervalImmediately(func: Function, interval: number) {
+	func()
+	return setInterval(func, interval)
 }

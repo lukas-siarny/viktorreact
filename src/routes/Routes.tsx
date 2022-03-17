@@ -14,15 +14,15 @@ import CreatePasswordRoute from './CreatePasswordRoute'
 
 // layouts
 import MainLayout from '../layouts/MainLayout'
-import SimpleLayout from '../layouts/SimpleLayout'
+import PublicLayout from '../layouts/PublicLayout'
 
 // redux
-import * as UserActions from '../reducers/users/userActions'
+import { refreshToken } from '../reducers/users/userActions'
 
 // utils
 import { getPath } from '../utils/history'
 import { REFRESH_TOKEN_INTERVAL, PAGE } from '../utils/enums'
-// import { SUBMENU_PARENT_ITEMS } from '../utils/helper'
+import { setIntervalImmediately } from '../utils/helper'
 
 // import SubMenuPage from '../components/SubMenuPage'
 
@@ -32,6 +32,7 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import UserAccountPage from '../pages/UserAccountPage/UserAccountPage'
+import ActivationPage from '../pages/ActivationPage/ActivationPage'
 
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
@@ -42,7 +43,7 @@ const Routes: FC = (props) => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		const refreshInterval = setInterval(dispatch(UserActions.refreshToken), REFRESH_TOKEN_INTERVAL)
+		const refreshInterval = setIntervalImmediately(() => dispatch(refreshToken()), REFRESH_TOKEN_INTERVAL)
 
 		return () => {
 			if (refreshInterval) {
@@ -53,23 +54,31 @@ const Routes: FC = (props) => {
 
 	return (
 		<Switch>
-			<PublicRoute {...props} exact path={getPath(t('paths:login'))} component={LoginPage} layout={SimpleLayout} />
-			<PublicRoute {...props} exact path={getPath(t('paths:signup'))} component={RegistrationPage} layout={SimpleLayout} />
+			<PublicRoute {...props} exact path={getPath(t('paths:login'))} component={LoginPage} layout={PublicLayout} />
+			<PublicRoute {...props} exact path={getPath(t('paths:signup'))} component={RegistrationPage} layout={PublicLayout} />
 			<CreatePasswordRoute
 				exact
 				path={getPath(t('paths:reset-password'))}
 				translatePathKey={getPath(t('paths:reset-password'))}
 				component={CreatePasswordPage}
-				layout={SimpleLayout}
+				layout={PublicLayout}
 			/>
-			<AuthRoute {...props} exact path={getPath(t('paths:my-account'))} translatePathKey={getPath(t('paths:my-account'))} component={UserAccountPage} layout={MainLayout} />
 			<AuthRoute {...props} exact path={getPath(t('paths:index'))} component={EntryPage} translatePathKey={getPath(t('paths:index'))} layout={MainLayout} />
 			<AuthRoute {...props} exact path={getPath(t('paths:home'))} component={HomePage} translatePathKey={getPath(t('paths:home'))} layout={MainLayout} page={PAGE.HOME} />
 			<AuthRoute
 				{...props}
 				exact
+				path={getPath(t('paths:activation'))}
+				component={ActivationPage}
+				translatePathKey={getPath(t('paths:activation'))}
+				layout={MainLayout}
+				page={PAGE.ACTIVATION}
+			/>
+			<AuthRoute
+				{...props}
+				exact
 				path={getPath(t('paths:my-account'))}
-				component={EntryPage}
+				component={UserAccountPage}
 				translatePathKey={getPath(t('paths:my-account'))}
 				layout={MainLayout}
 				page={PAGE.MY_ACCOUNT}

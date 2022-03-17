@@ -23,6 +23,7 @@
   "8 rokov": "8 rokov",
   "9 rokov": "9 rokov",
   "Aktivovaný": "Aktivovaný",
+  "Aktivovať": "Aktivovať",
   "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak": "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak",
   "Autobusová doprava": "Autobusová doprava",
   "Boli ste automaticky odhlásený": "Boli ste automaticky odhlásený",
@@ -57,44 +58,25 @@
   "Jednotlivci": "Jednotlivci",
   "Katalóg produktov": "Katalóg produktov",
   "Kategória hotela": "Kategória hotela",
-  "Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne": {
-    "": ""
-  },
+  "Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne.": "_NEPRELOZENE_",
   "Krajiny": "Krajiny",
   "Kód jazdy": "Kód jazdy",
   "Kód letu": "Kód letu",
   "Letecká doprava": "Letecká doprava",
-  "Lorem ipsium": {
-    "": ""
-  },
-  "Lorem ipsum": {
-    "": ""
-  },
-  "Marketingové účely": "Marketingové účely",
-  "Max": {
-    " počet znakov je {{max}}": " počet znakov je {{max}}",
-    " váha batožiny [kg]": " váha batožiny [kg]"
-  },
+  "Lorem ipsium.": "_NEPRELOZENE_",
+  "Lorem ipsum.": "_NEPRELOZENE_",
+  "Max. počet znakov je {{max}}": "_NEPRELOZENE_",
+  "Max. váha batožiny [kg]": "_NEPRELOZENE_",
   "Mena": "Mena",
   "Meno": "Meno",
   "Mesto": "Mesto",
   "Môj účet": "Môj účet",
   "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás": "Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás",
-  "Na vašu adresu odošleme link na obnovenie hesla": {
-    " Prosím zadajte svoju adresu": {
-      "": ""
-    }
-  },
+  "Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.": "Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.",
   "Nahrajte pečiatku": "Nahrajte pečiatku",
   "Nahrať": "Nahrať",
   "Naozaj chcete odstrániť {{entity}} ?": "Naozaj chcete odstrániť {{entity}} ?",
-  "Načítavam": {
-    "": {
-      "": {
-        "": ""
-      }
-    }
-  },
+  "Načítavam...": "_NEPRELOZENE_",
   "Nepovinný príplatok": "Nepovinný príplatok",
   "Nesprávny formát emailovej adresy": "Nesprávny formát emailovej adresy",
   "Nie je validná IP": "Nie je validná IP",
@@ -111,9 +93,7 @@
   "Odstrániť {{entity}}": "Odstrániť {{entity}}",
   "Osobné údaje": "Osobné údaje",
   "PSČ": "PSČ",
-  "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov": {
-    "": ""
-  },
+  "Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov.": "_NEPRELOZENE_",
   "Poistenie": "Poistenie",
   "Poisťovne": "Poisťovne",
   "Používateľovi chýbajú oprávnenia na akciu": "Používateľovi chýbajú oprávnenia na akciu",
@@ -121,9 +101,7 @@
   "Počet nocí": "Počet nocí",
   "Počet znakov musí byť {{length}}": "Počet znakov musí byť {{length}}",
   "Pre prístup potvrďte základné údaje": "Pre prístup potvrďte základné údaje",
-  "Pre túto akciu nemáte dostatočné oprávnenia": {
-    "": ""
-  },
+  "Pre túto akciu nemáte dostatočné oprávnenia.": "_NEPRELOZENE_",
   "Predajné kanály": "Predajné kanály",
   "Pridať {{entity}}": "Pridať {{entity}}",
   "Priezvisko": "Priezvisko",
@@ -141,9 +119,7 @@
   "Späť na prihlásenie": "Späť na prihlásenie",
   "Stanice": "Stanice",
   "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás",
-  "Súbor je príliš veľký (max": {
-    " {{size}} {{unit}})": " {{size}} {{unit}})"
-  },
+  "Súbor je príliš veľký (max. {{size}} {{unit}})": "_NEPRELOZENE_",
   "Telefónne číslo": "Telefónne číslo",
   "Textové popisy": "Textové popisy",
   "Toto pole je povinné": "Toto pole je povinné",
@@ -156,13 +132,12 @@
   "Ulica": "Ulica",
   "Uložiť": "Uložiť",
   "Uložiť {{entity}}": "Uložiť {{entity}}",
-  "Umiestnite pečiatku s podpisom do modrého rámu": {
-    "": ""
-  },
+  "Umiestnite pečiatku s podpisom do modrého rámu.": "_NEPRELOZENE_",
   "Upozornenie": "Upozornenie",
   "Upraviť {{entity}}": "Upraviť {{entity}}",
   "Ups niečo sa pokazilo": "Ups niečo sa pokazilo",
   "Už ste registrovaný? ": "Už ste registrovaný? ",
+  "Verifikácia": "Verifikácia",
   "Vlastnosti vzoru jednotky": "Vlastnosti vzoru jednotky",
   "Vlastnosti zariadenia": "Vlastnosti zariadenia",
   "Vyber krajinu": "Vyber krajinu",
@@ -182,11 +157,9 @@
   "Výška zľavy": "Výška zľavy",
   "Webové projekty": "Webové projekty",
   "Zabudnuté heslo": "Zabudnuté heslo",
-  "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet": {
-    " Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla": {
-      "": ""
-    }
-  },
+  "Zadajte PIN": "Zadajte PIN",
+  "Zadajte celý PIN": "Zadajte celý PIN",
+  "Zadajte e-mailovú adresu, na ktorú máte registrovaný účet. Skontrolujte svoju e-mailovú schránku a kliknutím na odkaz v e-maile budete presmerovaný na stránku pre obnovenie hesla.": "_NEPRELOZENE_",
   "Zadajte email": "Zadajte email",
   "Zadajte firmu": "Zadajte firmu",
   "Zadajte heslo": "Zadajte heslo",
@@ -207,6 +180,7 @@
   "Zadajte {{entity}}": "Zadajte {{entity}}",
   "Zadajte {{label}}": "Zadajte {{label}}",
   "Zatvoriť": "Zatvoriť",
+  "Znovu vyžiadať PIN": "Znovu vyžiadať PIN",
   "Zopakujte heslo": "Zopakujte heslo",
   "Zopakujte nové heslo": "Zopakujte nové heslo",
   "Zraz na letisku [min] pred odletom": "Zraz na letisku [min] pred odletom",
@@ -217,13 +191,12 @@
   "Zásadami spracovania osobných údajov": "Zásadami spracovania osobných údajov",
   "Zľava na zájazd": "Zľava na zájazd",
   "Zľava pre nových klientov": "Zľava pre nových klientov",
-  "Zľava pre presný počet zájazdov, izeb, alebo leteniek": {
-    "": ""
-  },
+  "Zľava pre presný počet zájazdov, izeb, alebo leteniek.": "_NEPRELOZENE_",
   "Zľava pre prvých XY leteniek alebo izieb": "Zľava pre prvých XY leteniek alebo izieb",
   "Zľava pre stálych klientov": "Zľava pre stálych klientov",
   "jazda": "jazda",
   "jazdu": "jazdu",
+  "ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}": "ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}",
   "let": "let",
   "slovensky": "slovensky",
   "Úspešné": "Úspešné",

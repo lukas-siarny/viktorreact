@@ -2,6 +2,7 @@ import React, { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { reset, initialize } from 'redux-form'
 import { useTranslation } from 'react-i18next'
+import { map } from 'lodash'
 
 // components
 import RegistrationForm from './components/RegistrationForm'
@@ -11,6 +12,7 @@ import { postReq } from '../../utils/request'
 import { NOTIFICATION_TYPE, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { setAccessToken, setRefreshToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
+import { getPrefixCountryCode } from '../../utils/helper'
 
 // interfaces
 import { IRegistrationForm } from '../../types/interfaces'
@@ -50,13 +52,16 @@ const RegistrationPage: FC<Props> = () => {
 	}
 
 	const fetchData = async () => {
-		const prefixData = await dispatch(getCountries(ENUMERATIONS_KEYS.COUNTRIES)) // save data to redux and return prefix data
-		let initData: any
-		if (prefixData.data) {
-			initData = {
-				phonePrefixCountryCode: 'SK'
-			}
+		const { data } = await dispatch(getCountries(ENUMERATIONS_KEYS.COUNTRIES)) // save data to redux and return prefix data
+		const phonePrefixCountryCode = getPrefixCountryCode(
+			map(data, (item) => item.code),
+			'SK'
+		)
+
+		const initData = {
+			phonePrefixCountryCode
 		}
+
 		dispatch(initialize(FORM.REGISTRATION, initData || {}))
 	}
 

@@ -36,7 +36,8 @@ import {
 	times,
 	toNumber,
 	uniq,
-	chain
+	chain,
+	lowerCase
 } from 'lodash'
 import countryCodeList from 'flagpack-core/countryCodeList.json'
 import slugify from 'slugify'
@@ -382,4 +383,18 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 			})
 		}
 	}
+}
+
+export const getPrefixCountryCode = (options: string[], fallback: string) => {
+	const locale = split(lowerCase(i18next.language))
+	const language = locale[1] || locale[0]
+	let prefix = fallback
+
+	some(options, (item) => {
+		if (!includes(language, lowerCase(item))) return false
+		prefix = item
+		return true
+	})
+
+	return prefix
 }

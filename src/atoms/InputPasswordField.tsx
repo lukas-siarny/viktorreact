@@ -35,7 +35,8 @@ const InputPasswordField = (props: Props) => {
 		hideHelp,
 		maxLength,
 		readOnly,
-		className
+		className,
+		tooltip
 	} = props
 
 	const onChange = useCallback(
@@ -88,6 +89,7 @@ const InputPasswordField = (props: Props) => {
 			className={cx(className, { 'form-item-disabled': disabled, readOnly })}
 			help={hideHelp ? undefined : touched && error}
 			validateStatus={error && touched ? 'error' : undefined}
+			tooltip={tooltip}
 		>
 			<Input.Password
 				{...input}

@@ -7,10 +7,12 @@ import { ThunkAction } from 'redux-thunk'
 
 // reducers
 import userReducer from './users/userReducer'
+import enumerationReducer from './enumerations/enumerationReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
-	USER: 'USER'
+	USER: 'USER',
+	ENUMERATIONS: 'ENUMERATIONS'
 }
 
 const rootReducer = combineReducers({
@@ -27,6 +29,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		formReducer
+	),
+	enumerationsStore: persistReducer(
+		{
+			key: REDUCER_KEYS.ENUMERATIONS,
+			storage: storageSession
+		},
+		enumerationReducer
 	)
 })
 

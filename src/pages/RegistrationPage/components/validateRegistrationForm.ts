@@ -5,6 +5,7 @@ import i18next from 'i18next'
 
 // utils
 import passwordRegEx from '../../../utils/regex'
+import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
 import { IRegistrationForm } from '../../../types/interfaces'
@@ -18,21 +19,41 @@ export default (values: IRegistrationForm) => {
 	if (!get(values, 'email')) {
 		errors.email = i18next.t('loc:Toto pole je povinné')
 	}
+	if (values?.email && values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
+		errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_255
+		})
+	}
+
 	if (!get(values, 'password')) {
 		errors.password = i18next.t('loc:Toto pole je povinné')
 	}
 	if (values.password && !passwordRegEx.test(values.password)) {
 		errors.password = i18next.t('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak')
 	}
+	if (values?.password && values.password?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
+		errors.password = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_255
+		})
+	}
+
 	if (!get(values, 'phonePrefixCountryCode')) {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
 	}
+
 	if (!get(values, 'phone')) {
 		errors.phone = i18next.t('loc:Toto pole je povinné')
 	}
+	if (values?.phone && values.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_20
+		})
+	}
+
 	if (!get(values, 'gdpr')) {
 		errors.gdpr = i18next.t('loc:Toto pole je povinné')
 	}
+
 	if (!get(values, 'gtc')) {
 		errors.gtc = i18next.t('loc:Toto pole je povinné')
 	}

@@ -1,6 +1,6 @@
 import React from 'react'
 
-type Props = { label: any; anchorText: any; href: string }
+type Props = { label: string; anchorText: string; href: string }
 
 const SwitchLabel = (props: Props) => {
 	const { label, href, anchorText } = props

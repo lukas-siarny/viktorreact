@@ -24,6 +24,10 @@ module.exports = {
 				return `/${key}`
 			}
 
+			if (lng === 'sk') {
+				return key
+			}
+
 			return '_NEPRELOZENE_'
 		},
 		resource: {

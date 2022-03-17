@@ -28,7 +28,6 @@ import { setIntervalImmediately } from '../utils/helper'
 
 // User
 import LoginPage from '../pages/LoginPage/LoginPage'
-import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import UserAccountPage from '../pages/UserAccountPage/UserAccountPage'

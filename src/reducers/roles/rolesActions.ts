@@ -33,7 +33,6 @@ export const getRoles = (): ThunkResult<Promise<void>> => async (dispatch) => {
 				extra: { permissions: role?.permissions }
 			})
 		})
-		console.log('roles: ', parsedData)
 		dispatch({ type: ROLES.ROLES_LOAD_DONE, payload: { data: parsedData } })
 	} catch (err) {
 		dispatch({ type: ROLES.ROLES_LOAD_FAIL })

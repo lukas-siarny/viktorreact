@@ -34,7 +34,6 @@ export default (state = initState, action: IRolesActions) => {
 				}
 			}
 		case ROLES.ROLES_LOAD_DONE:
-			console.log(action.payload)
 			return {
 				...state,
 				roles: {

@@ -41,6 +41,7 @@ const PinField = (props: Props) => {
 				onChange={(code) => input.onChange(code)}
 				className={cx('pin-field heading-4 mr-2 rounded-DEFAULT', { 'pin-error': error && touched })}
 			/>
+			<div className={cx('mt-2 text-danger h-6', { invisible: !(error && touched) })}>{error}</div>
 		</Form.Item>
 	)
 }

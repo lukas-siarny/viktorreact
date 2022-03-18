@@ -21,7 +21,7 @@ import { IRegistrationForm } from '../../types/interfaces'
 import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 // actions
-import * as UserActions from '../../reducers/users/userActions'
+import { registerUser } from '../../reducers/users/userActions'
 
 type Props = {}
 
@@ -40,7 +40,7 @@ const RegistrationPage: FC<Props> = () => {
 				agreeGTC: values.gtc
 			}
 
-			const res = dispatch(UserActions.registerUser(reqData))
+			const res = dispatch(registerUser(reqData))
 			dispatch(reset(FORM.REGISTRATION))
 			return res
 		} catch (e) {

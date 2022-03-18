@@ -51,6 +51,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									{t('loc:Používatelia')}
 								</Menu.Item>
 							) : undefined}
+							{checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]) ? (
+								<Menu.Item key={PAGE.CATEGORIES} onClick={() => history.push(getPath(t('paths:categories')))} icon={<ThumbnailIcon />}>
+									{t('loc:Kategórie')}
+								</Menu.Item>
+							) : undefined}
 						</Menu>
 					)}
 				</div>

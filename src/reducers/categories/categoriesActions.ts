@@ -23,8 +23,8 @@ export interface ICategoriesPayload {
 export const getCategories = (): ThunkResult<Promise<void>> => async (dispatch) => {
 	try {
 		dispatch({ type: CATEGORIES.CATEGORIES_LOAD_START })
-		const { data } = await getReq('/api/b2b/v1/enums/categories/', null)
-		dispatch({ type: CATEGORIES.CATEGORIES_LOAD_DONE, payload: data })
+		const { data } = await getReq('/api/b2b/admin/enums/categories/', null)
+		dispatch({ type: CATEGORIES.CATEGORIES_LOAD_DONE, payload: { data: data?.categories } })
 	} catch (err) {
 		dispatch({ type: CATEGORIES.CATEGORIES_LOAD_FAIL })
 		// eslint-disable-next-line no-console

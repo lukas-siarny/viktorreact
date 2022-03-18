@@ -34,6 +34,9 @@ import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
 import CreateUserAccountPage from '../pages/UserAccountPage/CreateUserAccountPage'
 
+// categories
+import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
+
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -78,7 +81,15 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.ACTIVATION}
 			/>
-			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} />
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:categories')}
+				component={CategoriesPage}
+				translatePathKey={t('paths:categories')}
+				layout={MainLayout}
+				page={PAGE.CATEGORIES}
+			/>
 			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
 			<AuthRoute
 				{...props}

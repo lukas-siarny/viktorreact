@@ -19,7 +19,7 @@ export default (state = initState, action: ICategoriesActions) => {
 		case CATEGORIES.CATEGORIES_LOAD_START:
 			return {
 				...state,
-				roles: {
+				categories: {
 					...state.categories,
 					isLoading: true
 				}
@@ -27,15 +27,16 @@ export default (state = initState, action: ICategoriesActions) => {
 		case CATEGORIES.CATEGORIES_LOAD_FAIL:
 			return {
 				...state,
-				roles: {
+				categories: {
 					...initState.categories,
 					isFailure: true
 				}
 			}
 		case CATEGORIES.CATEGORIES_LOAD_DONE:
+			console.log('action.payload.data: ', action.payload.data)
 			return {
 				...state,
-				roles: {
+				categories: {
 					...initState.categories,
 					data: action.payload.data
 				}

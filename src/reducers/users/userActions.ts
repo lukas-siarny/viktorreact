@@ -1,11 +1,12 @@
 /* eslint-disable import/no-cycle */
 import i18next from 'i18next'
 import decode from 'jwt-decode'
+import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
 import { ILoginForm, IJwtPayload } from '../../types/interfaces'
-import { AUTH_USER, USER } from './userTypes'
+import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
@@ -13,8 +14,9 @@ import { Paths } from '../../types/api'
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
 import { history, getPath } from '../../utils/history'
 import { getReq, postReq } from '../../utils/request'
+import { PERMISSION } from '../../utils/enums'
 
-export type IUserActions = IResetStore | IGetAuthUser | IGetUser
+export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers
 
 interface IGetAuthUser {
 	type: AUTH_USER
@@ -26,13 +28,28 @@ interface IGetUser {
 	payload: IUserPayload
 }
 
-export interface IAuthUserPayload {
-	data: Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null
-}
-export interface IUserPayload {
-	data: Paths.GetApiB2BV1UsersUserId.Responses.$200 | null
+interface IGetUsers {
+	type: USERS
+	payload: IUsersPayload
 }
 
+interface IPermissions {
+	uniqPermissions?: PERMISSION[]
+}
+
+export interface IAuthUserPayload {
+	data: ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) | null
+}
+
+export interface IUserPayload {
+	data: Paths.GetApiB2BV1UsersUserId.Responses.$200['user'] | null
+}
+
+export interface IUsersPayload {
+	data: Paths.GetApiB2BAdminUsers.Responses.$200 | null
+}
+
+// eslint-disable-next-line import/prefer-default-export
 export const logInUser =
 	(input: ILoginForm): ThunkResult<void> =>
 	async (dispatch) => {
@@ -43,9 +60,18 @@ export const logInUser =
 			setAccessToken(data.accessToken)
 			setRefreshToken(data.refreshToken)
 
+			// parse permissions from role
+			const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
+			const uniqPermissions = uniq(map([...rolePermissions], 'name'))
+
 			dispatch({
 				type: AUTH_USER.AUTH_USER_LOAD_DONE,
-				payload: { data: data.user }
+				payload: {
+					data: {
+						...data.user,
+						uniqPermissions
+					}
+				}
 			})
 
 			history.push(getPath(i18next.t('paths:index')))
@@ -70,7 +96,16 @@ export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => asyn
 
 		const { data } = await getReq('/api/b2b/admin/users/{userID}', { userID: jwtPayload.uid })
 
-		payload = { data: data.user }
+		// parse permissions from role
+		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
+		const uniqPermissions = uniq(map([...rolePermissions], 'name'))
+
+		payload = {
+			data: {
+				...data.user,
+				uniqPermissions
+			}
+		}
 
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_DONE, payload })
 	} catch (err) {
@@ -136,5 +171,36 @@ export const registerUser =
 			// eslint-disable-next-line no-console
 			console.log(e)
 			return e
+		}
+	}
+
+export const getUserAccountDetails =
+	(userID: number): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: USER.USER_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/users/{userID}', { userID })
+			dispatch({ type: USER.USER_LOAD_DONE, payload: { data: data.user } })
+		} catch (err) {
+			dispatch({ type: USER.USER_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+	}
+
+export const getUsers =
+	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: USERS.USERS_LOAD_START })
+			const pageLimit = limit
+
+			const data = await getReq('/api/b2b/admin/users/', { page: page || 1, limit: pageLimit, order, search })
+
+			dispatch({ type: USERS.USERS_LOAD_DONE, payload: data })
+		} catch (err) {
+			dispatch({ type: USERS.USERS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
 		}
 	}

@@ -12,7 +12,7 @@ import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
 // types
-import { ILoginForm } from '../../../types/interfaces'
+import { ICreateUserForm } from '../../../types/interfaces'
 
 // validate
 import validateCreateUserAccountForm from './validateCreateUserAccountForm'
@@ -23,7 +23,7 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 type ComponentProps = {}
 
-type Props = InjectedFormProps<ILoginForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ICreateUserForm, ComponentProps> & ComponentProps
 
 const CreateUserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -54,7 +54,7 @@ const CreateUserAccountForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ILoginForm, ComponentProps>({
+const form = reduxForm<ICreateUserForm, ComponentProps>({
 	form: FORM.ADMIN_CREATE_USER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

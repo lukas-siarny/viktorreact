@@ -1,6 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { get, map } from 'lodash'
-import i18next from 'i18next'
+import { get, map, isEmpty } from 'lodash'
 
 import { IResetStore } from '../generalTypes'
 
@@ -12,7 +11,7 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { ENUMERATIONS_KEYS, getTranslatedCountryLabel } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, getTranslatedCountriesLabels } from '../../utils/enums'
 import { Paths } from '../../types/api'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
@@ -61,11 +60,17 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			flag: item.flag
 		}))
 
+		const countriesLabels = getTranslatedCountriesLabels()
 		// prepare countries list with translated label
 		const enumerationsCountriesOptions: ISelectOptionItem[] = map(data, (item) => {
+			const countryLabel: string | null = countriesLabels?.[item.code]
+			if (isEmpty(countryLabel)) {
+				// eslint-disable-next-line no-console
+				console.error(`Missing translation for country with code ${item.code}!`)
+			}
 			return {
 				key: item.code,
-				label: getTranslatedCountryLabel()?.[item.code],
+				label: countryLabel || item.code,
 				value: item.code,
 				flag: item.flag
 			}

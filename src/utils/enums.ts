@@ -5,6 +5,10 @@ import en_GB from 'antd/lib/locale-provider/en_GB'
 import sk_SK from 'antd/lib/locale-provider/sk_SK'
 import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
 
+// types
+// eslint-disable-next-line import/no-cycle
+import { ICountryLabel } from '../types/interfaces'
+
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
 }
@@ -1512,11 +1516,11 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_10 = 10
 }
 
-export const getTranslatedCountryLabel = (): any => {
+export const getTranslatedCountriesLabels = (): ICountryLabel => {
 	return {
 		SK: `${i18next.t('loc:Slovenská republika')}`,
 		CZ: `${i18next.t('loc:Česká republika')}`
-	} as any
+	} as ICountryLabel
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'

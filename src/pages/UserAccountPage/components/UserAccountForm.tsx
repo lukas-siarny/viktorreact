@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
 
 // types
-import { ILoginForm } from '../../../types/interfaces'
+import { IUserAccountForm } from '../../../types/interfaces'
 
 // validate
 import validateUserAccountForm from './validateUserAccountForm'
@@ -26,7 +26,7 @@ type ComponentProps = {
 	isCompany: boolean
 }
 
-type Props = InjectedFormProps<ILoginForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProps
 
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -96,7 +96,7 @@ const UserAccountForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ILoginForm, ComponentProps>({
+const form = reduxForm<IUserAccountForm, ComponentProps>({
 	form: FORM.USER_ACCOUNT_FORM,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

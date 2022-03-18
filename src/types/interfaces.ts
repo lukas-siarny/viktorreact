@@ -36,6 +36,28 @@ export interface ILoginForm {
 	password: string
 }
 
+export interface ICreateUserForm {
+	email: string
+	phonePrefixCountryCode: string
+	phone: string
+	roleID: number
+}
+
+export interface IUserAccountForm {
+	firstName: string
+	lastName: string
+	email: string
+	phone: string
+	phonePrefixCountryCode: string
+	companyName?: string
+	businessID?: string
+	vatID?: string
+	zipCode?: string
+	city?: string
+	street?: string
+	countryCode?: string
+}
+
 export interface IRegistrationForm {
 	email: string
 	password: string
@@ -94,4 +116,8 @@ export interface IBreadcrumbItem {
 
 export interface IBreadcrumbs {
 	items: IBreadcrumbItem[]
+}
+
+export interface ICountryLabel {
+	[key: string]: string
 }

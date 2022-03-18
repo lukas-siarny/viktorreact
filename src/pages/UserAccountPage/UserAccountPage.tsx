@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // components
-import UserAccountFrom from './components/UserAccountFrom'
+import UserAccountForm from './components/UserAccountForm'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
@@ -141,7 +141,7 @@ const UserAccountPage: FC<Props> = (props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:users'))} />
 			</Row>
 			<div className='content-body small'>
-				<UserAccountFrom onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(userAccountDetail.data?.company)} />
+				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(userAccountDetail.data?.company)} />
 				<Row className={rowClass}>
 					{showDeleteBtn ? (
 						<DeleteButton

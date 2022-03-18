@@ -8,6 +8,7 @@ import { ThunkResult } from '../index'
 
 // utils
 import { getReq } from '../../utils/request'
+import { ILabelInValueOption } from '../../types/interfaces'
 
 export type IRolesActions = IResetStore | IGetRoles
 
@@ -24,8 +25,8 @@ export const getRoles = (): ThunkResult<Promise<void>> => async (dispatch) => {
 	try {
 		dispatch({ type: ROLES.ROLES_LOAD_START })
 		const { data } = await getReq('/api/b2b/admin/roles/', null)
-		const parsedData: any[] = []
-		data.roles.forEach((role: any) => {
+		const parsedData: ILabelInValueOption[] = []
+		data.roles.forEach((role) => {
 			parsedData.push({
 				label: role?.name,
 				value: role?.id,

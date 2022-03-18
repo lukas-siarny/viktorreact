@@ -9,6 +9,7 @@ import PhonePrefixField from '../atoms/PhonePrefixField'
 
 // reducers
 import { RootState } from '../reducers'
+import { ENUMERATIONS_KEYS } from '../utils/enums'
 
 type Props = {
 	placeholder?: string
@@ -23,7 +24,7 @@ const fallbackDefaultValue = 'SK'
 
 const PhoneWithPrefixField = (props: Props) => {
 	const { placeholder, label, size, prefixName = 'phonePrefixCountryCode', phoneName = 'phone' } = props
-	const prefixOptions = useSelector((state: RootState) => state.enumerationsStore.countries)
+	const prefixOptions = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	let options = prefixOptions.enumerationsOptions
 	if (options.length === 0) options = fallbackOptions

@@ -24,70 +24,70 @@ export const checkPermissions = (authUserPermissions: PERMISSION[] = [], allowed
 	}
 	return true
 }
-// export const withPermissions =
-// 	(allowed: PERMISSION[] = [], except: PERMISSION[] = []) =>
-// 	(WrappedComponent: any) => {
-// 		class WithPermissionsClass extends Component<any> {
-// 			_mounted = false
+export const withPermissions =
+	(allowed: PERMISSION[] = [], except: PERMISSION[] = []) =>
+	(WrappedComponent: any) => {
+		class WithPermissionsClass extends Component<any> {
+			_mounted = false
 
-// 			constructor(props: any) {
-// 				super(props)
-// 				this.state = {
-// 					visible: true
-// 				}
-// 			}
+			constructor(props: any) {
+				super(props)
+				this.state = {
+					visible: true
+				}
+			}
 
-// 			componentDidMount() {
-// 				this.init()
-// 			}
+			componentDidMount() {
+				this.init()
+			}
 
-// 			componentWillUnmount() {
-// 				this._mounted = false
-// 			}
+			componentWillUnmount() {
+				this._mounted = false
+			}
 
-// 			init = async () => {
-// 				this._mounted = true
-// 				const { userActions, authUserPermissions } = this.props
-// 				let permissions
-// 				try {
-// 					const { data } = await userActions.getAuthUserProfile()
-// 					permissions = get(data, 'uniqPermissions')
-// 				} catch (e) {
-// 					permissions = authUserPermissions
-// 				}
+			init = async () => {
+				this._mounted = true
+				const { userActions, authUserPermissions } = this.props
+				let permissions
+				try {
+					const { data } = await userActions.getAuthUserProfile()
+					permissions = get(data, 'uniqPermissions')
+				} catch (e) {
+					permissions = authUserPermissions
+				}
 
-// 				if (!checkPermissions(permissions, allowed, except)) {
-// 					if (this._mounted) {
-// 						this.setState(
-// 							{
-// 								visible: false
-// 							},
-// 							() => {
-// 								history.push('/403')
-// 							}
-// 						)
-// 					}
-// 				}
-// 			}
+				if (!checkPermissions(permissions, allowed, except)) {
+					if (this._mounted) {
+						this.setState(
+							{
+								visible: false
+							},
+							() => {
+								history.push('/403')
+							}
+						)
+					}
+				}
+			}
 
-// 			render() {
-// 				const { visible } = this.state as any
-// 				if (!visible) {
-// 					return null
-// 				}
-// 				return <WrappedComponent {...this.props} />
-// 			}
-// 		}
-// 		const mapStateToProps = (state: RootState) => ({
-// 			authUserPermissions: state.user.authUser?.data?.uniqPermissions || []
-// 		})
+			render() {
+				const { visible } = this.state as any
+				if (!visible) {
+					return null
+				}
+				return <WrappedComponent {...this.props} />
+			}
+		}
+		const mapStateToProps = (state: RootState) => ({
+			authUserPermissions: state.user.authUser?.data?.uniqPermissions
+		})
 
-// 		const mapDispatchToProps = (dispatch: any) => ({
-// 			userActions: bindActionCreators(UserActions, dispatch)
-// 		})
+		const mapDispatchToProps = (dispatch: any) => ({
+			userActions: bindActionCreators(UserActions, dispatch)
+		})
 
-// 		return compose(connect(mapStateToProps, mapDispatchToProps))(WithPermissionsClass)
-// 	}
+		return compose(connect(mapStateToProps, mapDispatchToProps))(WithPermissionsClass)
+	}
 
 type Props = {
 	render?: (hasPermission: boolean, object: any) => React.ReactNode
@@ -96,47 +96,47 @@ type Props = {
 }
 
 const Permissions: FC<Props> = (props) => {
-	// const { render, allowed, except, children } = props
-	// const authUserPermissions = useSelector((state: RootState) => state.user.authUser?.data?.uniqPermissions || [])
-	// const hasPermissions = checkPermissions(authUserPermissions, allowed, except)
-	// const [visibleModal, setVisibleModal] = useState(false)
-	// const [t] = useTranslation()
+	const { render, allowed, except, children } = props
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+	const hasPermissions = checkPermissions(authUserPermissions, allowed, except)
+	const [visibleModal, setVisibleModal] = useState(false)
+	const [t] = useTranslation()
 
-	// if (render) {
-	// 	const item: any = render(hasPermissions, {
-	// 		openForbiddenModal: () => {
-	// 			setVisibleModal(true)
-	// 		},
-	// 		openForbiddenNotification: () => {
-	// 			notification.warning({
-	// 				message: t('loc:Upozornenie'),
-	// 				description: t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
-	// 			})
-	// 		},
-	// 		checkPermissions: (allowedPermissions: PERMISSION[]) => checkPermissions(authUserPermissions, allowedPermissions)
-	// 	})
-	// 	const modal: any = (
-	// 		<>
-	// 			<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
-	// 				<Result
-	// 					status='warning'
-	// 					title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
-	// 					extra={
-	// 						<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
-	// 							{t('loc:Zatvoriť')}
-	// 						</Button>
-	// 					}
-	// 				/>
-	// 			</Modal>
-	// 			{item}
-	// 		</>
-	// 	)
-	// 	return modal
-	// }
+	if (render) {
+		const item: any = render(hasPermissions, {
+			openForbiddenModal: () => {
+				setVisibleModal(true)
+			},
+			openForbiddenNotification: () => {
+				notification.warning({
+					message: t('loc:Upozornenie'),
+					description: t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
+				})
+			},
+			checkPermissions: (allowedPermissions: PERMISSION[]) => checkPermissions(authUserPermissions, allowedPermissions)
+		})
+		const modal: any = (
+			<>
+				<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
+					<Result
+						status='warning'
+						title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
+						extra={
+							<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
+								{t('loc:Zatvoriť')}
+							</Button>
+						}
+					/>
+				</Modal>
+				{item}
+			</>
+		)
+		return modal
+	}
 
-	// if (hasPermissions) {
-	// 	return children
-	// }
+	if (hasPermissions) {
+		return children
+	}
 
 	return null
 }

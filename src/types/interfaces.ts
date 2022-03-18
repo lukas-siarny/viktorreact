@@ -36,6 +36,28 @@ export interface ILoginForm {
 	password: string
 }
 
+export interface ICreateUserForm {
+	email: string
+	phonePrefixCountryCode: string
+	phone: string
+	roleID: number
+}
+
+export interface IUserAccountForm {
+	firstName: string
+	lastName: string
+	email: string
+	phone: string
+	phonePrefixCountryCode: string
+	companyName?: string
+	businessID?: string
+	vatID?: string
+	zipCode?: string
+	city?: string
+	street?: string
+	countryCode?: string
+}
+
 export interface IRegistrationForm {
 	email: string
 	password: string
@@ -76,4 +98,26 @@ export interface ILoadingAndFailure {
 export interface IConfirmUserForm extends ICreatePasswordForm {
 	name: string
 	surname: string
+}
+
+export interface IComputedMatch<Params> {
+	isExact: boolean
+	params: Params
+	path: string
+	url: string
+}
+
+export interface IBreadcrumbItem {
+	name: string
+	link?: string
+	action?: any
+	titleName?: string | null | undefined
+}
+
+export interface IBreadcrumbs {
+	items: IBreadcrumbItem[]
+}
+
+export interface ICountryLabel {
+	[key: string]: string
 }

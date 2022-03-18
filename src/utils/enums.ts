@@ -5,6 +5,10 @@ import en_GB from 'antd/lib/locale-provider/en_GB'
 import sk_SK from 'antd/lib/locale-provider/sk_SK'
 import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
 
+// types
+// eslint-disable-next-line import/no-cycle
+import { ICountryLabel } from '../types/interfaces'
+
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
 }
@@ -174,36 +178,9 @@ export enum PERMISSION {
 	SUPER_ADMIN = 'SUPER_ADMIN',
 	ADMIN = 'ADMIN',
 	USER_CREATE = 'USER_CREATE',
+	USER_BROWSING = 'USER_BROWSING',
 	USER_EDIT = 'USER_EDIT',
-	USER_DELETE = 'USER_DELETE',
-	USER_LIST = 'USER_LIST',
-	ENUMS_DEFINITION = 'ENUMS_DEFINITION',
-	DESTINATION_EDIT = 'DESTINATION_EDIT',
-	DESTINATION_BROWSING = 'DESTINATION_BROWSING',
-	FACILITY_BROWSING = 'FACILITY_BROWSING',
-	FACILITY_EDIT = 'FACILITY_EDIT',
-	FILES_EDIT = 'FILES_EDIT',
-	TRANSPORTATION_BROWSING = 'TRANSPORTATION_BROWSING',
-	TRANSPORTATION_EDIT = 'TRANSPORTATION_EDIT',
-	PRODUCT_BROWSING = 'PRODUCT_BROWSING',
-	PRODUCT_EDIT = 'PRODUCT_EDIT',
-	COMPANIES_BROWSING = 'COMPANIES_BROWSING',
-	COMPANIES_EDIT = 'COMPANIES_EDIT',
-	RECORD_ID_SHOW = 'RECORD_ID_SHOW',
-	BUSINESS_CASES_CREATE = 'BUSINESS_CASES_CREATE',
-	BUSINESS_CASES_EDIT = 'BUSINESS_CASES_EDIT',
-	BUSINESS_CASES_BROWSING = 'BUSINESS_CASES_BROWSING',
-	CUSTOMERS_BROWSING = 'CUSTOMERS_BROWSING',
-	BUSINESS_CASES_DELETE = 'BUSINESS_CASES_DELETE',
-	DISCOUNT_BROWSING = 'DISCOUNT_BROWSING',
-	DISCOUNT_EDIT = 'DISCOUNT_EDIT',
-	COMMISSION_EDIT = 'COMMISSION_EDIT',
-	SALES = 'SALES',
-	INSURANCE_EDIT = 'INSURANCE_EDIT',
-	INSURANCE_BROWSING = 'INSURANCE_BROWSING',
-	PAYMENTS_BROWSING = ' PAYMENTS_BROWSING',
-	PAYMENTS_EDIT = ' PAYMENTS_EDIT',
-	COMMISSION_BROWSING = 'COMMISSION_BROWSING'
+	USER_DELETE = 'USER_DELETE'
 }
 
 export enum SUBMENU_PARENT {
@@ -641,6 +618,7 @@ export enum ENUMERATIONS_KEYS {
 	// FACILITY_TYPES = 'facilityTypes',
 	// VAT_RATES = 'vatRates',
 	// CURRENCIES = 'currencies',
+	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries'
 	// UNIT_TEMPLATES = 'unitTemplates',
 	// UNIT_TEMPLATE_PROPERTIES = 'unitTemplateProperties',
@@ -931,7 +909,7 @@ export const ENUMERATIONS_OPTIONS = () =>
 			// },
 			{
 				label: i18next.t('loc:Krajiny'),
-				key: ENUMERATIONS_KEYS.COUNTRIES,
+				key: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX,
 				url: ENUMERATIONS_PATHS.COUNTRIES
 			}
 			// {
@@ -1536,6 +1514,13 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_100 = 100,
 	LENGTH_20 = 20,
 	LENGTH_10 = 10
+}
+
+export const getTranslatedCountriesLabels = (): ICountryLabel => {
+	return {
+		SK: `${i18next.t('loc:Slovenská republika')}`,
+		CZ: `${i18next.t('loc:Česká republika')}`
+	} as ICountryLabel
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'

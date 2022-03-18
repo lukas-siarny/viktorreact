@@ -19,7 +19,7 @@ export default (values: ICreatePasswordForm, { t }: DecoratedFormProps<ICreatePa
 	}
 
 	if (get(values, 'password') && get(values, 'confirmPassword') && get(values, 'password') !== get(values, 'confirmPassword')) {
-		errors.confirmPassword = t('loc:Hesla sa nezhodujú')
+		errors.confirmPassword = t('loc:Heslá sa nezhodujú')
 	}
 
 	if (values.password && !passwordRegEx.test(values.password)) {

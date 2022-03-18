@@ -68,6 +68,8 @@ export const ROW_GUTTER_X_DEFAULT = [4, 0] as Gutter
 export const ROW_GUTTER_X_M = [16, 0] as Gutter
 export const ROW_GUTTER_X_L = [32, 0] as Gutter
 
+export const MIN_SUPPORTED_RESOLUTION = 744 // 744px breakpoint is also defined in tailwind config
+
 export const ROUTE_PREFIX = '/b2b'
 
 export const DROPDOWN_POSITION = {

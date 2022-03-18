@@ -9,12 +9,27 @@
 .ant-form
 	color: $textColor-notino-black
 
+.ant-form-item
+	margin-bottom: 1.5rem
+
+@media (max-width: $min-supported-resoulution)
+	.ant-form-item
+		margin-bottom: 1rem
+
 // Label
 .ant-form-item-label,
 .ant-form-vertical .ant-form-item-label // this is for higher specificity so it can override the original style
 	padding-bottom: 4px
 	label
 		color: $textColor-notino-black
+
+// Error form item
+.ant-form-item-control
+	.ant-form-item-explain.ant-form-item-explain-error
+		padding-top: 0
+		min-height: 1rem
+		margin-top: 0.25rem
+		@extend .s-regular
 
 // Forms
 // .form

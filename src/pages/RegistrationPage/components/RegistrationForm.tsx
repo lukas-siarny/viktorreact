@@ -34,7 +34,7 @@ const RegistrationForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, submitting } = props
 	return (
-		<Form layout={'vertical'} className={'form h-full max-w-48 flex flex-col'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form h-full mt-4 max-w-48 flex flex-col'} onSubmitCapture={handleSubmit}>
 			<h3>{t('loc:Registrácia')}</h3>
 			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 			<Field
@@ -69,7 +69,7 @@ const RegistrationForm: FC<Props> = (props) => {
 				customLabel={<SwitchLabel label={t('loc:Udeľujem súhlas so spracúvaním osobných údajov na')} anchorText={t('loc:Marketingové účely')} href={MARKETING_URL} />}
 				size={'large'}
 			/>
-			<div className='mt-auto'>
+			<div className='mt-4'>
 				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Registrovať')}
 				</Button>

@@ -35,7 +35,7 @@ const ActivationPage = () => {
 		}
 	}
 
-	const resendPind = async () => {
+	const resendPin = async () => {
 		setSubmitting(true)
 		try {
 			await postReq('/api/b2b/admin/users/activation-resend', undefined, undefined)
@@ -58,7 +58,7 @@ const ActivationPage = () => {
 					})}
 				</p>
 				<ActivationForm onSubmit={handleSubmit} submitting={submitting} />
-				<Button type={'link'} htmlType={'button'} onClick={resendPind} className='mt-4'>
+				<Button type={'link'} htmlType={'button'} onClick={resendPin} className='mt-4'>
 					{t('loc:Znovu vyžiadať PIN')}
 				</Button>
 			</div>

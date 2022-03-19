@@ -24,7 +24,6 @@ class CreatePasswordRoute extends Route<Props> {
 	render = () => {
 		// t je query param pre token (nie preklad)
 		const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
-		console.log('🚀 ~ file: CreatePasswordRoute.tsx ~ line 27 ~ CreatePasswordRoute ~ t', t)
 
 		// if user is already logged In or token does not exist redirect to index route
 		if (isLoggedIn() || !t) {
@@ -34,14 +33,12 @@ class CreatePasswordRoute extends Route<Props> {
 		const payload = decode(t as string)
 		const aud = get(payload, 'aud')
 
-		return <BaseRoute {...(this.props as any)} />
+		if (aud === TOKEN_AUDIENCE.FORGOTTEN_PASSWORD || aud === TOKEN_AUDIENCE.INVITATION) {
+			// dokoncenie registracie , zabudnute heslo
+			return <BaseRoute {...(this.props as any)} token={t} />
+		}
 
-		// if (aud === TOKEN_AUDIENCE.FORGOTTEN_PASSWORD || aud === TOKEN_AUDIENCE.INVITATION) {
-		// 	// dokoncenie registracie , zabudnute heslo
-		// 	return <BaseRoute {...(this.props as any)} />
-		// }
-
-		// return <Redirect to={getPath(this.props.t('paths:index'))} />
+		return <Redirect to={getPath(this.props.t('paths:index'))} />
 	}
 }
 

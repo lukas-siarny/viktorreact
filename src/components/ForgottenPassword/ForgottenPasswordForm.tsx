@@ -4,13 +4,13 @@ import { Form, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 // atoms
-import InputField from '../../../atoms/InputField'
+import InputField from '../../atoms/InputField'
 
 // interfaces
-import { IForgotPasswordForm } from '../../../types/interfaces'
+import { IForgotPasswordForm } from '../../types/interfaces'
 
 // utils
-import { FORM } from '../../../utils/enums'
+import { FORM } from '../../utils/enums'
 
 // validate
 import validateForgotPasswordForm from './validateForgotPasswordForm'

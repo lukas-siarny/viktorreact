@@ -4,7 +4,7 @@ import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 
 // types
-import { IForgotPasswordForm } from '../../../types/interfaces'
+import { IForgotPasswordForm } from '../../types/interfaces'
 
 export default (values: IForgotPasswordForm) => {
 	const errors: FormErrors<IForgotPasswordForm> = {}

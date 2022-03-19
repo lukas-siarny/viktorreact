@@ -26,6 +26,37 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BAdminSalonsSalonId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BAdminUsersUserId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -202,9 +233,210 @@ declare namespace Paths {
                     name: string;
                     permissions: {
                         id: number;
-                        name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                        name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                     }[];
                 }[];
+            }
+        }
+    }
+    namespace GetApiB2BAdminSalons {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryFirstLevelIDs = number[];
+            export type Limit = 25 | 50 | 100;
+            export type Order = string;
+            export type Page = number;
+            export type Search = string | null;
+            export type Statuses = ("PUBLISHED" | "VISIBLE" | "DELETED" | "ALL")[];
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            categoryFirstLevelIDs?: Parameters.CategoryFirstLevelIDs;
+            statuses?: Parameters.Statuses;
+            order?: Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                salons: {
+                    id: number;
+                    name: string;
+                    phonePrefixCountryCode: string;
+                    phone: string; // ^\d+$
+                    email: string;
+                    address: {
+                        city: string;
+                        street: string;
+                        latitude: number; // float
+                        longitude: number; // float
+                        countryCode: string;
+                    };
+                    categories: {
+                        id: number;
+                        name: string;
+                    }[];
+                    isPublished: boolean;
+                    isVisible: boolean;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminSalonsSalonId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                    name: string;
+                    aboutUsFirst?: string;
+                    aboutUsSecond?: string;
+                    openingHours: [
+                        {
+                            /**
+                             * example:
+                             * MONDAY
+                             */
+                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                            timeRanges: [
+                                {
+                                    /**
+                                     * example:
+                                     * 07:00
+                                     */
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    /**
+                                     * example:
+                                     * 15:00
+                                     */
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                },
+                                ...{
+                                    /**
+                                     * example:
+                                     * 07:00
+                                     */
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    /**
+                                     * example:
+                                     * 15:00
+                                     */
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[]
+                            ];
+                        },
+                        ...{
+                            /**
+                             * example:
+                             * MONDAY
+                             */
+                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                            timeRanges: [
+                                {
+                                    /**
+                                     * example:
+                                     * 07:00
+                                     */
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    /**
+                                     * example:
+                                     * 15:00
+                                     */
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                },
+                                ...{
+                                    /**
+                                     * example:
+                                     * 07:00
+                                     */
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    /**
+                                     * example:
+                                     * 15:00
+                                     */
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[]
+                            ];
+                        }[]
+                    ];
+                    address: {
+                        city: string;
+                        street: string;
+                        latitude: number; // float
+                        longitude: number; // float
+                        countryCode: string;
+                    };
+                    phonePrefixCountryCode: string;
+                    phone: string; // ^\d+$
+                    email: string;
+                    socialLinkFB?: string;
+                    socialLinkInstagram?: string;
+                    socialLinkWebPage?: string;
+                    payByCard: boolean;
+                    otherPaymentMethods?: string;
+                    categories: {
+                        id: number;
+                        name: string;
+                    }[];
+                    isPublished: boolean;
+                    isVisible: boolean;
+                    user: {
+                        id: number;
+                        name: string;
+                    };
+                    image: {
+                        id: number;
+                        url: string;
+                    };
+                    logo?: {
+                        id: number;
+                        url: string;
+                    };
+                    aboutUsImage?: {
+                        id: number;
+                        url: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
             }
         }
     }
@@ -303,7 +535,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -459,7 +691,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -491,6 +723,211 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 category: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Salon 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            aboutUsFirst?: string | null;
+            /**
+             * example:
+             * some text
+             */
+            aboutUsSecond?: string | null;
+            openingHours: [
+                {
+                    /**
+                     * example:
+                     * MONDAY
+                     */
+                    day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                    timeRanges: [
+                        {
+                            /**
+                             * example:
+                             * 07:00
+                             */
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            /**
+                             * example:
+                             * 15:00
+                             */
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        },
+                        ...{
+                            /**
+                             * example:
+                             * 07:00
+                             */
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            /**
+                             * example:
+                             * 15:00
+                             */
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[]
+                    ];
+                },
+                ...{
+                    /**
+                     * example:
+                     * MONDAY
+                     */
+                    day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                    timeRanges: [
+                        {
+                            /**
+                             * example:
+                             * 07:00
+                             */
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            /**
+                             * example:
+                             * 15:00
+                             */
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        },
+                        ...{
+                            /**
+                             * example:
+                             * 07:00
+                             */
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            /**
+                             * example:
+                             * 15:00
+                             */
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[]
+                    ];
+                }[]
+            ];
+            /**
+             * example:
+             * Žilina
+             */
+            city: string;
+            /**
+             * example:
+             * Framborska 58
+             */
+            street: string;
+            /**
+             * example:
+             * 49.226666
+             */
+            latitude: number; // float
+            /**
+             * example:
+             * 18.7348681
+             */
+            longitude: number; // float
+            /**
+             * example:
+             * SK
+             */
+            countryCode: string;
+            /**
+             * example:
+             * SK
+             */
+            phonePrefixCountryCode: string;
+            /**
+             * example:
+             * 906047188
+             */
+            phone: string; // ^\d+$
+            /**
+             * example:
+             * test_notino.goodrequest.com
+             */
+            email: string; // email
+            /**
+             * example:
+             * https://www.facebook.com/GoodRequestCom
+             */
+            socialLinkFB?: string | null;
+            /**
+             * example:
+             * https://www.instagram.com/goodrequest/
+             */
+            socialLinkInstagram?: string | null;
+            /**
+             * example:
+             * https://www.goodrequest.com/
+             */
+            socialLinkWebPage?: string | null;
+            /**
+             * example:
+             * true
+             */
+            payByCard: boolean;
+            /**
+             * example:
+             * Prevod na účet
+             */
+            otherPaymentMethods?: string | null;
+            categoryIDs: [
+                number,
+                ...number[]
+            ];
+            /**
+             * example:
+             * 8
+             */
+            userID: number;
+            /**
+             * example:
+             * 1
+             */
+            imageID: number;
+            /**
+             * example:
+             * 1
+             */
+            logoID?: null | number;
+            /**
+             * example:
+             * 1
+             */
+            aboutUsImageID?: null | number;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon?: {
                     id: number;
                 };
                 messages: {
@@ -594,7 +1031,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -733,7 +1170,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -830,7 +1267,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -932,7 +1369,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -962,6 +1399,256 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 category: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminFilesSignUrls {
+        export interface RequestBody {
+            files: [
+                {
+                    /**
+                     * example:
+                     * test.pdf
+                     */
+                    name: string;
+                    /**
+                     * example:
+                     * 1024
+                     */
+                    size: number;
+                    /**
+                     * example:
+                     * application/pdf
+                     */
+                    mimeType: string;
+                },
+                ...{
+                    /**
+                     * example:
+                     * test.pdf
+                     */
+                    name: string;
+                    /**
+                     * example:
+                     * 1024
+                     */
+                    size: number;
+                    /**
+                     * example:
+                     * application/pdf
+                     */
+                    mimeType: string;
+                }[]
+            ];
+        }
+        namespace Responses {
+            export interface $200 {
+                signedUrls: {
+                    name: string;
+                    url: string;
+                    signedUrl: string;
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminSalons {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Salon 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            aboutUsFirst?: string | null;
+            /**
+             * example:
+             * some text
+             */
+            aboutUsSecond?: string | null;
+            openingHours: [
+                {
+                    /**
+                     * example:
+                     * MONDAY
+                     */
+                    day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                    timeRanges: [
+                        {
+                            /**
+                             * example:
+                             * 07:00
+                             */
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            /**
+                             * example:
+                             * 15:00
+                             */
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        },
+                        ...{
+                            /**
+                             * example:
+                             * 07:00
+                             */
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            /**
+                             * example:
+                             * 15:00
+                             */
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[]
+                    ];
+                },
+                ...{
+                    /**
+                     * example:
+                     * MONDAY
+                     */
+                    day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                    timeRanges: [
+                        {
+                            /**
+                             * example:
+                             * 07:00
+                             */
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            /**
+                             * example:
+                             * 15:00
+                             */
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        },
+                        ...{
+                            /**
+                             * example:
+                             * 07:00
+                             */
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            /**
+                             * example:
+                             * 15:00
+                             */
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[]
+                    ];
+                }[]
+            ];
+            /**
+             * example:
+             * Žilina
+             */
+            city: string;
+            /**
+             * example:
+             * Framborska 58
+             */
+            street: string;
+            /**
+             * example:
+             * 49.226666
+             */
+            latitude: number; // float
+            /**
+             * example:
+             * 18.7348681
+             */
+            longitude: number; // float
+            /**
+             * example:
+             * SK
+             */
+            countryCode: string;
+            /**
+             * example:
+             * SK
+             */
+            phonePrefixCountryCode: string;
+            /**
+             * example:
+             * 906047188
+             */
+            phone: string; // ^\d+$
+            /**
+             * example:
+             * test_notino.goodrequest.com
+             */
+            email: string; // email
+            /**
+             * example:
+             * https://www.facebook.com/GoodRequestCom
+             */
+            socialLinkFB?: string | null;
+            /**
+             * example:
+             * https://www.instagram.com/goodrequest/
+             */
+            socialLinkInstagram?: string | null;
+            /**
+             * example:
+             * https://www.goodrequest.com/
+             */
+            socialLinkWebPage?: string | null;
+            /**
+             * example:
+             * true
+             */
+            payByCard: boolean;
+            /**
+             * example:
+             * Prevod na účet
+             */
+            otherPaymentMethods?: string | null;
+            categoryIDs: [
+                number,
+                ...number[]
+            ];
+            /**
+             * example:
+             * 8
+             */
+            userID: number;
+            /**
+             * example:
+             * 1
+             */
+            imageID: number;
+            /**
+             * example:
+             * 1
+             */
+            logoID?: null | number;
+            /**
+             * example:
+             * 1
+             */
+            aboutUsImageID?: null | number;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon?: {
                     id: number;
                 };
                 messages: {
@@ -1143,7 +1830,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -1236,7 +1923,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -1275,7 +1962,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -1377,7 +2064,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -1412,6 +2099,55 @@ declare namespace Paths {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BV1FilesSignUrls {
+        export interface RequestBody {
+            files: [
+                {
+                    /**
+                     * example:
+                     * test.pdf
+                     */
+                    name: string;
+                    /**
+                     * example:
+                     * 1024
+                     */
+                    size: number;
+                    /**
+                     * example:
+                     * application/pdf
+                     */
+                    mimeType: string;
+                },
+                ...{
+                    /**
+                     * example:
+                     * test.pdf
+                     */
+                    name: string;
+                    /**
+                     * example:
+                     * 1024
+                     */
+                    size: number;
+                    /**
+                     * example:
+                     * application/pdf
+                     */
+                    mimeType: string;
+                }[]
+            ];
+        }
+        namespace Responses {
+            export interface $200 {
+                signedUrls: {
+                    name: string;
+                    url: string;
+                    signedUrl: string;
                 }[];
             }
         }
@@ -1543,7 +2279,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -1660,6 +2396,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   /**
+   * postApiB2BAdminFilesSignUrls - PERMISSION: NO
+   */
+  'postApiB2BAdminFilesSignUrls'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  /**
    * postApiB2BV1AuthLogin - PERMISSION: NO
    */
   'postApiB2BV1AuthLogin'(
@@ -1756,6 +2500,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   /**
+   * postApiB2BV1FilesSignUrls - PERMISSION: NO
+   */
+  'postApiB2BV1FilesSignUrls'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
+  /**
    * postApiB2BAdminAuthLogin - PERMISSION: NO
    */
   'postApiB2BAdminAuthLogin'(
@@ -1827,6 +2579,46 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
+  /**
+   * getApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   */
+  'getApiB2BAdminSalons'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
+  /**
+   * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'postApiB2BAdminSalons'(
+    parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminSalons.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   */
+  'getApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'deleteApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   /**
    * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
    */
@@ -1994,6 +2786,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   }
+  ['/api/b2b/admin/files/sign-urls']: {
+    /**
+     * postApiB2BAdminFilesSignUrls - PERMISSION: NO
+     */
+    'post'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  }
   ['/api/b2b/v1/auth/login']: {
     /**
      * postApiB2BV1AuthLogin - PERMISSION: NO
@@ -2112,6 +2914,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   }
+  ['/api/b2b/v1/files/sign-urls']: {
+    /**
+     * postApiB2BV1FilesSignUrls - PERMISSION: NO
+     */
+    'post'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
+  }
   ['/api/b2b/admin/auth/login']: {
     /**
      * postApiB2BAdminAuthLogin - PERMISSION: NO
@@ -2193,6 +3005,50 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/']: {
+    /**
+     * getApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
+    /**
+     * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminSalons.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}']: {
+    /**
+     * getApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
+    /**
+     * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   }
   ['/api/b2b/v1/auth/login-as-partner']: {
     /**

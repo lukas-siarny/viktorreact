@@ -22,7 +22,7 @@ const LoginPage: FC<Props> = () => {
 	return (
 		<>
 			<LoginForm onSubmit={handleLoginSubmit} showForgottenPasswordModal={() => setModalVisible(true)} />
-			<ForgottenPasswordModal visible={modalVisible} onClose={() => setModalVisible(false)} />
+			{modalVisible && <ForgottenPasswordModal visible={modalVisible} onClose={() => setModalVisible(false)} />}
 		</>
 	)
 }

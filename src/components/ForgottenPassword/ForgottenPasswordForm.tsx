@@ -26,7 +26,7 @@ const ForgottenPasswordForm: FC<Props> = (props) => {
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<p className={'base-regular mb-7'}>{t('loc:Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.')}</p>
-			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
+			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} focused />
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
 				{t('loc:Odoslať email')}
 			</Button>
@@ -37,7 +37,8 @@ const ForgottenPasswordForm: FC<Props> = (props) => {
 const form = reduxForm<IForgotPasswordForm, ComponentProps>({
 	form: FORM.FORGOT_PASSWORD,
 	forceUnregisterOnUnmount: true,
-	touchOnChange: true,
+	touchOnChange: false,
+	touchOnBlur: true,
 	destroyOnUnmount: true,
 	validate: validateForgotPasswordForm
 })(ForgottenPasswordForm)

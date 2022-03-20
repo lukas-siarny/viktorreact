@@ -27,6 +27,11 @@ const ForgottenPasswordModal: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
+	const hideModal = () => {
+		dispatch(reset(FORM.FORGOT_PASSWORD))
+		onClose()
+	}
+
 	const handleSubmit = async (values: IForgotPasswordForm) => {
 		try {
 			const reqData = {
@@ -34,8 +39,7 @@ const ForgottenPasswordModal: FC<Props> = (props) => {
 			}
 
 			const res = await postReq('/api/b2b/admin/auth/forgot-password', null, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			dispatch(reset(FORM.FORGOT_PASSWORD))
-			onClose()
+			hideModal()
 			return res
 		} catch (e) {
 			return e
@@ -43,7 +47,7 @@ const ForgottenPasswordModal: FC<Props> = (props) => {
 	}
 
 	return (
-		<Modal className='rounded-fields' title={t('loc:Zabudnuté heslo')} centered visible={visible} footer={null} onCancel={onClose} closeIcon={<CloseIcon />} width={394}>
+		<Modal className='rounded-fields' title={t('loc:Zabudnuté heslo')} centered visible={visible} footer={null} onCancel={hideModal} closeIcon={<CloseIcon />} width={394}>
 			<ForgottenPasswordForm onSubmit={handleSubmit} />
 		</Modal>
 	)

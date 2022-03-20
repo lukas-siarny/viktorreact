@@ -43,9 +43,10 @@ const RegistrationPage: FC<Props> = () => {
 			const { accessToken, refreshToken } = res.data
 			setAccessToken(accessToken)
 			setRefreshToken(refreshToken)
-			history.push(getPath(t('paths:home')))
+			history.push(getPath(t('paths:activation')))
 			return res
 		} catch (e) {
+			// eslint-disable-next-line no-console
 			console.log(e)
 			return e
 		}

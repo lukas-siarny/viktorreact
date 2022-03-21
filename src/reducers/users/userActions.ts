@@ -53,8 +53,9 @@ const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/log
 	dispatch: any,
 	url: T,
 	input: any,
-	config?: ICustomConfig
-): Promise<void> => {
+	config?: ICustomConfig,
+	redirectPath = getPath(i18next.t('paths:index'))
+): Promise<IAuthUserPayload | null> => {
 	try {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
 
@@ -73,22 +74,26 @@ const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/log
 		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
 		const uniqPermissions = uniq(map([...rolePermissions], 'name'))
 
+		const payload = {
+			data: {
+				...data.user,
+				uniqPermissions
+			}
+		}
+
 		dispatch({
 			type: AUTH_USER.AUTH_USER_LOAD_DONE,
-			payload: {
-				data: {
-					...data.user,
-					uniqPermissions
-				}
-			}
+			payload
 		})
 
-		history.push(getPath(i18next.t('paths:index')))
+		history.push(redirectPath)
+		return payload
 	} catch (e) {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
 		history.push(getPath(i18next.t('paths:login')))
 		// eslint-disable-next-line no-console
 		console.log(e)
+		return null
 	}
 }
 
@@ -171,6 +176,12 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 		}
 	}
 }
+
+export const registerUser =
+	(input: Paths.PostApiB2BAdminUsersRegistration.RequestBody): ThunkResult<void> =>
+	async (dispatch) => {
+		return authorize(dispatch, '/api/b2b/admin/users/registration', input, undefined, i18next.t('paths:activation'))
+	}
 
 export const getUserAccountDetails =
 	(userID: number): ThunkResult<Promise<void>> =>

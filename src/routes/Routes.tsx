@@ -32,7 +32,9 @@ import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import UserAccountPage from '../pages/UserAccountPage/UserAccountPage'
+import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
+import CreateUserAccountPage from '../pages/UserAccountPage/CreateUserAccountPage'
 
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
@@ -63,6 +65,23 @@ const Routes: FC = (props) => {
 				component={CreatePasswordPage}
 				layout={PublicLayout}
 			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={getPath(t('paths:user-detail/{{userID}}', { userID: ':userID' }))}
+				translatePathKey={getPath(t('paths:user-detail/{{userID}}', { userID: ':userID' }))}
+				component={UserAccountPage}
+				layout={MainLayout}
+			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={getPath(t('paths:user/create'))}
+				component={CreateUserAccountPage}
+				translatePathKey={getPath(t('paths:user/create'))}
+				layout={MainLayout}
+			/>
+			<AuthRoute {...props} exact path={getPath(t('paths:my-account'))} translatePathKey={getPath(t('paths:my-account'))} component={UserAccountPage} layout={MainLayout} />
 			<AuthRoute {...props} exact path={getPath(t('paths:index'))} component={EntryPage} translatePathKey={getPath(t('paths:index'))} layout={MainLayout} />
 			<AuthRoute {...props} exact path={getPath(t('paths:home'))} component={HomePage} translatePathKey={getPath(t('paths:home'))} layout={MainLayout} page={PAGE.HOME} />
 			<AuthRoute
@@ -74,6 +93,7 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.ACTIVATION}
 			/>
+			<AuthRoute {...props} exact path={getPath(t('paths:users'))} component={AdminUsersPage} translatePathKey={getPath(t('paths:users'))} layout={MainLayout} />
 			<AuthRoute
 				{...props}
 				exact

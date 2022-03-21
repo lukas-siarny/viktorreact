@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { get, map } from 'lodash'
+import { get, map, isEmpty } from 'lodash'
 
 import { IResetStore } from '../generalTypes'
 
@@ -11,25 +11,7 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import {
-	ENUMERATIONS_KEYS
-	// ENUMERATIONS_OPTIONS,
-	// EXPIRATION_TYPE,
-	// LINE_TYPE,
-	// PAGINATION,
-	// PRICELIST_ITEM_CATEGORY,
-	// PRICELIST_ITEM_TIME_RELATION,
-	// PRICELIST_ITEM_UNIT_RELATION,
-	// PRICELIST_ITEM_USAGE,
-	// PROPERTY_TYPE,
-	// PROPERTY_USAGE,
-	// TEXT_TEMPLATE_TYPE,
-	// UNIT_TEMPLATE_FACILITY_TYPE,
-	// UNIT_TEMPLATE_TYPE,
-	// WEB_PROJECT_CODE
-} from '../../utils/enums'
-// import { timezones } from '../../utils/timezones'
-// import { formatUTCOffset } from '../../utils/helper'
+import { ENUMERATIONS_KEYS, getTranslatedCountriesLabels } from '../../utils/enums'
 import { Paths } from '../../types/api'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
@@ -51,37 +33,65 @@ export interface IEnumerationsPayload {
 	enumerationsOptions: IEnumerationOptions[]
 }
 
+export interface ICountriesPayload {
+	countriesPayload: IEnumerationsPayload
+	countriesPhonePrefixPayload: IEnumerationsPayload
+}
+
 export type EnumerationData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
 
-export const getCountries =
-	(enumType: ENUMERATIONS_KEYS): ThunkResult<Promise<IEnumerationsPayload>> =>
-	async (dispatch) => {
-		let payload = {} as IEnumerationsPayload
-		try {
-			dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType })
-			let enumerationsOptions: ISelectOptionItem[] = []
+export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async (dispatch) => {
+	let countriesPhonePrefixPayload: IEnumerationsPayload = {} as IEnumerationsPayload
+	let countriesPayload: IEnumerationsPayload = {} as IEnumerationsPayload
+	try {
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX })
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES })
 
-			const response = await getReq('/api/b2b/admin/enums/countries', undefined, undefined, undefined, undefined, true)
-			const data: any[] = map(get(response, `data.${enumType}`, []), (item, index) => ({
-				key: index + 1,
-				...item
-			}))
+		const response = await getReq('/api/b2b/admin/enums/countries', undefined, undefined, undefined, undefined, true)
+		const data: any[] = map(get(response, 'data.countries', []), (item, index) => ({
+			key: index + 1,
+			...item
+		}))
 
-			enumerationsOptions = map(data, (item) => ({
+		const enumerationsPhonePrefixOptions: ISelectOptionItem[] = map(data, (item) => ({
+			key: item.code,
+			label: item.phonePrefix,
+			value: item.code,
+			flag: item.flag
+		}))
+
+		const countriesLabels = getTranslatedCountriesLabels()
+		// prepare countries list with translated label
+		const enumerationsCountriesOptions: ISelectOptionItem[] = map(data, (item) => {
+			const countryLabel: string | null = countriesLabels?.[item.code]
+			if (isEmpty(countryLabel)) {
+				// eslint-disable-next-line no-console
+				console.error(`Missing translation for country with code ${item.code}!`)
+			}
+			return {
 				key: item.code,
-				label: item.phonePrefix,
+				label: countryLabel || item.code,
 				value: item.code,
 				flag: item.flag
-			}))
-
-			payload = {
-				data,
-				enumerationsOptions,
-				pagination: get(response, 'data.pagination')
 			}
-			dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType, payload })
-		} catch (e) {
-			dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType })
+		})
+
+		countriesPhonePrefixPayload = {
+			data,
+			enumerationsOptions: enumerationsPhonePrefixOptions,
+			pagination: get(response, 'data.pagination')
 		}
-		return payload
+
+		countriesPayload = {
+			data,
+			enumerationsOptions: enumerationsCountriesOptions,
+			pagination: get(response, 'data.pagination')
+		}
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX, payload: { ...countriesPhonePrefixPayload } })
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.COUNTRIES, payload: { ...countriesPayload } })
+	} catch (e) {
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX })
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.COUNTRIES })
 	}
+	return { countriesPayload, countriesPhonePrefixPayload }
+}

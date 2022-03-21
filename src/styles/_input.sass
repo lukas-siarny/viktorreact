@@ -4,6 +4,37 @@
 .ant-form-item
 	.ant-input.noti-input
 		border-radius: 8px
+	// Vyhladavaci filter nad tabulami
+	.noti-input-filter
+		background-color: $backgroundColor-notino-grayLighter
+		border-radius: 8px
+		border: 1px solid $borderColor-notino-grayLight
+		.ant-input-suffix
+			display: none !important
+		input
+			color: $textColor-gray-900
+			background-color: $backgroundColor-notino-grayLighter
+			&::placeholder
+				color: $borderColor-notino-gray
+		&:hover
+			border: 1px solid $borderColor-notino-grayDark
+			background-color: $backgroundColor-notino-grayLight
+			.ant-input-suffix
+				display: flex !important
+			input
+				background-color: $backgroundColor-notino-grayLight
+		&.ant-input-affix-wrapper-focused
+			border: 1px solid $borderColor-notino-black
+			box-sizing: border-box
+			box-shadow: 0px 0px 0px 2px $field-shadow-focus-default
+			background-color: $backgroundColor-notino-white
+			input
+				background-color: $backgroundColor-notino-white
+			.ant-input-prefix
+				svg
+					color: $textColor-notino-black
+			.ant-input-suffix
+				display: flex !important
 
 .ant-form-item:not(.ant-form-item-has-error)
 	// Normal state

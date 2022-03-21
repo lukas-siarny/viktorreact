@@ -38,11 +38,11 @@ const ForgottenPasswordModal: FC<Props> = (props) => {
 				email: values.email
 			}
 
-			const res = await postReq('/api/b2b/admin/auth/forgot-password', null, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await postReq('/api/b2b/admin/auth/forgot-password', null, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			hideModal()
-			return res
 		} catch (e) {
-			return e
+			// eslint-disable-next-line no-console
+			console.log(e)
 		}
 	}
 

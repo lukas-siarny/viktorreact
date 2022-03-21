@@ -48,7 +48,8 @@ const LoginPage: FC<Props> = () => {
 	}
 
 	return (
-		<>
+		<div className='mt-16'>
+			<h3>{t('loc:Prihlásenie')}</h3>
 			<LoginForm onSubmit={handleLoginSubmit} showForgottenPasswordModal={() => setModalVisible(true)} />
 			<Modal
 				className='rounded-fields'
@@ -62,7 +63,7 @@ const LoginPage: FC<Props> = () => {
 			>
 				<ForgottenPasswordForm onSubmit={handleForgottenPassSubmit} />
 			</Modal>
-		</>
+		</div>
 	)
 }
 

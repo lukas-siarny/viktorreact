@@ -100,6 +100,8 @@ import docLogoPath from '../assets/icons/doc-icon.svg'
 import xlsLogoPath from '../assets/icons/xls-icon.svg'
 import unknownDocumentPath from '../assets/icons/unknown-document-icon.svg'
 
+import { Paths } from '../types/api'
+
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
 /**
@@ -396,4 +398,37 @@ export const getPrefixCountryCode = (options: string[], fallback: string) => {
 export function setIntervalImmediately(func: Function, interval: number) {
 	func()
 	return setInterval(func, interval)
+}
+
+export const getMaxSizeNotifMessage = (maxFileSize: any) => {
+	let notifMaxSize
+	if (maxFileSize >= 10 ** 6) {
+		notifMaxSize = [maxFileSize / 10 ** 6, 'MB']
+	} else {
+		notifMaxSize = [maxFileSize / 10 ** 3, 'KB']
+	}
+	return {
+		type: MSG_TYPE.ERROR,
+		message: i18next.t('loc:Súbor je príliš veľký (max. {{size}} {{unit}})', {
+			size: notifMaxSize[0],
+			unit: notifMaxSize[1]
+		})
+	}
+}
+
+// type SignedImgPayload = Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['signedUrls']
+// type ImgUploadData = { uid: string } & SignedImgPayload
+type ImgUploadData = { uid: string } & Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['signedUrls'][0]
+export type ImgUploadParam = { [key: string]: ImgUploadData }
+
+export const getImagesFormValues = (fileList: any, data: ImgUploadParam) => {
+	const values = map(fileList, (file) => {
+		return {
+			uid: get(file, 'uid'),
+			name: get(file, 'name'),
+			url: get(file, 'url') || data[get(file, 'uid')]?.url,
+			signedUrl: data[get(file, 'uid')]?.signedUrl
+		}
+	})
+	return values
 }

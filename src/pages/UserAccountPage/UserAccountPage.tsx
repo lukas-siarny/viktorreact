@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { initialize, submit } from 'redux-form'
-import { isEmpty } from 'lodash'
+import { isEmpty, get } from 'lodash'
 import cx from 'classnames'
 
 // components
@@ -45,7 +45,7 @@ const UserAccountPage: FC<Props> = (props) => {
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
 
 	const showDeleteBtn: boolean =
-		authUser.data?.id !== userAccountDetail.data?.id && checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE])
+		authUser.data?.id !== get(userAccountDetail, 'data.id') && checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE])
 
 	useEffect(() => {
 		dispatch(getCountries())
@@ -56,8 +56,8 @@ const UserAccountPage: FC<Props> = (props) => {
 
 	// init forms
 	useEffect(() => {
-		dispatch(initialize(FORM.USER_ACCOUNT_FORM, { ...userAccountDetail.data, ...userAccountDetail.data?.company }))
-	}, [userAccountDetail.data, dispatch])
+		dispatch(initialize(FORM.USER_ACCOUNT_FORM, { ...userAccountDetail.data, ...get(userAccountDetail, 'data.company') }))
+	}, [userAccountDetail, dispatch])
 
 	const handleUserAccountFormSubmit = async (data: any) => {
 		try {
@@ -103,9 +103,9 @@ const UserAccountPage: FC<Props> = (props) => {
 			{
 				name: t('loc:Detail používateľa'),
 				titleName:
-					userAccountDetail.data?.firstName && userAccountDetail.data?.lastName
-						? `${userAccountDetail.data?.firstName} ${userAccountDetail.data?.lastName}`
-						: userAccountDetail.data?.email
+					get(userAccountDetail, 'data.firstName') && get(userAccountDetail, 'data.lastName')
+						? `${get(userAccountDetail, 'data.firstName')} ${get(userAccountDetail, 'data.lastName')}`
+						: get(userAccountDetail, 'data.email')
 			}
 		]
 	}
@@ -141,7 +141,7 @@ const UserAccountPage: FC<Props> = (props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:users'))} />
 			</Row>
 			<div className='content-body small'>
-				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(userAccountDetail.data?.company)} />
+				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(get(userAccountDetail, 'data.company'))} />
 				<Row className={rowClass}>
 					{showDeleteBtn ? (
 						<DeleteButton

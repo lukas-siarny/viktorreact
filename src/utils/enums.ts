@@ -212,8 +212,8 @@ export enum REQ_TYPE {
 
 export enum TOKEN_AUDIENCE {
 	API = 'jwt-api',
-	FORGOTTEN_PASSWORD = 'jwt-forgotten-password',
-	INVITATION = 'jwt-invitation'
+	FORGOTTEN_PASSWORD = 'FORGOTTEN_PASSWORD',
+	INVITATION = 'INVITATION'
 }
 
 export enum PERSON_TYPE {

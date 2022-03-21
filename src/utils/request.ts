@@ -23,7 +23,7 @@ type GetUrls = {
 	[Q in FilteredKeys<PathsDictionary, { get: any }>]: PathsDictionary[Q]
 }
 
-type PostUrls = {
+export type PostUrls = {
 	[Q in FilteredKeys<PathsDictionary, { post: any }>]: PathsDictionary[Q]
 }
 
@@ -67,7 +67,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 	}
 }
 
-interface ICustomConfig extends AxiosRequestConfig {
+export interface ICustomConfig extends AxiosRequestConfig {
 	messages?: IErrorMessage[]
 }
 

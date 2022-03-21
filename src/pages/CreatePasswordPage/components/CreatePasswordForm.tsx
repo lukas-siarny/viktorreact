@@ -1,89 +1,60 @@
-import React, { PureComponent } from 'react'
-import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Form, Space } from 'antd'
-import { withTranslation, WithTranslation } from 'react-i18next'
-import { compose } from 'redux'
-import { connect, ConnectedProps } from 'react-redux'
-import { get } from 'lodash'
+import React, { FC } from 'react'
+import { Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { Button, Form, Row } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 // types
-import Progress from 'antd/es/progress/progress'
 import { ICreatePasswordForm } from '../../../types/interfaces'
-import { RootState } from '../../../reducers'
 
 // atoms
+import InputPasswordField from '../../../atoms/InputPasswordField'
 import InputField from '../../../atoms/InputField'
 
 // utils
 import { FORM } from '../../../utils/enums'
 
+// assets
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-16.svg'
+
 // validate
 // eslint-disable-next-line import/no-cycle
 import validateCreatePasswordForm from './validateCreatePasswordForm'
 
-const mapStateToProps = (state: RootState) => ({
-	formValues: getFormValues(FORM.CREATE_PASSWORD)(state)
-})
-
-const connector = connect(mapStateToProps)
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-export type ComponentProps = WithTranslation & PropsFromRedux
+type ComponentProps = {
+	showForgottenPasswordModal: () => void
+}
 
 type Props = InjectedFormProps<ICreatePasswordForm, ComponentProps> & ComponentProps
 
-class CreatePasswordForm extends PureComponent<Props> {
-	render() {
-		const { t, handleSubmit, formValues, submitting } = this.props
+const CreatePasswordForm: FC<Props> = (props) => {
+	const [t] = useTranslation()
+	const { handleSubmit, submitting, showForgottenPasswordModal } = props
 
-		const renderPercent = () => {
-			let percent = 0
-			if (get(formValues, 'password')) {
-				// 1 malé písmeno
-				if (/(?=.*[a-z])/.test(get(formValues, 'password'))) {
-					percent += 20
-				}
-				// 1 číslo
-				if (/(?=.*\d)/.test(get(formValues, 'password'))) {
-					percent += 20
-				}
-				// 1 veľké písmeno
-				if (/(?=.*[A-Z])/.test(get(formValues, 'password'))) {
-					percent += 20
-				}
-				// Aspon 8 znakov
-				if (get(formValues, 'password.length') >= 8) {
-					percent += 20
-				}
-				// 1 specialny znak
-				if (/(?=.*?([^\w\s]|[_]))/.test(get(formValues, 'password'))) {
-					percent += 20
-				}
-			}
-			return percent
-		}
-
-		return (
-			<Form layout='vertical' className={'create-password-form'} onSubmitCapture={handleSubmit}>
-				<Space className={'w-full'} direction='vertical' size={20}>
-					<h3>{t('loc:Obnova hesla')}</h3>
-					<Field component={InputField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte nové heslo')} name='password' type='password' required />
-					<Progress
-						percent={renderPercent()}
-						strokeColor={{
-							'0%': '#108ee9',
-							'100%': '#87d068'
-						}}
-					/>
-					<Field component={InputField} label={t('loc:Zopakujte heslo')} placeholder={t('loc:Zopakujte nové heslo')} type='password' name='confirmPassword' required />
-					<Button block size='large' type='primary' className={'noti-btn square'} htmlType='submit' disabled={submitting} loading={submitting}>
-						{t('loc:Vytvoriť heslo')}
-					</Button>
-				</Space>
-			</Form>
-		)
-	}
+	return (
+		<Form layout={'vertical'} className={'form h-full max-w-48 flex flex-col'} onSubmitCapture={handleSubmit}>
+			<h3>{t('loc:Nastavenie hesla')}</h3>
+			<Field
+				component={InputPasswordField}
+				label={t('loc:Heslo')}
+				placeholder={t('loc:Zadajte heslo')}
+				type={'password'}
+				size={'large'}
+				name={'password'}
+				tooltip={{ title: t('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'), icon: <InfoIcon /> }}
+			/>
+			<Field component={InputField} label={t('loc:Zopakujte heslo')} placeholder={t('loc:Zopakujte nové heslo')} name='confirmPassword' type='password' size={'large'} />
+			<Row justify={'end'} className=''>
+				<Button style={{ paddingRight: 0 }} className={'noti-btn text-notino-black'} onClick={showForgottenPasswordModal} type={'link'} htmlType={'button'}>
+					{t('loc:Vyžiadať nový odkaz pre nastavenie hesla')}
+				</Button>
+			</Row>
+			<div className='mt-auto'>
+				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+					{t('loc:Nastaviť heslo')}
+				</Button>
+			</div>
+		</Form>
+	)
 }
 
 const form = reduxForm<ICreatePasswordForm, ComponentProps>({
@@ -94,4 +65,4 @@ const form = reduxForm<ICreatePasswordForm, ComponentProps>({
 	validate: validateCreatePasswordForm
 })(CreatePasswordForm)
 
-export default withTranslation()(compose(connector)(form))
+export default form

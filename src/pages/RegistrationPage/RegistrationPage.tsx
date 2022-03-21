@@ -44,6 +44,7 @@ const RegistrationPage: FC<Props> = () => {
 			dispatch(reset(FORM.REGISTRATION))
 			return res
 		} catch (e) {
+			// eslint-disable-next-line no-console
 			console.log(e)
 			return e
 		}

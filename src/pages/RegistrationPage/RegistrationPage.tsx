@@ -20,11 +20,13 @@ import { IRegistrationForm } from '../../types/interfaces'
 // reducers
 import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
+// actions
+import { registerUser } from '../../reducers/users/userActions'
+
 type Props = {}
 
 const RegistrationPage: FC<Props> = () => {
 	const dispatch = useDispatch()
-	const [t] = useTranslation()
 
 	const handleSubmit = async (values: IRegistrationForm) => {
 		try {
@@ -38,12 +40,8 @@ const RegistrationPage: FC<Props> = () => {
 				agreeGTC: values.gtc
 			}
 
-			const res = await postReq('/api/b2b/admin/users/registration', null, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			const res = dispatch(registerUser(reqData))
 			dispatch(reset(FORM.REGISTRATION))
-			const { accessToken, refreshToken } = res.data
-			setAccessToken(accessToken)
-			setRefreshToken(refreshToken)
-			history.push(getPath(t('paths:home')))
 			return res
 		} catch (e) {
 			console.log(e)

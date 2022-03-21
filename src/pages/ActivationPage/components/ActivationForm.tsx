@@ -20,12 +20,12 @@ type ComponentProps = {}
 type Props = InjectedFormProps<IActivationForm, ComponentProps> & ComponentProps
 
 const ActivationForm: FC<Props> = (props) => {
-	const [t] = useTranslation()
+	const { t } = useTranslation()
 	const { handleSubmit, submitting, initialize } = props
 
 	useEffect(() => {
 		initialize({ code: undefined })
-	})
+	}, [initialize])
 
 	return (
 		<Form onSubmitCapture={handleSubmit}>

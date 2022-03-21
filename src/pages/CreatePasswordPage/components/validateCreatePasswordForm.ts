@@ -18,7 +18,7 @@ export default (values: ICreatePasswordForm) => {
 	}
 
 	if (get(values, 'password') && get(values, 'confirmPassword') && get(values, 'password') !== get(values, 'confirmPassword')) {
-		errors.confirmPassword = i18next.t('loc:Hesla sa nezhodujú')
+		errors.confirmPassword = i18next.t('loc:Heslá sa nezhodujú')
 	}
 
 	if (values.password && !passwordRegEx.test(values.password)) {

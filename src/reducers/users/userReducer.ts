@@ -1,9 +1,9 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
-import { IUserActions, IAuthUserPayload, IUserPayload } from './userActions'
+import { IUserActions, IAuthUserPayload, IUserPayload, IUsersPayload } from './userActions'
 // eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { AUTH_USER, USER } from './userTypes'
+import { AUTH_USER, USERS, USER } from './userTypes'
 
 export const initState = {
 	authUser: {
@@ -15,7 +15,12 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as IUserPayload & ILoadingAndFailure
+	} as IUserPayload & ILoadingAndFailure,
+	users: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IUsersPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -68,6 +73,31 @@ export default (state = initState, action: IUserActions) => {
 				...state,
 				user: {
 					...initState.user,
+					data: action.payload.data
+				}
+			}
+		// Users
+		case USERS.USERS_LOAD_START:
+			return {
+				...state,
+				users: {
+					...state.users,
+					isLoading: true
+				}
+			}
+		case USERS.USERS_LOAD_FAIL:
+			return {
+				...state,
+				users: {
+					...initState.users,
+					isFailure: true
+				}
+			}
+		case USERS.USERS_LOAD_DONE:
+			return {
+				...state,
+				users: {
+					...initState.users,
 					data: action.payload.data
 				}
 			}

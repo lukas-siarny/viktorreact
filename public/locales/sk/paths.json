@@ -5,5 +5,8 @@
   "login": "/auth/login",
   "my-account": "/my-account",
   "reset-password": "/auth/reset-password",
-  "signup": "/auth/signup"
+  "signup": "/auth/signup",
+  "user-detail/{{userID}}": "/user-detail/{{userID}}",
+  "user/create": "/user/create",
+  "users": "/users"
 }

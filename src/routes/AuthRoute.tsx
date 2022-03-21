@@ -1,9 +1,9 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Redirect, RouteProps } from 'react-router-dom'
 import IdleTimer from 'react-idle-timer'
 import { Dictionary } from 'lodash'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // routes
 import BaseRoute from './BaseRoute'
@@ -15,6 +15,7 @@ import { RootState } from '../reducers'
 import { isLoggedIn } from '../utils/auth'
 import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
 import { getPath } from '../utils/history'
+import { getCurrentUser } from '../reducers/users/userActions'
 
 type Props = RouteProps & {
 	layout: React.ReactNode
@@ -36,8 +37,13 @@ const onIdle = () => {
 const AuthRoute: FC<Props> = (props) => {
 	const { page } = props
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const currentUser = useSelector((state: RootState) => state.user.authUser)
 	const isActivated = currentUser.data?.activateAt
+
+	useEffect(() => {
+		dispatch(getCurrentUser())
+	}, [dispatch])
 
 	if (!isLoggedIn()) {
 		return <Redirect to={getPath(t('paths:login'))} />

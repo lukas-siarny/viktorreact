@@ -424,8 +424,7 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 		const fileData = filesData[get(file, 'uid')]
 
 		return {
-			uid: get(file, 'uid'),
-			name: get(file, 'name'),
+			...file,
 			url: get(file, 'url') || fileData?.path,
 			signedUrl: fileData?.signedUrl
 		}

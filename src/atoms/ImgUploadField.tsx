@@ -9,6 +9,7 @@ import { FormItemProps } from 'antd/lib/form/FormItem'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
+import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
 
 // utils
 import { uploadFile, postReq } from '../utils/request'
@@ -53,6 +54,7 @@ const ImgUploadField: FC<Props> = (props) => {
 	const imagesUrls = useRef<ImgUploadParam>({})
 	const [previewUrl, setPreviewUrl] = useState('')
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
+		console.log(info.file.status)
 		if (info.file.status === 'error') {
 			showNotifications([{ type: MSG_TYPE.ERROR, message: info.file.error.message }], NOTIFICATION_TYPE.NOTIFICATION)
 		}
@@ -61,6 +63,7 @@ const ImgUploadField: FC<Props> = (props) => {
 			input.onChange(values)
 		}
 		if (info.file.status === 'uploading') {
+
 			input.onChange(info.fileList)
 		}
 		if (isEmpty(info.fileList)) {
@@ -131,7 +134,7 @@ const ImgUploadField: FC<Props> = (props) => {
 		<Item className='w-full' label={label} required={required} help={touched && error ? error : undefined} validateStatus={touched && error ? 'error' : undefined}>
 			{staticMode && !input.value && '-'}
 			{uploader}
-			<Modal visible={!!previewUrl} onCancel={() => setPreviewUrl('')} footer={null}>
+			<Modal visible={!!previewUrl} onCancel={() => setPreviewUrl('')} footer={null} closeIcon={<CloseIcon />}>
 				<img key={previewUrl} className={'w-full'} src={previewUrl} alt='preview' />
 			</Modal>
 		</Item>

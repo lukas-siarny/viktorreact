@@ -11,7 +11,7 @@ import { FormItemProps } from 'antd/lib/form/FormItem'
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 
 // utils
-import { uploadFile, getSignedImgUrl, postReq } from '../utils/request'
+import { uploadFile, postReq } from '../utils/request'
 import { getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
 import { MSG_TYPE, NOTIFICATION_TYPE } from '../utils/enums'
@@ -41,7 +41,7 @@ const ImgUploadField: FC<Props> = (props) => {
 		required,
 		meta: { error, touched },
 		staticMode,
-		accept = 'image/jpeg',
+		accept = 'image/jpeg,image/png',
 		maxFileSize,
 		disabled,
 		sighUrl,
@@ -50,15 +50,14 @@ const ImgUploadField: FC<Props> = (props) => {
 	} = props
 
 	const [t] = useTranslation()
-	const amazonS3Urls = useRef<ImgUploadParam>({})
+	const imagesUrls = useRef<ImgUploadParam>({})
 	const [previewUrl, setPreviewUrl] = useState('')
-
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
 			showNotifications([{ type: MSG_TYPE.ERROR, message: info.file.error.message }], NOTIFICATION_TYPE.NOTIFICATION)
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
-			const values = getImagesFormValues(info.fileList, amazonS3Urls.current)
+			const values = getImagesFormValues(info.fileList, imagesUrls.current)
 			input.onChange(values)
 		}
 		if (info.file.status === 'uploading') {
@@ -79,16 +78,12 @@ const ImgUploadField: FC<Props> = (props) => {
 
 	const handleAction = async (file: any) => {
 		const { uid, name, size, type } = file
-		// const { signedUrl = '', fileUrl = '' } = await getSignedImgUrl(sighUrl, file)
-		// amazonS3Urls.current[uid] = fileUrl
-		// return signedUrl
-
 		const files = [{ name, size, mimeType: type }]
+
 		const { data } = await postReq(sighUrl as any, undefined, { files })
 		const imgData = data?.files?.[0]
-		amazonS3Urls.current[uid] = { uid, ...imgData }
-		console.log(data)
-		console.log(amazonS3Urls.current)
+		imagesUrls.current[uid] = { uid, ...imgData }
+
 		return imgData.signedUrl
 	}
 
@@ -103,7 +98,7 @@ const ImgUploadField: FC<Props> = (props) => {
 			multiple={multiple}
 			customRequest={uploadFile}
 			fileList={input.value || []}
-			onPreview={(file) => setPreviewUrl(file.url || amazonS3Urls.current?.[file.uid]?.url)}
+			onPreview={(file) => setPreviewUrl(file.url || imagesUrls.current?.[file.uid]?.url)}
 			maxCount={maxCount}
 			showUploadList={showUploadList}
 			beforeUpload={(file, fileList) => {

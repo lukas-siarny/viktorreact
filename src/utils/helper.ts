@@ -416,18 +416,18 @@ export const getMaxSizeNotifMessage = (maxFileSize: any) => {
 	}
 }
 
-// type SignedImgPayload = Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['signedUrls']
-// type ImgUploadData = { uid: string } & SignedImgPayload
 type ImgUploadData = { uid: string } & Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['signedUrls'][0]
 export type ImgUploadParam = { [key: string]: ImgUploadData }
 
-export const getImagesFormValues = (fileList: any, data: ImgUploadParam) => {
+export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) => {
 	const values = map(fileList, (file) => {
+		const fileData = filesData[get(file, 'uid')]
+
 		return {
 			uid: get(file, 'uid'),
 			name: get(file, 'name'),
-			url: get(file, 'url') || data[get(file, 'uid')]?.url,
-			signedUrl: data[get(file, 'uid')]?.signedUrl
+			url: get(file, 'url') || fileData?.url,
+			signedUrl: fileData?.signedUrl
 		}
 	})
 	return values

@@ -401,12 +401,11 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		return Promise.reject(e)
 	}
 }
-const awsS3Axios = axios.create()
 export const uploadFile = async (options: any) => {
 	const { action, file, onSuccess, onError } = options
 
 	try {
-		const data = await awsS3Axios.put(action, file, {
+		const data = await axios.put(action, file, {
 			headers: {
 				'Content-Type': file.type
 			}
@@ -415,16 +414,4 @@ export const uploadFile = async (options: any) => {
 	} catch (error) {
 		onError(error)
 	}
-}
-
-export const getSignedImgUrl = async (sighUrl: string, file: any) => {
-	const files = [
-		{
-			name: file.name,
-			size: file.size,
-			mimeType: file.type
-		}
-	]
-	const { data } = await postReq(sighUrl as any, undefined, { files })
-	return data
 }

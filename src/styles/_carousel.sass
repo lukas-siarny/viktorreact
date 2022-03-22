@@ -7,6 +7,8 @@ $dotSize: 8px
     height: 100%
     .slick-slider
         height: 100%
+        .slick-list
+            height: 100%
 
     .slick-dots-bottom.slick-dots
         margin: 0
@@ -26,6 +28,7 @@ $dotSize: 8px
             button
                 background: $backgroundColor-trueGray-500
 
-    .content-wrapper
+    .carousel-content
         display: flex !important
-        height: calc(100vh - (2 * #{$simple-layout-left-inner-padding}))
+        & > img
+            max-height: 446px

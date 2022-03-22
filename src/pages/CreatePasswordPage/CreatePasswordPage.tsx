@@ -1,47 +1,42 @@
-import React, { Component } from 'react'
-import { withTranslation, WithTranslation } from 'react-i18next'
-import { compose } from 'redux'
-import { get } from 'lodash'
-import qs from 'qs'
-import { RouteProps } from 'react-router-dom'
+import React, { FC, useState } from 'react'
+import { useDispatch } from 'react-redux'
 
 // components
 import CreatePasswordForm from './components/CreatePasswordForm'
+import ForgottenPasswordModal from '../../components/ForgottenPassword/ForgottenPasswordModal'
+
 // inteerfaces
 import { ICreatePasswordForm } from '../../types/interfaces'
 
-// utils
-import { history } from '../../utils/history'
-import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE } from '../../utils/enums'
+// actions
+import { resetPassword } from '../../reducers/users/userActions'
 
-type Props = WithTranslation & RouteProps
+type Props = {
+	token: string
+}
 
-class CreatePasswordPage extends Component<Props> {
-	handleSubmit = async (values: ICreatePasswordForm) => {
+const CreatePasswordPage: FC<Props> = (props) => {
+	const [modalVisible, setModalVisible] = useState(false)
+	const dispatch = useDispatch()
+
+	const handleSubmit = async (values: ICreatePasswordForm) => {
 		try {
 			const data = {
-				password: get(values, 'password')
-			}
-			const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
-
-			const headers = {
-				Authorization: `Bearer ${t}`
+				password: values.confirmPassword
 			}
 
-			const res = await postReq('/api/v1/authorization/reset-password', undefined, data, { headers }, NOTIFICATION_TYPE.NOTIFICATION, true)
-
-			history.push(this.props.t('paths:prihlasenie'))
-
-			return res
+			return dispatch(resetPassword(data, props.token))
 		} catch (e) {
 			return e
 		}
 	}
 
-	render() {
-		return <CreatePasswordForm onSubmit={this.handleSubmit} />
-	}
+	return (
+		<>
+			<CreatePasswordForm onSubmit={handleSubmit} showForgottenPasswordModal={() => setModalVisible(true)} />
+			{modalVisible && <ForgottenPasswordModal visible={modalVisible} onClose={() => setModalVisible(false)} />}
+		</>
+	)
 }
 
-export default compose(withTranslation())(CreatePasswordPage)
+export default CreatePasswordPage

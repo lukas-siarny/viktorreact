@@ -55,9 +55,10 @@ export type Props = {
 	itemRef?: any
 	autoBlur?: boolean
 	readOnly?: boolean
-	disableTpStyles?: boolean // Vypne styly ktore dava classa tp-input ked je potrebne (obrazovka /vyhladavanie vo filtroch su pouzite ine styly pre selecty z global)
+	disableTpStyles?: boolean // Vypne styly ktore dava classa noti-input ked je potrebne (obrazovka /vyhladavanie vo filtroch su pouzite ine styly pre selecty z global)
 	disableMenuItemSelectedIcon?: boolean // niekedy tuto ikonu renderujeme nie cez propu ale cez position absolute a vtedy by sa tu dve zobrazovali lebo je || SearchIcon (vo filtroch pre vyhladavanie)
 	onSelect?: (opt: any, option: any, value: any) => any
+	optionRender?: any // custom render for item(option)
 } & WrappedFieldProps &
 	SelectProps<any> &
 	FormItemProps
@@ -113,7 +114,7 @@ export default class SelectField extends PureComponent<Props> {
 				<div className={'w-11/12 m-auto'}>{divider}</div>
 				{map(actions, (item, index) => (
 					<div className={'flex items-center h-12'} key={index}>
-						<Button key={item.title} type='link' size={'large'} htmlType='button' className={'tp-btn'} icon={item.icon || <PlusIcon />} onClick={item.onAction}>
+						<Button key={item.title} type='link' size={'large'} htmlType='button' className={'noti-btn'} icon={item.icon || <PlusIcon />} onClick={item.onAction}>
 							{item.title}
 						</Button>
 					</div>
@@ -313,7 +314,8 @@ export default class SelectField extends PureComponent<Props> {
 			fieldMode = FIELD_MODE.INPUT,
 			readOnly,
 			disableTpStyles = false,
-			autoFocus
+			autoFocus,
+			optionRender
 		} = this.props
 		const { fetching, data } = this.state
 
@@ -329,11 +331,11 @@ export default class SelectField extends PureComponent<Props> {
 		let suffIcon
 		if (!loading && !fetching) {
 			if (showSearch && !suffixIcon) {
-				suffIcon = <ArrowIcon className={'text-blue-600'} />
+				suffIcon = <ArrowIcon className={'text-notino-black'} />
 			} else if (suffixIcon) {
 				suffIcon = suffixIcon
 			} else {
-				suffIcon = <ArrowIcon className={'text-blue-600'} />
+				suffIcon = <ArrowIcon className={'text-notino-black'} />
 			}
 		}
 
@@ -342,7 +344,7 @@ export default class SelectField extends PureComponent<Props> {
 
 		const contentOpts = map(opt, (option) => (
 			<Option key={option.key} value={option.value} disabled={option.disabled} label={option.label} extra={option.extra}>
-				{option.label}
+				{optionRender ? optionRender(option) : option.label}
 			</Option>
 		))
 
@@ -386,7 +388,7 @@ export default class SelectField extends PureComponent<Props> {
 				<Select
 					bordered={bordered}
 					style={{ backgroundColor }}
-					className={cx({ 'tp-select-input': !disableTpStyles, rounded: backgroundColor, 'filter-select': fieldMode === FIELD_MODE.FILTER })}
+					className={cx({ 'noti-select-input': !disableTpStyles, rounded: backgroundColor, 'filter-select': fieldMode === FIELD_MODE.FILTER })}
 					tagRender={tagRender}
 					mode={mode}
 					{...input}
@@ -419,7 +421,7 @@ export default class SelectField extends PureComponent<Props> {
 					onSelect={this.onSelectWrap}
 					showArrow={showArrow}
 					menuItemSelectedIcon={renderMenuItemSelectedIcon()}
-					dropdownClassName={cx(`tp-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
+					dropdownClassName={cx(`noti-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
 					dropdownStyle={dropdownStyle}
 					dropdownMatchSelectWidth={dropdownMatchSelectWidth}
 					listHeight={listHeight}

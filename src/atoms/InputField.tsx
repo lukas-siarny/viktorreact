@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef, useEffect } from 'react'
 import { Form, Input } from 'antd'
 import cx from 'classnames'
 import { WrappedFieldProps } from 'redux-form'
@@ -21,6 +21,7 @@ type Props = WrappedFieldProps &
 		hideHelp?: boolean
 		rounded?: boolean
 		fieldMode?: FIELD_MODE
+		focused?: boolean
 	}
 
 const InputField = (props: Props) => {
@@ -43,8 +44,19 @@ const InputField = (props: Props) => {
 		className,
 		customOnChange,
 		allowClear,
-		suffix
+		suffix,
+		addonBefore,
+		focused
 	} = props
+
+	const inputRef = useRef<any>(null)
+
+	useEffect(() => {
+		if (inputRef.current && focused) {
+			inputRef.current.focus()
+		}
+	}, [focused])
+
 	const onChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
 			// NOTE: prevent to have "" empty string as empty value
@@ -92,9 +104,10 @@ const InputField = (props: Props) => {
 			<Input
 				{...input}
 				id={formFieldID(form, input.name)}
-				className={cx('tp-input', { 'tp-input-filter': fieldMode === FIELD_MODE.FILTER })}
+				className={cx('noti-input', { 'noti-input-filter': fieldMode === FIELD_MODE.FILTER })}
 				onChange={onChange}
 				onBlur={onBlur}
+				addonBefore={addonBefore}
 				size={size || 'middle'}
 				onFocus={onFocus}
 				value={input.value}
@@ -111,6 +124,7 @@ const InputField = (props: Props) => {
 				prefix={fieldMode === FIELD_MODE.FILTER ? <SearchIcon /> : prefix}
 				disabled={disabled}
 				maxLength={maxLength}
+				ref={inputRef}
 			/>
 		</Item>
 	)

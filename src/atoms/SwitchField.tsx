@@ -19,6 +19,7 @@ type Props = WrappedFieldProps &
 		offsetLabel?: boolean
 		extraText?: any
 		description?: string // text ktory sa zobrazi v tooltipe pri prilozeni na ikonu, ktory moze niekedy dodefinovat dany switch (eg. doplnkove sluzby)
+		customLabel?: any
 	}
 
 const SwitchField = (props: Props) => {
@@ -35,7 +36,8 @@ const SwitchField = (props: Props) => {
 		suffixIcon,
 		extraText,
 		description,
-		offsetLabel
+		offsetLabel,
+		customLabel
 	} = props
 	// NOTE: ak existuje label znamena to ze switch je pouzity ako label vo forme a vtedy sa pouzije novy layout ikona + label text + switch
 	// Ak nie je label pouzite je v tabulke alebo vo filtri a vtedy sa nerenderuje label ani ikona ale len samotny switch field
@@ -50,9 +52,9 @@ const SwitchField = (props: Props) => {
 
 	return (
 		<Item help={touched && error} validateStatus={error && touched ? 'error' : undefined} style={style} className={cx(className, { 'pt-25px': offsetLabel })}>
-			{label ? (
+			{label || customLabel ? (
 				<div
-					className={cx('tp-switch', { 'pointer-events-none': disabled, 'bg-gray-50': disabled })}
+					className={cx('noti-switch', { 'pointer-events-none': disabled, 'bg-gray-50': disabled })}
 					onClick={() => {
 						onChange(!checkedState)
 					}}
@@ -66,10 +68,12 @@ const SwitchField = (props: Props) => {
 					tabIndex={0}
 				>
 					<div className={'flex items-center justify-between w-full'}>
-						<div className={'flex items-center w-8/12'}>
-							<Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} className={'label'}>
-								{label}
-							</Typography.Paragraph>
+						<div className={'noti-switch__label flex items-center w-8/12'}>
+							{customLabel || (
+								<Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} className={'label'}>
+									{label}
+								</Typography.Paragraph>
+							)}
 							{description && (
 								<Tooltip title={description} className={'cursor-pointer'}>
 									{suffixIcon || <InfoIcon className={'text-blue-600'} />}

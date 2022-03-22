@@ -12,6 +12,7 @@ import { ILoginForm } from '../../../types/interfaces'
 
 // utils
 import { FORM } from '../../../utils/enums'
+import { getPath } from '../../../utils/history'
 
 // validate
 // eslint-disable-next-line import/no-cycle
@@ -35,19 +36,17 @@ const LoginForm: FC<Props> = (props) => {
 				<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} />
 			</Space>
 			<Row justify={'end'} className=''>
-				{/* <Link to={t('paths:zabudnute-heslo') as string}> */}
 				<Button style={{ paddingRight: 0 }} className={'noti-btn text-notino-black'} onClick={showForgottenPasswordModal} type={'link'} htmlType={'button'}>
 					{t('loc:Zabudnuté heslo')}
 				</Button>
-				{/* </Link> */}
 			</Row>
-			<div className='absolute bottom-0 left-0 right-0'>
+			<div className='mt-6'>
 				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Prihlásiť sa')}
 				</Button>
 				<span className='table m-auto text-notino-black'>
 					{t('loc:Ešte nemáte účet?')}
-					<Link to={t('paths:registracia') as string} className='inline-block'>
+					<Link to={getPath(t('paths:signup'))} className='inline-block'>
 						<Button style={{ paddingRight: 0 }} type={'link'} htmlType={'button'}>
 							{t('loc:Registrovať sa')}
 						</Button>

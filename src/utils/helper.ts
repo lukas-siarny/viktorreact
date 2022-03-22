@@ -36,7 +36,8 @@ import {
 	times,
 	toNumber,
 	uniq,
-	chain
+	chain,
+	lowerCase
 } from 'lodash'
 import countryCodeList from 'flagpack-core/countryCodeList.json'
 import slugify from 'slugify'
@@ -55,7 +56,6 @@ import {
 	DEFAULT_TIME_FORMAT,
 	DEPARTURE_SHIFT,
 	DEPARTURE_SHIFTS,
-	DESTINATION_SEASON_GENERAL_SERVICE,
 	DISCOUNT_VALUE_TYPE,
 	EMPTY_FILTER_ROOM,
 	EXPIRATION_TYPE,
@@ -66,12 +66,10 @@ import {
 	GLOBAL_DISCOUNT_TYPE,
 	INVALID_DATE_FORMAT,
 	LINE_DIRECTION,
-	LINE_TYPE,
 	MSG_TYPE,
 	PERMISSION,
 	PERSON_TYPE,
 	PERSON_TYPE_INFANT,
-	PRICELIST_ITEM_CATEGORY,
 	PRICELIST_ITEM_TIME_RELATION,
 	PRICELIST_ITEM_TIME_RELATIONS,
 	PRICELIST_ITEM_UNIT_RELATION,
@@ -83,14 +81,11 @@ import {
 	PUBLICATION_STATUS,
 	PUBLICATION_STATUSES,
 	QUERY_LIMIT,
-	ROOM_TYPE,
-	SERVICE_PRICELIST_ITEM_TYPE,
 	SUBMENU_PARENT,
 	TEXT_TEMPLATE_TYPE,
 	TEXT_TEMPLATE_TYPES,
 	TRAVELER_ROLE,
 	TRAVELER_ROLES,
-	UNIT_TEMPLATE_TYPE,
 	UPLOAD,
 	UPLOAD_ERROR_TYPE,
 	WEB_PROJECT_CODE,
@@ -104,8 +99,6 @@ import pdfLogoPath from '../assets/icons/pdf-icon.svg'
 import docLogoPath from '../assets/icons/doc-icon.svg'
 import xlsLogoPath from '../assets/icons/xls-icon.svg'
 import unknownDocumentPath from '../assets/icons/unknown-document-icon.svg'
-
-import { UserPermission } from '../reducers/users/userActions'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -384,4 +377,23 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 			})
 		}
 	}
+}
+
+export const getPrefixCountryCode = (options: string[], fallback: string) => {
+	const locale = split(lowerCase(i18next.language), '-')
+	const language = locale[1] || locale[0]
+	let prefix = fallback
+
+	some(options, (item) => {
+		if (!includes(language, lowerCase(item))) return false
+		prefix = item
+		return true
+	})
+
+	return prefix
+}
+
+export function setIntervalImmediately(func: Function, interval: number) {
+	func()
+	return setInterval(func, interval)
 }

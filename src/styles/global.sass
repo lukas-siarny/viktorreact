@@ -1,10 +1,17 @@
 @import tailwind-variables
 @import "variables"
 @import "typography"
+@import "input"
+@import "modal"
+@import "select"
 @import "layout"
 @import "carousel"
 @import "form"
 @import "button"
+@import "table"
+@import "pin"
+@import "pagination"
+@import "breadcrumbs"
 
 $searchProductTop: 166px
 
@@ -125,7 +132,7 @@ body, .ant-layout
 	background-color: $textColor-primary
 	color: $textColor-white
 
-.tp-badge .ant-badge-count
+.noti-badge .ant-badge-count
 	display: flex
 	justify-content: center
 	background-color: $backgroundColor-gray-100
@@ -136,11 +143,11 @@ body, .ant-layout
 	border-left: 1px solid #d9d9d9 !important
 .readOnly
 	cursor: not-allowed
-	.tp-select-input,
-	.tp-input,
-	.tp-textarea,
-	.tp-date-input,
-	.tp-input-number
+	.noti-select-input,
+	.noti-input,
+	.noti-textarea,
+	.noti-date-input,
+	.noti-input-number
 		pointer-events: none
 .clickable-row
 	cursor: pointer
@@ -539,6 +546,9 @@ h4.ant-typography
 	display: flex
 	justify-content: center
 	align-items: center
+
+	.ant-spin-dot-item
+		background-color: $backgroundColor-notino-black
 // Pages
 .separator
 	border-right: 1px solid #d6d4d4 !important
@@ -1005,8 +1015,3 @@ td.ant-table-cell.track
 		.ant-collapse-content
 			.ant-collapse-content-box
 				padding: 24px
-
-
-.notino-ad-banner
-	max-width: calc(50vw - (2 * #{$simple-layout-left-inner-padding})
-	max-height: calc(100vh - 17rem) // TODO

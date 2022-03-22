@@ -51,7 +51,7 @@ const RawInput = (props: Props) => {
 			<Input
 				ref={inputRef}
 				style={style || { width: '100%' }}
-				className={cx('tp-input', { className, readOnly })}
+				className={cx('noti-input', { className, readOnly })}
 				size={size || 'middle'}
 				value={textData}
 				placeholder={placeholder}

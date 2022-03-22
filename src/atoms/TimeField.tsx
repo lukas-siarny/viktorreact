@@ -79,8 +79,8 @@ class TimeField extends React.Component<Props> {
 						onChange={this.onClear}
 						format={timeFormat}
 						value={value}
-						className={'tp-date-input tp-time-input'}
-						popupClassName={popupClassName || 'tp-time-dropdown'}
+						className={'noti-date-input noti-time-input'}
+						popupClassName={popupClassName || 'noti-time-dropdown'}
 						suffixIcon={<TimerIcon className={'text-blue-600'} />}
 						placeholder={placeholder}
 						disabled={disabled}

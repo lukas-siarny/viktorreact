@@ -10,9 +10,13 @@ declare namespace Paths {
     namespace DeleteApiB2BAdminEnumsCategoriesCategoryId {
         namespace Parameters {
             export type CategoryID = number;
+            export type Restore = boolean;
         }
         export interface PathParameters {
             categoryID: Parameters.CategoryID;
+        }
+        export interface QueryParameters {
+            restore: Parameters.Restore;
         }
         namespace Responses {
             export interface $200 {
@@ -47,7 +51,38 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                salon?: {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BAdminServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -91,13 +126,79 @@ declare namespace Paths {
     namespace DeleteApiB2BV1EnumsCategoriesCategoryId {
         namespace Parameters {
             export type CategoryID = number;
+            export type Restore = boolean;
         }
         export interface PathParameters {
             categoryID: Parameters.CategoryID;
         }
+        export interface QueryParameters {
+            restore: Parameters.Restore;
+        }
         namespace Responses {
             export interface $200 {
                 category: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BV1SalonsSalonId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -289,6 +390,7 @@ declare namespace Paths {
                     }[];
                     isPublished: boolean;
                     isVisible: boolean;
+                    fillingProgress: number;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -396,6 +498,11 @@ declare namespace Paths {
                             ];
                         }[]
                     ];
+                    openingHoursNote?: {
+                        note: string;
+                        validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        validTo: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    };
                     address: {
                         city: string;
                         street: string;
@@ -417,25 +524,121 @@ declare namespace Paths {
                     }[];
                     isPublished: boolean;
                     isVisible: boolean;
+                    fillingProgress: number;
                     user: {
                         id: number;
                         name: string;
                     };
-                    image: {
+                    images: {
                         id: number;
                         url: string;
-                    };
+                    }[];
                     logo?: {
-                        id: number;
-                        url: string;
-                    };
-                    aboutUsImage?: {
                         id: number;
                         url: string;
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryID = number;
+            export type EmployeeID = number;
+            export type SalonID = number;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            categoryID?: Parameters.CategoryID;
+            employeeID?: Parameters.EmployeeID;
+            salonID?: Parameters.SalonID;
+        }
+        namespace Responses {
+            export interface $200 {
+                services: {
+                    id: number;
+                    name: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                    employees: {
+                        id: number;
+                        name: string;
+                    }[];
+                    category: {
+                        id: number;
+                        name: string;
+                        children: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BAdminServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: number;
+                    name: string;
+                    description?: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                    employees: {
+                        id: number;
+                        name: string;
+                    }[];
+                    category: {
+                        id: number;
+                        name: string;
+                        children: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                    images: {
+                        id: number;
+                        fullURL: string;
+                    }[];
                 };
             }
         }
@@ -653,6 +856,540 @@ declare namespace Paths {
                     code: string;
                     symbol: string;
                 }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1Salons {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                salons: {
+                    id: number;
+                    name: string;
+                    fillingProgress: number;
+                    images: {
+                        id: number;
+                        fullPath: string;
+                    }[];
+                    logo?: {
+                        id: number;
+                        fullPath: string;
+                    };
+                    address: {
+                        street: string;
+                        city: string;
+                        countryCode: string;
+                        latitude: number; // float
+                        longitude: number; // float
+                    };
+                    categories: {
+                        id: number;
+                        name: string;
+                    }[];
+                    isPublished: boolean;
+                    isVisible: boolean;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1SalonsPreview {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                    fillingProgress: number;
+                    categorySegment?: {
+                        categories: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                    gallerySeqment?: {
+                        images: {
+                            id: number;
+                            fullPath: string;
+                        }[];
+                        logo?: {
+                            id: number;
+                            fullPath: string;
+                        };
+                    };
+                    nameSegment?: {
+                        name: string;
+                    };
+                    openingHoursSegment?: {
+                        openingHours: [
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            }
+                        ];
+                        openingHoursNote?: {
+                            note: string;
+                            validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        };
+                    };
+                    aboutUsSegment?: {
+                        aboutUsFirst?: string;
+                        aboutUsSecond?: string;
+                    };
+                    contactInfoSegment?: {
+                        countryCode: string;
+                        city: string;
+                        street: string;
+                        latitude: number; // float
+                        longitude: number; // float
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        email: string;
+                        socialLinkFB?: string;
+                        socialLinkInstagram?: string;
+                        socialLinkWebPage?: string;
+                    };
+                    paymentSegment?: {
+                        payByCard: boolean;
+                        otherPaymentMethods?: string;
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2BV1SalonsSalonId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                    fillingProgress: number;
+                    categorySegment?: {
+                        categories: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                    gallerySeqment?: {
+                        images: {
+                            id: number;
+                            fullPath: string;
+                        }[];
+                        logo?: {
+                            id: number;
+                            fullPath: string;
+                        };
+                    };
+                    nameSegment?: {
+                        name: string;
+                    };
+                    openingHoursSegment?: {
+                        openingHours: [
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            }
+                        ];
+                        openingHoursNote?: {
+                            note: string;
+                            validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        };
+                    };
+                    aboutUsSegment?: {
+                        aboutUsFirst?: string;
+                        aboutUsSecond?: string;
+                    };
+                    contactInfoSegment?: {
+                        countryCode: string;
+                        city: string;
+                        street: string;
+                        latitude: number; // float
+                        longitude: number; // float
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        email: string;
+                        socialLinkFB?: string;
+                        socialLinkInstagram?: string;
+                        socialLinkWebPage?: string;
+                    };
+                    paymentSegment?: {
+                        payByCard: boolean;
+                        otherPaymentMethods?: string;
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2BV1Services {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryID = number;
+            export type EmployeeID = number;
+            export type SalonID = number;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            categoryID?: Parameters.CategoryID;
+            employeeID?: Parameters.EmployeeID;
+            salonID?: Parameters.SalonID;
+        }
+        namespace Responses {
+            export interface $200 {
+                services: {
+                    id: number;
+                    name: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                    employees: {
+                        id: number;
+                        name: string;
+                    }[];
+                    category: {
+                        id: number;
+                        name: string;
+                        children: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: number;
+                    name: string;
+                    description?: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                    employees: {
+                        id: number;
+                        name: string;
+                    }[];
+                    category: {
+                        id: number;
+                        name: string;
+                        children: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                    images: {
+                        id: number;
+                        fullURL: string;
+                    }[];
+                };
+            }
+        }
+    }
+    namespace GetApiB2BV1UsersPartners {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Limit = 25 | 50 | 100;
+            export type Page = number;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                users: {
+                    id: number;
+                    email: string;
+                    fullName?: string;
+                    companyName?: string;
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
             }
         }
     }
@@ -913,21 +1650,166 @@ declare namespace Paths {
              * example:
              * 1
              */
-            imageID: number;
+            imageIDs: [
+                number,
+                ...number[]
+            ];
             /**
              * example:
              * 1
              */
             logoID?: null | number;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdOpenHoursNote {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            openingHoursNote: {
+                note: string;
+                validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                validTo: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            } | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdPublish {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            publish: boolean;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Služba 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            description?: string | null;
+            /**
+             * example:
+             * 10
+             */
+            durationFrom: number;
+            /**
+             * example:
+             * 10
+             */
+            durationTo?: null | number;
+            /**
+             * example:
+             * 10
+             */
+            priceFrom: number; // float
+            /**
+             * example:
+             * 10
+             */
+            priceTo?: number | null; // float
             /**
              * example:
              * 1
              */
-            aboutUsImageID?: null | number;
+            salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryID: number;
+            employeeIDs?: number[];
+            imageIDs?: number[] | null;
         }
         namespace Responses {
             export interface $200 {
-                salon?: {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -1067,6 +1949,488 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 category: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            categorySegment?: {
+                categoryIDs: [
+                    number,
+                    ...number[]
+                ];
+            };
+            gallerySeqment?: {
+                imageIDs: [
+                    number,
+                    ...number[]
+                ];
+                /**
+                 * example:
+                 * 1
+                 */
+                logoID?: null | number;
+            };
+            nameSegment?: {
+                /**
+                 * example:
+                 * Salon 1
+                 */
+                name: string;
+            };
+            openingHoursSegment?: {
+                openingHours: [
+                    {
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: [
+                            {
+                                /**
+                                 * example:
+                                 * 07:00
+                                 */
+                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                /**
+                                 * example:
+                                 * 15:00
+                                 */
+                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            },
+                            ...{
+                                /**
+                                 * example:
+                                 * 07:00
+                                 */
+                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                /**
+                                 * example:
+                                 * 15:00
+                                 */
+                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            }[]
+                        ];
+                    },
+                    ...{
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: [
+                            {
+                                /**
+                                 * example:
+                                 * 07:00
+                                 */
+                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                /**
+                                 * example:
+                                 * 15:00
+                                 */
+                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            },
+                            ...{
+                                /**
+                                 * example:
+                                 * 07:00
+                                 */
+                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                /**
+                                 * example:
+                                 * 15:00
+                                 */
+                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            }[]
+                        ];
+                    }[]
+                ];
+                openingHoursNote?: {
+                    /**
+                     * example:
+                     * Poznámka
+                     */
+                    note: string;
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
+                    validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
+                    validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                };
+            };
+            aboutUsSegment?: {
+                /**
+                 * example:
+                 * some text
+                 */
+                aboutUsFirst?: string | null;
+                /**
+                 * example:
+                 * some text
+                 */
+                aboutUsSecond?: string | null;
+            };
+            contactInfoSegment?: {
+                /**
+                 * example:
+                 * SK
+                 */
+                countryCode: string;
+                /**
+                 * example:
+                 * Žilina
+                 */
+                city: string;
+                /**
+                 * example:
+                 * Framborska 58
+                 */
+                street: string;
+                /**
+                 * example:
+                 * 49.226666
+                 */
+                latitude: number; // float
+                /**
+                 * example:
+                 * 18.7348681
+                 */
+                longitude: number; // float
+                /**
+                 * example:
+                 * SK
+                 */
+                phonePrefixCountryCode: string;
+                /**
+                 * example:
+                 * 906047188
+                 */
+                phone: string; // ^\d+$
+                /**
+                 * example:
+                 * test_notino.goodrequest.com
+                 */
+                email: string; // email
+                /**
+                 * example:
+                 * https://www.facebook.com/GoodRequestCom
+                 */
+                socialLinkFB?: string | null;
+                /**
+                 * example:
+                 * https://www.instagram.com/goodrequest/
+                 */
+                socialLinkInstagram?: string | null;
+                /**
+                 * example:
+                 * https://www.goodrequest.com/
+                 */
+                socialLinkWebPage?: string | null;
+            };
+            paymentSegment?: {
+                /**
+                 * example:
+                 * true
+                 */
+                payByCard: boolean;
+                /**
+                 * example:
+                 * Prevod na účet
+                 */
+                otherPaymentMethods?: string | null;
+            };
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                    fillingProgress: number;
+                    categorySegment?: {
+                        categories: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                    gallerySeqment?: {
+                        images: {
+                            id: number;
+                            fullPath: string;
+                        }[];
+                        logo?: {
+                            id: number;
+                            fullPath: string;
+                        };
+                    };
+                    nameSegment?: {
+                        name: string;
+                    };
+                    openingHoursSegment?: {
+                        openingHours: [
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            }
+                        ];
+                        openingHoursNote?: {
+                            note: string;
+                            validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        };
+                    };
+                    aboutUsSegment?: {
+                        aboutUsFirst?: string;
+                        aboutUsSecond?: string;
+                    };
+                    contactInfoSegment?: {
+                        countryCode: string;
+                        city: string;
+                        street: string;
+                        latitude: number; // float
+                        longitude: number; // float
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        email: string;
+                        socialLinkFB?: string;
+                        socialLinkInstagram?: string;
+                        socialLinkWebPage?: string;
+                    };
+                    paymentSegment?: {
+                        payByCard: boolean;
+                        otherPaymentMethods?: string;
+                    };
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdPublish {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            publish: boolean;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Služba 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            description?: string | null;
+            /**
+             * example:
+             * 10
+             */
+            durationFrom: number;
+            /**
+             * example:
+             * 10
+             */
+            durationTo?: null | number;
+            /**
+             * example:
+             * 10
+             */
+            priceFrom: number; // float
+            /**
+             * example:
+             * 10
+             */
+            priceTo?: number | null; // float
+            /**
+             * example:
+             * 1
+             */
+            salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryID: number;
+            employeeIDs?: number[];
+            imageIDs?: number[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -1355,6 +2719,8 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                accessToken: string;
+                refreshToken: string;
                 user: {
                     id: number;
                     email: string;
@@ -1449,8 +2815,8 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                signedUrls: {
-                    name: string;
+                files: {
+                    id: number;
                     url: string;
                     signedUrl: string;
                 }[];
@@ -1634,21 +3000,90 @@ declare namespace Paths {
              * example:
              * 1
              */
-            imageID: number;
+            imageIDs: [
+                number,
+                ...number[]
+            ];
             /**
              * example:
              * 1
              */
             logoID?: null | number;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Služba 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            description?: string | null;
+            /**
+             * example:
+             * 10
+             */
+            durationFrom: number;
+            /**
+             * example:
+             * 10
+             */
+            durationTo?: null | number;
+            /**
+             * example:
+             * 10
+             */
+            priceFrom: number; // float
+            /**
+             * example:
+             * 10
+             */
+            priceTo?: number | null; // float
             /**
              * example:
              * 1
              */
-            aboutUsImageID?: null | number;
+            salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryID: number;
+            employeeIDs?: number[];
+            imageIDs?: number[] | null;
         }
         namespace Responses {
             export interface $200 {
-                salon?: {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -2050,6 +3485,8 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                accessToken: string;
+                refreshToken: string;
                 user: {
                     id: number;
                     email: string;
@@ -2144,10 +3581,262 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                signedUrls: {
-                    name: string;
+                files: {
+                    id: number;
                     url: string;
                     signedUrl: string;
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BV1Salons {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            categoryIDs: [
+                number,
+                ...number[]
+            ];
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                    fillingProgress: number;
+                    categorySegment?: {
+                        categories: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                    gallerySeqment?: {
+                        images: {
+                            id: number;
+                            fullPath: string;
+                        }[];
+                        logo?: {
+                            id: number;
+                            fullPath: string;
+                        };
+                    };
+                    nameSegment?: {
+                        name: string;
+                    };
+                    openingHoursSegment?: {
+                        openingHours: [
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            }
+                        ];
+                        openingHoursNote?: {
+                            note: string;
+                            validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        };
+                    };
+                    aboutUsSegment?: {
+                        aboutUsFirst?: string;
+                        aboutUsSecond?: string;
+                    };
+                    contactInfoSegment?: {
+                        countryCode: string;
+                        city: string;
+                        street: string;
+                        latitude: number; // float
+                        longitude: number; // float
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                        email: string;
+                        socialLinkFB?: string;
+                        socialLinkInstagram?: string;
+                        socialLinkWebPage?: string;
+                    };
+                    paymentSegment?: {
+                        payByCard: boolean;
+                        otherPaymentMethods?: string;
+                    };
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BV1Services {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Služba 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            description?: string | null;
+            /**
+             * example:
+             * 10
+             */
+            durationFrom: number;
+            /**
+             * example:
+             * 10
+             */
+            durationTo?: null | number;
+            /**
+             * example:
+             * 10
+             */
+            priceFrom: number; // float
+            /**
+             * example:
+             * 10
+             */
+            priceTo?: number | null; // float
+            /**
+             * example:
+             * 1
+             */
+            salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryID: number;
+            employeeIDs?: number[];
+            imageIDs?: number[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
                 }[];
             }
         }
@@ -2567,7 +4256,7 @@ export interface OperationMethods {
    * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
    */
   'deleteApiB2BAdminEnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -2620,6 +4309,62 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   /**
+   * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminSalonsSalonIdPublish'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
+  /**
+   * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   */
+  'getApiB2BAdminServices'(
+    parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
+  /**
+   * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'postApiB2BAdminServices'(
+    parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
+  /**
+   * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   */
+  'getApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'deleteApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
+  /**
    * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
    */
   'postApiB2BV1AuthLoginAsPartner'(
@@ -2627,6 +4372,14 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
+  /**
+   * getApiB2BV1UsersPartners - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
+   */
+  'getApiB2BV1UsersPartners'(
+    parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
   /**
    * getApiB2BV1EnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING]
    */
@@ -2663,10 +4416,106 @@ export interface OperationMethods {
    * deleteApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
    */
   'deleteApiB2BV1EnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
+    parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.QueryParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * getApiB2BV1Salons - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1Salons'(
+    parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
+  /**
+   * postApiB2BV1Salons - PERMISSION: [PARTNER]
+   */
+  'postApiB2BV1Salons'(
+    parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1Salons.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
+  /**
+   * getApiB2BV1SalonsPreview - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1SalonsPreview'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1SalonsSalonId'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1SalonsSalonId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
+  /**
+   * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+   */
+  'deleteApiB2BV1SalonsSalonId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1SalonsSalonIdPublish'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
+  /**
+   * getApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   */
+  'getApiB2BV1Services'(
+    parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
+  /**
+   * postApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'postApiB2BV1Services'(
+    parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1Services.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
+  /**
+   * getApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   */
+  'getApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
+  /**
+   * patchApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
+  /**
+   * deleteApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'deleteApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
 }
 
 export interface PathsDictionary {
@@ -2991,7 +4840,7 @@ export interface PathsDictionary {
      * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
     'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -3050,6 +4899,70 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/publish']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
+  }
+  ['/api/b2b/admin/services/']: {
+    /**
+     * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
+    /**
+     * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminServices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
+  }
+  ['/api/b2b/admin/services/{serviceID}']: {
+    /**
+     * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
+    /**
+     * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
+    /**
+     * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
+  }
   ['/api/b2b/v1/auth/login-as-partner']: {
     /**
      * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
@@ -3059,6 +4972,16 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
+  }
+  ['/api/b2b/v1/users/partners']: {
+    /**
+     * getApiB2BV1UsersPartners - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
   }
   ['/api/b2b/v1/enums/categories/']: {
     /**
@@ -3099,10 +5022,118 @@ export interface PathsDictionary {
      * deleteApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
     'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
+      parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.QueryParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/']: {
+    /**
+     * getApiB2BV1Salons - PERMISSION: [PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
+    /**
+     * postApiB2BV1Salons - PERMISSION: [PARTNER]
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1Salons.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/preview']: {
+    /**
+     * getApiB2BV1SalonsPreview - PERMISSION: [PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}']: {
+    /**
+     * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
+    /**
+     * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
+    /**
+     * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/publish']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
+  }
+  ['/api/b2b/v1/services/']: {
+    /**
+     * getApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
+    /**
+     * postApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1Services.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
+  }
+  ['/api/b2b/v1/services/{serviceID}']: {
+    /**
+     * getApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
+    /**
+     * patchApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
+    /**
+     * deleteApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   }
 }
 

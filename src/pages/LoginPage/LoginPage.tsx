@@ -1,68 +1,32 @@
 import React, { FC, useState } from 'react'
-import { Modal } from 'antd'
-import { useTranslation } from 'react-i18next'
-// import { get } from 'lodash'
 import { useDispatch } from 'react-redux'
-import { reset } from 'redux-form'
+import { useTranslation } from 'react-i18next'
 
 // components
 import LoginForm from './components/LoginForm'
-import ForgottenPasswordForm from './components/ForgottenPasswordForm'
+import ForgottenPasswordModal from '../../components/ForgottenPassword/ForgottenPasswordModal'
 
 // interfaces
-import { ILoginForm, IForgotPasswordForm } from '../../types/interfaces'
+import { ILoginForm } from '../../types/interfaces'
 
-// // actions
-import * as UserActions from '../../reducers/users/userActions'
-
-// utils
-import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE, FORM } from '../../utils/enums'
-
-// assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+// actions
+import { logInUser } from '../../reducers/users/userActions'
 
 type Props = {}
 
 const LoginPage: FC<Props> = () => {
 	const [modalVisible, setModalVisible] = useState(false)
-	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const [t] = useTranslation()
 
-	const handleLoginSubmit = async (values: ILoginForm) => dispatch(UserActions.logInUser(values))
-
-	const handleForgottenPassSubmit = async (values: IForgotPasswordForm) => {
-		try {
-			const reqData = {
-				email: values.email
-			}
-
-			const res = await postReq('/api/b2b/admin/auth/forgot-password', null, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			dispatch(reset(FORM.FORGOT_PASSWORD))
-			setModalVisible(false)
-			return res
-		} catch (e) {
-			console.log(e)
-			return e
-		}
-	}
+	const handleLoginSubmit = async (values: ILoginForm) => dispatch(logInUser(values))
 
 	return (
-		<>
+		<div className='mt-16'>
+			<h3>{t('loc:Prihlásenie')}</h3>
 			<LoginForm onSubmit={handleLoginSubmit} showForgottenPasswordModal={() => setModalVisible(true)} />
-			<Modal
-				className='rounded-fields'
-				title={t('loc:Zabudnuté heslo')}
-				centered
-				visible={modalVisible}
-				footer={null}
-				onCancel={() => setModalVisible(false)}
-				closeIcon={<CloseIcon />}
-				width={394}
-			>
-				<ForgottenPasswordForm onSubmit={handleForgottenPassSubmit} />
-			</Modal>
-		</>
+			{modalVisible && <ForgottenPasswordModal visible={modalVisible} onClose={() => setModalVisible(false)} />}
+		</div>
 	)
 }
 

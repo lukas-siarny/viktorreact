@@ -416,7 +416,7 @@ export const getMaxSizeNotifMessage = (maxFileSize: any) => {
 	}
 }
 
-type ImgUploadData = { uid: string; path: string } & Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['signedUrls'][0]
+type ImgUploadData = { uid: string; path: string } & Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['files'][0]
 export type ImgUploadParam = { [key: string]: ImgUploadData }
 
 export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) => {
@@ -425,6 +425,7 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 
 		return {
 			...file,
+			id: get(file, 'id') || fileData?.id,
 			url: get(file, 'url') || fileData?.path,
 			signedUrl: fileData?.signedUrl
 		}

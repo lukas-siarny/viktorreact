@@ -10,9 +10,13 @@ declare namespace Paths {
     namespace DeleteApiB2BAdminEnumsCategoriesCategoryId {
         namespace Parameters {
             export type CategoryID = number;
+            export type Restore = boolean;
         }
         export interface PathParameters {
             categoryID: Parameters.CategoryID;
+        }
+        export interface QueryParameters {
+            restore: Parameters.Restore;
         }
         namespace Responses {
             export interface $200 {
@@ -57,6 +61,37 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BAdminServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BAdminUsersUserId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -91,13 +126,48 @@ declare namespace Paths {
     namespace DeleteApiB2BV1EnumsCategoriesCategoryId {
         namespace Parameters {
             export type CategoryID = number;
+            export type Restore = boolean;
         }
         export interface PathParameters {
             categoryID: Parameters.CategoryID;
         }
+        export interface QueryParameters {
+            restore: Parameters.Restore;
+        }
         namespace Responses {
             export interface $200 {
                 category: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -289,6 +359,7 @@ declare namespace Paths {
                     }[];
                     isPublished: boolean;
                     isVisible: boolean;
+                    fillingProgress: number;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -396,6 +467,11 @@ declare namespace Paths {
                             ];
                         }[]
                     ];
+                    openingHoursNote?: {
+                        note: string;
+                        validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        validTo: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    };
                     address: {
                         city: string;
                         street: string;
@@ -417,25 +493,121 @@ declare namespace Paths {
                     }[];
                     isPublished: boolean;
                     isVisible: boolean;
+                    fillingProgress: number;
                     user: {
                         id: number;
                         name: string;
                     };
-                    image: {
+                    images: {
                         id: number;
                         url: string;
-                    };
+                    }[];
                     logo?: {
-                        id: number;
-                        url: string;
-                    };
-                    aboutUsImage?: {
                         id: number;
                         url: string;
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryID = number;
+            export type EmployeeID = number;
+            export type SalonID = number;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            categoryID?: Parameters.CategoryID;
+            employeeID?: Parameters.EmployeeID;
+            salonID?: Parameters.SalonID;
+        }
+        namespace Responses {
+            export interface $200 {
+                services: {
+                    id: number;
+                    name: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                    employees: {
+                        id: number;
+                        name: string;
+                    }[];
+                    category: {
+                        id: number;
+                        name: string;
+                        children: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BAdminServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: number;
+                    name: string;
+                    description?: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                    employees: {
+                        id: number;
+                        name: string;
+                    }[];
+                    category: {
+                        id: number;
+                        name: string;
+                        children: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                    images: {
+                        id: number;
+                        fullURL: string;
+                    }[];
                 };
             }
         }
@@ -653,6 +825,105 @@ declare namespace Paths {
                     code: string;
                     symbol: string;
                 }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1Services {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryID = number;
+            export type EmployeeID = number;
+            export type SalonID = number;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            categoryID?: Parameters.CategoryID;
+            employeeID?: Parameters.EmployeeID;
+            salonID?: Parameters.SalonID;
+        }
+        namespace Responses {
+            export interface $200 {
+                services: {
+                    id: number;
+                    name: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                    employees: {
+                        id: number;
+                        name: string;
+                    }[];
+                    category: {
+                        id: number;
+                        name: string;
+                        children: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: number;
+                    name: string;
+                    description?: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                    employees: {
+                        id: number;
+                        name: string;
+                    }[];
+                    category: {
+                        id: number;
+                        name: string;
+                        children: {
+                            id: number;
+                            name: string;
+                        }[];
+                    };
+                    images: {
+                        id: number;
+                        fullURL: string;
+                    }[];
+                };
             }
         }
     }
@@ -953,17 +1224,53 @@ declare namespace Paths {
              * example:
              * 1
              */
-            imageID: number;
+            imageIDs: [
+                number,
+                ...number[]
+            ];
             /**
              * example:
              * 1
              */
             logoID?: null | number;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdOpenHoursNote {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
             /**
              * example:
-             * 1
+             * sk
              */
-            aboutUsImageID?: null | number;
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            openingHoursNote: {
+                note: string;
+                validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                validTo: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            } | null;
         }
         namespace Responses {
             export interface $200 {
@@ -1002,6 +1309,81 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Služba 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            description?: string | null;
+            /**
+             * example:
+             * 10
+             */
+            durationFrom: number;
+            /**
+             * example:
+             * 10
+             */
+            durationTo?: null | number;
+            /**
+             * example:
+             * 10
+             */
+            priceFrom: number; // float
+            /**
+             * example:
+             * 10
+             */
+            priceTo?: number | null; // float
+            /**
+             * example:
+             * 1
+             */
+            salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryID: number;
+            employeeIDs?: number[];
+            imageIDs?: number[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -1150,6 +1532,44 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BV1SalonsSalonIdOpenHoursNote {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            openingHoursNote: {
+                note: string;
+                validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                validTo: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            } | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BV1SalonsSalonIdPublish {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -1175,6 +1595,81 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Služba 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            description?: string | null;
+            /**
+             * example:
+             * 10
+             */
+            durationFrom: number;
+            /**
+             * example:
+             * 10
+             */
+            durationTo?: null | number;
+            /**
+             * example:
+             * 10
+             */
+            priceFrom: number; // float
+            /**
+             * example:
+             * 10
+             */
+            priceTo?: number | null; // float
+            /**
+             * example:
+             * 1
+             */
+            salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryID: number;
+            employeeIDs?: number[];
+            imageIDs?: number[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -1463,6 +1958,8 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                accessToken: string;
+                refreshToken: string;
                 user: {
                     id: number;
                     email: string;
@@ -1557,8 +2054,8 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                signedUrls: {
-                    name: string;
+                files: {
+                    id: number;
                     url: string;
                     signedUrl: string;
                 }[];
@@ -1742,21 +2239,90 @@ declare namespace Paths {
              * example:
              * 1
              */
-            imageID: number;
+            imageIDs: [
+                number,
+                ...number[]
+            ];
             /**
              * example:
              * 1
              */
             logoID?: null | number;
-            /**
-             * example:
-             * 1
-             */
-            aboutUsImageID?: null | number;
         }
         namespace Responses {
             export interface $200 {
                 salon?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Služba 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            description?: string | null;
+            /**
+             * example:
+             * 10
+             */
+            durationFrom: number;
+            /**
+             * example:
+             * 10
+             */
+            durationTo?: null | number;
+            /**
+             * example:
+             * 10
+             */
+            priceFrom: number; // float
+            /**
+             * example:
+             * 10
+             */
+            priceTo?: number | null; // float
+            /**
+             * example:
+             * 1
+             */
+            salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryID: number;
+            employeeIDs?: number[];
+            imageIDs?: number[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
                     id: number;
                 };
                 messages: {
@@ -2158,6 +2724,8 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                accessToken: string;
+                refreshToken: string;
                 user: {
                     id: number;
                     email: string;
@@ -2252,10 +2820,81 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                signedUrls: {
-                    name: string;
+                files: {
+                    id: number;
                     url: string;
                     signedUrl: string;
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BV1Services {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Služba 1
+             */
+            name: string;
+            /**
+             * example:
+             * some text
+             */
+            description?: string | null;
+            /**
+             * example:
+             * 10
+             */
+            durationFrom: number;
+            /**
+             * example:
+             * 10
+             */
+            durationTo?: null | number;
+            /**
+             * example:
+             * 10
+             */
+            priceFrom: number; // float
+            /**
+             * example:
+             * 10
+             */
+            priceTo?: number | null; // float
+            /**
+             * example:
+             * 1
+             */
+            salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryID: number;
+            employeeIDs?: number[];
+            imageIDs?: number[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
+                service?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
                 }[];
             }
         }
@@ -2675,7 +3314,7 @@ export interface OperationMethods {
    * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
    */
   'deleteApiB2BAdminEnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -2728,6 +3367,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   /**
+   * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
+  /**
    * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
    */
   'patchApiB2BAdminSalonsSalonIdPublish'(
@@ -2735,6 +3382,46 @@ export interface OperationMethods {
     data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
+  /**
+   * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   */
+  'getApiB2BAdminServices'(
+    parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
+  /**
+   * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'postApiB2BAdminServices'(
+    parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
+  /**
+   * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   */
+  'getApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'deleteApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   /**
    * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
    */
@@ -2787,10 +3474,18 @@ export interface OperationMethods {
    * deleteApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
    */
   'deleteApiB2BV1EnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
+    parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.QueryParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BV1SalonsSalonIdOpenHoursNote'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
    */
@@ -2799,6 +3494,46 @@ export interface OperationMethods {
     data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
+  /**
+   * getApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   */
+  'getApiB2BV1Services'(
+    parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
+  /**
+   * postApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'postApiB2BV1Services'(
+    parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1Services.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
+  /**
+   * getApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   */
+  'getApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
+  /**
+   * patchApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
+  /**
+   * deleteApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'deleteApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
 }
 
 export interface PathsDictionary {
@@ -3123,7 +3858,7 @@ export interface PathsDictionary {
      * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
     'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -3182,6 +3917,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
+  }
   ['/api/b2b/admin/salons/{salonID}/publish']: {
     /**
      * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -3191,6 +3936,50 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
+  }
+  ['/api/b2b/admin/services/']: {
+    /**
+     * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
+    /**
+     * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminServices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
+  }
+  ['/api/b2b/admin/services/{serviceID}']: {
+    /**
+     * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
+    /**
+     * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
+    /**
+     * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   }
   ['/api/b2b/v1/auth/login-as-partner']: {
     /**
@@ -3251,10 +4040,20 @@ export interface PathsDictionary {
      * deleteApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
     'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
+      parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.QueryParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/open-hours-note']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/publish']: {
     /**
@@ -3265,6 +4064,50 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
+  }
+  ['/api/b2b/v1/services/']: {
+    /**
+     * getApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
+    /**
+     * postApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1Services.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
+  }
+  ['/api/b2b/v1/services/{serviceID}']: {
+    /**
+     * getApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
+    /**
+     * patchApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
+    /**
+     * deleteApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   }
 }
 

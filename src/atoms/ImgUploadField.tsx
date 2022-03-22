@@ -54,7 +54,6 @@ const ImgUploadField: FC<Props> = (props) => {
 	const imagesUrls = useRef<ImgUploadParam>({})
 	const [previewUrl, setPreviewUrl] = useState('')
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
-		console.log(info.file.status)
 		if (info.file.status === 'error') {
 			showNotifications([{ type: MSG_TYPE.ERROR, message: info.file.error.message }], NOTIFICATION_TYPE.NOTIFICATION)
 		}

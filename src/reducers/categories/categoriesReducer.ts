@@ -1,5 +1,5 @@
+/* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-// eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { CATEGORIES } from './categoriesTypes'
 import { ICategoriesActions, ICategoriesPayload } from './categoriesActions'
@@ -33,7 +33,6 @@ export default (state = initState, action: ICategoriesActions) => {
 				}
 			}
 		case CATEGORIES.CATEGORIES_LOAD_DONE:
-			console.log('action.payload.data: ', action.payload.data)
 			return {
 				...state,
 				categories: {

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Form, Row } from 'antd'
+import { Button, Col, Divider, Form, Row, DatePicker } from 'antd'
 
 // enums
 import { useSelector } from 'react-redux'
@@ -24,6 +24,7 @@ export interface ICategoryForm {
 	id: number
 	orderIndex: number
 	parentId: number
+	childrenLength: number
 }
 
 type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
@@ -35,22 +36,24 @@ const CategoryForm: FC<Props> = (props) => {
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3'}>{values?.id ? t('loc:Upraviť kategóriu') : t('loc:Vytvoriť kategóriu')}</h3>
+					<h3 className={'mb-0 mt-3'}>{values?.id ? t('loc:Upraviť kategóriu') : `${t('loc:Vytvoriť kategóriu')}${values?.parentTitle ? values?.parentTitle : ''}`}</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<Field component={InputField} label={t('loc:Name')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
+					<Field component={InputField} label={t('loc:Názov kategórie')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
 					<div className={'flex justify-between'}>
 						<Button className={'noti-btn w-1/3'} block size='middle' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
 							{t('loc:Uložiť')}
 						</Button>
-						<DeleteButton
-							onConfirm={() => deleteCategory(values?.id)}
-							entityName={t('loc:kategóriu')}
-							type={'default'}
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
+						{values?.id ? (
+							<DeleteButton
+								onConfirm={() => deleteCategory(values?.id)}
+								entityName={t('loc:kategóriu')}
+								type={'default'}
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							/>
+						) : undefined}
 					</div>
 				</Row>
 			</Col>

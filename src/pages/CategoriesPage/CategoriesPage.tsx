@@ -2,18 +2,24 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Col, Row } from 'antd'
+import { compose } from 'redux'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // components
 import CategoriesTree from './components/CategoriesTree'
+import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import Breadcrumbs from '../../components/Breadcrumbs'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { getPath } from '../../utils/history'
+import { withPermissions } from '../../utils/Permissions'
+
+// types
 import { IBreadcrumbs } from '../../types/interfaces'
+
+const browsePermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]
 
 const CategoriesPage = () => {
 	const [t] = useTranslation()
@@ -47,4 +53,4 @@ const CategoriesPage = () => {
 	)
 }
 
-export default CategoriesPage
+export default compose(withPermissions(browsePermissions))(CategoriesPage)

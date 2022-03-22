@@ -4,7 +4,7 @@ import type {
   UnknownParamsObject,
   OperationResponse,
   AxiosRequestConfig,
-} from 'openapi-client-axios'; 
+} from 'openapi-client-axios';
 
 declare namespace Paths {
     namespace DeleteApiB2BAdminEnumsCategoriesCategoryId {
@@ -51,7 +51,7 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                salon: {
+                salon?: {
                     id: number;
                 };
                 messages: {
@@ -137,37 +137,6 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 category: {
-                    id: number;
-                };
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
-    namespace DeleteApiB2BV1SalonsSalonId {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-            export type SalonID = number;
-        }
-        export interface PathParameters {
-            salonID: Parameters.SalonID;
-        }
-        namespace Responses {
-            export interface $200 {
-                salon: {
                     id: number;
                 };
                 messages: {
@@ -859,401 +828,6 @@ declare namespace Paths {
             }
         }
     }
-    namespace GetApiB2BV1Salons {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        namespace Responses {
-            export interface $200 {
-                salons: {
-                    id: number;
-                    name: string;
-                    fillingProgress: number;
-                    images: {
-                        id: number;
-                        fullPath: string;
-                    }[];
-                    logo?: {
-                        id: number;
-                        fullPath: string;
-                    };
-                    address: {
-                        street: string;
-                        city: string;
-                        countryCode: string;
-                        latitude: number; // float
-                        longitude: number; // float
-                    };
-                    categories: {
-                        id: number;
-                        name: string;
-                    }[];
-                    isPublished: boolean;
-                    isVisible: boolean;
-                    createdAt: string; // date-time
-                    updatedAt: string; // date-time
-                    deletedAt?: string; // date-time
-                }[];
-            }
-        }
-    }
-    namespace GetApiB2BV1SalonsPreview {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        namespace Responses {
-            export interface $200 {
-                salon: {
-                    id: number;
-                    fillingProgress: number;
-                    categorySegment?: {
-                        categories: {
-                            id: number;
-                            name: string;
-                        }[];
-                    };
-                    gallerySeqment?: {
-                        images: {
-                            id: number;
-                            fullPath: string;
-                        }[];
-                        logo?: {
-                            id: number;
-                            fullPath: string;
-                        };
-                    };
-                    nameSegment?: {
-                        name: string;
-                    };
-                    openingHoursSegment?: {
-                        openingHours: [
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            }
-                        ];
-                        openingHoursNote?: {
-                            note: string;
-                            validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                        };
-                    };
-                    aboutUsSegment?: {
-                        aboutUsFirst?: string;
-                        aboutUsSecond?: string;
-                    };
-                    contactInfoSegment?: {
-                        countryCode: string;
-                        city: string;
-                        street: string;
-                        latitude: number; // float
-                        longitude: number; // float
-                        phonePrefixCountryCode: string;
-                        phone: string; // ^\d+$
-                        email: string;
-                        socialLinkFB?: string;
-                        socialLinkInstagram?: string;
-                        socialLinkWebPage?: string;
-                    };
-                    paymentSegment?: {
-                        payByCard: boolean;
-                        otherPaymentMethods?: string;
-                    };
-                };
-            }
-        }
-    }
-    namespace GetApiB2BV1SalonsSalonId {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-            export type SalonID = number;
-        }
-        export interface PathParameters {
-            salonID: Parameters.SalonID;
-        }
-        namespace Responses {
-            export interface $200 {
-                salon: {
-                    id: number;
-                    fillingProgress: number;
-                    categorySegment?: {
-                        categories: {
-                            id: number;
-                            name: string;
-                        }[];
-                    };
-                    gallerySeqment?: {
-                        images: {
-                            id: number;
-                            fullPath: string;
-                        }[];
-                        logo?: {
-                            id: number;
-                            fullPath: string;
-                        };
-                    };
-                    nameSegment?: {
-                        name: string;
-                    };
-                    openingHoursSegment?: {
-                        openingHours: [
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            }
-                        ];
-                        openingHoursNote?: {
-                            note: string;
-                            validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                        };
-                    };
-                    aboutUsSegment?: {
-                        aboutUsFirst?: string;
-                        aboutUsSecond?: string;
-                    };
-                    contactInfoSegment?: {
-                        countryCode: string;
-                        city: string;
-                        street: string;
-                        latitude: number; // float
-                        longitude: number; // float
-                        phonePrefixCountryCode: string;
-                        phone: string; // ^\d+$
-                        email: string;
-                        socialLinkFB?: string;
-                        socialLinkInstagram?: string;
-                        socialLinkWebPage?: string;
-                    };
-                    paymentSegment?: {
-                        payByCard: boolean;
-                        otherPaymentMethods?: string;
-                    };
-                };
-            }
-        }
-    }
     namespace GetApiB2BV1Services {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -1662,7 +1236,7 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                salon: {
+                salon?: {
                     id: number;
                 };
                 messages: {
@@ -1700,7 +1274,7 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                salon: {
+                salon?: {
                     id: number;
                 };
                 messages: {
@@ -1734,7 +1308,7 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                salon: {
+                salon?: {
                     id: number;
                 };
                 messages: {
@@ -1958,7 +1532,7 @@ declare namespace Paths {
             }
         }
     }
-    namespace PatchApiB2BV1SalonsSalonId {
+    namespace PatchApiB2BV1SalonsSalonIdOpenHoursNote {
         export interface HeaderParameters {
             "accept-language"?: /**
              * example:
@@ -1978,351 +1552,16 @@ declare namespace Paths {
             salonID: Parameters.SalonID;
         }
         export interface RequestBody {
-            categorySegment?: {
-                categoryIDs: [
-                    number,
-                    ...number[]
-                ];
-            };
-            gallerySeqment?: {
-                imageIDs: [
-                    number,
-                    ...number[]
-                ];
-                /**
-                 * example:
-                 * 1
-                 */
-                logoID?: null | number;
-            };
-            nameSegment?: {
-                /**
-                 * example:
-                 * Salon 1
-                 */
-                name: string;
-            };
-            openingHoursSegment?: {
-                openingHours: [
-                    {
-                        /**
-                         * example:
-                         * MONDAY
-                         */
-                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                        timeRanges: [
-                            {
-                                /**
-                                 * example:
-                                 * 07:00
-                                 */
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                /**
-                                 * example:
-                                 * 15:00
-                                 */
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            },
-                            ...{
-                                /**
-                                 * example:
-                                 * 07:00
-                                 */
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                /**
-                                 * example:
-                                 * 15:00
-                                 */
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[]
-                        ];
-                    },
-                    ...{
-                        /**
-                         * example:
-                         * MONDAY
-                         */
-                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                        timeRanges: [
-                            {
-                                /**
-                                 * example:
-                                 * 07:00
-                                 */
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                /**
-                                 * example:
-                                 * 15:00
-                                 */
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            },
-                            ...{
-                                /**
-                                 * example:
-                                 * 07:00
-                                 */
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                /**
-                                 * example:
-                                 * 15:00
-                                 */
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[]
-                        ];
-                    }[]
-                ];
-                openingHoursNote?: {
-                    /**
-                     * example:
-                     * Poznámka
-                     */
-                    note: string;
-                    /**
-                     * example:
-                     * 2022-03-22
-                     */
-                    validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                    /**
-                     * example:
-                     * 2022-03-22
-                     */
-                    validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                };
-            };
-            aboutUsSegment?: {
-                /**
-                 * example:
-                 * some text
-                 */
-                aboutUsFirst?: string | null;
-                /**
-                 * example:
-                 * some text
-                 */
-                aboutUsSecond?: string | null;
-            };
-            contactInfoSegment?: {
-                /**
-                 * example:
-                 * SK
-                 */
-                countryCode: string;
-                /**
-                 * example:
-                 * Žilina
-                 */
-                city: string;
-                /**
-                 * example:
-                 * Framborska 58
-                 */
-                street: string;
-                /**
-                 * example:
-                 * 49.226666
-                 */
-                latitude: number; // float
-                /**
-                 * example:
-                 * 18.7348681
-                 */
-                longitude: number; // float
-                /**
-                 * example:
-                 * SK
-                 */
-                phonePrefixCountryCode: string;
-                /**
-                 * example:
-                 * 906047188
-                 */
-                phone: string; // ^\d+$
-                /**
-                 * example:
-                 * test_notino.goodrequest.com
-                 */
-                email: string; // email
-                /**
-                 * example:
-                 * https://www.facebook.com/GoodRequestCom
-                 */
-                socialLinkFB?: string | null;
-                /**
-                 * example:
-                 * https://www.instagram.com/goodrequest/
-                 */
-                socialLinkInstagram?: string | null;
-                /**
-                 * example:
-                 * https://www.goodrequest.com/
-                 */
-                socialLinkWebPage?: string | null;
-            };
-            paymentSegment?: {
-                /**
-                 * example:
-                 * true
-                 */
-                payByCard: boolean;
-                /**
-                 * example:
-                 * Prevod na účet
-                 */
-                otherPaymentMethods?: string | null;
-            };
+            openingHoursNote: {
+                note: string;
+                validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                validTo: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            } | null;
         }
         namespace Responses {
             export interface $200 {
-                salon: {
+                salon?: {
                     id: number;
-                    fillingProgress: number;
-                    categorySegment?: {
-                        categories: {
-                            id: number;
-                            name: string;
-                        }[];
-                    };
-                    gallerySeqment?: {
-                        images: {
-                            id: number;
-                            fullPath: string;
-                        }[];
-                        logo?: {
-                            id: number;
-                            fullPath: string;
-                        };
-                    };
-                    nameSegment?: {
-                        name: string;
-                    };
-                    openingHoursSegment?: {
-                        openingHours: [
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            }
-                        ];
-                        openingHoursNote?: {
-                            note: string;
-                            validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                        };
-                    };
-                    aboutUsSegment?: {
-                        aboutUsFirst?: string;
-                        aboutUsSecond?: string;
-                    };
-                    contactInfoSegment?: {
-                        countryCode: string;
-                        city: string;
-                        street: string;
-                        latitude: number; // float
-                        longitude: number; // float
-                        phonePrefixCountryCode: string;
-                        phone: string; // ^\d+$
-                        email: string;
-                        socialLinkFB?: string;
-                        socialLinkInstagram?: string;
-                        socialLinkWebPage?: string;
-                    };
-                    paymentSegment?: {
-                        payByCard: boolean;
-                        otherPaymentMethods?: string;
-                    };
                 };
                 messages: {
                     message: string;
@@ -2355,7 +1594,7 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                salon: {
+                salon?: {
                     id: number;
                 };
                 messages: {
@@ -3012,7 +2251,7 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                salon: {
+                salon?: {
                     id: number;
                 };
                 messages: {
@@ -3589,187 +2828,6 @@ declare namespace Paths {
             }
         }
     }
-    namespace PostApiB2BV1Salons {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            categoryIDs: [
-                number,
-                ...number[]
-            ];
-        }
-        namespace Responses {
-            export interface $200 {
-                salon: {
-                    id: number;
-                    fillingProgress: number;
-                    categorySegment?: {
-                        categories: {
-                            id: number;
-                            name: string;
-                        }[];
-                    };
-                    gallerySeqment?: {
-                        images: {
-                            id: number;
-                            fullPath: string;
-                        }[];
-                        logo?: {
-                            id: number;
-                            fullPath: string;
-                        };
-                    };
-                    nameSegment?: {
-                        name: string;
-                    };
-                    openingHoursSegment?: {
-                        openingHours: [
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            },
-                            {
-                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                                isCurrentDate: boolean;
-                                isOpen: boolean;
-                                /**
-                                 * example:
-                                 * MONDAY
-                                 */
-                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                                timeRanges: {
-                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                }[];
-                            }
-                        ];
-                        openingHoursNote?: {
-                            note: string;
-                            validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                        };
-                    };
-                    aboutUsSegment?: {
-                        aboutUsFirst?: string;
-                        aboutUsSecond?: string;
-                    };
-                    contactInfoSegment?: {
-                        countryCode: string;
-                        city: string;
-                        street: string;
-                        latitude: number; // float
-                        longitude: number; // float
-                        phonePrefixCountryCode: string;
-                        phone: string; // ^\d+$
-                        email: string;
-                        socialLinkFB?: string;
-                        socialLinkInstagram?: string;
-                        socialLinkWebPage?: string;
-                    };
-                    paymentSegment?: {
-                        payByCard: boolean;
-                        otherPaymentMethods?: string;
-                    };
-                };
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
     namespace PostApiB2BV1Services {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -3994,7 +3052,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthRefreshToken'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthRefreshToken.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
   /**
    * postApiB2BAdminAuthLogout - PERMISSION: NO
@@ -4002,7 +3060,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthLogout'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthLogout.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
   /**
    * postApiB2BAdminAuthForgotPassword - PERMISSION: NO
@@ -4010,7 +3068,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthForgotPassword'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthForgotPassword.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
   /**
    * postApiB2BAdminAuthResetPassword - PERMISSION: NO
@@ -4018,7 +3076,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthResetPassword'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthResetPassword.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   /**
    * getApiB2BAdminUsersUserId - PERMISSION: NO
@@ -4026,7 +3084,7 @@ export interface OperationMethods {
   'getApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
   /**
    * patchApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
@@ -4034,7 +3092,7 @@ export interface OperationMethods {
   'patchApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
   /**
    * deleteApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_DELETE]
@@ -4042,7 +3100,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   /**
    * postApiB2BAdminUsersRegistration - PERMISSION: NO
@@ -4050,7 +3108,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersRegistration'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsersRegistration.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
   /**
    * postApiB2BAdminUsersActivation - PERMISSION: NO
@@ -4058,7 +3116,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersActivation'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsersActivation.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
   /**
    * postApiB2BAdminUsersActivationResend - PERMISSION: NO
@@ -4066,7 +3124,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersActivationResend'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsersActivationResend.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   /**
    * getApiB2BAdminEnumsCountries - PERMISSION: NO
@@ -4074,7 +3132,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCountries'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCountries.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
   /**
    * getApiB2BAdminEnumsCurrencies - PERMISSION: NO
@@ -4082,7 +3140,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCurrencies'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCurrencies.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   /**
    * postApiB2BAdminFilesSignUrls - PERMISSION: NO
@@ -4090,7 +3148,7 @@ export interface OperationMethods {
   'postApiB2BAdminFilesSignUrls'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
   /**
    * postApiB2BV1AuthLogin - PERMISSION: NO
@@ -4098,7 +3156,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthLogin'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthLogin.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
   /**
    * postApiB2BV1AuthRefreshToken - PERMISSION: NO
@@ -4106,7 +3164,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthRefreshToken'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthRefreshToken.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
   /**
    * postApiB2BV1AuthLogout - PERMISSION: NO
@@ -4114,7 +3172,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthLogout'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthLogout.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
   /**
    * postApiB2BV1AuthForgotPassword - PERMISSION: NO
@@ -4122,7 +3180,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthForgotPassword'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthForgotPassword.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
   /**
    * postApiB2BV1AuthResetPassword - PERMISSION: NO
@@ -4130,7 +3188,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthResetPassword'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthResetPassword.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
   /**
    * getApiB2BV1UsersUserId - PERMISSION: NO
@@ -4138,7 +3196,7 @@ export interface OperationMethods {
   'getApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
   /**
    * patchApiB2BV1UsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
@@ -4146,7 +3204,7 @@ export interface OperationMethods {
   'patchApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
   /**
    * postApiB2BV1UsersRegistration - PERMISSION: NO
@@ -4154,7 +3212,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersRegistration'(
     parameters?: Parameters<Paths.PostApiB2BV1UsersRegistration.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
   /**
    * postApiB2BV1UsersActivation - PERMISSION: NO
@@ -4162,7 +3220,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersActivation'(
     parameters?: Parameters<Paths.PostApiB2BV1UsersActivation.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
   /**
    * postApiB2BV1UsersActivationResend - PERMISSION: NO
@@ -4170,7 +3228,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersActivationResend'(
     parameters?: Parameters<Paths.PostApiB2BV1UsersActivationResend.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   /**
    * getApiB2BV1EnumsCountries - PERMISSION: NO
@@ -4178,7 +3236,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCountries'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCountries.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
   /**
    * getApiB2BV1EnumsCurrencies - PERMISSION: NO
@@ -4186,7 +3244,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCurrencies'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCurrencies.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   /**
    * postApiB2BV1FilesSignUrls - PERMISSION: NO
@@ -4194,7 +3252,7 @@ export interface OperationMethods {
   'postApiB2BV1FilesSignUrls'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
   /**
    * postApiB2BAdminAuthLogin - PERMISSION: NO
@@ -4202,7 +3260,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthLogin'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
   /**
    * getApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_BROWSING]
@@ -4210,7 +3268,7 @@ export interface OperationMethods {
   'getApiB2BAdminUsers'(
     parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
   /**
    * postApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
@@ -4218,7 +3276,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsers'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminUsers.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
   /**
    * getApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING]
@@ -4226,7 +3284,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCategories'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
   /**
    * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4234,7 +3292,7 @@ export interface OperationMethods {
   'postApiB2BAdminEnumsCategories'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
   /**
    * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING, ENUM_EDIT]
@@ -4242,7 +3300,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
    * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4250,7 +3308,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
     data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
    * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4258,7 +3316,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
    * getApiB2BAdminRoles - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
@@ -4266,7 +3324,7 @@ export interface OperationMethods {
   'getApiB2BAdminRoles'(
     parameters?: Parameters<Paths.GetApiB2BAdminRoles.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
   /**
    * getApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
@@ -4274,7 +3332,7 @@ export interface OperationMethods {
   'getApiB2BAdminSalons'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
   /**
    * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4282,7 +3340,7 @@ export interface OperationMethods {
   'postApiB2BAdminSalons'(
     parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminSalons.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
   /**
    * getApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
@@ -4290,7 +3348,7 @@ export interface OperationMethods {
   'getApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4298,7 +3356,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
   /**
    * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4306,7 +3364,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4314,7 +3372,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4322,7 +3380,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdPublish'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
   /**
    * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
@@ -4330,7 +3388,7 @@ export interface OperationMethods {
   'getApiB2BAdminServices'(
     parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
   /**
    * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4338,7 +3396,7 @@ export interface OperationMethods {
   'postApiB2BAdminServices'(
     parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminServices.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
   /**
    * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
@@ -4346,7 +3404,7 @@ export interface OperationMethods {
   'getApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
   /**
    * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4354,7 +3412,7 @@ export interface OperationMethods {
   'patchApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
   /**
    * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4362,7 +3420,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   /**
    * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
@@ -4370,7 +3428,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthLoginAsPartner'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
   /**
    * getApiB2BV1UsersPartners - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
@@ -4378,7 +3436,7 @@ export interface OperationMethods {
   'getApiB2BV1UsersPartners'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
   /**
    * getApiB2BV1EnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING]
@@ -4386,7 +3444,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCategories'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
   /**
    * postApiB2BV1EnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4394,7 +3452,7 @@ export interface OperationMethods {
   'postApiB2BV1EnumsCategories'(
     parameters?: Parameters<UnknownParamsObject> | null,
     data?: Paths.PostApiB2BV1EnumsCategories.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1EnumsCategories.Responses.$200>
   /**
    * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING, ENUM_EDIT]
@@ -4402,7 +3460,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
   /**
    * patchApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4410,7 +3468,7 @@ export interface OperationMethods {
   'patchApiB2BV1EnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.PatchApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
     data?: Paths.PatchApiB2BV1EnumsCategoriesCategoryId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
   /**
    * deleteApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4418,63 +3476,23 @@ export interface OperationMethods {
   'deleteApiB2BV1EnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.QueryParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
   /**
-   * getApiB2BV1Salons - PERMISSION: [PARTNER]
+   * patchApiB2BV1SalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
    */
-  'getApiB2BV1Salons'(
-    parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
+  'patchApiB2BV1SalonsSalonIdOpenHoursNote'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.RequestBody,
+    config?: AxiosRequestConfig
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.Responses.$200>
   /**
-   * postApiB2BV1Salons - PERMISSION: [PARTNER]
-   */
-  'postApiB2BV1Salons'(
-    parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
-    data?: Paths.PostApiB2BV1Salons.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
-  /**
-   * getApiB2BV1SalonsPreview - PERMISSION: [PARTNER]
-   */
-  'getApiB2BV1SalonsPreview'(
-    parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
-  /**
-   * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
-   */
-  'getApiB2BV1SalonsSalonId'(
-    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
-   */
-  'patchApiB2BV1SalonsSalonId'(
-    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
-    data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
-  /**
-   * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
-   */
-  'deleteApiB2BV1SalonsSalonId'(
-    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
-  /**
-   * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
+   * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
    */
   'patchApiB2BV1SalonsSalonIdPublish'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
   /**
    * getApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
@@ -4482,7 +3500,7 @@ export interface OperationMethods {
   'getApiB2BV1Services'(
     parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
   /**
    * postApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4490,7 +3508,7 @@ export interface OperationMethods {
   'postApiB2BV1Services'(
     parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1Services.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
   /**
    * getApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
@@ -4498,7 +3516,7 @@ export interface OperationMethods {
   'getApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
   /**
    * patchApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4506,7 +3524,7 @@ export interface OperationMethods {
   'patchApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
   /**
    * deleteApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4514,7 +3532,7 @@ export interface OperationMethods {
   'deleteApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig  
+    config?: AxiosRequestConfig
   ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
 }
 
@@ -4526,7 +3544,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthRefreshToken.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
   }
   ['/api/b2b/admin/auth/logout']: {
@@ -4536,7 +3554,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthLogout.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
   }
   ['/api/b2b/admin/auth/forgot-password']: {
@@ -4546,7 +3564,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthForgotPassword.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
   }
   ['/api/b2b/admin/auth/reset-password']: {
@@ -4556,7 +3574,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthResetPassword.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   }
   ['/api/b2b/admin/users/{userID}']: {
@@ -4566,7 +3584,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
     /**
      * patchApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
@@ -4574,7 +3592,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
     /**
      * deleteApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_DELETE]
@@ -4582,7 +3600,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   }
   ['/api/b2b/admin/users/registration']: {
@@ -4592,7 +3610,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsersRegistration.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
   }
   ['/api/b2b/admin/users/activation']: {
@@ -4602,7 +3620,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsersActivation.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
   }
   ['/api/b2b/admin/users/activation-resend']: {
@@ -4612,7 +3630,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsersActivationResend.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   }
   ['/api/b2b/admin/enums/countries']: {
@@ -4622,7 +3640,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCountries.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
   }
   ['/api/b2b/admin/enums/currencies']: {
@@ -4632,7 +3650,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCurrencies.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   }
   ['/api/b2b/admin/files/sign-urls']: {
@@ -4642,7 +3660,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
   }
   ['/api/b2b/v1/auth/login']: {
@@ -4652,7 +3670,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthLogin.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
   }
   ['/api/b2b/v1/auth/refresh-token']: {
@@ -4662,7 +3680,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthRefreshToken.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
   }
   ['/api/b2b/v1/auth/logout']: {
@@ -4672,7 +3690,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthLogout.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
   }
   ['/api/b2b/v1/auth/forgot-password']: {
@@ -4682,7 +3700,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthForgotPassword.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
   }
   ['/api/b2b/v1/auth/reset-password']: {
@@ -4692,7 +3710,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthResetPassword.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
   }
   ['/api/b2b/v1/users/{userID}']: {
@@ -4702,7 +3720,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
     /**
      * patchApiB2BV1UsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
@@ -4710,7 +3728,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
   }
   ['/api/b2b/v1/users/registration']: {
@@ -4720,7 +3738,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1UsersRegistration.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
   }
   ['/api/b2b/v1/users/activation']: {
@@ -4730,7 +3748,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1UsersActivation.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
   }
   ['/api/b2b/v1/users/activation-resend']: {
@@ -4740,7 +3758,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1UsersActivationResend.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   }
   ['/api/b2b/v1/enums/countries']: {
@@ -4750,7 +3768,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCountries.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
   }
   ['/api/b2b/v1/enums/currencies']: {
@@ -4760,7 +3778,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCurrencies.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   }
   ['/api/b2b/v1/files/sign-urls']: {
@@ -4770,7 +3788,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
   }
   ['/api/b2b/admin/auth/login']: {
@@ -4780,7 +3798,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
   }
   ['/api/b2b/admin/users/']: {
@@ -4790,7 +3808,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
     /**
      * postApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
@@ -4798,7 +3816,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminUsers.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
   }
   ['/api/b2b/admin/enums/categories/']: {
@@ -4808,7 +3826,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
     /**
      * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4816,7 +3834,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
   }
   ['/api/b2b/admin/enums/categories/{categoryID}']: {
@@ -4826,7 +3844,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
      * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4834,7 +3852,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
       data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
      * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4842,7 +3860,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   }
   ['/api/b2b/admin/roles/']: {
@@ -4852,7 +3870,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminRoles.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
   }
   ['/api/b2b/admin/salons/']: {
@@ -4862,7 +3880,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
     /**
      * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4870,7 +3888,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminSalons.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}']: {
@@ -4880,7 +3898,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
     /**
      * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4888,7 +3906,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
     /**
      * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4896,7 +3914,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
@@ -4906,7 +3924,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/publish']: {
@@ -4916,7 +3934,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
   }
   ['/api/b2b/admin/services/']: {
@@ -4926,7 +3944,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
     /**
      * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4934,7 +3952,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminServices.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
   }
   ['/api/b2b/admin/services/{serviceID}']: {
@@ -4944,7 +3962,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
     /**
      * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4952,7 +3970,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
     /**
      * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -4960,7 +3978,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   }
   ['/api/b2b/v1/auth/login-as-partner']: {
@@ -4970,7 +3988,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
   }
   ['/api/b2b/v1/users/partners']: {
@@ -4980,7 +3998,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
   }
   ['/api/b2b/v1/enums/categories/']: {
@@ -4990,7 +4008,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
     /**
      * postApiB2BV1EnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -4998,7 +4016,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<UnknownParamsObject> | null,
       data?: Paths.PostApiB2BV1EnumsCategories.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1EnumsCategories.Responses.$200>
   }
   ['/api/b2b/v1/enums/categories/{categoryID}']: {
@@ -5008,7 +4026,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
     /**
      * patchApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -5016,7 +4034,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
       data?: Paths.PatchApiB2BV1EnumsCategoriesCategoryId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
     /**
      * deleteApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
@@ -5024,71 +4042,27 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.QueryParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
   }
-  ['/api/b2b/v1/salons/']: {
+  ['/api/b2b/v1/salons/{salonID}/open-hours-note']: {
     /**
-     * getApiB2BV1Salons - PERMISSION: [PARTNER]
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
-    /**
-     * postApiB2BV1Salons - PERMISSION: [PARTNER]
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
-      data?: Paths.PostApiB2BV1Salons.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
-  }
-  ['/api/b2b/v1/salons/preview']: {
-    /**
-     * getApiB2BV1SalonsPreview - PERMISSION: [PARTNER]
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
-  }
-  ['/api/b2b/v1/salons/{salonID}']: {
-    /**
-     * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
-    /**
-     * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+     * patchApiB2BV1SalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
     'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
-      data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
-    /**
-     * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.RequestBody,
+      config?: AxiosRequestConfig
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdOpenHoursNote.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/publish']: {
     /**
-     * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
+     * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
   }
   ['/api/b2b/v1/services/']: {
@@ -5098,7 +4072,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
     /**
      * postApiB2BV1Services - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -5106,7 +4080,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1Services.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
   }
   ['/api/b2b/v1/services/{serviceID}']: {
@@ -5116,7 +4090,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
     /**
      * patchApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -5124,7 +4098,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
     /**
      * deleteApiB2BV1ServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
@@ -5132,7 +4106,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig  
+      config?: AxiosRequestConfig
     ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   }
 }

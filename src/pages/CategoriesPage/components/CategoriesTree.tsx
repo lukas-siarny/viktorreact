@@ -1,24 +1,22 @@
 import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
-import { Button, Col, Row, Popover, Tree } from 'antd'
+import { Button, Col, Row, Popover, Tree, Divider } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { get, map, isEmpty } from 'lodash'
+import { get, map } from 'lodash'
+import { initialize } from 'redux-form'
 import cx from 'classnames'
 
 // assets
-import { initialize } from 'redux-form'
-import { AntTreeNodeDropEvent } from 'antd/es/tree/Tree'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as ResetIcon } from '../../../assets/icons/reset-icon.svg'
 
 // redux
 import { getCategories } from '../../../reducers/categories/categoriesActions'
 import { RootState } from '../../../reducers'
 
 // utils
-import { history } from '../../../utils/history'
-import { encodeBackDataQuery } from '../../../utils/helper'
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
@@ -32,17 +30,12 @@ type TreeDestinations = {
 	icon?: ReactElement
 	key: number
 	name: string
+	disabled?: boolean
+	parentId?: number | null
 	children?: TreeDestinations[] | null
 }
 
-enum TREE_DATA_ACTIONS {
-	ADD = 'ADD',
-	MOVE = 'MOVE',
-	EDIT = 'EDIT'
-}
-
 const editPermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_EDIT]
-const browsePermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]
 
 const CategoriesTree = () => {
 	const dispatch = useDispatch()
@@ -50,14 +43,13 @@ const CategoriesTree = () => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [showForm, setShowForm] = useState<boolean>(false)
 	const [treeNodeData, setTreeNodeData] = useState<any[]>([])
-	const backUrl = btoa(`${window.location.pathname}${window.location.search}`)
 
-	const nestedDestinations = useSelector((state: RootState) => state.categories.categories)
+	const categories = useSelector((state: RootState) => state.categories.categories)
 
 	const createDestinationHandler = useCallback(
-		(parentId: number, parentTitle: string) => {
+		(parentId: number, parentTitle: string, childrenLength: number) => {
 			setShowForm(true)
-			dispatch(initialize(FORM.CATEGORY, { parentId, parentTitle }))
+			dispatch(initialize(FORM.CATEGORY, { parentId, parentTitle, childrenLength }))
 		},
 		[dispatch]
 	)
@@ -71,13 +63,13 @@ const CategoriesTree = () => {
 	)
 
 	const deleteDestinationHandler = useCallback(
-		async (id: number) => {
+		async (id: number, restore: boolean) => {
 			if (isRemoving) {
 				return
 			}
 			try {
 				setIsRemoving(true)
-				await deleteReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+				await deleteReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: id, restore }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 				dispatch(getCategories())
 				setShowForm(false)
 				setIsRemoving(false)
@@ -90,56 +82,71 @@ const CategoriesTree = () => {
 		[dispatch, isRemoving]
 	)
 
-	const titleBuilder = (title: string, id: number, parentId: number, index: number) => (
-		<Popover
-			placement='right'
-			trigger='click'
-			content={
-				<div className={'flex'}>
-					<Permissions
-						allowed={editPermissions}
-						render={(hasPermission, { openForbiddenModal }) => (
-							<>
-								<Button
-									type='link'
-									className={'noti-btn icon-center'}
-									onClick={hasPermission ? () => createDestinationHandler(id, title) : openForbiddenModal}
-									icon={<PlusIcon />}
-								/>
-								<Button
-									type='link'
-									className={'noti-btn icon-center'}
-									onClick={
-										hasPermission
-											? () => {
-													updateDestinationHandler(id, title, parentId, index)
-											  }
-											: openForbiddenModal
-									}
-									icon={<EditIcon />}
-								/>
-								<DeleteButton
-									className={'icon-center'}
-									onConfirm={hasPermission ? () => deleteDestinationHandler(id) : openForbiddenModal}
-									onlyIcon
-									entityName={t('loc:destináciu')}
-								/>
-							</>
-						)}
-					/>
-				</div>
-			}
-		>
-			<span>{title}</span>
-		</Popover>
+	const titleBuilder = (title: string, id: number, parentId: number, index: number, disabled: boolean, children: any) => (
+		<>
+			<Popover
+				placement='right'
+				trigger='click'
+				content={
+					<div className={'flex'}>
+						<Permissions
+							allowed={editPermissions}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<>
+									{!disabled ? (
+										<>
+											<Button
+												type='link'
+												className={'noti-btn icon-center'}
+												onClick={hasPermission ? () => createDestinationHandler(id, title, children?.length) : openForbiddenModal}
+												icon={<PlusIcon />}
+											/>
+											<Button
+												type='link'
+												className={'noti-btn icon-center'}
+												onClick={
+													hasPermission
+														? () => {
+																updateDestinationHandler(id, title, parentId, index)
+														  }
+														: openForbiddenModal
+												}
+												icon={<EditIcon />}
+											/>
+											<DeleteButton
+												className={'icon-center'}
+												onConfirm={hasPermission ? () => deleteDestinationHandler(id, disabled) : openForbiddenModal}
+												onlyIcon
+												entityName={t('loc:kategóriu')}
+											/>
+										</>
+									) : (
+										<Button
+											type='link'
+											className={'noti-btn icon-center'}
+											onClick={hasPermission ? () => deleteDestinationHandler(id, disabled) : openForbiddenModal}
+											icon={<ResetIcon />}
+										/>
+									)}
+								</>
+							)}
+						/>
+					</div>
+				}
+			>
+				<span>{title}</span>
+			</Popover>
+		</>
 	)
 
 	const childrenRecursive = (parentId: number, children: any[]) => {
 		const childs: TreeDestinations[] & any = children
 		const items: any = map(childs, (child, index) => ({
-			title: titleBuilder(get(child, 'name'), get(child, 'id'), parentId, parseInt(index, 10)),
+			title: titleBuilder(get(child, 'name'), get(child, 'id'), parentId, parseInt(index, 10), !!get(child, 'deletedAt'), get(child, 'children')),
 			key: get(child, 'id'),
 			name: get(child, 'name'),
+			disabled: !!get(child, 'deletedAt'),
+			parentId,
 			children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children')) : null
 		}))
 		return items as any[] & TreeDestinations[]
@@ -147,12 +154,14 @@ const CategoriesTree = () => {
 
 	const treeData = () => {
 		const handledData: TreeDestinations[] = []
-		map(nestedDestinations?.data, (destination, index) => {
+		map(categories?.data, (category: any, index) => {
 			handledData.push({
-				title: titleBuilder(get(destination, 'name'), get(destination, 'id'), -1, parseInt(index, 10)),
-				key: get(destination, 'id'),
-				name: get(destination, 'name'),
-				children: get(destination, 'children') ? childrenRecursive(get(destination, 'id'), get(destination, 'children') as any[]) : null
+				title: titleBuilder(get(category, 'name'), get(category, 'id'), -1, parseInt(index, 10), !!get(category, 'deletedAt'), get(category, 'children')),
+				key: get(category, 'id'),
+				name: get(category, 'name'),
+				parentId: null,
+				disabled: !!get(category, 'deletedAt'),
+				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[]) : null
 			})
 		})
 		setTreeNodeData(handledData as TreeDestinations[] & DataNode[])
@@ -160,45 +169,7 @@ const CategoriesTree = () => {
 
 	useEffect(() => {
 		treeData()
-	}, [nestedDestinations])
-
-	// update tree data structure
-	const updateTreeData = (data: TreeDestinations[], targetParentKey: number, posIndex: number, addedNode: TreeDestinations, action: TREE_DATA_ACTIONS): TreeDestinations[] => {
-		const result: TreeDestinations[] = []
-		data.forEach((node: TreeDestinations) => {
-			// check and remove moved node => basically removing of moved node
-			if (node.key !== addedNode?.key) {
-				const updatedNode: TreeDestinations = { ...node }
-				let executed = false
-				// check for target parent key
-				if (targetParentKey === node.key) {
-					// add node to parent
-					if (action === TREE_DATA_ACTIONS.MOVE) {
-						console.log(TREE_DATA_ACTIONS.MOVE)
-						updatedNode?.children?.splice(posIndex, 0, addedNode)
-					} else if (action === TREE_DATA_ACTIONS.EDIT && !isEmpty(updatedNode.children)) {
-						console.log(TREE_DATA_ACTIONS.EDIT)
-						let editedNode: any = { ...updatedNode?.children?.[posIndex] }
-						editedNode = {
-							...editedNode,
-							name: addedNode?.name
-						}
-						updatedNode?.children?.splice(posIndex, 0, editedNode)
-					}
-					executed = true
-				}
-				// prevent deeper nesting if target node is updated => executed variable
-				if (!isEmpty(node.children) && !executed) {
-					// recursively update all children
-					updatedNode.children = updateTreeData(node.children || [], targetParentKey, posIndex, addedNode, action)
-				}
-				result.push({ ...updatedNode })
-			} else if (action === TREE_DATA_ACTIONS.ADD) {
-				console.log(TREE_DATA_ACTIONS.ADD)
-			}
-		})
-		return result
-	}
+	}, [categories])
 
 	const onDrop = async (droppedData: any) => {
 		try {
@@ -206,23 +177,54 @@ const CategoriesTree = () => {
 			const dropKey: number = droppedData.node.key
 			// key of dragged node
 			const dragKey: number = droppedData.dragNode.key
+			// drag node actual index/position in array children nodes
+			const dragPos: string = droppedData.dragNode.pos.split('-')
 			const dropPos: string = droppedData.node.pos.split('-')
 			// drop index position in drop node children array
 			const dropPosition: number = droppedData.dropPosition - Number(dropPos[dropPos.length - 1])
 			let body: any = {
-				name: droppedData.node.name,
-				orderIndex: dropPosition + 1
+				name: droppedData.dragNode.name,
+				orderIndex: (dropPosition >= 0 ? dropPosition : 0) + 1
 			}
-			if (dropKey >= 0) {
+
+			// check condition if user dropped node to gap between nodes
+			if (
+				!droppedData.dropToGap ||
+				((droppedData.node.children || []).length > 0 && // Has children
+					droppedData.node.expanded && // Is expanded
+					dropPosition === 1)
+			) {
+				// dropped node outside of gap between nodes
+				if (dropKey >= 0) {
+					body = {
+						...body,
+						parentID: dropKey
+					}
+				}
+			} else {
+				//  dropped node inside of gap between nodes or dropped node to start or end of children nodes array
+				let orderIndex: number
+				// if drop position is not detected
+				if (dropPosition === -1) {
+					orderIndex = 1
+				} else if (Number(dragPos[dragPos.length - 1]) < droppedData.dropPosition && droppedData.node.props.data.parentId === droppedData.dragNode.props.data.parentId) {
+					// check if drag position is less than drop position and if is inside same node parent
+					orderIndex = droppedData.dropPosition
+				} else {
+					// if previous condition is not met, count one to the index of drop node
+					// dropped node fitted in gap between two node
+					orderIndex = droppedData.dropPosition + 1
+				}
+				// prepare body for request
 				body = {
 					...body,
-					parentID: dropKey
+					parentID: droppedData.node.props.data.parentId,
+					orderIndex
 				}
 			}
 			// check and update categories on be
 			await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: dragKey }, body)
-			// if everything is ok upgrade local state
-			setTreeNodeData(updateTreeData(treeNodeData, dropKey, dropPosition, droppedData.dragNode, TREE_DATA_ACTIONS.MOVE))
+			dispatch(getCategories())
 			setShowForm(false)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -231,11 +233,11 @@ const CategoriesTree = () => {
 	}
 
 	const handleSubmit = async (formData: ICategoryForm) => {
+		const cat: any | null = categories?.data
 		try {
-			let updatedTreeNodeData = []
 			let body: any = {
 				name: formData.name,
-				orderIndex: (formData.orderIndex || 0) + 1
+				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1
 			}
 			if (formData.parentId >= 0) {
 				body = {
@@ -243,34 +245,12 @@ const CategoriesTree = () => {
 					parentID: formData.parentId
 				}
 			}
-			if (!isEmpty(formData.id)) {
+			if (formData.id && formData.id >= 0) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
-				updatedTreeNodeData = updateTreeData(
-					treeNodeData,
-					// if parentID not exist add own key because node is root
-					body?.parentID || formData?.orderIndex,
-					formData.orderIndex,
-					{
-						name: formData.name,
-						key: formData?.orderIndex
-					},
-					TREE_DATA_ACTIONS.ADD
-				)
 			} else {
-				const { data }: any = await postReq('/api/b2b/admin/enums/categories/', null, body)
-				updatedTreeNodeData = updateTreeData(
-					treeNodeData,
-					// if parentID not exist add own key because node is root
-					body?.parentID || data?.orderIndex,
-					data?.orderIndex,
-					{
-						name: formData.name,
-						key: data?.orderIndex
-					},
-					TREE_DATA_ACTIONS.EDIT
-				)
+				await postReq('/api/b2b/admin/enums/categories/', null, body)
 			}
-			setTreeNodeData(updatedTreeNodeData)
+			dispatch(getCategories())
 			setShowForm(false)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -284,7 +264,10 @@ const CategoriesTree = () => {
 
 	return (
 		<>
-			<Row className={'flex justify-end'}>
+			<Row className={'flex justify-between'}>
+				<Col span={6}>
+					<h3>{t('loc:Kategórie')}</h3>
+				</Col>
 				<Col span={6}>
 					<Button
 						onClick={() => {
@@ -305,8 +288,9 @@ const CategoriesTree = () => {
 					<Tree className={'noti-tree'} treeData={treeNodeData} onDrop={onDrop} showIcon showLine draggable />
 				</div>
 				{showForm ? (
-					<div className={'w-6/12'}>
-						<CategoryForm deleteCategory={(id: number) => deleteDestinationHandler(id)} onSubmit={handleSubmit} />
+					<div className={'w-6/12 flex justify-around items-start'}>
+						<Divider className={'h-full'} type={'vertical'} />
+						<CategoryForm deleteCategory={(id: number) => deleteDestinationHandler(id, false)} onSubmit={handleSubmit} />
 					</div>
 				) : undefined}
 			</div>

@@ -52,7 +52,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 								</Menu.Item>
 							) : undefined}
 							{checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]) ? (
-								<Menu.Item key={PAGE.CATEGORIES} onClick={() => history.push(getPath(t('paths:categories')))} icon={<ThumbnailIcon />}>
+								<Menu.Item key={PAGE.CATEGORIES} onClick={() => history.push(t('paths:categories'))} icon={<ThumbnailIcon />}>
 									{t('loc:Kategórie')}
 								</Menu.Item>
 							) : undefined}
@@ -61,7 +61,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
-					<p>User detail</p>
+					<Link className='flex justify-start pt-2 pb-2' to={t('paths:my-account')}>
+						My account
+					</Link>
 					<Button block onClick={() => dispatch(logOutUser())}>
 						{t('loc:Odhlásiť')}
 					</Button>

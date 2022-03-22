@@ -11,7 +11,7 @@ import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../utils/enums'
 import { formFieldID } from '../utils/helper'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
-type Props = WrappedFieldProps &
+export type Props = WrappedFieldProps &
 	FormItemProps &
 	RangePickerProps & {
 		disableFuture?: boolean // for disable startDate from past
@@ -39,7 +39,8 @@ const DateRangePickerField = (props: Props) => {
 		disabledDate,
 		itemRef,
 		required,
-		meta
+		meta,
+		size
 	} = props
 
 	const onFocus = (e: any) => {
@@ -105,6 +106,7 @@ const DateRangePickerField = (props: Props) => {
 					dropdownClassName={dropdownClassName}
 					renderExtraFooter={renderExtraFooter}
 					getPopupContainer={getPopupContainer || ((node) => node)}
+					size={size}
 				/>
 			</div>
 		</Form.Item>

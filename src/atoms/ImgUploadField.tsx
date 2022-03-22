@@ -62,7 +62,6 @@ const ImgUploadField: FC<Props> = (props) => {
 			input.onChange(values)
 		}
 		if (info.file.status === 'uploading') {
-
 			input.onChange(info.fileList)
 		}
 		if (isEmpty(info.fileList)) {

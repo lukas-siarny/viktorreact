@@ -25,14 +25,14 @@ import Permissions from '../../../utils/Permissions'
 import DeleteButton from '../../../components/DeleteButton'
 import CategoryForm, { ICategoryForm } from './CategoryForm'
 
-type TreeDestinations = {
+type TreeCategories = {
 	title?: ReactElement
 	icon?: ReactElement
 	key: number
 	name: string
 	disabled?: boolean
 	parentId?: number | null
-	children?: TreeDestinations[] | null
+	children?: TreeCategories[] | null
 }
 
 const editPermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_EDIT]
@@ -46,7 +46,7 @@ const CategoriesTree = () => {
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 
-	const createDestinationHandler = useCallback(
+	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number) => {
 			setShowForm(true)
 			dispatch(initialize(FORM.CATEGORY, { parentId, parentTitle, childrenLength }))
@@ -54,7 +54,7 @@ const CategoriesTree = () => {
 		[dispatch]
 	)
 
-	const updateDestinationHandler = useCallback(
+	const updateCategoryHandler = useCallback(
 		(id: number, title: string, parentId: number, index: number) => {
 			setShowForm(true)
 			dispatch(initialize(FORM.CATEGORY, { id, name: title, parentId, orderIndex: index }))
@@ -62,7 +62,7 @@ const CategoriesTree = () => {
 		[dispatch]
 	)
 
-	const deleteDestinationHandler = useCallback(
+	const deleteCategoryHandler = useCallback(
 		async (id: number, restore: boolean) => {
 			if (isRemoving) {
 				return
@@ -98,7 +98,7 @@ const CategoriesTree = () => {
 											<Button
 												type='link'
 												className={'noti-btn icon-center'}
-												onClick={hasPermission ? () => createDestinationHandler(id, title, children?.length) : openForbiddenModal}
+												onClick={hasPermission ? () => createCategoryHandler(id, title, children?.length) : openForbiddenModal}
 												icon={<PlusIcon />}
 											/>
 											<Button
@@ -107,7 +107,7 @@ const CategoriesTree = () => {
 												onClick={
 													hasPermission
 														? () => {
-																updateDestinationHandler(id, title, parentId, index)
+																updateCategoryHandler(id, title, parentId, index)
 														  }
 														: openForbiddenModal
 												}
@@ -115,7 +115,7 @@ const CategoriesTree = () => {
 											/>
 											<DeleteButton
 												className={'icon-center'}
-												onConfirm={hasPermission ? () => deleteDestinationHandler(id, disabled) : openForbiddenModal}
+												onConfirm={hasPermission ? () => deleteCategoryHandler(id, disabled) : openForbiddenModal}
 												onlyIcon
 												entityName={t('loc:kategóriu')}
 											/>
@@ -124,7 +124,7 @@ const CategoriesTree = () => {
 										<Button
 											type='link'
 											className={'noti-btn icon-center'}
-											onClick={hasPermission ? () => deleteDestinationHandler(id, disabled) : openForbiddenModal}
+											onClick={hasPermission ? () => deleteCategoryHandler(id, disabled) : openForbiddenModal}
 											icon={<ResetIcon />}
 										/>
 									)}
@@ -140,7 +140,7 @@ const CategoriesTree = () => {
 	)
 
 	const childrenRecursive = (parentId: number, children: any[]) => {
-		const childs: TreeDestinations[] & any = children
+		const childs: TreeCategories[] & any = children
 		const items: any = map(childs, (child, index) => ({
 			title: titleBuilder(get(child, 'name'), get(child, 'id'), parentId, parseInt(index, 10), !!get(child, 'deletedAt'), get(child, 'children')),
 			key: get(child, 'id'),
@@ -149,11 +149,11 @@ const CategoriesTree = () => {
 			parentId,
 			children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children')) : null
 		}))
-		return items as any[] & TreeDestinations[]
+		return items as any[] & TreeCategories[]
 	}
 
 	const treeData = () => {
-		const handledData: TreeDestinations[] = []
+		const handledData: TreeCategories[] = []
 		map(categories?.data, (category: any, index) => {
 			handledData.push({
 				title: titleBuilder(get(category, 'name'), get(category, 'id'), -1, parseInt(index, 10), !!get(category, 'deletedAt'), get(category, 'children')),
@@ -164,7 +164,7 @@ const CategoriesTree = () => {
 				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[]) : null
 			})
 		})
-		setTreeNodeData(handledData as TreeDestinations[] & DataNode[])
+		setTreeNodeData(handledData as TreeCategories[] & DataNode[])
 	}
 
 	useEffect(() => {
@@ -288,7 +288,7 @@ const CategoriesTree = () => {
 				{showForm ? (
 					<div className={'w-6/12 flex justify-around items-start'}>
 						<Divider className={'h-full'} type={'vertical'} />
-						<CategoryForm deleteCategory={(id: number) => deleteDestinationHandler(id, false)} onSubmit={handleSubmit} />
+						<CategoryForm deleteCategory={(id: number) => deleteCategoryHandler(id, false)} onSubmit={handleSubmit} />
 					</div>
 				) : undefined}
 			</div>

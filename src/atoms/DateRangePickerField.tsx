@@ -9,7 +9,6 @@ import { ReactComponent as SeparatorIcon } from '../assets/icons/datepicker-sepa
 
 import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../utils/enums'
 import { formFieldID } from '../utils/helper'
-import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
 export type Props = WrappedFieldProps &
 	FormItemProps &
@@ -93,12 +92,12 @@ const DateRangePickerField = (props: Props) => {
 			<div id={formFieldID(meta.form, input.name)}>
 				<RangePicker
 					ref={itemRef}
+					className={'noti-date-picker'}
 					value={value}
 					onChange={onChange}
 					format={format}
 					onFocus={onFocus}
 					placeholder={placeholder}
-					clearIcon={<RemoveIcon className={'text-blue-600'} />}
 					suffixIcon={suffixIcon}
 					separator={separator || <SeparatorIcon />}
 					open={open}

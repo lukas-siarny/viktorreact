@@ -22,28 +22,12 @@ const OpenHoursNoteFields = (props: Props) => {
 		<>
 			<Row>
 				<Col span={24}>
-					<Field
-						component={DateRangePickerField}
-						disablePast
-						name={`${name}.range`}
-						// dropdownClassName={'products-filter-date-range-dropdown'}
-						placeholder={datePlaceholder}
-						// getPopupContainer={() => document.body}
-						label={dateLabel}
-						size={size}
-					/>
+					<Field component={DateRangePickerField} disablePast name={`${name}.range`} placeholder={datePlaceholder} label={dateLabel} size={size} />
 				</Col>
 			</Row>
 			<Row>
 				<Col span={24}>
-					<Field
-						component={TextareaField}
-						// disablePast
-						name={`${name}.note`}
-						placeholder={textAreaPlaceholder}
-						label={textAreaLabel}
-						size={size}
-					/>
+					<Field component={TextareaField} name={`${name}.note`} placeholder={textAreaPlaceholder} label={textAreaLabel} size={size} />
 				</Col>
 			</Row>
 		</>

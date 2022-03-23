@@ -60,15 +60,8 @@ const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/log
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
 
 		const { data } = await postReq(url, null, input, config)
-
-		// temp fix
-		if ('accessToken' in data) {
-			setAccessToken(data.accessToken)
-		}
-		// temp fix
-		if ('refreshToken' in data) {
-			setRefreshToken(data.refreshToken)
-		}
+		setAccessToken(data.accessToken)
+		setRefreshToken(data.refreshToken)
 
 		// parse permissions from role
 		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))

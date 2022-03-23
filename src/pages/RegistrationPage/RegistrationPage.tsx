@@ -1,17 +1,13 @@
 import React, { FC, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { reset, initialize } from 'redux-form'
-import { useTranslation } from 'react-i18next'
 import { map } from 'lodash'
 
 // components
 import RegistrationForm from './components/RegistrationForm'
 
 // utils
-import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE, FORM, LANGUAGE } from '../../utils/enums'
-import { setAccessToken, setRefreshToken } from '../../utils/auth'
-import { history, getPath } from '../../utils/history'
+import { FORM, LANGUAGE } from '../../utils/enums'
 import { getPrefixCountryCode } from '../../utils/helper'
 
 // interfaces

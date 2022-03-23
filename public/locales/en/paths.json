@@ -2,10 +2,10 @@
   "activation": "/activation",
   "home": "/home",
   "index": "/",
-  "login": "/auth/login",
+  "login": "/login",
   "my-account": "/my-account",
-  "reset-password": "/auth/reset-password",
-  "signup": "/auth/signup",
+  "reset-password": "/reset-password",
+  "signup": "/signup",
   "user-detail/{{userID}}": "/user-detail/{{userID}}",
   "user/create": "/user/create",
   "users": "/users"

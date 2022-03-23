@@ -92,13 +92,16 @@ import {
 	ADULT_PERSON_TYPE_MAX_AGE,
 	RESERVATION_STATE,
 	FACILITY_PROPERTY_CATEGORIES,
-	UNIT_TEMPLATE_FACILITY_TYPE
+	UNIT_TEMPLATE_FACILITY_TYPE,
+	BYTE_MULTIPLIER
 } from './enums'
 
 import pdfLogoPath from '../assets/icons/pdf-icon.svg'
 import docLogoPath from '../assets/icons/doc-icon.svg'
 import xlsLogoPath from '../assets/icons/xls-icon.svg'
 import unknownDocumentPath from '../assets/icons/unknown-document-icon.svg'
+
+import { Paths } from '../types/api'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -396,4 +399,37 @@ export const getPrefixCountryCode = (options: string[], fallback: string) => {
 export function setIntervalImmediately(func: Function, interval: number) {
 	func()
 	return setInterval(func, interval)
+}
+
+export const getMaxSizeNotifMessage = (maxFileSize: any) => {
+	let notifMaxSize
+	if (maxFileSize >= BYTE_MULTIPLIER.MEGA) {
+		notifMaxSize = [maxFileSize / BYTE_MULTIPLIER.MEGA, 'MB']
+	} else {
+		notifMaxSize = [maxFileSize / BYTE_MULTIPLIER.KILO, 'KB']
+	}
+	return {
+		type: MSG_TYPE.ERROR,
+		message: i18next.t('loc:Súbor je príliš veľký (max. {{size}} {{unit}})', {
+			size: notifMaxSize[0],
+			unit: notifMaxSize[1]
+		})
+	}
+}
+
+type ImgUploadData = { uid: string; path: string } & Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['files'][0]
+export type ImgUploadParam = { [key: string]: ImgUploadData }
+
+export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) => {
+	const values = map(fileList, (file) => {
+		const fileData = filesData[get(file, 'uid')]
+
+		return {
+			...file,
+			id: get(file, 'id') || fileData?.id,
+			url: get(file, 'url') || fileData?.path,
+			signedUrl: fileData?.signedUrl
+		}
+	})
+	return values
 }

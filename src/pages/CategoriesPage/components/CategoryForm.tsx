@@ -39,7 +39,9 @@ const CategoryForm: FC<Props> = (props) => {
 		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3'}>{values?.id ? t('loc:Upraviť kategóriu') : `${t('loc:Vytvoriť kategóriu')}${values?.parentTitle ? values?.parentTitle : ''}`}</h3>
+					<h3 className={'mb-0 mt-3'}>
+						{values?.id ? t('loc:Upraviť kategóriu') : `${t('loc:Vytvoriť kategóriu')}${values?.parentTitle ? ` - ${values?.parentTitle}` : ''}`}
+					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<Field component={InputField} label={t('loc:Názov kategórie')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
 					<div className={'flex justify-between'}>

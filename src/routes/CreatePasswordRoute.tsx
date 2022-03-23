@@ -12,7 +12,6 @@ import BaseRoute from './BaseRoute'
 // utils
 import { TOKEN_AUDIENCE } from '../utils/enums'
 import { isLoggedIn } from '../utils/auth'
-import { getPath } from '../utils/history'
 
 type Props = WithTranslation &
 	RouteProps & {
@@ -27,7 +26,7 @@ class CreatePasswordRoute extends Route<Props> {
 
 		// if user is already logged In or token does not exist redirect to index route
 		if (isLoggedIn() || !t) {
-			return <Redirect to={getPath(this.props.t('paths:index'))} />
+			return <Redirect to={this.props.t('paths:index')} />
 		}
 
 		const payload = decode(t as string)
@@ -38,7 +37,7 @@ class CreatePasswordRoute extends Route<Props> {
 			return <BaseRoute {...(this.props as any)} token={t} />
 		}
 
-		return <Redirect to={getPath(this.props.t('paths:index'))} />
+		return <Redirect to={this.props.t('paths:index')} />
 	}
 }
 

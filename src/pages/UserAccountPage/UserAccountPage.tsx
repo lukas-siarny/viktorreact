@@ -23,7 +23,7 @@ import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
-import { getPath, history } from '../../utils/history'
+import { history } from '../../utils/history'
 import { checkPermissions } from '../../utils/Permissions'
 import showNotifications from '../../utils/tsxHelpers'
 import { getCountries } from '../../reducers/enumerations/enumerationActions'
@@ -98,7 +98,7 @@ const UserAccountPage: FC<Props> = (props) => {
 		items: [
 			{
 				name: t('loc:Zoznam používateľov'),
-				link: getPath(t('paths:users'))
+				link: t('paths:users')
 			},
 			{
 				name: t('loc:Detail používateľa'),
@@ -117,7 +117,7 @@ const UserAccountPage: FC<Props> = (props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/users/{userID}', { userID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(getPath(t('paths:users')))
+			history.push(t('paths:users'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -138,7 +138,7 @@ const UserAccountPage: FC<Props> = (props) => {
 	return (
 		<>
 			<Row className={hideClass}>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:users'))} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
 			<div className='content-body small'>
 				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(get(userAccountDetail, 'data.company'))} />

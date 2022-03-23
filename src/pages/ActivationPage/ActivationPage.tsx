@@ -8,7 +8,7 @@ import ActivationForm from './components/ActivationForm'
 
 // utils
 import { postReq } from '../../utils/request'
-import { history, getPath } from '../../utils/history'
+import { history } from '../../utils/history'
 
 // redux
 import { RootState } from '../../reducers'
@@ -25,7 +25,7 @@ const ActivationPage = () => {
 
 	useEffect(() => {
 		if (currentUser?.activateAt) {
-			history.push(getPath(t('paths:index')))
+			history.push(t('paths:index'))
 		}
 	}, [t, currentUser])
 

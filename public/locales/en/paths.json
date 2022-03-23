@@ -7,7 +7,8 @@
   "my-account": "/my-account",
   "reset-password": "/reset-password",
   "signup": "/signup",
-  "salons": "/salons",
+  "salon": "/salon",
+  "salon/{{salonID}}": "/salon/{{salonID}}",
   "user-detail/{{userID}}": "/user-detail/{{userID}}",
   "user/create": "/user/create",
   "users": "/users"

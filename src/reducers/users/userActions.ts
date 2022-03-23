@@ -99,11 +99,13 @@ export const logInUser =
 export const resetPassword =
 	(input: Pick<ICreatePasswordForm, 'password'>, token: string): ThunkResult<void> =>
 	async (dispatch) => {
-		const headers = {
-			Authorization: `Bearer ${token}`
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
 		}
 
-		await authorize(dispatch, '/api/b2b/admin/auth/reset-password', input, headers as ICustomConfig)
+		await authorize(dispatch, '/api/b2b/admin/auth/reset-password', input, config)
 	}
 
 export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch) => {

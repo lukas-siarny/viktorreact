@@ -27,7 +27,7 @@ type Props = WrappedFieldProps &
 		// /** Max file size in Bytes */
 		maxFileSize: number
 		// endpoint which returns signed url for image upload
-		sighUrl: string
+		signUrl: string
 	}
 
 // export type ImgUploadParam = { [key: string]: { uid: string } }
@@ -45,7 +45,7 @@ const ImgUploadField: FC<Props> = (props) => {
 		accept = 'image/jpeg,image/png',
 		maxFileSize,
 		disabled,
-		sighUrl,
+		signUrl,
 		multiple,
 		maxCount = 20
 	} = props
@@ -81,7 +81,7 @@ const ImgUploadField: FC<Props> = (props) => {
 		const { uid, name, size, type } = file
 		const files = [{ name, size, mimeType: type }]
 
-		const { data } = await postReq(sighUrl as any, undefined, { files })
+		const { data } = await postReq(signUrl as any, undefined, { files })
 		const imgData = data?.files?.[0]
 		imagesUrls.current[uid] = { uid, ...imgData }
 

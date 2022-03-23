@@ -92,7 +92,8 @@ import {
 	ADULT_PERSON_TYPE_MAX_AGE,
 	RESERVATION_STATE,
 	FACILITY_PROPERTY_CATEGORIES,
-	UNIT_TEMPLATE_FACILITY_TYPE
+	UNIT_TEMPLATE_FACILITY_TYPE,
+	BYTE_MULTIPLIER
 } from './enums'
 
 import pdfLogoPath from '../assets/icons/pdf-icon.svg'
@@ -402,10 +403,10 @@ export function setIntervalImmediately(func: Function, interval: number) {
 
 export const getMaxSizeNotifMessage = (maxFileSize: any) => {
 	let notifMaxSize
-	if (maxFileSize >= 10 ** 6) {
-		notifMaxSize = [maxFileSize / 10 ** 6, 'MB']
+	if (maxFileSize >= BYTE_MULTIPLIER.MEGA) {
+		notifMaxSize = [maxFileSize / BYTE_MULTIPLIER.MEGA, 'MB']
 	} else {
-		notifMaxSize = [maxFileSize / 10 ** 3, 'KB']
+		notifMaxSize = [maxFileSize / BYTE_MULTIPLIER.KILO, 'KB']
 	}
 	return {
 		type: MSG_TYPE.ERROR,

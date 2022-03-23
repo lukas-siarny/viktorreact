@@ -401,6 +401,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		return Promise.reject(e)
 	}
 }
+
 export const uploadFile = async (options: any) => {
 	const { action, file, onSuccess, onError } = options
 

@@ -5,8 +5,9 @@ import { useEffect } from 'react'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 
 // utils
+import { initialize } from 'redux-form'
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION } from '../../utils/enums'
+import { FORM, PERMISSION, SALON_STATUSES } from '../../utils/enums'
 
 // reducers
 import { getSalons } from '../../reducers/salons/salonsActions'
@@ -21,15 +22,16 @@ const SalonsPage = () => {
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		categoryFirstLevelID: NumberParam,
-		statuses: withDefault(StringParam, 'ALL'),
+		statuses: withDefault(StringParam, SALON_STATUSES.ALL),
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'fullName:ASC')
 	})
 
 	useEffect(() => {
-		dispatch(getSalons())
-	}, [])
+		dispatch(initialize(FORM.SALONS_FILTER, { search: query.search }))
+		dispatch(getSalons(query.page, query.limit, query.order, query.search, query.categoryFirstLevelID, query.statuses))
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelID, query.statuses])
 
 	return <>TEST</>
 }

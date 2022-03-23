@@ -51,7 +51,7 @@ const OpenHoursNoteModal = (props: Props) => {
 	}
 
 	return (
-		<Modal title={title} visible={visible} onCancel={hideModal} footer={null} closeIcon={<CloseIcon />}>
+		<Modal key={`${visible}`} title={title} visible={visible} onCancel={hideModal} footer={null} closeIcon={<CloseIcon />}>
 			<OpenHoursNoteForm onSubmit={handleSubmit} />
 		</Modal>
 	)

@@ -42,8 +42,7 @@ const OpenHoursNoteForm: FC<Props> = (props) => {
 const form = reduxForm<IOpenHoursNoteForm, ComponentProps>({
 	form: FORM.OPEN_HOURS_NOTE,
 	forceUnregisterOnUnmount: true,
-	touchOnChange: false,
-	touchOnBlur: true,
+	touchOnChange: true,
 	destroyOnUnmount: true,
 	validate: validateOpenHoursNoteForm
 })(OpenHoursNoteForm)

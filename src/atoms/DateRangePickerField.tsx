@@ -89,7 +89,7 @@ const DateRangePickerField = (props: Props) => {
 	)
 
 	return (
-		<Form.Item style={style} label={label} required={required}>
+		<Form.Item style={style} label={label} required={required} help={meta.touched && meta.error} validateStatus={meta.error && meta.touched ? 'error' : undefined}>
 			<div id={formFieldID(meta.form, input.name)}>
 				<RangePicker
 					ref={itemRef}

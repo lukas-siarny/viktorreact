@@ -1,5 +1,6 @@
 {
   "activation": "/activation",
+  "categories": "/categories",
   "home": "/home",
   "index": "/",
   "login": "/login",

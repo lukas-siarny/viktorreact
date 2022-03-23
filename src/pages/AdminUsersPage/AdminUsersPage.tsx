@@ -135,7 +135,6 @@ const AdminUsersPage = () => {
 		}
 	]
 
-	// View
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{

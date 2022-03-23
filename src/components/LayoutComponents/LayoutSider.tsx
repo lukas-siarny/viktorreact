@@ -43,12 +43,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							<Menu.Item key={PAGE.HOME} onClick={() => history.push(t('paths:home'))} icon={<ThumbnailIcon />}>
 								{t('loc:Home')}
 							</Menu.Item>
-							<Menu.Item key={PAGE.MY_ACCOUNT} onClick={() => history.push(t('paths:my-account'))} icon={<ThumbnailIcon />}>
-								{t('loc:Môj účet')}
-							</Menu.Item>
 							{checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]) ? (
 								<Menu.Item key={PAGE.USERS} onClick={() => history.push(t('paths:users'))} icon={<ThumbnailIcon />}>
 									{t('loc:Používatelia')}
+								</Menu.Item>
+							) : undefined}
+							{checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]) ? (
+								<Menu.Item key={PAGE.CATEGORIES} onClick={() => history.push(t('paths:categories'))} icon={<ThumbnailIcon />}>
+									{t('loc:Kategórie')}
 								</Menu.Item>
 							) : undefined}
 						</Menu>
@@ -56,7 +58,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
-					<p>User detail</p>
+					<Link className='flex justify-start pt-2 pb-2' to={t('paths:my-account')}>
+						{t('loc: Môj účet')}
+					</Link>
 					<Button block onClick={() => dispatch(logOutUser())}>
 						{t('loc:Odhlásiť')}
 					</Button>

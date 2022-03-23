@@ -36,13 +36,8 @@ const onIdle = () => {
 const AuthRoute: FC<Props> = (props) => {
 	const { page } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const currentUser = useSelector((state: RootState) => state.user.authUser)
 	const isActivated = currentUser.data?.activateAt
-
-	useEffect(() => {
-		dispatch(getCurrentUser())
-	}, [dispatch])
 
 	if (!isLoggedIn()) {
 		return <Redirect to={t('paths:login')} />

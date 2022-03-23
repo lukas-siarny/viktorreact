@@ -37,6 +37,9 @@ import CreateUserAccountPage from '../pages/UserAccountPage/CreateUserAccountPag
 // categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
+// Salons
+import SalonsPage from '../pages/SalonsPage/SalonsPage'
+
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -80,6 +83,15 @@ const Routes: FC = (props) => {
 				translatePathKey={t('paths:activation')}
 				layout={MainLayout}
 				page={PAGE.ACTIVATION}
+			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:salons')}
+				component={SalonsPage}
+				translatePathKey={t('paths:salons')}
+				layout={MainLayout}
+				page={PAGE.SALONS}
 			/>
 			<AuthRoute
 				{...props}

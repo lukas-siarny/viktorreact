@@ -1,16 +1,13 @@
 import React, { FC } from 'react'
-import { Field, reduxForm, InjectedFormProps } from 'redux-form'
+import { reduxForm, InjectedFormProps } from 'redux-form'
 import { Form, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-
-// atoms
-import InputField from '../../atoms/InputField'
 
 // interfaces
 import { IOpenHoursNoteForm } from '../../types/interfaces'
 
 // utils
-import { FORM } from '../../utils/enums'
+import { FORM, STRINGS } from '../../utils/enums'
 
 // components
 import OpenHoursNoteFields from './OpenHoursNoteFields'
@@ -29,13 +26,15 @@ const OpenHoursNoteForm: FC<Props> = (props) => {
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<OpenHoursNoteFields
-				// placeholder={[t('loc:Vyberte termín od'), t('loc:Vyberte termín do')]}
 				datePlaceholder={[t('loc:Od'), t('loc:Do')]}
-				dateLabel={'Datum'}
-				textAreaPlaceholder='test'
-				textAreaLabel='Poznamka'
+				dateLabel={t('loc:Dátum')}
+				textAreaPlaceholder={STRINGS(t).enter(t('loc:poznámku'))}
+				textAreaLabel={t('loc:Poznámka')}
 				size={'large'}
 			/>
+			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
+				{STRINGS(t).save(t('loc:poznámku'))}
+			</Button>
 		</Form>
 	)
 }

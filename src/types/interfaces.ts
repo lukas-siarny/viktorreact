@@ -121,3 +121,13 @@ export interface IBreadcrumbs {
 export interface ICountryLabel {
 	[key: string]: string
 }
+
+export interface IOpenHoursNoteForm {
+	hoursNote: {
+		note: string
+		range: {
+			dateFrom: string
+			dateTo: string
+		}
+	}
+}

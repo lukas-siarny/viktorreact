@@ -3,8 +3,8 @@ import { Row, Col } from 'antd'
 import { Field } from 'redux-form'
 
 // atoms
-import DateRangePickerField, { Props as DateProps } from '../atoms/DateRangePickerField'
-import TextareaField from '../atoms/TextareaField'
+import DateRangePickerField, { Props as DateProps } from '../../atoms/DateRangePickerField'
+import TextareaField from '../../atoms/TextareaField'
 
 type Props = {
 	size?: string
@@ -28,7 +28,7 @@ const OpenHoursNoteFields = (props: Props) => {
 						name={`${name}.range`}
 						// dropdownClassName={'products-filter-date-range-dropdown'}
 						placeholder={datePlaceholder}
-						getPopupContainer={() => document.body}
+						// getPopupContainer={() => document.body}
 						label={dateLabel}
 						size={size}
 					/>

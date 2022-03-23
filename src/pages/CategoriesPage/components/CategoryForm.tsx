@@ -49,7 +49,7 @@ const CategoryForm: FC<Props> = (props) => {
 						{values?.id ? (
 							<DeleteButton
 								onConfirm={() => deleteCategory(values?.id)}
-								entityName={t('loc:kategóriu')}
+								entityName={''}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 							/>

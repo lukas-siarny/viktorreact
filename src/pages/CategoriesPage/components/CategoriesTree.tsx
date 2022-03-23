@@ -188,12 +188,7 @@ const CategoriesTree = () => {
 			}
 
 			// check condition if user dropped node to gap between nodes
-			if (
-				!droppedData.dropToGap ||
-				((droppedData.node.children || []).length > 0 && // Has children
-					droppedData.node.expanded && // Is expanded
-					dropPosition === 1)
-			) {
+			if (!droppedData.dropToGap) {
 				// dropped node outside of gap between nodes
 				if (dropKey >= 0) {
 					body = {
@@ -207,7 +202,10 @@ const CategoriesTree = () => {
 				// if drop position is not detected
 				if (dropPosition === -1) {
 					orderIndex = 1
-				} else if (Number(dragPos[dragPos.length - 1]) < droppedData.dropPosition && droppedData.node.props.data.parentId === droppedData.dragNode.props.data.parentId) {
+				} else if (
+					Number(dragPos[dragPos.length - 1]) < droppedData.dropPosition &&
+					(droppedData.node.props.data.parentId === droppedData.dragNode.props.data.parentId || droppedData.dragNode.props.data.parentId === null)
+				) {
 					// check if drag position is less than drop position and if is inside same node parent
 					orderIndex = droppedData.dropPosition
 				} else {

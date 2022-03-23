@@ -1,7 +1,11 @@
 import React from 'react'
+import AddressForm, { IDestinationForm } from './AddressForm'
 
 const HomePage = () => {
-	return <h1 className='text-5xl font-bold'>Home page content</h1>
-}
+	const handleSubmit = (values: IDestinationForm) => {
+		console.log('🚀 ~ file: HomePage.tsx ~ line 5 ~ handleSubmit ~ values', values)
+	}
 
+	return <AddressForm onSubmit={handleSubmit} />
+}
 export default HomePage

@@ -1,16 +1,9 @@
 /* eslint-disable import/no-cycle */
 import {
-	compact,
-	Dictionary,
-	filter,
-	find,
 	first,
-	flatten,
 	floor,
 	forEach,
 	get,
-	groupBy,
-	identity,
 	includes,
 	inRange,
 	isArray,
@@ -20,85 +13,23 @@ import {
 	isNaN,
 	isNil,
 	isNumber,
-	isString,
-	keys,
-	map,
 	mapValues,
 	orderBy,
 	pick,
-	pickBy,
-	reduce,
-	replace,
 	round,
-	size,
 	some,
 	split,
-	times,
 	toNumber,
-	uniq,
 	chain,
-	lowerCase
+	lowerCase,
+	isString,
+	replace
 } from 'lodash'
-import countryCodeList from 'flagpack-core/countryCodeList.json'
 import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import {
-	ADDRESS_TYPE,
-	ADULT_PERSON_TYPE_MIN_AGE,
-	ARRIVAL_SHIFT,
-	ARRIVAL_SHIFTS,
-	DAY,
-	DEFAULT_DATE_FORMAT,
-	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_DATE_WITH_TIME_FORMAT,
-	DEFAULT_TIME_FORMAT,
-	DEPARTURE_SHIFT,
-	DEPARTURE_SHIFTS,
-	DISCOUNT_VALUE_TYPE,
-	EMPTY_FILTER_ROOM,
-	EXPIRATION_TYPE,
-	FILE_FILTER_DATA_TYPE,
-	FORM,
-	GENDER,
-	GENDERS,
-	GLOBAL_DISCOUNT_TYPE,
-	INVALID_DATE_FORMAT,
-	LINE_DIRECTION,
-	MSG_TYPE,
-	PERMISSION,
-	PERSON_TYPE,
-	PERSON_TYPE_INFANT,
-	PRICELIST_ITEM_TIME_RELATION,
-	PRICELIST_ITEM_TIME_RELATIONS,
-	PRICELIST_ITEM_UNIT_RELATION,
-	PRICELIST_ITEM_UNIT_RELATIONS,
-	PRICELIST_ITEM_USAGE,
-	PRICELIST_ITEM_USAGES,
-	PROPERTY_TYPE,
-	PROPERTY_TYPES,
-	PUBLICATION_STATUS,
-	PUBLICATION_STATUSES,
-	QUERY_LIMIT,
-	SUBMENU_PARENT,
-	TEXT_TEMPLATE_TYPE,
-	TEXT_TEMPLATE_TYPES,
-	TRAVELER_ROLE,
-	TRAVELER_ROLES,
-	UPLOAD,
-	UPLOAD_ERROR_TYPE,
-	WEB_PROJECT_CODE,
-	ADULT_PERSON_TYPE_MAX_AGE,
-	RESERVATION_STATE,
-	FACILITY_PROPERTY_CATEGORIES,
-	UNIT_TEMPLATE_FACILITY_TYPE
-} from './enums'
-
-import pdfLogoPath from '../assets/icons/pdf-icon.svg'
-import docLogoPath from '../assets/icons/doc-icon.svg'
-import xlsLogoPath from '../assets/icons/xls-icon.svg'
-import unknownDocumentPath from '../assets/icons/unknown-document-icon.svg'
+import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_WITH_TIME_FORMAT, DEFAULT_TIME_FORMAT, FORM, INVALID_DATE_FORMAT, MSG_TYPE } from './enums'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -396,4 +327,47 @@ export const getPrefixCountryCode = (options: string[], fallback: string) => {
 export function setIntervalImmediately(func: Function, interval: number) {
 	func()
 	return setInterval(func, interval)
+}
+
+export const fromStringToFloat = (string: string | number | null | undefined): number | null => {
+	let result
+	if (string && isString(string)) {
+		result = parseFloat(replace(string, ',', '.').replace(' ', ''))
+	} else if (string) {
+		result = Number(string)
+	} else {
+		result = null
+	}
+
+	return result
+}
+
+/**
+ * Returns null - e.g. input was cleared
+ *
+ * Returns NaN - e.g. input value is "asdf"
+ */
+export const transformNumberFieldValue = (rawValue: number | string | undefined | null, min?: number, max?: number, precision?: number, notNullValue?: boolean) => {
+	let result = null
+	const value = typeof rawValue === 'string' ? fromStringToFloat(rawValue) : rawValue
+	if (!value && notNullValue) {
+		result = min
+	}
+	if (isNumber(value) && isFinite(value)) {
+		if (isNumber(min) && value < min) {
+			result = min
+		} else if (isNumber(max) && value > max) {
+			result = max
+		} else if (isNumber(min) && isNumber(max) && value >= min && value <= max) {
+			result = value
+		}
+	} else if (Number.isNaN(value)) {
+		result = NaN
+	}
+
+	if (isFinite(result) && isNumber(precision)) {
+		result = round(result as number, precision)
+	}
+
+	return result
 }

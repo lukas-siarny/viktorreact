@@ -421,7 +421,7 @@ export enum ENUMERATIONS_KEYS {
 	// DEPOSIT_AMOUNTS = 'depositAmounts'
 }
 
-export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBYEtWbN4XE4lcmntowheFqUGKpUKORwZ0&libraries=places&language=sk'
+export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw&libraries=places&language=sk'
 export const UNSPLASH_API_KEY = '-fx2nNGTarjuitKIz4qAUOCP1uLAlPClByWS6YpaSLc'
 export const UNSPLASH_IMAGE_SEARCH_STRING = 'nature'
 export const EMPTY_KEY = 'EMPTY_KEY'
@@ -516,7 +516,7 @@ export const MAP = {
 	minLongitude: -180,
 	maxLongitude: 180,
 	minZoom: 1,
-	maxZoom: 10
+	maxZoom: 20
 }
 
 export enum PAGE_VIEW {

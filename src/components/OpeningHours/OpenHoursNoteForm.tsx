@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next'
 import { IOpenHoursNoteForm } from '../../types/interfaces'
 
 // utils
-import { FORM, STRINGS } from '../../utils/enums'
+import { FORM, STRINGS, PERMISSION } from '../../utils/enums'
+import Permissions from '../../utils/Permissions'
 
 // components
 import OpenHoursNoteFields from './OpenHoursNoteFields'
@@ -32,9 +33,28 @@ const OpenHoursNoteForm: FC<Props> = (props) => {
 				textAreaLabel={t('loc:Poznámka')}
 				size={'large'}
 			/>
-			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
-				{STRINGS(t).save(t('loc:poznámku'))}
-			</Button>
+			<Permissions
+				allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN]}
+				render={(hasPermission, { openForbiddenModal }) => (
+					<Button
+						onClick={(e) => {
+							if (!hasPermission) {
+								e.preventDefault()
+								openForbiddenModal()
+							}
+						}}
+						className='noti-btn'
+						block
+						size='large'
+						type='primary'
+						htmlType='submit'
+						disabled={submitting}
+						loading={submitting}
+					>
+						{STRINGS(t).save(t('loc:poznámku'))}
+					</Button>
+				)}
+			/>
 		</Form>
 	)
 }

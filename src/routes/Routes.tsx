@@ -79,6 +79,7 @@ const Routes: FC = (props) => {
 				page={PAGE.ACTIVATION}
 			/>
 			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} />
+			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
 			<AuthRoute
 				{...props}
 				exact

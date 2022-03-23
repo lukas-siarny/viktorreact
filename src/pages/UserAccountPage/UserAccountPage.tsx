@@ -84,7 +84,7 @@ const UserAccountPage: FC<Props> = (props) => {
 					}
 				}
 			}
-			await patchReq('/api/b2b/admin/users/{userID}', { userID: 1 }, userData)
+			await patchReq('/api/b2b/admin/users/{userID}', { userID: data?.id }, userData)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

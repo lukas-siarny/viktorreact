@@ -14,7 +14,6 @@ import { RootState } from '../reducers'
 // utils
 import { isLoggedIn } from '../utils/auth'
 import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
-import { getPath } from '../utils/history'
 import { getCurrentUser } from '../reducers/users/userActions'
 
 type Props = RouteProps & {
@@ -37,26 +36,21 @@ const onIdle = () => {
 const AuthRoute: FC<Props> = (props) => {
 	const { page } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const currentUser = useSelector((state: RootState) => state.user.authUser)
 	const isActivated = currentUser.data?.activateAt
 
-	useEffect(() => {
-		dispatch(getCurrentUser())
-	}, [dispatch])
-
 	if (!isLoggedIn()) {
-		return <Redirect to={getPath(t('paths:login'))} />
+		return <Redirect to={t('paths:login')} />
 	}
 
 	// account is not activated, redirect to route '/activation'
 	if (!isActivated && page !== PAGE.ACTIVATION) {
-		return currentUser.isLoading || !currentUser.data ? <></> : <Redirect to={getPath(t('paths:activation'))} />
+		return currentUser.isLoading || !currentUser.data ? <></> : <Redirect to={t('paths:activation')} />
 	}
 
 	// account is activated, disabled route '/activation'
 	if (!!isActivated && page === PAGE.ACTIVATION) {
-		return <Redirect to={getPath(t('paths:index'))} />
+		return <Redirect to={t('paths:index')} />
 	}
 
 	return (

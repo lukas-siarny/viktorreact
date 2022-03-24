@@ -8,11 +8,4 @@ module.exports = (app) => {
 			changeOrigin: true
 		})
 	)
-
-	app.use('/', (req, res, next) => {
-		if (req.url === '/') {
-			return res.redirect('/b2b')
-		}
-		return next()
-	})
 }

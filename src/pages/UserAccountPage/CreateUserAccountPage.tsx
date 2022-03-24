@@ -13,7 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import { IBreadcrumbs } from '../../types/interfaces'
 
 // utils
-import { getPath, history } from '../../utils/history'
+import { history } from '../../utils/history'
 import { FORM, PERMISSION } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
@@ -31,7 +31,7 @@ const CreateUserAccountPage = () => {
 		items: [
 			{
 				name: t('loc:Zoznam používateľov'),
-				link: getPath(t('paths:users'))
+				link: t('paths:users')
 			},
 			{
 				name: t('loc:Nový používateľ')
@@ -53,7 +53,7 @@ const CreateUserAccountPage = () => {
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
 				roleID: data?.roleID
 			})
-			history.push(getPath(t('paths:users')))
+			history.push(t('paths:users'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -65,7 +65,7 @@ const CreateUserAccountPage = () => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:users'))} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
 			<div className='content-body small'>
 				<CreateUserAccountForm onSubmit={createUser} />

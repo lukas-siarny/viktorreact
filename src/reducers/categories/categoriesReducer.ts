@@ -7,6 +7,7 @@ import { ICategoriesActions, ICategoriesPayload } from './categoriesActions'
 export const initState = {
 	categories: {
 		data: null,
+		enumerationsOptions: [],
 		isLoading: false,
 		isFailure: false
 	} as ICategoriesPayload & ILoadingAndFailure
@@ -37,6 +38,7 @@ export default (state = initState, action: ICategoriesActions) => {
 				...state,
 				categories: {
 					...initState.categories,
+					enumerationsOptions: action.payload.enumerationsOptions,
 					data: action.payload.data
 				}
 			}

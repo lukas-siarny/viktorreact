@@ -6,9 +6,10 @@
   "login": "/login",
   "my-account": "/my-account",
   "reset-password": "/reset-password",
-  "signup": "/signup",
-  "salon": "/salon",
+  "salon/create": "/salon/create",
   "salon/{{salonID}}": "/salon/{{salonID}}",
+  "salons": "/salons",
+  "signup": "/signup",
   "user-detail/{{userID}}": "/user-detail/{{userID}}",
   "user/create": "/user/create",
   "users": "/users"

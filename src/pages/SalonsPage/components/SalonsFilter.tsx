@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 
 // components
+import { useSelector } from 'react-redux'
 import Filters from '../../../components/Filters'
 
 // reducers
@@ -37,7 +38,17 @@ const SalonsFilter = (props: Props) => {
 	const { handleSubmit, createSalon } = props
 	const [t] = useTranslation()
 
-	// const formValues = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER].values)
+	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
+	const categories = useSelector((state: RootState) => state.categories.categories)
+
+	const statusOptions = [
+		{ label: t('loc:Všetky'), value: SALON_STATUSES.ALL, key: SALON_STATUSES.ALL },
+		{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED },
+		{ label: t('loc:Publikované'), value: SALON_STATUSES.PUBLISHED, key: SALON_STATUSES.PUBLISHED },
+		{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE, key: SALON_STATUSES.VISIBLE }
+	]
+
+	console.log(form)
 
 	const searchInput = (
 		<Field
@@ -45,7 +56,7 @@ const SalonsFilter = (props: Props) => {
 			component={InputField}
 			size={'large'}
 			placeholder={t('loc:Vyhľadajte podľa názvu')}
-			name='search'
+			name={'search'}
 			fieldMode={FIELD_MODE.FILTER}
 			search
 			validate={fixLength100}
@@ -60,25 +71,34 @@ const SalonsFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch([{ statuses: SALON_STATUSES.ALL }])}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(form?.values)}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					<Col span={8}>
 						<Field
 							component={SelectField}
-							name='statuses'
+							name={'statuses'}
+							mode={'multiple'}
 							placeholder={t('loc:Status')}
 							allowClear
+							size={'middle'}
 							filterOptions
 							onDidMountSearch
-							options={[
-								{ label: t('loc:Všetky'), value: SALON_STATUSES.ALL },
-								{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED },
-								{ label: t('loc:Publikované'), value: SALON_STATUSES.PUBLISHED },
-								{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE }
-							]}
-							onSearch={(search: any) => {
-								console.log('value', search)
-							}}
+							options={statusOptions}
+						/>
+					</Col>
+					<Col span={8}>
+						<Field
+							component={SelectField}
+							name={'categoryFirstLevelIDs'}
+							mode={'multiple'}
+							placeholder={t('loc:Kategórie')}
+							allowClear
+							size={'middle'}
+							filterOptions
+							onDidMountSearch
+							options={categories?.enumerationsOptions}
+							loading={categories?.isLoading}
+							disabled={categories?.isLoading}
 						/>
 					</Col>
 				</Row>

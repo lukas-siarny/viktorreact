@@ -28,14 +28,14 @@ export const getSalons =
 		limit?: any | undefined,
 		order?: string | undefined,
 		search?: string | undefined | null,
-		categoryFirstLevelID?: (number | null)[],
+		categoryFirstLevelIDs?: (string | null)[] | null | undefined,
 		statuses?: (string | null)[] | SALON_STATUSES[]
 	): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
 		try {
 			dispatch({ type: SALONS.SALONS_LOAD_START })
 			const pageLimit = limit
-			const data = await getReq('/api/b2b/admin/salons/', { page: page || 1, limit: pageLimit, order, search, categoryFirstLevelID, statuses } as any)
+			const data = await getReq('/api/b2b/admin/salons/', { page: page || 1, limit: pageLimit, order, search, categoryFirstLevelIDs, statuses } as any)
 			dispatch({ type: SALONS.SALONS_LOAD_DONE, payload: data })
 		} catch (err) {
 			dispatch({ type: SALONS.SALONS_LOAD_FAIL })

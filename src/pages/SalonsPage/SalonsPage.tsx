@@ -17,12 +17,13 @@ import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
-import { getPath, history } from '../../utils/history'
+import { history } from '../../utils/history'
 import showNotifications from '../../utils/tsxHelpers'
 
 // reducers
 import { getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
@@ -41,9 +42,13 @@ const SalonsPage = () => {
 
 	const salons = useSelector((state: RootState) => state.salons.salons)
 
+	useEffect(() => {
+		dispatch(getCategories())
+	}, [dispatch])
+
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
-		categoryFirstLevelID: ArrayParam,
+		categoryFirstLevelIDs: ArrayParam,
 		statuses: withDefault(ArrayParam, [SALON_STATUSES.ALL]),
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
@@ -51,9 +56,9 @@ const SalonsPage = () => {
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SALONS_FILTER, { search: query.search, status: query.statuses }))
-		dispatch(getSalons(query.page, query.limit, query.order, query.search, [], query.statuses))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelID, query.statuses])
+		dispatch(initialize(FORM.SALONS_FILTER, { search: query.search, statuses: query.statuses, categoryFirstLevelIDs: query.categoryFirstLevelIDs }))
+		dispatch(getSalons(query.page, query.limit, query.order, query.search, query.categoryFirstLevelIDs, query.statuses))
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelIDs, query.statuses])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -149,7 +154,7 @@ const SalonsPage = () => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={getPath(t('paths:home'))} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:home')} />
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
@@ -157,7 +162,7 @@ const SalonsPage = () => {
 						<SalonsFilter
 							createSalon={() => {
 								if (checkPermissions(editPermissions)) {
-									history.push(getPath(t('paths:salon')))
+									history.push(t('paths:salon/create'))
 								} else {
 									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
 								}
@@ -175,7 +180,7 @@ const SalonsPage = () => {
 							onRow={(record) => ({
 								onClick: () => {
 									if (checkPermissions(editPermissions)) {
-										history.push(getPath(t('paths:salon/{{salonID}}', { salonID: record.id })))
+										history.push(t('paths:salon/{{salonID}}', { salonID: record.id }))
 									} else {
 										showNotifications(
 											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],

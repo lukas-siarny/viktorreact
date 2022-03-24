@@ -121,3 +121,11 @@ export interface IBreadcrumbs {
 export interface ICountryLabel {
 	[key: string]: string
 }
+
+export interface IStructuredAddress {
+	streetNumber: string
+	postal_code: string
+	street: string
+	city: string
+	country: string
+}

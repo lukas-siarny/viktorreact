@@ -6,4 +6,5 @@
 
 const passwordRegEx = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?([^\w\s]|[_])).{8,}$/ // 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak
 export const positiveIntegerRegEx = /^[0-9]+$/ // allow 0 on start, prevent + / - and exponential character
+export const phoneRegEx = /^\d+$/
 export default passwordRegEx

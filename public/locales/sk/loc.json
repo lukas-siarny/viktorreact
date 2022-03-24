@@ -1,4 +1,5 @@
 {
+  " Môj účet": " Môj účet",
   "Aktivovaný": "Aktivovaný",
   "Aktivovať": "Aktivovať",
   "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak": "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak",
@@ -79,6 +80,7 @@
   "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás",
   "Súbor je príliš veľký (max. {{size}} {{unit}})": "Súbor je príliš veľký (max. {{size}} {{unit}})",
   "Telefón": "Telefón",
+  "Telefónne číslo nie je platné": "Telefónne číslo nie je platné",
   "Textové popisy": "Textové popisy",
   "Toto pole je povinné": "Toto pole je povinné",
   "Typ osoby": "Typ osoby",

@@ -98,6 +98,7 @@ export enum FORM {
 	ADMIN_USERS_FILTER = 'ADMIN_USERS_FILTER',
 	ENUMERATION_FORM = 'ENUMERATION_FORM',
 	ENUMERATION_FORM_2 = 'ENUMERATION_FORM_2',
+	CREATE_SALON_FROM = 'CREATE_SALON_FROM',
 	ROLE_FORM = 'ROLE_FORM',
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
 	ADMIN_UPDATE_USER = 'ADMIN_UPDATE_USER',
@@ -421,6 +422,7 @@ export enum ENUMERATIONS_KEYS {
 	// DEPOSIT_AMOUNTS = 'depositAmounts'
 }
 
+export const GOOGLE_MAPS_API_KEY = 'AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw'
 export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw&libraries=places&language=sk'
 export const UNSPLASH_API_KEY = '-fx2nNGTarjuitKIz4qAUOCP1uLAlPClByWS6YpaSLc'
 export const UNSPLASH_IMAGE_SEARCH_STRING = 'nature'

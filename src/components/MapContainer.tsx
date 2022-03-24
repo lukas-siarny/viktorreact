@@ -6,7 +6,7 @@ type Props = GoogleMapProps & {
 	lat: number
 	long: number
 	onLocationChange: (e: any) => void
-	zoomChanged: (newZoom: number) => void
+	zoomChanged?: (newZoom: number) => void
 }
 
 const MapContainer = (props: Props) => {

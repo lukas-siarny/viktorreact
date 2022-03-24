@@ -29,7 +29,8 @@ import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_WITH_TIME_FORMAT, DEFAULT_TIME_FORMAT, FORM, INVALID_DATE_FORMAT, MSG_TYPE } from './enums'
+import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_WITH_TIME_FORMAT, DEFAULT_TIME_FORMAT, FORM, INVALID_DATE_FORMAT, MSG_TYPE, DEFAULT_LANGUAGE, GOOGLE_MAPS_API_KEY } from './enums'
+import { IStructuredAddress } from '../types/interfaces'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -327,6 +328,61 @@ export const getPrefixCountryCode = (options: string[], fallback: string) => {
 export function setIntervalImmediately(func: Function, interval: number) {
 	func()
 	return setInterval(func, interval)
+}
+
+export const getCurrentLanguageCode = (fallbackLng = DEFAULT_LANGUAGE) => {
+	const locale = split(i18next.language, '-')
+	const result = locale[0] || fallbackLng
+	return result.toLowerCase()
+}
+
+export const getGoogleMapUrl = (): string => {
+	const locale = getCurrentLanguageCode()
+
+	// query params for google API
+	const base = 'https://maps.googleapis.com/maps/api/'
+	// TODO read Google Map API key from .env file
+	const key = `key=${GOOGLE_MAPS_API_KEY}`
+	const language = `language=${locale.toLowerCase()}`
+
+	return `${base}js?${key}&libraries=places&${language}`
+}
+
+/**
+ * @see https://medium.com/@almestaadmicadiab/how-to-parse-google-maps-address-components-geocoder-response-774d1f3375d
+ */
+export const parseAddressComponents = (addressComponents: any[] = []): IStructuredAddress => {
+	const address: IStructuredAddress = {
+		streetNumber: '',
+		postal_code: '',
+		street: '',
+		city: '',
+		country: ''
+	}
+
+	if (!isEmpty(addressComponents)) {
+		const addressProperties = {
+			streetNumber: ['street_number'],
+			postal_code: ['postal_code'],
+			street: ['street_address', 'route'],
+			city: ['locality', 'sublocality', 'political', 'sublocality_level_1', 'sublocality_level_2', 'sublocality_level_3', 'sublocality_level_4'],
+			country: ['country']
+		}
+
+		addressComponents.forEach((component: any) => {
+			Object.keys(addressProperties).forEach((shouldBe) => {
+				if (addressProperties[shouldBe as keyof IStructuredAddress].indexOf(component.types[0]) !== -1) {
+					if (shouldBe === 'country') {
+						address[shouldBe] = component.short_name
+					} else {
+						address[shouldBe as keyof IStructuredAddress] = component.long_name
+					}
+				}
+			})
+		})
+	}
+
+	return address
 }
 
 export const fromStringToFloat = (string: string | number | null | undefined): number | null => {

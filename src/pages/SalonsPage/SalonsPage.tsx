@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import React, { useEffect } from 'react'
 import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row } from 'antd'
+import { Col, Progress, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize } from 'redux-form'
@@ -114,7 +114,9 @@ const SalonsPage = () => {
 			ellipsis: true,
 			sorter: false,
 			width: '8%',
-			render: (value) => <div className={'flex justify-start'}>{value ? <CircleCheckIcon /> : <CircleCloseIcon />}</div>
+			render: (value) => (
+				<div className={'flex justify-start'}>{value ? <CircleCheckIcon color={'$textColor-green-600'} /> : <CircleCloseIcon color={'$textColor-green-600'} />}</div>
+			)
 		},
 		{
 			title: t('loc:Viditeľné'),
@@ -130,7 +132,8 @@ const SalonsPage = () => {
 			dataIndex: 'fillingProgress',
 			key: 'fillingProgress',
 			ellipsis: true,
-			sorter: false
+			sorter: false,
+			render: (value) => <Progress percent={value} steps={5} />
 		},
 		{
 			title: t('loc:Vytvorené'),

@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { Modal } from 'antd'
-import { reset } from 'redux-form'
+import { reset, initialize } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
@@ -12,6 +12,7 @@ import { patchReq } from '../../utils/request'
 import { NOTIFICATION_TYPE, FORM, PERMISSION, MSG_TYPE } from '../../utils/enums'
 import { checkPermissions } from '../../utils/Permissions'
 import showNotifications from '../../utils/tsxHelpers'
+import { Paths } from '../../types/api'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -27,10 +28,11 @@ type Props = {
 	onClose?: () => void
 	title?: string
 	salonID: number
+	openingHoursNote?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHoursNote']
 }
 
 const OpenHoursNoteModal = (props: Props) => {
-	const { visible, onClose = () => {}, title, salonID } = props
+	const { visible, onClose = () => {}, title, salonID, openingHoursNote } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
@@ -45,6 +47,27 @@ const OpenHoursNoteModal = (props: Props) => {
 	}, [visible, t, authUserPermissions])
 
 	if (!isModalVisible && visible) onClose() // if OpenHoursNoteModal was opened but user does not have permission, "close" modal state in parent component
+
+	useEffect(() => {
+		if (!isModalVisible) return // init form only if the modal is opened
+
+		let initData: any
+
+		if (openingHoursNote) {
+			initData = {
+				hoursNote: {
+					note: openingHoursNote?.note,
+					range: {
+						dateFrom: openingHoursNote?.validFrom,
+						dateTo: openingHoursNote?.validTo
+					}
+				}
+			}
+		}
+		dispatch(initialize(FORM.OPEN_HOURS_NOTE, initData || {}))
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isModalVisible])
 
 	const hideModal = () => {
 		dispatch(reset(FORM.OPEN_HOURS_NOTE))

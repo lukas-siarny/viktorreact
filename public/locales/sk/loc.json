@@ -1,4 +1,5 @@
 {
+  " Môj účet": " Môj účet",
   "Aktivovaný": "Aktivovaný",
   "Aktivovať": "Aktivovať",
   "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak": "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak",
@@ -6,6 +7,7 @@
   "Cenová skupina": "Cenová skupina",
   "Chyba": "Chyba",
   "Chyba pripojenia k serveru": "Chyba pripojenia k serveru",
+  "Chybný rozsah dátumov": "Chybný rozsah dátumov",
   "Detail používateľa": "Detail používateľa",
   "Do": "Do",
   "Dátum": "Dátum",
@@ -101,6 +103,8 @@
   "Vyber krajinu": "Vyber krajinu",
   "Vyber rolu": "Vyber rolu",
   "Vyberte aspoň jednu z možností": "Vyberte aspoň jednu z možností",
+  "Vyberte termín do": "Vyberte termín do",
+  "Vyberte termín od": "Vyberte termín od",
   "Vyberte {{entity}}": "Vyberte {{entity}}",
   "Vyhlasujem, že som sa oboznámil s": "Vyhlasujem, že som sa oboznámil s",
   "Vyhlasujem, že som sa oboznámil so": "Vyhlasujem, že som sa oboznámil so",

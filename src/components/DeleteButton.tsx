@@ -48,7 +48,7 @@ const DeleteButton = (props: Props) => {
 
 	const [t] = useTranslation()
 
-	const defaultEntityName = entityName || (t('loc:Položku') as string)
+	const defaultEntityName = entityName ?? (t('loc:Položku') as string)
 
 	let buttonIcon = icon
 	if (!buttonIcon && onlyIcon) {

@@ -20,7 +20,6 @@ import PublicLayout from '../layouts/PublicLayout'
 import { refreshToken } from '../reducers/users/userActions'
 
 // utils
-import { getPath } from '../utils/history'
 import { REFRESH_TOKEN_INTERVAL, PAGE } from '../utils/enums'
 import { setIntervalImmediately } from '../utils/helper'
 
@@ -34,6 +33,9 @@ import UserAccountPage from '../pages/UserAccountPage/UserAccountPage'
 import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
 import CreateUserAccountPage from '../pages/UserAccountPage/CreateUserAccountPage'
+
+// categories
+import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
@@ -55,50 +57,46 @@ const Routes: FC = (props) => {
 
 	return (
 		<Switch>
-			<PublicRoute {...props} exact path={getPath(t('paths:login'))} component={LoginPage} layout={PublicLayout} />
-			<PublicRoute {...props} exact path={getPath(t('paths:signup'))} component={RegistrationPage} layout={PublicLayout} />
-			<CreatePasswordRoute
-				exact
-				path={getPath(t('paths:reset-password'))}
-				translatePathKey={getPath(t('paths:reset-password'))}
-				component={CreatePasswordPage}
-				layout={PublicLayout}
-			/>
+			<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} />
+			<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} />
+			<CreatePasswordRoute exact path={t('paths:reset-password')} translatePathKey={t('paths:reset-password')} component={CreatePasswordPage} layout={PublicLayout} />
 			<AuthRoute
 				{...props}
 				exact
-				path={getPath(t('paths:user-detail/{{userID}}', { userID: ':userID' }))}
-				translatePathKey={getPath(t('paths:user-detail/{{userID}}', { userID: ':userID' }))}
+				path={t('paths:user-detail/{{userID}}', { userID: ':userID' })}
+				translatePathKey={t('paths:user-detail/{{userID}}', { userID: ':userID' })}
 				component={UserAccountPage}
 				layout={MainLayout}
 			/>
+			<AuthRoute {...props} exact path={t('paths:user/create')} component={CreateUserAccountPage} translatePathKey={t('paths:user/create')} layout={MainLayout} />
+			<AuthRoute {...props} exact path={t('paths:my-account')} translatePathKey={t('paths:my-account')} component={UserAccountPage} layout={MainLayout} />
+			<AuthRoute {...props} exact path={t('paths:index')} component={EntryPage} translatePathKey={t('paths:index')} layout={MainLayout} />
+			<AuthRoute {...props} exact path={t('paths:home')} component={HomePage} translatePathKey={t('paths:home')} layout={MainLayout} page={PAGE.HOME} />
 			<AuthRoute
 				{...props}
 				exact
-				path={getPath(t('paths:user/create'))}
-				component={CreateUserAccountPage}
-				translatePathKey={getPath(t('paths:user/create'))}
-				layout={MainLayout}
-			/>
-			<AuthRoute {...props} exact path={getPath(t('paths:my-account'))} translatePathKey={getPath(t('paths:my-account'))} component={UserAccountPage} layout={MainLayout} />
-			<AuthRoute {...props} exact path={getPath(t('paths:index'))} component={EntryPage} translatePathKey={getPath(t('paths:index'))} layout={MainLayout} />
-			<AuthRoute {...props} exact path={getPath(t('paths:home'))} component={HomePage} translatePathKey={getPath(t('paths:home'))} layout={MainLayout} page={PAGE.HOME} />
-			<AuthRoute
-				{...props}
-				exact
-				path={getPath(t('paths:activation'))}
+				path={t('paths:activation')}
 				component={ActivationPage}
-				translatePathKey={getPath(t('paths:activation'))}
+				translatePathKey={t('paths:activation')}
 				layout={MainLayout}
 				page={PAGE.ACTIVATION}
 			/>
-			<AuthRoute {...props} exact path={getPath(t('paths:users'))} component={AdminUsersPage} translatePathKey={getPath(t('paths:users'))} layout={MainLayout} />
 			<AuthRoute
 				{...props}
 				exact
-				path={getPath(t('paths:my-account'))}
+				path={t('paths:categories')}
+				component={CategoriesPage}
+				translatePathKey={t('paths:categories')}
+				layout={MainLayout}
+				page={PAGE.CATEGORIES}
+			/>
+			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:my-account')}
 				component={UserAccountPage}
-				translatePathKey={getPath(t('paths:my-account'))}
+				translatePathKey={t('paths:my-account')}
 				layout={MainLayout}
 				page={PAGE.MY_ACCOUNT}
 			/>

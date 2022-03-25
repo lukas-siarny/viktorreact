@@ -59,12 +59,12 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 
 	useEffect(() => {
 		// NOTE: fix TP-1909
-		forEach(document.getElementsByClassName('custom-table-pagination'), (item) => {
+		forEach(document.getElementsByClassName('$textColor-notino-black'), (item) => {
 			const selectBox = item.getElementsByClassName('ant-pagination-options-size-changer')?.[0]
 			selectBox.addEventListener('click', onClickOptionSizeChanger)
 		})
 		return () => {
-			forEach(document.getElementsByClassName('custom-table-pagination'), (item) => {
+			forEach(document.getElementsByClassName('$textColor-notino-black'), (item) => {
 				const selectBox = item.getElementsByClassName('ant-pagination-options-size-changer')?.[0]
 				selectBox.removeEventListener('click', onClickOptionSizeChanger)
 			})
@@ -95,10 +95,9 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				pagination={
 					props.pagination &&
 					({
-						pageSize: 1,
 						...props.pagination,
 						onChange,
-						className: ' ant-table-pagination ant-table-pagination-right custom-table-pagination'
+						className: 'ant-table-pagination ant-table-pagination-right custom-table-pagination'
 					} as any)
 				}
 				locale={emptyLocale}

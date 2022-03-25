@@ -23,14 +23,28 @@ import {
 	chain,
 	lowerCase,
 	isString,
-	replace
+	replace,
+	map
 } from 'lodash'
 import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_WITH_TIME_FORMAT, DEFAULT_TIME_FORMAT, FORM, INVALID_DATE_FORMAT, MSG_TYPE, DEFAULT_LANGUAGE, GOOGLE_MAPS_API_KEY } from './enums'
+import {
+	DEFAULT_DATE_FORMAT,
+	DEFAULT_DATE_WITH_TIME_FORMAT,
+	DEFAULT_TIME_FORMAT,
+	FORM,
+	INVALID_DATE_FORMAT,
+	MSG_TYPE,
+	DEFAULT_LANGUAGE,
+	GOOGLE_MAPS_API_KEY,
+	BYTE_MULTIPLIER
+} from './enums'
 import { IStructuredAddress } from '../types/interfaces'
+import { phoneRegEx } from './regex'
+
+import { Paths } from '../types/api'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -226,6 +240,8 @@ export const validateArray = (key: string) => (values: any) => {
 	const hasSome = some(values, (value) => !!get(value, key))
 	return !hasSome && i18next.t('loc:Názov musí byť vyplnení pre aspoň jeden jazyk')
 }
+
+export const validationPhone = (value: string) => !phoneRegEx.test(value) && i18next.t('loc:Telefónne číslo nie je platné')
 
 export const normalizeDirectionKeys = (direction: 'ascend' | 'descend' | null | undefined) => (direction === 'descend' ? 'DESC' : 'ASC')
 export const normalizeASCDESCKeys = (direction: string) => (direction === 'DESC' ? 'descend' : 'ascend')
@@ -426,4 +442,37 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
 	}
 
 	return result
+}
+
+export const getMaxSizeNotifMessage = (maxFileSize: any) => {
+	let notifMaxSize
+	if (maxFileSize >= BYTE_MULTIPLIER.MEGA) {
+		notifMaxSize = [maxFileSize / BYTE_MULTIPLIER.MEGA, 'MB']
+	} else {
+		notifMaxSize = [maxFileSize / BYTE_MULTIPLIER.KILO, 'KB']
+	}
+	return {
+		type: MSG_TYPE.ERROR,
+		message: i18next.t('loc:Súbor je príliš veľký (max. {{size}} {{unit}})', {
+			size: notifMaxSize[0],
+			unit: notifMaxSize[1]
+		})
+	}
+}
+
+type ImgUploadData = { uid: string; path: string } & Paths.PostApiB2BAdminFilesSignUrls.Responses.$200['files'][0]
+export type ImgUploadParam = { [key: string]: ImgUploadData }
+
+export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) => {
+	const values = map(fileList, (file) => {
+		const fileData = filesData[get(file, 'uid')]
+
+		return {
+			...file,
+			id: get(file, 'id') || fileData?.id,
+			url: get(file, 'url') || fileData?.path,
+			signedUrl: fileData?.signedUrl
+		}
+	})
+	return values
 }

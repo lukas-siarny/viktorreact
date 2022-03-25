@@ -1,3 +1,6 @@
+@import tailwind-variables
+@import "variables"
+
 .ant-form-item
 	.ant-select.noti-select-input
 		.ant-select-selector
@@ -18,3 +21,8 @@
 	.ant-select-item.ant-select-item-option-selected
 		color: $textColor-white
 		font-weight: $fontWeight-normal
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled)
+		color: $textColor-white
+		font-weight: 400
+		background-color: $backgroundColor-notino-black

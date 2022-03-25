@@ -12,7 +12,7 @@ import { Paths } from '../../types/api'
 
 // utils
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
-import { history, getPath } from '../../utils/history'
+import { history } from '../../utils/history'
 import { getReq, postReq, PostUrls, ICustomConfig } from '../../utils/request'
 import { PERMISSION } from '../../utils/enums'
 
@@ -54,7 +54,7 @@ const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/log
 	url: T,
 	input: any,
 	config?: ICustomConfig,
-	redirectPath = getPath(i18next.t('paths:index'))
+	redirectPath = i18next.t('paths:index')
 ): Promise<IAuthUserPayload | null> => {
 	try {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
@@ -83,7 +83,7 @@ const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/log
 		return payload
 	} catch (e) {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
-		history.push(getPath(i18next.t('paths:login')))
+		history.push(i18next.t('paths:login'))
 		// eslint-disable-next-line no-console
 		console.log(e)
 		return null
@@ -99,11 +99,13 @@ export const logInUser =
 export const resetPassword =
 	(input: Pick<ICreatePasswordForm, 'password'>, token: string): ThunkResult<void> =>
 	async (dispatch) => {
-		const headers = {
-			Authorization: `Bearer ${token}`
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
 		}
 
-		await authorize(dispatch, '/api/b2b/admin/auth/reset-password', input, headers as ICustomConfig)
+		await authorize(dispatch, '/api/b2b/admin/auth/reset-password', input, config)
 	}
 
 export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch) => {
@@ -153,7 +155,7 @@ export const logOutUser = (): ThunkResult<Promise<void>> => async (dispatch) => 
 		type: RESET_STORE
 	})
 
-	history.push(getPath(i18next.t('paths:login')))
+	history.push(i18next.t('paths:login'))
 }
 
 export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) => {

@@ -99,16 +99,16 @@ const Routes: FC = (props) => {
 				page={PAGE.SALON}
 			/>
 			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
-			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				{...props}
 				exact
-				path={t('paths:salons')}
-				component={SalonsPage}
-				translatePathKey={t('paths:salons')}
+				path={t('paths:salon/{{salonID}}', { salonID: ':salonID' })}
+				component={SalonPage}
+				translatePathKey={t('paths:salon/{{salonID}}', { salonID: ':salonID' })}
 				layout={MainLayout}
-				page={PAGE.SALONS}
+				page={PAGE.SALON}
 			/>
+			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				{...props}
 				exact

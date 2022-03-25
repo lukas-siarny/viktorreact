@@ -123,9 +123,9 @@ export interface ICountryLabel {
 }
 
 export interface IStructuredAddress {
-	streetNumber: string
-	postal_code: string
-	street: string
-	city: string
-	country: string
+	streetNumber: string | null
+	zip: string | null
+	street: string | null
+	city: string | null
+	country: string | null
 }

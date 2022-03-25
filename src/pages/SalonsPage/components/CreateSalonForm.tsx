@@ -1,15 +1,12 @@
 import React from 'react'
-import { getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
+import { getFormValues, InjectedFormProps, reduxForm, Field } from 'redux-form'
 import { Form, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { get } from 'lodash'
 
-// interfaces
-import { IStructuredAddress } from '../../../types/interfaces'
-
 // components
-import AddressFields from '../../../components/AddressFields'
+import AddressFields, { AddressInputFields } from '../../../components/AddressFields'
 
 // utils
 import { FORM } from '../../../utils/enums'
@@ -17,10 +14,16 @@ import { FORM } from '../../../utils/enums'
 // types
 import { RootState } from '../../../reducers'
 
+// validation
+import validateCreateSalonForm from './validateCreateSalonForm'
+
 type ComponentProps = {}
 
-// TODO use correct (full) type definition
-type TempSalonFormDefinition = Pick<IStructuredAddress, 'city' | 'country' | 'street'>
+// TODO: use correct (full) type definition
+// NOTE: let address property in Type definition. Property represents global wrapper for address subfields validation
+export type TempSalonFormDefinition = AddressInputFields & {
+	address?: string
+}
 
 type Props = InjectedFormProps<TempSalonFormDefinition, ComponentProps> & ComponentProps
 
@@ -28,11 +31,23 @@ const CreateSalonForm = (props: Props) => {
 	const { submitting, handleSubmit, change } = props
 	const { t } = useTranslation()
 
-	const formValues = useSelector((state: RootState) => getFormValues(FORM.DESTINATION_FORM)(state))
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.CREATE_SALON_FROM)(state))
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
-			<AddressFields latitude={get(formValues, 'latitude')} longtitude={get(formValues, 'longtitude')} changeFormFieldValue={change} />
+			<Field
+				component={AddressFields}
+				inputValues={{
+					latitude: get(formValues, 'latitude'),
+					longitude: get(formValues, 'longitude'),
+					city: get(formValues, 'city'),
+					street: get(formValues, 'street'),
+					zip: get(formValues, 'zip'),
+					country: get(formValues, 'country')
+				}}
+				changeFormFieldValue={change}
+				name='address'
+			/>
 			<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 				{t('loc:Zmeniť')}
 			</Button>
@@ -44,7 +59,8 @@ const form = reduxForm<TempSalonFormDefinition, ComponentProps>({
 	form: FORM.CREATE_SALON_FROM,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
-	destroyOnUnmount: true
+	destroyOnUnmount: true,
+	validate: validateCreateSalonForm
 })(CreateSalonForm)
 
 export default form

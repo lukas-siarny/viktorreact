@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState, ReactElement } from 'react'
-import { Field, InjectedFormProps } from 'redux-form'
+import { InjectedFormProps, WrappedFieldProps } from 'redux-form'
 import { Col, Divider, Row } from 'antd'
+import cx from 'classnames'
+import { get } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import Geocode from 'react-geocode'
 
@@ -13,7 +16,27 @@ import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents } from 
 
 // atoms
 import LocationSearchInputField from '../atoms/LocationSearchInputField'
-import InputField from '../atoms/InputField'
+
+function getLabelField(label: string): ReactElement<any> {
+	return (
+		<div className='ant-col ant-form-item-label'>
+			<label title={label}>{label}</label>
+		</div>
+	)
+}
+
+/**
+ * Define in props only variables required for form
+ */
+export type AddressInputFields = {
+	latitude: number
+	longitude: number
+	city?: string
+	street?: string
+	zip?: string
+	country?: string
+	address?: string
+}
 
 type LocationSearchElements = {
 	loadingElement: ReactElement<any>
@@ -24,9 +47,8 @@ type MapContainerElements = {
 	mapElement: ReactElement<any>
 } & LocationSearchElements
 
-type Props = {
-	latitude: number
-	longtitude: number
+type Props = WrappedFieldProps & {
+	inputValues: AddressInputFields
 	changeFormFieldValue: InjectedFormProps['change']
 	zoom?: number
 	locationSearchElements?: LocationSearchElements
@@ -38,9 +60,10 @@ const FULL_H_ELEMENT = <div style={{ height: '100%' }} />
 const AddressFields = (props: Props) => {
 	const {
 		changeFormFieldValue,
-		latitude,
-		longtitude,
+		inputValues,
 		zoom = MAP.defaultZoom,
+		input,
+		meta: { error, touched },
 		locationSearchElements = {
 			loadingElement: FULL_H_ELEMENT,
 			containerElement: <div />
@@ -66,9 +89,14 @@ const AddressFields = (props: Props) => {
 	const parseAddressObject = (addressComponents: any[]) => {
 		const address = parseAddressComponents(addressComponents)
 
+		const { streetNumber } = address
+
 		changeFormFieldValue('city', address.city)
-		changeFormFieldValue('street', `${address.street} ${address.streetNumber}`)
+		changeFormFieldValue('street', streetNumber ? `${address.street} ${streetNumber}` : address.street)
 		changeFormFieldValue('country', address.country)
+		changeFormFieldValue('zip', address.zip)
+
+		input.onChange(true)
 	}
 
 	const selectLocation = (place: any) => {
@@ -77,9 +105,9 @@ const AddressFields = (props: Props) => {
 		changeFormFieldValue('longitude', parseFloat(place.location.lng().toFixed(8)))
 	}
 
-	const changeLocation = (e: any) => {
-		const lat = e.latLng.lat().toFixed(8)
-		const lng = e.latLng.lng().toFixed(8)
+	const changeLocation = (event: any) => {
+		const lat = event.latLng.lat().toFixed(8)
+		const lng = event.latLng.lng().toFixed(8)
 
 		changeFormFieldValue('latitude', parseFloat(lat))
 		changeFormFieldValue('longitude', parseFloat(lng))
@@ -87,9 +115,9 @@ const AddressFields = (props: Props) => {
 		// reverse geocoding
 		Geocode.fromLatLng(lat, lng).then(
 			(response: any) => parseAddressObject(response.results[0].address_components),
-			(error: any) => {
+			(e: any) => {
 				// eslint-disable-next-line no-console
-				console.error(error)
+				console.error(e)
 			}
 		)
 	}
@@ -105,13 +133,41 @@ const AddressFields = (props: Props) => {
 							containerElement={locationSearchElements.containerElement}
 							label={t('loc:Vyhľadať')}
 							onPlaceSelected={selectLocation}
+							type='search'
 							placeholder={t('loc:Vyhľadajte miesto na mape')}
+							error={error && touched}
 						/>
+						<div className={cx('text-danger h-6', { invisible: !(error && touched) })}>{error}</div>
 						<Divider type={'horizontal'} style={{ width: '100%' }} />
-						<Field component={InputField} label={t('loc:Mesto')} name={'city'} size={'large'} />
-						<Field component={InputField} label={t('loc:Ulica')} name={'street'} size={'large'} />
-						<Field component={InputField} label={t('loc:PSČ')} name={'postalCode'} size={'large'} />
-						<Field component={InputField} label={t('loc:Krajina')} name={'country'} size={'large'} />
+						{/* Display only fields defined in inputValues */}
+						{'city' in inputValues && (
+							<div>
+								{getLabelField(t('loc:Mesto'))}
+								<h4>{get(inputValues, 'city')}</h4>
+							</div>
+						)}
+						{'street' in inputValues && (
+							<div>
+								{getLabelField(t('loc:Ulica'))}
+								<h4>{get(inputValues, 'street')}</h4>
+							</div>
+						)}
+						{'zip' in inputValues && (
+							<div>
+								{getLabelField(t('loc:PSČ'))}
+								<h4>{get(inputValues, 'zip')}</h4>
+							</div>
+						)}
+						{'country' in inputValues && (
+							<div>
+								{getLabelField(t('loc:Krajina'))}
+								<h4>{get(inputValues, 'country')}</h4>
+							</div>
+						)}
+						{/* <Field disabled component={InputField} label={t('loc:Mesto')} name={'city'} size={'large'} />
+						<Field readOnly component={InputField} label={t('loc:Ulica')} name={'street'} size={'large'} />
+						<Field component={InputField} label={t('loc:PSČ')} name={'zip'} size={'large'} />
+						<Field component={InputField} label={t('loc:Krajina')} name={'country'} size={'large'} /> */}
 					</Col>
 					<Col xl={1} className={'flex-center'}>
 						<Divider type={'vertical'} style={{ height: '100%' }} />
@@ -123,8 +179,8 @@ const AddressFields = (props: Props) => {
 							mapElement={mapContainerElements.mapElement}
 							loadingElement={mapContainerElements.loadingElement}
 							onLocationChange={changeLocation}
-							lat={latitude}
-							long={longtitude}
+							lat={get(inputValues, 'latitude')}
+							long={get(inputValues, 'longitude')}
 							zoom={zoom}
 						/>
 					</Col>

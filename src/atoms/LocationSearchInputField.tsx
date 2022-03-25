@@ -4,6 +4,7 @@ import { compose } from 'redux'
 import { Form, Input } from 'antd'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { InputProps } from 'antd/lib/input'
+import cx from 'classnames'
 import { ReactComponent as SearchIcon } from '../assets/icons/search-icon-16.svg'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -15,6 +16,7 @@ type Props = FormItemLabelProps &
 	InputProps & {
 		onPlaceSelected: (place: any) => void
 		containerElement: React.ReactNode
+		error?: boolean
 	}
 
 type State = {
@@ -65,19 +67,20 @@ class LocationSearchInputField extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { placeholder, label, required, type, style, className } = this.props
+		const { placeholder, label, required, type, style, className, error } = this.props
 		const { onSearchBoxMounted, onPlacesChanged, place } = this.state
 
 		return (
 			<Item label={label} required={required} style={style} className={className}>
 				<StandaloneSearchBox ref={onSearchBoxMounted} onPlacesChanged={onPlacesChanged}>
 					<Input
-						className={'tp-search-input'}
+						size='large'
+						className={cx('h-10 m-0 noti-input', { 'border-danger': error })}
 						placeholder={placeholder}
 						type={type || 'text'}
 						value={place.placeName}
 						onChange={this.onChange}
-						prefix={<SearchIcon className='text-blue-600' />}
+						prefix={<SearchIcon />}
 					/>
 				</StandaloneSearchBox>
 			</Item>

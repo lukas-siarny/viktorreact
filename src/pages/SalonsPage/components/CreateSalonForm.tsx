@@ -15,6 +15,7 @@ import { FORM } from '../../../utils/enums'
 import { RootState } from '../../../reducers'
 
 // validation
+// eslint-disable-next-line import/no-cycle
 import validateCreateSalonForm from './validateCreateSalonForm'
 
 type ComponentProps = {}

@@ -6,6 +6,7 @@
   "login": "/login",
   "my-account": "/my-account",
   "reset-password": "/reset-password",
+  "services": "/services",
   "signup": "/signup",
   "user-detail/{{userID}}": "/user-detail/{{userID}}",
   "user/create": "/user/create",

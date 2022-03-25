@@ -53,6 +53,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									{t('loc:Kategórie')}
 								</Menu.Item>
 							) : undefined}
+							<Menu.Item key={PAGE.SERVICES} onClick={() => history.push(t('paths:services'))} icon={<ThumbnailIcon />}>
+									{t('loc:Služby')}
+							</Menu.Item>
 						</Menu>
 					)}
 				</div>

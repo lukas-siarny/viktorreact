@@ -4,7 +4,7 @@ import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALONS } from './salonsTypes'
+import { SALON, SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 
@@ -12,11 +12,20 @@ import { ThunkResult } from '../index'
 import { getReq } from '../../utils/request'
 import { PAGINATION, SALON_STATUSES } from '../../utils/enums'
 
-export type ISalonsActions = IResetStore | IGetSalons
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
 
 interface IGetSalons {
 	type: SALONS
 	payload: ISalonsPayload
+}
+
+interface IGetSalon {
+	type: SALON
+	payload: ISalonPayload
+}
+
+export interface ISalonPayload {
+	data: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 | null
 }
 
 export interface SalonOptionItem {
@@ -61,4 +70,18 @@ export const getSalons =
 		}
 
 		return payload
+	}
+
+export const getSalon =
+	(salonID: number): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: SALON.SALON_LOAD_START })
+			const data = await getReq('/api/b2b/admin/salons/{salonID}', { salonID } as any)
+			dispatch({ type: SALON.SALON_LOAD_DONE, payload: data })
+		} catch (err) {
+			dispatch({ type: SALON.SALON_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
 	}

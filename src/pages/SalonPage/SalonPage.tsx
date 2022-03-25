@@ -3,20 +3,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { initialize, submit } from 'redux-form'
-import { isEmpty, get } from 'lodash'
+import { get } from 'lodash'
 import cx from 'classnames'
 
 // components
-import UserAccountForm from './components/UserAccountForm'
+import { compose } from 'redux'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
+import SalonForm from './components/SalonForm'
 
 // enums
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getUserAccountDetails } from '../../reducers/users/userActions'
+import { getSalon } from '../../reducers/salons/salonsActions'
 
 // types
 import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
@@ -24,67 +25,50 @@ import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import { checkPermissions } from '../../utils/Permissions'
+import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import showNotifications from '../../utils/tsxHelpers'
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 type Props = {
-	computedMatch: IComputedMatch<{ userID: number }>
+	computedMatch: IComputedMatch<{ salonID: number }>
 }
 
-const UserAccountPage: FC<Props> = (props) => {
+const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
+
+const SalonPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { computedMatch } = props
-	const { userID } = computedMatch.params
+	const { salonID } = computedMatch.params
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-
 	const authUserPermissions = authUser?.data?.uniqPermissions || []
-	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
 
-	const showDeleteBtn: boolean =
-		authUser.data?.id !== get(userAccountDetail, 'data.id') && checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE])
+	const showDeleteBtn: boolean = checkPermissions(authUserPermissions, editPermissions)
+
+	const salon = useSelector((state: RootState) => state.salons.salon)
 
 	useEffect(() => {
-		dispatch(getCountries())
-		if (userID) {
-			dispatch(getUserAccountDetails(userID))
+		if (salonID) {
+			dispatch(getSalon(salonID))
 		}
-	}, [dispatch, userID])
+	}, [dispatch, salonID])
 
 	// init forms
 	useEffect(() => {
-		dispatch(initialize(FORM.USER_ACCOUNT, { ...userAccountDetail.data, ...get(userAccountDetail, 'data.company') }))
-	}, [userAccountDetail, dispatch])
+		dispatch(initialize(FORM.USER_ACCOUNT, { ...salon.data }))
+	}, [salon, dispatch])
 
-	const handleUserAccountFormSubmit = async (data: any) => {
+	const handleSubmit = async (data: any) => {
 		try {
 			setSubmitting(true)
-			let userData: any = {
+			const userData: any = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
 				phone: data?.phone
 			}
-
-			// check one required field for company info
-			if (data?.companyName) {
-				userData = {
-					...userData,
-					company: {
-						businessID: data?.businessID,
-						vatID: data?.vatID,
-						companyName: data?.companyName,
-						zipCode: data?.zipCode,
-						city: data?.city,
-						street: data?.street,
-						countryCode: data?.countryCode
-					}
-				}
-			}
-			await patchReq('/api/b2b/admin/users/{userID}', { userID: data?.id }, userData)
+			await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: data?.id }, userData)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -97,27 +81,24 @@ const UserAccountPage: FC<Props> = (props) => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam používateľov'),
-				link: t('paths:users')
+				name: t('loc:Zoznam salónov'),
+				link: t('paths:salons')
 			},
 			{
-				name: t('loc:Detail používateľa'),
-				titleName:
-					get(userAccountDetail, 'data.firstName') && get(userAccountDetail, 'data.lastName')
-						? `${get(userAccountDetail, 'data.firstName')} ${get(userAccountDetail, 'data.lastName')}`
-						: get(userAccountDetail, 'data.email')
+				name: t('loc:Detail salónu'),
+				titleName: get(salon, 'data.salon.name')
 			}
 		]
 	}
 
-	const deleteUser = async () => {
+	const deleteSalon = async () => {
 		if (isRemoving) {
 			return
 		}
 		try {
 			setIsRemoving(true)
-			await deleteReq('/api/b2b/admin/users/{userID}', { userID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(t('paths:users'))
+			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			history.push(t('paths:salons'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -127,7 +108,7 @@ const UserAccountPage: FC<Props> = (props) => {
 	}
 
 	const hideClass = cx({
-		hidden: !userID
+		hidden: !salonID
 	})
 
 	const rowClass = cx({
@@ -138,16 +119,16 @@ const UserAccountPage: FC<Props> = (props) => {
 	return (
 		<>
 			<Row className={hideClass}>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
 			</Row>
 			<div className='content-body small'>
-				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(get(userAccountDetail, 'data.company'))} />
+				<SalonForm onSubmit={handleSubmit} />
 				<Row className={rowClass}>
 					{showDeleteBtn ? (
 						<DeleteButton
 							className={`mt-2 mb-2 w-1/3`}
-							onConfirm={deleteUser}
-							entityName={t('loc:používateľa')}
+							onConfirm={deleteSalon}
+							entityName={t('loc:salón')}
 							type={'default'}
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
@@ -159,8 +140,8 @@ const UserAccountPage: FC<Props> = (props) => {
 						className={`noti-btn m-regular mt-2 mb-2 w-1/3`}
 						htmlType={'submit'}
 						onClick={() => {
-							if (checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
-								dispatch(submit(FORM.USER_ACCOUNT))
+							if (checkPermissions(authUserPermissions, editPermissions)) {
+								dispatch(submit(FORM.SALON))
 							} else {
 								showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
 							}
@@ -176,4 +157,4 @@ const UserAccountPage: FC<Props> = (props) => {
 	)
 }
 
-export default UserAccountPage
+export default compose(withPermissions([...editPermissions, PERMISSION.SALON_BROWSING]))(SalonPage)

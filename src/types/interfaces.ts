@@ -129,3 +129,13 @@ export interface IStructuredAddress {
 	city: string | null
 	country: string | null
 }
+
+export interface IOpenHoursNoteForm {
+	hoursNote: {
+		note: string
+		range: {
+			dateFrom: string
+			dateTo: string
+		}
+	}
+}

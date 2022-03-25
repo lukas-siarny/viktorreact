@@ -476,3 +476,9 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 	})
 	return values
 }
+
+export const isValidDateRange = (from: string, to: string) => {
+	const dateFrom = dayjs(from)
+	const dateTo = dayjs(to)
+	return dateTo.diff(dateFrom) > 0 // 'from' must be smaller than 'to'
+}

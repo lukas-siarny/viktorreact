@@ -1,0 +1,26 @@
+@import tailwind-variables
+
+.ant-form-item
+	.ant-picker.noti-date-picker
+		border-radius: 8px
+
+.ant-form-item:not(.ant-form-item-has-error)
+	// Normal state
+	.ant-picker.noti-date-picker
+		border: 1px solid $borderColor-notino-grayLight
+		&:hover
+			border: 1px solid $borderColor-notino-grayDark
+		&.ant-picker-focused
+			border: 1px solid $borderColor-notino-black
+			box-sizing: border-box
+			box-shadow: $field-shadow-focus-default
+			background-color: $backgroundColor-notino-white
+		.ant-picker-input input::placeholder
+			color: $borderColor-notino-gray
+
+// Date range picker
+.ant-picker-range-wrapper
+	.ant-picker-panel-container
+		.ant-picker-content
+			.ant-picker-cell-in-range.ant-picker-cell-in-view
+				color: $textColor-white

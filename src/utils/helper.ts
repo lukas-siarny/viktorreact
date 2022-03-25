@@ -95,6 +95,7 @@ import {
 	UNIT_TEMPLATE_FACILITY_TYPE,
 	BYTE_MULTIPLIER
 } from './enums'
+import { phoneRegEx } from './regex'
 
 import pdfLogoPath from '../assets/icons/pdf-icon.svg'
 import docLogoPath from '../assets/icons/doc-icon.svg'
@@ -297,6 +298,8 @@ export const validateArray = (key: string) => (values: any) => {
 	const hasSome = some(values, (value) => !!get(value, key))
 	return !hasSome && i18next.t('loc:Názov musí byť vyplnení pre aspoň jeden jazyk')
 }
+
+export const validationPhone = (value: string) => !phoneRegEx.test(value) && i18next.t('loc:Telefónne číslo nie je platné')
 
 export const normalizeDirectionKeys = (direction: 'ascend' | 'descend' | null | undefined) => (direction === 'descend' ? 'DESC' : 'ASC')
 export const normalizeASCDESCKeys = (direction: string) => (direction === 'DESC' ? 'descend' : 'ascend')

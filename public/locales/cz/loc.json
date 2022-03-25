@@ -1,4 +1,5 @@
 {
+  " Môj účet": "_NEPRELOZENE_",
   "Aktivovaný": "_NEPRELOZENE_",
   "Aktivovať": "_NEPRELOZENE_",
   "Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak": "_NEPRELOZENE_",
@@ -79,6 +80,7 @@
   "Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás": "_NEPRELOZENE_",
   "Súbor je príliš veľký (max. {{size}} {{unit}})": "_NEPRELOZENE_",
   "Telefón": "_NEPRELOZENE_",
+  "Telefónne číslo nie je platné": "_NEPRELOZENE_",
   "Textové popisy": "_NEPRELOZENE_",
   "Toto pole je povinné": "_NEPRELOZENE_",
   "Typ osoby": "_NEPRELOZENE_",

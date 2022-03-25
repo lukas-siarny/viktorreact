@@ -1,6 +1,6 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
-import { IServiceActions, IServicesPayload, IUserPayload, IUsersPayload } from './serviceActions'
+import { IServiceActions, IServicesPayload } from './serviceActions'
 // eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { SERVICES } from './serviceTypes'

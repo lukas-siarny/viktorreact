@@ -6,17 +6,16 @@ import { get, map, flatten, uniq } from 'lodash'
 // types
 import { ThunkResult } from '../index'
 import { ILoginForm, IJwtPayload, ICreatePasswordForm } from '../../types/interfaces'
-import { AUTH_USER, USER, USERS, SERVICES } from './serviceTypes'
+import { SERVICES } from './serviceTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
 // utils
-import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
 import { history } from '../../utils/history'
-import { getReq, postReq, PostUrls, ICustomConfig } from '../../utils/request'
-import { PERMISSION } from '../../utils/enums'
+import { getReq } from '../../utils/request'
+// import { PERMISSION } from '../../utils/enums'
 
-export type IUserActions = IResetStore | IGetServices
+export type IServiceActions = IResetStore | IGetServices
 
 interface IGetServices {
 	type: SERVICES

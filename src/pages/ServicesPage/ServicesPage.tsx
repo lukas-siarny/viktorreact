@@ -22,6 +22,7 @@ import { checkPermissions, withPermissions } from '../../utils/Permissions'
 // reducers
 import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
+import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
@@ -50,7 +51,8 @@ const ServicesPage = () => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search }))
-		dispatch(getUsers(query.page, query.limit, query.order, query.search))
+		// dispatch(getUsers(query.page, query.limit, query.order, query.search))
+		dispatch(getServices(query.page, query.limit, query.order, query.search))
 	}, [dispatch, query.page, query.limit, query.search, query.order])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {

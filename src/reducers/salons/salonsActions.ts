@@ -9,7 +9,7 @@ import { ThunkResult } from '../index'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_STATUSES } from '../../utils/enums'
+import { PAGINATION, SALON_STATUSES } from '../../utils/enums'
 
 export type ISalonsActions = IResetStore | IGetSalons
 
@@ -34,8 +34,7 @@ export const getSalons =
 	async (dispatch) => {
 		try {
 			dispatch({ type: SALONS.SALONS_LOAD_START })
-			const pageLimit = limit
-			const data = await getReq('/api/b2b/admin/salons/', { page: page || 1, limit: pageLimit, order, search, categoryFirstLevelIDs, statuses } as any)
+			const data = await getReq('/api/b2b/admin/salons/', { page: page || 1, limit: limit || PAGINATION.limit, order, search, categoryFirstLevelIDs, statuses } as any)
 			dispatch({ type: SALONS.SALONS_LOAD_DONE, payload: data })
 		} catch (err) {
 			dispatch({ type: SALONS.SALONS_LOAD_FAIL })

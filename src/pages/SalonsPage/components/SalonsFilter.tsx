@@ -48,8 +48,6 @@ const SalonsFilter = (props: Props) => {
 		{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE, key: SALON_STATUSES.VISIBLE }
 	]
 
-	console.log(form)
-
 	const searchInput = (
 		<Field
 			className={'h-10 p-0 m-0'}

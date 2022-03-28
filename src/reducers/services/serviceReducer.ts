@@ -7,7 +7,8 @@ import { SERVICES } from './serviceTypes'
 
 export const initState = {
 	services: {
-		data: null,
+		originalData: null,
+		tableData: undefined,
 		isLoading: false,
 		isFailure: false
 	} as IServicesPayload & ILoadingAndFailure
@@ -38,7 +39,8 @@ export default (state = initState, action: IServiceActions) => {
 				...state,
 				services: {
 					...initState.services,
-					data: action.payload.data
+					originalData: action.payload.originalData,
+					tableData: action.payload.tableData
 				}
 			}
 		case RESET_STORE:

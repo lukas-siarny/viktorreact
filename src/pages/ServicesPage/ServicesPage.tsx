@@ -41,12 +41,13 @@ const ServicesPage = () => {
 	const dispatch = useDispatch()
 
 	const users = useSelector((state: RootState) => state.user.users)
+	const services = useSelector((state: RootState) => state.service.services)
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'fullName:ASC')
+		order: withDefault(StringParam, 'name:ASC')
 	})
 
 	useEffect(() => {
@@ -80,67 +81,43 @@ const ServicesPage = () => {
 	const columns: Columns = [
 		{
 			title: t('loc:Meno'),
-			dataIndex: 'fullName',
-			key: 'fullName',
+			dataIndex: 'name',
+			key: 'name',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'fullName'),
-			render: (value, record) => (
-				<>
-					{record?.firstName} {record?.lastName}
-				</>
-			)
+			sortOrder: setOrder(query.order, 'name')
 		},
 		{
-			title: t('loc:Email'),
-			dataIndex: 'email',
-			key: 'email',
+			title: t('loc:Zamestnanec'),
+			dataIndex: 'employees',
+			key: 'employees',
 			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'email')
+			render: (value) => <span className='whitespace-pre'>{value}</span>
 		},
 		{
-			title: t('loc:Telefón'),
-			dataIndex: 'phone',
-			key: 'phone',
-			ellipsis: true,
-			sorter: false,
-			render: (value, record) => (
-				<>
-					{record?.phonePrefixCountryCode} {value}
-				</>
-			)
+			title: t('loc:Trvanie'),
+			dataIndex: 'duration',
+			key: 'duration',
+			ellipsis: true
 		},
 		{
-			title: t('loc:Rola'),
-			dataIndex: 'roles',
-			key: 'roles',
-			ellipsis: {
-				showTitle: false
-			},
-			render(value) {
-				return value.map((role: any) => {
-					return role?.name
-				})
-			}
+			title: t('loc:Cena'),
+			dataIndex: 'price',
+			key: 'price',
+			ellipsis: true
 		},
 		{
-			title: t('loc:Spoločnosť'),
-			dataIndex: 'companyName',
-			key: 'companyName',
-			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'companyName'),
-			render: (value, record) => {
-				return <>{record?.company?.companyName}</>
-			}
+			title: t('loc:Kategória'),
+			dataIndex: 'category',
+			key: 'category',
+			ellipsis: true
 		}
 	]
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam používateľov')
+				name: t('loc:Zoznam služieb')
 			}
 		]
 	}
@@ -167,9 +144,9 @@ const ServicesPage = () => {
 							className='table-fixed'
 							onChange={onChangeTable}
 							columns={columns}
-							dataSource={users?.data?.users}
+							dataSource={services?.tableData}
 							rowClassName={'clickable-row'}
-							loading={users?.isLoading}
+							loading={services?.isLoading}
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {

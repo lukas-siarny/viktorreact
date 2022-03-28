@@ -55,7 +55,7 @@ type Props = WrappedFieldProps & {
 	mapContainerElements?: MapContainerElements
 }
 
-const FULL_H_ELEMENT = <div style={{ height: '100%' }} />
+const FULL_H_ELEMENT = <div className='h-full' />
 
 const AddressFields = (props: Props) => {
 	const {
@@ -71,7 +71,7 @@ const AddressFields = (props: Props) => {
 		mapContainerElements = {
 			loadingElement: FULL_H_ELEMENT,
 			mapElement: FULL_H_ELEMENT,
-			containerElement: <div style={{ height: '660px' }} />
+			containerElement: <div className='h-96' />
 		}
 	} = props
 	const { t } = useTranslation()
@@ -138,7 +138,7 @@ const AddressFields = (props: Props) => {
 							error={error && touched}
 						/>
 						<div className={cx('text-danger h-6', { invisible: !(error && touched) })}>{error}</div>
-						<Divider type={'horizontal'} style={{ width: '100%' }} />
+						<Divider type={'horizontal'} className='w-full' />
 						{/* Display only fields defined in inputValues */}
 						{'city' in inputValues && (
 							<div>
@@ -170,7 +170,7 @@ const AddressFields = (props: Props) => {
 						<Field component={InputField} label={t('loc:Krajina')} name={'country'} size={'large'} /> */}
 					</Col>
 					<Col xl={1} className={'flex-center'}>
-						<Divider type={'vertical'} style={{ height: '100%' }} />
+						<Divider type={'vertical'} className='h-full' />
 					</Col>
 					<Col xl={17} md={14}>
 						<MapContainer

@@ -118,49 +118,6 @@ const InputNumberField = (props: Props) => {
 				onBlur={onBlur}
 				onPressEnter={onPressEnterWrap}
 				onChange={input.onChange}
-				// NOTE:    V starej verzii antu sa pri vpisovani volal formatter vzdy
-				//          v novej verzii antu sa pri vpisovani nezavola formatter ak hodnota je vacsia ako max (rovnako plati pre min)
-				// formatter={(string: any) => {
-				// 	if (isString(string)) {
-				// 		let hasComma = 0
-				// 		const formattedString = filter(string, (str, index) => {
-				// 			const isNumber = !isNaN(Number(str))
-				// 			if (str === '.') {
-				// 				hasComma += 1
-				// 			}
-				//          // NOTE: ant default spravanie uz obsahuje - funguje az na blur/press enter
-				// 			if (hasComma > 1) {
-				// 				return false
-				// 			}
-				//          // NOTE: ant default spravanie uz obsahuje - funguje az na blur/press enter
-				// 			if (index === 0 && !isNumber && str.charCodeAt(0) !== 45) {
-				// 				return false
-				// 			}
-				//          // NOTE: ant default spravanie uz obsahuje - funguje az na blur/press enter
-				// 			if (index !== 0 && !isNumber && str !== '.') {
-				// 				return false
-				// 			}
-				// 			return true
-				// 		}).join('')
-				// 		if (touched) {
-				// 			// NOTE: format Min, Max hodnoty len po blurnutí
-				//          // NOTE: ant default spravanie uz obsahuje - funguje az na blur/press enter
-				// 			if (formattedString && Number(formattedString) < min) {
-				// 				return `${min}`
-				// 			}
-				//          // NOTE: ant default spravanie uz obsahuje - funguje az na blur/press enter
-				// 			if (Number(formattedString) > max) {
-				// 				return `${max}`
-				// 			}
-				// 			// NOTE: format Empty hodnoty len po blurnutí
-				// 			if (touchedEmptyFormat && !formattedString?.length) {
-				// 				return touchedEmptyFormat
-				// 			}
-				// 		}
-				// 		return formattedString
-				// 	}
-				// 	return string
-				// }}
 			/>
 		</Item>
 	)

@@ -24,6 +24,7 @@ type State = {
 	onSearchBoxMounted: (ref: any) => void
 	onPlacesChanged: () => void
 }
+
 class LocationSearchInputField extends React.Component<Props, State> {
 	constructor(props: any) {
 		super(props)

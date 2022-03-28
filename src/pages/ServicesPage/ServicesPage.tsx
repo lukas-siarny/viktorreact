@@ -15,7 +15,7 @@ import ServicesFilter from './components/ServicesFilter'
 
 // utils
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 
@@ -44,6 +44,9 @@ const ServicesPage = () => {
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
+		categoryID: NumberParam,
+		employeeID: NumberParam,
+		salonID: NumberParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'name:ASC')
@@ -51,8 +54,8 @@ const ServicesPage = () => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search }))
-		dispatch(getServices(query.page, query.limit, query.order, query.search))
-	}, [dispatch, query.page, query.limit, query.search, query.order])
+		dispatch(getServices(query.page, query.limit, query.order, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID: query.salonID }))
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, query.salonID])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -73,7 +76,7 @@ const ServicesPage = () => {
 			...values,
 			page: 1
 		}
-		setQuery(newQuery)
+		setQuery(normalizeQueryParams(newQuery))
 	}
 
 	const columns: Columns = [
@@ -159,11 +162,10 @@ const ServicesPage = () => {
 									}),
 								defaultPageSize: PAGINATION.defaultPageSize,
 								pageSizeOptions: PAGINATION.pageSizeOptions,
-								showSizeChanger: true
-								// TODO update after pagination is available from BE
-								// pageSize: services?.originalData?.services?.pagination?.limit,
-								// total: services?.originalData?.services?.pagination?.totalPages,
-								// current: services?.originalData?.services?.pagination?.page
+								showSizeChanger: true,
+								pageSize: services?.originalData?.pagination?.limit,
+								total: services?.originalData?.pagination?.totalPages,
+								current: services?.originalData?.pagination?.page
 							}}
 						/>
 					</div>

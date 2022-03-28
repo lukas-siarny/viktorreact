@@ -14,7 +14,7 @@ import { Paths } from '../../types/api'
 import { history } from '../../utils/history'
 import { getReq } from '../../utils/request'
 // import { PERMISSION } from '../../utils/enums'
-import { getServiceRange } from '../../utils/helper'
+import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices
 
@@ -38,17 +38,13 @@ export interface IServicesPayload {
 }
 
 export const getServices =
-	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null): ThunkResult<Promise<void>> =>
+	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
 			const pageLimit = limit
 
-			const { data } = await getReq(
-				'/api/b2b/admin/services/',
-				{}
-				// { page: page || 1, limit: pageLimit, order, search }
-			)
+			const { data } = await getReq('/api/b2b/admin/services/', { page: page || 1, limit: pageLimit, order, ...normalizeQueryParams(queryParams) })
 			const tableData = map(data.services, (item) => {
 				const tableItem = {
 					key: item.id,

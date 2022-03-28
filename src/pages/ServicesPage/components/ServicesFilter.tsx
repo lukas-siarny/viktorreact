@@ -19,6 +19,9 @@ type ComponentProps = {
 
 interface IServicesFilter {
 	search: string
+	categoryID: number
+	employeeID: number
+	salonID: number
 }
 
 type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps
@@ -65,7 +68,7 @@ const ServicesFilter = (props: Props) => {
 						component={SelectField}
 						allowClear
 						placeholder={t('loc:Filtrujte podľa kategórie')}
-						name='category'
+						name='categoryID'
 						options={CATEGORIES}
 						size={'large'}
 					/>
@@ -76,13 +79,13 @@ const ServicesFilter = (props: Props) => {
 						component={SelectField}
 						allowClear
 						placeholder={t('loc:Filtrujte podľa zamestnancov')}
-						name='employee'
+						name='employeeID'
 						options={EMPLOYEES_OPTIONS}
 						size={'large'}
 					/>
 				</Col>
 				<Col span={6}>
-					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Filtrujte podľa salónu')} name='category3' options={TEST} size={'large'} />
+					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Filtrujte podľa salónu')} name='salonID' options={TEST} size={'large'} />
 				</Col>
 			</Row>
 		</Form>

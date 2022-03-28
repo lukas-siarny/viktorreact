@@ -95,6 +95,7 @@ import {
 	UNIT_TEMPLATE_FACILITY_TYPE,
 	BYTE_MULTIPLIER
 } from './enums'
+import { phoneRegEx } from './regex'
 
 import pdfLogoPath from '../assets/icons/pdf-icon.svg'
 import docLogoPath from '../assets/icons/doc-icon.svg'
@@ -298,6 +299,8 @@ export const validateArray = (key: string) => (values: any) => {
 	return !hasSome && i18next.t('loc:Názov musí byť vyplnení pre aspoň jeden jazyk')
 }
 
+export const validationPhone = (value: string) => !phoneRegEx.test(value) && i18next.t('loc:Telefónne číslo nie je platné')
+
 export const normalizeDirectionKeys = (direction: 'ascend' | 'descend' | null | undefined) => (direction === 'descend' ? 'DESC' : 'ASC')
 export const normalizeASCDESCKeys = (direction: string) => (direction === 'DESC' ? 'descend' : 'ascend')
 
@@ -439,3 +442,11 @@ export const getServiceRange = (from: number, to?: number, unit = '') => {
 	if (from === to) return `${from}${unit}`
 	return `${from} - ${to}${unit}`
 }
+
+export const isValidDateRange = (from: string, to: string) => {
+	const dateFrom = dayjs(from)
+	const dateTo = dayjs(to)
+	return dateTo.diff(dateFrom) > 0 // 'from' must be smaller than 'to'
+}
+
+export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))

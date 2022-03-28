@@ -31,7 +31,8 @@ const TextareaField = (props: Props) => {
 		maxLength,
 		focusRow,
 		readOnly,
-		className
+		className,
+		size
 	} = props
 
 	const [autoSizeState, setSutoSizeState] = useState(undefined as { minRows?: number; maxRows?: number } | undefined)
@@ -101,6 +102,7 @@ const TextareaField = (props: Props) => {
 				allowClear={allowClear}
 				maxLength={maxLength}
 				ref={ref}
+				size={size}
 			/>
 		</Form.Item>
 	)

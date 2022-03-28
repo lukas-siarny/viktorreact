@@ -11,6 +11,9 @@ import PhonePrefixField from '../atoms/PhonePrefixField'
 import { RootState } from '../reducers'
 import { ENUMERATIONS_KEYS } from '../utils/enums'
 
+// utils
+import { validationPhone } from '../utils/helper'
+
 type Props = {
 	placeholder?: string
 	label?: string
@@ -43,7 +46,7 @@ const PhoneWithPrefixField = (props: Props) => {
 				/>
 			</Col>
 			<Col flex='auto'>
-				<Field label={label ? ' ' : undefined} component={InputField} placeholder={placeholder} name={phoneName} size={size} />
+				<Field label={label ? ' ' : undefined} component={InputField} placeholder={placeholder} name={phoneName} size={size} validate={validationPhone} />
 			</Col>
 		</Row>
 	)

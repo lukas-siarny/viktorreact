@@ -54,8 +54,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 								</Menu.Item>
 							) : undefined}
 							<Menu.Item key={PAGE.SERVICES} onClick={() => history.push(t('paths:services'))} icon={<ThumbnailIcon />}>
-									{t('loc:Služby')}
+								{t('loc:Služby')}
 							</Menu.Item>
+							{checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING]) ? (
+								<Menu.Item key={PAGE.SALONS} onClick={() => history.push(t('paths:salons'))} icon={<ThumbnailIcon />}>
+									{t('loc:Salóny')}
+								</Menu.Item>
+							) : undefined}
 						</Menu>
 					)}
 				</div>

@@ -11,7 +11,7 @@ import { compose } from 'redux'
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import AdminUsersFilter from './components/AdminUsersFilter'
+import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 
 // utils
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
@@ -30,10 +30,6 @@ import showNotifications from '../../utils/tsxHelpers'
 type Props = {}
 
 type Columns = ColumnsType<any>
-
-interface IAdminUsersFilter {
-	search: string
-}
 
 const AdminUsersPage = () => {
 	const [t] = useTranslation()
@@ -66,7 +62,7 @@ const AdminUsersPage = () => {
 		}
 	}
 
-	const handleSubmit = (values: IAdminUsersFilter) => {
+	const handleSubmit = (values: IUsersFilter) => {
 		const newQuery = {
 			...query,
 			...values,

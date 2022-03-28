@@ -9,9 +9,8 @@ import { ReactComponent as SeparatorIcon } from '../assets/icons/datepicker-sepa
 
 import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../utils/enums'
 import { formFieldID } from '../utils/helper'
-import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
-type Props = WrappedFieldProps &
+export type Props = WrappedFieldProps &
 	FormItemProps &
 	RangePickerProps & {
 		disableFuture?: boolean // for disable startDate from past
@@ -39,7 +38,8 @@ const DateRangePickerField = (props: Props) => {
 		disabledDate,
 		itemRef,
 		required,
-		meta
+		meta,
+		size
 	} = props
 
 	const onFocus = (e: any) => {
@@ -88,16 +88,16 @@ const DateRangePickerField = (props: Props) => {
 	)
 
 	return (
-		<Form.Item style={style} label={label} required={required}>
+		<Form.Item style={style} label={label} required={required} help={meta.touched && meta.error} validateStatus={meta.error && meta.touched ? 'error' : undefined}>
 			<div id={formFieldID(meta.form, input.name)}>
 				<RangePicker
 					ref={itemRef}
+					className={'noti-date-picker'}
 					value={value}
 					onChange={onChange}
 					format={format}
 					onFocus={onFocus}
 					placeholder={placeholder}
-					clearIcon={<RemoveIcon className={'text-blue-600'} />}
 					suffixIcon={suffixIcon}
 					separator={separator || <SeparatorIcon />}
 					open={open}
@@ -105,6 +105,7 @@ const DateRangePickerField = (props: Props) => {
 					dropdownClassName={dropdownClassName}
 					renderExtraFooter={renderExtraFooter}
 					getPopupContainer={getPopupContainer || ((node) => node)}
+					size={size}
 				/>
 			</div>
 		</Form.Item>

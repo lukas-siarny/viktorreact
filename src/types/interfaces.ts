@@ -122,6 +122,14 @@ export interface ICountryLabel {
 	[key: string]: string
 }
 
+export interface IStructuredAddress {
+	streetNumber: string | null
+	zip: string | null
+	street: string | null
+	city: string | null
+	country: string | null
+}
+
 export interface IOpenHoursNoteForm {
 	hoursNote: {
 		note: string

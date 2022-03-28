@@ -123,29 +123,6 @@ declare namespace Paths {
             }
         }
     }
-    namespace DeleteApiB2BV1EnumsCategoriesCategoryId {
-        namespace Parameters {
-            export type CategoryID = number;
-            export type Restore = boolean;
-        }
-        export interface PathParameters {
-            categoryID: Parameters.CategoryID;
-        }
-        export interface QueryParameters {
-            restore: Parameters.Restore;
-        }
-        namespace Responses {
-            export interface $200 {
-                category: {
-                    id: number;
-                };
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
     namespace DeleteApiB2BV1SalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -226,8 +203,11 @@ declare namespace Paths {
                             name: string;
                             parentID?: number;
                             orderIndex: number;
+                            deletedAt?: string; // date-time
                         }[];
+                        deletedAt?: string; // date-time
                     }[];
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -256,8 +236,11 @@ declare namespace Paths {
                             name: string;
                             parentID?: number;
                             orderIndex: number;
+                            deletedAt?: string; // date-time
                         }[];
+                        deletedAt?: string; // date-time
                     }[];
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -773,8 +756,11 @@ declare namespace Paths {
                             name: string;
                             parentID?: number;
                             orderIndex: number;
+                            deletedAt?: string; // date-time
                         }[];
+                        deletedAt?: string; // date-time
                     }[];
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -803,8 +789,11 @@ declare namespace Paths {
                             name: string;
                             parentID?: number;
                             orderIndex: number;
+                            deletedAt?: string; // date-time
                         }[];
+                        deletedAt?: string; // date-time
                     }[];
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -873,6 +862,14 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type Limit = 25 | 50 | 100;
+            export type Order = string;
+            export type Page = number;
+        }
+        export interface QueryParameters {
+            order?: Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
         }
         namespace Responses {
             export interface $200 {
@@ -934,7 +931,7 @@ declare namespace Paths {
                             name: string;
                         }[];
                     };
-                    gallerySeqment?: {
+                    gallerySegment?: {
                         images: {
                             id: number;
                             fullPath: string;
@@ -1109,7 +1106,7 @@ declare namespace Paths {
                             name: string;
                         }[];
                     };
-                    gallerySeqment?: {
+                    gallerySegment?: {
                         images: {
                             id: number;
                             fullPath: string;
@@ -1637,10 +1634,6 @@ declare namespace Paths {
              * Prevod na účet
              */
             otherPaymentMethods?: string | null;
-            categoryIDs: [
-                number,
-                ...number[]
-            ];
             /**
              * example:
              * 8
@@ -1934,30 +1927,6 @@ declare namespace Paths {
             }
         }
     }
-    namespace PatchApiB2BV1EnumsCategoriesCategoryId {
-        namespace Parameters {
-            export type CategoryID = number;
-        }
-        export interface PathParameters {
-            categoryID: Parameters.CategoryID;
-        }
-        export interface RequestBody {
-            name: string;
-            orderIndex: number;
-            parentID?: null | number;
-        }
-        namespace Responses {
-            export interface $200 {
-                category: {
-                    id: number;
-                };
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
     namespace PatchApiB2BV1SalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -1978,13 +1947,7 @@ declare namespace Paths {
             salonID: Parameters.SalonID;
         }
         export interface RequestBody {
-            categorySegment?: {
-                categoryIDs: [
-                    number,
-                    ...number[]
-                ];
-            };
-            gallerySeqment?: {
+            gallerySegment?: {
                 imageIDs: [
                     number,
                     ...number[]
@@ -2081,13 +2044,13 @@ declare namespace Paths {
                      * example:
                      * 2022-03-22
                      */
-                    validFrom?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    validFrom?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                     /**
                      * example:
                      * 2022-03-22
                      */
-                    validTo?: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                };
+                    validTo?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                } | null;
             };
             aboutUsSegment?: {
                 /**
@@ -2182,7 +2145,7 @@ declare namespace Paths {
                             name: string;
                         }[];
                     };
-                    gallerySeqment?: {
+                    gallerySegment?: {
                         images: {
                             id: number;
                             fullPath: string;
@@ -2715,6 +2678,10 @@ declare namespace Paths {
             export type AcceptLanguage = string;
         }
         export interface RequestBody {
+            /**
+             * example:
+             * Lopaty123.
+             */
             password: string; // (?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d+)
         }
         namespace Responses {
@@ -2812,13 +2779,20 @@ declare namespace Paths {
                     mimeType: string;
                 }[]
             ];
+            category: "SALON";
         }
         namespace Responses {
             export interface $200 {
                 files: {
                     id: number;
-                    url: string;
+                    path: string;
                     signedUrl: string;
+                    imagePaths?: {
+                        thumbnailSizePath: string;
+                        smallSizePath: string;
+                        mediumSizePath: string;
+                        largeSizePath: string;
+                    };
                 }[];
             }
         }
@@ -2987,10 +2961,6 @@ declare namespace Paths {
              * Prevod na účet
              */
             otherPaymentMethods?: string | null;
-            categoryIDs: [
-                number,
-                ...number[]
-            ];
             /**
              * example:
              * 8
@@ -3481,6 +3451,10 @@ declare namespace Paths {
             export type AcceptLanguage = string;
         }
         export interface RequestBody {
+            /**
+             * example:
+             * Lopaty123.
+             */
             password: string; // (?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d+)
         }
         namespace Responses {
@@ -3514,24 +3488,6 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
-                };
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
-    namespace PostApiB2BV1EnumsCategories {
-        export interface RequestBody {
-            name: string;
-            orderIndex: number;
-            parentID?: null | number;
-        }
-        namespace Responses {
-            export interface $200 {
-                category: {
-                    id: number;
                 };
                 messages: {
                     message: string;
@@ -3578,13 +3534,20 @@ declare namespace Paths {
                     mimeType: string;
                 }[]
             ];
+            category: "SALON";
         }
         namespace Responses {
             export interface $200 {
                 files: {
                     id: number;
-                    url: string;
+                    path: string;
                     signedUrl: string;
+                    imagePaths?: {
+                        thumbnailSizePath: string;
+                        smallSizePath: string;
+                        mediumSizePath: string;
+                        largeSizePath: string;
+                    };
                 }[];
             }
         }
@@ -3605,10 +3568,6 @@ declare namespace Paths {
             export type AcceptLanguage = string;
         }
         export interface RequestBody {
-            categoryIDs: [
-                number,
-                ...number[]
-            ];
         }
         namespace Responses {
             export interface $200 {
@@ -3621,7 +3580,7 @@ declare namespace Paths {
                             name: string;
                         }[];
                     };
-                    gallerySeqment?: {
+                    gallerySegment?: {
                         images: {
                             id: number;
                             fullPath: string;
@@ -4069,6 +4028,46 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   /**
+   * getApiB2BAdminEnumsCategories - PERMISSION: NO
+   */
+  'getApiB2BAdminEnumsCategories'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
+  /**
+   * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   */
+  'postApiB2BAdminEnumsCategories'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
+  /**
+   * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: NO
+   */
+  'getApiB2BAdminEnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   */
+  'patchApiB2BAdminEnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+    data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   */
+  'deleteApiB2BAdminEnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+  /**
    * getApiB2BAdminEnumsCountries - PERMISSION: NO
    */
   'getApiB2BAdminEnumsCountries'(
@@ -4173,6 +4172,22 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   /**
+   * getApiB2BV1EnumsCategories - PERMISSION: NO
+   */
+  'getApiB2BV1EnumsCategories'(
+    parameters?: Parameters<UnknownParamsObject> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
+  /**
+   * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: NO
+   */
+  'getApiB2BV1EnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
+  /**
    * getApiB2BV1EnumsCountries - PERMISSION: NO
    */
   'getApiB2BV1EnumsCountries'(
@@ -4220,46 +4235,6 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BAdminUsers.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
-  /**
-   * getApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING]
-   */
-  'getApiB2BAdminEnumsCategories'(
-    parameters?: Parameters<UnknownParamsObject> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
-  /**
-   * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-   */
-  'postApiB2BAdminEnumsCategories'(
-    parameters?: Parameters<UnknownParamsObject> | null,
-    data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
-  /**
-   * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING, ENUM_EDIT]
-   */
-  'getApiB2BAdminEnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
-  /**
-   * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-   */
-  'patchApiB2BAdminEnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
-    data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
-  /**
-   * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-   */
-  'deleteApiB2BAdminEnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
    * getApiB2BAdminRoles - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
    */
@@ -4381,50 +4356,10 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
   /**
-   * getApiB2BV1EnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING]
-   */
-  'getApiB2BV1EnumsCategories'(
-    parameters?: Parameters<UnknownParamsObject> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
-  /**
-   * postApiB2BV1EnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-   */
-  'postApiB2BV1EnumsCategories'(
-    parameters?: Parameters<UnknownParamsObject> | null,
-    data?: Paths.PostApiB2BV1EnumsCategories.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1EnumsCategories.Responses.$200>
-  /**
-   * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING, ENUM_EDIT]
-   */
-  'getApiB2BV1EnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
-  /**
-   * patchApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-   */
-  'patchApiB2BV1EnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.PatchApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
-    data?: Paths.PatchApiB2BV1EnumsCategoriesCategoryId.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PatchApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
-  /**
-   * deleteApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-   */
-  'deleteApiB2BV1EnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.QueryParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
-  /**
    * getApiB2BV1Salons - PERMISSION: [PARTNER]
    */
   'getApiB2BV1Salons'(
-    parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
+    parameters?: Parameters<Paths.GetApiB2BV1Salons.QueryParameters & Paths.GetApiB2BV1Salons.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
@@ -4615,6 +4550,50 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   }
+  ['/api/b2b/admin/enums/categories/']: {
+    /**
+     * getApiB2BAdminEnumsCategories - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
+    /**
+     * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+     */
+    'post'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/categories/{categoryID}']: {
+    /**
+     * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+    /**
+     * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+      data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+    /**
+     * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+  }
   ['/api/b2b/admin/enums/countries']: {
     /**
      * getApiB2BAdminEnumsCountries - PERMISSION: NO
@@ -4743,6 +4722,26 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   }
+  ['/api/b2b/v1/enums/categories/']: {
+    /**
+     * getApiB2BV1EnumsCategories - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<UnknownParamsObject> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
+  }
+  ['/api/b2b/v1/enums/categories/{categoryID}']: {
+    /**
+     * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
+  }
   ['/api/b2b/v1/enums/countries']: {
     /**
      * getApiB2BV1EnumsCountries - PERMISSION: NO
@@ -4800,50 +4799,6 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BAdminUsers.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
-  }
-  ['/api/b2b/admin/enums/categories/']: {
-    /**
-     * getApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING]
-     */
-    'get'(
-      parameters?: Parameters<UnknownParamsObject> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
-    /**
-     * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-     */
-    'post'(
-      parameters?: Parameters<UnknownParamsObject> | null,
-      data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
-  }
-  ['/api/b2b/admin/enums/categories/{categoryID}']: {
-    /**
-     * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING, ENUM_EDIT]
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
-    /**
-     * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
-      data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
-    /**
-     * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   }
   ['/api/b2b/admin/roles/']: {
     /**
@@ -4983,56 +4938,12 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
   }
-  ['/api/b2b/v1/enums/categories/']: {
-    /**
-     * getApiB2BV1EnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING]
-     */
-    'get'(
-      parameters?: Parameters<UnknownParamsObject> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
-    /**
-     * postApiB2BV1EnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-     */
-    'post'(
-      parameters?: Parameters<UnknownParamsObject> | null,
-      data?: Paths.PostApiB2BV1EnumsCategories.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1EnumsCategories.Responses.$200>
-  }
-  ['/api/b2b/v1/enums/categories/{categoryID}']: {
-    /**
-     * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_BROWSING, ENUM_EDIT]
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
-    /**
-     * patchApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-     */
-    'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
-      data?: Paths.PatchApiB2BV1EnumsCategoriesCategoryId.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PatchApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
-    /**
-     * deleteApiB2BV1EnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-     */
-    'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.QueryParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.DeleteApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
-  }
   ['/api/b2b/v1/salons/']: {
     /**
      * getApiB2BV1Salons - PERMISSION: [PARTNER]
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2BV1Salons.QueryParameters & Paths.GetApiB2BV1Salons.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>

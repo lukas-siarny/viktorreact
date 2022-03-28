@@ -1,23 +1,24 @@
 import React, { useCallback } from 'react'
-import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Form, Row } from 'antd'
+import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
+import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import { useDispatch } from 'react-redux'
-
-// assets
-import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
+import { useDispatch, useSelector } from 'react-redux'
 
 // utils
 import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
-import { validationString } from '../../../utils/helper'
+import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
+// components
+import Filters from '../../../components/Filters'
+
 // reducers
 import { getSalons } from '../../../reducers/salons/salonsActions'
+import { RootState } from '../../../reducers'
 
 type ComponentProps = {
 	createNewTemplate?: any
@@ -34,11 +35,6 @@ type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
-const TEST = [
-	{ label: 'test', value: 'a' },
-	{ label: 'test2', value: 'ac' }
-]
-
 const CATEGORIES = [
 	{ label: 'Kategória 1.2', value: 5 },
 	{ label: 'Kategória 1.1', value: 4 }
@@ -53,6 +49,7 @@ const ServicesFilter = (props: Props) => {
 	const { handleSubmit } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.SERVICES_FILTER)(state))
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
@@ -62,31 +59,33 @@ const ServicesFilter = (props: Props) => {
 		[dispatch]
 	)
 
+	const searchInput = (
+		<Field
+			className={'h-10 p-0 m-0'}
+			component={InputField}
+			size={'large'}
+			placeholder={t('loc:Vyhľadajte podľa názvu')}
+			name='search'
+			fieldMode={FIELD_MODE.FILTER}
+			search
+			validate={fixLength100}
+		/>
+	)
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Row className={'flex justify-between'} gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={6}>
-					<Field
-						className={'h-10 p-0 m-0'}
-						component={InputField}
-						size={'large'}
-						placeholder={t('loc:Vyhľadajte podľa názvu')}
-						name='search'
-						fieldMode={FIELD_MODE.FILTER}
-						search
-						validate={fixLength100}
-					/>
-				</Col>
-				<Col span={6}>
-					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Kategória')} name='categoryID' options={CATEGORIES} size={'large'} />
-				</Col>
-				<Col span={6}>
-					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Zamestnanec')} name='employeeID' options={EMPLOYEES_OPTIONS} size={'large'} />
-				</Col>
-				<Col span={6}>
-					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Salón')} name='salonID' size={'large'} showSearch onSearch={searchSalon} />
-				</Col>
-			</Row>
+			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
+				<Row gutter={ROW_GUTTER_X_DEFAULT}>
+					<Col span={6}>
+						<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Kategória')} name='categoryID' options={CATEGORIES} />
+					</Col>
+					<Col span={6}>
+						<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Zamestnanec')} name='employeeID' options={EMPLOYEES_OPTIONS} />
+					</Col>
+					<Col span={6}>
+						<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Salón')} name='salonID' showSearch onSearch={searchSalon} onDidMountSearch />
+					</Col>
+				</Row>
+			</Filters>
 		</Form>
 	)
 }

@@ -17,11 +17,11 @@ type ComponentProps = {
 	createNewTemplate?: any
 }
 
-interface IUserPermissionFilter {
+export interface IUsersFilter {
 	search: string
 }
 
-type Props = InjectedFormProps<IUserPermissionFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IUsersFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 

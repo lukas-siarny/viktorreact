@@ -24,7 +24,9 @@ import {
 	lowerCase,
 	isString,
 	replace,
-	map
+	map,
+	size,
+	filter
 } from 'lodash'
 import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
@@ -482,3 +484,5 @@ export const isValidDateRange = (from: string, to: string) => {
 	const dateTo = dayjs(to)
 	return dateTo.diff(dateFrom) > 0 // 'from' must be smaller than 'to'
 }
+
+export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))

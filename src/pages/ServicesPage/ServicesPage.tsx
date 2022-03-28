@@ -27,8 +27,6 @@ import { getServices } from '../../reducers/services/serviceActions'
 import { IBreadcrumbs } from '../../types/interfaces'
 import showNotifications from '../../utils/tsxHelpers'
 
-type Props = {}
-
 type Columns = ColumnsType<any>
 
 interface IAdminUsersFilter {
@@ -38,8 +36,6 @@ interface IAdminUsersFilter {
 const ServicesPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
-	// const users = useSelector((state: RootState) => state.user.users)
 	const services = useSelector((state: RootState) => state.service.services)
 
 	const [query, setQuery] = useQueryParams({
@@ -53,7 +49,7 @@ const ServicesPage = () => {
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search }))
+		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID: query.salonID }))
 		dispatch(getServices(query.page, query.limit, query.order, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID: query.salonID }))
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, query.salonID])
 

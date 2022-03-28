@@ -181,6 +181,27 @@ export const translateMessageType = (msgType: MSG_TYPE) => {
 	}
 }
 
+export const translateDayName = (day: DAY, shortName?: boolean) => {
+	switch (day) {
+		case DAY.MONDAY:
+			return shortName ? i18next.t('loc:Po') : i18next.t('loc:Pondelok')
+		case DAY.TUESDAY:
+			return shortName ? i18next.t('loc:Ut') : i18next.t('loc:Utorok')
+		case DAY.WEDNESDAY:
+			return shortName ? i18next.t('loc:St') : i18next.t('loc:Streda')
+		case DAY.THURSDAY:
+			return shortName ? i18next.t('loc:Štv') : i18next.t('loc:Štvrtok')
+		case DAY.FRIDAY:
+			return shortName ? i18next.t('loc:Pia') : i18next.t('loc:Piatok')
+		case DAY.SATURDAY:
+			return shortName ? i18next.t('loc:So') : i18next.t('loc:Sobota')
+		case DAY.SUNDAY:
+			return shortName ? i18next.t('loc:Ne') : i18next.t('loc:Nedeľa')
+		default:
+			return ''
+	}
+}
+
 export const createSlug = (value: string, separator = '-', lower = true) => {
 	if (value) {
 		return slugify(value, {

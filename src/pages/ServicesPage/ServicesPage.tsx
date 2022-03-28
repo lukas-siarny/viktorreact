@@ -11,7 +11,7 @@ import { compose } from 'redux'
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-// import AdminUsersFilter from './components/AdminUsersFilter'
+import ServicesFilter from './components/ServicesFilter'
 
 // utils
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
@@ -20,7 +20,6 @@ import { history } from '../../utils/history'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
@@ -40,7 +39,7 @@ const ServicesPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const users = useSelector((state: RootState) => state.user.users)
+	// const users = useSelector((state: RootState) => state.user.users)
 	const services = useSelector((state: RootState) => state.service.services)
 
 	const [query, setQuery] = useQueryParams({
@@ -52,7 +51,6 @@ const ServicesPage = () => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search }))
-		// dispatch(getUsers(query.page, query.limit, query.order, query.search))
 		dispatch(getServices(query.page, query.limit, query.order, query.search))
 	}, [dispatch, query.page, query.limit, query.search, query.order])
 
@@ -130,16 +128,7 @@ const ServicesPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						{/* <AdminUsersFilter
-							createUser={() => {
-								if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE])) {
-									history.push(t('paths:user/create'))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							onSubmit={handleSubmit}
-						/> */}
+						<ServicesFilter onSubmit={handleSubmit} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}
@@ -151,7 +140,8 @@ const ServicesPage = () => {
 							onRow={(record) => ({
 								onClick: () => {
 									if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
-										history.push(t('paths:user-detail/{{userID}}', { userID: record.id }))
+										// TODO add route
+										// history.push(t('paths:user-detail/{{userID}}', { userID: record.id }))
 									} else {
 										showNotifications(
 											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
@@ -169,10 +159,11 @@ const ServicesPage = () => {
 									}),
 								defaultPageSize: PAGINATION.defaultPageSize,
 								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: users?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: users?.data?.pagination?.totalPages,
-								current: users?.data?.pagination?.page
+								showSizeChanger: true
+								// TODO update after pagination is available from BE
+								// pageSize: services?.originalData?.services?.pagination?.limit,
+								// total: services?.originalData?.services?.pagination?.totalPages,
+								// current: services?.originalData?.services?.pagination?.page
 							}}
 						/>
 					</div>

@@ -16,6 +16,9 @@ import { validationString } from '../../../utils/helper'
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
+// reducers
+import { getSalons } from '../../../reducers/salons/salonsActions'
+
 type ComponentProps = {
 	createNewTemplate?: any
 }
@@ -53,9 +56,8 @@ const ServicesFilter = (props: Props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			// const { destinationsOptions, pagination } = await dispatch(getDestinations(page, PAGINATION.limit, undefined, undefined, { search }))
-
-			return { pagination: page, TEST }
+			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
+			return { pagination: data?.pagination?.page, data: salonsOptions }
 		},
 		[dispatch]
 	)
@@ -76,38 +78,13 @@ const ServicesFilter = (props: Props) => {
 					/>
 				</Col>
 				<Col span={6}>
-					<Field
-						className='m-0'
-						component={SelectField}
-						allowClear
-						placeholder={t('loc:Filtrujte podľa kategórie')}
-						name='categoryID'
-						options={CATEGORIES}
-						size={'large'}
-					/>
+					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Kategória')} name='categoryID' options={CATEGORIES} size={'large'} />
 				</Col>
 				<Col span={6}>
-					<Field
-						className='m-0'
-						component={SelectField}
-						allowClear
-						placeholder={t('loc:Filtrujte podľa zamestnancov')}
-						name='employeeID'
-						options={EMPLOYEES_OPTIONS}
-						size={'large'}
-					/>
+					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Zamestnanec')} name='employeeID' options={EMPLOYEES_OPTIONS} size={'large'} />
 				</Col>
 				<Col span={6}>
-					<Field
-						className='m-0'
-						component={SelectField}
-						allowClear
-						placeholder={t('loc:Filtrujte podľa salónu')}
-						name='salonID'
-						size={'large'}
-						showSearch
-						onSearch={searchSalon}
-					/>
+					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Salón')} name='salonID' size={'large'} showSearch onSearch={searchSalon} />
 				</Col>
 			</Row>
 		</Form>

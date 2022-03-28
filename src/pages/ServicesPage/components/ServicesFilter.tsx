@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
+import { useDispatch } from 'react-redux'
+
+// assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
@@ -46,6 +49,16 @@ const EMPLOYEES_OPTIONS = [
 const ServicesFilter = (props: Props) => {
 	const { handleSubmit } = props
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
+
+	const searchSalon = useCallback(
+		async (search: string, page: number) => {
+			// const { destinationsOptions, pagination } = await dispatch(getDestinations(page, PAGINATION.limit, undefined, undefined, { search }))
+
+			return { pagination: page, TEST }
+		},
+		[dispatch]
+	)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
@@ -85,7 +98,16 @@ const ServicesFilter = (props: Props) => {
 					/>
 				</Col>
 				<Col span={6}>
-					<Field className='m-0' component={SelectField} allowClear placeholder={t('loc:Filtrujte podľa salónu')} name='salonID' options={TEST} size={'large'} />
+					<Field
+						className='m-0'
+						component={SelectField}
+						allowClear
+						placeholder={t('loc:Filtrujte podľa salónu')}
+						name='salonID'
+						size={'large'}
+						showSearch
+						onSearch={searchSalon}
+					/>
 				</Col>
 			</Row>
 		</Form>

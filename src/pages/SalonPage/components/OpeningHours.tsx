@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, Fields } from 'redux-form'
 import { Button } from 'antd'
+import { isEmpty } from 'lodash'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
@@ -38,8 +39,14 @@ const TimeRangesComponent = (param: any) => {
 		<div className={'flex items-center'}>
 			{items}
 			{items.length < 3 && (
-				<Button onClick={() => param.fields.push({ timeFrom: null, timeTo: null })} icon={<PlusIcon />} className={'noti-btn'} type={'default'} size={'small'}>
-					{t('loc:Pridať prestávku')}
+				<Button
+					onClick={() => param.fields.push({ timeFrom: null, timeTo: null })}
+					icon={<PlusIcon className={'text-notino-black'} />}
+					className={'noti-btn'}
+					type={'default'}
+					size={'small'}
+				>
+					{t('loc:Pridať interval')}
 				</Button>
 			)}
 		</div>
@@ -56,11 +63,13 @@ const OpeningHours = (param: any) => {
 				const value = fields.get(index)
 				return (
 					<div key={field} className={'mt-2'}>
-						<div className='text-gray-900 font-semibold text-base'>{translateDayName(value?.day)}</div>
+						<div className='text-gray-900 font-semibold text-base'>
+							{translateDayName(value?.day)} {isEmpty(value?.timeRanges) ? ` - ${t('loc:Zatvorené')}` : undefined}
+						</div>
 						<FieldArray component={TimeRangesComponent} name={`${field}.timeRanges`} />
 						{/* show switch filed for open work hours over weekend */}
 						{index === 4 || fields.length === 1 || (fields.length === 3 && index === 0) ? (
-							<Field component={SwitchField} label={t('loc:Otvorené cez víkend')} name={'openOverWeekend'} size={'middle'} />
+							<Field className={'mt-3 mb-0'} component={SwitchField} label={t('loc:Otvorené cez víkend')} name={'openOverWeekend'} size={'middle'} />
 						) : undefined}
 					</div>
 				)

@@ -13,7 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonForm from './components/SalonForm'
 
 // enums
-import { DAY, FORM, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DAY, FORM, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -59,7 +59,7 @@ const SalonPage: FC<Props> = (props) => {
 	const showDeleteBtn: boolean = checkPermissions(authUserPermissions, editPermissions)
 
 	const salon = useSelector((state: RootState) => state.salons.salon)
-	const formValues = useSelector((state: RootState) => state.form[FORM.SALON].values)
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 
@@ -86,24 +86,53 @@ const SalonPage: FC<Props> = (props) => {
 		return false
 	}
 
+	const getDayTimeRanges = (openingHours: IOpeningHours, day?: DAY) => {
+		let timeRanges: ITimeRanges | [] = []
+		if (openingHours) {
+			// eslint-disable-next-line consistent-return,no-restricted-syntax
+			for (const openingHour of openingHours) {
+				if (day && openingHour.day === day) {
+					timeRanges = openingHour.timeRanges
+					break
+				} else if (!isEmpty(openingHour.timeRanges) && !isEmpty(openingHour.timeRanges[0]) && isEmpty(day)) {
+					timeRanges = openingHour.timeRanges
+					break
+				}
+			}
+		}
+		return timeRanges
+	}
+
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
 			if (openOverWeekendFormValue) {
-				// TODO - add weekend days
-				console.log(true)
-			} else {
+				// set switch same open hours over week with weekend
 				dispatch(
 					change(FORM.SALON, 'openingHours', [
-						{
-							day: DAY.MONDAY,
-							timeRanges: []
-						}
+						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(formValues?.openingHours) },
+						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
+						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
 					])
 				)
+			} else {
+				// set switch same open hours over week without weekend
+				dispatch(change(FORM.SALON, 'openingHours', [{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(formValues?.openingHours) }]))
 			}
 		} else {
-			const openOverWeekend: boolean = checkWeekend(salon.data?.salon?.openingHours)
-			dispatch(change(FORM.SALON, 'openingHours', initOpeningHours(salon.data?.salon?.openingHours, openOverWeekend)))
+			// set to init values
+			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
+			const openingHours: IOpeningHours = initOpeningHours(salon.data?.salon?.openingHours, false)
+			if (openOverWeekendFormValue) {
+				dispatch(
+					change(FORM.SALON, 'openingHours', [
+						...openingHours,
+						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
+						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
+					])
+				)
+			} else {
+				dispatch(change(FORM.SALON, 'openingHours', openingHours))
+			}
 		}
 	}, [dispatch, sameOpenHoursOverWeekFormValue])
 
@@ -111,16 +140,7 @@ const SalonPage: FC<Props> = (props) => {
 		if (!isEmpty(formValues) && formValues?.openingHours && formValues?.openingHours.length > 0) {
 			if (openOverWeekendFormValue) {
 				// if check open over weekend add saturday and sunday
-				dispatch(
-					change(FORM.SALON, 'openingHours', [
-						...formValues.openingHours,
-						{
-							day: DAY.SATURDAY,
-							timeRanges: []
-						},
-						{ day: DAY.SUNDAY, timeRanges: [] }
-					])
-				)
+				dispatch(change(FORM.SALON, 'openingHours', [...formValues.openingHours, { day: DAY.SATURDAY, timeRanges: [] }, { day: DAY.SUNDAY, timeRanges: [] }]))
 			} else {
 				// remove weekend days from field array
 				const newValues = remove(formValues.openingHours as IOpeningHours, (openingHour) => openingHour.day !== DAY.SATURDAY && openingHour.day !== DAY.SUNDAY)
@@ -165,7 +185,10 @@ const SalonPage: FC<Props> = (props) => {
 				...salon.data?.salon,
 				openOverWeekend,
 				sameOpenHoursOverWeek,
-				openingHours: initOpeningHours(salon.data?.salon?.openingHours, openOverWeekend)
+				openingHours: initOpeningHours(salon.data?.salon?.openingHours, openOverWeekend),
+				note: salon.data?.salon?.openingHoursNote?.note,
+				noteFrom: salon.data?.salon?.openingHoursNote?.validFrom,
+				noteTo: salon.data?.salon?.openingHoursNote?.validTo
 			})
 		)
 	}, [salon, dispatch])
@@ -173,13 +196,8 @@ const SalonPage: FC<Props> = (props) => {
 	const handleSubmit = async (data: any) => {
 		try {
 			setSubmitting(true)
-			const userData: any = {
-				firstName: data?.firstName,
-				lastName: data?.lastName,
-				phonePrefixCountryCode: data?.phonePrefixCountryCode,
-				phone: data?.phone
-			}
-			await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: data?.id }, userData)
+			// TODO - implement
+			await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: data?.id }, undefined)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

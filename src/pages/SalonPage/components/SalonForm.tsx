@@ -1,7 +1,16 @@
 import React, { FC } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, Fields, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row } from 'antd'
+
+// components
+import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import OpeningHours from './OpeningHours'
+
+// atoms
+import InputField from '../../../atoms/InputField'
+import SwitchField from '../../../atoms/SwitchField'
+import DateRangeField from '../../../atoms/DateRangeField'
 
 // enums
 import { FORM } from '../../../utils/enums'
@@ -11,14 +20,6 @@ import { IUserAccountForm } from '../../../types/interfaces'
 
 // validate
 import validateSalonForm from './validateSalonForm'
-
-// atoms
-import InputField from '../../../atoms/InputField'
-
-// components
-import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
-import OpeningHours from './OpeningHours'
-import SwitchField from '../../../atoms/SwitchField'
 
 type ComponentProps = {}
 
@@ -42,11 +43,24 @@ const UserAccountForm: FC<Props> = (props) => {
 			</Col>
 			<Col>
 				<Row className={'mx-9 h-full block'} justify='center'>
-					<Field component={InputField} placeholder={t('loc:poznámku')} name={'openingHoursNote'} size={'small'} />
-					<div className={'vertical-divider-lg'} />
-					<h4>{t('loc:Otváracie hodiny')}</h4>
-					<Field component={SwitchField} label={t('loc:Pon - Pi rovnaké otváracie hodiny')} name={'sameOpenHoursOverWeek'} size={'middle'} />
+					<div className={'vertical-divider-lg mt-0 mb-4'} />
+					<h3>{t('loc:Otváracie hodiny')}</h3>
+					<Field className={'mb-0'} component={SwitchField} label={t('loc:Pon - Pi rovnaké otváracie hodiny')} name={'sameOpenHoursOverWeek'} size={'middle'} />
 					<FieldArray component={OpeningHours} name={'openingHours'} />
+					<Col className={'flex mt-4 justify-between'}>
+						<Field className={'w-12/25'} label={t('loc:Poznámka')} component={InputField} placeholder={t('loc:poznámku')} name={'note'} size={'middle'} />
+						<div className={'w-12/25'}>
+							<Fields
+								labels={[t('loc:Platnosť'), ' ']}
+								names={['noteFrom', 'noteTo']}
+								placeholders={[t('loc:čas od'), t('loc:čas do')]}
+								component={DateRangeField}
+								hideHelp
+								allowClear
+								itemClassName={'m-0'}
+							/>
+						</div>
+					</Col>
 				</Row>
 			</Col>
 		</Form>

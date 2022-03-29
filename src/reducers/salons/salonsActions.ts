@@ -20,8 +20,9 @@ interface IGetSalons {
 }
 
 export interface SalonOptionItem {
-	label: string
+	label: string | undefined
 	value: number
+	key: number
 }
 
 export interface ISalonsPayload {

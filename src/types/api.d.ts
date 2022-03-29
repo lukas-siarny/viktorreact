@@ -7,8 +7,51 @@ import type {
 } from 'openapi-client-axios'; 
 
 declare namespace Paths {
-    namespace DeleteApiB2BAdminEnumsCategoriesCategoryId {
+    namespace DeleteApiB2BAdminCustomersCustomerId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
         namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CustomerID = number;
+        }
+        export interface PathParameters {
+            customerID: Parameters.CustomerID;
+        }
+        namespace Responses {
+            export interface $200 {
+                customer?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BAdminEnumsCategoriesCategoryId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
             export type CategoryID = number;
             export type Restore = boolean;
         }
@@ -123,6 +166,37 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BV1CustomersCustomerId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CustomerID = number;
+        }
+        export interface PathParameters {
+            customerID: Parameters.CustomerID;
+        }
+        namespace Responses {
+            export interface $200 {
+                customer?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BV1SalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -185,22 +259,144 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminCustomers {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Limit = 25 | 50 | 100;
+            export type Order = string;
+            export type Page = number;
+            export type SalonID = number;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            salonID?: Parameters.SalonID;
+            order?: Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                customers: {
+                    id: number;
+                    firstName: string;
+                    lastName: string;
+                    email?: string;
+                    phonePrefixCountryCode: string;
+                    phone: string; // ^\d+$
+                    gender?: "MALE" | "FEMALE";
+                    address: {
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        countryCode?: string;
+                    };
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminCustomersCustomerId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CustomerID = number;
+        }
+        export interface PathParameters {
+            customerID: Parameters.CustomerID;
+        }
+        namespace Responses {
+            export interface $200 {
+                customer: {
+                    id: number;
+                    firstName: string;
+                    lastName: string;
+                    email?: string;
+                    phonePrefixCountryCode: string;
+                    phone: string; // ^\d+$
+                    gender?: "MALE" | "FEMALE";
+                    address: {
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        countryCode?: string;
+                    };
+                    salon: {
+                        id: number;
+                        name?: string;
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminEnumsCategories {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
         namespace Responses {
             export interface $200 {
                 categories: {
                     id: number;
                     name: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
                     parentID?: number;
                     orderIndex: number;
                     children: {
                         id: number;
                         name: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en";
+                            value: string | null;
+                        }[];
                         parentID?: number;
                         orderIndex: number;
                         children: {
                             id: number;
                             name: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en";
+                                value: string | null;
+                            }[];
                             parentID?: number;
                             orderIndex: number;
                             deletedAt?: string; // date-time
@@ -213,7 +409,19 @@ declare namespace Paths {
         }
     }
     namespace GetApiB2BAdminEnumsCategoriesCategoryId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
         namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
             export type CategoryID = number;
         }
         export interface PathParameters {
@@ -224,16 +432,28 @@ declare namespace Paths {
                 category: {
                     id: number;
                     name: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
                     parentID?: number;
                     orderIndex: number;
                     children: {
                         id: number;
                         name: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en";
+                            value: string | null;
+                        }[];
                         parentID?: number;
                         orderIndex: number;
                         children: {
                             id: number;
                             name: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en";
+                                value: string | null;
+                            }[];
                             parentID?: number;
                             orderIndex: number;
                             deletedAt?: string; // date-time
@@ -264,6 +484,11 @@ declare namespace Paths {
             export interface $200 {
                 countries: {
                     code: string;
+                    name: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
                     currencyCode: string;
                     flag: string;
                     phonePrefix: string;
@@ -317,7 +542,7 @@ declare namespace Paths {
                     name: string;
                     permissions: {
                         id: number;
-                        name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                        name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                     }[];
                 }[];
             }
@@ -356,11 +581,12 @@ declare namespace Paths {
             export interface $200 {
                 salons: {
                     id: number;
-                    name: string;
-                    phonePrefixCountryCode: string;
-                    phone: string; // ^\d+$
-                    email: string;
-                    address: {
+                    name?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    email?: string;
+                    address?: {
+                        zipCode: string;
                         city: string;
                         street: string;
                         latitude: number; // float
@@ -410,10 +636,10 @@ declare namespace Paths {
             export interface $200 {
                 salon: {
                     id: number;
-                    name: string;
+                    name?: string;
                     aboutUsFirst?: string;
                     aboutUsSecond?: string;
-                    openingHours: [
+                    openingHours?: [
                         {
                             /**
                              * example:
@@ -486,20 +712,21 @@ declare namespace Paths {
                         validFrom: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         validTo: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                     };
-                    address: {
+                    address?: {
+                        zipCode: string;
                         city: string;
                         street: string;
                         latitude: number; // float
                         longitude: number; // float
                         countryCode: string;
                     };
-                    phonePrefixCountryCode: string;
-                    phone: string; // ^\d+$
-                    email: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    email?: string;
                     socialLinkFB?: string;
                     socialLinkInstagram?: string;
                     socialLinkWebPage?: string;
-                    payByCard: boolean;
+                    payByCard?: boolean;
                     otherPaymentMethods?: string;
                     categories: {
                         id: number;
@@ -514,11 +741,17 @@ declare namespace Paths {
                     };
                     images: {
                         id: number;
-                        url: string;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
                     }[];
                     logo?: {
                         id: number;
-                        url: string;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -543,6 +776,9 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type CategoryID = number;
             export type EmployeeID = number;
+            export type Limit = 25 | 50 | 100;
+            export type Order = string;
+            export type Page = number;
             export type SalonID = number;
             export type Search = string | null;
         }
@@ -551,6 +787,9 @@ declare namespace Paths {
             categoryID?: Parameters.CategoryID;
             employeeID?: Parameters.EmployeeID;
             salonID?: Parameters.SalonID;
+            order?: Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
         }
         namespace Responses {
             export interface $200 {
@@ -574,6 +813,12 @@ declare namespace Paths {
                         }[];
                     };
                 }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
             }
         }
     }
@@ -620,7 +865,10 @@ declare namespace Paths {
                     };
                     images: {
                         id: number;
-                        fullURL: string;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
                     }[];
                 };
             }
@@ -721,7 +969,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -738,22 +986,144 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BV1Customers {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Limit = 25 | 50 | 100;
+            export type Order = string;
+            export type Page = number;
+            export type SalonID = number;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            salonID?: Parameters.SalonID;
+            order?: Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                customers: {
+                    id: number;
+                    firstName: string;
+                    lastName: string;
+                    email?: string;
+                    phonePrefixCountryCode: string;
+                    phone: string; // ^\d+$
+                    gender?: "MALE" | "FEMALE";
+                    address: {
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        countryCode?: string;
+                    };
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2BV1CustomersCustomerId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CustomerID = number;
+        }
+        export interface PathParameters {
+            customerID: Parameters.CustomerID;
+        }
+        namespace Responses {
+            export interface $200 {
+                customer: {
+                    id: number;
+                    firstName: string;
+                    lastName: string;
+                    email?: string;
+                    phonePrefixCountryCode: string;
+                    phone: string; // ^\d+$
+                    gender?: "MALE" | "FEMALE";
+                    address: {
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        countryCode?: string;
+                    };
+                    salon: {
+                        id: number;
+                        name?: string;
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BV1EnumsCategories {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
         namespace Responses {
             export interface $200 {
                 categories: {
                     id: number;
                     name: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
                     parentID?: number;
                     orderIndex: number;
                     children: {
                         id: number;
                         name: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en";
+                            value: string | null;
+                        }[];
                         parentID?: number;
                         orderIndex: number;
                         children: {
                             id: number;
                             name: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en";
+                                value: string | null;
+                            }[];
                             parentID?: number;
                             orderIndex: number;
                             deletedAt?: string; // date-time
@@ -766,7 +1136,19 @@ declare namespace Paths {
         }
     }
     namespace GetApiB2BV1EnumsCategoriesCategoryId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
         namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
             export type CategoryID = number;
         }
         export interface PathParameters {
@@ -777,16 +1159,28 @@ declare namespace Paths {
                 category: {
                     id: number;
                     name: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
                     parentID?: number;
                     orderIndex: number;
                     children: {
                         id: number;
                         name: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en";
+                            value: string | null;
+                        }[];
                         parentID?: number;
                         orderIndex: number;
                         children: {
                             id: number;
                             name: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en";
+                                value: string | null;
+                            }[];
                             parentID?: number;
                             orderIndex: number;
                             deletedAt?: string; // date-time
@@ -817,6 +1211,11 @@ declare namespace Paths {
             export interface $200 {
                 countries: {
                     code: string;
+                    name: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
                     currencyCode: string;
                     flag: string;
                     phonePrefix: string;
@@ -875,18 +1274,25 @@ declare namespace Paths {
             export interface $200 {
                 salons: {
                     id: number;
-                    name: string;
+                    name?: string;
                     fillingProgress: number;
                     images: {
                         id: number;
-                        fullPath: string;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
                     }[];
                     logo?: {
                         id: number;
-                        fullPath: string;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
                     };
-                    address: {
+                    address?: {
                         street: string;
+                        zipCode: string;
                         city: string;
                         countryCode: string;
                         latitude: number; // float
@@ -934,11 +1340,17 @@ declare namespace Paths {
                     gallerySegment?: {
                         images: {
                             id: number;
-                            fullPath: string;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
                         }[];
                         logo?: {
                             id: number;
-                            fullPath: string;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
                         };
                     };
                     nameSegment?: {
@@ -1057,6 +1469,7 @@ declare namespace Paths {
                     };
                     contactInfoSegment?: {
                         countryCode: string;
+                        zipCode: string;
                         city: string;
                         street: string;
                         latitude: number; // float
@@ -1109,11 +1522,17 @@ declare namespace Paths {
                     gallerySegment?: {
                         images: {
                             id: number;
-                            fullPath: string;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
                         }[];
                         logo?: {
                             id: number;
-                            fullPath: string;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
                         };
                     };
                     nameSegment?: {
@@ -1232,6 +1651,7 @@ declare namespace Paths {
                     };
                     contactInfoSegment?: {
                         countryCode: string;
+                        zipCode: string;
                         city: string;
                         street: string;
                         latitude: number; // float
@@ -1267,6 +1687,9 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type CategoryID = number;
             export type EmployeeID = number;
+            export type Limit = 25 | 50 | 100;
+            export type Order = string;
+            export type Page = number;
             export type SalonID = number;
             export type Search = string | null;
         }
@@ -1275,6 +1698,9 @@ declare namespace Paths {
             categoryID?: Parameters.CategoryID;
             employeeID?: Parameters.EmployeeID;
             salonID?: Parameters.SalonID;
+            order?: Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
         }
         namespace Responses {
             export interface $200 {
@@ -1298,6 +1724,12 @@ declare namespace Paths {
                         }[];
                     };
                 }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
             }
         }
     }
@@ -1344,7 +1776,10 @@ declare namespace Paths {
                     };
                     images: {
                         id: number;
-                        fullURL: string;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
                     }[];
                 };
             }
@@ -1425,7 +1860,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -1442,15 +1877,113 @@ declare namespace Paths {
             }
         }
     }
-    namespace PatchApiB2BAdminEnumsCategoriesCategoryId {
+    namespace PatchApiB2BAdminCustomersCustomerId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
         namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CustomerID = number;
+        }
+        export interface PathParameters {
+            customerID: Parameters.CustomerID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Janko
+             */
+            firstName: string;
+            /**
+             * example:
+             * Hráško
+             */
+            lastName: string;
+            /**
+             * example:
+             * test.user1@goodrequest.com
+             */
+            email?: string | null; // email
+            /**
+             * example:
+             * SK
+             */
+            phonePrefixCountryCode: string;
+            /**
+             * example:
+             * 906047188
+             */
+            phone: string; // ^\d+$
+            gender?: "MALE" | "FEMALE";
+            /**
+             * example:
+             * 010 01
+             */
+            zipCode?: string | null;
+            /**
+             * example:
+             * Žilina
+             */
+            city?: string | null;
+            /**
+             * example:
+             * Framborska 58
+             */
+            street?: string | null;
+            /**
+             * example:
+             * SK
+             */
+            countryCode?: string | null;
+            salonID: number;
+        }
+        namespace Responses {
+            export interface $200 {
+                customer?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminEnumsCategoriesCategoryId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
             export type CategoryID = number;
         }
         export interface PathParameters {
             categoryID: Parameters.CategoryID;
         }
         export interface RequestBody {
-            name: string;
+            nameLocalizations: ({
+                language: "en";
+                value: string;
+            } | {
+                language: "sk" | "cs";
+                value?: string | null;
+            })[];
             orderIndex: number;
             parentID?: null | number;
         }
@@ -1571,6 +2104,11 @@ declare namespace Paths {
             ];
             /**
              * example:
+             * 010 01
+             */
+            zipCode: string;
+            /**
+             * example:
              * Žilina
              */
             city: string;
@@ -1606,7 +2144,7 @@ declare namespace Paths {
             phone: string; // ^\d+$
             /**
              * example:
-             * test_notino.goodrequest.com
+             * test_notino@goodrequest.com
              */
             email: string; // email
             /**
@@ -1636,13 +2174,9 @@ declare namespace Paths {
             otherPaymentMethods?: string | null;
             /**
              * example:
-             * 8
+             * 10
              */
             userID: number;
-            /**
-             * example:
-             * 1
-             */
             imageIDs: [
                 number,
                 ...number[]
@@ -1737,6 +2271,40 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BAdminSalonsSalonIdVisible {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            visible: boolean;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BAdminServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -1797,7 +2365,7 @@ declare namespace Paths {
              * 1
              */
             categoryID: number;
-            employeeIDs?: number[];
+            employeeIDs?: number[] | null;
             imageIDs?: number[] | null;
         }
         namespace Responses {
@@ -1906,7 +2474,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -1919,6 +2487,86 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1CustomersCustomerId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CustomerID = number;
+        }
+        export interface PathParameters {
+            customerID: Parameters.CustomerID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Janko
+             */
+            firstName: string;
+            /**
+             * example:
+             * Hráško
+             */
+            lastName: string;
+            /**
+             * example:
+             * test.user1@goodrequest.com
+             */
+            email?: string | null; // email
+            /**
+             * example:
+             * SK
+             */
+            phonePrefixCountryCode: string;
+            /**
+             * example:
+             * 906047188
+             */
+            phone: string; // ^\d+$
+            gender?: "MALE" | "FEMALE";
+            /**
+             * example:
+             * 010 01
+             */
+            zipCode?: string | null;
+            /**
+             * example:
+             * Žilina
+             */
+            city?: string | null;
+            /**
+             * example:
+             * Framborska 58
+             */
+            street?: string | null;
+            /**
+             * example:
+             * SK
+             */
+            countryCode?: string | null;
+            salonID: number;
+        }
+        namespace Responses {
+            export interface $200 {
+                customer?: {
+                    id: number;
                 };
                 messages: {
                     message: string;
@@ -1957,14 +2605,14 @@ declare namespace Paths {
                  * 1
                  */
                 logoID?: null | number;
-            };
+            } | null;
             nameSegment?: {
                 /**
                  * example:
                  * Salon 1
                  */
                 name: string;
-            };
+            } | null;
             openingHoursSegment?: {
                 openingHours: [
                     {
@@ -2051,7 +2699,7 @@ declare namespace Paths {
                      */
                     validTo?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                 } | null;
-            };
+            } | null;
             aboutUsSegment?: {
                 /**
                  * example:
@@ -2063,13 +2711,18 @@ declare namespace Paths {
                  * some text
                  */
                 aboutUsSecond?: string | null;
-            };
+            } | null;
             contactInfoSegment?: {
                 /**
                  * example:
                  * SK
                  */
                 countryCode: string;
+                /**
+                 * example:
+                 * 010 01
+                 */
+                zipCode: string;
                 /**
                  * example:
                  * Žilina
@@ -2120,7 +2773,7 @@ declare namespace Paths {
                  * https://www.goodrequest.com/
                  */
                 socialLinkWebPage?: string | null;
-            };
+            } | null;
             paymentSegment?: {
                 /**
                  * example:
@@ -2132,7 +2785,7 @@ declare namespace Paths {
                  * Prevod na účet
                  */
                 otherPaymentMethods?: string | null;
-            };
+            } | null;
         }
         namespace Responses {
             export interface $200 {
@@ -2148,11 +2801,17 @@ declare namespace Paths {
                     gallerySegment?: {
                         images: {
                             id: number;
-                            fullPath: string;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
                         }[];
                         logo?: {
                             id: number;
-                            fullPath: string;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
                         };
                     };
                     nameSegment?: {
@@ -2271,6 +2930,7 @@ declare namespace Paths {
                     };
                     contactInfoSegment?: {
                         countryCode: string;
+                        zipCode: string;
                         city: string;
                         street: string;
                         latitude: number; // float
@@ -2388,7 +3048,7 @@ declare namespace Paths {
              * 1
              */
             categoryID: number;
-            employeeIDs?: number[];
+            employeeIDs?: number[] | null;
             imageIDs?: number[] | null;
         }
         namespace Responses {
@@ -2497,7 +3157,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -2594,7 +3254,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -2702,7 +3362,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -2723,9 +3383,105 @@ declare namespace Paths {
             }
         }
     }
-    namespace PostApiB2BAdminEnumsCategories {
+    namespace PostApiB2BAdminCustomers {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
         export interface RequestBody {
-            name: string;
+            /**
+             * example:
+             * Janko
+             */
+            firstName: string;
+            /**
+             * example:
+             * Hráško
+             */
+            lastName: string;
+            /**
+             * example:
+             * test.user1@goodrequest.com
+             */
+            email?: string | null; // email
+            /**
+             * example:
+             * SK
+             */
+            phonePrefixCountryCode: string;
+            /**
+             * example:
+             * 906047188
+             */
+            phone: string; // ^\d+$
+            gender?: "MALE" | "FEMALE";
+            /**
+             * example:
+             * 010 01
+             */
+            zipCode?: string | null;
+            /**
+             * example:
+             * Žilina
+             */
+            city?: string | null;
+            /**
+             * example:
+             * Framborska 58
+             */
+            street?: string | null;
+            /**
+             * example:
+             * SK
+             */
+            countryCode?: string | null;
+            salonID: number;
+        }
+        namespace Responses {
+            export interface $200 {
+                customer?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminEnumsCategories {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            nameLocalizations: ({
+                language: "en";
+                value: string;
+            } | {
+                language: "sk" | "cs";
+                value?: string | null;
+            })[];
             orderIndex: number;
             parentID?: null | number;
         }
@@ -2742,6 +3498,20 @@ declare namespace Paths {
         }
     }
     namespace PostApiB2BAdminFilesSignUrls {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
         export interface RequestBody {
             files: [
                 {
@@ -2787,11 +3557,8 @@ declare namespace Paths {
                     id: number;
                     path: string;
                     signedUrl: string;
-                    imagePaths?: {
-                        thumbnailSizePath: string;
-                        smallSizePath: string;
-                        mediumSizePath: string;
-                        largeSizePath: string;
+                    resizedImages?: {
+                        [key: string]: any;
                     };
                 }[];
             }
@@ -2898,6 +3665,11 @@ declare namespace Paths {
             ];
             /**
              * example:
+             * 010 01
+             */
+            zipCode: string;
+            /**
+             * example:
              * Žilina
              */
             city: string;
@@ -2933,7 +3705,7 @@ declare namespace Paths {
             phone: string; // ^\d+$
             /**
              * example:
-             * test_notino.goodrequest.com
+             * test_notino@goodrequest.com
              */
             email: string; // email
             /**
@@ -2963,13 +3735,9 @@ declare namespace Paths {
             otherPaymentMethods?: string | null;
             /**
              * example:
-             * 8
+             * 9
              */
             userID: number;
-            /**
-             * example:
-             * 1
-             */
             imageIDs: [
                 number,
                 ...number[]
@@ -3048,7 +3816,7 @@ declare namespace Paths {
              * 1
              */
             categoryID: number;
-            employeeIDs?: number[];
+            employeeIDs?: number[] | null;
             imageIDs?: number[] | null;
         }
         namespace Responses {
@@ -3235,7 +4003,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -3328,7 +4096,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -3346,6 +4114,20 @@ declare namespace Paths {
         }
     }
     namespace PostApiB2BV1AuthLoginAsPartner {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
         export interface RequestBody {
             userID: number;
         }
@@ -3367,7 +4149,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -3475,7 +4257,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -3496,7 +4278,97 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiB2BV1Customers {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Janko
+             */
+            firstName: string;
+            /**
+             * example:
+             * Hráško
+             */
+            lastName: string;
+            /**
+             * example:
+             * test.user1@goodrequest.com
+             */
+            email?: string | null; // email
+            /**
+             * example:
+             * SK
+             */
+            phonePrefixCountryCode: string;
+            /**
+             * example:
+             * 906047188
+             */
+            phone: string; // ^\d+$
+            gender?: "MALE" | "FEMALE";
+            /**
+             * example:
+             * 010 01
+             */
+            zipCode?: string | null;
+            /**
+             * example:
+             * Žilina
+             */
+            city?: string | null;
+            /**
+             * example:
+             * Framborska 58
+             */
+            street?: string | null;
+            /**
+             * example:
+             * SK
+             */
+            countryCode?: string | null;
+            salonID: number;
+        }
+        namespace Responses {
+            export interface $200 {
+                customer?: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PostApiB2BV1FilesSignUrls {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
         export interface RequestBody {
             files: [
                 {
@@ -3542,11 +4414,8 @@ declare namespace Paths {
                     id: number;
                     path: string;
                     signedUrl: string;
-                    imagePaths?: {
-                        thumbnailSizePath: string;
-                        smallSizePath: string;
-                        mediumSizePath: string;
-                        largeSizePath: string;
+                    resizedImages?: {
+                        [key: string]: any;
                     };
                 }[];
             }
@@ -3583,11 +4452,17 @@ declare namespace Paths {
                     gallerySegment?: {
                         images: {
                             id: number;
-                            fullPath: string;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
                         }[];
                         logo?: {
                             id: number;
-                            fullPath: string;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
                         };
                     };
                     nameSegment?: {
@@ -3706,6 +4581,7 @@ declare namespace Paths {
                     };
                     contactInfoSegment?: {
                         countryCode: string;
+                        zipCode: string;
                         city: string;
                         street: string;
                         latitude: number; // float
@@ -3785,7 +4661,7 @@ declare namespace Paths {
              * 1
              */
             categoryID: number;
-            employeeIDs?: number[];
+            employeeIDs?: number[] | null;
             imageIDs?: number[] | null;
         }
         namespace Responses {
@@ -3927,7 +4803,7 @@ declare namespace Paths {
                         name: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT";
+                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                         }[];
                     }[];
                     company?: {
@@ -4031,7 +4907,7 @@ export interface OperationMethods {
    * getApiB2BAdminEnumsCategories - PERMISSION: NO
    */
   'getApiB2BAdminEnumsCategories'(
-    parameters?: Parameters<UnknownParamsObject> | null,
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategories.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
@@ -4039,7 +4915,7 @@ export interface OperationMethods {
    * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
    */
   'postApiB2BAdminEnumsCategories'(
-    parameters?: Parameters<UnknownParamsObject> | null,
+    parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
@@ -4047,7 +4923,7 @@ export interface OperationMethods {
    * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: NO
    */
   'getApiB2BAdminEnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -4055,7 +4931,7 @@ export interface OperationMethods {
    * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
    */
   'patchApiB2BAdminEnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -4063,7 +4939,7 @@ export interface OperationMethods {
    * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
    */
   'deleteApiB2BAdminEnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
+    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -4087,7 +4963,7 @@ export interface OperationMethods {
    * postApiB2BAdminFilesSignUrls - PERMISSION: NO
    */
   'postApiB2BAdminFilesSignUrls'(
-    parameters?: Parameters<UnknownParamsObject> | null,
+    parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
@@ -4175,7 +5051,7 @@ export interface OperationMethods {
    * getApiB2BV1EnumsCategories - PERMISSION: NO
    */
   'getApiB2BV1EnumsCategories'(
-    parameters?: Parameters<UnknownParamsObject> | null,
+    parameters?: Parameters<Paths.GetApiB2BV1EnumsCategories.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
@@ -4183,7 +5059,7 @@ export interface OperationMethods {
    * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: NO
    */
   'getApiB2BV1EnumsCategoriesCategoryId'(
-    parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
+    parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BV1EnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
@@ -4207,7 +5083,7 @@ export interface OperationMethods {
    * postApiB2BV1FilesSignUrls - PERMISSION: NO
    */
   'postApiB2BV1FilesSignUrls'(
-    parameters?: Parameters<UnknownParamsObject> | null,
+    parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
@@ -4300,6 +5176,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
   /**
+   * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT]
+   */
+  'patchApiB2BAdminSalonsSalonIdVisible'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdVisible.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdVisible.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdVisible.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdVisible.Responses.$200>
+  /**
    * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
    */
   'getApiB2BAdminServices'(
@@ -4340,10 +5224,50 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   /**
+   * getApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, PARTNER]
+   */
+  'getApiB2BAdminCustomers'(
+    parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
+  /**
+   * postApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   */
+  'postApiB2BAdminCustomers'(
+    parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminCustomers.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
+  /**
+   * getApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, CUSTOMER_EDIT, PARTNER]
+   */
+  'getApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
+   * patchApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
+   * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   */
+  'deleteApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
    * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
    */
   'postApiB2BV1AuthLoginAsPartner'(
-    parameters?: Parameters<UnknownParamsObject> | null,
+    parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
@@ -4451,6 +5375,46 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
+  /**
+   * getApiB2BV1Customers - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1Customers'(
+    parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
+  /**
+   * postApiB2BV1Customers - PERMISSION: [PARTNER]
+   */
+  'postApiB2BV1Customers'(
+    parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1Customers.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1Customers.Responses.$200>
+  /**
+   * getApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1CustomersCustomerId'(
+    parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
+  /**
+   * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1CustomersCustomerId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1CustomersCustomerId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
+  /**
+   * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+   */
+  'deleteApiB2BV1CustomersCustomerId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
 }
 
 export interface PathsDictionary {
@@ -4555,7 +5519,7 @@ export interface PathsDictionary {
      * getApiB2BAdminEnumsCategories - PERMISSION: NO
      */
     'get'(
-      parameters?: Parameters<UnknownParamsObject> | null,
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategories.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
@@ -4563,7 +5527,7 @@ export interface PathsDictionary {
      * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
     'post'(
-      parameters?: Parameters<UnknownParamsObject> | null,
+      parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
@@ -4573,7 +5537,7 @@ export interface PathsDictionary {
      * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -4581,7 +5545,7 @@ export interface PathsDictionary {
      * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
     'patch'(
-      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters> | null,
+      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -4589,7 +5553,7 @@ export interface PathsDictionary {
      * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
     'delete'(
-      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters> | null,
+      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
@@ -4619,7 +5583,7 @@ export interface PathsDictionary {
      * postApiB2BAdminFilesSignUrls - PERMISSION: NO
      */
     'post'(
-      parameters?: Parameters<UnknownParamsObject> | null,
+      parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
@@ -4727,7 +5691,7 @@ export interface PathsDictionary {
      * getApiB2BV1EnumsCategories - PERMISSION: NO
      */
     'get'(
-      parameters?: Parameters<UnknownParamsObject> | null,
+      parameters?: Parameters<Paths.GetApiB2BV1EnumsCategories.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
@@ -4737,7 +5701,7 @@ export interface PathsDictionary {
      * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BV1EnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
@@ -4767,7 +5731,7 @@ export interface PathsDictionary {
      * postApiB2BV1FilesSignUrls - PERMISSION: NO
      */
     'post'(
-      parameters?: Parameters<UnknownParamsObject> | null,
+      parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
@@ -4874,6 +5838,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/visible']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdVisible.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdVisible.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdVisible.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdVisible.Responses.$200>
+  }
   ['/api/b2b/admin/services/']: {
     /**
      * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
@@ -4918,12 +5892,56 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   }
+  ['/api/b2b/admin/customers/']: {
+    /**
+     * getApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
+    /**
+     * postApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminCustomers.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
+  }
+  ['/api/b2b/admin/customers/{customerID}']: {
+    /**
+     * getApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, CUSTOMER_EDIT, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
+    /**
+     * patchApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
+    /**
+     * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
+  }
   ['/api/b2b/v1/auth/login-as-partner']: {
     /**
      * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
      */
     'post'(
-      parameters?: Parameters<UnknownParamsObject> | null,
+      parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
@@ -5045,6 +6063,50 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
+  }
+  ['/api/b2b/v1/customers/']: {
+    /**
+     * getApiB2BV1Customers - PERMISSION: [PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
+    /**
+     * postApiB2BV1Customers - PERMISSION: [PARTNER]
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1Customers.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1Customers.Responses.$200>
+  }
+  ['/api/b2b/v1/customers/{customerID}']: {
+    /**
+     * getApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
+    /**
+     * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1CustomersCustomerId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
+    /**
+     * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
   }
 }
 

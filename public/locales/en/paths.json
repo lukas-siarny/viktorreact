@@ -9,6 +9,7 @@
   "salon/create": "/salon/create",
   "salon/{{salonID}}": "/salon/{{salonID}}",
   "salons": "/salons",
+  "services": "/services",
   "signup": "/signup",
   "user-detail/{{userID}}": "/user-detail/{{userID}}",
   "user/create": "/user/create",

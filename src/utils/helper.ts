@@ -479,6 +479,12 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 	return values
 }
 
+export const getServiceRange = (from: number, to?: number, unit = '') => {
+	if (!to) return `${from}${unit}+`
+	if (from === to) return `${from}${unit}`
+	return `${from} - ${to}${unit}`
+}
+
 export const isValidDateRange = (from: string, to: string) => {
 	const dateFrom = dayjs(from)
 	const dateTo = dayjs(to)
@@ -486,3 +492,4 @@ export const isValidDateRange = (from: string, to: string) => {
 }
 
 export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))
+export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))

@@ -37,6 +37,9 @@ import CreateUserAccountPage from '../pages/UserAccountPage/CreateUserAccountPag
 // categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
+// services
+import ServicesPage from '../pages/ServicesPage/ServicesPage'
+
 // Salons
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
 
@@ -104,6 +107,7 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.MY_ACCOUNT}
 			/>
+			<AuthRoute {...props} exact path={t('paths:services')} component={ServicesPage} translatePathKey={t('paths:services')} layout={MainLayout} page={PAGE.SERVICES} />
 			{/* NOTE: add all private routes before this declaration */}
 			<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
 			<AuthRoute

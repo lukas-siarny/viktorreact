@@ -10,6 +10,7 @@ import userReducer from './users/userReducer'
 import enumerationReducer from './enumerations/enumerationReducer'
 import rolesReducer from './roles/rolesReducer'
 import categoriesReducer from './categories/categoriesReducer'
+import serviceReducer from './services/serviceReducer'
 import salonsReducer from './salons/salonsReducer'
 
 export const REDUCER_KEYS = {
@@ -18,6 +19,7 @@ export const REDUCER_KEYS = {
 	ENUMERATIONS: 'ENUMERATIONS',
 	ROLES: 'ROLES',
 	CATEGORIES: 'CATEGORIES',
+	SERVICE: 'SERVICE',
 	SALONS: 'SALONS'
 }
 
@@ -63,6 +65,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		enumerationReducer
+	),
+	service: persistReducer(
+		{
+			key: REDUCER_KEYS.SERVICE,
+			storage: storageSession
+		},
+		serviceReducer
 	)
 })
 

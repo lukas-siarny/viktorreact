@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { NumberParam } from 'use-query-params'
+import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
@@ -18,8 +19,15 @@ interface IGetSalons {
 	payload: ISalonsPayload
 }
 
+export interface SalonOptionItem {
+	label: string | undefined
+	value: number
+	key: number
+}
+
 export interface ISalonsPayload {
 	data: Paths.GetApiB2BAdminSalons.Responses.$200 | null
+	salonsOptions: SalonOptionItem[]
 }
 
 export const getSalons =
@@ -30,15 +38,27 @@ export const getSalons =
 		search?: string | undefined | null,
 		categoryFirstLevelIDs?: (string | null)[] | null | undefined,
 		statuses?: (string | null)[] | SALON_STATUSES[]
-	): ThunkResult<Promise<void>> =>
+	): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
+		let payload = {} as ISalonsPayload
 		try {
 			dispatch({ type: SALONS.SALONS_LOAD_START })
-			const data = await getReq('/api/b2b/admin/salons/', { page: page || 1, limit: limit || PAGINATION.limit, order, search, categoryFirstLevelIDs, statuses } as any)
-			dispatch({ type: SALONS.SALONS_LOAD_DONE, payload: data })
+			const { data } = await getReq('/api/b2b/admin/salons/', { page: page || 1, limit: limit || PAGINATION.limit, order, search, categoryFirstLevelIDs, statuses } as any)
+			const salonsOptions = map(data.salons, (salon) => {
+				return { label: salon.name, value: salon.id, key: salon.id }
+			})
+
+			payload = {
+				data,
+				salonsOptions
+			}
+
+			dispatch({ type: SALONS.SALONS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: SALONS.SALONS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}

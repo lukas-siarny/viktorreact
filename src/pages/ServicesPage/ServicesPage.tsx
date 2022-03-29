@@ -138,7 +138,7 @@ const ServicesPage = () => {
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
+									if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT, PERMISSION.PARTNER])) {
 										// TODO add route
 										// history.push(t('paths:user-detail/{{userID}}', { userID: record.id }))
 									} else {
@@ -171,4 +171,4 @@ const ServicesPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]))(ServicesPage)
+export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]))(ServicesPage)

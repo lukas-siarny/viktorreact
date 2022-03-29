@@ -77,7 +77,7 @@ const ServicesPage = () => {
 
 	const columns: Columns = [
 		{
-			title: t('loc:Meno'),
+			title: t('loc:Názov'),
 			dataIndex: 'name',
 			key: 'name',
 			ellipsis: true,
@@ -127,7 +127,7 @@ const ServicesPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<ServicesFilter onSubmit={handleSubmit} />
+						<ServicesFilter onSubmit={handleSubmit} total={services?.originalData?.pagination?.totalPages} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}

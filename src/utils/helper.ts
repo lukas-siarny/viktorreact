@@ -450,3 +450,4 @@ export const isValidDateRange = (from: string, to: string) => {
 }
 
 export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))
+export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))

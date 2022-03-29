@@ -2,7 +2,7 @@
   "activation": "/activation",
   "categories": "/categories",
   "home": "/home",
-  "index": "/index",
+  "index": "/",
   "login": "/login",
   "my-account": "/my-account",
   "reset-password": "/reset-password",

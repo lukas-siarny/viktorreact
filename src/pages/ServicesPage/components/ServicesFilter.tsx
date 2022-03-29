@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
-import { Col, Form, Row } from 'antd'
+import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,6 +12,9 @@ import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } fro
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
+
+// assets
+import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // components
 import Filters from '../../../components/Filters'
@@ -82,9 +85,16 @@ const ServicesFilter = (props: Props) => {
 			disabled={isFilterDisabled}
 		/>
 	)
+
+	const customContent = (
+		<Button onClick={() => {}} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
+			{t('loc:Pridať službu')}
+		</Button>
+	)
+
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
+			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={customContent}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					<Col span={6}>
 						<Field

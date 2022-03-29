@@ -1,16 +1,9 @@
 /* eslint-disable import/no-cycle */
 import {
-	compact,
-	Dictionary,
-	filter,
-	find,
 	first,
-	flatten,
 	floor,
 	forEach,
 	get,
-	groupBy,
-	identity,
 	includes,
 	inRange,
 	isArray,
@@ -20,87 +13,38 @@ import {
 	isNaN,
 	isNil,
 	isNumber,
-	isString,
-	keys,
-	map,
 	mapValues,
 	orderBy,
 	pick,
-	pickBy,
-	reduce,
-	replace,
 	round,
-	size,
 	some,
 	split,
-	times,
 	toNumber,
-	uniq,
 	chain,
-	lowerCase
+	lowerCase,
+	isString,
+	replace,
+	map,
+	size,
+	filter
 } from 'lodash'
-import countryCodeList from 'flagpack-core/countryCodeList.json'
 import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import {
-	ADDRESS_TYPE,
-	ADULT_PERSON_TYPE_MIN_AGE,
-	ARRIVAL_SHIFT,
-	ARRIVAL_SHIFTS,
-	DAY,
 	DEFAULT_DATE_FORMAT,
-	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
 	DEFAULT_TIME_FORMAT,
-	DEPARTURE_SHIFT,
-	DEPARTURE_SHIFTS,
-	DISCOUNT_VALUE_TYPE,
-	EMPTY_FILTER_ROOM,
-	EXPIRATION_TYPE,
-	FILE_FILTER_DATA_TYPE,
 	FORM,
-	GENDER,
-	GENDERS,
-	GLOBAL_DISCOUNT_TYPE,
 	INVALID_DATE_FORMAT,
-	LINE_DIRECTION,
 	MSG_TYPE,
-	PERMISSION,
-	PERSON_TYPE,
-	PERSON_TYPE_INFANT,
-	PRICELIST_ITEM_TIME_RELATION,
-	PRICELIST_ITEM_TIME_RELATIONS,
-	PRICELIST_ITEM_UNIT_RELATION,
-	PRICELIST_ITEM_UNIT_RELATIONS,
-	PRICELIST_ITEM_USAGE,
-	PRICELIST_ITEM_USAGES,
-	PROPERTY_TYPE,
-	PROPERTY_TYPES,
-	PUBLICATION_STATUS,
-	PUBLICATION_STATUSES,
-	QUERY_LIMIT,
-	SUBMENU_PARENT,
-	TEXT_TEMPLATE_TYPE,
-	TEXT_TEMPLATE_TYPES,
-	TRAVELER_ROLE,
-	TRAVELER_ROLES,
-	UPLOAD,
-	UPLOAD_ERROR_TYPE,
-	WEB_PROJECT_CODE,
-	ADULT_PERSON_TYPE_MAX_AGE,
-	RESERVATION_STATE,
-	FACILITY_PROPERTY_CATEGORIES,
-	UNIT_TEMPLATE_FACILITY_TYPE,
+	DEFAULT_LANGUAGE,
+	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER
 } from './enums'
+import { IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
-
-import pdfLogoPath from '../assets/icons/pdf-icon.svg'
-import docLogoPath from '../assets/icons/doc-icon.svg'
-import xlsLogoPath from '../assets/icons/xls-icon.svg'
-import unknownDocumentPath from '../assets/icons/unknown-document-icon.svg'
 
 import { Paths } from '../types/api'
 
@@ -402,6 +346,104 @@ export const getPrefixCountryCode = (options: string[], fallback: string) => {
 export function setIntervalImmediately(func: Function, interval: number) {
 	func()
 	return setInterval(func, interval)
+}
+
+export const getCurrentLanguageCode = (fallbackLng = DEFAULT_LANGUAGE) => {
+	const locale = split(i18next.language, '-')
+	const result = locale[0] || fallbackLng
+	return result.toLowerCase()
+}
+
+export const getGoogleMapUrl = (): string => {
+	const locale = getCurrentLanguageCode()
+
+	// query params for google API
+	const base = 'https://maps.googleapis.com/maps/api/'
+	// TODO read Google Map API key from .env file
+	const key = `key=${GOOGLE_MAPS_API_KEY}`
+	const language = `language=${locale.toLowerCase()}`
+
+	return `${base}js?${key}&libraries=places&${language}`
+}
+
+/**
+ * @see https://medium.com/@almestaadmicadiab/how-to-parse-google-maps-address-components-geocoder-response-774d1f3375d
+ */
+export const parseAddressComponents = (addressComponents: any[] = []): IStructuredAddress => {
+	const address: IStructuredAddress = {
+		streetNumber: null,
+		zip: null,
+		street: null,
+		city: null,
+		country: null
+	}
+
+	if (!isEmpty(addressComponents)) {
+		const addressProperties = {
+			streetNumber: ['street_number'],
+			zip: ['postal_code'],
+			street: ['street_address', 'route'],
+			city: ['locality', 'sublocality', 'political', 'sublocality_level_1', 'sublocality_level_2', 'sublocality_level_3', 'sublocality_level_4'],
+			country: ['country']
+		}
+
+		addressComponents.forEach((component: any) => {
+			Object.keys(addressProperties).forEach((shouldBe) => {
+				if (addressProperties[shouldBe as keyof IStructuredAddress].indexOf(component.types[0]) !== -1) {
+					if (shouldBe === 'country') {
+						address[shouldBe] = component.short_name
+					} else {
+						address[shouldBe as keyof IStructuredAddress] = component.long_name
+					}
+				}
+			})
+		})
+	}
+
+	return address
+}
+
+export const fromStringToFloat = (string: string | number | null | undefined): number | null => {
+	let result
+	if (string && isString(string)) {
+		result = parseFloat(replace(string, ',', '.').replace(' ', ''))
+	} else if (string) {
+		result = Number(string)
+	} else {
+		result = null
+	}
+
+	return result
+}
+
+/**
+ * Returns null - e.g. input was cleared
+ *
+ * Returns NaN - e.g. input value is "asdf"
+ */
+export const transformNumberFieldValue = (rawValue: number | string | undefined | null, min?: number, max?: number, precision?: number, notNullValue?: boolean) => {
+	let result = null
+	const value = typeof rawValue === 'string' ? fromStringToFloat(rawValue) : rawValue
+	if (!value && notNullValue) {
+		result = min
+	}
+	if (isNumber(value) && isFinite(value)) {
+		if (isNumber(min) && value < min) {
+			result = min
+		} else if (isNumber(max) && value > max) {
+			result = max
+		} else if (isNumber(min) && isNumber(max) && value >= min && value <= max) {
+			result = value
+		}
+	} else if (Number.isNaN(value)) {
+		result = NaN
+	}
+
+	if (isFinite(result) && isNumber(precision)) {
+		result = round(result as number, precision)
+	}
+
+	return result
 }
 
 export const getMaxSizeNotifMessage = (maxFileSize: any) => {

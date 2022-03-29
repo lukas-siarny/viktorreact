@@ -1,6 +1,6 @@
 import React, { FC, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps } from 'redux-form'
-import { isEmpty, isEqual } from 'lodash'
+import { isEmpty, isEqual, get } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { Form, Upload, UploadProps, Modal } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
@@ -99,7 +99,7 @@ const ImgUploadField: FC<Props> = (props) => {
 			multiple={multiple}
 			customRequest={uploadFile}
 			fileList={input.value || []}
-			onPreview={(file) => setPreviewUrl(file.url || imagesUrls.current?.[file.uid]?.url)}
+			onPreview={(file) => setPreviewUrl(file.url || get(imagesUrls, `current.[${file.uid}].url`))}
 			maxCount={maxCount}
 			showUploadList={showUploadList}
 			beforeUpload={(file, fileList) => {

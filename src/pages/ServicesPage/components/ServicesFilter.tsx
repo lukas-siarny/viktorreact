@@ -36,11 +36,13 @@ type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
+// TODO remove after BE is finished
 const CATEGORIES = [
 	{ label: 'Kategória 1.2', value: 5, key: 5 },
 	{ label: 'Kategória 1.1', value: 4, key: 4 }
 ]
 
+// TODO remove after BE is finished
 const EMPLOYEES_OPTIONS = [
 	{ label: 'Zamestnanec 1 Salón 1', value: 1, key: 1 },
 	{ label: 'Zamestnanec 1 Salón 2', value: 2, key: 2 }

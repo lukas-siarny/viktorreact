@@ -16,7 +16,7 @@ import ServicesFilter from './components/ServicesFilter'
 // utils
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
-import { history } from '../../utils/history'
+// import { history } from '../../utils/history'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 
 // reducers

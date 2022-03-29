@@ -1,17 +1,13 @@
 /* eslint-disable import/no-cycle */
-import i18next from 'i18next'
-import decode from 'jwt-decode'
-import { get, map, flatten, uniq, join } from 'lodash'
+import { map, join } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { ILoginForm, IJwtPayload, ICreatePasswordForm } from '../../types/interfaces'
 import { SERVICES } from './serviceTypes'
-import { IResetStore, RESET_STORE } from '../generalTypes'
+import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
 
 // utils
-import { history } from '../../utils/history'
 import { getReq } from '../../utils/request'
 // import { PERMISSION } from '../../utils/enums'
 import { getServiceRange, normalizeQueryParams } from '../../utils/helper'

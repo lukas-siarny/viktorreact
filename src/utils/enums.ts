@@ -1048,6 +1048,11 @@ export enum BYTE_MULTIPLIER {
 
 export const LOCALIZATIONS = 'LOCALIZATIONS'
 
+export enum UPLOAD_IMG_CATEGORIES {
+	SALON = 'SALON'
+}
+
+export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const TEXT_TEMPLATE_TYPES = Object.keys(TEXT_TEMPLATE_TYPE)
 export const PROPERTY_TYPES = Object.keys(PROPERTY_TYPE)

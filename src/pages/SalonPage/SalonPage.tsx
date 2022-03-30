@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { change, initialize, submit } from 'redux-form'
-import { get, isEmpty, unionBy, remove } from 'lodash'
+import { get, isEmpty, unionBy, remove, map } from 'lodash'
 import cx from 'classnames'
 
 // components
@@ -13,7 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonForm from './components/SalonForm'
 
 // enums
-import { DAY, FORM, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DAY, FORM, getTranslatedCountriesLabels, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -186,6 +186,7 @@ const SalonPage: FC<Props> = (props) => {
 	useEffect(() => {
 		const openOverWeekend: boolean = checkWeekend(salon.data?.salon?.openingHours)
 		const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salon.data?.salon?.openingHours)
+		const countriesLabels = getTranslatedCountriesLabels()
 		dispatch(
 			initialize(FORM.SALON, {
 				...salon.data?.salon,
@@ -194,7 +195,15 @@ const SalonPage: FC<Props> = (props) => {
 				openingHours: initOpeningHours(salon.data?.salon?.openingHours, openOverWeekend),
 				note: salon.data?.salon?.openingHoursNote?.note,
 				noteFrom: salon.data?.salon?.openingHoursNote?.validFrom,
-				noteTo: salon.data?.salon?.openingHoursNote?.validTo
+				noteTo: salon.data?.salon?.openingHoursNote?.validTo,
+				latitude: salon.data?.salon?.address?.latitude,
+				longitude: salon.data?.salon?.address?.longitude,
+				city: salon.data?.salon?.address?.city,
+				street: salon.data?.salon?.address?.street,
+				zip: salon.data?.salon?.address?.zipCode,
+				country: countriesLabels?.[salon.data?.salon?.address?.countryCode || ''] || salon.data?.salon?.address?.countryCode,
+				gallery: map(salon.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
+				logo: [{ url: salon.data?.salon?.logo?.original, uid: salon.data?.salon?.logo?.id }]
 			})
 		)
 	}, [salon, dispatch])
@@ -264,10 +273,10 @@ const SalonPage: FC<Props> = (props) => {
 					openingHoursNote={salon?.data?.salon?.openingHoursNote}
 					onClose={() => setVisible(false)}
 				/>
-				<Row className={rowClass}>
+				<Row className={`${rowClass} mx-9`}>
 					{showDeleteBtn ? (
 						<DeleteButton
-							className={`mt-2 mb-2 w-1/3`}
+							className={'mt-2 mb-2 w-1/3'}
 							onConfirm={deleteSalon}
 							entityName={t('loc:salón')}
 							type={'default'}

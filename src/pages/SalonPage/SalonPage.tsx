@@ -41,6 +41,8 @@ type IOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['
 // @ts-ignore
 type ITimeRanges = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours'][0]['timeRanges']
 
+type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
+
 const week: IOpeningHours = [
 	{ day: DAY.MONDAY, timeRanges: [] as never },
 	{ day: DAY.TUESDAY, timeRanges: [] as never },
@@ -211,8 +213,25 @@ const SalonPage: FC<Props> = (props) => {
 	const handleSubmit = async (data: any) => {
 		try {
 			setSubmitting(true)
-			// TODO - implement
-			await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: data?.id }, undefined)
+			const salonData: SalonPatch = {
+				imageIDs: map(data.gallery, (image) => image.id ?? image.uid),
+				logoID: data.logo.id,
+				name: data.name,
+				openingHours: data.openingHours,
+				aboutUsFirst: data.aboutUsFirst,
+				aboutUsSecond: data.aboutUsSecond,
+				...data.address,
+				phonePrefixCountryCode: data.phonePrefixCountryCode,
+				phone: data.phone,
+				email: data.email,
+				socialLinkFB: data.socialLinkFB,
+				socialLinkInstagram: data.socialLinkInstagram,
+				socialLinkWebPage: data.socialLinkWebPage,
+				payByCard: data.payByCard,
+				otherPaymentMethods: data.otherPaymentMethods
+			}
+			console.log('data', data)
+			await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: data?.id }, salonData)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

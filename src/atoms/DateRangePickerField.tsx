@@ -49,7 +49,7 @@ const DateRangePickerField = (props: Props) => {
 	}
 
 	const value: any = []
-	forEach(input.value, (val) => {
+	forEach(input?.value, (val) => {
 		if (val && dayjs(val).isValid()) {
 			value.push(dayjs(val))
 		}
@@ -88,8 +88,8 @@ const DateRangePickerField = (props: Props) => {
 	)
 
 	return (
-		<Form.Item style={style} label={label} required={required} help={meta.touched && meta.error} validateStatus={meta.error && meta.touched ? 'error' : undefined}>
-			<div id={formFieldID(meta.form, input.name)}>
+		<Form.Item style={style} label={label} required={required} help={meta?.touched && meta?.error} validateStatus={meta?.error && meta?.touched ? 'error' : undefined}>
+			<div id={formFieldID(meta?.form, input?.name)}>
 				<RangePicker
 					ref={itemRef}
 					className={'noti-date-picker'}

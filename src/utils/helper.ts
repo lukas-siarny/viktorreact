@@ -41,7 +41,9 @@ import {
 	MSG_TYPE,
 	DEFAULT_LANGUAGE,
 	GOOGLE_MAPS_API_KEY,
-	BYTE_MULTIPLIER
+	BYTE_MULTIPLIER,
+	MONDAY_TO_FRIDAY,
+	DAY
 } from './enums'
 import { IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -176,6 +178,29 @@ export const translateMessageType = (msgType: MSG_TYPE) => {
 			return i18next.t('loc:Úspešné')
 		case MSG_TYPE.INFO:
 			return i18next.t('loc:Info')
+		default:
+			return ''
+	}
+}
+
+export const translateDayName = (day: DAY | typeof MONDAY_TO_FRIDAY, shortName?: boolean) => {
+	switch (day) {
+		case DAY.MONDAY:
+			return shortName ? i18next.t('loc:Po') : i18next.t('loc:Pondelok')
+		case DAY.TUESDAY:
+			return shortName ? i18next.t('loc:Ut') : i18next.t('loc:Utorok')
+		case DAY.WEDNESDAY:
+			return shortName ? i18next.t('loc:St') : i18next.t('loc:Streda')
+		case DAY.THURSDAY:
+			return shortName ? i18next.t('loc:Štv') : i18next.t('loc:Štvrtok')
+		case DAY.FRIDAY:
+			return shortName ? i18next.t('loc:Pia') : i18next.t('loc:Piatok')
+		case DAY.SATURDAY:
+			return shortName ? i18next.t('loc:So') : i18next.t('loc:Sobota')
+		case DAY.SUNDAY:
+			return shortName ? i18next.t('loc:Ne') : i18next.t('loc:Nedeľa')
+		case MONDAY_TO_FRIDAY:
+			return shortName ? i18next.t('loc:Po - Pia') : i18next.t('loc:Pondelok - Piatok')
 		default:
 			return ''
 	}

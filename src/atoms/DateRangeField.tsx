@@ -96,8 +96,8 @@ class DateRangeField extends React.Component<Props> {
 								arrow={false}
 								getCalendarContainer={getCalendarContainer}
 								format={format}
-								suffixIcon={suffixIcon || <DateSuffixIcon className={'text-blue-600'} />}
-								clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
+								suffixIcon={suffixIcon || <DateSuffixIcon className={'TreeCategories'} />}
+								clearIcon={clearIcon || <RemoveIcon className={'TreeCategories'} />}
 								allowClear={allowClear || this.props.allowClear}
 								value={value}
 								placeholder={get(placeholders, `[${index}]`)}

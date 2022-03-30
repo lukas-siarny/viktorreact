@@ -34,7 +34,7 @@ import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
 import CreateUserAccountPage from '../pages/UserAccountPage/CreateUserAccountPage'
 
-// categories
+// Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
 // services
@@ -42,6 +42,7 @@ import ServicesPage from '../pages/ServicesPage/ServicesPage'
 
 // Salons
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
+import SalonPage from '../pages/SalonPage/SalonPage'
 
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
@@ -87,6 +88,16 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.ACTIVATION}
 			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:salon/{{salonID}}', { salonID: ':salonID' })}
+				component={SalonPage}
+				translatePathKey={t('paths:salon/{{salonID}}', { salonID: ':salonID' })}
+				layout={MainLayout}
+				page={PAGE.SALON}
+			/>
+			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				{...props}

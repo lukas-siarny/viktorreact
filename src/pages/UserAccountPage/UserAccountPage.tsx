@@ -56,7 +56,7 @@ const UserAccountPage: FC<Props> = (props) => {
 
 	// init forms
 	useEffect(() => {
-		dispatch(initialize(FORM.USER_ACCOUNT_FORM, { ...userAccountDetail.data, ...get(userAccountDetail, 'data.company') }))
+		dispatch(initialize(FORM.USER_ACCOUNT, { ...userAccountDetail.data, ...get(userAccountDetail, 'data.company') }))
 	}, [userAccountDetail, dispatch])
 
 	const handleUserAccountFormSubmit = async (data: any) => {
@@ -160,7 +160,7 @@ const UserAccountPage: FC<Props> = (props) => {
 						htmlType={'submit'}
 						onClick={() => {
 							if (checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
-								dispatch(submit(FORM.USER_ACCOUNT_FORM))
+								dispatch(submit(FORM.USER_ACCOUNT))
 							} else {
 								showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
 							}

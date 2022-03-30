@@ -111,10 +111,10 @@ const TimeRangeField = (props: Props) => {
 								className={'w-full noti-date-input noti-time-input'}
 								popupClassName={'noti-time-dropdown'}
 								size={size}
-								suffixIcon={<TimerIcon className={'text-blue-600'} />}
+								suffixIcon={<TimerIcon className={'text-notino-black'} />}
 								placeholder={placeholders[index] as any}
 								disabled={disabled}
-								clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
+								clearIcon={clearIcon || <RemoveIcon className={'text-notino-black'} />}
 								allowClear={allowClear}
 								minuteStep={minuteStep}
 								getPopupContainer={getPopupContainer || ((node: any) => node)}

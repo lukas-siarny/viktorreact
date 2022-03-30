@@ -74,6 +74,7 @@ const Routes: FC = (props) => {
 				translatePathKey={t('paths:user-detail/{{userID}}', { userID: ':userID' })}
 				component={UserAccountPage}
 				layout={MainLayout}
+				page={PAGE.USERS}
 			/>
 			<AuthRoute {...props} exact path={t('paths:user/create')} component={CreateUserAccountPage} translatePathKey={t('paths:user/create')} layout={MainLayout} />
 			<AuthRoute {...props} exact path={t('paths:my-account')} translatePathKey={t('paths:my-account')} component={UserAccountPage} layout={MainLayout} />

@@ -17,7 +17,7 @@ import { DAY, FORM, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } 
 
 // reducers
 import { RootState } from '../../reducers'
-import { getSalon, ISalonsPayload } from '../../reducers/salons/salonsActions'
+import { getSalon } from '../../reducers/salons/salonsActions'
 
 // types
 import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
@@ -28,14 +28,17 @@ import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import showNotifications from '../../utils/tsxHelpers'
+import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 
 type Props = {
 	computedMatch: IComputedMatch<{ salonID: number }>
 }
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
-
+// Pick<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200, 'salon.openingHours'>
 type IOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 type ITimeRanges = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours'][0]['timeRanges']
 
 const week: IOpeningHours = [
@@ -55,6 +58,7 @@ const SalonPage: FC<Props> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const authUserPermissions = authUser?.data?.uniqPermissions || []
+	const [visible, setVisible] = useState<boolean>(false)
 
 	const showDeleteBtn: boolean = checkPermissions(authUserPermissions, editPermissions)
 
@@ -125,6 +129,8 @@ const SalonPage: FC<Props> = (props) => {
 			if (openOverWeekendFormValue) {
 				dispatch(
 					change(FORM.SALON, 'openingHours', [
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore
 						...openingHours,
 						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
 						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
@@ -143,7 +149,7 @@ const SalonPage: FC<Props> = (props) => {
 				dispatch(change(FORM.SALON, 'openingHours', [...formValues.openingHours, { day: DAY.SATURDAY, timeRanges: [] }, { day: DAY.SUNDAY, timeRanges: [] }]))
 			} else {
 				// remove weekend days from field array
-				const newValues = remove(formValues.openingHours as IOpeningHours, (openingHour) => openingHour.day !== DAY.SATURDAY && openingHour.day !== DAY.SUNDAY)
+				const newValues = remove(formValues.openingHours, (openingHour: any) => openingHour?.day !== DAY.SATURDAY && openingHour.day !== DAY.SUNDAY)
 				dispatch(change(FORM.SALON, 'openingHours', newValues))
 			}
 		}
@@ -251,7 +257,13 @@ const SalonPage: FC<Props> = (props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
 			</Row>
 			<div className='content-body small'>
-				<SalonForm onSubmit={handleSubmit} />
+				<SalonForm onSubmit={handleSubmit} openNoteModal={() => setVisible(true)} />
+				<OpenHoursNoteModal
+					visible={visible}
+					salonID={salon?.data?.salon?.id || 0}
+					openingHoursNote={salon?.data?.salon?.openingHoursNote}
+					onClose={() => setVisible(false)}
+				/>
 				<Row className={rowClass}>
 					{showDeleteBtn ? (
 						<DeleteButton

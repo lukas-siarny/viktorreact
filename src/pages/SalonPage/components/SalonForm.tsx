@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import { Field, FieldArray, Fields, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row } from 'antd'
+import { Button, Col, Divider, Form, Row } from 'antd'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -10,7 +10,6 @@ import OpeningHours from './OpeningHours'
 // atoms
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
-import DateRangeField from '../../../atoms/DateRangeField'
 
 // enums
 import { FORM } from '../../../utils/enums'
@@ -21,13 +20,15 @@ import { IUserAccountForm } from '../../../types/interfaces'
 // validate
 import validateSalonForm from './validateSalonForm'
 
-type ComponentProps = {}
+type ComponentProps = {
+	openNoteModal: Function
+}
 
 type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProps
 
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit } = props
+	const { handleSubmit, openNoteModal } = props
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -44,23 +45,14 @@ const UserAccountForm: FC<Props> = (props) => {
 			<Col>
 				<Row className={'mx-9 h-full block'} justify='center'>
 					<div className={'vertical-divider-lg mt-0 mb-4'} />
-					<h3>{t('loc:Otváracie hodiny')}</h3>
+					<div className={'flex justify-between items-center w-full'}>
+						<h3>{t('loc:Otváracie hodiny')}</h3>
+						<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4`} onClick={() => openNoteModal()}>
+							{t('loc:Pridať poznámku')}
+						</Button>
+					</div>
 					<Field className={'mb-0'} component={SwitchField} label={t('loc:Pon - Pi rovnaké otváracie hodiny')} name={'sameOpenHoursOverWeek'} size={'middle'} />
 					<FieldArray component={OpeningHours} name={'openingHours'} />
-					<Col className={'flex mt-4 justify-between'}>
-						<Field className={'w-12/25'} label={t('loc:Poznámka')} component={InputField} placeholder={t('loc:poznámku')} name={'note'} size={'middle'} />
-						<div className={'w-12/25'}>
-							<Fields
-								labels={[t('loc:Platnosť'), ' ']}
-								names={['noteFrom', 'noteTo']}
-								placeholders={[t('loc:čas od'), t('loc:čas do')]}
-								component={DateRangeField}
-								hideHelp
-								allowClear
-								itemClassName={'m-0'}
-							/>
-						</div>
-					</Col>
 				</Row>
 			</Col>
 		</Form>

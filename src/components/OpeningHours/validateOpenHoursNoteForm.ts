@@ -11,7 +11,6 @@ import { isValidDateRange } from '../../utils/helper'
 export default (values: IOpenHoursNoteForm) => {
 	const errors: any = { hoursNote: {} }
 
-	console.log(values)
 	if (!get(values, 'hoursNote.note')) {
 		errors.hoursNote.note = i18next.t('loc:Toto pole je povinné')
 	}

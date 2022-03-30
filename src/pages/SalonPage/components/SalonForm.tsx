@@ -2,14 +2,17 @@ import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row } from 'antd'
+import { useSelector } from 'react-redux'
+import { get } from 'lodash'
 
 // components
-import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import OpeningHours from './OpeningHours'
+import AddressFields from '../../../components/AddressFields'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
+import TextareaField from '../../../atoms/TextareaField'
 
 // enums
 import { FORM } from '../../../utils/enums'
@@ -20,6 +23,9 @@ import { IUserAccountForm } from '../../../types/interfaces'
 // validate
 import validateSalonForm from './validateSalonForm'
 
+// reducers
+import { RootState } from '../../../reducers'
+
 type ComponentProps = {
 	openNoteModal: Function
 }
@@ -28,18 +34,37 @@ type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProp
 
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, openNoteModal } = props
+	const { handleSubmit, change, openNoteModal } = props
+	const salon = useSelector((state: RootState) => state.salons.salon)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
-				<Row className={'mx-9 h-full block'} justify='center'>
+				<Row className={'mx-9 h-full block w-1/2'} justify='center'>
 					<h3 className={'mb-0 mt-3'}>{t('loc:Salón')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} />
-					<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} />
-					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled />
-					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
+					<Field component={TextareaField} label={t('loc:O nás 1')} name={'aboutUsFirst'} size={'large'} />
+					<Field component={TextareaField} label={t('loc:O nás 2')} name={'aboutUsSecond'} size={'large'} />
+				</Row>
+			</Col>
+			<Col span={24}>
+				<Row className={'mx-9 mb-2 w-full h-full block w-1/2'} justify='center'>
+					<h3 className={'mb-0 mt-3'}>{t('loc:Adresa')}</h3>
+					<Divider className={'mb-3 mt-3'} />
+					<Field
+						component={AddressFields}
+						inputValues={{
+							latitude: get(salon?.data?.salon?.address?.latitude, 'latitude'),
+							longitude: get(salon?.data?.salon?.address?.longitude, 'longitude'),
+							city: get(salon?.data?.salon?.address?.city, 'city'),
+							street: get(salon?.data?.salon?.address?.street, 'street'),
+							zip: get(salon?.data?.salon?.address?.countryCode, 'zip'),
+							country: get(salon?.data?.salon?.address?.countryCode, 'country')
+						}}
+						changeFormFieldValue={change}
+						name={'address'}
+					/>
 				</Row>
 			</Col>
 			<Col>

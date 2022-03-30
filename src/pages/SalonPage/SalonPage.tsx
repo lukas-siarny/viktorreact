@@ -35,7 +35,7 @@ type Props = {
 }
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
-// Pick<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200, 'salon.openingHours'>
+// TODO - check how to get nested interface
 type IOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

@@ -71,14 +71,14 @@ export const Localizations = (param: any) => {
 	})
 
 	return (
-		<div className={'relative'}>
+		<div className={cx(param.className, 'relative noti-localizations-collapse-wrapper')}>
 			{param.mainField}
 
 			<Collapse
 				// Collapse is controlled by other element
 				expandIcon={() => null}
 				bordered={false}
-				className={cx('noti-localizations-collapse tp-localizations-horizontal')}
+				className={'noti-localizations-collapse tp-localizations-horizontal'}
 				activeKey={finalCollapseKey}
 			>
 				<Collapse.Panel header={''} key={keyName}>

@@ -78,11 +78,11 @@ const Localizations = (param: any) => {
 				// Collapse is controlled by other element
 				expandIcon={() => null}
 				bordered={false}
-				className={'noti-localizations-collapse tp-localizations-horizontal'}
+				className={'noti-localizations-collapse'}
 				activeKey={finalCollapseKey}
 			>
 				<Collapse.Panel header={''} key={keyName}>
-					<div>{otherFields}</div>
+					<div className='mt-2'>{otherFields}</div>
 				</Collapse.Panel>
 			</Collapse>
 			<button type='button' className={'absolute top-0 right-0 flex items-center justify-end cursor-pointer border-none bg-none p-0 bg-transparent'} onClick={onChange}>

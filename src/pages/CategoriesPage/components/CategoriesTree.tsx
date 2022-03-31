@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Col, Row, Popover, Tree, Divider } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { forEach, get, map } from 'lodash'
+import { filter, forEach, get, map } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 
@@ -271,8 +271,8 @@ const CategoriesTree = () => {
 		const cat: any | null = categories?.data
 		try {
 			let body: any = {
-				name: formData.name,
-				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1
+				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,
+				nameLocalizations: filter(formData.nameLocalizations, (item) => item.value)
 			}
 			if (formData.parentId >= 0) {
 				body = {

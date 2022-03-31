@@ -81,7 +81,6 @@ const CategoryForm: FC<Props> = (props) => {
 							/>
 						}
 					/>
-					{/* <Field component={InputField} label={t('loc:Názov kategórie')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required /> */}
 					<div className={'flex justify-between'}>
 						<Button className={'noti-btn w-1/3'} block size='middle' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
 							{t('loc:Uložiť')}

@@ -8,6 +8,7 @@ import { get } from 'lodash'
 // components
 import OpeningHours from './OpeningHours'
 import AddressFields from '../../../components/AddressFields'
+import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -27,6 +28,14 @@ import validateSalonForm from './validateSalonForm'
 import { RootState } from '../../../reducers'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 
+// assets
+import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-circle-icon.svg'
+import { ReactComponent as FacebookIcon } from '../../../assets/icons/social-facebook-circle-icon.svg'
+import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card-icon.svg'
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-notino-icon.svg'
+import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-icon.svg'
+import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
+
 type ComponentProps = {
 	openNoteModal: Function
 }
@@ -42,7 +51,27 @@ const UserAccountForm: FC<Props> = (props) => {
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col>
 				<Row className={'mx-9'}>
-					<h3 className={'mb-0 mt-3'}>{t('loc:Základné informácie o salóne')}</h3>
+					<div className={'flex justify-between w-full'}>
+						<h3 className={'mb-0 mt-3'}>
+							{t('loc:Základné údaje')} <InfoIcon className={'text-notino-black'} />
+						</h3>
+						<div className={'flex justify-between w-2/5'}>
+							<Field className={'mt-2 mb-2 w-12/25'} component={SwitchField} label={t('loc:Viditeľné')} name={'isVisible'} size={'middle'} required />
+							<Button
+								type={'primary'}
+								block
+								size={'middle'}
+								className={`noti-btn m-regular mt-2 mb-2 w-12/25`}
+								htmlType={'submit'}
+								onClick={() => {
+									// TODO - add callback fun for public salon
+									console.log('ano')
+								}}
+							>
+								{t('loc:Publikovať')}
+							</Button>
+						</div>
+					</div>
 					<Divider className={'mb-3 mt-3'} />
 				</Row>
 			</Col>
@@ -60,7 +89,6 @@ const UserAccountForm: FC<Props> = (props) => {
 						label={t('loc:Logo')}
 						signUrl={URL_UPLOAD_IMAGES}
 						multiple={false}
-						required
 						maxCount={1}
 						category={UPLOAD_IMG_CATEGORIES.SALON}
 					/>
@@ -77,10 +105,27 @@ const UserAccountForm: FC<Props> = (props) => {
 					/>
 				</Row>
 			</Col>
-			<Col span={24}>
+			<Col>
 				<Row className={'mx-9 mb-2 h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3'}>{t('loc:Adresa')}</h3>
+					<h3 className={'mb-0 mt-3'}>
+						{t('loc:Kontaktné údaje')} <PhoneIcon className={'text-notino-black'} />
+					</h3>
 					<Divider className={'mb-3 mt-3'} />
+					<Col className={'flex'}>
+						<Row className={'w-1/2'}>
+							<PhoneWithPrefixField
+								label={'Telefón'}
+								placeholder={t('loc:Zadajte telefón')}
+								size={'large'}
+								prefixName={'phonePrefixCountryCode'}
+								phoneName={'phone'}
+								required
+							/>
+						</Row>
+						<Row className={'w-1/2'}>
+							<Field className={'w-full'} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
+						</Row>
+					</Col>
 					<Field
 						component={AddressFields}
 						inputValues={{
@@ -100,13 +145,32 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row className={'mx-9 h-full block'} justify='center'>
 					<div className={'vertical-divider-lg mt-0 mb-4'} />
 					<div className={'flex justify-between items-center w-full mb-4'}>
-						<h3 className={'mb-0'}>{t('loc:Otváracie hodiny')}</h3>
+						<h3 className={'mb-0'}>
+							{t('loc:Otváracie hodiny')} <TimerIcon width={24} height={24} className={'text-notino-black'} />
+						</h3>
 						<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4`} onClick={() => openNoteModal()}>
 							{t('loc:Pridať poznámku')}
 						</Button>
 					</div>
 					<Field className={'mb-0'} component={SwitchField} label={t('loc:Pon - Pi rovnaké otváracie hodiny')} name={'sameOpenHoursOverWeek'} size={'middle'} />
 					<FieldArray component={OpeningHours} name={'openingHours'} />
+				</Row>
+			</Col>
+			<Col className={'flex'}>
+				<Row className={'mx-9 mb-2 h-full block w-1/2'} justify='center'>
+					<h3 className={'mb-0 mt-3'}>{t('loc:Sociálne siete')}</h3>
+					<Divider className={'mb-3 mt-3'} />
+					<Field component={InputField} label={t('loc:Facebook')} name={'socialLinkFB'} size={'large'} prefix={<FacebookIcon />} />
+					<Field component={InputField} label={t('loc:Instagram')} name={'socialLinkInstagram'} size={'large'} prefix={<InstagramIcon />} />
+					<Field component={InputField} label={t('loc:Webstránka')} name={'socialLinkWeb'} size={'large'} />
+				</Row>
+				<Row className={'mx-9 mb-2 h-full block w-1/2'} justify='center'>
+					<h3 className={'mb-0 mt-3'}>
+						{t('loc:Možnosti platby')} <CreditCardIcon className={'text-notino-black'} />
+					</h3>
+					<Divider className={'mb-3 mt-3'} />
+					<Field component={InputField} label={t('loc:Iné spôsoby platby')} name={'otherPaymentMethods'} size={'large'} />
+					<Field className={'mb-0'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} required />
 				</Row>
 			</Col>
 		</Form>

@@ -2,12 +2,15 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, Fields } from 'redux-form'
 import { Button } from 'antd'
-import { isEmpty } from 'lodash'
+import { isEmpty, get } from 'lodash'
+import i18next from 'i18next'
 
 // components
+import cx from 'classnames'
 import DeleteButton from '../../../components/DeleteButton'
 
 // atoms
+import SwitchField from '../../../atoms/SwitchField'
 import TimeRangeField from '../../../atoms/TimeRangeField'
 
 // helpers
@@ -15,7 +18,13 @@ import { translateDayName } from '../../../utils/helper'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon-16.svg'
-import SwitchField from '../../../atoms/SwitchField'
+
+const validateTimeRangeField = (value: string) => {
+	if (!value) {
+		return i18next.t('loc:Toto pole je povinné')
+	}
+	return undefined
+}
 
 const TimeRangesComponent = (param: any) => {
 	const [t] = useTranslation()
@@ -30,6 +39,7 @@ const TimeRangesComponent = (param: any) => {
 				allowClear
 				size={'small'}
 				itemClassName={'m-0'}
+				validate={validateTimeRangeField}
 			/>
 			<DeleteButton className={'ml-1 bg-red-100'} onClick={() => param.fields.remove(index)} onlyIcon noConfirm smallIcon size={'small'} />
 		</div>
@@ -61,10 +71,16 @@ const OpeningHours = (param: any) => {
 		<>
 			{fields.map((field: any, index: any) => {
 				const value = fields.get(index)
+				const requiredClass = cx({
+					required: isEmpty(value?.timeRanges)
+				})
 				return (
 					<div key={field} className={'mt-2'}>
-						<div className='text-gray-900 font-semibold text-base'>
-							{translateDayName(value?.day)} {isEmpty(value?.timeRanges) ? ` - ${t('loc:Zatvorené')}` : undefined}
+						<div className={'text-gray-900 font-semibold text-base ant-form-item-label'}>
+							<label className={`ant-form-item-required ${requiredClass}`}>
+								{/* TODO - if can be empty {isEmpty(value?.timeRanges) ? ` - ${t('loc:Zatvorené')}` : undefined} */}
+								{translateDayName(value?.day)}
+							</label>
 						</div>
 						<FieldArray component={TimeRangesComponent} name={`${field}.timeRanges`} />
 						{/* show switch filed for open work hours over weekend */}

@@ -85,3 +85,7 @@ export const getSalon =
 			console.error(err)
 		}
 	}
+
+export const emptySalon = (): ThunkResult<Promise<void>> => async (dispatch) => {
+	dispatch({ type: SALON.SALON_LOAD_DONE, payload: { data: null } })
+}

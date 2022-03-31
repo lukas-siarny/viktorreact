@@ -74,7 +74,7 @@ const CreateUserAccountPage = () => {
 						type={'primary'}
 						block
 						size={'middle'}
-						className={`noti-btn m-regular mb-2 w-1/3`}
+						className={'noti-btn m-regular mb-2 w-1/3'}
 						htmlType={'submit'}
 						onClick={() => {
 							dispatch(submit(FORM.ADMIN_CREATE_USER))

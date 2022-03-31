@@ -23,6 +23,17 @@
 	label
 		color: $textColor-notino-black
 
+.noti-input-label
+	&.required:before
+		display: inline-block
+		margin-right: 4px
+		color: #ff4d4f // ant required color
+		font-size: 14px
+		font-family: SimSun, sans-serif
+		line-height: 1
+		content: '* '
+		vertical-align: text-top
+
 // Error form item
 .ant-form-item-control
 	.ant-form-item-explain.ant-form-item-explain-error

@@ -65,7 +65,6 @@ const UserAccountForm: FC<Props> = (props) => {
 								htmlType={'submit'}
 								onClick={() => {
 									// TODO - add callback fun for public salon
-									console.log('ano')
 								}}
 							>
 								{t('loc:Publikovať')}

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm, FieldArray } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Form, Row, DatePicker } from 'antd'
+import { Button, Col, Divider, Form, Row } from 'antd'
 
 // enums
 import { useSelector } from 'react-redux'
@@ -12,14 +12,24 @@ import InputField from '../../../atoms/InputField'
 
 // components
 import Localizations from '../../../components/Localizations'
+import DeleteButton from '../../../components/DeleteButton'
 
 // validate
 import validateCategoryFrom from './validateCategoryFrom'
-import DeleteButton from '../../../components/DeleteButton'
+
+// utils
+import { validationString } from '../../../utils/helper'
+
+// redux
 import { RootState } from '../../../reducers'
 
 type ComponentProps = {
 	deleteCategory: any
+}
+
+type NameLocalizationsItem = {
+	language: string
+	value: string
 }
 
 export interface ICategoryForm {
@@ -28,7 +38,10 @@ export interface ICategoryForm {
 	orderIndex: number
 	parentId: number
 	childrenLength: number
+	nameLocalizations: NameLocalizationsItem[]
 }
+
+const fixLength100 = validationString(100)
 
 type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
 
@@ -54,15 +67,17 @@ const CategoryForm: FC<Props> = (props) => {
 						placeholder={t('loc:Zadajte názov')}
 						horizontal
 						ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
+						customValidate={fixLength100}
 						mainField={
 							<Field
 								className='mb-0'
 								component={InputField}
 								label={t('loc:Názov kategórie (en)')}
 								placeholder={t('loc:Zadajte názov')}
-								key='name'
+								key='nameLocalizations[0].value'
 								name='nameLocalizations[0].value'
 								required
+								validate={fixLength100}
 							/>
 						}
 					/>

@@ -53,7 +53,7 @@ const CategoryForm: FC<Props> = (props) => {
 						component={Localizations}
 						placeholder={t('loc:Zadajte názov')}
 						horizontal
-						hideLanguageField='en'
+						ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
 						mainField={
 							<Field
 								className='mb-0'

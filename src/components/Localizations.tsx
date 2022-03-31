@@ -40,7 +40,7 @@ const Localizations = (param: any) => {
 	param.fields.forEach((field: any, index: any, fields: any) => {
 		const value = fields.get(index)
 
-		if (get(value, 'language') === param.hideLanguageField) {
+		if (index === param.ignoreFieldIndex) {
 			return
 		}
 

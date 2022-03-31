@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, InjectedFormProps, reduxForm, FieldArray } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row, DatePicker } from 'antd'
 
@@ -9,6 +9,9 @@ import { FORM } from '../../../utils/enums'
 
 // atoms
 import InputField from '../../../atoms/InputField'
+
+// components
+import Localizations from '../../../components/Localizations'
 
 // validate
 import validateCategoryFrom from './validateCategoryFrom'
@@ -43,7 +46,27 @@ const CategoryForm: FC<Props> = (props) => {
 						{values?.id ? t('loc:Upraviť kategóriu') : `${t('loc:Vytvoriť kategóriu')}${values?.parentTitle ? ` - ${values?.parentTitle}` : ''}`}
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<Field component={InputField} label={t('loc:Názov kategórie')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
+					<FieldArray
+						className={'mb-6'}
+						key='nameLocalizations'
+						name='nameLocalizations'
+						component={Localizations}
+						placeholder={t('loc:Zadajte názov')}
+						horizontal
+						hideLanguageField='en'
+						mainField={
+							<Field
+								className='mb-0'
+								component={InputField}
+								label={t('loc:Názov kategórie (en)')}
+								placeholder={t('loc:Zadajte názov')}
+								key='name'
+								name='nameLocalizations[0].value'
+								required
+							/>
+						}
+					/>
+					{/* <Field component={InputField} label={t('loc:Názov kategórie')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required /> */}
 					<div className={'flex justify-between'}>
 						<Button className={'noti-btn w-1/3'} block size='middle' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
 							{t('loc:Uložiť')}

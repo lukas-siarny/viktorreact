@@ -12,7 +12,7 @@ import InputField from '../atoms/InputField'
 const fixLength255 = validationString(255)
 const horizontalLabelStyle = { minWidth: 25 }
 
-export const Localizations = (param: any) => {
+const Localizations = (param: any) => {
 	const formValueLocalizations = param.fields.getAll()
 	const existNameLocalization = some(formValueLocalizations, 'value')
 	const [activeKey, setActiveKey] = useState<string | null>()

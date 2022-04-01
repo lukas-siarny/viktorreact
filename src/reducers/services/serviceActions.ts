@@ -44,6 +44,7 @@ export const getServices =
 			const tableData = map(data.services, (item) => {
 				const tableItem = {
 					key: item.id,
+					serviceID: item.id,
 					name: item.name || '-',
 					employees: join(
 						map(item.employees, (employee) => employee.name),

@@ -26,6 +26,7 @@ import { RootState } from '../../../reducers'
 type ComponentProps = {
 	createNewTemplate?: any
 	total: number
+	createService: () => void
 }
 
 interface IServicesFilter {
@@ -52,7 +53,7 @@ const EMPLOYEES_OPTIONS = [
 ]
 
 const ServicesFilter = (props: Props) => {
-	const { handleSubmit, total } = props
+	const { handleSubmit, total, createService } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SERVICES_FILTER)(state))
@@ -87,7 +88,7 @@ const ServicesFilter = (props: Props) => {
 	)
 
 	const customContent = (
-		<Button onClick={() => {}} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
+		<Button onClick={createService} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
 			{t('loc:Pridať službu')}
 		</Button>
 	)

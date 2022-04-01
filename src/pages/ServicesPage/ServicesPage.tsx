@@ -16,7 +16,7 @@ import ServicesFilter from './components/ServicesFilter'
 // utils
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
-// import { history } from '../../utils/history'
+import { history } from '../../utils/history'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -26,6 +26,8 @@ import { getServices } from '../../reducers/services/serviceActions'
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
 import showNotifications from '../../utils/tsxHelpers'
+
+const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
 
 type Columns = ColumnsType<any>
 
@@ -127,7 +129,17 @@ const ServicesPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<ServicesFilter onSubmit={handleSubmit} total={services?.originalData?.pagination?.totalPages} />
+						<ServicesFilter
+							createService={() => {
+								if (checkPermissions(editPermissions)) {
+									history.push(t('paths:services/create'))
+								} else {
+									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
+								}
+							}}
+							onSubmit={handleSubmit}
+							total={services?.originalData?.pagination?.totalPages}
+						/>
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}
@@ -138,9 +150,8 @@ const ServicesPage = () => {
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT, PERMISSION.PARTNER])) {
-										// TODO add route
-										// history.push(t('paths:user-detail/{{userID}}', { userID: record.id }))
+									if (checkPermissions(editPermissions)) {
+										history.push(t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
 									} else {
 										showNotifications(
 											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],

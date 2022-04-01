@@ -49,6 +49,7 @@ import { IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
+import { RootState } from '../reducers'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -518,3 +519,39 @@ export const isValidDateRange = (from: string, to: string) => {
 
 export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))
 export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))
+
+export const convertCountriesToLocalizations = (countries: RootState['enumerationsStore']['countries'], defaultLanguageName?: string) => {
+	const fieldValues = map(countries.data, (country) => ({
+		language: lowerCase(country.code)
+	}))
+
+	if (!defaultLanguageName) return fieldValues
+
+	const defaultLanguage = { language: defaultLanguageName }
+	const otherLanguages = filter(fieldValues, (field) => field.language !== defaultLanguageName)
+
+	// default language must be first
+	return [defaultLanguage, ...otherLanguages]
+}
+
+type NameLocalizationsItem = {
+	language: string
+}
+
+/**
+ * add default language to the first position
+ * or
+ * move default language to the first position
+ */
+export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[], defaultLanguageName?: string) => {
+	let defaultLanguage = { language: defaultLanguageName }
+	const otherLanguages: any = []
+	forEach(nameLocalizations, (localization) => {
+		if (localization.language === defaultLanguageName) {
+			defaultLanguage = localization
+		} else {
+			otherLanguages.push(localization)
+		}
+	})
+	return [defaultLanguage, ...otherLanguages]
+}

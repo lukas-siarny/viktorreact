@@ -107,7 +107,8 @@ const ServicesFilter = (props: Props) => {
 							disabled={isFilterDisabled}
 						/>
 					</Col>
-					<Col span={6}>
+					{/* TODO currently not needed */}
+					{/* <Col span={6}>
 						<Field
 							className='m-0'
 							component={SelectField}
@@ -117,7 +118,7 @@ const ServicesFilter = (props: Props) => {
 							options={EMPLOYEES_OPTIONS}
 							disabled={isFilterDisabled}
 						/>
-					</Col>
+					</Col> */}
 					<Col span={6}>
 						<Field
 							className='m-0'

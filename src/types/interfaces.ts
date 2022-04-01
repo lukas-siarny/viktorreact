@@ -58,6 +58,8 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
+export interface IServiceForm {}
+
 export interface IRegistrationForm {
 	email: string
 	password: string

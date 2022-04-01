@@ -28,10 +28,15 @@ const ServicePage = (props: Props) => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam služieb')
+				name: t('loc:Zoznam služieb'),
+				link: t('paths:services')
+			},
+			{
+				name: t('loc:Detail služby')
 			}
 		]
 	}
+
 	return (
 		<>
 			<Row>

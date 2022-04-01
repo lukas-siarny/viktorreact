@@ -1,5 +1,8 @@
 import React from 'react'
 
+// components
+import ServiceForm from './components/ServiceForm'
+
 type Props = {
 	serviceID: number
 }

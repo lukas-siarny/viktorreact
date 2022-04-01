@@ -107,7 +107,7 @@ const ServicesFilter = (props: Props) => {
 							disabled={isFilterDisabled}
 						/>
 					</Col>
-					{/* NOTE currently not needed */}
+					{/* TODO currently not needed */}
 					{/* <Col span={6}>
 						<Field
 							className='m-0'

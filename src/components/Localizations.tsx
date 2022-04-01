@@ -5,8 +5,14 @@ import { Field } from 'redux-form'
 import i18next from 'i18next'
 import cx from 'classnames'
 
+// assets
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+
+// utils
 import { validationString } from '../utils/helper'
+import { LOCALIZATIONS } from '../utils/enums'
+
+// atoms
 import InputField from '../atoms/InputField'
 
 const fixLength255 = validationString(255)
@@ -17,7 +23,7 @@ const Localizations = (param: any) => {
 	const existNameLocalization = some(formValueLocalizations, 'value')
 	const [activeKey, setActiveKey] = useState<string | null>()
 	const [focusedFieldInCollapse, setFocusedFieldInCollapse] = useState<boolean>()
-	const keyName = 'LOCALIZATIONS'
+	const keyName = LOCALIZATIONS
 
 	let finalCollapseKey: any
 	if (activeKey !== undefined) {
@@ -31,7 +37,7 @@ const Localizations = (param: any) => {
 	const onChange = useCallback(() => {
 		setActiveKey(finalCollapseKey ? null : keyName)
 		setFocusedFieldInCollapse(false)
-	}, [finalCollapseKey])
+	}, [finalCollapseKey, keyName])
 
 	const setFocusedWrap = useCallback(() => setFocusedFieldInCollapse(true), [])
 

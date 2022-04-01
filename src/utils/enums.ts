@@ -1046,6 +1046,8 @@ export enum BYTE_MULTIPLIER {
 	MEGA = 10 ** 6
 }
 
+export const LOCALIZATIONS = 'LOCALIZATIONS'
+
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const TEXT_TEMPLATE_TYPES = Object.keys(TEXT_TEMPLATE_TYPE)
 export const PROPERTY_TYPES = Object.keys(PROPERTY_TYPE)

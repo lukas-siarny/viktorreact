@@ -25,7 +25,7 @@ export default (values: any) => {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!(values?.zip || values?.city || values?.street || values?.latitude || values?.longitude || !values?.country)) {
+	if (!(values?.zip && values?.city && values?.street && values?.latitude && values?.longitude && values?.country)) {
 		errors.address = i18next.t('loc:Upresnite adresu vo vyhľadávaní alebo priamo v mape')
 	}
 
@@ -41,6 +41,10 @@ export default (values: any) => {
 
 	if (!values?.email) {
 		errors.email = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (!(values?.gallery?.length > 0)) {
+		errors.gallery = i18next.t('loc:Nahrajte aspoň jeden obrázok')
 	}
 
 	if (values?.email && values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {

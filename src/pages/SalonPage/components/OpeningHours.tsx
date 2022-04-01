@@ -71,16 +71,10 @@ const OpeningHours = (param: any) => {
 		<>
 			{fields.map((field: any, index: any) => {
 				const value = fields.get(index)
-				const requiredClass = cx({
-					required: isEmpty(value?.timeRanges)
-				})
 				return (
 					<div key={field} className={'mt-2'}>
-						<div className={'text-gray-900 font-semibold text-base ant-form-item-label'}>
-							<label className={`ant-form-item-required ${requiredClass}`}>
-								{/* TODO - if can be empty {isEmpty(value?.timeRanges) ? ` - ${t('loc:Zatvorené')}` : undefined} */}
-								{translateDayName(value?.day)}
-							</label>
+						<div className={'text-gray-900 font-semibold text-base'}>
+							{translateDayName(value?.day)} {isEmpty(value?.timeRanges) ? ` - ${t('loc:Zatvorené')}` : undefined}
 						</div>
 						<FieldArray component={TimeRangesComponent} name={`${field}.timeRanges`} />
 						{/* show switch filed for open work hours over weekend */}

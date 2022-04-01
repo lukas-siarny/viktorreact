@@ -1,11 +1,12 @@
-import React, { FC } from 'react'
+import React, { FC, useCallback, useEffect } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { get } from 'lodash'
 
 // components
+import i18next from 'i18next'
 import OpeningHours from './OpeningHours'
 import AddressFields from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -14,6 +15,7 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
+import SelectField from '../../../atoms/SelectField'
 
 // enums
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
@@ -35,17 +37,33 @@ import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-c
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-notino-icon.svg'
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
+import { ReactComponent as UserIcon } from '../../../assets/icons/user-bold-icon.svg'
+import { getUsers } from '../../../reducers/users/userActions'
 
 type ComponentProps = {
 	openNoteModal: Function
+	isAdmin: boolean
 }
 
 type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProps
 
+// validate user select only if auth user have SUPER ADMIN or ADMIN permissions
+const validateUsersSelect = (value: string, formValues: any, props: any) => {
+	if (!value && props?.isAdmin) {
+		return i18next.t('loc:Toto pole je povinné')
+	}
+	return undefined
+}
+
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, openNoteModal } = props
+	const dispatch = useDispatch()
+	const { handleSubmit, change, openNoteModal, isAdmin } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
+
+	const onSearchUsers = useCallback((data: string) => {
+		return dispatch(getUsers(1, 100, undefined, data))
+	}, [])
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -161,7 +179,7 @@ const UserAccountForm: FC<Props> = (props) => {
 					<Divider className={'mb-3 mt-3'} />
 					<Field component={InputField} label={t('loc:Facebook')} name={'socialLinkFB'} size={'large'} prefix={<FacebookIcon />} />
 					<Field component={InputField} label={t('loc:Instagram')} name={'socialLinkInstagram'} size={'large'} prefix={<InstagramIcon />} />
-					<Field component={InputField} label={t('loc:Webstránka')} name={'socialLinkWeb'} size={'large'} />
+					<Field component={InputField} label={t('loc:Webstránka')} name={'socialLinkWebPage'} size={'large'} />
 				</Row>
 				<Row className={'mx-9 mb-2 h-full block w-1/2'} justify='center'>
 					<h3 className={'mb-0 mt-3'}>
@@ -172,6 +190,33 @@ const UserAccountForm: FC<Props> = (props) => {
 					<Field className={'mb-0'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} required />
 				</Row>
 			</Col>
+			{/* show this block only if auth user have SUPER ADMIN or ADMIN permissions */}
+			{isAdmin ? (
+				<Col className={'flex'}>
+					<Row className={'mx-9 mb-2 h-full block w-full'} justify='center'>
+						<h3 className={'mb-0 mt-3'}>
+							{t('loc:Oprávnenie')} <UserIcon className={'text-notino-black'} />
+						</h3>
+						<Divider className={'mb-3 mt-3'} />
+						<Field
+							component={SelectField}
+							label={t('loc:Používateľ')}
+							placeholder={t('loc:Vyber používateľa')}
+							name={'userID'}
+							size={'large'}
+							validate={validateUsersSelect}
+							onSearch={onSearchUsers}
+							optionLabelProp={'label'}
+							dataSourcePath={'usersOptions'}
+							filterOption={true}
+							labelInValue
+							showSearch
+							allowInfinityScroll
+							required
+						/>
+					</Row>
+				</Col>
+			) : undefined}
 		</Form>
 	)
 }

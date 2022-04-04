@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { FieldArray, InjectedFormProps, reduxForm, Field, isPristine } from 'redux-form'
 import { Form, notification, Spin, Divider, Row, Col, Button } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // assets
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
@@ -26,6 +26,7 @@ import DeleteButton from '../../../components/DeleteButton'
 
 // reducers
 import { RootState } from '../../../reducers'
+import { getSalons } from '../../../reducers/salons/salonsActions'
 
 // utils
 import { scrollToFirstError } from '../../../utils/helper'
@@ -39,9 +40,10 @@ type ComponentProps = {
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
 
 const ServiceForm = (props: Props) => {
-	const { serviceID } = props
+	const { serviceID, handleSubmit } = props
 	const [t] = useTranslation()
-	const { handleSubmit } = props
+	const dispatch = useDispatch()
+
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const serviceLoading = useSelector((state: RootState) => state.service.services.isLoading) // update
@@ -66,6 +68,14 @@ const ServiceForm = (props: Props) => {
 		}
 	}
 
+	const searchSalon = useCallback(
+		async (search: string, page: number) => {
+			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
+			return { pagination: data?.pagination?.page, data: salonsOptions }
+		},
+		[dispatch]
+	)
+
 	const variableDuration = form?.values?.variableDuration
 	const variablePrice = form?.values?.variablePrice
 	return (
@@ -73,6 +83,18 @@ const ServiceForm = (props: Props) => {
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} />
 				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
+				<Field
+					className='m-0'
+					label={t('loc:Salón')}
+					component={SelectField}
+					allowClear
+					placeholder={t('loc:Salón')}
+					name='salonID'
+					showSearch
+					onSearch={searchSalon}
+					onDidMountSearch
+					size={'large'}
+				/>
 				<Divider />
 				<Row gutter={8}>
 					<Col span={variableDuration ? 12 : 24}>

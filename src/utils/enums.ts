@@ -1,4 +1,4 @@
-import { capitalize, orderBy } from 'lodash'
+import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import en_GB from 'antd/lib/locale-provider/en_GB'

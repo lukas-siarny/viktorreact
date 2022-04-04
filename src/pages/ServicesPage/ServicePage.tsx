@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { compose } from 'redux'
+import { useDispatch } from 'react-redux'
 
 // components
 import ServiceCreatePage from './ServiceCreatePage'
@@ -15,6 +16,9 @@ import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
 import { PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
+// reducers
+import { getCategories } from '../../reducers/categories/categoriesActions'
+
 type Props = {
 	computedMatch: IComputedMatch<{
 		serviceID: string
@@ -24,6 +28,11 @@ type Props = {
 const ServicePage = (props: Props) => {
 	const serviceID = parseInt(props.computedMatch.params.serviceID, 10)
 	const { t } = useTranslation()
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(getCategories())
+	}, [])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [

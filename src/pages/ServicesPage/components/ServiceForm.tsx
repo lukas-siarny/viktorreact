@@ -13,11 +13,16 @@ import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { IServiceForm } from '../../../types/interfaces'
 import SelectField from '../../../atoms/SelectField'
 import validateServiceForm from './validateServiceForm'
-import DeleteButton from '../../../components/DeleteButton'
+import InputField from '../../../atoms/InputField'
+import TextareaField from '../../../atoms/TextareaField'
+import InputNumberField from '../../../atoms/InputNumberField'
+import SwitchField from '../../../atoms/SwitchField'
+import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // components
 // import ProductDetailLocalizations from './ProductDetailLocalizations'
 // import ProductPrices from './ProductPrices'
+import DeleteButton from '../../../components/DeleteButton'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -37,6 +42,8 @@ const ServiceForm = (props: Props) => {
 	const { serviceID } = props
 	const [t] = useTranslation()
 	const { handleSubmit } = props
+	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
+	const categories = useSelector((state: RootState) => state.categories.categories)
 	const serviceLoading = useSelector((state: RootState) => state.service.services.isLoading) // update
 	const isPristineForm: boolean = useSelector((state: RootState) => isPristine(FORM.SERVICE_FORM)(state))
 	const [isRemoving, setIsRemoving] = useState(false)
@@ -59,10 +66,103 @@ const ServiceForm = (props: Props) => {
 		}
 	}
 
+	const variableDuration = form?.values?.variableDuration
+	const variablePrice = form?.values?.variablePrice
 	return (
 		<Spin tip={STRINGS(t).loading} spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-				create page
+				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} />
+				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
+				<Divider />
+				<Row gutter={8}>
+					<Col span={variableDuration ? 12 : 24}>
+						<Field
+							component={InputNumberField}
+							label={variableDuration ? t('loc:Trvanie od') : t('loc:Trvanie')}
+							placeholder={t('loc:min')}
+							name='durationFrom'
+							precision={0}
+							step={1}
+							maxChars={3}
+							size={'large'}
+						/>
+					</Col>
+
+					{variableDuration && (
+						<Col span={12}>
+							<Field
+								component={InputNumberField}
+								label={t('loc:Trvanie do')}
+								placeholder={t('loc:min')}
+								name='durationTo'
+								precision={0}
+								step={1}
+								maxChars={3}
+								size={'large'}
+							/>
+						</Col>
+					)}
+				</Row>
+				<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
+				<Divider />
+
+				<Row gutter={8}>
+					<Col span={variablePrice ? 12 : 24}>
+						<Field
+							component={InputNumberField}
+							label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
+							// placeholder={t('loc:min')}
+							name='priceFrom'
+							precision={2}
+							step={1}
+							maxChars={5}
+							size={'large'}
+						/>
+					</Col>
+
+					{variablePrice && (
+						<Col span={12}>
+							<Field
+								component={InputNumberField}
+								label={t('loc:Cena do')}
+								// placeholder={t('loc:min')}
+								name='priceTo'
+								precision={2}
+								step={1}
+								maxChars={5}
+								size={'large'}
+							/>
+						</Col>
+					)}
+				</Row>
+				<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+
+				<Divider />
+
+				<Field
+					className='m-0'
+					component={ImgUploadField}
+					name='gallery'
+					label={t('loc:Referenčné obrázky')}
+					sighUrl='/api/b2b/admin/files/sign-urls'
+					multiple
+					required
+					maxCount={10}
+				/>
+
+				{/* {
+  "name": "Služba 1", 				DONE
+  "description": "some text",		DONE
+  "durationFrom": 10,				DONE
+  "durationTo": 10,					DONE
+  "priceFrom": 10,					DONE
+  "priceTo": 10,					DONE
+  "salonID": 1,
+  "categoryID": 1,
+  "imageIDs": [						DONE
+    1
+  ]
+} */}
 				{/* <h2>{t('loc:Všeobecné údaje')}</h2>
 				<FieldArray key='productLocalization' name='productLocalization' component={ProductDetailLocalizations} />
 				<h2>{t('loc:Doplňujúce údaje')}</h2>

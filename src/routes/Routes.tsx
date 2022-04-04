@@ -44,6 +44,11 @@ import ServicesPage from '../pages/ServicesPage/ServicesPage'
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
 import SalonPage from '../pages/SalonPage/SalonPage'
 
+// Customers
+import CustomersPage from '../pages/CustomersPage/CustomersPage'
+import CustomerPage from '../pages/CustomersPage/CustomerPage'
+import CreateCustomerPage from '../pages/CustomersPage/CreateCustomerPage'
+
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -99,7 +104,6 @@ const Routes: FC = (props) => {
 				page={PAGE.SALON}
 			/>
 			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
-			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				{...props}
 				exact
@@ -119,6 +123,26 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.MY_ACCOUNT}
 			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:customers/create')}
+				component={CreateCustomerPage}
+				translatePathKey={t('paths:customers/create')}
+				layout={MainLayout}
+				page={PAGE.CUSTOMERS}
+			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:customers/{{customerID}}', { customerID: ':customerID' })}
+				component={CustomerPage}
+				translatePathKey={t('paths:customers/{{customerID}}', { customerID: ':customerID' })}
+				layout={MainLayout}
+				page={PAGE.CUSTOMERS}
+			/>
+
+			<AuthRoute {...props} exact path={t('paths:customers')} component={CustomersPage} translatePathKey={t('paths:customers')} layout={MainLayout} page={PAGE.CUSTOMERS} />
 			<AuthRoute {...props} exact path={t('paths:services')} component={ServicesPage} translatePathKey={t('paths:services')} layout={MainLayout} page={PAGE.SERVICES} />
 			{/* NOTE: add all private routes before this declaration */}
 			<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />

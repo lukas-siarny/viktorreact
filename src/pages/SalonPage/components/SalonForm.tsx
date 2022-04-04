@@ -61,9 +61,12 @@ const UserAccountForm: FC<Props> = (props) => {
 	const { handleSubmit, change, openNoteModal, isAdmin } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
-	const onSearchUsers = useCallback((data: string) => {
-		return dispatch(getUsers(1, 100, undefined, data))
-	}, [])
+	const onSearchUsers = useCallback(
+		(data: string) => {
+			return dispatch(getUsers(1, 100, undefined, data))
+		},
+		[dispatch]
+	)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>

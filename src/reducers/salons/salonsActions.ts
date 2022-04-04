@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import { NumberParam } from 'use-query-params'
 import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 

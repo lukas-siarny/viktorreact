@@ -11,7 +11,7 @@ import CreateUserAccountForm from './components/CreateUserAccountForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
-import { IBreadcrumbs, ILoadingAndFailure } from '../../types/interfaces'
+import { IBreadcrumbs } from '../../types/interfaces'
 
 // utils
 import { history } from '../../utils/history'
@@ -23,7 +23,6 @@ import { withPermissions } from '../../utils/Permissions'
 import { getRoles } from '../../reducers/roles/rolesActions'
 import { getCountries } from '../../reducers/enumerations/enumerationActions'
 import { getPrefixCountryCode } from '../../utils/helper'
-import { ISalonPayload } from '../../reducers/salons/salonsActions'
 
 const CreateUserAccountPage = () => {
 	const [t] = useTranslation()
@@ -55,6 +54,7 @@ const CreateUserAccountPage = () => {
 
 	useEffect(() => {
 		fetchData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	const createUser = async (data: any) => {

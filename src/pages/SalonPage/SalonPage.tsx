@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { change, initialize, submit } from 'redux-form'
-import { get, isEmpty, map, remove, unionBy } from 'lodash'
+import { get, isEmpty, map, unionBy } from 'lodash'
 import cx from 'classnames'
 import { compose } from 'redux'
 
@@ -230,7 +230,8 @@ const SalonPage: FC<Props> = (props) => {
 				dispatch(change(FORM.SALON, 'openingHours', openingHours?.sort(orderDaysInWeek)))
 			}
 		}
-	}, [dispatch, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
 	useEffect(() => {
 		if (salonID > 0) {
@@ -240,7 +241,8 @@ const SalonPage: FC<Props> = (props) => {
 			// creating new salon clear salon store
 			dispatch(emptySalon())
 		}
-	}, [dispatch, salonID])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [salonID])
 
 	const fetchData = async (salonData: ISalonPayload & ILoadingAndFailure) => {
 		if (!isEmpty(salonData.data)) {
@@ -292,6 +294,7 @@ const SalonPage: FC<Props> = (props) => {
 	// init forms
 	useEffect(() => {
 		fetchData(salon)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salon])
 
 	const handleSubmit = async (data: any) => {

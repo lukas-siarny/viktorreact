@@ -19,7 +19,7 @@ interface IGetSalons {
 	payload: ISalonsPayload
 }
 
-interface IGetSalon {
+export interface IGetSalon {
 	type: SALON
 	payload: ISalonPayload
 }

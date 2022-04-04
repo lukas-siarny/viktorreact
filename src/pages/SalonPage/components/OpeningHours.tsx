@@ -2,11 +2,10 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, Fields } from 'redux-form'
 import { Button } from 'antd'
-import { isEmpty, get } from 'lodash'
+import { isEmpty } from 'lodash'
 import i18next from 'i18next'
 
 // components
-import cx from 'classnames'
 import DeleteButton from '../../../components/DeleteButton'
 
 // atoms

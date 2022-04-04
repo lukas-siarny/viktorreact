@@ -19,9 +19,10 @@ import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PER
 // reducers
 import { RootState } from '../../reducers'
 import { emptySalon, getSalon, ISalonPayload } from '../../reducers/salons/salonsActions'
+import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 // types
-import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, ILoadingAndFailure } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -29,7 +30,6 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import showNotifications from '../../utils/tsxHelpers'
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
 import { getPrefixCountryCode } from '../../utils/helper'
 
 type Props = {
@@ -38,13 +38,13 @@ type Props = {
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
 // TODO - check how to get nested interface
-type IOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-type ITimeRanges = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours'][0]['timeRanges']
+type TimeRanges = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours'][0]['timeRanges']
 type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
-const week: IOpeningHours = [
+const week: OpeningHours = [
 	{ day: DAY.MONDAY, timeRanges: [] as never },
 	{ day: DAY.TUESDAY, timeRanges: [] as never },
 	{ day: DAY.WEDNESDAY, timeRanges: [] as never },
@@ -68,19 +68,19 @@ const orderDaysInWeek = (a: any, b: any) => {
 }
 
 // create options for filed array based on length of week
-const initOpeningHours = (openingHours: IOpeningHours | undefined, sameOpenHoursOverWeek: boolean, openOverWeekend: boolean): IOpeningHours => {
-	let workWeek: IOpeningHours = [...week]
+const initOpeningHours = (openingHours: OpeningHours | undefined, sameOpenHoursOverWeek: boolean, openOverWeekend: boolean): OpeningHours => {
+	let workWeek: OpeningHours = [...week]
 	if (openOverWeekend) {
 		// add weekend days
 		workWeek = [...week, { day: DAY.SATURDAY, timeRanges: [] as never }, { day: DAY.SUNDAY, timeRanges: [] as never }]
-		workWeek = unionBy(openingHours, workWeek, 'day') as IOpeningHours
+		workWeek = unionBy(openingHours, workWeek, 'day') as OpeningHours
 	} else {
 		// remove weekend days
 		workWeek = unionBy(
 			openingHours?.filter((openingHour) => openingHour?.day !== DAY.SUNDAY && openingHour?.day !== DAY.SATURDAY),
 			workWeek,
 			'day'
-		) as IOpeningHours
+		) as OpeningHours
 	}
 	if (sameOpenHoursOverWeek) {
 		// filter all work days
@@ -91,7 +91,7 @@ const initOpeningHours = (openingHours: IOpeningHours | undefined, sameOpenHours
 				openingHour.day !== DAY.WEDNESDAY &&
 				openingHour.day !== DAY.THURSDAY &&
 				openingHour.day !== DAY.FRIDAY
-		) as IOpeningHours
+		) as OpeningHours
 		// add monday to friday field
 		workWeek?.splice(0, 0, {
 			day: MONDAY_TO_FRIDAY as DAY,
@@ -101,7 +101,7 @@ const initOpeningHours = (openingHours: IOpeningHours | undefined, sameOpenHours
 	return workWeek
 }
 
-const checkWeekend = (openingHours: IOpeningHours | undefined): boolean => {
+const checkWeekend = (openingHours: OpeningHours | undefined): boolean => {
 	let result = false
 	if (openingHours) {
 		// eslint-disable-next-line consistent-return
@@ -114,8 +114,8 @@ const checkWeekend = (openingHours: IOpeningHours | undefined): boolean => {
 	return result
 }
 
-const getDayTimeRanges = (openingHours: IOpeningHours, day?: DAY) => {
-	let timeRanges: ITimeRanges | [] = []
+const getDayTimeRanges = (openingHours: OpeningHours, day?: DAY) => {
+	let timeRanges: TimeRanges | [] = []
 	if (openingHours) {
 		// eslint-disable-next-line consistent-return,no-restricted-syntax
 		for (const openingHour of openingHours) {
@@ -131,12 +131,12 @@ const getDayTimeRanges = (openingHours: IOpeningHours, day?: DAY) => {
 	return timeRanges
 }
 
-const equals = (ref: ITimeRanges, comp: ITimeRanges): boolean => JSON.stringify(ref) === JSON.stringify(comp)
+const equals = (ref: TimeRanges, comp: TimeRanges): boolean => JSON.stringify(ref) === JSON.stringify(comp)
 
-const checkSameOpeningHours = (openingHours: IOpeningHours | undefined): boolean => {
+const checkSameOpeningHours = (openingHours: OpeningHours | undefined): boolean => {
 	if (openingHours) {
 		const checks: boolean[] = []
-		let referenceTimeRanges: ITimeRanges
+		let referenceTimeRanges: TimeRanges
 		openingHours.forEach((openingHour, index) => {
 			if (openingHour?.day !== DAY.SUNDAY && openingHour?.day !== DAY.SATURDAY) {
 				// take reference
@@ -154,13 +154,11 @@ const checkSameOpeningHours = (openingHours: IOpeningHours | undefined): boolean
 	return false
 }
 
-const createSameOpeningHours = (openingHours: IOpeningHours, sameOpenHoursOverWeek: boolean, openOverWeekend: boolean) => {
+const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWeek: boolean, openOverWeekend: boolean) => {
 	if (sameOpenHoursOverWeek && openingHours) {
-		const result: IOpeningHours = [] as any
+		const result: OpeningHours = [] as any
 		week.forEach((day) => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			result.push({
+			result?.push({
 				day: day?.day,
 				timeRanges: openingHours?.[0]?.timeRanges || ([] as any)
 			})
@@ -169,9 +167,7 @@ const createSameOpeningHours = (openingHours: IOpeningHours, sameOpenHoursOverWe
 			// add weekend
 			openingHours.forEach((openingHour) => {
 				if (openingHour.day === DAY.SUNDAY || openingHour.day === DAY.SATURDAY) {
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
-					result.push({
+					result?.push({
 						day: openingHour.day,
 						timeRanges: openingHour.timeRanges
 					})
@@ -219,43 +215,22 @@ const SalonPage: FC<Props> = (props) => {
 		} else {
 			// set to init values
 			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: IOpeningHours = initOpeningHours(salon.data?.salon?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
-			if (openOverWeekendFormValue) {
-				dispatch(
-					change(FORM.SALON, 'openingHours', [
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore
-						...openingHours,
+			const openingHours: OpeningHours = initOpeningHours(salon.data?.salon?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
+			if (openOverWeekendFormValue && openingHours) {
+				const updatedOpeningHours = unionBy(
+					[
 						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
 						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
-					])
-				)
+					],
+					openingHours,
+					'day'
+				)?.sort(orderDaysInWeek)
+				dispatch(change(FORM.SALON, 'openingHours', updatedOpeningHours))
 			} else {
 				dispatch(change(FORM.SALON, 'openingHours', openingHours?.sort(orderDaysInWeek)))
 			}
 		}
-	}, [dispatch, sameOpenHoursOverWeekFormValue])
-
-	useEffect(() => {
-		if (!isEmpty(formValues) && formValues?.openingHours && formValues?.openingHours.length > 0) {
-			if (openOverWeekendFormValue) {
-				// if check open over weekend add saturday and sunday
-				const newOpeningHours = formValues?.openingHours?.sort(orderDaysInWeek)
-				dispatch(
-					change(FORM.SALON, 'openingHours', [
-						...newOpeningHours,
-						// check if weekend open hours exist
-						{ day: DAY.SATURDAY, timeRanges: checkWeekend(salon.data?.salon?.openingHours) ? getDayTimeRanges(salon.data?.salon?.openingHours, DAY.SATURDAY) : [] },
-						{ day: DAY.SUNDAY, timeRanges: checkWeekend(salon.data?.salon?.openingHours) ? getDayTimeRanges(salon.data?.salon?.openingHours, DAY.SUNDAY) : [] }
-					])
-				)
-			} else {
-				// remove weekend days from field array
-				const newValues = remove(formValues.openingHours, (openingHour: any) => openingHour?.day !== DAY.SATURDAY && openingHour.day !== DAY.SUNDAY)
-				dispatch(change(FORM.SALON, 'openingHours', newValues?.sort(orderDaysInWeek)))
-			}
-		}
-	}, [dispatch, openOverWeekendFormValue])
+	}, [dispatch, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
 	useEffect(() => {
 		if (salonID > 0) {
@@ -267,14 +242,12 @@ const SalonPage: FC<Props> = (props) => {
 		}
 	}, [dispatch, salonID])
 
-	const fetchData = async (salonData: ISalonPayload) => {
+	const fetchData = async (salonData: ISalonPayload & ILoadingAndFailure) => {
 		if (!isEmpty(salonData.data)) {
 			// init data for existing salon
 			const openOverWeekend: boolean = checkWeekend(salonData.data?.salon?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.salon?.openingHours)
-			const openingHours: IOpeningHours = initOpeningHours(salonData.data?.salon?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(
-				orderDaysInWeek
-			) as IOpeningHours
+			const openingHours: OpeningHours = initOpeningHours(salonData.data?.salon?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 			dispatch(
 				initialize(FORM.SALON, {
 					...salonData.data?.salon,
@@ -296,7 +269,7 @@ const SalonPage: FC<Props> = (props) => {
 					userID: { label: salonData.data?.salon?.user?.name, value: salonData.data?.salon?.user?.id }
 				})
 			)
-		} else {
+		} else if (!salon?.isLoading) {
 			const { countriesPhonePrefixPayload } = await dispatch(getCountries()) // save data to redux and return prefix data
 			const phonePrefixCountryCode = getPrefixCountryCode(
 				map(countriesPhonePrefixPayload?.data, (item) => item.code),
@@ -324,7 +297,7 @@ const SalonPage: FC<Props> = (props) => {
 	const handleSubmit = async (data: any) => {
 		try {
 			setSubmitting(true)
-			const openingHours: IOpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as IOpeningHours
+			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 			const salonData: SalonPatch = {
 				imageIDs: map(data.gallery, (image) => image?.id ?? image?.uid),
 				logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
@@ -347,7 +320,7 @@ const SalonPage: FC<Props> = (props) => {
 				socialLinkWebPage: data.socialLinkWebPage,
 				payByCard: data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
-				userID: data?.user?.id || data?.userID?.value
+				userID: data?.user?.id || data?.userID?.value || authUser?.data?.id
 			}
 			if (salonID > 0) {
 				// update existing salon
@@ -357,7 +330,7 @@ const SalonPage: FC<Props> = (props) => {
 				// create new salon
 				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData)
 				if (result?.data?.salon?.id) {
-					history.push(t('paths:salon/{{salonID}}', { salonID: result?.data?.salon?.id }))
+					history.push(t('paths:salons/{{salonID}}', { salonID: result?.data?.salon?.id }))
 				}
 			}
 		} catch (error: any) {
@@ -422,7 +395,10 @@ const SalonPage: FC<Props> = (props) => {
 					visible={visible}
 					salonID={salon?.data?.salon?.id || 0}
 					openingHoursNote={salon?.data?.salon?.openingHoursNote}
-					onClose={() => setVisible(false)}
+					onClose={() => {
+						setVisible(false)
+						dispatch(getSalon(salonID))
+					}}
 				/>
 				<div className={'content-footer'}>
 					<Row className={`${rowClass} w-full`}>

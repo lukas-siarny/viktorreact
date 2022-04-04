@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { submit } from 'redux-form'
+import { initialize, submit } from 'redux-form'
 import { useDispatch } from 'react-redux'
 import { compose } from 'redux'
 
 // components
+import { map } from 'lodash'
 import CreateUserAccountForm from './components/CreateUserAccountForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, ILoadingAndFailure } from '../../types/interfaces'
 
 // utils
 import { history } from '../../utils/history'
-import { FORM, PERMISSION } from '../../utils/enums'
+import { FORM, LANGUAGE, PERMISSION } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { getRoles } from '../../reducers/roles/rolesActions'
 import { getCountries } from '../../reducers/enumerations/enumerationActions'
+import { getPrefixCountryCode } from '../../utils/helper'
+import { ISalonPayload } from '../../reducers/salons/salonsActions'
 
 const CreateUserAccountPage = () => {
 	const [t] = useTranslation()
@@ -39,10 +42,20 @@ const CreateUserAccountPage = () => {
 		]
 	}
 
-	useEffect(() => {
+	const fetchData = async () => {
+		const { countriesPhonePrefixPayload } = await dispatch(getCountries()) // save data to redux and return prefix data
+		const phonePrefixCountryCode = getPrefixCountryCode(
+			map(countriesPhonePrefixPayload?.data, (item) => item.code),
+			LANGUAGE.SK.toUpperCase()
+		)
+		dispatch(initialize(FORM.ADMIN_CREATE_USER, { phonePrefixCountryCode }))
 		dispatch(getRoles())
 		dispatch(getCountries())
-	}, [dispatch])
+	}
+
+	useEffect(() => {
+		fetchData()
+	}, [])
 
 	const createUser = async (data: any) => {
 		try {

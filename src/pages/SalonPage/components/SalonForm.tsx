@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from 'react'
+import React, { FC, useCallback } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row } from 'antd'

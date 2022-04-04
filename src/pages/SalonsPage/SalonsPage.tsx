@@ -165,7 +165,7 @@ const SalonsPage = () => {
 						<SalonsFilter
 							createSalon={() => {
 								if (checkPermissions(editPermissions)) {
-									history.push(t('paths:salon/create'))
+									history.push(t('paths:salons/create'))
 								} else {
 									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
 								}
@@ -183,7 +183,7 @@ const SalonsPage = () => {
 							onRow={(record) => ({
 								onClick: () => {
 									if (checkPermissions(editPermissions)) {
-										history.push(t('paths:salon/{{salonID}}', { salonID: record.id }))
+										history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
 									} else {
 										showNotifications(
 											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, Fields } from 'redux-form'
 import { Button } from 'antd'
 import { isEmpty } from 'lodash'
-import i18next from 'i18next'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
@@ -13,17 +12,10 @@ import SwitchField from '../../../atoms/SwitchField'
 import TimeRangeField from '../../../atoms/TimeRangeField'
 
 // helpers
-import { translateDayName } from '../../../utils/helper'
+import { translateDayName, validationRequired } from '../../../utils/helper'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon-16.svg'
-
-const validateTimeRangeField = (value: string) => {
-	if (!value) {
-		return i18next.t('loc:Toto pole je povinné')
-	}
-	return undefined
-}
 
 const TimeRangesComponent = (param: any) => {
 	const [t] = useTranslation()
@@ -38,7 +30,7 @@ const TimeRangesComponent = (param: any) => {
 				allowClear
 				size={'small'}
 				itemClassName={'m-0'}
-				validate={validateTimeRangeField}
+				validate={validationRequired}
 			/>
 			<DeleteButton className={'ml-1 bg-red-100'} onClick={() => param.fields.remove(index)} onlyIcon noConfirm smallIcon size={'small'} />
 		</div>

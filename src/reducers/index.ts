@@ -12,6 +12,7 @@ import rolesReducer from './roles/rolesReducer'
 import categoriesReducer from './categories/categoriesReducer'
 import serviceReducer from './services/serviceReducer'
 import salonsReducer from './salons/salonsReducer'
+import customerReducer from './customers/customerReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -20,7 +21,8 @@ export const REDUCER_KEYS = {
 	ROLES: 'ROLES',
 	CATEGORIES: 'CATEGORIES',
 	SERVICE: 'SERVICE',
-	SALONS: 'SALONS'
+	SALONS: 'SALONS',
+	CUSTOMERS: 'CUSTOMERS'
 }
 
 const rootReducer = combineReducers({
@@ -72,6 +74,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		serviceReducer
+	),
+	customers: persistReducer(
+		{
+			key: REDUCER_KEYS.CUSTOMERS,
+			storage: storageSession
+		},
+		customerReducer
 	)
 })
 

@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { map } from 'lodash'
 
 // components
 import ServiceForm from './components/ServiceForm'
@@ -25,9 +26,9 @@ const ServiceCreatePage = () => {
 				priceFrom: values.priceFrom,
 				priceTo: values.priceTo,
 				salonID: values.salonID,
-				categoryID: values.categorySecondLevel
+				categoryID: values.categorySecondLevel,
 				// employeeIDs
-				// imageIDs
+				imageIDs: map(values?.gallery, (image) => image.id)
 			}
 
 			await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)

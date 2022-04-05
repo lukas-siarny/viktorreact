@@ -8,14 +8,14 @@ import { isEmpty } from 'lodash'
 import DeleteButton from '../../../components/DeleteButton'
 
 // atoms
+import SwitchField from '../../../atoms/SwitchField'
 import TimeRangeField from '../../../atoms/TimeRangeField'
 
 // helpers
-import { translateDayName } from '../../../utils/helper'
+import { translateDayName, validationRequired } from '../../../utils/helper'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon-16.svg'
-import SwitchField from '../../../atoms/SwitchField'
 
 const TimeRangesComponent = (param: any) => {
 	const [t] = useTranslation()
@@ -30,6 +30,7 @@ const TimeRangesComponent = (param: any) => {
 				allowClear
 				size={'small'}
 				itemClassName={'m-0'}
+				validate={validationRequired}
 			/>
 			<DeleteButton className={'ml-1 bg-red-100'} onClick={() => param.fields.remove(index)} onlyIcon noConfirm smallIcon size={'small'} />
 		</div>
@@ -63,7 +64,7 @@ const OpeningHours = (param: any) => {
 				const value = fields.get(index)
 				return (
 					<div key={field} className={'mt-2'}>
-						<div className='text-gray-900 font-semibold text-base'>
+						<div className={'text-gray-900 font-semibold text-base'}>
 							{translateDayName(value?.day)} {isEmpty(value?.timeRanges) ? ` - ${t('loc:Zatvorené')}` : undefined}
 						</div>
 						<FieldArray component={TimeRangesComponent} name={`${field}.timeRanges`} />

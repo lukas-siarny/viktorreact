@@ -54,7 +54,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 								</Menu.Item>
 							) : undefined}
 
-							{checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING]) ? (
+							{checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]) ? (
 								<Menu.Item key={PAGE.SALONS} onClick={() => history.push(t('paths:salons'))} icon={<ThumbnailIcon />}>
 									{t('loc:Salóny')}
 								</Menu.Item>

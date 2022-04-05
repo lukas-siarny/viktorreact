@@ -555,3 +555,17 @@ export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsI
 	})
 	return [defaultLanguage, ...otherLanguages]
 }
+
+type SelectDataItem = {
+	id: number
+	children?: any
+	name: string
+}
+
+export const getSelectOptionsFromData = (data: SelectDataItem[] | null) => {
+	if (!data) return []
+
+	return map(data, (item) => {
+		return { ...item, label: item.name, value: item.id, key: item.id, children: item.children }
+	})
+}

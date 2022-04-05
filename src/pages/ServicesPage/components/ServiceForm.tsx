@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { FieldArray, InjectedFormProps, reduxForm, Field, isPristine } from 'redux-form'
@@ -23,6 +23,7 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 // import ProductDetailLocalizations from './ProductDetailLocalizations'
 // import ProductPrices from './ProductPrices'
 import DeleteButton from '../../../components/DeleteButton'
+import CategoryFields from './CategoryFields'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -78,9 +79,11 @@ const ServiceForm = (props: Props) => {
 
 	const variableDuration = form?.values?.variableDuration
 	const variablePrice = form?.values?.variablePrice
+
 	return (
 		<Spin tip={STRINGS(t).loading} spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+				<CategoryFields />
 				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} />
 				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
 				<Field

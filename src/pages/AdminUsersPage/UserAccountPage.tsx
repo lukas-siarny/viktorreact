@@ -142,35 +142,37 @@ const UserAccountPage: FC<Props> = (props) => {
 			</Row>
 			<div className='content-body small'>
 				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(get(userAccountDetail, 'data.company'))} />
-				<Row className={`${rowClass} mx-9`}>
-					{showDeleteBtn ? (
-						<DeleteButton
-							className={'mt-2 mb-2 w-1/3'}
-							onConfirm={deleteUser}
-							entityName={t('loc:používateľa')}
-							type={'default'}
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
-					) : undefined}
-					<Button
-						type={'primary'}
-						block
-						size={'middle'}
-						className={'noti-btn m-regular mt-2 mb-2 w-1/3'}
-						htmlType={'submit'}
-						onClick={() => {
-							if (checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
-								dispatch(submit(FORM.USER_ACCOUNT))
-							} else {
-								showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-							}
-						}}
-						disabled={submitting}
-						loading={submitting}
-					>
-						{t('loc:Uložiť')}
-					</Button>
-				</Row>
+				<div className={'content-footer'}>
+					<Row className={rowClass}>
+						{showDeleteBtn ? (
+							<DeleteButton
+								className={'w-1/3'}
+								onConfirm={deleteUser}
+								entityName={t('loc:používateľa')}
+								type={'default'}
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							/>
+						) : undefined}
+						<Button
+							type={'primary'}
+							block
+							size={'middle'}
+							className={'noti-btn m-regular w-1/3'}
+							htmlType={'submit'}
+							onClick={() => {
+								if (checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
+									dispatch(submit(FORM.USER_ACCOUNT))
+								} else {
+									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
+								}
+							}}
+							disabled={submitting}
+							loading={submitting}
+						>
+							{t('loc:Uložiť')}
+						</Button>
+					</Row>
+				</div>
 			</div>
 		</>
 	)

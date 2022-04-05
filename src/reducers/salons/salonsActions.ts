@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import { NumberParam } from 'use-query-params'
 import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
@@ -19,7 +18,7 @@ interface IGetSalons {
 	payload: ISalonsPayload
 }
 
-interface IGetSalon {
+export interface IGetSalon {
 	type: SALON
 	payload: ISalonPayload
 }
@@ -85,3 +84,7 @@ export const getSalon =
 			console.error(err)
 		}
 	}
+
+export const emptySalon = (): ThunkResult<Promise<void>> => async (dispatch) => {
+	dispatch({ type: SALON.SALON_LOAD_DONE, payload: { data: null } })
+}

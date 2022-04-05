@@ -1,13 +1,12 @@
 import React, { PureComponent, ReactNode } from 'react'
 import { FormAction, WrappedFieldProps } from 'redux-form'
 import cx from 'classnames'
-import { debounce, filter, find, get, isArray, isEmpty, isNil, isString, last, map, size as length, take } from 'lodash'
+import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, take } from 'lodash'
 
 // ant
-import { Button, Divider, Empty, Form, Select, Spin, Typography } from 'antd'
+import { Button, Divider, Empty, Form, Select, Spin } from 'antd'
 import { SelectProps } from 'antd/lib/select'
 import { FormItemProps } from 'antd/lib/form/FormItem'
-import i18next from 'i18next'
 import { createSlug, formFieldID } from '../utils/helper'
 // icons
 import { ReactComponent as ArrowIcon } from '../assets/icons/select-arrow-icon.svg'
@@ -20,7 +19,7 @@ import { FIELD_MODE } from '../utils/enums'
 import { ReactComponent as LoadingIcon } from '../assets/icons/loading-icon.svg'
 
 const { Item } = Form
-const { Option, OptGroup } = Select
+const { Option } = Select
 
 type Action = {
 	title: string

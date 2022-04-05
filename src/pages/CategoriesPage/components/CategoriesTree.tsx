@@ -206,6 +206,7 @@ const CategoriesTree = () => {
 
 	useEffect(() => {
 		treeData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categories])
 
 	const onDrop = async (droppedData: any) => {

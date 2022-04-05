@@ -58,7 +58,25 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
-export interface IServiceForm {}
+interface GalleryItem {
+	id: number
+}
+
+export interface IServiceForm {
+	name: string
+	description: string
+	salonID: number
+	durationFrom: number
+	durationTo: number
+	variableDuration: boolean
+	priceFrom: number
+	priceTo: number
+	variablePrice: boolean
+	gallery: GalleryItem[]
+	categoryRoot: number
+	categoryFirstLevel: number
+	categorySecondLevel: number
+}
 
 export interface IRegistrationForm {
 	email: string

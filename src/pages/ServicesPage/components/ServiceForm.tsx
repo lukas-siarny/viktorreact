@@ -130,7 +130,6 @@ const ServiceForm = (props: Props) => {
 				</Row>
 				<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
 				<Divider />
-
 				<Row gutter={8}>
 					<Col span={variablePrice ? 12 : 24}>
 						<Field
@@ -144,7 +143,6 @@ const ServiceForm = (props: Props) => {
 							size={'large'}
 						/>
 					</Col>
-
 					{variablePrice && (
 						<Col span={12}>
 							<Field
@@ -161,9 +159,7 @@ const ServiceForm = (props: Props) => {
 					)}
 				</Row>
 				<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
-
 				<Divider />
-
 				<Field
 					className='m-0'
 					component={ImgUploadField}
@@ -174,61 +170,6 @@ const ServiceForm = (props: Props) => {
 					required
 					maxCount={10}
 				/>
-
-				{/* {
-  "name": "Služba 1", 				DONE
-  "description": "some text",		DONE
-  "durationFrom": 10,				DONE
-  "durationTo": 10,					DONE
-  "priceFrom": 10,					DONE
-  "priceTo": 10,					DONE
-  "salonID": 1,
-  "categoryID": 1,
-  "imageIDs": [						DONE
-    1
-  ]
-} */}
-				{/* <h2>{t('loc:Všeobecné údaje')}</h2>
-				<FieldArray key='productLocalization' name='productLocalization' component={ProductDetailLocalizations} />
-				<h2>{t('loc:Doplňujúce údaje')}</h2>
-				<Field component={SelectField} placeholder={t('loc:Vyberte kategóriu')} name='category' options={PRODUCT_CATEGORY_OPTIONS} label={t('loc:Kategória')} required />
-				<Field
-					className='m-0'
-					component={SignedImageUploadField}
-					name='gallery'
-					label={t('loc:Fotogaléria')}
-					sighUrl='/api/admin/upload/sign'
-					multiple
-					required
-					maxCount={10}
-				/>
-				<Divider />
-				<h2>{t('loc:Cena')}</h2>
-				<FieldArray key='priceVariants' name='priceVariants' component={ProductPrices} />
-				<Row className='bg-gray-100 mt-6 -mb-4 -ml-4 -mr-4 px-4 py-3 sticky bottom-0 rounded-b-md' id={'content-footer-container'}>
-					<Col span={12} className={'text-left'}>
-						{productID ? (
-							<DeleteButton
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								onConfirm={onConfirmDelete}
-								entityName={t('loc:produkt')}
-							/>
-						) : null}
-					</Col>
-
-					<Col span={12} className={'text-right'}>
-						<Button
-							type={'primary'}
-							className={'b-btn'}
-							htmlType={'submit'}
-							icon={productID ? <EditIcon /> : <CreateIcon />}
-							disabled={submitting || isPristineForm}
-							loading={submitting}
-						>
-							{productID ? STRINGS(t).save(t('loc:produkt')) : STRINGS(t).createRecord(t('loc:produkt'))}
-						</Button>
-					</Col>
-				</Row> */}
 				<Row className='bg-notino-white mt-3 px-3 py-3 sticky bottom-0' id={'content-footer-container'}>
 					<Col span={12} className={'text-left'}>
 						{serviceID ? (
@@ -239,7 +180,6 @@ const ServiceForm = (props: Props) => {
 							/>
 						) : null}
 					</Col>
-
 					<Col span={12} className={'text-right'}>
 						<Button
 							type={'primary'}

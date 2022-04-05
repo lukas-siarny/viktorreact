@@ -6,7 +6,6 @@ import { compose } from 'redux'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 // components
 import CategoriesTree from './components/CategoriesTree'
@@ -27,7 +26,6 @@ const CategoriesPage = () => {
 
 	useEffect(() => {
 		dispatch(getCategories())
-		dispatch(getCountries())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 

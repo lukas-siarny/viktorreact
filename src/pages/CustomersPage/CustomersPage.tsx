@@ -22,7 +22,6 @@ import { checkPermissions, withPermissions } from '../../utils/Permissions'
 // reducers
 import { RootState } from '../../reducers'
 import { getCustomers } from '../../reducers/customers/customerActions'
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 // types
 import { IBreadcrumbs, ISearchFilter } from '../../types/interfaces'
@@ -48,7 +47,6 @@ const CustomersPage = () => {
 	})
 
 	useEffect(() => {
-		dispatch(getCountries())
 		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search, salonID: query.salonID }))
 		dispatch(getCustomers(query.page, query.limit, query.order, { search: query.search, salonID: query.salonID }))
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])

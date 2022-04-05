@@ -31,7 +31,7 @@ import { getSalons } from '../../../reducers/salons/salonsActions'
 
 // utils
 import { scrollToFirstError } from '../../../utils/helper'
-import { FORM, NOTIFICATION_TYPE, STRINGS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 
@@ -46,7 +46,6 @@ const ServiceForm = (props: Props) => {
 	const dispatch = useDispatch()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
-	const categories = useSelector((state: RootState) => state.categories.categories)
 	const serviceLoading = useSelector((state: RootState) => state.service.services.isLoading) // update
 	const isPristineForm: boolean = useSelector((state: RootState) => isPristine(FORM.SERVICE_FORM)(state))
 	const [isRemoving, setIsRemoving] = useState(false)
@@ -60,7 +59,7 @@ const ServiceForm = (props: Props) => {
 		}
 		try {
 			setIsRemoving(true)
-			// await deleteReq(`/api/admin/products/${productID}`, undefined, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID: serviceID || -1 }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			setIsRemoving(false)
 			const url = t('paths:services')
 			history.push(url)
@@ -178,6 +177,7 @@ const ServiceForm = (props: Props) => {
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								onConfirm={onConfirmDelete}
 								entityName={t('loc:službu')}
+								permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]}
 							/>
 						) : null}
 					</Col>

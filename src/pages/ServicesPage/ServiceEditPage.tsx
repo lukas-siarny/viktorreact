@@ -1,14 +1,51 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { map } from 'lodash'
 
 // components
 import ServiceForm from './components/ServiceForm'
+
+// types
+import { IServiceForm } from '../../types/interfaces'
+
+// utils
+import { patchReq } from '../../utils/request'
+import { NOTIFICATION_TYPE } from '../../utils/enums'
+import { history } from '../../utils/history'
 
 type Props = {
 	serviceID: number
 }
 
 const ServiceEditPage = (props: Props) => {
-	return <div>edit</div>
+	const { serviceID } = props
+	const { t } = useTranslation()
+
+	const handleSubmit = async (values: IServiceForm) => {
+		try {
+			const reqData = {
+				name: values.name,
+				description: values.description,
+				durationFrom: values.durationFrom,
+				durationTo: values.durationTo,
+				priceFrom: values.priceFrom,
+				priceTo: values.priceTo,
+				salonID: values.salonID,
+				categoryID: values.categorySecondLevel,
+				// employeeIDs
+				imageIDs: map(values?.gallery, (image) => image.id)
+			}
+
+			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+
+			const url = t('paths:services')
+			history.push(url)
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
+	return <ServiceForm onSubmit={handleSubmit} serviceID={serviceID} />
 }
 
 export default ServiceEditPage

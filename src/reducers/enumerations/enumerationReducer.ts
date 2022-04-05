@@ -55,8 +55,6 @@ export default (state = initState, action: IEnumerationActions) => {
 				}
 			}
 
-		case RESET_STORE:
-			return initState
 		default:
 			return state
 	}

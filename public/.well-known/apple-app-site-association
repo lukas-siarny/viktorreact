@@ -4,11 +4,11 @@
         "details": [
             {
                 "appID": "FFZN8CA2AB.com.goodrequest.NotinoBusiness",
-                "paths": [ "/reset-password/*"]
+                "paths": [ "/reset-password"]
             },
             {
                 "appID": "FFZN8CA2AB.com.goodrequest.AuthorizationFeature",
-                "paths": [ "/reset-password/*"]
+                "paths": [ "/reset-password"]
             }
         ]
     }

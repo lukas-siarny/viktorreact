@@ -14,7 +14,7 @@
   "salons/{{salonID}}": "/salons/{{salonID}}",
   "services": "/services",
   "signup": "/signup",
-  "user-detail/{{userID}}": "/user-detail/{{userID}}",
-  "user/create": "/user/create",
-  "users": "/users"
+  "users": "/users",
+  "users/create": "/users/create",
+  "users/{{userID}}": "/users/{{userID}}"
 }

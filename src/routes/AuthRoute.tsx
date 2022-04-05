@@ -1,9 +1,9 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Redirect, RouteProps } from 'react-router-dom'
 import IdleTimer from 'react-idle-timer'
 import { Dictionary } from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // routes
 import BaseRoute from './BaseRoute'
@@ -14,7 +14,6 @@ import { RootState } from '../reducers'
 // utils
 import { isLoggedIn } from '../utils/auth'
 import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
-import { getCurrentUser } from '../reducers/users/userActions'
 
 type Props = RouteProps & {
 	layout: React.ReactNode

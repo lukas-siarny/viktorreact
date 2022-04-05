@@ -23,16 +23,14 @@ import { refreshToken } from '../reducers/users/userActions'
 import { REFRESH_TOKEN_INTERVAL, PAGE } from '../utils/enums'
 import { setIntervalImmediately } from '../utils/helper'
 
-// import SubMenuPage from '../components/SubMenuPage'
-
 // User
 import LoginPage from '../pages/LoginPage/LoginPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
-import UserAccountPage from '../pages/UserAccountPage/UserAccountPage'
-import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
-import CreateUserAccountPage from '../pages/UserAccountPage/CreateUserAccountPage'
+import UserAccountPage from '../pages/AdminUsersPage/UserAccountPage'
+import CreateUserAccountPage from '../pages/AdminUsersPage/CreateUserAccountPage'
+import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
@@ -42,7 +40,7 @@ import ServicesPage from '../pages/ServicesPage/ServicesPage'
 
 // Salons
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
-import SalonPage from '../pages/SalonPage/SalonPage'
+import SalonPage from '../pages/SalonsPage/SalonPage'
 
 // Customers
 import CustomersPage from '../pages/CustomersPage/CustomersPage'
@@ -75,14 +73,31 @@ const Routes: FC = (props) => {
 			<AuthRoute
 				{...props}
 				exact
-				path={t('paths:user-detail/{{userID}}', { userID: ':userID' })}
-				translatePathKey={t('paths:user-detail/{{userID}}', { userID: ':userID' })}
+				path={t('paths:users/create')}
+				component={CreateUserAccountPage}
+				translatePathKey={t('paths:users/create')}
+				layout={MainLayout}
+				page={PAGE.USERS}
+			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:users/{{userID}}', { userID: ':userID' })}
+				translatePathKey={t('paths:users/{{userID}}', { userID: ':userID' })}
 				component={UserAccountPage}
 				layout={MainLayout}
 				page={PAGE.USERS}
 			/>
-			<AuthRoute {...props} exact path={t('paths:user/create')} component={CreateUserAccountPage} translatePathKey={t('paths:user/create')} layout={MainLayout} />
-			<AuthRoute {...props} exact path={t('paths:my-account')} translatePathKey={t('paths:my-account')} component={UserAccountPage} layout={MainLayout} />
+			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:my-account')}
+				translatePathKey={t('paths:my-account')}
+				component={UserAccountPage}
+				layout={MainLayout}
+				page={PAGE.MY_ACCOUNT}
+			/>
 			<AuthRoute {...props} exact path={t('paths:index')} component={EntryPage} translatePathKey={t('paths:index')} layout={MainLayout} />
 			<AuthRoute {...props} exact path={t('paths:home')} component={HomePage} translatePathKey={t('paths:home')} layout={MainLayout} page={PAGE.HOME} />
 			<AuthRoute
@@ -94,6 +109,7 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.ACTIVATION}
 			/>
+			<AuthRoute {...props} exact path={t('paths:salons/create')} component={SalonPage} translatePathKey={t('paths:salons/create')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				{...props}
 				exact
@@ -103,7 +119,6 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.SALONS}
 			/>
-			<AuthRoute {...props} exact path={t('paths:salons/create')} component={SalonPage} translatePathKey={t('paths:salons/create')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				{...props}
@@ -113,16 +128,6 @@ const Routes: FC = (props) => {
 				translatePathKey={t('paths:categories')}
 				layout={MainLayout}
 				page={PAGE.CATEGORIES}
-			/>
-			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:my-account')}
-				component={UserAccountPage}
-				translatePathKey={t('paths:my-account')}
-				layout={MainLayout}
-				page={PAGE.MY_ACCOUNT}
 			/>
 			<AuthRoute
 				{...props}

@@ -183,13 +183,13 @@ const CategoriesTree = () => {
 
 	const treeData = () => {
 		const handledData: TreeCategories[] = []
-		forEach(categories?.data, (category: any, index) => {
+		forEach(categories?.data, (category: any, index: number) => {
 			handledData.push({
 				title: titleBuilder(
 					get(category, 'name'),
 					get(category, 'id'),
 					-1,
-					parseInt(index, 10),
+					index,
 					!!get(category, 'deletedAt'),
 					get(category, 'children'),
 					get(category, 'nameLocalizations')

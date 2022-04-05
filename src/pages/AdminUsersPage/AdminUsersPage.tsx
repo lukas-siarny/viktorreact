@@ -148,7 +148,7 @@ const AdminUsersPage = () => {
 						<AdminUsersFilter
 							createUser={() => {
 								if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE])) {
-									history.push(t('paths:user/create'))
+									history.push(t('paths:users/create'))
 								} else {
 									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
 								}
@@ -166,7 +166,7 @@ const AdminUsersPage = () => {
 							onRow={(record) => ({
 								onClick: () => {
 									if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
-										history.push(t('paths:user-detail/{{userID}}', { userID: record.id }))
+										history.push(t('paths:users/{{userID}}', { userID: record.id }))
 									} else {
 										showNotifications(
 											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],

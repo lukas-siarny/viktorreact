@@ -20,7 +20,7 @@ interface IGetCategories {
 }
 
 export interface ICategoriesPayload {
-	data: Paths.GetApiB2BAdminEnumsCategories.Responses.$200 | null
+	data: Paths.GetApiB2BAdminEnumsCategories.Responses.$200['categories'] | null
 	enumerationsOptions: IEnumerationOptions[]
 }
 

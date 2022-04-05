@@ -140,7 +140,7 @@ const ServicesPage = () => {
 								onClick: () => {
 									if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT, PERMISSION.PARTNER])) {
 										// TODO add route
-										// history.push(t('paths:user-detail/{{userID}}', { userID: record.id }))
+										// history.push(t('paths:users/{{userID}}', { userID: record.id }))
 									} else {
 										showNotifications(
 											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],

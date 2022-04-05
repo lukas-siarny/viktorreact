@@ -267,8 +267,7 @@ const SalonPage: FC<Props> = (props) => {
 					country: salonData.data?.salon?.address?.countryCode,
 					gallery: map(salonData.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
 					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null,
-					// TODO - add "|| salonData.data?.salon?.user?.email" after BE update EP
-					userID: { label: salonData.data?.salon?.user?.name, value: salonData.data?.salon?.user?.id }
+					userID: { label: salonData.data?.salon?.user?.name || salonData.data?.salon?.user?.email, value: salonData.data?.salon?.user?.id }
 				})
 			)
 		} else if (!salon?.isLoading) {

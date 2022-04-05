@@ -62,8 +62,9 @@ const UserAccountForm: FC<Props> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const onSearchUsers = useCallback(
-		(data: string) => {
-			return dispatch(getUsers(1, 100, undefined, data))
+		(searchText: string) => {
+			// roleID = 3 for PARTNER users
+			return dispatch(getUsers(1, 100, undefined, searchText, 3))
 		},
 		[dispatch]
 	)

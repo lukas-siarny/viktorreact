@@ -194,13 +194,13 @@ export const getUserAccountDetails =
 	}
 
 export const getUsers =
-	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null): ThunkResult<Promise<IUsersPayload>> =>
+	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null, roleID?: number | undefined): ThunkResult<Promise<IUsersPayload>> =>
 	// eslint-disable-next-line consistent-return
 	async (dispatch) => {
 		let payload = {} as IUsersPayload
 		try {
 			dispatch({ type: USERS.USERS_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/users/', { page: page || 1, limit, order, search })
+			const { data } = await getReq('/api/b2b/admin/users/', { page: page || 1, limit, order, search, roleID })
 
 			const usersOptions: ISelectOptionItem[] = map(data?.users, (user) => ({
 				key: user?.id,

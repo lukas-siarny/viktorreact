@@ -1,0 +1,15 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "FFZN8CA2AB.com.goodrequest.NotinoBusiness",
+                "paths": [ "/reset-password/*"]
+            },
+            {
+                "appID": "FFZN8CA2AB.com.goodrequest.AuthorizationFeature",
+                "paths": [ "/reset-password/*"]
+            }
+        ]
+    }
+}

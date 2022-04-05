@@ -15,7 +15,6 @@ type Props = {
 
 const CustomerPage = (props: Props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const { customerID } = props.computedMatch.params
 
 	// View

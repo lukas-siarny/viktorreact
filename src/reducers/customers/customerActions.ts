@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 // types
 import { ThunkResult } from '../index'
 import { CUSTOMERS } from './customerTypes'
@@ -6,7 +7,6 @@ import { Paths } from '../../types/api'
 
 // utils
 import { getReq } from '../../utils/request'
-// import { PERMISSION } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ICustomerActions = IResetStore | IGetCustomers

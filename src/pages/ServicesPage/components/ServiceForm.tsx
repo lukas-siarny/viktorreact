@@ -165,10 +165,11 @@ const ServiceForm = (props: Props) => {
 					component={ImgUploadField}
 					name='gallery'
 					label={t('loc:Referenčné obrázky')}
-					sighUrl='/api/b2b/admin/files/sign-urls'
+					signUrl='/api/b2b/admin/files/sign-urls'
 					multiple
 					required
 					maxCount={10}
+					category='SALON'
 				/>
 				<Row className='bg-notino-white mt-3 px-3 py-3 sticky bottom-0' id={'content-footer-container'}>
 					<Col span={12} className={'text-left'}>

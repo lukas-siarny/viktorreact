@@ -1,0 +1,15 @@
+{
+    "applinks": {
+        "details": [
+             {
+               "appIDs": [ "FFZN8CA2AB.com.goodrequest.NotinoBusiness", "FFZN8CA2AB.com.goodrequest.AuthorizationFeature" ],
+               "components": [
+                 {
+                    "/": "/reset-password",
+                    "comment": "Matches any URL whose path starts with /reset-password"
+                 }
+               ]
+             }
+         ]
+     }
+}

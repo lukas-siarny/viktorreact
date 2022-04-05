@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { submit } from 'redux-form'
+import { initialize, submit } from 'redux-form'
 import { useDispatch } from 'react-redux'
 import { compose } from 'redux'
 
 // components
+import { map } from 'lodash'
 import CreateUserAccountForm from './components/CreateUserAccountForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
@@ -14,13 +15,14 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // utils
 import { history } from '../../utils/history'
-import { FORM, PERMISSION } from '../../utils/enums'
+import { FORM, LANGUAGE, PERMISSION } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { getRoles } from '../../reducers/roles/rolesActions'
 import { getCountries } from '../../reducers/enumerations/enumerationActions'
+import { getPrefixCountryCode } from '../../utils/helper'
 
 const CreateUserAccountPage = () => {
 	const [t] = useTranslation()
@@ -39,10 +41,21 @@ const CreateUserAccountPage = () => {
 		]
 	}
 
-	useEffect(() => {
+	const fetchData = async () => {
+		const { countriesPhonePrefixPayload } = await dispatch(getCountries()) // save data to redux and return prefix data
+		const phonePrefixCountryCode = getPrefixCountryCode(
+			map(countriesPhonePrefixPayload?.data, (item) => item.code),
+			LANGUAGE.SK.toUpperCase()
+		)
+		dispatch(initialize(FORM.ADMIN_CREATE_USER, { phonePrefixCountryCode }))
 		dispatch(getRoles())
 		dispatch(getCountries())
-	}, [dispatch])
+	}
+
+	useEffect(() => {
+		fetchData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	const createUser = async (data: any) => {
 		try {
@@ -74,7 +87,7 @@ const CreateUserAccountPage = () => {
 						type={'primary'}
 						block
 						size={'middle'}
-						className={`noti-btn m-regular mb-2 w-1/3`}
+						className={'noti-btn m-regular mb-2 w-1/3'}
 						htmlType={'submit'}
 						onClick={() => {
 							dispatch(submit(FORM.ADMIN_CREATE_USER))

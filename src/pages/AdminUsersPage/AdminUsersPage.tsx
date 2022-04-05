@@ -27,8 +27,6 @@ import { RootState } from '../../reducers'
 import { IBreadcrumbs } from '../../types/interfaces'
 import showNotifications from '../../utils/tsxHelpers'
 
-type Props = {}
-
 type Columns = ColumnsType<any>
 
 const AdminUsersPage = () => {

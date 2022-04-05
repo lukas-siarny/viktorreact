@@ -1,7 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 
 import { forEach, includes } from 'lodash'
 import cx from 'classnames'
@@ -41,24 +40,19 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 		[className]
 	)
 
-	// const userSettings = useSelector((state: RootState) => state.user.settings)
 	const dispatch = useDispatch()
-	const [t] = useTranslation()
 
 	const onChange = useCallback(
 		(page: number, pageSize?: number | undefined) => {
 			if (props.pagination && props.pagination.onChange) {
 				props.pagination.onChange(page, pageSize)
 			}
-			// if (pageSize && userSettings.data?.pagination !== pageSize) {
-			// dispatch(updateUserSettings({ pagination: pageSize }))
-			// }
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[props.pagination, dispatch]
 	)
 
 	useEffect(() => {
-		// NOTE: fix TP-1909
 		forEach(document.getElementsByClassName('$textColor-notino-black'), (item) => {
 			const selectBox = item.getElementsByClassName('ant-pagination-options-size-changer')?.[0]
 			selectBox.addEventListener('click', onClickOptionSizeChanger)

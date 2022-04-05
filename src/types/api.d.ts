@@ -302,6 +302,13 @@ declare namespace Paths {
                         street?: string;
                         countryCode?: string;
                     };
+                    salon: {
+                        id: number;
+                        name: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
                 pagination: {
                     limit: number;
@@ -351,6 +358,9 @@ declare namespace Paths {
                         id: number;
                         name?: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -403,6 +413,8 @@ declare namespace Paths {
                         }[];
                         deletedAt?: string; // date-time
                     }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 }[];
             }
@@ -460,6 +472,8 @@ declare namespace Paths {
                         }[];
                         deletedAt?: string; // date-time
                     }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
             }
@@ -492,6 +506,9 @@ declare namespace Paths {
                     currencyCode: string;
                     flag: string;
                     phonePrefix: string;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -516,6 +533,9 @@ declare namespace Paths {
                 currencies: {
                     code: string;
                     symbol: string;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -544,6 +564,9 @@ declare namespace Paths {
                         id: number;
                         name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT";
                     }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -738,6 +761,7 @@ declare namespace Paths {
                     user: {
                         id: number;
                         name: string;
+                        email: string;
                     };
                     images: {
                         id: number;
@@ -812,6 +836,13 @@ declare namespace Paths {
                             name: string;
                         }[];
                     };
+                    salon: {
+                        id: number;
+                        name: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
                 pagination: {
                     limit: number;
@@ -870,6 +901,13 @@ declare namespace Paths {
                             [key: string]: any;
                         };
                     }[];
+                    salon: {
+                        id: number;
+                        name: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -891,9 +929,11 @@ declare namespace Paths {
             export type Limit = 25 | 50 | 100;
             export type Order = string;
             export type Page = number;
+            export type RoleID = number;
             export type Search = string | null;
         }
         export interface QueryParameters {
+            roleID?: Parameters.RoleID;
             search?: Parameters.Search;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
@@ -924,6 +964,9 @@ declare namespace Paths {
                         id: number;
                         name: string;
                     }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
                 pagination: {
                     limit: number;
@@ -982,6 +1025,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -1029,6 +1075,13 @@ declare namespace Paths {
                         street?: string;
                         countryCode?: string;
                     };
+                    salon: {
+                        id: number;
+                        name: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
                 pagination: {
                     limit: number;
@@ -1078,6 +1131,9 @@ declare namespace Paths {
                         id: number;
                         name?: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -1130,6 +1186,8 @@ declare namespace Paths {
                         }[];
                         deletedAt?: string; // date-time
                     }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 }[];
             }
@@ -1187,6 +1245,8 @@ declare namespace Paths {
                         }[];
                         deletedAt?: string; // date-time
                     }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
             }
@@ -1219,6 +1279,9 @@ declare namespace Paths {
                     currencyCode: string;
                     flag: string;
                     phonePrefix: string;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -1243,6 +1306,9 @@ declare namespace Paths {
                 currencies: {
                     code: string;
                     symbol: string;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -1485,6 +1551,9 @@ declare namespace Paths {
                         payByCard: boolean;
                         otherPaymentMethods?: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -1667,6 +1736,9 @@ declare namespace Paths {
                         payByCard: boolean;
                         otherPaymentMethods?: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -1723,6 +1795,13 @@ declare namespace Paths {
                             name: string;
                         }[];
                     };
+                    salon: {
+                        id: number;
+                        name: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
                 pagination: {
                     limit: number;
@@ -1781,6 +1860,13 @@ declare namespace Paths {
                             [key: string]: any;
                         };
                     }[];
+                    salon: {
+                        id: number;
+                        name: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -1815,6 +1901,9 @@ declare namespace Paths {
                     email: string;
                     fullName?: string;
                     companyName?: string;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
                 pagination: {
                     limit: number;
@@ -1873,6 +1962,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -2487,6 +2579,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -2946,6 +3041,9 @@ declare namespace Paths {
                         payByCard: boolean;
                         otherPaymentMethods?: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -3170,6 +3268,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -3267,6 +3368,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -3375,6 +3479,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -4016,6 +4123,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -4109,6 +4219,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -4162,6 +4275,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }
@@ -4270,6 +4386,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -4597,6 +4716,9 @@ declare namespace Paths {
                         payByCard: boolean;
                         otherPaymentMethods?: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -4816,6 +4938,9 @@ declare namespace Paths {
                         street: string;
                         countryCode: string;
                     };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
             }
         }

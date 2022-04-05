@@ -15,13 +15,14 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
 import { uploadFile, postReq } from '../utils/request'
 import { getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { MSG_TYPE, NOTIFICATION_TYPE } from '../utils/enums'
+import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
 
 const { Item } = Form
 
 type Props = WrappedFieldProps &
 	FormItemProps &
 	UploadProps & {
+		category: UPLOAD_IMG_CATEGORIES
 		pathToFolder: string
 		staticMode?: boolean
 		// /** Max file size in Bytes */
@@ -47,7 +48,8 @@ const ImgUploadField: FC<Props> = (props) => {
 		disabled,
 		signUrl,
 		multiple,
-		maxCount = 20
+		maxCount = 20,
+		category
 	} = props
 
 	const [t] = useTranslation()
@@ -81,7 +83,7 @@ const ImgUploadField: FC<Props> = (props) => {
 		const { uid, name, size, type } = file
 		const files = [{ name, size, mimeType: type }]
 
-		const { data } = await postReq(signUrl as any, undefined, { files })
+		const { data } = await postReq(signUrl as any, undefined, { files, category })
 		const imgData = data?.files?.[0]
 		imagesUrls.current[uid] = { uid, ...imgData }
 

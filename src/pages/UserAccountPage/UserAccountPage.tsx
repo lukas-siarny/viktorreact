@@ -142,10 +142,10 @@ const UserAccountPage: FC<Props> = (props) => {
 			</Row>
 			<div className='content-body small'>
 				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(get(userAccountDetail, 'data.company'))} />
-				<Row className={rowClass}>
+				<Row className={`${rowClass} mx-9`}>
 					{showDeleteBtn ? (
 						<DeleteButton
-							className={`mt-2 mb-2 w-1/3`}
+							className={'mt-2 mb-2 w-1/3'}
 							onConfirm={deleteUser}
 							entityName={t('loc:používateľa')}
 							type={'default'}
@@ -156,7 +156,7 @@ const UserAccountPage: FC<Props> = (props) => {
 						type={'primary'}
 						block
 						size={'middle'}
-						className={`noti-btn m-regular mt-2 mb-2 w-1/3`}
+						className={'noti-btn m-regular mt-2 mb-2 w-1/3'}
 						htmlType={'submit'}
 						onClick={() => {
 							if (checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {

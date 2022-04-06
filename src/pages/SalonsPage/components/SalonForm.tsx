@@ -65,9 +65,11 @@ const UserAccountForm: FC<Props> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const onSearchUsers = useCallback(
-		(searchText: string) => {
+		async (searchText: string, page: number) => {
 			// roleID = 3 for PARTNER users
-			return dispatch(getUsers(1, 100, undefined, searchText, 3))
+			const { data, usersOptions } = await dispatch(getUsers(page, undefined, undefined, searchText, 3))
+			console.log(usersOptions)
+			return { pagination: data?.pagination?.page, data: usersOptions }
 		},
 		[dispatch]
 	)
@@ -221,7 +223,6 @@ const UserAccountForm: FC<Props> = (props) => {
 							validate={validateUsersSelect}
 							onSearch={onSearchUsers}
 							optionLabelProp={'label'}
-							dataSourcePath={'usersOptions'}
 							filterOption={true}
 							labelInValue
 							showSearch

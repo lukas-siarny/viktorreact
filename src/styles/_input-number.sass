@@ -1,0 +1,20 @@
+@import tailwind-variables
+@import "variables"
+
+.ant-form-item
+	.ant-input.noti-input, .noti-input-number
+		border-radius: 8px
+
+.ant-form-item:not(.ant-form-item-has-error)
+	// Normal state
+	.ant-input-number.noti-input-number
+		&.ant-input-number-focused
+			border: 1px solid $borderColor-notino-black
+			box-shadow: $field-shadow-focus-default
+		.ant-input-number-handler-wrap
+			border-radius: 8px
+		&:hover
+			border: 1px solid $borderColor-notino-grayDark
+		.ant-input-number-input
+			&::placeholder
+				color: $borderColor-notino-gray

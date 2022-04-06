@@ -24,7 +24,9 @@ export interface ICategoriesPayload {
 	enumerationsOptions: IEnumerationOptions[]
 }
 
-export const getCategories = (): ThunkResult<Promise<void>> => async (dispatch) => {
+export const getCategories = (): ThunkResult<Promise<ICategoriesPayload>> => async (dispatch) => {
+	let payload = {} as ICategoriesPayload
+
 	try {
 		dispatch({ type: CATEGORIES.CATEGORIES_LOAD_START })
 		const { data } = await getReq('/api/b2b/admin/enums/categories/', null)
@@ -33,10 +35,13 @@ export const getCategories = (): ThunkResult<Promise<void>> => async (dispatch) 
 			label: get(item, 'name'),
 			value: `${get(item, 'id')}`
 		}))
-		dispatch({ type: CATEGORIES.CATEGORIES_LOAD_DONE, payload: { data: data?.categories, enumerationsOptions } })
+		payload = { data: data?.categories, enumerationsOptions }
+		dispatch({ type: CATEGORIES.CATEGORIES_LOAD_DONE, payload })
 	} catch (err) {
 		dispatch({ type: CATEGORIES.CATEGORIES_LOAD_FAIL })
 		// eslint-disable-next-line no-console
 		console.error(err)
 	}
+
+	return payload
 }

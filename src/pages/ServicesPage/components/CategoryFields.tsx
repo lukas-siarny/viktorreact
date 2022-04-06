@@ -54,7 +54,7 @@ const CategoryFields = () => {
 				}}
 				size={'large'}
 			/>
-			{categoryRoot && (
+			{categoryRoot && categoryFirstLevelOptions.length > 0 && (
 				<Field
 					className='m-1'
 					component={SelectField}
@@ -68,7 +68,7 @@ const CategoryFields = () => {
 					size={'large'}
 				/>
 			)}
-			{categoryRoot && categoryFirstLevel && (
+			{categoryRoot && categoryFirstLevel && categorySecondLevelOptions.length > 0 && (
 				<Field
 					className='m-1'
 					component={SelectField}

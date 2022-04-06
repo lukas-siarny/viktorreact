@@ -3,7 +3,7 @@ import { map, join } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { SERVICES } from './serviceTypes'
+import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
 
@@ -67,4 +67,31 @@ export const getServices =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+	}
+
+interface IProductPayload {
+	data: Paths.GetApiB2BAdminServicesServiceId.Responses.$200 | null
+}
+
+export const getService =
+	(serviceID: number): ThunkResult<Promise<IProductPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IProductPayload
+		try {
+			dispatch({
+				type: SERVICE.SERVICE_LOAD_START
+			})
+			const { data } = await getReq('/api/b2b/admin/services/{serviceID}', { serviceID })
+			payload = { data }
+
+			dispatch({
+				type: SERVICE.SERVICE_LOAD_DONE,
+				payload
+			})
+		} catch (e) {
+			dispatch({
+				type: SERVICE.SERVICE_LOAD_FAIL
+			})
+		}
+		return payload
 	}

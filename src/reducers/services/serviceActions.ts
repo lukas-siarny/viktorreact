@@ -12,7 +12,7 @@ import { getReq } from '../../utils/request'
 // import { PERMISSION } from '../../utils/enums'
 import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
-export type IServiceActions = IResetStore | IGetServices
+export type IServiceActions = IResetStore | IGetServices | IGetService
 
 interface IGetServices {
 	type: SERVICES
@@ -29,7 +29,7 @@ interface ServicesTableData {
 }
 
 export interface IServicesPayload {
-	originalData: Paths.GetApiB2BAdminServices.Responses.$200 | null
+	data: Paths.GetApiB2BAdminServices.Responses.$200 | null
 	tableData: ServicesTableData[] | undefined
 }
 
@@ -57,7 +57,7 @@ export const getServices =
 				return tableItem
 			})
 			const payload = {
-				originalData: data,
+				data,
 				tableData
 			}
 
@@ -69,14 +69,19 @@ export const getServices =
 		}
 	}
 
-interface IProductPayload {
+interface IGetService {
+	type: SERVICE
+	payload: IServicePayload
+}
+
+export interface IServicePayload {
 	data: Paths.GetApiB2BAdminServicesServiceId.Responses.$200 | null
 }
 
 export const getService =
-	(serviceID: number): ThunkResult<Promise<IProductPayload>> =>
+	(serviceID: number): ThunkResult<Promise<IServicePayload>> =>
 	async (dispatch) => {
-		let payload = {} as IProductPayload
+		let payload = {} as IServicePayload
 		try {
 			dispatch({
 				type: SERVICE.SERVICE_LOAD_START

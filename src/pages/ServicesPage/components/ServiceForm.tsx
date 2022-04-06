@@ -46,11 +46,13 @@ const ServiceForm = (props: Props) => {
 	const dispatch = useDispatch()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
-	const serviceLoading = useSelector((state: RootState) => state.service.services.isLoading) // update
+	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
+	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
+
 	const isPristineForm: boolean = useSelector((state: RootState) => isPristine(FORM.SERVICE_FORM)(state))
 	const [isRemoving, setIsRemoving] = useState(false)
 
-	const isLoading = serviceLoading || isRemoving
+	const isLoading = serviceLoading || categoriesLoading || isRemoving
 	const submitting = false
 
 	const onConfirmDelete = async () => {

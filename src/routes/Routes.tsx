@@ -18,6 +18,7 @@ import PublicLayout from '../layouts/PublicLayout'
 
 // redux
 import { refreshToken } from '../reducers/users/userActions'
+import { getCountries } from '../reducers/enumerations/enumerationActions'
 
 // utils
 import { REFRESH_TOKEN_INTERVAL, PAGE } from '../utils/enums'
@@ -56,6 +57,9 @@ const Routes: FC = (props) => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
+		// set accessible enumeration data for whole app
+		dispatch(getCountries())
+		// repeat refreshing of tokens
 		const refreshInterval = setIntervalImmediately(() => dispatch(refreshToken()), REFRESH_TOKEN_INTERVAL)
 
 		return () => {

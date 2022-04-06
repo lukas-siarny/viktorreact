@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row } from 'antd'
@@ -14,7 +14,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 
 // utils
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
@@ -34,6 +34,8 @@ const AdminUsersPage = () => {
 	const dispatch = useDispatch()
 
 	const users = useSelector((state: RootState) => state.user.users)
+	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
+	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -46,6 +48,16 @@ const AdminUsersPage = () => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search }))
 		dispatch(getUsers(query.page, query.limit, query.order, query.search))
 	}, [dispatch, query.page, query.limit, query.search, query.order])
+
+	useEffect(() => {
+		const prefixes: { [key: string]: string } = {}
+
+		phonePrefixes.forEach((option) => {
+			prefixes[option.key] = option.label
+		})
+
+		setPrefixOptions(prefixes)
+	}, [phonePrefixes])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -99,7 +111,7 @@ const AdminUsersPage = () => {
 			sorter: false,
 			render: (value, record) => (
 				<>
-					{record?.phonePrefixCountryCode} {value}
+					{prefixOptions[record?.phonePrefixCountryCode]} {value}
 				</>
 			)
 		},

@@ -36,7 +36,9 @@ type Props = {
 	computedMatch: IComputedMatch<{ salonID: number }>
 }
 
-const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
+const visibilityPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT]
+
+const editPermissions: PERMISSION[] = [...visibilityPermissions, PERMISSION.PARTNER]
 // TODO - check how to get nested interface
 type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -373,6 +375,48 @@ const SalonPage: FC<Props> = (props) => {
 		}
 	}
 
+	const publishSalon = async (published: boolean) => {
+		if (checkPermissions(authUserPermissions, editPermissions)) {
+			if (submitting) {
+				return
+			}
+
+			setSubmitting(true)
+			try {
+				await patchReq('/api/b2b/admin/salons/{salonID}/publish', { salonID }, { publish: published })
+				dispatch(getSalon(salonID))
+			} catch (error: any) {
+				// eslint-disable-next-line no-console
+				console.error(error.message)
+			} finally {
+				setSubmitting(false)
+			}
+		} else {
+			showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
+		}
+	}
+
+	const changeVisibility = async (isVisible: boolean) => {
+		if (checkPermissions(authUserPermissions, visibilityPermissions)) {
+			if (submitting) {
+				return
+			}
+
+			setSubmitting(true)
+			try {
+				await patchReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
+				dispatch(getSalon(salonID))
+			} catch (error: any) {
+				// eslint-disable-next-line no-console
+				console.error(error.message)
+			} finally {
+				setSubmitting(false)
+			}
+		} else {
+			showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
+		}
+	}
+
 	const hideClass = cx({
 		hidden: !salonID
 	})
@@ -392,6 +436,9 @@ const SalonPage: FC<Props> = (props) => {
 					isAdmin={checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN])}
 					onSubmit={handleSubmit}
 					openNoteModal={() => setVisible(true)}
+					changeSalonVisibility={changeVisibility}
+					publishSalon={publishSalon}
+					switchDisabled={submitting}
 				/>
 				<OpenHoursNoteModal
 					visible={visible}

@@ -263,7 +263,7 @@ const SalonPage: FC<Props> = (props) => {
 					longitude: salonData.data?.salon?.address?.longitude,
 					city: salonData.data?.salon?.address?.city,
 					street: salonData.data?.salon?.address?.street,
-					zip: salonData.data?.salon?.address?.zipCode,
+					zipCode: salonData.data?.salon?.address?.zipCode,
 					country: salonData.data?.salon?.address?.countryCode,
 					gallery: map(salonData.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
 					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null,

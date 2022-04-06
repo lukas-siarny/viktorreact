@@ -19,6 +19,8 @@ import SelectField from '../../../atoms/SelectField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+
+// reducers
 import { RootState } from '../../../reducers'
 import { getSalons } from '../../../reducers/salons/salonsActions'
 
@@ -53,7 +55,7 @@ const CustomerForm: FC<Props> = (props) => {
 					<Divider className={'mb-3 mt-3'} />
 					<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
 					<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
-					<Field component={SelectField} label={t('loc:Pohlavie')} placeholder={t('loc:Vyber pohlavie')} options={genders} name={'gender'} size={'large'} />
+					<Field component={SelectField} label={t('loc:Pohlavie')} placeholder={t('loc:Vyber pohlavie')} options={genders} name={'gender'} size={'large'} allowClear />
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
 					<Field component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
@@ -69,6 +71,7 @@ const CustomerForm: FC<Props> = (props) => {
 						name={'countryCode'}
 						size={'large'}
 						loading={countries?.isLoading}
+						allowClear
 					/>
 					<Field
 						className='m-0'

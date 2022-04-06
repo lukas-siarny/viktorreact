@@ -19,7 +19,6 @@ import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PER
 // reducers
 import { RootState } from '../../reducers'
 import { emptySalon, getSalon, ISalonPayload } from '../../reducers/salons/salonsActions'
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 // types
 import { IBreadcrumbs, IComputedMatch, ILoadingAndFailure } from '../../types/interfaces'

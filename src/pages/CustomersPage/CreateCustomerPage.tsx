@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { initialize, submit } from 'redux-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
+import { map } from 'lodash'
 
 // components
-import { map } from 'lodash'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomerForm from './components/CustomerForm'
 
@@ -15,16 +15,20 @@ import { IBreadcrumbs, ICustomerForm } from '../../types/interfaces'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { FORM, LANGUAGE, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
 import { getPrefixCountryCode } from '../../utils/helper'
+
+// reducers
+import { RootState } from '../../reducers'
 
 const CreateCustomerPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
+
+	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	// View
 	const breadcrumbs: IBreadcrumbs = {
@@ -40,9 +44,8 @@ const CreateCustomerPage = () => {
 	}
 
 	const fetchData = async () => {
-		const { countriesPhonePrefixPayload } = await dispatch(getCountries()) // save data to redux and return prefix data
 		const phonePrefixCountryCode = getPrefixCountryCode(
-			map(countriesPhonePrefixPayload?.data, (item) => item.code),
+			map(countriesPhonePrefix?.data, (item) => item.code),
 			LANGUAGE.SK.toUpperCase()
 		)
 		dispatch(initialize(FORM.CUSTOMER, { phonePrefixCountryCode }))

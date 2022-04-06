@@ -104,8 +104,8 @@ export default class SelectField extends PureComponent<Props> {
 		return (
 			<Spin
 				style={{ margin: '10px', justifyContent: 'flex-start' }}
-				indicator={<LoadingIcon className={'loading-spinner text-blue-600'} />}
-				className={'flex-center'}
+				indicator={<LoadingIcon className={'loading-spinner text-notino-black'} />}
+				className={'flex-center text-notino-black'}
 				tip={'Načítavam...'}
 				spinning={this.state.fetching}
 			>
@@ -137,7 +137,6 @@ export default class SelectField extends PureComponent<Props> {
 
 				const data: any = await onSearch(value, page)
 				const dataOptions = get(data, dataSourcePath)
-
 				if (data.pagination || dataOptions) {
 					const mergedData = [...collectedData, ...dataOptions]
 					this.setState({ data: mergedData, pagination: data.pagination, fetching: false })

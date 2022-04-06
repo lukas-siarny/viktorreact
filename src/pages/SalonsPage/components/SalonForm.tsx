@@ -68,7 +68,6 @@ const UserAccountForm: FC<Props> = (props) => {
 		async (searchText: string, page: number) => {
 			// roleID = 3 for PARTNER users
 			const { data, usersOptions } = await dispatch(getUsers(page, undefined, undefined, searchText, 3))
-			console.log(usersOptions)
 			return { pagination: data?.pagination?.page, data: usersOptions }
 		},
 		[dispatch]

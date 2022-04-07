@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { FieldArray, InjectedFormProps, reduxForm, Field, isPristine } from 'redux-form'
+import { InjectedFormProps, reduxForm, Field, isPristine } from 'redux-form'
 import { Form, notification, Spin, Divider, Row, Col, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -20,8 +20,6 @@ import SwitchField from '../../../atoms/SwitchField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // components
-// import ProductDetailLocalizations from './ProductDetailLocalizations'
-// import ProductPrices from './ProductPrices'
 import DeleteButton from '../../../components/DeleteButton'
 import CategoryFields from './CategoryFields'
 

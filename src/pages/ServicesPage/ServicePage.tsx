@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { compose } from 'redux'

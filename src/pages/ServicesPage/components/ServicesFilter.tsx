@@ -47,10 +47,10 @@ const CATEGORIES = [
 ]
 
 // TODO remove after BE is finished
-const EMPLOYEES_OPTIONS = [
-	{ label: 'Zamestnanec 1 Salón 1', value: 1, key: 1 },
-	{ label: 'Zamestnanec 1 Salón 2', value: 2, key: 2 }
-]
+// const EMPLOYEES_OPTIONS = [
+// 	{ label: 'Zamestnanec 1 Salón 1', value: 1, key: 1 },
+// 	{ label: 'Zamestnanec 1 Salón 2', value: 2, key: 2 }
+// ]
 
 const ServicesFilter = (props: Props) => {
 	const { handleSubmit, total, createService } = props

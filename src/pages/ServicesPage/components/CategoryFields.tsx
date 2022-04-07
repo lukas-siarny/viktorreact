@@ -53,6 +53,7 @@ const CategoryFields = () => {
 					dispatch(clearFields(FORM.SERVICE_FORM, false, false, 'categoryFirstLevel', 'categorySecondLevel'))
 				}}
 				size={'large'}
+				required
 			/>
 			{categoryRoot && categoryFirstLevelOptions.length > 0 && (
 				<Field

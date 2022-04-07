@@ -30,10 +30,12 @@ import { RootState } from '../../../reducers'
 import { getSalons } from '../../../reducers/salons/salonsActions'
 
 // utils
-import { scrollToFirstError } from '../../../utils/helper'
+import { scrollToFirstError, validationNumberMin } from '../../../utils/helper'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
+
+const numberMin0 = validationNumberMin(0)
 
 type ComponentProps = {
 	serviceID?: number
@@ -85,7 +87,7 @@ const ServiceForm = (props: Props) => {
 		<Spin tip={STRINGS(t).loading} spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 				<CategoryFields />
-				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} />
+				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
 				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
 				<Field
 					className='m-0'
@@ -98,6 +100,7 @@ const ServiceForm = (props: Props) => {
 					onSearch={searchSalon}
 					onDidMountSearch
 					size={'large'}
+					required
 				/>
 				<Divider />
 				<Row gutter={8}>
@@ -111,6 +114,8 @@ const ServiceForm = (props: Props) => {
 							step={1}
 							maxChars={3}
 							size={'large'}
+							validate={[numberMin0]}
+							required
 						/>
 					</Col>
 
@@ -125,6 +130,8 @@ const ServiceForm = (props: Props) => {
 								step={1}
 								maxChars={3}
 								size={'large'}
+								validate={[numberMin0]}
+								required
 							/>
 						</Col>
 					)}
@@ -136,12 +143,15 @@ const ServiceForm = (props: Props) => {
 						<Field
 							component={InputNumberField}
 							label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
+							// TODO add currency
 							// placeholder={t('loc:min')}
 							name='priceFrom'
 							precision={2}
 							step={1}
 							maxChars={5}
 							size={'large'}
+							validate={[numberMin0]}
+							required
 						/>
 					</Col>
 					{variablePrice && (
@@ -149,12 +159,15 @@ const ServiceForm = (props: Props) => {
 							<Field
 								component={InputNumberField}
 								label={t('loc:Cena do')}
+								// TODO add currency
 								// placeholder={t('loc:min')}
 								name='priceTo'
 								precision={2}
 								step={1}
 								maxChars={5}
 								size={'large'}
+								validate={[numberMin0]}
+								required
 							/>
 						</Col>
 					)}
@@ -168,7 +181,6 @@ const ServiceForm = (props: Props) => {
 					label={t('loc:Referenčné obrázky')}
 					signUrl='/api/b2b/admin/files/sign-urls'
 					multiple
-					required
 					maxCount={10}
 					category='SALON'
 				/>

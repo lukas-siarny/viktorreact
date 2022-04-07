@@ -2,17 +2,17 @@
 import React from 'react'
 import { withDesign } from 'storybook-addon-designs'
 import { ComponentStory } from '@storybook/react'
-import SimpleLayout from '../../layouts/SimpleLayout'
+import PublicLayout from '../../layouts/PublicLayout'
 
 export default {
 	title: 'Layouts/SimpleLayout',
-	component: SimpleLayout,
+	component: PublicLayout,
 	decorators: [withDesign]
 }
 
-const Template: ComponentStory<typeof SimpleLayout> = (args) => (
+const Template: ComponentStory<typeof PublicLayout> = (args) => (
 	<div id='tailwind' style={{ margin: '-1rem' }}>
-		<SimpleLayout {...args}>Some content</SimpleLayout>
+		<PublicLayout {...args}>Some content</PublicLayout>
 	</div>
 )
 

@@ -5,17 +5,19 @@ import { Form } from 'antd'
 import { ComponentStory } from '@storybook/react'
 import InputField from '../../atoms/InputField'
 
+const inputDefaultProps = {
+	form: undefined,
+	error: null,
+	onBlur: () => {},
+	onChange: () => {}
+}
+
 export default {
 	title: 'Fields/Input',
 	component: InputField,
 	decorators: [withDesign],
 	args: {
-		input: {
-			form: undefined,
-			error: null,
-			onBlur: () => {},
-			onChange: () => {}
-		} as any,
+		input: inputDefaultProps,
 		placeholder: 'Placeholder',
 		meta: { touched: false },
 		size: 'large'
@@ -47,6 +49,7 @@ InputFieldRequired.args = {
 
 InputFieldFilled.args = {
 	input: {
+		...inputDefaultProps,
 		value: 'Filled text'
 	} as any
 }

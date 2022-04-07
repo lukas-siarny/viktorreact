@@ -15,7 +15,7 @@ export default {
 }
 
 const Template: ComponentStory<typeof Button> = (args) => <Button {...args}>Button</Button>
-const TemplateEmpty: ComponentStory<typeof Button> = (args) => <Button {...args} />
+// const TemplateEmpty: ComponentStory<typeof Button> = (args) => <Button {...args} />
 
 // stories
 export const ButtonPrimary = Template.bind({})
@@ -26,7 +26,7 @@ export const ButtonPrimaryDanger = Template.bind({})
 export const ButtonSecondaryDanger = Template.bind({})
 export const ButtonPrimaryLoading = Template.bind({})
 export const ButtonPrimaryIcon = Template.bind({})
-export const ButtonPrimaryIconOnly = TemplateEmpty.bind({})
+// export const ButtonPrimaryIconOnly = TemplateEmpty.bind({})
 
 // arguments
 ButtonPrimary.args = {
@@ -67,10 +67,10 @@ ButtonPrimaryIcon.args = {
 	icon: <SearchIcon />
 }
 
-ButtonPrimaryIconOnly.args = {
-	type: 'primary',
-	icon: <SearchIcon />
-}
+// ButtonPrimaryIconOnly.args = {
+// 	type: 'primary',
+// 	icon: <SearchIcon />
+// }
 
 // parameters
 ButtonPrimary.parameters = {
@@ -127,9 +127,9 @@ ButtonPrimaryIcon.parameters = {
 		url: 'https://www.figma.com/file/HL0lsNm8yCHGGCkL1c3euX/Notino-B2B-Desktop-app?node-id=90%3A1868'
 	}
 }
-ButtonPrimaryIconOnly.parameters = {
-	design: {
-		type: 'figma',
-		url: 'https://www.figma.com/file/HL0lsNm8yCHGGCkL1c3euX/Notino-B2B-Desktop-app?node-id=90%3A1868'
-	}
-}
+// ButtonPrimaryIconOnly.parameters = {
+// 	design: {
+// 		type: 'figma',
+// 		url: 'https://www.figma.com/file/HL0lsNm8yCHGGCkL1c3euX/Notino-B2B-Desktop-app?node-id=90%3A1868'
+// 	}
+// }

@@ -15,7 +15,7 @@ const Template: ComponentStory<typeof Modal> = (args) => {
 	const [showModal, setShowModal] = useState(false)
 	return (
 		<>
-			<Button className='noti-btn m-regular' size='large' onClick={() => setShowModal(true)}>
+			<Button className='noti-btn m-regular' onClick={() => setShowModal(true)}>
 				Open Modal
 			</Button>
 			<Modal {...args} visible={showModal} onOk={() => setShowModal(false)} onCancel={() => setShowModal(false)}>

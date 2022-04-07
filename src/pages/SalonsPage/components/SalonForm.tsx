@@ -154,7 +154,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							longitude: get(formValues, 'longitude'),
 							city: get(formValues, 'city'),
 							street: get(formValues, 'street'),
-							zip: get(formValues, 'zipCode'),
+							zipCode: get(formValues, 'zipCode'),
 							country: get(formValues, 'country')
 						}}
 						changeFormFieldValue={change}

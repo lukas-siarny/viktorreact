@@ -1,5 +1,5 @@
 import React, { FC, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { reset, initialize } from 'redux-form'
 import { map } from 'lodash'
 
@@ -7,14 +7,14 @@ import { map } from 'lodash'
 import RegistrationForm from './components/RegistrationForm'
 
 // utils
-import { FORM, LANGUAGE } from '../../utils/enums'
+import { FORM, LANGUAGE, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { getPrefixCountryCode } from '../../utils/helper'
 
 // interfaces
 import { IRegistrationForm } from '../../types/interfaces'
 
 // reducers
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
+import { RootState } from '../../reducers'
 
 // actions
 import { registerUser } from '../../reducers/users/userActions'
@@ -23,6 +23,7 @@ type Props = {}
 
 const RegistrationPage: FC<Props> = () => {
 	const dispatch = useDispatch()
+	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	const handleSubmit = async (values: IRegistrationForm) => {
 		try {
@@ -46,10 +47,9 @@ const RegistrationPage: FC<Props> = () => {
 		}
 	}
 
-	const fetchData = async () => {
-		const { countriesPhonePrefixPayload } = await dispatch(getCountries()) // save data to redux and return prefix data
+	const fetchData = () => {
 		const phonePrefixCountryCode = getPrefixCountryCode(
-			map(countriesPhonePrefixPayload?.data, (item) => item.code),
+			map(phonePrefixes?.data, (item) => item.code),
 			LANGUAGE.SK.toUpperCase()
 		)
 
@@ -63,7 +63,7 @@ const RegistrationPage: FC<Props> = () => {
 	useEffect(() => {
 		fetchData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, [phonePrefixes])
 
 	return <RegistrationForm onSubmit={handleSubmit} />
 }

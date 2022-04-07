@@ -33,7 +33,7 @@ export type AddressInputFields = {
 	longitude: number
 	city?: string
 	street?: string
-	zip?: string
+	zipCode?: string
 	country?: string
 	address?: string
 }
@@ -94,7 +94,7 @@ const AddressFields = (props: Props) => {
 		changeFormFieldValue('city', address.city)
 		changeFormFieldValue('street', streetNumber ? `${address.street} ${streetNumber}` : address.street)
 		changeFormFieldValue('country', address.country)
-		changeFormFieldValue('zip', address.zip)
+		changeFormFieldValue('zipCode', address.zip)
 
 		input.onChange(true)
 	}
@@ -152,10 +152,10 @@ const AddressFields = (props: Props) => {
 								<h4>{get(inputValues, 'street')}</h4>
 							</div>
 						)}
-						{'zip' in inputValues && (
+						{'zipCode' in inputValues && (
 							<div>
 								{getLabelField(t('loc:PSČ'))}
-								<h4>{get(inputValues, 'zip')}</h4>
+								<h4>{get(inputValues, 'zipCode')}</h4>
 							</div>
 						)}
 						{'country' in inputValues && (

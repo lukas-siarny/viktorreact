@@ -14,7 +14,7 @@ import SalonForm from './components/SalonForm'
 import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 
 // enums
-import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -188,6 +188,7 @@ const SalonPage: FC<Props> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const authUserPermissions = authUser?.data?.uniqPermissions || []
+	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const [visible, setVisible] = useState<boolean>(false)
 
 	const showDeleteBtn: boolean = checkPermissions(authUserPermissions, editPermissions)
@@ -263,7 +264,7 @@ const SalonPage: FC<Props> = (props) => {
 					longitude: salonData.data?.salon?.address?.longitude,
 					city: salonData.data?.salon?.address?.city,
 					street: salonData.data?.salon?.address?.street,
-					zip: salonData.data?.salon?.address?.zipCode,
+					zipCode: salonData.data?.salon?.address?.zipCode,
 					country: salonData.data?.salon?.address?.countryCode,
 					gallery: map(salonData.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
 					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null,
@@ -271,9 +272,8 @@ const SalonPage: FC<Props> = (props) => {
 				})
 			)
 		} else if (!salon?.isLoading) {
-			const { countriesPhonePrefixPayload } = await dispatch(getCountries()) // save data to redux and return prefix data
 			const phonePrefixCountryCode = getPrefixCountryCode(
-				map(countriesPhonePrefixPayload?.data, (item) => item.code),
+				map(phonePrefixes?.data, (item) => item.code),
 				LANGUAGE.SK.toUpperCase()
 			)
 			// init data for new "creating process" salon

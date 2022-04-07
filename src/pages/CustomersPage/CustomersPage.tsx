@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row } from 'antd'
@@ -11,43 +11,45 @@ import { compose } from 'redux'
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
+import CustomersFilter from './components/CustomersFilter'
 
 // utils
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
+import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, ISearchFilter } from '../../types/interfaces'
 import showNotifications from '../../utils/tsxHelpers'
 
 type Columns = ColumnsType<any>
 
-const AdminUsersPage = () => {
+const EDIT_PERMISSIONS = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]
+
+const CustomersPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
-	const users = useSelector((state: RootState) => state.user.users)
+	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
+		salonID: NumberParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'fullName:ASC')
+		order: withDefault(StringParam, 'lastName:ASC')
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search }))
-		dispatch(getUsers(query.page, query.limit, query.order, query.search))
-	}, [dispatch, query.page, query.limit, query.search, query.order])
+		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search, salonID: query.salonID }))
+		dispatch(getCustomers(query.page, query.limit, query.order, { search: query.search, salonID: query.salonID }))
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -72,36 +74,37 @@ const AdminUsersPage = () => {
 		}
 	}
 
-	const handleSubmit = (values: IUsersFilter) => {
+	const handleSubmit = (values: ISearchFilter) => {
 		const newQuery = {
 			...query,
 			...values,
 			page: 1
 		}
-		setQuery(newQuery)
+		setQuery(normalizeQueryParams(newQuery))
 	}
 
 	const columns: Columns = [
 		{
 			title: t('loc:Meno'),
-			dataIndex: 'fullName',
-			key: 'fullName',
+			dataIndex: 'firstName',
+			key: 'firstName',
+			ellipsis: true,
+			sorter: false
+		},
+		{
+			title: t('loc:Priezvisko'),
+			dataIndex: 'lastName',
+			key: 'lastName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'fullName'),
-			render: (value, record) => (
-				<>
-					{record?.firstName} {record?.lastName}
-				</>
-			)
+			sortOrder: setOrder(query.order, 'lastName')
 		},
 		{
 			title: t('loc:Email'),
 			dataIndex: 'email',
 			key: 'email',
 			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'email')
+			sorter: false
 		},
 		{
 			title: t('loc:Telefón'),
@@ -109,34 +112,22 @@ const AdminUsersPage = () => {
 			key: 'phone',
 			ellipsis: true,
 			sorter: false,
-			render: (value, record) => (
-				<>
-					{prefixOptions[record?.phonePrefixCountryCode]} {value}
-				</>
-			)
-		},
-		{
-			title: t('loc:Rola'),
-			dataIndex: 'roles',
-			key: 'roles',
-			ellipsis: {
-				showTitle: false
-			},
-			render(value) {
-				return value.map((role: any) => {
-					return role?.name
-				})
+			render: (value, record) => {
+				return (
+					<>
+						{prefixOptions[record?.phonePrefixCountryCode]} {value}
+					</>
+				)
 			}
 		},
 		{
-			title: t('loc:Spoločnosť'),
-			dataIndex: 'companyName',
-			key: 'companyName',
+			title: t('loc:Salón'),
+			dataIndex: 'salonName',
+			key: 'salonName',
 			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'companyName'),
+			sorter: false,
 			render: (value, record) => {
-				return <>{record?.company?.companyName}</>
+				return <>{record?.salon?.name}</>
 			}
 		}
 	]
@@ -144,10 +135,18 @@ const AdminUsersPage = () => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam používateľov')
+				name: t('loc:Zoznam zákazníkov')
 			}
 		]
 	}
+
+	const createCustomer = useCallback(() => {
+		if (checkPermissions(EDIT_PERMISSIONS)) {
+			history.push(t('paths:customers/create'))
+		} else {
+			showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
+		}
+	}, [t])
 
 	return (
 		<>
@@ -157,28 +156,19 @@ const AdminUsersPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<AdminUsersFilter
-							createUser={() => {
-								if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE])) {
-									history.push(t('paths:users/create'))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							onSubmit={handleSubmit}
-						/>
+						<CustomersFilter onSubmit={handleSubmit} total={customers?.data?.pagination?.totalCount} createCustomer={createCustomer} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}
 							columns={columns}
-							dataSource={users?.data?.users}
+							dataSource={customers?.data?.customers}
 							rowClassName={'clickable-row'}
-							loading={users?.isLoading}
+							loading={customers?.isLoading}
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
-										history.push(t('paths:users/{{userID}}', { userID: record.id }))
+									if (checkPermissions(EDIT_PERMISSIONS)) {
+										history.push(t('paths:customers/{{customerID}}', { customerID: record.id }))
 									} else {
 										showNotifications(
 											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
@@ -196,10 +186,10 @@ const AdminUsersPage = () => {
 									}),
 								defaultPageSize: PAGINATION.defaultPageSize,
 								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: users?.data?.pagination?.limit,
 								showSizeChanger: true,
-								total: users?.data?.pagination?.totalPages,
-								current: users?.data?.pagination?.page
+								pageSize: customers?.data?.pagination?.limit,
+								total: customers?.data?.pagination?.totalPages,
+								current: customers?.data?.pagination?.page
 							}}
 						/>
 					</div>
@@ -209,4 +199,4 @@ const AdminUsersPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]))(AdminUsersPage)
+export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]))(CustomersPage)

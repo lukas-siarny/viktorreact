@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { initialize, submit } from 'redux-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 
 // components
@@ -15,18 +15,19 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // utils
 import { history } from '../../utils/history'
-import { FORM, LANGUAGE, PERMISSION } from '../../utils/enums'
+import { FORM, LANGUAGE, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { getRoles } from '../../reducers/roles/rolesActions'
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
 import { getPrefixCountryCode } from '../../utils/helper'
+import { RootState } from '../../reducers'
 
 const CreateUserAccountPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const [submitting, setSubmitting] = useState<boolean>(false)
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -42,20 +43,18 @@ const CreateUserAccountPage = () => {
 	}
 
 	const fetchData = async () => {
-		const { countriesPhonePrefixPayload } = await dispatch(getCountries()) // save data to redux and return prefix data
 		const phonePrefixCountryCode = getPrefixCountryCode(
-			map(countriesPhonePrefixPayload?.data, (item) => item.code),
+			map(phonePrefixes?.data, (item) => item.code),
 			LANGUAGE.SK.toUpperCase()
 		)
 		dispatch(initialize(FORM.ADMIN_CREATE_USER, { phonePrefixCountryCode }))
 		dispatch(getRoles())
-		dispatch(getCountries())
 	}
 
 	useEffect(() => {
 		fetchData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, [phonePrefixes])
 
 	const createUser = async (data: any) => {
 		try {
@@ -82,22 +81,24 @@ const CreateUserAccountPage = () => {
 			</Row>
 			<div className='content-body small'>
 				<CreateUserAccountForm onSubmit={createUser} />
-				<Row justify='center'>
-					<Button
-						type={'primary'}
-						block
-						size={'middle'}
-						className={'noti-btn m-regular mb-2 w-1/3'}
-						htmlType={'submit'}
-						onClick={() => {
-							dispatch(submit(FORM.ADMIN_CREATE_USER))
-						}}
-						disabled={submitting}
-						loading={submitting}
-					>
-						{t('loc:Uložiť')}
-					</Button>
-				</Row>
+				<div className={'content-footer'}>
+					<Row justify='center'>
+						<Button
+							type={'primary'}
+							block
+							size={'middle'}
+							className={'noti-btn m-regular mb-2 w-1/3'}
+							htmlType={'submit'}
+							onClick={() => {
+								dispatch(submit(FORM.ADMIN_CREATE_USER))
+							}}
+							disabled={submitting}
+							loading={submitting}
+						>
+							{t('loc:Uložiť')}
+						</Button>
+					</Row>
+				</div>
 			</div>
 		</>
 	)

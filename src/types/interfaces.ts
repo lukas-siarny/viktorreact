@@ -159,3 +159,7 @@ export interface IOpenHoursNoteForm {
 		}
 	}
 }
+
+export interface ISearchFilter {
+	search: string
+}

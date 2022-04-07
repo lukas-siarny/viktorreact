@@ -18,21 +18,20 @@ import PublicLayout from '../layouts/PublicLayout'
 
 // redux
 import { refreshToken } from '../reducers/users/userActions'
+import { getCountries } from '../reducers/enumerations/enumerationActions'
 
 // utils
 import { REFRESH_TOKEN_INTERVAL, PAGE } from '../utils/enums'
 import { setIntervalImmediately } from '../utils/helper'
 
-// import SubMenuPage from '../components/SubMenuPage'
-
 // User
 import LoginPage from '../pages/LoginPage/LoginPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
-import UserAccountPage from '../pages/UserAccountPage/UserAccountPage'
-import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
-import CreateUserAccountPage from '../pages/UserAccountPage/CreateUserAccountPage'
+import UserAccountPage from '../pages/AdminUsersPage/UserAccountPage'
+import CreateUserAccountPage from '../pages/AdminUsersPage/CreateUserAccountPage'
+import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
@@ -43,7 +42,12 @@ import ServicePage from '../pages/ServicesPage/ServicePage'
 
 // Salons
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
-import SalonPage from '../pages/SalonPage/SalonPage'
+import SalonPage from '../pages/SalonsPage/SalonPage'
+
+// Customers
+import CustomersPage from '../pages/CustomersPage/CustomersPage'
+import CustomerPage from '../pages/CustomersPage/CustomerPage'
+import CreateCustomerPage from '../pages/CustomersPage/CreateCustomerPage'
 
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
@@ -54,6 +58,9 @@ const Routes: FC = (props) => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
+		// set accessible enumeration data for whole app
+		dispatch(getCountries())
+		// repeat refreshing of tokens
 		const refreshInterval = setIntervalImmediately(() => dispatch(refreshToken()), REFRESH_TOKEN_INTERVAL)
 
 		return () => {
@@ -71,14 +78,31 @@ const Routes: FC = (props) => {
 			<AuthRoute
 				{...props}
 				exact
-				path={t('paths:user-detail/{{userID}}', { userID: ':userID' })}
-				translatePathKey={t('paths:user-detail/{{userID}}', { userID: ':userID' })}
+				path={t('paths:users/create')}
+				component={CreateUserAccountPage}
+				translatePathKey={t('paths:users/create')}
+				layout={MainLayout}
+				page={PAGE.USERS}
+			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:users/{{userID}}', { userID: ':userID' })}
+				translatePathKey={t('paths:users/{{userID}}', { userID: ':userID' })}
 				component={UserAccountPage}
 				layout={MainLayout}
 				page={PAGE.USERS}
 			/>
-			<AuthRoute {...props} exact path={t('paths:user/create')} component={CreateUserAccountPage} translatePathKey={t('paths:user/create')} layout={MainLayout} />
-			<AuthRoute {...props} exact path={t('paths:my-account')} translatePathKey={t('paths:my-account')} component={UserAccountPage} layout={MainLayout} />
+			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:my-account')}
+				translatePathKey={t('paths:my-account')}
+				component={UserAccountPage}
+				layout={MainLayout}
+				page={PAGE.MY_ACCOUNT}
+			/>
 			<AuthRoute {...props} exact path={t('paths:index')} component={EntryPage} translatePathKey={t('paths:index')} layout={MainLayout} />
 			<AuthRoute {...props} exact path={t('paths:home')} component={HomePage} translatePathKey={t('paths:home')} layout={MainLayout} page={PAGE.HOME} />
 			<AuthRoute
@@ -90,6 +114,7 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.ACTIVATION}
 			/>
+			<AuthRoute {...props} exact path={t('paths:salons/create')} component={SalonPage} translatePathKey={t('paths:salons/create')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				{...props}
 				exact
@@ -99,7 +124,6 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.SALONS}
 			/>
-			<AuthRoute {...props} exact path={t('paths:salons/create')} component={SalonPage} translatePathKey={t('paths:salons/create')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
 			<AuthRoute
 				{...props}
@@ -110,16 +134,26 @@ const Routes: FC = (props) => {
 				layout={MainLayout}
 				page={PAGE.CATEGORIES}
 			/>
-			<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
 			<AuthRoute
 				{...props}
 				exact
-				path={t('paths:my-account')}
-				component={UserAccountPage}
-				translatePathKey={t('paths:my-account')}
+				path={t('paths:customers/create')}
+				component={CreateCustomerPage}
+				translatePathKey={t('paths:customers/create')}
 				layout={MainLayout}
-				page={PAGE.MY_ACCOUNT}
+				page={PAGE.CUSTOMERS}
 			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:customers/{{customerID}}', { customerID: ':customerID' })}
+				component={CustomerPage}
+				translatePathKey={t('paths:customers/{{customerID}}', { customerID: ':customerID' })}
+				layout={MainLayout}
+				page={PAGE.CUSTOMERS}
+			/>
+
+			<AuthRoute {...props} exact path={t('paths:customers')} component={CustomersPage} translatePathKey={t('paths:customers')} layout={MainLayout} page={PAGE.CUSTOMERS} />
 			<AuthRoute {...props} exact path={t('paths:services')} component={ServicesPage} translatePathKey={t('paths:services')} layout={MainLayout} page={PAGE.SERVICES} />
 			<AuthRoute
 				{...props}

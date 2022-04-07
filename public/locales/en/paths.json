@@ -1,6 +1,9 @@
 {
   "activation": "/activation",
   "categories": "/categories",
+  "customers": "/customers",
+  "customers/create": "/customers/create",
+  "customers/{{customerID}}": "/customers/{{customerID}}",
   "home": "/home",
   "index": "/",
   "login": "/login",
@@ -13,7 +16,7 @@
   "services/create": "/services/create",
   "services/{{serviceID}}": "/services/{{serviceID}}",
   "signup": "/signup",
-  "user-detail/{{userID}}": "/user-detail/{{userID}}",
-  "user/create": "/user/create",
-  "users": "/users"
+  "users": "/users",
+  "users/create": "/users/create",
+  "users/{{userID}}": "/users/{{userID}}"
 }

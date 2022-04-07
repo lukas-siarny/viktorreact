@@ -70,6 +70,7 @@ const ServiceEditPage = (props: Props) => {
 				priceTo: values.variablePrice ? values.priceTo : undefined,
 				salonID: values.salonID,
 				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
+				// TODO add employee
 				// employeeIDs
 				imageIDs: map(values?.gallery, (image) => image.id)
 			}

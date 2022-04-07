@@ -32,7 +32,7 @@ const ServicePage = (props: Props) => {
 				link: t('paths:services')
 			},
 			{
-				name: t('loc:Detail služby')
+				name: serviceID ? t('loc:Detail služby') : t('loc:Vytvoriť službu')
 			}
 		]
 	}

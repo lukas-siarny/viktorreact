@@ -1,6 +1,13 @@
-import { capitalize, filter, orderBy } from 'lodash'
+import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
+import en_GB from 'antd/lib/locale-provider/en_GB'
+import sk_SK from 'antd/lib/locale-provider/sk_SK'
+import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
+
+// types
+// eslint-disable-next-line import/no-cycle
+import { ICountryLabel } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -9,6 +16,33 @@ export enum KEYBOARD_KEY {
 export enum NAMESPACE {
 	PATHS = 'paths',
 	LOC = 'loc'
+}
+
+export enum LANGUAGE {
+	SK = 'sk',
+	CZ = 'cz',
+	EN = 'en'
+}
+
+export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
+
+export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hurs
+
+export const DEFAULT_LANGUAGE = LANGUAGE.SK
+
+export const LOCALES = {
+	[LANGUAGE.SK]: {
+		ISO_639: 'sk',
+		antD: sk_SK
+	},
+	[LANGUAGE.CZ]: {
+		ISO_639: 'cs',
+		antD: cs_CZ
+	},
+	[LANGUAGE.EN]: {
+		ISO_639: 'en',
+		antD: en_GB
+	}
 }
 
 export enum NOTIFICATION_TYPE {
@@ -38,6 +72,8 @@ export const ROW_GUTTER_X_DEFAULT = [4, 0] as Gutter
 export const ROW_GUTTER_X_M = [16, 0] as Gutter
 export const ROW_GUTTER_X_L = [32, 0] as Gutter
 
+export const MIN_SUPPORTED_RESOLUTION = 744 // 744px breakpoint is also defined in tailwind config
+
 export const DROPDOWN_POSITION = {
 	BOTTOM_LEFT: {
 		points: ['tl', 'bl'],
@@ -50,13 +86,20 @@ export const DROPDOWN_POSITION = {
 }
 
 export enum FORM {
+	USER_ACCOUNT = 'USER_ACCOUNT',
+	SALON = 'SALON',
 	LOGIN = 'LOGIN',
+	CATEGORY = 'CATEGORY',
+	SALONS_FILTER = 'SALONS_FILTER',
+	ACTIVATION = 'ACTIVATION',
 	FORGOT_PASSWORD = 'FORGOT_PASSWORD',
 	CREATE_PASSWORD = 'CREATE_PASSWORD',
+	REGISTRATION = 'REGISTRATION',
 	USER_PROFILE = 'USER_PROFILE',
 	ADMIN_USERS_FILTER = 'ADMIN_USERS_FILTER',
 	ENUMERATION_FORM = 'ENUMERATION_FORM',
 	ENUMERATION_FORM_2 = 'ENUMERATION_FORM_2',
+	CREATE_SALON_FROM = 'CREATE_SALON_FROM',
 	ROLE_FORM = 'ROLE_FORM',
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
 	ADMIN_UPDATE_USER = 'ADMIN_UPDATE_USER',
@@ -132,43 +175,25 @@ export enum FORM {
 	PAYMENT_FORM = 'PAYMENT_FORM',
 	COMMISIONS_FILTER = 'COMMISIONS_FILTER',
 	COMMISION_FORM = 'COMMISION_FORM',
-	BUSINESS_CASE_NOTE_FORM = 'BUSINESS_CASE_NOTE_FORM'
+	BUSINESS_CASE_NOTE_FORM = 'BUSINESS_CASE_NOTE_FORM',
+	SERVICES_FILTER = 'SERVICES_FILTER',
+	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE'
 }
 
 export enum PERMISSION {
 	SUPER_ADMIN = 'SUPER_ADMIN',
 	ADMIN = 'ADMIN',
+	PARTNER = 'PARTNER',
 	USER_CREATE = 'USER_CREATE',
+	USER_BROWSING = 'USER_BROWSING',
 	USER_EDIT = 'USER_EDIT',
 	USER_DELETE = 'USER_DELETE',
-	USER_LIST = 'USER_LIST',
-	ENUMS_DEFINITION = 'ENUMS_DEFINITION',
-	DESTINATION_EDIT = 'DESTINATION_EDIT',
-	DESTINATION_BROWSING = 'DESTINATION_BROWSING',
-	FACILITY_BROWSING = 'FACILITY_BROWSING',
-	FACILITY_EDIT = 'FACILITY_EDIT',
-	FILES_EDIT = 'FILES_EDIT',
-	TRANSPORTATION_BROWSING = 'TRANSPORTATION_BROWSING',
-	TRANSPORTATION_EDIT = 'TRANSPORTATION_EDIT',
-	PRODUCT_BROWSING = 'PRODUCT_BROWSING',
-	PRODUCT_EDIT = 'PRODUCT_EDIT',
-	COMPANIES_BROWSING = 'COMPANIES_BROWSING',
-	COMPANIES_EDIT = 'COMPANIES_EDIT',
-	RECORD_ID_SHOW = 'RECORD_ID_SHOW',
-	BUSINESS_CASES_CREATE = 'BUSINESS_CASES_CREATE',
-	BUSINESS_CASES_EDIT = 'BUSINESS_CASES_EDIT',
-	BUSINESS_CASES_BROWSING = 'BUSINESS_CASES_BROWSING',
-	CUSTOMERS_BROWSING = 'CUSTOMERS_BROWSING',
-	BUSINESS_CASES_DELETE = 'BUSINESS_CASES_DELETE',
-	DISCOUNT_BROWSING = 'DISCOUNT_BROWSING',
-	DISCOUNT_EDIT = 'DISCOUNT_EDIT',
-	COMMISSION_EDIT = 'COMMISSION_EDIT',
-	SALES = 'SALES',
-	INSURANCE_EDIT = 'INSURANCE_EDIT',
-	INSURANCE_BROWSING = 'INSURANCE_BROWSING',
-	PAYMENTS_BROWSING = ' PAYMENTS_BROWSING',
-	PAYMENTS_EDIT = ' PAYMENTS_EDIT',
-	COMMISSION_BROWSING = 'COMMISSION_BROWSING'
+	ENUM_BROWSING = 'ENUM_BROWSING',
+	ENUM_EDIT = 'ENUM_EDIT',
+	SALON_BROWSING = 'SALON_BROWSING',
+	SALON_EDIT = 'SALON_EDIT',
+	CUSTOMER_BROWSING = 'CUSTOMER_BROWSING',
+	CUSTOMER_EDIT = 'CUSTOMER_EDIT'
 }
 
 export enum SUBMENU_PARENT {
@@ -198,8 +223,8 @@ export enum REQ_TYPE {
 
 export enum TOKEN_AUDIENCE {
 	API = 'jwt-api',
-	FORGOTTEN_PASSWORD = 'jwt-forgotten-password',
-	INVITATION = 'jwt-invitation'
+	FORGOTTEN_PASSWORD = 'FORGOTTEN_PASSWORD',
+	INVITATION = 'INVITATION'
 }
 
 export enum PERSON_TYPE {
@@ -232,7 +257,10 @@ export const EMPTY_FILTER_ROOM = {
 }
 
 export enum PAGE {
+	SALON = 'SALON',
+	SALONS = 'SALONS',
 	ENUMERATIONS = 'ENUMERATIONS',
+	CATEGORIES = 'CATEGORIES',
 	USER_PROFILE = 'USER_PROFILE',
 	USERS = 'USERS',
 	ACCOMMODATION_FACILITIES = 'ACCOMMODATION_FACILITIES',
@@ -259,7 +287,10 @@ export enum PAGE {
 	PRODUCTS = 'PRODUCTS',
 	SALES = 'SALES',
 	COMMISIONS = 'COMMISIONS',
-	ENTRY = 'ENTRY'
+	ENTRY = 'ENTRY',
+	HOME = 'HOME',
+	MY_ACCOUNT = 'MY_ACCOUNT',
+	ACTIVATION = 'ACTIVATION'
 }
 
 export enum PAGE_ACCOMMODATION_FACILITY_TABS {
@@ -328,18 +359,13 @@ export enum PAGE_DESTINATION_SEASON_TABS {
 	GENERAL_PRICELIST_ITEMS = 'GENERAL_PRICELIST_ITEMS'
 }
 
-export const TAB_ID_PREFIX = 'tp-tabs'
+export const TAB_ID_PREFIX = 'noti-tabs'
 
 export enum PAGE_BUSINESS_CASE_TABS {
 	TRAVELERS = 'TRAVELERS',
 	GENERAL = 'GENERAL',
 	PAYMENTS = 'PAYMENTS',
 	DOCUMENTS = 'DOCUMENTS'
-}
-
-export enum DESTINATION_SEASON_GENERAL_SERVICE {
-	PRICELIST_ITEM = 'PRICELIST_ITEM',
-	INSURANCE = 'INSURANCE'
 }
 
 export enum PAGE_BUSINESS_CASE_PAYMENTS_TABS {
@@ -354,12 +380,6 @@ export enum PAGE_ENUMMERATION_TABS {
 	INFO = 'INFO'
 }
 
-export enum PRICELIST_ITEM_CATEGORY {
-	BASE_PRICE = 'BASE_PRICE',
-	REQUIRED_SURCHARGE = 'REQUIRED_SURCHARGE',
-	OPTIONAL_SURCHARGE = 'OPTIONAL_SURCHARGE'
-}
-
 export enum WEB_PROJECT_CODE {
 	TIPTRAVEL = 'TIPTRAVEL',
 	TATRATOUR = 'TATRATOUR',
@@ -367,21 +387,6 @@ export enum WEB_PROJECT_CODE {
 	HECHTER = 'HECHTER',
 	KOALA = 'KOALA',
 	COMMON = 'COMMON'
-}
-
-export enum LANGUAGE {
-	DEFAULT = 'DEFAULT'
-}
-
-export enum PRODUCT_SEARCH_FILTER {
-	NIGHTS_COUNT = 'NIGHTS_COUNT',
-	HOTEL_CATEGORY = 'HOTEL_CATEGORY',
-	OCCUPANCY = 'OCCUPANCY',
-	PRICE_RANGE = 'PRICE_RANGE',
-	MEAL_PLAN = 'MEAL_PLAN',
-	BEACH_DISTANCE = 'BEACH_DISTANCE',
-	PRICE_FLAG = 'PRICE_FLAG',
-	DISCOUNT_AMOUNT = 'DISCOUNT_AMOUNT'
 }
 
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
@@ -396,198 +401,7 @@ export const DEFAULT_DATE_WITH_TIME_FORMAT = 'DD.MM.YYYY HH:mm'
 
 export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 
-export enum NIGHTS_COUNT_FILTER {
-	THREE_NIGHTS = 'THREE_NIGHTS',
-	SEVEN_NIGHTS = 'SEVEN_NIGHTS',
-	TEN_NIGHTS = 'TEN_NIGHTS',
-	FOURTEEN_NIGHTS = 'FOURTEEN_NIGHTS',
-	MORE_THAN_TWENTYONE_NIGHTS = 'MORE_THAN_TWENTYONE_NIGHTS'
-}
-
 export const INDIVIDUAL_TRANSPORT = 0
-
-export const nightsCountFilterOptions = () => [
-	{
-		key: NIGHTS_COUNT_FILTER.THREE_NIGHTS,
-		label: i18next.t('loc:3 nocí')
-	},
-	{
-		key: NIGHTS_COUNT_FILTER.SEVEN_NIGHTS,
-		label: i18next.t('loc:7 nocí')
-	},
-	{
-		key: NIGHTS_COUNT_FILTER.TEN_NIGHTS,
-		label: i18next.t('loc:10 nocí')
-	},
-	{
-		key: NIGHTS_COUNT_FILTER.FOURTEEN_NIGHTS,
-		label: i18next.t('loc:14 nocí')
-	},
-	{
-		key: NIGHTS_COUNT_FILTER.MORE_THAN_TWENTYONE_NIGHTS,
-		label: i18next.t('loc:21 a viac')
-	}
-]
-
-export const pricelistItemCategoryOptions = () => [
-	{
-		key: PRICELIST_ITEM_CATEGORY.OPTIONAL_SURCHARGE,
-		label: i18next.t('loc:Nepovinný príplatok')
-	},
-	{
-		key: PRICELIST_ITEM_CATEGORY.BASE_PRICE,
-		label: i18next.t('loc:Základna cena')
-	},
-	{
-		key: PRICELIST_ITEM_CATEGORY.REQUIRED_SURCHARGE,
-		label: i18next.t('loc:Povinný príplatok')
-	}
-]
-
-export const CHILD_AGE_OPTIONS = (maxInfantAge = 2) =>
-	filter(
-		[
-			{
-				key: 0,
-				value: 0,
-				label: i18next.t('loc:0 rokov')
-			},
-			{
-				key: 1,
-				value: 1,
-				label: i18next.t('loc:1 rok')
-			},
-			{
-				key: 2,
-				value: 2,
-				label: i18next.t('loc:2 roky')
-			},
-			{
-				key: 3,
-				value: 3,
-				label: i18next.t('loc:3 roky')
-			},
-			{
-				key: 4,
-				value: 4,
-				label: i18next.t('loc:4 roky')
-			},
-			{
-				key: 5,
-				value: 5,
-				label: i18next.t('loc:5 rokov')
-			},
-			{
-				key: 6,
-				value: 6,
-				label: i18next.t('loc:6 rokov')
-			},
-			{
-				key: 7,
-				value: 7,
-				label: i18next.t('loc:7 rokov')
-			},
-			{
-				key: 8,
-				value: 8,
-				label: i18next.t('loc:8 rokov')
-			},
-			{
-				key: 9,
-				value: 9,
-				label: i18next.t('loc:9 rokov')
-			},
-			{
-				key: 10,
-				value: 10,
-				label: i18next.t('loc:10 rokov')
-			},
-			{
-				key: 11,
-				value: 11,
-				label: i18next.t('loc:11 rokov')
-			},
-			{
-				key: 12,
-				value: 12,
-				label: i18next.t('loc:12 rokov')
-			},
-			{
-				key: 13,
-				value: 13,
-				label: i18next.t('loc:13 rokov')
-			},
-			{
-				key: 14,
-				value: 14,
-				label: i18next.t('loc:14 rokov')
-			},
-			{
-				key: 15,
-				value: 15,
-				label: i18next.t('loc:15 rokov')
-			},
-			{
-				key: 16,
-				value: 16,
-				label: i18next.t('loc:16 rokov')
-			},
-			{
-				key: 17,
-				value: 17,
-				label: i18next.t('loc:17 rokov')
-			}
-		],
-		(item: any) => item.value >= maxInfantAge
-	)
-
-export const DEFAULT_ADVANCED_FILTERS = [PRODUCT_SEARCH_FILTER.NIGHTS_COUNT, PRODUCT_SEARCH_FILTER.HOTEL_CATEGORY]
-
-export const DEFAULT_ADVANCED_FILTER_OPTIONS = () => [
-	{
-		key: PRODUCT_SEARCH_FILTER.NIGHTS_COUNT,
-		name: i18next.t('loc:Počet nocí')
-	},
-	{
-		key: PRODUCT_SEARCH_FILTER.HOTEL_CATEGORY,
-		name: i18next.t('loc:Kategória hotela')
-	}
-]
-
-export const PRODUCT_SEARCH_FILTER_OPTIONS = () => [
-	{
-		key: PRODUCT_SEARCH_FILTER.NIGHTS_COUNT,
-		name: i18next.t('loc:Počet nocí')
-	},
-	{
-		key: PRODUCT_SEARCH_FILTER.HOTEL_CATEGORY,
-		name: i18next.t('loc:Kategória hotela')
-	},
-	{
-		key: PRODUCT_SEARCH_FILTER.OCCUPANCY,
-		name: i18next.t('loc:Obsadenosť')
-	},
-	{
-		key: PRODUCT_SEARCH_FILTER.PRICE_RANGE,
-		name: i18next.t('loc:Cenový rozsah')
-	},
-	{
-		key: PRODUCT_SEARCH_FILTER.MEAL_PLAN,
-		name: i18next.t('loc:Typ stravy')
-	},
-	{
-		key: PRODUCT_SEARCH_FILTER.BEACH_DISTANCE,
-		name: i18next.t('loc:Vzdialenosť pláže')
-	},
-	{
-		key: PRODUCT_SEARCH_FILTER.PRICE_FLAG,
-		name: i18next.t('loc:Príznak ceny')
-	},
-	{
-		key: PRODUCT_SEARCH_FILTER.DISCOUNT_AMOUNT,
-		name: i18next.t('loc:Výška zľavy')
-	}
-]
 
 export enum SOCKET_EVENT {
 	FOLDER_COMPRESSION_PROGRESS = 'folderCompressionProgress'
@@ -602,64 +416,46 @@ export enum BACK_ENTITY {
 }
 
 export enum ENUMERATIONS_KEYS {
-	WEB_PROJECTS = 'webProjects',
-	LANGUAGES = 'languages',
-	FACILITY_TYPES = 'facilityTypes',
-	VAT_RATES = 'vatRates',
-	CURRENCIES = 'currencies',
-	COUNTRIES = 'countries',
-	UNIT_TEMPLATES = 'unitTemplates',
-	UNIT_TEMPLATE_PROPERTIES = 'unitTemplateProperties',
-	STATIONS = 'stations',
-	TEXT_TEMPLATES = 'textTemplates',
-	TIME_ZONES = 'timeZones',
-	PROPERTIES = 'properties',
-	SEASONS = 'seasons',
-	PRODUCT_TYPES = 'productTypes',
-	PRODUCT_CATALOGUES = 'productCatalogues',
-	PERSON_TYPES = 'personTypes',
-	MEAL_PLANS = 'mealPlans',
-	PRICELIST_ITEMS = 'pricelistItems',
-	PRICE_GROUPS = 'priceGroups',
-	EXCHANGE_RATES = 'exchangeRates',
-	CARRIERS = 'carriers',
-	SALES_CHANNELS = 'salesChannels',
-	DISCOUNT_MARKS = 'discountMarks',
-	RESERVATION_EXPIRATION_TIMES = 'reservationExpirationTimes',
-	INSURANCE_COMPANIES = 'insuranceCompanies',
-	DEPOSIT_AMOUNTS = 'depositAmounts'
+	// LANGUAGES = 'languages',
+	// VAT_RATES = 'vatRates',
+	// CURRENCIES = 'currencies',
+	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
+	COUNTRIES = 'countries'
+	// UNIT_TEMPLATES = 'unitTemplates',
+	// TEXT_TEMPLATES = 'textTemplates',
+	// TIME_ZONES = 'timeZones',
+	// PROPERTIES = 'properties',
+	// PRODUCT_TYPES = 'productTypes',
+	// PRODUCT_CATALOGUES = 'productCatalogues',
+	// PERSON_TYPES = 'personTypes',
+	// PRICE_GROUPS = 'priceGroups',
+	// EXCHANGE_RATES = 'exchangeRates',
+	// DISCOUNT_MARKS = 'discountMarks',
+	// RESERVATION_EXPIRATION_TIMES = 'reservationExpirationTimes',
+	// DEPOSIT_AMOUNTS = 'depositAmounts'
 }
 
-export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBYEtWbN4XE4lcmntowheFqUGKpUKORwZ0&libraries=places&language=sk'
+export const GOOGLE_MAPS_API_KEY = 'AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw'
+export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw&libraries=places&language=sk'
 export const UNSPLASH_API_KEY = '-fx2nNGTarjuitKIz4qAUOCP1uLAlPClByWS6YpaSLc'
 export const UNSPLASH_IMAGE_SEARCH_STRING = 'nature'
 export const EMPTY_KEY = 'EMPTY_KEY'
 
 export enum ENUMERATIONS_PATHS {
-	WEB_PROJECTS = 'web-projects',
 	LANGUAGES = 'languages',
-	FACILITY_TYPES = 'facility-types',
 	VAT_RATES = 'vat-rates',
 	CURRENCIES = 'currencies',
 	COUNTRIES = 'countries',
 	UNIT_TEMPLATES = 'unit-templates',
-	UNIT_TEMPLATE_PROPERTIES = 'unit-template-properties',
-	STATIONS = 'stations',
 	TEXT_TEMPLATES = 'text-templates',
 	PROPERTIES = 'properties',
-	SEASONS = 'seasons',
 	PRODUCT_TYPES = 'product-types',
 	PRODUCT_CATALOGUES = 'product-catalogues',
 	PERSON_TYPES = 'person-types',
-	MEAL_PLANS = 'meal-plans',
-	PRICELIST_ITEMS = 'pricelist-items',
 	PRICE_GROUPS = 'price-groups',
 	EXCHANGE_RATES = 'exchange-rates',
-	CARRIERS = 'carriers',
-	SALES_CHANNELS = 'sales-channels',
 	DISCOUNT_MARKS = 'discount-marks',
 	RESERVATION_EXPIRATION_TIMES = 'reservation-expiration-times',
-	INSURANCE_COMPANIES = 'insurance-companies',
 	DEPOSIT_AMOUNTS = 'deposit-amounts'
 }
 
@@ -735,7 +531,14 @@ export const MAP = {
 	minLongitude: -180,
 	maxLongitude: 180,
 	minZoom: 1,
-	maxZoom: 10
+	maxZoom: 20
+}
+
+export enum SALON_STATUSES {
+	PUBLISHED = 'PUBLISHED',
+	VISIBLE = 'VISIBLE',
+	DELETED = 'DELETED',
+	ALL = 'ALL'
 }
 
 export enum PAGE_VIEW {
@@ -757,62 +560,6 @@ export enum GLOBAL_DISCOUNT_TYPE {
 	CASHBACK = 'CASHBACK' // cashback
 }
 
-export const discountTypes = () => [
-	{
-		id: 1,
-		type: GLOBAL_DISCOUNT_TYPE.OLD_BUSINESS_CASE,
-		name: i18next.t('loc:Zľava pre stálych klientov'),
-		description: i18next.t('loc:Percentuálna zľava pre klientov, ktorí vedia vydokladovť že cestovali s nami aspoň raz za posledných 5 rokov.')
-	},
-	{
-		id: 2,
-		type: GLOBAL_DISCOUNT_TYPE.NEW_BUSINESS_CASE,
-		name: i18next.t('loc:Zľava pre nových klientov'),
-		description: i18next.t('loc:Zľava pre presný počet zájazdov, izeb, alebo leteniek.')
-	},
-	{
-		id: 3,
-		type: GLOBAL_DISCOUNT_TYPE.LIMIT_CAPACITY_UNIT_TEMPLATE,
-		name: i18next.t('loc:Zľava pre prvých XY leteniek alebo izieb'),
-		description: i18next.t('loc:Klasická percentuálna zľava na destinácie, destinácie na sezónu a podobne.')
-	},
-	{
-		id: 4,
-		type: GLOBAL_DISCOUNT_TYPE.TRIP,
-		name: i18next.t('loc:Zľava na zájazd'),
-		description: i18next.t('loc:Lorem ipsium.')
-	},
-	{
-		id: 5,
-		type: GLOBAL_DISCOUNT_TYPE.CASHBACK,
-		name: i18next.t('loc:Cashback'),
-		description: i18next.t('loc:Lorem ipsum.')
-	}
-]
-
-export const DISCOUNT_TYPES_OPTIONS = () => [
-	{
-		label: i18next.t('loc:Zľava pre stálych klientov'),
-		key: GLOBAL_DISCOUNT_TYPE.OLD_BUSINESS_CASE
-	},
-	{
-		label: i18next.t('loc:Zľava pre nových klientov'),
-		key: GLOBAL_DISCOUNT_TYPE.NEW_BUSINESS_CASE
-	},
-	{
-		label: i18next.t('loc:Zľava pre prvých XY leteniek alebo izieb'),
-		key: GLOBAL_DISCOUNT_TYPE.LIMIT_CAPACITY_UNIT_TEMPLATE
-	},
-	{
-		label: i18next.t('loc:Zľava na zájazd'),
-		key: GLOBAL_DISCOUNT_TYPE.TRIP
-	},
-	{
-		label: i18next.t('loc:Cashback'),
-		key: GLOBAL_DISCOUNT_TYPE.CASHBACK
-	}
-]
-
 export const PAGE_VIEW_OPTIONS = [
 	{
 		label: 'Tabuľka',
@@ -824,26 +571,10 @@ export const PAGE_VIEW_OPTIONS = [
 	}
 ]
 
-export enum ROOM_TYPE {
-	GROUP = 'GROUP',
-	INDIVIDUAL = 'INDIVIDUAL'
-}
-
 export enum COUNTER_TYPE {
 	INCREASE = 'INCREASE',
 	DECREASE = 'DECREASE'
 }
-
-export const ROOM_TYPE_OPTIONS = () => [
-	{
-		label: i18next.t('loc:Skupina'),
-		key: ROOM_TYPE.GROUP
-	},
-	{
-		label: i18next.t('loc:Jednotlivci'),
-		key: ROOM_TYPE.INDIVIDUAL
-	}
-]
 
 export enum ADDITIONAL_SERVICE_TYPE {
 	GENERAL_INSURANCE = 'GENERAL_INSURANCE',
@@ -851,145 +582,84 @@ export enum ADDITIONAL_SERVICE_TYPE {
 	INDIVIDUAL_PRICELIST_ITEM = 'INDIVIDUAL_PRICELIST_ITEM'
 }
 
-export const GENERAL_PRICELIST_ITEMS_OPTIONS = () => [
-	{
-		label: i18next.t('loc:Cenníková položka'),
-		key: DESTINATION_SEASON_GENERAL_SERVICE.PRICELIST_ITEM
-	},
-	{
-		label: i18next.t('loc:Poistenie'),
-		key: DESTINATION_SEASON_GENERAL_SERVICE.INSURANCE
-	}
-]
-
 export const ENUMERATIONS_OPTIONS = () =>
 	orderBy(
 		[
-			{
-				label: i18next.t('loc:Webové projekty'),
-				key: ENUMERATIONS_KEYS.WEB_PROJECTS,
-				url: ENUMERATIONS_PATHS.WEB_PROJECTS
-			},
-			{
-				label: i18next.t('loc:Jazyky'),
-				key: ENUMERATIONS_KEYS.LANGUAGES,
-				url: ENUMERATIONS_PATHS.LANGUAGES
-			},
-			{
-				label: i18next.t('loc:Stanice'),
-				key: ENUMERATIONS_KEYS.STATIONS,
-				url: ENUMERATIONS_PATHS.STATIONS
-			},
-			{
-				label: i18next.t('loc:Typ ubytovania'),
-				key: ENUMERATIONS_KEYS.FACILITY_TYPES,
-				url: ENUMERATIONS_PATHS.FACILITY_TYPES
-			},
-			{
-				label: i18next.t('loc:Sadzba DPH'),
-				key: ENUMERATIONS_KEYS.VAT_RATES,
-				url: ENUMERATIONS_PATHS.VAT_RATES
-			},
-			{
-				label: i18next.t('loc:Mena'),
-				key: ENUMERATIONS_KEYS.CURRENCIES,
-				url: ENUMERATIONS_PATHS.CURRENCIES
-			},
+			// {
+			// 	label: i18next.t('loc:Jazyky'),
+			// 	key: ENUMERATIONS_KEYS.LANGUAGES,
+			// 	url: ENUMERATIONS_PATHS.LANGUAGES
+			// },
+			// {
+			// 	label: i18next.t('loc:Sadzba DPH'),
+			// 	key: ENUMERATIONS_KEYS.VAT_RATES,
+			// 	url: ENUMERATIONS_PATHS.VAT_RATES
+			// },
+			// {
+			// 	label: i18next.t('loc:Mena'),
+			// 	key: ENUMERATIONS_KEYS.CURRENCIES,
+			// 	url: ENUMERATIONS_PATHS.CURRENCIES
+			// },
 			{
 				label: i18next.t('loc:Krajiny'),
-				key: ENUMERATIONS_KEYS.COUNTRIES,
+				key: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX,
 				url: ENUMERATIONS_PATHS.COUNTRIES
-			},
-			{
-				label: i18next.t('loc:Vzory jednotiek'),
-				key: ENUMERATIONS_KEYS.UNIT_TEMPLATES,
-				url: ENUMERATIONS_PATHS.UNIT_TEMPLATES
-			},
-			{
-				label: i18next.t('loc:Vlastnosti vzoru jednotky'),
-				key: ENUMERATIONS_KEYS.UNIT_TEMPLATE_PROPERTIES,
-				url: ENUMERATIONS_PATHS.UNIT_TEMPLATE_PROPERTIES
-			},
-			{
-				label: i18next.t('loc:Textové popisy'),
-				key: ENUMERATIONS_KEYS.TEXT_TEMPLATES,
-				url: ENUMERATIONS_PATHS.TEXT_TEMPLATES
-			},
-			{
-				label: i18next.t('loc:Vlastnosti zariadenia'),
-				key: ENUMERATIONS_KEYS.PROPERTIES,
-				url: ENUMERATIONS_PATHS.PROPERTIES
-			},
-			{
-				label: i18next.t('loc:Sezóny'),
-				key: ENUMERATIONS_KEYS.SEASONS,
-				url: ENUMERATIONS_PATHS.SEASONS
-			},
-			{
-				label: i18next.t('loc:Typ produktu'),
-				key: ENUMERATIONS_KEYS.PRODUCT_TYPES,
-				url: ENUMERATIONS_PATHS.PRODUCT_TYPES
-			},
-			{
-				label: i18next.t('loc:Katalóg produktov'),
-				key: ENUMERATIONS_KEYS.PRODUCT_CATALOGUES,
-				url: ENUMERATIONS_PATHS.PRODUCT_CATALOGUES
-			},
-			{
-				label: i18next.t('loc:Typ osoby'),
-				key: ENUMERATIONS_KEYS.PERSON_TYPES,
-				url: ENUMERATIONS_PATHS.PERSON_TYPES
-			},
-			{
-				label: i18next.t('loc:Typ stravy'),
-				key: ENUMERATIONS_KEYS.MEAL_PLANS,
-				url: ENUMERATIONS_PATHS.MEAL_PLANS
-			},
-			{
-				label: i18next.t('loc:Cenníková položka'),
-				key: ENUMERATIONS_KEYS.PRICELIST_ITEMS,
-				url: ENUMERATIONS_PATHS.PRICELIST_ITEMS
-			},
-			{
-				label: i18next.t('loc:Cenová skupina'),
-				key: ENUMERATIONS_KEYS.PRICE_GROUPS,
-				url: ENUMERATIONS_PATHS.PRICE_GROUPS
-			},
-			{
-				label: i18next.t('loc:Výmenný menový kurz'),
-				key: ENUMERATIONS_KEYS.EXCHANGE_RATES,
-				url: ENUMERATIONS_PATHS.EXCHANGE_RATES
-			},
-			{
-				label: i18next.t('loc:Dopravcovia'),
-				key: ENUMERATIONS_KEYS.CARRIERS,
-				url: ENUMERATIONS_PATHS.CARRIERS
-			},
-			{
-				label: i18next.t('loc:Predajné kanály'),
-				key: ENUMERATIONS_KEYS.SALES_CHANNELS,
-				url: ENUMERATIONS_PATHS.SALES_CHANNELS
-			},
-			{
-				label: i18next.t('loc:Príznak zľavy'),
-				key: ENUMERATIONS_KEYS.DISCOUNT_MARKS,
-				url: ENUMERATIONS_PATHS.DISCOUNT_MARKS
-			},
-			{
-				label: i18next.t('loc:Expirácia rezervácie'),
-				key: ENUMERATIONS_KEYS.RESERVATION_EXPIRATION_TIMES,
-				url: ENUMERATIONS_PATHS.RESERVATION_EXPIRATION_TIMES
-			},
-			{
-				label: i18next.t('loc:Poisťovne'),
-				key: ENUMERATIONS_KEYS.INSURANCE_COMPANIES,
-				url: ENUMERATIONS_PATHS.INSURANCE_COMPANIES
-			},
-			{
-				label: i18next.t('loc:Výška zálohy'),
-				key: ENUMERATIONS_KEYS.DEPOSIT_AMOUNTS,
-				url: ENUMERATIONS_PATHS.DEPOSIT_AMOUNTS
 			}
+			// {
+			// 	label: i18next.t('loc:Vzory jednotiek'),
+			// 	key: ENUMERATIONS_KEYS.UNIT_TEMPLATES,
+			// 	url: ENUMERATIONS_PATHS.UNIT_TEMPLATES
+			// },
+			// {
+			// 	label: i18next.t('loc:Textové popisy'),
+			// 	key: ENUMERATIONS_KEYS.TEXT_TEMPLATES,
+			// 	url: ENUMERATIONS_PATHS.TEXT_TEMPLATES
+			// },
+			// {
+			// 	label: i18next.t('loc:Vlastnosti zariadenia'),
+			// 	key: ENUMERATIONS_KEYS.PROPERTIES,
+			// 	url: ENUMERATIONS_PATHS.PROPERTIES
+			// },
+			// {
+			// 	label: i18next.t('loc:Typ produktu'),
+			// 	key: ENUMERATIONS_KEYS.PRODUCT_TYPES,
+			// 	url: ENUMERATIONS_PATHS.PRODUCT_TYPES
+			// },
+			// {
+			// 	label: i18next.t('loc:Katalóg produktov'),
+			// 	key: ENUMERATIONS_KEYS.PRODUCT_CATALOGUES,
+			// 	url: ENUMERATIONS_PATHS.PRODUCT_CATALOGUES
+			// },
+			// {
+			// 	label: i18next.t('loc:Typ osoby'),
+			// 	key: ENUMERATIONS_KEYS.PERSON_TYPES,
+			// 	url: ENUMERATIONS_PATHS.PERSON_TYPES
+			// },
+			// {
+			// 	label: i18next.t('loc:Cenová skupina'),
+			// 	key: ENUMERATIONS_KEYS.PRICE_GROUPS,
+			// 	url: ENUMERATIONS_PATHS.PRICE_GROUPS
+			// },
+			// {
+			// 	label: i18next.t('loc:Výmenný menový kurz'),
+			// 	key: ENUMERATIONS_KEYS.EXCHANGE_RATES,
+			// 	url: ENUMERATIONS_PATHS.EXCHANGE_RATES
+			// },
+			// {
+			// 	label: i18next.t('loc:Príznak zľavy'),
+			// 	key: ENUMERATIONS_KEYS.DISCOUNT_MARKS,
+			// 	url: ENUMERATIONS_PATHS.DISCOUNT_MARKS
+			// },
+			// {
+			// 	label: i18next.t('loc:Expirácia rezervácie'),
+			// 	key: ENUMERATIONS_KEYS.RESERVATION_EXPIRATION_TIMES,
+			// 	url: ENUMERATIONS_PATHS.RESERVATION_EXPIRATION_TIMES
+			// },
+			// {
+			// 	label: i18next.t('loc:Výška zálohy'),
+			// 	key: ENUMERATIONS_KEYS.DEPOSIT_AMOUNTS,
+			// 	url: ENUMERATIONS_PATHS.DEPOSIT_AMOUNTS
+			// }
 		],
 		['label'],
 		['asc']
@@ -1068,12 +738,6 @@ export const lineDirectionOptions = [
 	}
 ]
 
-export enum UNIT_TEMPLATE_TYPE {
-	FACILITY = 'FACILITY',
-	AIR_TRANSPORT = 'AIR_TRANSPORT',
-	BUS_TRANSPORT = 'BUS_TRANSPORT'
-}
-
 export enum UNIT_TEMPLATE_FACILITY_TYPE {
 	FAMILY_SUITE = 'FAMILY_SUITE',
 	FAMILY_ROOM = 'FAMILY_ROOM',
@@ -1123,54 +787,6 @@ export const lineConnectionTypeOptions = [
 	}
 ]
 
-export enum LINE_TYPE {
-	BUS = 'BUS',
-	AIR = 'AIR'
-}
-
-export const ROAD_STRINGS = (t: TFunction, lineType: LINE_TYPE = LINE_TYPE.AIR) => {
-	const locCodeLabel = lineType === LINE_TYPE.AIR ? t('loc:Kód letu') : t('loc:Kód jazdy')
-	const locMeetupBeforeLabel = lineType === LINE_TYPE.AIR ? t('loc:Zraz na letisku [min] pred odletom') : t('loc:Zraz pred cestou [min]')
-	const locMeetupBeforePlaceholder = lineType === LINE_TYPE.AIR ? t('loc:Zadajte zraz na letisku pred odletom') : t('loc:Zadajte zraz pred cestou')
-	const locDepartureDatetimeLable = lineType === LINE_TYPE.AIR ? t('loc:Dátum a čas odletu') : t('loc:Dátum a čas odchodu')
-	const locArrivalDatetimeLabel = lineType === LINE_TYPE.AIR ? t('loc:Dátum a čas príletu') : t('loc:Dátum a čas príchodu')
-	const locDatetimeLabel = lineType === LINE_TYPE.AIR ? t('loc:Dátum a čas príletu a odletu') : t('loc:Dátum a čas príchodu a odchodu')
-	const locMaxLuggageWeightLabel = t('loc:Max. váha batožiny [kg]')
-
-	const locModalCreateTitle = lineType === LINE_TYPE.AIR ? t('loc:Nový let') : t('loc:Nová jazda')
-	const locModalUpdateTitle = capitalize(lineType === LINE_TYPE.AIR ? t('loc:let') : t('loc:jazda'))
-	const entityName = lineType === LINE_TYPE.AIR ? t('loc:let') : t('loc:jazdu')
-
-	return {
-		code: {
-			label: locCodeLabel,
-			placeholder: t('loc:Zadajte {{label}}', { label: locCodeLabel.toLowerCase() })
-		},
-		meetupBefore: {
-			label: locMeetupBeforeLabel,
-			placeholder: locMeetupBeforePlaceholder
-		},
-		departureDatetime: {
-			label: locDepartureDatetimeLable
-		},
-		arrivalDatetime: {
-			label: locArrivalDatetimeLabel
-		},
-		maxLuggageWeight: {
-			label: locMaxLuggageWeightLabel,
-			placeholder: locMaxLuggageWeightLabel
-		},
-		datetimeLabel: {
-			label: locDatetimeLabel
-		},
-		modal: {
-			createTitle: locModalCreateTitle,
-			updateTitle: locModalUpdateTitle
-		},
-		entityName
-	}
-}
-
 export enum UPLOAD_ERROR_TYPE {
 	MAX_SIZE = 'MAX_SIZE',
 	MAX_FILES = 'MAX_FILES',
@@ -1196,8 +812,7 @@ export enum FACILITY_PROPERTY_CATEGORIES {
 	BEACHES = 'BEACHES',
 	DESCRIPTION = 'DESCRIPTION',
 	SPORT = 'SPORT',
-	ACCOMMODATION = 'ACCOMMODATION',
-	MEAL_PLANS = 'MEAL_PLANS'
+	ACCOMMODATION = 'ACCOMMODATION'
 }
 
 export enum PROPERTY_USAGE {
@@ -1238,6 +853,8 @@ export enum DAY {
 	SATURDAY = 'SATURDAY',
 	SUNDAY = 'SUNDAY'
 }
+
+export const MONDAY_TO_FRIDAY = 'MONDAY_TO_FRIDAY'
 
 export enum SERVICE_TYPE {
 	TRANSPORTATION = 'TRANSPORTATION',
@@ -1344,57 +961,6 @@ export const facilityCategoryOurOptions = [
 	}
 ]
 
-export enum SERVICE_PRICELIST_ITEM_TYPE {
-	FIXED_PRICE = 'FIXED_PRICE',
-	PERCENT_REFERENCE = 'PERCENT_REFERENCE',
-	PERCENT_REFERENCE_DISCOUNT = 'PERCENT_REFERENCE_DISCOUNT',
-	SURCHARGE_COSTS_PERCENT = 'SURCHARGE_COSTS_PERCENT',
-	SURCHARGE_TERM = 'SURCHARGE_TERM',
-	// deprecated - zistit ci je prirazka na noc potrebna
-	// SURCHARGE_NIGHT = 'SURCHARGE_NIGHT',
-	SURCHARGE_PERCENT_WITH_FIXED_PRICE = 'SURCHARGE_PERCENT_WITH_FIXED_PRICE'
-}
-
-export const servicePricelistItemTypeOptions = (disabledReferencingTypes?: boolean) => [
-	{
-		key: SERVICE_PRICELIST_ITEM_TYPE.FIXED_PRICE,
-		value: SERVICE_PRICELIST_ITEM_TYPE.FIXED_PRICE,
-		label: 'Fixná suma'
-	},
-	{
-		key: SERVICE_PRICELIST_ITEM_TYPE.PERCENT_REFERENCE,
-		value: SERVICE_PRICELIST_ITEM_TYPE.PERCENT_REFERENCE,
-		label: '% referenčnej',
-		disabled: disabledReferencingTypes
-	},
-	{
-		key: SERVICE_PRICELIST_ITEM_TYPE.PERCENT_REFERENCE_DISCOUNT,
-		value: SERVICE_PRICELIST_ITEM_TYPE.PERCENT_REFERENCE_DISCOUNT,
-		label: '% zľava z referenčnej',
-		disabled: disabledReferencingTypes
-	},
-	{
-		key: SERVICE_PRICELIST_ITEM_TYPE.SURCHARGE_COSTS_PERCENT,
-		value: SERVICE_PRICELIST_ITEM_TYPE.SURCHARGE_COSTS_PERCENT,
-		label: 'Prirážka v % nákladov'
-	},
-	{
-		key: SERVICE_PRICELIST_ITEM_TYPE.SURCHARGE_TERM,
-		value: SERVICE_PRICELIST_ITEM_TYPE.SURCHARGE_TERM,
-		label: 'Prirážka na zájazd'
-	},
-	// deprecated - zistit ci je prirazka na noc potrebna
-	/* {
-	key: SERVICE_PRICELIST_ITEM_TYPE.SURCHARGE_NIGHT,
-	value: SERVICE_PRICELIST_ITEM_TYPE.SURCHARGE_NIGHT,
-	label: 'Prirážka na noc'
-}, */ {
-		key: SERVICE_PRICELIST_ITEM_TYPE.SURCHARGE_PERCENT_WITH_FIXED_PRICE,
-		value: SERVICE_PRICELIST_ITEM_TYPE.SURCHARGE_PERCENT_WITH_FIXED_PRICE,
-		label: 'Prirážka v % + fixná suma'
-	}
-]
-
 export enum USER_STATE {
 	ACTIVE = 'ACTIVE',
 	DELETED = 'DELETED'
@@ -1437,48 +1003,6 @@ export enum CLIENT_TYPE {
 	TRAVELER = 'TRAVLER' // Obycajny zakaznik (Cestujuci) kde sa enrozlisuje CUSTOMER_TYPE
 }
 
-export enum SELLING_TRANSPORT_TYPE {
-	AIR = 'AIR',
-	BUS = 'BUS',
-	INDIVIDUAL = 'INDIVIDUAL'
-}
-
-export const transportTypes = () => [
-	{
-		key: SELLING_TRANSPORT_TYPE.AIR,
-		value: SELLING_TRANSPORT_TYPE.AIR,
-		label: i18next.t('loc:Letecká doprava')
-	},
-	{
-		key: SELLING_TRANSPORT_TYPE.BUS,
-		value: SELLING_TRANSPORT_TYPE.BUS,
-		label: i18next.t('loc:Autobusová doprava')
-	},
-	{
-		key: SELLING_TRANSPORT_TYPE.INDIVIDUAL,
-		value: SELLING_TRANSPORT_TYPE.INDIVIDUAL,
-		label: i18next.t('loc:Individuálna doprava')
-	}
-]
-
-export const unitTemplateTypes = () => [
-	{
-		key: UNIT_TEMPLATE_TYPE.AIR_TRANSPORT,
-		value: UNIT_TEMPLATE_TYPE.AIR_TRANSPORT,
-		label: i18next.t('loc:Letecká doprava')
-	},
-	{
-		key: UNIT_TEMPLATE_TYPE.BUS_TRANSPORT,
-		value: UNIT_TEMPLATE_TYPE.BUS_TRANSPORT,
-		label: i18next.t('loc:Autobusová doprava')
-	},
-	{
-		key: UNIT_TEMPLATE_TYPE.FACILITY,
-		value: UNIT_TEMPLATE_TYPE.FACILITY,
-		label: i18next.t('loc:Ubytovanie')
-	}
-]
-
 export const customerTypeOptions = () => [
 	{
 		key: CUSTOMER_TYPE.LEGAL,
@@ -1497,10 +1021,40 @@ export enum PAGE_PAYMENT_TABS {
 	LOGS = 'LOGS'
 }
 
+export enum VALIDATION_MAX_LENGTH {
+	LENGTH_255 = 255,
+	LENGTH_100 = 100,
+	LENGTH_20 = 20,
+	LENGTH_10 = 10
+}
+
+export const getTranslatedCountriesLabels = (): ICountryLabel => {
+	return {
+		SK: `${i18next.t('loc:Slovenská republika')}`,
+		CZ: `${i18next.t('loc:Česká republika')}`
+	} as ICountryLabel
+}
+
+export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
+export const GTC_URL = 'https://www.notino.sk/obchodne-podmienky-vip/'
+export const MARKETING_URL = 'https://www.notino.sk/'
+
 export const OCCUPANCY_ALL_PERSONS_EXTRA_BED = 'OCCUPANCY_ALL_PERSONS_EXTRA_BED'
 export const OCCUPANCY_ALL_PERSONS_WITHOUT_BED = 'OCCUPANCY_ALL_PERSONS_WITHOUT_BED'
 export const COST_SEASON_ALL_TERMS_KEY = 'COST_SEASON_ALL_TERMS_KEY'
 
+export enum BYTE_MULTIPLIER {
+	KILO = 10 ** 3,
+	MEGA = 10 ** 6
+}
+
+export const LOCALIZATIONS = 'LOCALIZATIONS'
+
+export enum UPLOAD_IMG_CATEGORIES {
+	SALON = 'SALON'
+}
+
+export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const TEXT_TEMPLATE_TYPES = Object.keys(TEXT_TEMPLATE_TYPE)
 export const PROPERTY_TYPES = Object.keys(PROPERTY_TYPE)

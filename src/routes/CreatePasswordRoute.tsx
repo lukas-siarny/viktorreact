@@ -34,7 +34,7 @@ class CreatePasswordRoute extends Route<Props> {
 
 		if (aud === TOKEN_AUDIENCE.FORGOTTEN_PASSWORD || aud === TOKEN_AUDIENCE.INVITATION) {
 			// dokoncenie registracie , zabudnute heslo
-			return <BaseRoute {...(this.props as any)} />
+			return <BaseRoute {...(this.props as any)} token={t} />
 		}
 
 		return <Redirect to={this.props.t('paths:index')} />

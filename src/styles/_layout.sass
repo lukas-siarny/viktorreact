@@ -1,33 +1,23 @@
 @import tailwind-variables
-@import "variables"
 
 $vertical-header-spacing: 8px
 $right-left-layout-spacig: 16px
-
-/*md: '744px', // minimal supported resolution by Figma design
-			lg: '1024px',
-			xl: '1280px',
-			'2xl': '1536px',
-			'3xl': '1920px' */
+$layout-height: 780px
+$inner-padding: 45px
 
 // Simple layout - Landing page
 .simple-layout
-	position: relative
 	overflow: auto
-	width: 100vw
-	height: 100vh
+	background: $backgroundColor-notino-grayLight
 
-	@media (min-width: 1536px)
-		.left-column
-			padding-left: calc(4vw + #{$simple-layout-left-inner-padding}) !important
-		.right-column
-			padding-right: 4vw
+	.layout-content
+		box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.21)
+		height: $layout-height
+		max-width: 1280px
+		min-width: 744px
 
-	@media (min-width: 1920px)
-		.left-column
-			padding-left: calc(20vw + #{$simple-layout-left-inner-padding}) !important
-		.right-column
-			padding-right: 20vw
+	.ant-carousel
+		height: calc(#{$layout-height} - (2*#{$inner-padding})) // 630px
 
 	.cover
 		object-fit: cover
@@ -35,139 +25,124 @@ $right-left-layout-spacig: 16px
 		height: 100%
 
 	.content
-  		background-color: rgba(255,255,255,.8)
-  		border-radius: .25em
-  		box-shadow: 0 0 .25em rgba(0,0,0,.25)
-  		box-sizing: border-box
-  		left: 50%
-  		padding: 10vmin
-  		position: fixed
-  		text-align: center
-  		top: 50%
-  		transform: translate(-50%, -50%)
+		background-color: rgba(255,255,255,.8)
+		border-radius: .25em
+		box-shadow: 0 0 .25em rgba(0,0,0,.25)
+		box-sizing: border-box
+		left: 50%
+		padding: 10vmin
+		position: fixed
+		text-align: center
+		top: 50%
+		transform: translate(-50%, -50%)
 
 // Main layout
-.ant-layout.tp-layout
-	min-height: 100vh
-	background-color: $backgroundColor-gray-50
-	.tp-layout-header
-		z-index: $z-index-fixed-header
-		position: relative
-		padding: $vertical-header-spacing
-		border-bottom: 1px solid $borderColor-gray-100
-		height: $header-height
-		background-color: $backgroundColor-white
-		.header-logo
-			z-index: $zIndex-10
-			position: absolute
-		.menu-dropdown-wrapper
-			padding: 0px 8px
-			border-radius: 44px
-			display: inline-flex
-			&:hover,
-			&.ant-dropdown-open
-				cursor: pointer
-				background-color: $backgroundColor-gray-200
-				svg.chevron
-					color: $textColor-blue-600 !important
-		// Menu
-		.tp-layout-menu
-			background-color: $backgroundColor-white
-			color: $textColor-gray-600
-			font-size: 14px
-			font-weight: 600
-			border-bottom: none
-			margin-top: 7px
-			&.ant-menu-horizontal
-				line-height: 15px
-			.ant-menu-submenu
-				.ant-menu-submenu-title
-					padding-bottom: 10px
-			ul.ant-menu
-				border-bottom: none
-				height: $header-height
-				margin-top: -16px
-			li.ant-menu-overflow-item
+.ant-layout.noti-main-layout
+	.noti-sider-menu
+		.ant-menu-item
+			color: $textColor-notino-black
+
+			&.ant-menu-item-selected
+				color: $textColor-notino-white
+				background-color: $backgroundColor-notino-black
+			&:active
+				color: $textColor-notino-white
+
+		&.ant-menu-inline, &.ant-menu-inline-collapsed
+			.ant-menu-item, .ant-menu-submenu .ant-menu-submenu-title
 				display: flex
 				align-items: center
-				&:hover
-					color: $textColor-gray-900
-			.ant-menu-submenu-title
-				&:hover
-					color: $textColor-gray-900
-			.ant-menu-submenu-active,
-			.ant-menu-submenu-selected
-				background: none
-				.ant-menu-submenu-title
-					color: $textColor-gray-900
 
-	.tp-content
-		padding: $header-height $right-left-layout-spacig 0 $right-left-layout-spacig
-		.content-header
-			// NOTE: ak by v headeri bol niekedy nejaky koncet ktory musi byt vedla seba a nie pod seba ako je takto defaultne tak pretazit nejakou classou flex-direction na row
-			display: flex
-			flex-direction: column
-			justify-content: space-between
-			z-index: $z-index-content-header
-			position: sticky
-			top: 12px
-			min-height: 76px // Miesto potrebne pre breadcrumbs + Button / Tabs + spacing medzi breadcrumbami a buttonami / tabami
-			margin: -$vertical-header-spacing -24px 16px -24px
-			box-shadow: $boxShadow-lg
-			background-color: $backgroundColor-white
-			padding: 8px 24px 8px 24px
-			width: calc(100% + 40px)
-		// Content
-		.content-body
-			background: $backgroundColor-white
-			padding: 8px
-			border-radius: 4px
-			box-shadow: $boxShadow-xl
-			margin-bottom: 24px
+			.ant-menu-item:not(:last-child)
+				margin-bottom: 4px
+
+			.ant-menu-submenu
+				.ant-menu-submenu-title
+					&::after
+						position: absolute
+						top: 0
+						right: 0
+						bottom: 0
+						border-right: 3px solid $borderColor-notino-black
+						transform: scaleY(0.0001)
+						opacity: 0
+						transition: transform 0.15s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 0.15s cubic-bezier(0.215, 0.61, 0.355, 1)
+						content: ''
+				&.ant-menu-submenu-selected > .ant-menu-submenu-title
+					&::after
+						transform: scaleY(1)
+						opacity: 1
+						transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1)
+	.ant-layout-sider-zero-width-trigger
+		background-color: $backgroundColor-notino-black
+
+// 	.noti-content
+// 		padding: $header-height $right-left-layout-spacig 0 $right-left-layout-spacig
+// 		.content-header
+// 			// NOTE: ak by v headeri bol niekedy nejaky koncet ktory musi byt vedla seba a nie pod seba ako je takto defaultne tak pretazit nejakou classou flex-direction na row
+// 			display: flex
+// 			flex-direction: column
+// 			justify-content: space-between
+// 			z-index: $z-index-content-header
+// 			position: sticky
+// 			top: 12px
+// 			min-height: 76px // Miesto potrebne pre breadcrumbs + Button / Tabs + spacing medzi breadcrumbami a buttonami / tabami
+// 			margin: -$vertical-header-spacing -24px 16px -24px
+// 			box-shadow: $boxShadow-lg
+// 			background-color: $backgroundColor-white
+// 			padding: 8px 24px 8px 24px
+// 			width: calc(100% + 40px)
+// Content
+.content-body
+	background: $backgroundColor-white
+	padding: 8px
+	border-radius: 4px
+	box-shadow: $boxShadow-xl
+	margin-bottom: 24px
+	width: 100%
+	&.floating // cena sirka aj vyska bez marginov / paddingov so sedym pozadim na ktore idu biele formy a ine informacie (eg: dokoncenie-rezervacie)
+		min-height: calc(100vh - #{$header-height} - 80px - 56px) // 100vh - header - breadcrumbs - footer
+		margin-bottom: 0
+		padding: 0
+		width: calc(100% + 38px)
+		background: $backgroundColor-gray-50
+		margin: -16px -24px -24px -24px
+		.floating-content-wrapper
+			min-height: calc(100vh - #{$header-height} - 80px - 56px)
+	&.small
+		width: 50%
+		margin: 0 auto
+	&.medium
+		width: 75%
+		margin: 0 auto
+	&.without-content-footer
+		.floating-content-wrapper
+			min-height: calc(100vh - 80px - 81px) // 100vh - header - breadcrumbs
+	@media (max-width: 1700px)
+		&.small
+			width: 75%
+	@media (max-width: 1200px)
+		&.small, &.medium
 			width: 100%
-			&.floating // cena sirka aj vyska bez marginov / paddingov so sedym pozadim na ktore idu biele formy a ine informacie (eg: dokoncenie-rezervacie)
-				min-height: calc(100vh - #{$header-height} - 80px - 56px) // 100vh - header - breadcrumbs - footer
-				margin-bottom: 0
-				padding: 0
-				width: calc(100% + 38px)
-				background: $backgroundColor-gray-50
-				margin: -16px -24px -24px -24px
-				.floating-content-wrapper
-					min-height: calc(100vh - #{$header-height} - 80px - 56px)
-			&.small
-				width: 50%
-				margin: 0 auto
-			&.medium
-				width: 75%
-				margin: 0 auto
-			&.without-content-footer
-				.floating-content-wrapper
-					min-height: calc(100vh - 80px - 81px) // 100vh - header - breadcrumbs
-			@media (max-width: 1700px)
-				&.small
-					width: 75%
-			@media (max-width: 1200px)
-				&.small, &.medium
-					width: 100%
-			// footer
-			.content-footer
-				position: sticky
-				bottom: 0
-				border-bottom-left-radius: 4px
-				border-bottom-right-radius: 4px
-				height: $footer-height
-				width: calc(100% + 16px)
-				margin-left: -8px
-				margin-top: 24px
-				margin-bottom: -24px
-				background: $backgroundColor-gray-50
-				padding: 10px 24px 10px 24px
-				z-index: $z-index-five
-.tp-dropdown-header
+	// footer
+	.content-footer
+		position: sticky
+		bottom: 0
+		border-bottom-left-radius: 4px
+		border-bottom-right-radius: 4px
+		height: $footer-height
+		width: calc(100% + 16px)
+		margin-left: -8px
+		margin-top: 24px
+		margin-bottom: -12px
+		background: $backgroundColor-gray-50
+		padding: 10px 24px 10px 24px
+		z-index: $z-index-five
+.noti-dropdown-header
 	top: $header-height !important
 	box-shadow: $boxShadow-lg
 // Dropdown pre MENU
-.tp-layout-popup
+.noti-layout-popup
 	.ant-menu.ant-menu-sub
 		border-radius: 0 0 4px 4px
 		background: $backgroundColor-white

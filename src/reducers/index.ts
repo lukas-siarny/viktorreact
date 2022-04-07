@@ -7,10 +7,22 @@ import { ThunkAction } from 'redux-thunk'
 
 // reducers
 import userReducer from './users/userReducer'
+import enumerationReducer from './enumerations/enumerationReducer'
+import rolesReducer from './roles/rolesReducer'
+import categoriesReducer from './categories/categoriesReducer'
+import serviceReducer from './services/serviceReducer'
+import salonsReducer from './salons/salonsReducer'
+import customerReducer from './customers/customerReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
-	USER: 'USER'
+	USER: 'USER',
+	ENUMERATIONS: 'ENUMERATIONS',
+	ROLES: 'ROLES',
+	CATEGORIES: 'CATEGORIES',
+	SERVICE: 'SERVICE',
+	SALONS: 'SALONS',
+	CUSTOMERS: 'CUSTOMERS'
 }
 
 const rootReducer = combineReducers({
@@ -21,12 +33,54 @@ const rootReducer = combineReducers({
 		},
 		userReducer
 	),
+	roles: persistReducer(
+		{
+			key: REDUCER_KEYS.ROLES,
+			storage: storageSession
+		},
+		rolesReducer
+	),
+	categories: persistReducer(
+		{
+			key: REDUCER_KEYS.CATEGORIES,
+			storage: storageSession
+		},
+		categoriesReducer
+	),
+	salons: persistReducer(
+		{
+			key: REDUCER_KEYS.SALONS,
+			storage: storageSession
+		},
+		salonsReducer
+	),
 	form: persistReducer(
 		{
 			key: REDUCER_KEYS.FORMS,
 			storage: storageSession
 		},
 		formReducer
+	),
+	enumerationsStore: persistReducer(
+		{
+			key: REDUCER_KEYS.ENUMERATIONS,
+			storage: storageSession
+		},
+		enumerationReducer
+	),
+	service: persistReducer(
+		{
+			key: REDUCER_KEYS.SERVICE,
+			storage: storageSession
+		},
+		serviceReducer
+	),
+	customers: persistReducer(
+		{
+			key: REDUCER_KEYS.CUSTOMERS,
+			storage: storageSession
+		},
+		customerReducer
 	)
 })
 

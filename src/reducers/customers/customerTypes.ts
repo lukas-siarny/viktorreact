@@ -1,0 +1,6 @@
+// eslint-disable-next-line import/prefer-default-export
+export enum CUSTOMERS {
+	CUSTOMERS_LOAD_START = 'CUSTOMERS_LOAD_START',
+	CUSTOMERS_LOAD_DONE = 'CUSTOMERS_LOAD_DONE',
+	CUSTOMERS_LOAD_FAIL = 'CUSTOMERS_LOAD_FAIL'
+}

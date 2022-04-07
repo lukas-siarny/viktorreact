@@ -14,7 +14,7 @@ const NotFoundPage: FC<Props> = () => {
 			subTitle={t(
 				'loc:Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás'
 			)}
-			extra={<Link to={t('paths:index') as string}>{t('loc:Hlavná stránka')}</Link>}
+			extra={<Link to={t('paths:index')}>{t('loc:Hlavná stránka')}</Link>}
 		/>
 	)
 }

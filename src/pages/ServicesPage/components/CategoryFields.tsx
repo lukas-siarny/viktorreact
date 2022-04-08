@@ -23,7 +23,6 @@ const CategoryFields = () => {
 
 	const categoryRoot = form?.values?.categoryRoot
 	const categoryFirstLevel = form?.values?.categoryFirstLevel
-	// const categorySecondLevel = form?.values?.categorySecondLevel
 
 	const categoryRootOptions = useMemo(() => getSelectOptionsFromData(categories.data), [categories.data])
 

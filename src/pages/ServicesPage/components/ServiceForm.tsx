@@ -29,7 +29,7 @@ import { getSalons } from '../../../reducers/salons/salonsActions'
 
 // utils
 import { scrollToFirstError, validationNumberMin } from '../../../utils/helper'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 
@@ -50,7 +50,7 @@ const ServiceForm = (props: Props) => {
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
 
 	const isPristineForm: boolean = useSelector((state: RootState) => isPristine(FORM.SERVICE_FORM)(state))
-	const [isRemoving, setIsRemoving] = useState(false)
+	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
 	const isLoading = serviceLoading || categoriesLoading || isRemoving
 	const submitting = false
@@ -177,7 +177,7 @@ const ServiceForm = (props: Props) => {
 					component={ImgUploadField}
 					name='gallery'
 					label={t('loc:Referenčné obrázky')}
-					signUrl='/api/b2b/admin/files/sign-urls'
+					signUrl={URL_UPLOAD_IMAGES}
 					multiple
 					maxCount={10}
 					category='SALON'

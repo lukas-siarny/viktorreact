@@ -38,7 +38,6 @@
     "antd": "4.16.13",
     "antd-dayjs-webpack-plugin": "1.0.6",
     "autoprefixer": "10.4.0",
-    "awesome-debounce-promise": "2.1.0",
     "axios": "0.25.0",
     "babel-plugin-import": "1.13.3",
     "classnames": "2.3.1",

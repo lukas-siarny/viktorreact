@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { MSG_TYPE } from '../utils/enums'
+import { GENDER, MSG_TYPE } from '../utils/enums'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -16,6 +16,7 @@ export interface IResponsePagination {
 export interface ISelectOptionItem {
 	key: number | string
 	label: string
+	value: number | string
 	disabled?: boolean
 	hardSelected?: boolean
 	extra?: any
@@ -162,4 +163,18 @@ export interface IOpenHoursNoteForm {
 
 export interface ISearchFilter {
 	search: string
+}
+
+export interface ICustomerForm {
+	firstName: string
+	lastName: string
+	email?: string
+	phonePrefixCountryCode: string
+	phone: string
+	gender?: GENDER
+	zipCode?: string
+	city?: string
+	street?: string
+	countryCode?: string
+	salonID: number
 }

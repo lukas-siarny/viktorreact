@@ -86,6 +86,7 @@ export const DROPDOWN_POSITION = {
 }
 
 export enum FORM {
+	CUSTOMER = 'CUSTOMER',
 	USER_ACCOUNT = 'USER_ACCOUNT',
 	SALON = 'SALON',
 	LOGIN = 'LOGIN',

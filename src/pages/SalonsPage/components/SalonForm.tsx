@@ -43,6 +43,9 @@ import { getUsers } from '../../../reducers/users/userActions'
 type ComponentProps = {
 	openNoteModal: Function
 	isAdmin: boolean
+	changeSalonVisibility: (visible: boolean) => void
+	publishSalon: (published: boolean) => void
+	switchDisabled: boolean
 }
 
 type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProps
@@ -58,13 +61,14 @@ const validateUsersSelect = (value: string, formValues: any, props: any) => {
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, change, openNoteModal, isAdmin } = props
+	const { handleSubmit, change, openNoteModal, isAdmin, changeSalonVisibility, publishSalon, switchDisabled } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const onSearchUsers = useCallback(
-		(searchText: string) => {
+		async (searchText: string, page: number) => {
 			// roleID = 3 for PARTNER users
-			return dispatch(getUsers(1, 100, undefined, searchText, 3))
+			const { data, usersOptions } = await dispatch(getUsers(page, undefined, undefined, searchText, 3))
+			return { pagination: data?.pagination?.page, data: usersOptions }
 		},
 		[dispatch]
 	)
@@ -78,19 +82,26 @@ const UserAccountForm: FC<Props> = (props) => {
 							{t('loc:Základné údaje')} <InfoIcon className={'text-notino-black'} />
 						</h3>
 						<div className={'flex justify-between w-2/5'}>
-							<Field className={'mt-2 mb-2 w-12/25'} component={SwitchField} label={t('loc:Viditeľné')} name={'isVisible'} size={'middle'} required />
-							<Button
-								type={'primary'}
-								block
+							<Field
+								className={'mt-2 mb-2 w-12/25'}
+								component={SwitchField}
+								label={t('loc:Viditeľný')}
+								name={'isVisible'}
 								size={'middle'}
-								className={`noti-btn m-regular mt-2 mb-2 w-12/25`}
-								htmlType={'submit'}
-								onClick={() => {
-									// TODO - add callback fun for public salon
-								}}
-							>
-								{t('loc:Publikovať')}
-							</Button>
+								required
+								customOnChange={changeSalonVisibility}
+								disabled={switchDisabled}
+							/>
+							<Field
+								className={'mt-2 mb-2 w-12/25'}
+								component={SwitchField}
+								label={t('loc:Publikovaný')}
+								name={'isPublished'}
+								size={'middle'}
+								required
+								customOnChange={publishSalon}
+								disabled={switchDisabled}
+							/>
 						</div>
 					</div>
 					<Divider className={'mb-3 mt-3'} />
@@ -211,7 +222,6 @@ const UserAccountForm: FC<Props> = (props) => {
 							validate={validateUsersSelect}
 							onSearch={onSearchUsers}
 							optionLabelProp={'label'}
-							dataSourcePath={'usersOptions'}
 							filterOption={true}
 							labelInValue
 							showSearch

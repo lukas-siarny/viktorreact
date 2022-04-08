@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { initialize, submit } from 'redux-form'
-import { isEmpty, get } from 'lodash'
+import { get } from 'lodash'
 import cx from 'classnames'
 
 // components
@@ -133,13 +133,18 @@ const UserAccountPage: FC<Props> = (props) => {
 		'justify-center': !showDeleteBtn
 	})
 
+	// check role partner for show company form
+	const isPartner = (roles: any) => {
+		return roles?.find((role: any) => role?.name === 'Partner' && role?.id === 3)
+	}
+
 	return (
 		<>
 			<Row className={hideClass}>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
 			<div className='content-body small'>
-				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!isEmpty(get(userAccountDetail, 'data.company'))} />
+				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!!isPartner(get(userAccountDetail?.data, 'roles'))} />
 				<div className={'content-footer'}>
 					<Row className={rowClass}>
 						{showDeleteBtn ? (

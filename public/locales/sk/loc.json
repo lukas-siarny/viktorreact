@@ -1,4 +1,5 @@
 {
+  " Muž": " Muž",
   " Môj účet": " Môj účet",
   "Adresa": "Adresa",
   "Aktivovaný": "Aktivovaný",
@@ -18,6 +19,7 @@
   "Dátum": "Dátum",
   "Dátum nesmie byť v minulosti": "Dátum nesmie byť v minulosti",
   "Email": "Email",
+  "Email nie je platný": "Email nie je platný",
   "Expirácia rezervácie": "Expirácia rezervácie",
   "Ešte nemáte účet?": "Ešte nemáte účet?",
   "Facebook": "Facebook",
@@ -83,6 +85,7 @@
   "Platba kartou": "Platba kartou",
   "Po": "Po",
   "Po - Pia": "Po - Pia",
+  "Pohlavie": "Pohlavie",
   "Položku": "Položku",
   "Pon - Pi rovnaké otváracie hodiny": "Pon - Pi rovnaké otváracie hodiny",
   "Pondelok": "Pondelok",
@@ -155,9 +158,11 @@
   "Viditeľný": "Viditeľný",
   "Vlastnosti zariadenia": "Vlastnosti zariadenia",
   "Vyber krajinu": "Vyber krajinu",
+  "Vyber pohlavie": "Vyber pohlavie",
   "Vyber používateľa": "Vyber používateľa",
   "Vyber rolu": "Vyber rolu",
   "Vyberte aspoň jednu z možností": "Vyberte aspoň jednu z možností",
+  "Vyberte salón": "Vyberte salón",
   "Vyberte {{entity}}": "Vyberte {{entity}}",
   "Vyhlasujem, že som sa oboznámil s": "Vyhlasujem, že som sa oboznámil s",
   "Vyhlasujem, že som sa oboznámil so": "Vyhlasujem, že som sa oboznámil so",
@@ -172,6 +177,7 @@
   "Vytvorené": "Vytvorené",
   "Vytvoriť kategóriu": "Vytvoriť kategóriu",
   "Vytvoriť používateľa": "Vytvoriť používateľa",
+  "Vytvoriť salón": "Vytvoriť salón",
   "Vytvoriť {{entity}}": "Vytvoriť {{entity}}",
   "Vyžiadať nový odkaz pre nastavenie hesla": "Vyžiadať nový odkaz pre nastavenie hesla",
   "Vzory jednotiek": "Vzory jednotiek",
@@ -218,6 +224,7 @@
   "poznámku": "poznámku",
   "salón": "salón",
   "slovensky": "slovensky",
+  "zákazníka": "zákazníka",
   "{{from}} - {{to}} z {{total}} záznamov": "{{from}} - {{to}} z {{total}} záznamov",
   "Úspešné": "Úspešné",
   "Česká republika": "Česká republika",
@@ -225,5 +232,6 @@
   "čas od": "čas od",
   "Štv": "Štv",
   "Štvrtok": "Štvrtok",
-  "Štát": "Štát"
+  "Štát": "Štát",
+  "Žena": "Žena"
 }

@@ -6,8 +6,24 @@ import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 export default (values: any) => {
 	const errors: FormErrors<any> = {}
 
-	if (!values.email) {
-		errors.email = i18next.t('loc:Toto pole je povinné')
+	if (!values.firstName) {
+		errors.firstName = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (values?.firstName && values.firstName?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+		errors.firstName = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_100
+		})
+	}
+
+	if (!values.lastName) {
+		errors.lastName = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (values?.lastName && values.lastName?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+		errors.lastName = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_100
+		})
 	}
 
 	if (values?.email) {
@@ -30,8 +46,8 @@ export default (values: any) => {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!values.roleID) {
-		errors.roleID = i18next.t('loc:Toto pole je povinné')
+	if (!values.salonID) {
+		errors.salonID = i18next.t('loc:Toto pole je povinné')
 	}
 
 	return errors

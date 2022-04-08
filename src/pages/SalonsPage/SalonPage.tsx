@@ -19,7 +19,6 @@ import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PER
 // reducers
 import { RootState } from '../../reducers'
 import { emptySalon, getSalon, ISalonPayload } from '../../reducers/salons/salonsActions'
-import { getCountries } from '../../reducers/enumerations/enumerationActions'
 
 // types
 import { IBreadcrumbs, IComputedMatch, ILoadingAndFailure } from '../../types/interfaces'
@@ -352,10 +351,15 @@ const SalonPage: FC<Props> = (props) => {
 				name: t('loc:Zoznam salónov'),
 				link: t('paths:salons')
 			},
-			{
-				name: t('loc:Detail salónu'),
-				titleName: get(salon, 'data.salon.name')
-			}
+			get(salon, 'data.salon.name')
+				? {
+						name: t('loc:Detail salónu'),
+						titleName: get(salon, 'data.salon.name')
+				  }
+				: {
+						name: t('loc:Vytvoriť salón'),
+						link: t('paths:salons/create')
+				  }
 		]
 	}
 
@@ -417,10 +421,6 @@ const SalonPage: FC<Props> = (props) => {
 		}
 	}
 
-	const hideClass = cx({
-		hidden: !salonID
-	})
-
 	const rowClass = cx({
 		'justify-between': showDeleteBtn,
 		'justify-center': !showDeleteBtn
@@ -428,7 +428,7 @@ const SalonPage: FC<Props> = (props) => {
 
 	return (
 		<>
-			<Row className={hideClass}>
+			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
 			</Row>
 			<div className='content-body'>

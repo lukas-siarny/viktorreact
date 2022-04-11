@@ -1,4 +1,4 @@
-import React, { PureComponent, ReactNode } from 'react'
+import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormAction, WrappedFieldProps } from 'redux-form'
 import cx from 'classnames'
 import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, take } from 'lodash'
@@ -69,142 +69,214 @@ type IPagination = {
 	totalCount: number
 }
 
-export default class SelectField extends PureComponent<Props> {
-	// eslint-disable-next-line react/sort-comp
-	onBlur = () => {
-		// NOTE: let the function empty
+const getOptions = (optionRender: any, options: any) =>
+	map(options, (option) => (
+		<Option key={option.key} value={option.value} disabled={option.disabled} label={option.label} extra={option.extra}>
+			{optionRender ? optionRender(option) : option.label}
+		</Option>
+	))
+
+const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactElement, fetching: boolean | undefined) => {
+	const divider = isEmpty(actions) ? null : <Divider style={{ margin: 0 }} />
+
+	return (
+		<Spin
+			style={{ margin: '10px', justifyContent: 'flex-start' }}
+			indicator={<LoadingIcon className={'loading-spinner text-notino-black'} />}
+			className={'flex-center text-notino-black'}
+			tip={'Načítavam...'}
+			spinning={fetching}
+		>
+			{menu}
+			<div className={'w-11/12 m-auto'}>{divider}</div>
+			{map(actions, (item, index) => (
+				<div className={'flex items-center h-12'} key={index}>
+					<Button key={item.title} type='link' size={'large'} htmlType='button' className={'noti-btn'} icon={item.icon || <PlusIcon />} onClick={item.onAction}>
+						{item.title}
+					</Button>
+				</div>
+			))}
+		</Spin>
+	)
+}
+
+const handleChange = async (data: any) => {
+	const { value, options, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update } = data
+	let val = value
+	// NOTE condition for checking if select field has 'tags' mode with maxTagLength prop for checking length string of added tag
+	// if input value's length is larger than maxTagLength, filter this value from tags
+	if (mode === 'tags' && maxTagLength && length(last(value)) > maxTagLength) {
+		val = filter(value, (v, i: number) => i !== value.length - 1)
+	}
+	// NOTE: extra data k value, key, label ak potrebujeme poslat ine data -> eg. pri reservacii sa neposiela ID travelera ale cely objekt
+	if ((mode === 'tags' || mode === 'multiple') && hasExtra) {
+		val = map(value, (valInput) => ({
+			...valInput,
+			extra: find(options, (item) => item.value === valInput.value)?.extra
+		}))
+	} else if (hasExtra && options?.extra) {
+		val = {
+			...value,
+			extra: options?.extra
+		}
+	}
+	if (maxTagsLimit && val?.length > maxTagsLimit) {
+		val = take(val, maxTagsLimit)
+	}
+	await input.onChange(val === undefined ? null : val)
+	if (update) {
+		// NOTE: update prop for onSelect and onDeselect submitting form (eg. setting Tags)
+		update(val, itemRef.current)
 	}
 
-	itemRef: any
+	if (autoBlur && itemRef.current) {
+		itemRef.current.blur()
+	}
+}
 
-	state = {
+type SelectStateTypes = {
+	data?: any[]
+	fetching?: boolean
+	searchValue?: string
+	emptyText?: string | null
+	pagination?: IPagination | null
+}
+
+const SelectField = (props: Props) => {
+	const {
+		input,
+		size,
+		placeholder,
+		label,
+		required,
+		meta,
+		showErrorWhenUntouched,
+		hideHelp,
+		options,
+		loading,
+		mode,
+		tagRender,
+		allowClear,
+		style,
+		showSearch,
+		filterOption,
+		suffixIcon,
+		labelInValue,
+		actions,
+		disabled,
+		notFoundContent,
+		removeIcon,
+		allowInfinityScroll,
+		defaultValue,
+		backgroundColor,
+		clearIcon,
+		className,
+		optionLabelProp,
+		open,
+		showArrow,
+		menuItemSelectedIcon,
+		dropdownClassName,
+		dropdownStyle,
+		dropdownMatchSelectWidth = true,
+		listHeight,
+		emptyText,
+		bordered,
+		autoClearSearchValue,
+		maxTagTextLength,
+		showAction,
+		getPopupContainer,
+		disableMenuItemSelectedIcon,
+		fieldMode = FIELD_MODE.INPUT,
+		readOnly,
+		disableTpStyles = false,
+		autoFocus,
+		optionRender,
+		dataSourcePath = 'data',
+		onDidMountSearch,
+		update,
+		maxTagLength,
+		maxTagsLimit,
+		autoBlur,
+		hasExtra
+	} = props
+
+	const localItemRef = useRef()
+	const itemRef = props.itemRef || localItemRef
+
+	const [selectState, setSelectState] = useState<SelectStateTypes>({
 		data: [],
 		fetching: false,
 		searchValue: '',
 		emptyText: null,
-		pagination: null as IPagination | null
-	}
+		pagination: null
+	})
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	onSearchDebounced: (value: string, page?: number) => any
+	const renderDropdown = useCallback(
+		(antdActions?: Action[] | null) => (menu: React.ReactElement) => {
+			return customDropdown(antdActions, menu, selectState.fetching)
+		},
+		[selectState.fetching]
+	)
 
-	constructor(props: Props) {
-		super(props)
-		this.itemRef = this.props.itemRef || React.createRef()
+	const handleSearch = useCallback(
+		async (value = '', page = 1) => {
+			const onSearch = props.onSearch as any
+			if (selectState.fetching) {
+				return
+			}
+			if (onSearch) {
+				try {
+					let collectedData = []
+					if (page !== 1 && selectState.data) collectedData = selectState.data
 
-		this.onSearchDebounced = debounce(this.onSearch, 300)
-		if (props.onDidMountSearch) {
-			this.onSearch('', 1)
-		}
-	}
+					setSelectState({ ...selectState, fetching: true, searchValue: value })
 
-	renderDropdown = (actions?: Action[] | null) => (menu: React.ReactElement) => {
-		const divider = isEmpty(actions) ? null : <Divider style={{ margin: 0 }} />
-
-		return (
-			<Spin
-				style={{ margin: '10px', justifyContent: 'flex-start' }}
-				indicator={<LoadingIcon className={'loading-spinner text-notino-black'} />}
-				className={'flex-center text-notino-black'}
-				tip={'Načítavam...'}
-				spinning={this.state.fetching}
-			>
-				{menu}
-				<div className={'w-11/12 m-auto'}>{divider}</div>
-				{map(actions, (item, index) => (
-					<div className={'flex items-center h-12'} key={index}>
-						<Button key={item.title} type='link' size={'large'} htmlType='button' className={'noti-btn'} icon={item.icon || <PlusIcon />} onClick={item.onAction}>
-							{item.title}
-						</Button>
-					</div>
-				))}
-			</Spin>
-		)
-	}
-
-	onSearch = async (value: string, page = 1) => {
-		const onSearch = this.props.onSearch as any
-		const { dataSourcePath = 'data', allowInfinityScroll } = this.props
-
-		const { fetching } = this.state
-		if (fetching) {
-			return
-		}
-		if (onSearch) {
-			try {
-				const collectedData = page === 1 ? [] : this.state.data
-				this.setState({ fetching: true, searchValue: value })
-
-				const data: any = await onSearch(value, page)
-				const dataOptions = get(data, dataSourcePath)
-				if (data.pagination || dataOptions) {
-					const mergedData = [...collectedData, ...dataOptions]
-					this.setState({ data: mergedData, pagination: data.pagination, fetching: false })
-				} else if (!allowInfinityScroll && isArray(data)) {
-					// NOTE: Výsledky sa nedoliepajú
-					this.setState({ data, fetching: false })
-				} else {
-					this.setState({
+					const newData: any = await onSearch(value, page)
+					const dataOptions = get(newData, dataSourcePath)
+					if (newData.pagination || dataOptions) {
+						const mergedData = [...collectedData, ...dataOptions]
+						setSelectState({ data: mergedData, pagination: newData.pagination, fetching: false })
+					} else if (!allowInfinityScroll && isArray(newData)) {
+						// NOTE: Výsledky sa nedoliepajú
+						setSelectState({ data: newData, fetching: false })
+					} else {
+						setSelectState({
+							data: [],
+							pagination: null,
+							fetching: false,
+							searchValue: ''
+						})
+					}
+					if (newData.emptyText) {
+						setSelectState({
+							emptyText: newData.emptyText
+						})
+					}
+				} catch (e) {
+					setSelectState({
 						data: [],
 						pagination: null,
 						fetching: false,
 						searchValue: ''
 					})
 				}
-				if (data.emptyText) {
-					this.setState({
-						emptyText: data.emptyText
-					})
-				}
-			} catch (e) {
-				this.setState({
-					data: [],
-					pagination: null,
-					fetching: false,
-					searchValue: ''
-				})
 			}
-		}
-	}
+		},
+		[selectState, allowInfinityScroll, dataSourcePath, props.onSearch]
+	)
 
-	onChange = async (value: any, options: any) => {
-		const { input, update, maxTagLength, maxTagsLimit, mode, autoBlur, hasExtra } = this.props
-		if (input.onChange) {
-			let val = value
-			// NOTE condition for checking if select field has 'tags' mode with maxTagLength prop for checking length string of added tag
-			// if input value's length is larger than maxTagLength, filter this value from tags
-			if (mode === 'tags' && maxTagLength && length(last(value)) > maxTagLength) {
-				val = filter(value, (v, i: number) => i !== value.length - 1)
-			}
-			// NOTE: extra data k value, key, label ak potrebujeme poslat ine data -> eg. pri reservacii sa neposiela ID travelera ale cely objekt
-			if ((mode === 'tags' || mode === 'multiple') && hasExtra) {
-				val = map(value, (valInput) => ({
-					...valInput,
-					extra: find(options, (item) => item.value === valInput.value)?.extra
-				}))
-			} else if (hasExtra && options?.extra) {
-				val = {
-					...value,
-					extra: options?.extra
-				}
-			}
-			if (maxTagsLimit && val?.length > maxTagsLimit) {
-				val = take(val, maxTagsLimit)
-			}
-			await input.onChange(val === undefined ? null : val)
-			if (update) {
-				// NOTE: update prop for onSelect and onDeselect submitting form (eg. setting Tags)
-				update(val, this.itemRef.current)
-			}
+	const onSearchDebounced = useMemo(() => debounce(handleSearch, 300), [handleSearch])
 
-			if (autoBlur && this.itemRef.current) {
-				this.itemRef.current.blur()
-			}
-		}
-	}
+	const onChange = useCallback(
+		async (value: any, antdOptions: any) => {
+			if (!input.onChange) return
+			handleChange({ value, options: antdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update })
+		},
+		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update]
+	)
 
-	onSelectWrap = async (value: any, option: any) => {
-		const { mode, onSelect, options, hasExtra, input } = this.props
+	const onSelectWrap = async (value: any, option: any) => {
+		const { onSelect } = props
 		if (onSelect) {
 			let opt
 			if ((mode === 'tags' || mode === 'multiple') && hasExtra) {
@@ -219,8 +291,8 @@ export default class SelectField extends PureComponent<Props> {
 		}
 	}
 
-	onDeselectWrap = async (value: any, option: any) => {
-		const { mode, onDeselect, options, hasExtra } = this.props
+	const onDeselectWrap = async (value: any, option: any) => {
+		const { onDeselect } = props
 		if (onDeselect) {
 			let val
 			if ((mode === 'tags' || mode === 'multiple') && hasExtra) {
@@ -233,207 +305,169 @@ export default class SelectField extends PureComponent<Props> {
 		}
 	}
 
-	filterOption = (inputValue: any, option: any) => createSlug(option.label.toLowerCase()).indexOf(createSlug(inputValue.toLowerCase())) >= 0
+	const localFilterOption = (inputValue: any, option: any) => createSlug(option.label.toLowerCase()).indexOf(createSlug(inputValue.toLowerCase())) >= 0
 
-	onScroll = (e: any) => {
-		const { fetching, searchValue, pagination } = this.state
+	const onScroll = useCallback(
+		(e: any) => {
+			let hasMore = true
+			let nextPage = 1
+			const { pagination, searchValue, fetching } = selectState
 
-		let hasMore = true
-		let nextPage = 1
-		if (pagination) {
-			hasMore = pagination.page < pagination.totalPages
-			nextPage = pagination.page + 1
+			if (pagination) {
+				hasMore = pagination.page < pagination.totalPages
+				nextPage = pagination.page + 1
+			}
+			if (Math.ceil(e.target.scrollTop + e.target.offsetHeight) >= e.target.scrollHeight && !fetching && hasMore) {
+				handleSearch(searchValue, nextPage)
+			}
+		},
+		[selectState, handleSearch]
+	)
+
+	const onDropdownVisibleChange = useCallback(
+		(isOpen: boolean) => {
+			const { onSearch } = props
+			if (isOpen && onSearch) {
+				// NOTE: Po vyhladani, vybrani polozky a znovu otvoreni ostavali vo vysledkoch stare vyhladane vysledky, nie 1. strana zo vsetkych
+				handleSearch('', 1)
+			}
+		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[handleSearch, props.onSearch]
+	)
+
+	const onBlur = () => {
+		// NOTE: let the function empty
+	}
+
+	const onFocus = useCallback(
+		(e: any) => {
+			if (input.onFocus) {
+				input.onFocus(e)
+			}
+		},
+		[input]
+	)
+
+	useEffect(() => {
+		if (onDidMountSearch) {
+			handleSearch('', 1)
 		}
-		if (Math.ceil(e.target.scrollTop + e.target.offsetHeight) >= e.target.scrollHeight && !fetching && hasMore) {
-			this.onSearch(searchValue, nextPage)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [onDidMountSearch])
+
+	const value = input.value === null || input.value === '' ? undefined : input.value
+
+	let opt = options
+	if (isEmpty(options) && isEmpty(selectState.data)) {
+		opt = []
+	} else if (isEmpty(options)) {
+		opt = selectState.data
+	}
+
+	let suffIcon
+	if (!loading && !selectState.fetching) {
+		if (showSearch && !suffixIcon) {
+			suffIcon = <ArrowIcon className={'text-notino-black'} />
+		} else if (suffixIcon) {
+			suffIcon = suffixIcon
+		} else {
+			suffIcon = <ArrowIcon className={'text-notino-black'} />
 		}
 	}
 
-	onDropdownVisibleChange = (isOpen: boolean) => {
-		const { onSearch } = this.props
-		if (isOpen && onSearch) {
-			// NOTE: Po vyhladani, vybrani polozky a znovu otvoreni ostavali vo vysledkoch stare vyhladane vysledky, nie 1. strana zo vsetkych
-			this.onSearch('', 1)
-		}
+	const dropdownRender = props.dropdownRender || renderDropdown(actions)
+
+	let notFound = notFoundContent
+	if (emptyText || selectState.emptyText) {
+		notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={selectState.emptyText || emptyText} />
 	}
 
-	onFocus = (e: any) => {
-		const { input } = this.props
-
-		if (input.onFocus) {
-			input.onFocus(e)
+	const setGetPopupContainer = () => {
+		let popupContainer = (node: any) => node
+		// ak je multiple alebo tags tak sa nastavuje pre .ant-select-selector overflow: auto, aby sa scrollovali selectnute multiple option v selecte preto sa nastavuje container na document.body (aby sa to vzdy z hora nemuselo posielat)
+		if (mode === 'multiple' || mode === 'tags') {
+			popupContainer = (node: any) => node.closest('.ant-drawer-body') || node.closest('.ant-modal-body') || document.body
+		} else if (getPopupContainer) {
+			// Ak existuje getPopupContainer nastav ho -> vacsinou v editovatelnych tabulkach sa posiela
+			popupContainer = getPopupContainer
 		}
+		return popupContainer
+	}
+	const renderMenuItemSelectedIcon = () => {
+		// NOTE: menuItemSelectedIcon sa renderuje len ak je select typu tags / multiple alebo ak pretazim logiku a zhora ju poslem v prope menuItemSelectedIcon
+		let icon: any
+		if (menuItemSelectedIcon) {
+			icon = menuItemSelectedIcon
+		} else if (disableMenuItemSelectedIcon) {
+			icon = null
+		} else if ((mode === 'tags' || mode === 'multiple') && !disableMenuItemSelectedIcon) {
+			icon = <CheckedIcon /> || menuItemSelectedIcon
+		}
+		return icon
 	}
 
-	render() {
-		const {
-			input,
-			size,
-			placeholder,
-			label,
-			required,
-			meta,
-			showErrorWhenUntouched,
-			hideHelp,
-			options,
-			loading,
-			mode,
-			tagRender,
-			allowClear,
-			style,
-			showSearch,
-			filterOption,
-			suffixIcon,
-			labelInValue,
-			actions,
-			disabled,
-			notFoundContent,
-			removeIcon,
-			allowInfinityScroll,
-			defaultValue,
-			backgroundColor,
-			clearIcon,
-			className,
-			optionLabelProp,
-			open,
-			showArrow,
-			menuItemSelectedIcon,
-			dropdownClassName,
-			dropdownStyle,
-			dropdownMatchSelectWidth = true,
-			listHeight,
-			emptyText,
-			bordered,
-			autoClearSearchValue,
-			maxTagTextLength,
-			showAction,
-			getPopupContainer,
-			disableMenuItemSelectedIcon,
-			fieldMode = FIELD_MODE.INPUT,
-			readOnly,
-			disableTpStyles = false,
-			autoFocus,
-			optionRender
-		} = this.props
-		const { fetching, data } = this.state
-
-		const value = input.value === null || input.value === '' ? undefined : input.value
-
-		let opt = options
-		if (isEmpty(options) && isEmpty(data)) {
-			opt = []
-		} else if (isEmpty(options)) {
-			opt = data
-		}
-
-		let suffIcon
-		if (!loading && !fetching) {
-			if (showSearch && !suffixIcon) {
-				suffIcon = <ArrowIcon className={'text-notino-black'} />
-			} else if (suffixIcon) {
-				suffIcon = suffixIcon
-			} else {
-				suffIcon = <ArrowIcon className={'text-notino-black'} />
-			}
-		}
-
-		const dropdownRender = this.props.dropdownRender || this.renderDropdown(actions)
-		const onScroll = allowInfinityScroll ? this.onScroll : undefined
-
-		const contentOpts = map(opt, (option) => (
-			<Option key={option.key} value={option.value} disabled={option.disabled} label={option.label} extra={option.extra}>
-				{optionRender ? optionRender(option) : option.label}
-			</Option>
-		))
-
-		let notFound = notFoundContent
-		if (emptyText || this.state.emptyText) {
-			notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={this.state.emptyText || emptyText} />
-		}
-
-		const setGetPopupContainer = () => {
-			let popupContainer = (node: any) => node
-			// ak je multiple alebo tags tak sa nastavuje pre .ant-select-selector overflow: auto, aby sa scrollovali selectnute multiple option v selecte preto sa nastavuje container na document.body (aby sa to vzdy z hora nemuselo posielat)
-			if (mode === 'multiple' || mode === 'tags') {
-				popupContainer = (node: any) => node.closest('.ant-drawer-body') || node.closest('.ant-modal-body') || document.body
-			} else if (getPopupContainer) {
-				// Ak existuje getPopupContainer nastav ho -> vacsinou v editovatelnych tabulkach sa posiela
-				popupContainer = getPopupContainer
-			}
-			return popupContainer
-		}
-		const renderMenuItemSelectedIcon = () => {
-			// NOTE: menuItemSelectedIcon sa renderuje len ak je select typu tags / multiple alebo ak pretazim logiku a zhora ju poslem v prope menuItemSelectedIcon
-			let icon: any
-			if (menuItemSelectedIcon) {
-				icon = menuItemSelectedIcon
-			} else if (disableMenuItemSelectedIcon) {
-				icon = null
-			} else if ((mode === 'tags' || mode === 'multiple') && !disableMenuItemSelectedIcon) {
-				icon = <CheckedIcon /> || menuItemSelectedIcon
-			}
-			return icon
-		}
-		return (
-			<Item
-				label={label}
-				required={required}
-				style={style}
-				className={cx(className, { 'form-item-disabled': disabled, readOnly })}
-				help={(meta?.touched || showErrorWhenUntouched) && !hideHelp && isString(meta?.error) ? meta?.error : undefined}
-				validateStatus={(meta?.touched || showErrorWhenUntouched) && meta?.error ? 'error' : undefined}
+	return (
+		<Item
+			label={label}
+			required={required}
+			style={style}
+			className={cx(className, { 'form-item-disabled': disabled, readOnly })}
+			help={(meta?.touched || showErrorWhenUntouched) && !hideHelp && isString(meta?.error) ? meta?.error : undefined}
+			validateStatus={(meta?.touched || showErrorWhenUntouched) && meta?.error ? 'error' : undefined}
+		>
+			<Select
+				bordered={bordered}
+				style={{ backgroundColor }}
+				className={cx({ 'noti-select-input': !disableTpStyles, rounded: backgroundColor, 'filter-select': fieldMode === FIELD_MODE.FILTER })}
+				tagRender={tagRender}
+				mode={mode}
+				{...input}
+				id={formFieldID(meta.form, input.name)}
+				onFocus={onFocus}
+				onChange={onChange}
+				size={size || 'middle'}
+				value={value}
+				onBlur={onBlur}
+				placeholder={placeholder || ''}
+				loading={loading || selectState.fetching}
+				clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
+				allowClear={allowClear}
+				showSearch={showSearch}
+				filterOption={filterOption && localFilterOption}
+				onSearch={showSearch ? onSearchDebounced : undefined}
+				suffixIcon={suffIcon}
+				labelInValue={labelInValue}
+				dropdownRender={dropdownRender}
+				disabled={disabled}
+				removeIcon={removeIcon || <CloseIconSmall className={'text-blue-600'} />}
+				notFoundContent={notFound}
+				onPopupScroll={allowInfinityScroll ? onScroll : undefined}
+				onDropdownVisibleChange={onDropdownVisibleChange}
+				ref={itemRef as any}
+				defaultValue={defaultValue}
+				optionLabelProp={optionLabelProp}
+				open={open}
+				onDeselect={onDeselectWrap}
+				onSelect={onSelectWrap}
+				showArrow={showArrow}
+				menuItemSelectedIcon={renderMenuItemSelectedIcon()}
+				dropdownClassName={cx(`noti-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
+				dropdownStyle={dropdownStyle}
+				dropdownMatchSelectWidth={dropdownMatchSelectWidth}
+				listHeight={listHeight}
+				autoClearSearchValue={autoClearSearchValue}
+				maxTagTextLength={maxTagTextLength}
+				showAction={showAction}
+				getPopupContainer={setGetPopupContainer()}
+				autoFocus={autoFocus}
+				// NOTE: Do not show chrome suggestions dropdown and do not autofill this field when user picks chrome suggestion for other field
+				{...{ autoComplete: 'new-password' }}
 			>
-				<Select
-					bordered={bordered}
-					style={{ backgroundColor }}
-					className={cx({ 'noti-select-input': !disableTpStyles, rounded: backgroundColor, 'filter-select': fieldMode === FIELD_MODE.FILTER })}
-					tagRender={tagRender}
-					mode={mode}
-					{...input}
-					id={formFieldID(meta.form, input.name)}
-					onFocus={this.onFocus}
-					onChange={this.onChange}
-					size={size || 'middle'}
-					value={value}
-					onBlur={this.onBlur}
-					placeholder={placeholder || ''}
-					loading={loading || fetching}
-					clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
-					allowClear={allowClear}
-					showSearch={showSearch}
-					filterOption={filterOption && this.filterOption}
-					onSearch={showSearch ? this.onSearchDebounced : undefined}
-					suffixIcon={suffIcon}
-					labelInValue={labelInValue}
-					dropdownRender={dropdownRender}
-					disabled={disabled}
-					removeIcon={removeIcon || <CloseIconSmall className={'text-blue-600'} />}
-					notFoundContent={notFound}
-					onPopupScroll={onScroll}
-					onDropdownVisibleChange={this.onDropdownVisibleChange}
-					ref={this.itemRef as any}
-					defaultValue={defaultValue}
-					optionLabelProp={optionLabelProp}
-					open={open}
-					onDeselect={this.onDeselectWrap}
-					onSelect={this.onSelectWrap}
-					showArrow={showArrow}
-					menuItemSelectedIcon={renderMenuItemSelectedIcon()}
-					dropdownClassName={cx(`noti-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
-					dropdownStyle={dropdownStyle}
-					dropdownMatchSelectWidth={dropdownMatchSelectWidth}
-					listHeight={listHeight}
-					autoClearSearchValue={autoClearSearchValue}
-					maxTagTextLength={maxTagTextLength}
-					showAction={showAction}
-					getPopupContainer={setGetPopupContainer()}
-					autoFocus={autoFocus}
-					// NOTE: Do not show chrome suggestions dropdown and do not autofill this field when user picks chrome suggestion for other field
-					{...{ autoComplete: 'new-password' }}
-				>
-					{contentOpts}
-				</Select>
-			</Item>
-		)
-	}
+				{getOptions(optionRender, opt)}
+			</Select>
+		</Item>
+	)
 }
+
+export default SelectField

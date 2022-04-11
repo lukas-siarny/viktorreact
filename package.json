@@ -11,9 +11,9 @@
   },
   "scripts": {
     "start": "cross-env PORT=3210 npm-run-all -p start-watch translate-watch build:tailwind",
-    "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
-    "prebuild": "cross-env NODE_ENV=production npm-run-all -p build:tailwind rebuild:sass",
-    "build": "cross-env NODE_ENV=production REACT_APP_VERSION=$npm_package_version react-app-rewired build",
+    "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
+    "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true  npm-run-all -p build:tailwind rebuild:sass",
+    "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired build",
     "lint": "eslint src --color --ext .js --ext .ts --ext .jsx --ext .tsx",
     "release": "npm run build && npm run sentry",
     "sentry": "cross-env REACT_APP_VERSION=$npm_package_version node sentry.js",
@@ -128,7 +128,6 @@
     "@types/redux-logger": "3.0.9",
     "@types/selenium-webdriver": "4.0.16",
     "@types/sortablejs": "1.10.7",
-	"babel-loader": "8.1.0",
     "chai": "4.3.4",
     "chromedriver": "95.0.0",
     "eslint-plugin-chai-friendly": "0.7.2",
@@ -145,8 +144,7 @@
     "storybook-addon-customize-antd-theme": "1.1.0",
     "storybook-addon-designs": "6.2.1",
     "ts-mocha": "8.0.0",
-    "typescript": "4.4.4",
-	"webpack": "4.44.2"
+    "typescript": "4.4.4"
   },
   "browserslist": {
     "production": [

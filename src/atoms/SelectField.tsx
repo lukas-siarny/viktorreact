@@ -69,6 +69,43 @@ type IPagination = {
 	totalCount: number
 }
 
+type SelectStateTypes = {
+	data?: any[]
+	fetching?: boolean
+	searchValue?: string
+	emptyText?: string | null
+	pagination?: IPagination | null
+}
+
+const setGetPopupContainer = (mode: Props['mode'], getPopupContainer: Props['getPopupContainer']) => {
+	let popupContainer = (node: any) => node
+	// ak je multiple alebo tags tak sa nastavuje pre .ant-select-selector overflow: auto, aby sa scrollovali selectnute multiple option v selecte preto sa nastavuje container na document.body (aby sa to vzdy z hora nemuselo posielat)
+	if (mode === 'multiple' || mode === 'tags') {
+		popupContainer = (node: any) => node.closest('.ant-drawer-body') || node.closest('.ant-modal-body') || document.body
+	} else if (getPopupContainer) {
+		// Ak existuje getPopupContainer nastav ho -> vacsinou v editovatelnych tabulkach sa posiela
+		popupContainer = getPopupContainer
+	}
+	return popupContainer
+}
+
+const renderMenuItemSelectedIcon = (
+	mode: Props['mode'],
+	menuItemSelectedIcon: Props['menuItemSelectedIcon'],
+	disableMenuItemSelectedIcon: Props['disableMenuItemSelectedIcon']
+) => {
+	// NOTE: menuItemSelectedIcon sa renderuje len ak je select typu tags / multiple alebo ak pretazim logiku a zhora ju poslem v prope menuItemSelectedIcon
+	let icon: any
+	if (menuItemSelectedIcon) {
+		icon = menuItemSelectedIcon
+	} else if (disableMenuItemSelectedIcon) {
+		icon = null
+	} else if ((mode === 'tags' || mode === 'multiple') && !disableMenuItemSelectedIcon) {
+		icon = <CheckedIcon /> || menuItemSelectedIcon
+	}
+	return icon
+}
+
 const getOptions = (optionRender: any, options: any) =>
 	map(options, (option) => (
 		<Option key={option.key} value={option.value} disabled={option.disabled} label={option.label} extra={option.extra}>
@@ -134,12 +171,58 @@ const handleChange = async (data: any) => {
 	}
 }
 
-type SelectStateTypes = {
-	data?: any[]
-	fetching?: boolean
-	searchValue?: string
-	emptyText?: string | null
-	pagination?: IPagination | null
+const fetchSearchData = async ({
+	selectState,
+	value,
+	page,
+	onSearch,
+	dataSourcePath,
+	allowInfinityScroll
+}: {
+	selectState: SelectStateTypes
+	value: string
+	page: number
+	onSearch: any
+	dataSourcePath: string
+	allowInfinityScroll: boolean | undefined
+}) => {
+	let newState = {}
+
+	try {
+		let collectedData = []
+		if (page !== 1 && selectState.data) collectedData = selectState.data
+
+		const newData: any = await onSearch(value, page)
+		const dataOptions = get(newData, dataSourcePath)
+		if (newData.pagination || dataOptions) {
+			const mergedData = [...collectedData, ...dataOptions]
+			newState = { data: mergedData, pagination: newData.pagination, fetching: false }
+		} else if (!allowInfinityScroll && isArray(newData)) {
+			// NOTE: Výsledky sa nedoliepajú
+			newState = { data: newData, fetching: false }
+		} else {
+			newState = {
+				data: [],
+				pagination: null,
+				fetching: false,
+				searchValue: ''
+			}
+		}
+		if (newData.emptyText) {
+			newState = {
+				emptyText: newData.emptyText
+			}
+		}
+	} catch (e) {
+		newState = {
+			data: [],
+			pagination: null,
+			fetching: false,
+			searchValue: ''
+		}
+	}
+
+	return newState
 }
 
 const SelectField = (props: Props) => {
@@ -225,41 +308,9 @@ const SelectField = (props: Props) => {
 				return
 			}
 			if (onSearch) {
-				try {
-					let collectedData = []
-					if (page !== 1 && selectState.data) collectedData = selectState.data
-
-					setSelectState({ ...selectState, fetching: true, searchValue: value })
-
-					const newData: any = await onSearch(value, page)
-					const dataOptions = get(newData, dataSourcePath)
-					if (newData.pagination || dataOptions) {
-						const mergedData = [...collectedData, ...dataOptions]
-						setSelectState({ data: mergedData, pagination: newData.pagination, fetching: false })
-					} else if (!allowInfinityScroll && isArray(newData)) {
-						// NOTE: Výsledky sa nedoliepajú
-						setSelectState({ data: newData, fetching: false })
-					} else {
-						setSelectState({
-							data: [],
-							pagination: null,
-							fetching: false,
-							searchValue: ''
-						})
-					}
-					if (newData.emptyText) {
-						setSelectState({
-							emptyText: newData.emptyText
-						})
-					}
-				} catch (e) {
-					setSelectState({
-						data: [],
-						pagination: null,
-						fetching: false,
-						searchValue: ''
-					})
-				}
+				setSelectState({ ...selectState, fetching: true, searchValue: value })
+				const newState = await fetchSearchData({ selectState, value, page, onSearch, dataSourcePath, allowInfinityScroll })
+				setSelectState(newState)
 			}
 		},
 		[selectState, allowInfinityScroll, dataSourcePath, props.onSearch]
@@ -304,8 +355,6 @@ const SelectField = (props: Props) => {
 			await onDeselect(val, option)
 		}
 	}
-
-	const localFilterOption = (inputValue: any, option: any) => createSlug(option.label.toLowerCase()).indexOf(createSlug(inputValue.toLowerCase())) >= 0
 
 	const onScroll = useCallback(
 		(e: any) => {
@@ -356,6 +405,8 @@ const SelectField = (props: Props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [onDidMountSearch])
 
+	const localFilterOption = (inputValue: any, option: any) => createSlug(option.label.toLowerCase()).indexOf(createSlug(inputValue.toLowerCase())) >= 0
+
 	const value = input.value === null || input.value === '' ? undefined : input.value
 
 	let opt = options
@@ -376,35 +427,9 @@ const SelectField = (props: Props) => {
 		}
 	}
 
-	const dropdownRender = props.dropdownRender || renderDropdown(actions)
-
 	let notFound = notFoundContent
 	if (emptyText || selectState.emptyText) {
 		notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={selectState.emptyText || emptyText} />
-	}
-
-	const setGetPopupContainer = () => {
-		let popupContainer = (node: any) => node
-		// ak je multiple alebo tags tak sa nastavuje pre .ant-select-selector overflow: auto, aby sa scrollovali selectnute multiple option v selecte preto sa nastavuje container na document.body (aby sa to vzdy z hora nemuselo posielat)
-		if (mode === 'multiple' || mode === 'tags') {
-			popupContainer = (node: any) => node.closest('.ant-drawer-body') || node.closest('.ant-modal-body') || document.body
-		} else if (getPopupContainer) {
-			// Ak existuje getPopupContainer nastav ho -> vacsinou v editovatelnych tabulkach sa posiela
-			popupContainer = getPopupContainer
-		}
-		return popupContainer
-	}
-	const renderMenuItemSelectedIcon = () => {
-		// NOTE: menuItemSelectedIcon sa renderuje len ak je select typu tags / multiple alebo ak pretazim logiku a zhora ju poslem v prope menuItemSelectedIcon
-		let icon: any
-		if (menuItemSelectedIcon) {
-			icon = menuItemSelectedIcon
-		} else if (disableMenuItemSelectedIcon) {
-			icon = null
-		} else if ((mode === 'tags' || mode === 'multiple') && !disableMenuItemSelectedIcon) {
-			icon = <CheckedIcon /> || menuItemSelectedIcon
-		}
-		return icon
 	}
 
 	return (
@@ -438,7 +463,7 @@ const SelectField = (props: Props) => {
 				onSearch={showSearch ? onSearchDebounced : undefined}
 				suffixIcon={suffIcon}
 				labelInValue={labelInValue}
-				dropdownRender={dropdownRender}
+				dropdownRender={props.dropdownRender || renderDropdown(actions)}
 				disabled={disabled}
 				removeIcon={removeIcon || <CloseIconSmall className={'text-blue-600'} />}
 				notFoundContent={notFound}
@@ -451,7 +476,7 @@ const SelectField = (props: Props) => {
 				onDeselect={onDeselectWrap}
 				onSelect={onSelectWrap}
 				showArrow={showArrow}
-				menuItemSelectedIcon={renderMenuItemSelectedIcon()}
+				menuItemSelectedIcon={renderMenuItemSelectedIcon(mode, menuItemSelectedIcon, disableMenuItemSelectedIcon)}
 				dropdownClassName={cx(`noti-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
 				dropdownStyle={dropdownStyle}
 				dropdownMatchSelectWidth={dropdownMatchSelectWidth}
@@ -459,7 +484,7 @@ const SelectField = (props: Props) => {
 				autoClearSearchValue={autoClearSearchValue}
 				maxTagTextLength={maxTagTextLength}
 				showAction={showAction}
-				getPopupContainer={setGetPopupContainer()}
+				getPopupContainer={setGetPopupContainer(mode, getPopupContainer)}
 				autoFocus={autoFocus}
 				// NOTE: Do not show chrome suggestions dropdown and do not autofill this field when user picks chrome suggestion for other field
 				{...{ autoComplete: 'new-password' }}

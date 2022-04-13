@@ -3,7 +3,7 @@ import { map, join } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { SERVICES } from './serviceTypes'
+import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
 
@@ -12,7 +12,7 @@ import { getReq } from '../../utils/request'
 // import { PERMISSION } from '../../utils/enums'
 import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
-export type IServiceActions = IResetStore | IGetServices
+export type IServiceActions = IResetStore | IGetServices | IGetService
 
 interface IGetServices {
 	type: SERVICES
@@ -29,7 +29,7 @@ interface ServicesTableData {
 }
 
 export interface IServicesPayload {
-	originalData: Paths.GetApiB2BAdminServices.Responses.$200 | null
+	data: Paths.GetApiB2BAdminServices.Responses.$200 | null
 	tableData: ServicesTableData[] | undefined
 }
 
@@ -44,6 +44,7 @@ export const getServices =
 			const tableData = map(data.services, (item) => {
 				const tableItem = {
 					key: item.id,
+					serviceID: item.id,
 					name: item.name || '-',
 					employees: join(
 						map(item.employees, (employee) => employee.name),
@@ -56,7 +57,7 @@ export const getServices =
 				return tableItem
 			})
 			const payload = {
-				originalData: data,
+				data,
 				tableData
 			}
 
@@ -66,4 +67,36 @@ export const getServices =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+	}
+
+interface IGetService {
+	type: SERVICE
+	payload: IServicePayload
+}
+
+export interface IServicePayload {
+	data: Paths.GetApiB2BAdminServicesServiceId.Responses.$200 | null
+}
+
+export const getService =
+	(serviceID: number): ThunkResult<Promise<IServicePayload>> =>
+	async (dispatch) => {
+		let payload = {} as IServicePayload
+		try {
+			dispatch({
+				type: SERVICE.SERVICE_LOAD_START
+			})
+			const { data } = await getReq('/api/b2b/admin/services/{serviceID}', { serviceID })
+			payload = { data }
+
+			dispatch({
+				type: SERVICE.SERVICE_LOAD_DONE,
+				payload
+			})
+		} catch (e) {
+			dispatch({
+				type: SERVICE.SERVICE_LOAD_FAIL
+			})
+		}
+		return payload
 	}

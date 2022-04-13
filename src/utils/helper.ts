@@ -555,3 +555,27 @@ export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsI
 	})
 	return [defaultLanguage, ...otherLanguages]
 }
+
+type SelectDataItem = {
+	id: number
+	children?: any
+	name: string
+}
+
+export const getSelectOptionsFromData = (data: SelectDataItem[] | null) => {
+	if (!data) return []
+
+	return map(data, (item) => {
+		return { ...item, label: item.name, value: item.id, key: item.id, children: item.children }
+	})
+}
+
+export const getDefaultFormCategories = (id: number | undefined, categories: any, parentCategories: any = []): any => {
+	if (!id) return []
+	for (let index = 0; index < categories.length; index += 1) {
+		const currentCategories = [...parentCategories, categories[index]]
+		if (categories[index].id === id) return currentCategories // if id is found return current category and all parents
+		if (categories[index].children) return getDefaultFormCategories(id, categories[index].children, currentCategories)
+	}
+	return parentCategories
+}

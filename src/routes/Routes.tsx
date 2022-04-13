@@ -38,6 +38,7 @@ import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
 // services
 import ServicesPage from '../pages/ServicesPage/ServicesPage'
+import ServicePage from '../pages/ServicesPage/ServicePage'
 
 // Salons
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
@@ -154,6 +155,24 @@ const Routes: FC = (props) => {
 
 			<AuthRoute {...props} exact path={t('paths:customers')} component={CustomersPage} translatePathKey={t('paths:customers')} layout={MainLayout} page={PAGE.CUSTOMERS} />
 			<AuthRoute {...props} exact path={t('paths:services')} component={ServicesPage} translatePathKey={t('paths:services')} layout={MainLayout} page={PAGE.SERVICES} />
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:services/create')}
+				component={ServicePage}
+				translatePathKey={t('paths:services/create')}
+				layout={MainLayout}
+				page={PAGE.SERVICES}
+			/>
+			<AuthRoute
+				{...props}
+				exact
+				path={t('paths:services/{{serviceID}}', { serviceID: ':serviceID' })}
+				component={ServicePage}
+				translatePathKey={t('paths:services/{{serviceID}}', { serviceID: ':serviceID' })}
+				layout={MainLayout}
+				page={PAGE.SERVICES}
+			/>
 			{/* NOTE: add all private routes before this declaration */}
 			<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
 			<AuthRoute

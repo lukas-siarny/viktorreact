@@ -1,17 +1,22 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
-import { IServiceActions, IServicesPayload } from './serviceActions'
+import { IServiceActions, IServicesPayload, IServicePayload } from './serviceActions'
 // eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SERVICES } from './serviceTypes'
+import { SERVICES, SERVICE } from './serviceTypes'
 
 export const initState = {
 	services: {
-		originalData: null,
+		data: null,
 		tableData: undefined,
 		isLoading: false,
 		isFailure: false
-	} as IServicesPayload & ILoadingAndFailure
+	} as IServicesPayload & ILoadingAndFailure,
+	service: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IServicePayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -39,8 +44,33 @@ export default (state = initState, action: IServiceActions) => {
 				...state,
 				services: {
 					...initState.services,
-					originalData: action.payload.originalData,
+					data: action.payload.data,
 					tableData: action.payload.tableData
+				}
+			}
+		// Service
+		case SERVICE.SERVICE_LOAD_START:
+			return {
+				...state,
+				service: {
+					...state.service,
+					isLoading: true
+				}
+			}
+		case SERVICE.SERVICE_LOAD_FAIL:
+			return {
+				...state,
+				service: {
+					...initState.service,
+					isFailure: true
+				}
+			}
+		case SERVICE.SERVICE_LOAD_DONE:
+			return {
+				...state,
+				service: {
+					...initState.service,
+					data: action.payload.data
 				}
 			}
 		case RESET_STORE:

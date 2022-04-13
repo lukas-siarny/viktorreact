@@ -24,7 +24,7 @@ export const SeparateMainField: ComponentStory<typeof InputField> = () => {
 				name: 'example sk'
 			})
 		)
-	}, [])
+	}, [dispatch])
 
 	return (
 		<Form layout='vertical'>
@@ -61,7 +61,7 @@ export const IncludedMainField: ComponentStory<typeof InputField> = () => {
 				nameLocalizations: [{ language: 'sk', value: 'example sk' }, { language: 'en' }, { language: 'cz', value: 'example cz' }]
 			})
 		)
-	}, [])
+	}, [dispatch])
 
 	return (
 		<Form layout='vertical'>

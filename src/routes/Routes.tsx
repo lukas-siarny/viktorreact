@@ -123,7 +123,15 @@ const Routes: FC = (props) => {
 						layout={MainLayout}
 						page={PAGE.ACTIVATION}
 					/>
-					<AuthRoute {...props} exact path={t('paths:salons/create')} component={SalonPage} translatePathKey={t('paths:salons/create')} layout={MainLayout} page={PAGE.SALONS} />
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:salons/create')}
+						component={SalonPage}
+						translatePathKey={t('paths:salons/create')}
+						layout={MainLayout}
+						page={PAGE.SALONS}
+					/>
 					<AuthRoute
 						{...props}
 						exact

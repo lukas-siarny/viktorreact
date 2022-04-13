@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Divider } from 'antd'
+import { Row, Col } from 'antd'
 import { Field } from 'redux-form'
 import { useSelector } from 'react-redux'
 

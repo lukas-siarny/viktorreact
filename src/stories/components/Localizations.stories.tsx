@@ -30,14 +30,15 @@ export const SeparateMainField: ComponentStory<typeof InputField> = () => {
 		<Form layout='vertical'>
 			<p>
 				mainField (the first one) is <span className='text-red-700'>not</span> part of the nameLocalizations FieldArray. The language count will show only nameLocalizations
-				array count (e.g. 1/2)
-				<pre>
-					{`{
+				array count (e.g. 1/2){' '}
+			</p>
+			<pre>
+				{`{
 	nameLocalizations: [{ language: 'en', value: 'example en' }, { language: 'cz' }],
 	name: 'example sk'
 }`}
-				</pre>
-			</p>
+			</pre>
+
 			<Divider />
 			<FieldArray
 				className={'mb-6'}
@@ -65,14 +66,13 @@ export const IncludedMainField: ComponentStory<typeof InputField> = () => {
 
 	return (
 		<Form layout='vertical'>
-			<p>
-				mainField is part of the FieldArray. The language count is counting all fields
-				<pre>
-					{`{
+			<p>mainField is part of the FieldArray. The language count is counting all fields </p>
+			<pre>
+				{`{
 	nameLocalizations: [{ language: 'sk', value: 'example sk' }, { language: 'en' }, { language: 'cz', value: 'example cz' }]
 }`}
-				</pre>
-			</p>
+			</pre>
+
 			<Divider />
 
 			<FieldArray

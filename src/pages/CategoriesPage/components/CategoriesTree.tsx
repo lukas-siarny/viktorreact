@@ -36,6 +36,7 @@ type TreeCategories = {
 	disabled?: boolean
 	parentId?: number | null
 	children?: TreeCategories[] | null
+	nameLocalizations?: any
 }
 
 const editPermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_EDIT]
@@ -176,7 +177,8 @@ const CategoriesTree = () => {
 			name: get(child, 'name'),
 			disabled: !!get(child, 'deletedAt'),
 			parentId,
-			children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children')) : null
+			children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children')) : null,
+			nameLocalizations: get(child, 'nameLocalizations')
 		}))
 		return items as any[] & TreeCategories[]
 	}
@@ -198,7 +200,8 @@ const CategoriesTree = () => {
 				name: get(category, 'name'),
 				parentId: null,
 				disabled: !!get(category, 'deletedAt'),
-				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[]) : null
+				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[]) : null,
+				nameLocalizations: get(category, 'nameLocalizations')
 			})
 		})
 		setTreeNodeData(handledData as TreeCategories[] & DataNode[])
@@ -221,8 +224,8 @@ const CategoriesTree = () => {
 			// drop index position in drop node children array
 			const dropPosition: number = droppedData.dropPosition - Number(dropPos[dropPos.length - 1])
 			let body: any = {
-				name: droppedData.dragNode.name,
-				orderIndex: (dropPosition >= 0 ? dropPosition : 0) + 1
+				orderIndex: (dropPosition >= 0 ? dropPosition : 0) + 1,
+				nameLocalizations: filter(droppedData.dragNode.nameLocalizations, (item) => !!item.value)
 			}
 
 			// check condition if user dropped node to gap between nodes
@@ -273,7 +276,7 @@ const CategoriesTree = () => {
 		try {
 			let body: any = {
 				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,
-				nameLocalizations: filter(formData.nameLocalizations, (item) => item.value)
+				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value)
 			}
 			if (formData.parentId >= 0) {
 				body = {

@@ -1,22 +1,26 @@
+/* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-// eslint-disable-next-line import/no-cycle
-import { ICustomerActions, ICustomersPayload } from './customerActions'
-// eslint-disable-next-line import/no-cycle
+import { ICustomerActions, ICustomerPayload, ICustomersPayload } from './customerActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { CUSTOMERS } from './customerTypes'
+import { CUSTOMER, CUSTOMERS } from './customerTypes'
 
 export const initState = {
 	customers: {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as ICustomersPayload & ILoadingAndFailure
+	} as ICustomersPayload & ILoadingAndFailure,
+	customer: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ICustomerPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
 export default (state = initState, action: ICustomerActions) => {
 	switch (action.type) {
-		// Services
+		// Customers
 		case CUSTOMERS.CUSTOMERS_LOAD_START:
 			return {
 				...state,
@@ -38,6 +42,31 @@ export default (state = initState, action: ICustomerActions) => {
 				...state,
 				customers: {
 					...initState.customers,
+					data: action.payload.data
+				}
+			}
+		// Customer
+		case CUSTOMER.CUSTOMER_LOAD_START:
+			return {
+				...state,
+				customer: {
+					...state.customer,
+					isLoading: true
+				}
+			}
+		case CUSTOMER.CUSTOMER_LOAD_FAIL:
+			return {
+				...state,
+				customer: {
+					...initState.customer,
+					isFailure: true
+				}
+			}
+		case CUSTOMER.CUSTOMER_LOAD_DONE:
+			return {
+				...state,
+				customer: {
+					...initState.customer,
 					data: action.payload.data
 				}
 			}

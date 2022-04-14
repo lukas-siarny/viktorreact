@@ -33,7 +33,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	return (
 		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0'>
 			<div className='sticky top-0 flex flex-col h-screen'>
-				<Link className='flex justify-center pt-4 pb-6' to={t('paths:index')}>
+				<Link className='flex justify-center pt-4 pb-6' to={t('paths:index') as string}>
 					<LogoIcon className='h-8' />
 				</Link>
 
@@ -74,7 +74,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
-					<Link className='flex justify-start pt-2 pb-2' to={t('paths:my-account')}>
+					<Link className='flex justify-start pt-2 pb-2' to={t('paths:my-account') as string}>
 						{t('loc: Môj účet')}
 					</Link>
 					<Button block onClick={() => dispatch(logOutUser())}>

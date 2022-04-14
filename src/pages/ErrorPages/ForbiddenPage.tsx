@@ -12,7 +12,7 @@ const ForbiddenPage: FC<Props> = () => {
 			status='403'
 			title={'403'}
 			subTitle={t('loc:Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás')}
-			extra={<Link to={t('paths:index')}>{t('loc:Hlavná stránka')}</Link>}
+			extra={<Link to={t('paths:index') as string}>{t('loc:Hlavná stránka')}</Link>}
 		/>
 	)
 }

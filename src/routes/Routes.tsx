@@ -56,7 +56,7 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 const Routes: FC = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const [refTokLoading, setRefTokLoading] = useState<boolean>(true)
+	const [tokenLoading, setTokenLoading] = useState<boolean>(true)
 
 	useEffect(() => {
 		// set accessible enumeration data for whole app
@@ -64,8 +64,8 @@ const Routes: FC = (props) => {
 		// repeat refreshing of tokens
 		const refreshInterval = setIntervalImmediately(async () => {
 			await dispatch(refreshToken())
-			if (refTokLoading) {
-				setRefTokLoading(false)
+			if (tokenLoading) {
+				setTokenLoading(false)
 			}
 		}, REFRESH_TOKEN_INTERVAL)
 
@@ -79,7 +79,7 @@ const Routes: FC = (props) => {
 
 	return (
 		<>
-			{!refTokLoading ? (
+			{!tokenLoading ? (
 				<Switch>
 					<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} />
 					<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} />

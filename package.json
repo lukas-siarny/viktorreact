@@ -29,6 +29,8 @@
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
     "download:apidoc": "cross-env APIDOC=https://notino-development.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
+    "generate-translations": "cross-env LANGUAGES=cz,sk,en TYPES=loc,paths node scripts/prepareTranslations.js",
+    "generate-locales-doc": "npm run generate-translations",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
@@ -45,6 +47,7 @@
     "classnames": "2.3.1",
     "core-js": "3.19.1",
     "cross-env": "7.0.3",
+    "csvjson": "5.1.0",
     "customize-cra": "1.0.0",
     "dayjs": "1.10.7",
     "eslint-plugin-prettier": "4.0.0",

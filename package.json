@@ -29,7 +29,7 @@
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
     "download:apidoc": "cross-env APIDOC=https://notino-development.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
-    "generate-translations": "cross-env LANGUAGES=en,sk,cz TYPES=loc,paths node scripts/prepareTranslations.js",
+    "generate-translations": "cross-env node scripts/prepareTranslations.js",
     "generate-locales-doc": "npm run generate-translations",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"

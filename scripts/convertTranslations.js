@@ -8,6 +8,8 @@ const { forEach } = require('lodash')
 
 const regFileType = new RegExp('^(--)[a-zA-Z0-9]*(--)$')
 
+const filePath = process.env.FILEPATH || './public/translations.csv'
+
 const convert = (filePath) => {
 	try {
 		const fileContent = readFile(filePath, 'utf-8')
@@ -81,4 +83,8 @@ const convert = (filePath) => {
 	}
 }
 
-convert(process.env.FILEPATH || './public/translations.csv')
+if (fs.existsSync(filePath)) {
+	convert(filePath)
+} else {
+	console.log(`Error when loading file! No such file or directory, trying open '${filePath}'.`)
+}

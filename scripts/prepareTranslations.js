@@ -61,7 +61,7 @@ const generateCSV = (languages, fileTypes, filePaths) => {
 			}
 		})
 
-		// define buffer
+		// init buffer
 		let buffer = 'Keys;'
 		// create csv header with columns
 		forEach(languageDirs, (languageMutation, index) => {
@@ -82,7 +82,7 @@ const generateCSV = (languages, fileTypes, filePaths) => {
 						buffer = `${buffer}; ${locText?.[languageMutation]?.[fileName]?.[key]}`
 					})
 				})
-				// new table for specific file
+				// new line for specific file
 				buffer = `${buffer}\n`
 			}
 		})

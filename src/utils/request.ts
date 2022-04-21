@@ -8,7 +8,7 @@ import rootReducer from '../reducers'
 import { getAccessToken, isLoggedIn } from './auth'
 import { MSG_TYPE, NOTIFICATION_TYPE } from './enums'
 import configureStore from './configureStore'
-import { history, getPath } from './history'
+import { history } from './history'
 
 // types
 import { IErrorMessage } from '../types/interfaces'
@@ -51,7 +51,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 		}
 		showNotifications(messages, typeNotification)
 		logOutUser()(store.dispatch, store.getState, undefined)
-		history.push(getPath(i18next.t('paths:login')))
+		history.push(i18next.t('paths:login'))
 	} else if (get(error, 'response.status') === 504 || get(error, 'response') === undefined || get(error, 'message') === 'Network Error') {
 		messages = [
 			{
@@ -399,5 +399,20 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 			showErrorNotifications(e, typeNotification)
 		}
 		return Promise.reject(e)
+	}
+}
+
+export const uploadFile = async (options: any) => {
+	const { action, file, onSuccess, onError } = options
+
+	try {
+		const data = await axios.put(action, file, {
+			headers: {
+				'Content-Type': file.type
+			}
+		})
+		onSuccess(data.status, data.request)
+	} catch (error) {
+		onError(error)
 	}
 }

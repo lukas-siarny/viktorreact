@@ -12,7 +12,6 @@ import { ILoginForm } from '../../../types/interfaces'
 
 // utils
 import { FORM } from '../../../utils/enums'
-import { getPath } from '../../../utils/history'
 
 // validate
 // eslint-disable-next-line import/no-cycle
@@ -46,7 +45,7 @@ const LoginForm: FC<Props> = (props) => {
 				</Button>
 				<span className='table m-auto text-notino-black'>
 					{t('loc:Ešte nemáte účet?')}
-					<Link to={getPath(t('paths:signup'))} className='inline-block'>
+					<Link to={t('paths:signup')} className='inline-block'>
 						<Button style={{ paddingRight: 0 }} type={'link'} htmlType={'button'}>
 							{t('loc:Registrovať sa')}
 						</Button>

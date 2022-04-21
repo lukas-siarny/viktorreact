@@ -65,101 +65,101 @@ $smallLineHeight: 100%
 // Title + headings
 
 .text-xl, h1, h2, h3, h4, .heading-*
-    line-height: $bigLineHeight
+	line-height: $bigLineHeight
 
 .text-xl
-    font-size: 4rem
-    font-weight: 900
-    letter-spacing: -1px
+	font-size: 4rem
+	font-weight: 900
+	letter-spacing: -1px
 
 h1, .heading-1
-    font-size: 2.5rem
-    font-weight: 800
-    letter-spacing: -1px
+	font-size: 2.5rem
+	font-weight: 800
+	letter-spacing: -1px
 h2, .heading-2
-    font-size: 2rem
-    font-weight: 700
-    letter-spacing: -0.5px
+	font-size: 2rem
+	font-weight: 700
+	letter-spacing: -0.5px
 h3, .heading-3
-    font-size: 1.5rem
-    font-weight: 700
-    letter-spacing: -0.5px
+	font-size: 1.5rem
+	font-weight: 700
+	letter-spacing: -0.5px
 h4, .heading-4
-    font-size: 1.125rem
-    font-weight: 700
-    letter-spacing: -0.2px
+	font-size: 1.125rem
+	font-weight: 700
+	letter-spacing: -0.2px
 
 // Base text
 
 @mixin base($weight)
-    font-size: 1rem
-    line-height: $mediumLineHeight
-    font-weight: $weight
+	font-size: 1rem
+	line-height: $mediumLineHeight
+	font-weight: $weight
 
 .base-regular
-    @include base($regular-weight)
+	@include base($regular-weight)
 
 .base-medium
-    @include base($medium-weight)
+	@include base($medium-weight)
 
 .base-semibold
-    @include base($semi-bold-weight)
+	@include base($semi-bold-weight)
 
 .base-bold
-    @include base($bold-weight)
+	@include base($bold-weight)
 
 // M text
 
 @mixin M($weight)
-    font-size: 0.875rem
-    line-height: $mediumLineHeight
-    font-weight: $weight
+	font-size: 0.875rem
+	line-height: $mediumLineHeight
+	font-weight: $weight
 
 .m-regular
-    @include M($regular-weight)
+	@include M($regular-weight)
 
 .m-medium
-    @include M($medium-weight)
+	@include M($medium-weight)
 
 .m-semibold
-    @include M($semi-bold-weight)
+	@include M($semi-bold-weight)
 
 .m-bold
-    @include M($bold-weight)
+	@include M($bold-weight)
 
 // S text
 
 @mixin S($weight)
-    font-size: 0.75rem
-    line-height: $smallLineHeight
-    font-weight: $weight
+	font-size: 0.75rem
+	line-height: $smallLineHeight
+	font-weight: $weight
 
 .s-regular
-    @include S($regular-weight)
+	@include S($regular-weight)
 
 .s-medium
-    @include S($medium-weight)
+	@include S($medium-weight)
 
 .s-semibold
-    @include S($semi-bold-weight)
+	@include S($semi-bold-weight)
 
 .s-bold
-    @include S($bold-weight)
+	@include S($bold-weight)
 
 // XS text
 @mixin XS($weight)
-    font-size: 0.625rem
-    line-height: $smallLineHeight
-    font-weight: $weight
+	font-size: 0.625rem
+	line-height: $smallLineHeight
+	font-weight: $weight
 
 .xs-regular
-    @include XS($regular-weight)
+	@include XS($regular-weight)
 
 .xs-medium
-    @include XS($medium-weight)
+	@include XS($medium-weight)
 
 .xs-semibold
-    @include XS($semi-bold-weight)
+	@include XS($semi-bold-weight)
 
 .xs-bold
-    @include XS($bold-weight)
+	@include XS($bold-weight)

@@ -5,14 +5,14 @@ import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { ILoginForm, IJwtPayload, ICreatePasswordForm } from '../../types/interfaces'
+import { ILoginForm, IJwtPayload, ICreatePasswordForm, ISelectOptionItem } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
 // utils
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
-import { history, getPath } from '../../utils/history'
+import { history } from '../../utils/history'
 import { getReq, postReq, PostUrls, ICustomConfig } from '../../utils/request'
 import { PERMISSION } from '../../utils/enums'
 
@@ -47,6 +47,7 @@ export interface IUserPayload {
 
 export interface IUsersPayload {
 	data: Paths.GetApiB2BAdminUsers.Responses.$200 | null
+	usersOptions: ISelectOptionItem[]
 }
 
 const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/login' | '/api/b2b/admin/users/registration' | '/api/b2b/admin/auth/reset-password'>>(
@@ -54,21 +55,14 @@ const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/log
 	url: T,
 	input: any,
 	config?: ICustomConfig,
-	redirectPath = getPath(i18next.t('paths:index'))
+	redirectPath = i18next.t('paths:index')
 ): Promise<IAuthUserPayload | null> => {
 	try {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
 
 		const { data } = await postReq(url, null, input, config)
-
-		// temp fix
-		if ('accessToken' in data) {
-			setAccessToken(data.accessToken)
-		}
-		// temp fix
-		if ('refreshToken' in data) {
-			setRefreshToken(data.refreshToken)
-		}
+		setAccessToken(data.accessToken)
+		setRefreshToken(data.refreshToken)
 
 		// parse permissions from role
 		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
@@ -90,7 +84,7 @@ const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/log
 		return payload
 	} catch (e) {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
-		history.push(getPath(i18next.t('paths:login')))
+		history.push(i18next.t('paths:login'))
 		// eslint-disable-next-line no-console
 		console.log(e)
 		return null
@@ -106,11 +100,13 @@ export const logInUser =
 export const resetPassword =
 	(input: Pick<ICreatePasswordForm, 'password'>, token: string): ThunkResult<void> =>
 	async (dispatch) => {
-		const headers = {
-			Authorization: `Bearer ${token}`
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
 		}
 
-		await authorize(dispatch, '/api/b2b/admin/auth/reset-password', input, headers as ICustomConfig)
+		await authorize(dispatch, '/api/b2b/admin/auth/reset-password', input, config)
 	}
 
 export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch) => {
@@ -160,7 +156,7 @@ export const logOutUser = (): ThunkResult<Promise<void>> => async (dispatch) => 
 		type: RESET_STORE
 	})
 
-	history.push(getPath(i18next.t('paths:login')))
+	history.push(i18next.t('paths:login'))
 }
 
 export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) => {
@@ -198,18 +194,31 @@ export const getUserAccountDetails =
 	}
 
 export const getUsers =
-	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null): ThunkResult<Promise<void>> =>
+	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null, roleID?: number | undefined): ThunkResult<Promise<IUsersPayload>> =>
+	// eslint-disable-next-line consistent-return
 	async (dispatch) => {
+		let payload = {} as IUsersPayload
 		try {
 			dispatch({ type: USERS.USERS_LOAD_START })
-			const pageLimit = limit
+			const { data } = await getReq('/api/b2b/admin/users/', { page: page || 1, limit, order, search, roleID })
 
-			const data = await getReq('/api/b2b/admin/users/', { page: page || 1, limit: pageLimit, order, search })
+			const usersOptions: ISelectOptionItem[] = map(data?.users, (user) => ({
+				key: user?.id,
+				label: user?.firstName || user?.lastName ? `${user?.firstName} ${user?.lastName}` : user?.email,
+				value: user?.id
+			}))
 
-			dispatch({ type: USERS.USERS_LOAD_DONE, payload: data })
+			payload = {
+				data,
+				usersOptions
+			}
+
+			dispatch({ type: USERS.USERS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: USERS.USERS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}

@@ -97,7 +97,7 @@ const UserAccountForm: FC<Props> = (props) => {
 }
 
 const form = reduxForm<IUserAccountForm, ComponentProps>({
-	form: FORM.USER_ACCOUNT_FORM,
+	form: FORM.USER_ACCOUNT,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,

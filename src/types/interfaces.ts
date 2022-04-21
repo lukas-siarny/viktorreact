@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { MSG_TYPE } from '../utils/enums'
+import { GENDER, MSG_TYPE } from '../utils/enums'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -16,6 +16,7 @@ export interface IResponsePagination {
 export interface ISelectOptionItem {
 	key: number | string
 	label: string
+	value: number | string
 	disabled?: boolean
 	hardSelected?: boolean
 	extra?: any
@@ -56,6 +57,26 @@ export interface IUserAccountForm {
 	city?: string
 	street?: string
 	countryCode?: string
+}
+
+interface GalleryItem {
+	id: number
+}
+
+export interface IServiceForm {
+	name: string
+	description: string
+	salonID: number
+	durationFrom: number
+	durationTo: number
+	variableDuration: boolean
+	priceFrom: number
+	priceTo: number
+	variablePrice: boolean
+	gallery: GalleryItem[]
+	categoryRoot: number
+	categoryFirstLevel: number
+	categorySecondLevel: number
 }
 
 export interface IRegistrationForm {
@@ -120,4 +141,40 @@ export interface IBreadcrumbs {
 
 export interface ICountryLabel {
 	[key: string]: string
+}
+
+export interface IStructuredAddress {
+	streetNumber: string | null
+	zip: string | null
+	street: string | null
+	city: string | null
+	country: string | null
+}
+
+export interface IOpenHoursNoteForm {
+	hoursNote: {
+		note: string
+		range: {
+			dateFrom: string
+			dateTo: string
+		}
+	}
+}
+
+export interface ISearchFilter {
+	search: string
+}
+
+export interface ICustomerForm {
+	firstName: string
+	lastName: string
+	email?: string
+	phonePrefixCountryCode: string
+	phone: string
+	gender?: GENDER
+	zipCode?: string
+	city?: string
+	street?: string
+	countryCode?: string
+	salonID: number
 }

@@ -24,6 +24,7 @@ export const checkPermissions = (authUserPermissions: PERMISSION[] = [], allowed
 	}
 	return true
 }
+
 export const withPermissions =
 	(allowed: PERMISSION[] = [], except: PERMISSION[] = []) =>
 	(WrappedComponent: any) => {

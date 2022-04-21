@@ -5,6 +5,7 @@ import cx from 'classnames'
 
 import { ReactComponent as BinIcon } from '../assets/icons/bin-icon.svg'
 import { PERMISSION, STRINGS } from '../utils/enums'
+import Permissions from '../utils/Permissions'
 
 type Props = ButtonProps &
 	Partial<PopconfirmProps> & {
@@ -48,7 +49,7 @@ const DeleteButton = (props: Props) => {
 
 	const [t] = useTranslation()
 
-	const defaultEntityName = entityName || (t('loc:Položku') as string)
+	const defaultEntityName = entityName ?? (t('loc:Položku') as string)
 
 	let buttonIcon = icon
 	if (!buttonIcon && onlyIcon) {
@@ -105,14 +106,26 @@ const DeleteButton = (props: Props) => {
 	}
 
 	return (
-		<Button
-			{...btnProps}
-			onClick={(e) => {
-				e.preventDefault()
-			}}
-		>
-			{!onlyIcon && STRINGS(t).delete(defaultEntityName)}
-		</Button>
+		<Permissions
+			allowed={permissions}
+			render={(hasPermission, { openForbiddenModal }) => (
+				<>
+					{hasPermission ? (
+						allowedButton
+					) : (
+						<Button
+							{...btnProps}
+							onClick={(e) => {
+								e.preventDefault()
+								openForbiddenModal()
+							}}
+						>
+							{!onlyIcon && STRINGS(t).delete(defaultEntityName)}
+						</Button>
+					)}
+				</>
+			)}
+		/>
 	)
 }
 

@@ -1,4 +1,4 @@
-import { capitalize, orderBy } from 'lodash'
+import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import en_GB from 'antd/lib/locale-provider/en_GB'
@@ -74,8 +74,6 @@ export const ROW_GUTTER_X_L = [32, 0] as Gutter
 
 export const MIN_SUPPORTED_RESOLUTION = 744 // 744px breakpoint is also defined in tailwind config
 
-export const ROUTE_PREFIX = '/b2b'
-
 export const DROPDOWN_POSITION = {
 	BOTTOM_LEFT: {
 		points: ['tl', 'bl'],
@@ -88,8 +86,12 @@ export const DROPDOWN_POSITION = {
 }
 
 export enum FORM {
-	USER_ACCOUNT_FORM = 'USER_ACCOUNT_FORM',
+	CUSTOMER = 'CUSTOMER',
+	USER_ACCOUNT = 'USER_ACCOUNT',
+	SALON = 'SALON',
 	LOGIN = 'LOGIN',
+	CATEGORY = 'CATEGORY',
+	SALONS_FILTER = 'SALONS_FILTER',
 	ACTIVATION = 'ACTIVATION',
 	FORGOT_PASSWORD = 'FORGOT_PASSWORD',
 	CREATE_PASSWORD = 'CREATE_PASSWORD',
@@ -98,6 +100,7 @@ export enum FORM {
 	ADMIN_USERS_FILTER = 'ADMIN_USERS_FILTER',
 	ENUMERATION_FORM = 'ENUMERATION_FORM',
 	ENUMERATION_FORM_2 = 'ENUMERATION_FORM_2',
+	CREATE_SALON_FROM = 'CREATE_SALON_FROM',
 	ROLE_FORM = 'ROLE_FORM',
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
 	ADMIN_UPDATE_USER = 'ADMIN_UPDATE_USER',
@@ -173,16 +176,25 @@ export enum FORM {
 	PAYMENT_FORM = 'PAYMENT_FORM',
 	COMMISIONS_FILTER = 'COMMISIONS_FILTER',
 	COMMISION_FORM = 'COMMISION_FORM',
-	BUSINESS_CASE_NOTE_FORM = 'BUSINESS_CASE_NOTE_FORM'
+	BUSINESS_CASE_NOTE_FORM = 'BUSINESS_CASE_NOTE_FORM',
+	SERVICES_FILTER = 'SERVICES_FILTER',
+	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE'
 }
 
 export enum PERMISSION {
 	SUPER_ADMIN = 'SUPER_ADMIN',
 	ADMIN = 'ADMIN',
+	PARTNER = 'PARTNER',
 	USER_CREATE = 'USER_CREATE',
 	USER_BROWSING = 'USER_BROWSING',
 	USER_EDIT = 'USER_EDIT',
-	USER_DELETE = 'USER_DELETE'
+	USER_DELETE = 'USER_DELETE',
+	ENUM_BROWSING = 'ENUM_BROWSING',
+	ENUM_EDIT = 'ENUM_EDIT',
+	SALON_BROWSING = 'SALON_BROWSING',
+	SALON_EDIT = 'SALON_EDIT',
+	CUSTOMER_BROWSING = 'CUSTOMER_BROWSING',
+	CUSTOMER_EDIT = 'CUSTOMER_EDIT'
 }
 
 export enum SUBMENU_PARENT {
@@ -246,7 +258,10 @@ export const EMPTY_FILTER_ROOM = {
 }
 
 export enum PAGE {
+	SALON = 'SALON',
+	SALONS = 'SALONS',
 	ENUMERATIONS = 'ENUMERATIONS',
+	CATEGORIES = 'CATEGORIES',
 	USER_PROFILE = 'USER_PROFILE',
 	USERS = 'USERS',
 	ACCOMMODATION_FACILITIES = 'ACCOMMODATION_FACILITIES',
@@ -421,7 +436,8 @@ export enum ENUMERATIONS_KEYS {
 	// DEPOSIT_AMOUNTS = 'depositAmounts'
 }
 
-export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBYEtWbN4XE4lcmntowheFqUGKpUKORwZ0&libraries=places&language=sk'
+export const GOOGLE_MAPS_API_KEY = 'AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw'
+export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw&libraries=places&language=sk'
 export const UNSPLASH_API_KEY = '-fx2nNGTarjuitKIz4qAUOCP1uLAlPClByWS6YpaSLc'
 export const UNSPLASH_IMAGE_SEARCH_STRING = 'nature'
 export const EMPTY_KEY = 'EMPTY_KEY'
@@ -516,7 +532,14 @@ export const MAP = {
 	minLongitude: -180,
 	maxLongitude: 180,
 	minZoom: 1,
-	maxZoom: 10
+	maxZoom: 20
+}
+
+export enum SALON_STATUSES {
+	PUBLISHED = 'PUBLISHED',
+	VISIBLE = 'VISIBLE',
+	DELETED = 'DELETED',
+	ALL = 'ALL'
 }
 
 export enum PAGE_VIEW {
@@ -832,6 +855,8 @@ export enum DAY {
 	SUNDAY = 'SUNDAY'
 }
 
+export const MONDAY_TO_FRIDAY = 'MONDAY_TO_FRIDAY'
+
 export enum SERVICE_TYPE {
 	TRANSPORTATION = 'TRANSPORTATION',
 	FACILITY = 'FACILITY',
@@ -1000,6 +1025,7 @@ export enum PAGE_PAYMENT_TABS {
 export enum VALIDATION_MAX_LENGTH {
 	LENGTH_255 = 255,
 	LENGTH_100 = 100,
+	LENGTH_60 = 60,
 	LENGTH_20 = 20,
 	LENGTH_10 = 10
 }
@@ -1019,6 +1045,18 @@ export const OCCUPANCY_ALL_PERSONS_EXTRA_BED = 'OCCUPANCY_ALL_PERSONS_EXTRA_BED'
 export const OCCUPANCY_ALL_PERSONS_WITHOUT_BED = 'OCCUPANCY_ALL_PERSONS_WITHOUT_BED'
 export const COST_SEASON_ALL_TERMS_KEY = 'COST_SEASON_ALL_TERMS_KEY'
 
+export enum BYTE_MULTIPLIER {
+	KILO = 10 ** 3,
+	MEGA = 10 ** 6
+}
+
+export const LOCALIZATIONS = 'LOCALIZATIONS'
+
+export enum UPLOAD_IMG_CATEGORIES {
+	SALON = 'SALON'
+}
+
+export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const TEXT_TEMPLATE_TYPES = Object.keys(TEXT_TEMPLATE_TYPE)
 export const PROPERTY_TYPES = Object.keys(PROPERTY_TYPE)

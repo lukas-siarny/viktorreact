@@ -20,6 +20,7 @@ type Props = WrappedFieldProps &
 		extraText?: any
 		description?: string // text ktory sa zobrazi v tooltipe pri prilozeni na ikonu, ktory moze niekedy dodefinovat dany switch (eg. doplnkove sluzby)
 		customLabel?: any
+		customOnChange?: (value: boolean) => void
 	}
 
 const SwitchField = (props: Props) => {
@@ -37,7 +38,8 @@ const SwitchField = (props: Props) => {
 		extraText,
 		description,
 		offsetLabel,
-		customLabel
+		customLabel,
+		customOnChange
 	} = props
 	// NOTE: ak existuje label znamena to ze switch je pouzity ako label vo forme a vtedy sa pouzije novy layout ikona + label text + switch
 	// Ak nie je label pouzite je v tabulke alebo vo filtri a vtedy sa nerenderuje label ani ikona ale len samotny switch field
@@ -45,9 +47,13 @@ const SwitchField = (props: Props) => {
 	const checkedState = input.value === 'true' || input.value === true || checked
 	const onChange = useCallback(
 		(chck: boolean) => {
-			input.onChange(chck)
+			if (customOnChange) {
+				customOnChange(chck)
+			} else {
+				input.onChange(chck)
+			}
 		},
-		[input]
+		[input, customOnChange]
 	)
 
 	return (
@@ -55,9 +61,7 @@ const SwitchField = (props: Props) => {
 			{label || customLabel ? (
 				<div
 					className={cx('noti-switch', { 'pointer-events-none': disabled, 'bg-gray-50': disabled })}
-					onClick={() => {
-						onChange(!checkedState)
-					}}
+					onClick={() => onChange(!checkedState)}
 					onKeyDown={(e) => {
 						if (e.key === KEYBOARD_KEY.ENTER) {
 							onChange(!checkedState)
@@ -83,7 +87,7 @@ const SwitchField = (props: Props) => {
 						<div className={cx('flex justify-end extra-text w-4/12 text-right', { 'text-blue-600': checkedState })}>
 							<div>{extraText}</div>
 							<span id={formFieldID(form, input.name)}>
-								<Switch className={'ml-2'} onChange={onChange} checked={checkedState} disabled={disabled} size={size} onClick={onClick} tabIndex={-1} />
+								<Switch className={'ml-2'} checked={checkedState} disabled={disabled} size={size} onClick={onClick} tabIndex={-1} />
 							</span>
 						</div>
 					</div>

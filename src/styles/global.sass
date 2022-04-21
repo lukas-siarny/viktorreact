@@ -2,16 +2,23 @@
 @import "variables"
 @import "typography"
 @import "input"
+@import "input-number"
+@import "textarea"
+@import "date-range-picker"
 @import "modal"
 @import "select"
 @import "layout"
 @import "carousel"
+@import "collapse"
 @import "form"
 @import "button"
 @import "table"
 @import "pin"
 @import "pagination"
 @import "breadcrumbs"
+@import "tree"
+@import "switch"
+@import "time-range-picker"
 
 $searchProductTop: 166px
 
@@ -87,6 +94,9 @@ body, .ant-layout
 @keyframes rotate
 	to
 		transform: rotate(360deg)
+
+.ant-picker
+	border-radius: 8px
 
 .ant-picker-dropdown
 	.ant-picker-cell-inner
@@ -1015,3 +1025,17 @@ td.ant-table-cell.track
 		.ant-collapse-content
 			.ant-collapse-content-box
 				padding: 24px
+a
+	color: $textColor-notino-black
+	&:hover
+		color: $textColor-notino-grayDark
+
+.ant-progress-steps-item-active
+	background: $backgroundColor-notino-black
+
+.ant-progress-status-success .ant-progress-text
+	color: $textColor-green-600
+
+.noti-svg-color svg
+	& path
+		stroke: $backgroundColor-notino-black

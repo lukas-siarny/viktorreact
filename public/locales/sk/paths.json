@@ -1,12 +1,22 @@
 {
   "activation": "/activation",
+  "categories": "/categories",
+  "customers": "/customers",
+  "customers/create": "/customers/create",
+  "customers/{{customerID}}": "/customers/{{customerID}}",
   "home": "/home",
   "index": "/",
-  "login": "/auth/login",
+  "login": "/login",
   "my-account": "/my-account",
-  "reset-password": "/auth/reset-password",
-  "signup": "/auth/signup",
-  "user-detail/{{userID}}": "/user-detail/{{userID}}",
-  "user/create": "/user/create",
-  "users": "/users"
+  "reset-password": "/reset-password",
+  "salons": "/salons",
+  "salons/create": "/salons/create",
+  "salons/{{salonID}}": "/salons/{{salonID}}",
+  "services": "/services",
+  "services/create": "/services/create",
+  "services/{{serviceID}}": "/services/{{serviceID}}",
+  "signup": "/signup",
+  "users": "/users",
+  "users/create": "/users/create",
+  "users/{{userID}}": "/users/{{userID}}"
 }

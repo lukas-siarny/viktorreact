@@ -31,7 +31,7 @@ const CreatePasswordForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, showForgottenPasswordModal } = props
 
 	return (
-		<Form layout={'vertical'} className={'form h-full max-w-48 flex flex-col'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form h-full max-w-48 flex flex-col mt-16'} onSubmitCapture={handleSubmit}>
 			<h3>{t('loc:Nastavenie hesla')}</h3>
 			<Field
 				component={InputPasswordField}
@@ -48,7 +48,7 @@ const CreatePasswordForm: FC<Props> = (props) => {
 					{t('loc:Vyžiadať nový odkaz pre nastavenie hesla')}
 				</Button>
 			</Row>
-			<div className='mt-auto'>
+			<div className='mt-6'>
 				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Nastaviť heslo')}
 				</Button>

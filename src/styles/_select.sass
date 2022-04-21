@@ -1,3 +1,13 @@
+@import tailwind-variables
+@import "variables"
+
+.ant-select
+	span.ant-select-clear
+		& svg
+			width: 12px
+			height: 12px
+			& circle
+				fill: $backgroundColor-notino-black
 .ant-form-item
 	.ant-select.noti-select-input
 		.ant-select-selector
@@ -14,7 +24,33 @@
 		&:hover .ant-select-selector
 			border: 1px solid $borderColor-notino-grayDark
 
-.ant-select-dropdown.noti-select-dropdown
-	.ant-select-item.ant-select-item-option-selected
+.ant-select-item
+	&.ant-select-item-option-selected
 		color: $textColor-white
 		font-weight: $fontWeight-normal
+		display: flex
+		justify-content: space-between
+	&.ant-select-item-option
+		& .ant-select-item-option-selected
+			color: $textColor-white
+			font-weight: $fontWeight-normal
+			display: flex
+			justify-content: space-between
+		& .ant-select-item-option-active.ant-select-item-option-selected
+		& span.ant-select-item-option-state
+			height: 24px
+			& svg path
+				stroke: $backgroundColor-notino-white
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled)
+		color: $textColor-white
+		font-weight: 400
+		background-color: $backgroundColor-notino-black
+
+.ant-select-multiple
+	span.ant-select-selection-item-remove svg path
+		stroke: $backgroundColor-notino-black
+	& .ant-select-selection-item-remove
+		justify-content: center
+		align-items: center
+		display: flex

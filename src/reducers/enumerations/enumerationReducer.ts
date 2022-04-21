@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import { RESET_STORE } from '../generalTypes'
 import { IEnumerationActions, IEnumerationsPayload } from './enumerationActions'
 import { ENUMERATIONS } from './enumerationTypes'
 import { ENUMERATIONS_KEYS } from '../../utils/enums'
@@ -54,9 +53,6 @@ export default (state = initState, action: IEnumerationActions) => {
 					pagination: action.payload.pagination
 				}
 			}
-
-		case RESET_STORE:
-			return initState
 		default:
 			return state
 	}

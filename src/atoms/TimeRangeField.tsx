@@ -11,7 +11,7 @@ import { TimePickerProps } from 'antd/lib/time-picker'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 
 // assets
-import { ReactComponent as TimerIcon } from '../assets/icons/timer-16-icon.svg'
+import { ReactComponent as TimerIcon } from '../assets/icons/clock-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
 import { formFieldID } from '../utils/helper'
@@ -111,10 +111,10 @@ const TimeRangeField = (props: Props) => {
 								className={'w-full noti-date-input noti-time-input'}
 								popupClassName={'noti-time-dropdown'}
 								size={size}
-								suffixIcon={<TimerIcon className={'text-blue-600'} />}
+								suffixIcon={<TimerIcon className={'text-notino-black'} />}
 								placeholder={placeholders[index] as any}
 								disabled={disabled}
-								clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
+								clearIcon={clearIcon || <RemoveIcon className={'text-notino-black'} />}
 								allowClear={allowClear}
 								minuteStep={minuteStep}
 								getPopupContainer={getPopupContainer || ((node: any) => node)}

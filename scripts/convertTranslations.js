@@ -76,7 +76,7 @@ const convert = (filePath) => {
 			})
 		})
 		console.log('Detected languages: ', languages, ' | ', 'Detected files: ', files)
-		console.log('Data generated into files successfully!')
+		console.log('Data parsed into files successfully!')
 	} catch (error) {
 		console.error(error)
 		throw new Error(error)

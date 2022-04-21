@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, clearFields } from 'redux-form'
+import { Field, change } from 'redux-form'
 import { Space } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { findIndex } from 'lodash'
@@ -49,7 +49,8 @@ const CategoryFields = () => {
 				name='categoryRoot'
 				options={categoryRootOptions}
 				onChange={() => {
-					dispatch(clearFields(FORM.SERVICE_FORM, false, false, 'categoryFirstLevel', 'categorySecondLevel'))
+					dispatch(change(FORM.SERVICE_FORM, 'categoryFirstLevel', null))
+					dispatch(change(FORM.SERVICE_FORM, 'categorySecondLevel', null))
 				}}
 				size={'large'}
 				required
@@ -63,7 +64,7 @@ const CategoryFields = () => {
 					name='categoryFirstLevel'
 					options={categoryFirstLevelOptions}
 					onChange={() => {
-						dispatch(clearFields(FORM.SERVICE_FORM, false, false, 'categorySecondLevel'))
+						dispatch(dispatch(change(FORM.SERVICE_FORM, 'categorySecondLevel', null)))
 					}}
 					size={'large'}
 				/>

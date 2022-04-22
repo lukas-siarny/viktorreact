@@ -29,6 +29,7 @@ const generateCSV = (languages, fileTypes, filePaths) => {
 				const dir = fs.readdirSync(`./public/locales/${languageMutation}`)
 				// add language mutation to array
 				languageDirs.push(languageMutation)
+				let keys = []
 				forEach(dir, (fileName) => {
 					const name = fileName?.split('.')?.[0]
 					// going through all files inside specific language directory
@@ -47,7 +48,7 @@ const generateCSV = (languages, fileTypes, filePaths) => {
 						}
 						// init all available loc keys and file names
 						if (!loadedKeys) {
-							const keys = Object.keys(json)
+							keys = Object.keys(json)
 							locKeys = {
 								...locKeys,
 								[name]: keys
@@ -56,8 +57,11 @@ const generateCSV = (languages, fileTypes, filePaths) => {
 						}
 					}
 				})
-				// after first iteration do not load keys and file names
-				loadedKeys = true
+				// only if keys is not empty
+				if (keys && keys.length > 0) {
+					// after first iteration do not load keys and file names
+					loadedKeys = true
+				}
 			}
 		})
 

@@ -35,7 +35,7 @@ const convert = (filePath) => {
 					// save actual file name
 					actualFile = fileName
 				} else {
-					const locKey = text.split(';')?.[0].trim()
+					const locKey = text.split(';')?.[0]?.trim()
 					// go through table columns and get text for specific language
 					forEach(text.split(';'), (columnText, index) => {
 						// skip first column with loc key

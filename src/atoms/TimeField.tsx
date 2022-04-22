@@ -70,7 +70,7 @@ class TimeField extends React.Component<Props> {
 
 		return (
 			<Form.Item label={label} required={required} style={style} help={touched && error} validateStatus={error && touched ? 'error' : undefined}>
-				<div onKeyDown={this.onKeyDown}>
+				<div onKeyDown={this.onKeyDown} role={'button'} tabIndex={0}>
 					<TimePicker
 						id={formFieldID(form, input.name)}
 						dropdownAlign={DROPDOWN_POSITION.BOTTOM_LEFT}

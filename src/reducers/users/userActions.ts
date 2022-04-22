@@ -1,211 +1,224 @@
 /* eslint-disable import/no-cycle */
-import { find, flatten, get, join, map, uniq } from 'lodash'
 import i18next from 'i18next'
 import decode from 'jwt-decode'
+import { get, map, flatten, uniq } from 'lodash'
 
 // types
-import { IJwtPayload, IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
-
 import { ThunkResult } from '../index'
-import { AUTH_USER, AUTH_USER_SETTINGS, USER, USERS } from './userTypes'
+import { ILoginForm, IJwtPayload, ICreatePasswordForm, ISelectOptionItem } from '../../types/interfaces'
+import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
+import { Paths } from '../../types/api'
 
 // utils
-import { clearAccessToken, clearCompanyBranchID, getAccessToken, getCompanyBranchID, setAccessToken, setCompanyBranchID } from '../../utils/auth'
+import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
 import { history } from '../../utils/history'
-import { formatDateWithTime, normalizeQueryParams } from '../../utils/helper'
+import { getReq, postReq, PostUrls, ICustomConfig } from '../../utils/request'
+import { PERMISSION } from '../../utils/enums'
 
-import { getReq, patchReq, postReq } from '../../utils/request'
-import { PAGINATION, PERMISSION, PRODUCT_SEARCH_FILTER } from '../../utils/enums'
+export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers
 
-export type IUserActions = IResetStore | IGetAuthUserProfileActions | IGetUsersActions | IGetUserActions | IGetAuthUserSettings
-
-// user
-interface IGetUserActions {
-	type: USER
-	payload: IUserPayload
-}
-
-interface IGetAuthUserSettings {
-	type: AUTH_USER_SETTINGS
-	payload: IAuthUserSettingsPayload
-}
-
-export interface IUserPayload {
-	data: AuthUser | null
-	isLoading: boolean
-	isFailure: boolean
-}
-
-export interface IUserPermissions {
-	id: number
-	key: number
-	userID: number
-	name: string
-	permissions: UserPermission[]
-}
-
-// users
-interface IGetUsersActions {
-	type: USERS
-	payload: IUsersPayload
-}
-
-type RoleItem = {
-	id: number
-	name: string
-}
-
-type UsersOriginalItem = {
-	id: number
-	fullName: string
-	email: string
-	confirmedAt: string | null
-	deletedAt: string | null
-	roles: RoleItem[]
-}
-
-export type UsersTableItem = {
-	key: number
-	id: number
-	fullName: string
-	email: string
-	deletedAt: string
-	confirmedAt: string
-	roles: string
-}
-
-export interface IUsersPayload {
-	tableData: UsersTableItem[]
-	originalData: UsersOriginalItem[]
-	usersOptions: ISelectOptionItem[]
-	userPermissions: IUserPermissions[]
-	pagination: IResponsePagination | null
-}
-export type UserPermission = {
-	displayName: string
-	id: number
-	key: PERMISSION
-	roles: any[]
-}
-// auth user
-export interface IGetAuthUserProfileActions {
+interface IGetAuthUser {
 	type: AUTH_USER
 	payload: IAuthUserPayload
 }
 
-export type RolesType = {
-	id: number
-	name: string
-	permissions: UserPermission[]
+interface IGetUser {
+	type: USER
+	payload: IUserPayload
 }
 
-export type User = {
-	id: number
-	name: string | null
-	surname: string | null
-	email: string
-	confirmedAt: string | null
-	lastLoginAt: string | null
-	roles: RolesType[]
-	permissions: UserPermission[]
-	creator: {
-		id: number
-		initials: string
-		fullName: string | null
-	}
-	createdAt: string
-	destructor: {
-		id: number
-		fullName: string
-	} | null
-	deletedAt: string | null
-	ipAddresses: {
-		id: number
-		ip: string
-	}[]
+interface IGetUsers {
+	type: USERS
+	payload: IUsersPayload
 }
 
-export type AuthUser = User & {
-	avatarURL: string
-	uniqPermissions: PERMISSION[]
+interface IPermissions {
+	uniqPermissions?: PERMISSION[]
 }
 
 export interface IAuthUserPayload {
-	data: AuthUser | null
+	data: ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) | null
 }
 
-export type AuthUserSettings = {
-	pagination?: number
-	productSearchFilters?: PRODUCT_SEARCH_FILTER[] | null
+export interface IUserPayload {
+	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
 }
 
-export interface IAuthUserSettingsPayload {
-	data: AuthUserSettings | null
+export interface IUsersPayload {
+	data: Paths.GetApiB2BAdminUsers.Responses.$200 | null
+	usersOptions: ISelectOptionItem[]
+}
+
+const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/login' | '/api/b2b/admin/users/registration' | '/api/b2b/admin/auth/reset-password'>>(
+	dispatch: any,
+	url: T,
+	input: any,
+	config?: ICustomConfig,
+	redirectPath = i18next.t('paths:index')
+): Promise<IAuthUserPayload | null> => {
+	try {
+		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
+
+		const { data } = await postReq(url, null, input, config)
+		setAccessToken(data.accessToken)
+		setRefreshToken(data.refreshToken)
+
+		// parse permissions from role
+		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
+		const uniqPermissions = uniq(map([...rolePermissions], 'name'))
+
+		const payload = {
+			data: {
+				...data.user,
+				uniqPermissions
+			}
+		}
+
+		dispatch({
+			type: AUTH_USER.AUTH_USER_LOAD_DONE,
+			payload
+		})
+
+		history.push(redirectPath)
+		return payload
+	} catch (e) {
+		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
+		history.push(i18next.t('paths:login'))
+		// eslint-disable-next-line no-console
+		console.log(e)
+		return null
+	}
 }
 
 export const logInUser =
-	(email: string, password: string): ThunkResult<void> =>
-	async () => {
-		try {
-			const { data } = await postReq('/api/v1/authorization/login', null, {
-				email,
-				password
-			})
-
-			setAccessToken(data.accessToken)
-
-			history.push(i18next.t('paths:index'))
-			return null
-		} catch (e) {
-			history.push(i18next.t('paths:prihlasenie'))
-			// eslint-disable-next-line no-console
-			console.log(e)
-			return e
-		}
+	(input: ILoginForm): ThunkResult<void> =>
+	async (dispatch) => {
+		await authorize(dispatch, '/api/b2b/admin/auth/login', input)
 	}
 
-export const getAuthUserProfile = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch) => {
-	const payload = {} as IAuthUserPayload
+export const resetPassword =
+	(input: Pick<ICreatePasswordForm, 'password'>, token: string): ThunkResult<void> =>
+	async (dispatch) => {
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		}
+
+		await authorize(dispatch, '/api/b2b/admin/auth/reset-password', input, config)
+	}
+
+export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch) => {
+	let payload = {} as IAuthUserPayload
+
 	try {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
 
 		const accessToken = getAccessToken()
 		const jwtPayload: IJwtPayload = decode(accessToken as string)
-		// TODO:
+
+		const { data } = await getReq('/api/b2b/admin/users/{userID}', { userID: jwtPayload.uid })
+
+		// parse permissions from role
+		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
+		const uniqPermissions = uniq(map([...rolePermissions], 'name'))
+
+		payload = {
+			data: {
+				...data.user,
+				uniqPermissions
+			}
+		}
 
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_DONE, payload })
-	} catch (e) {
+	} catch (err) {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
+		// eslint-disable-next-line no-console
+		console.error(err)
 	}
+
 	return payload
 }
 
-export const selectAuthUser = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch, getState) => {
-	const state = getState()
-	return state.user.authUser
-}
+export const logOutUser = (): ThunkResult<Promise<void>> => async (dispatch) => {
+	try {
+		await postReq('/api/b2b/admin/auth/logout', null, undefined, undefined, false)
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.log(error)
+	}
 
-export const logOutUser = (): ThunkResult<void> => (dispatch) => {
 	clearAccessToken()
+	clearRefreshToken()
 
 	dispatch({
 		type: RESET_STORE
 	})
 
-	history.push(i18next.t('paths:prihlasenie'))
+	history.push(i18next.t('paths:login'))
 }
 
-export const ping = (): ThunkResult<Promise<void>> => async (dispatch, getState, extraArgument) => {
-	try {
-		const { data } = await postReq('/api/v1/authorization/ping', undefined)
-		if (data?.accessToken) {
+export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) => {
+	if (isLoggedIn() && hasRefreshToken()) {
+		try {
+			const { data } = await postReq('/api/b2b/admin/auth/refresh-token', null, { refreshToken: getRefreshToken() as string })
 			setAccessToken(data.accessToken)
-		} else {
-			logOutUser()(dispatch, getState, extraArgument)
+			setRefreshToken(data.refreshToken)
+			dispatch(getCurrentUser())
+		} catch (error) {
+			// eslint-disable-next-line no-console
+			console.log(error)
 		}
-	} catch (err) {
-		// eslint-disable-next-line
-		console.log(err)
 	}
 }
+
+export const registerUser =
+	(input: Paths.PostApiB2BAdminUsersRegistration.RequestBody): ThunkResult<void> =>
+	async (dispatch) => {
+		return authorize(dispatch, '/api/b2b/admin/users/registration', input, undefined, i18next.t('paths:activation'))
+	}
+
+export const getUserAccountDetails =
+	(userID: number): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: USER.USER_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/users/{userID}', { userID })
+			dispatch({ type: USER.USER_LOAD_DONE, payload: { data: data.user } })
+		} catch (err) {
+			dispatch({ type: USER.USER_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+	}
+
+export const getUsers =
+	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null, roleID?: number | undefined): ThunkResult<Promise<IUsersPayload>> =>
+	// eslint-disable-next-line consistent-return
+	async (dispatch) => {
+		let payload = {} as IUsersPayload
+		try {
+			dispatch({ type: USERS.USERS_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/users/', { page: page || 1, limit, order, search, roleID })
+
+			const usersOptions: ISelectOptionItem[] = map(data?.users, (user) => ({
+				key: user?.id,
+				label: user?.firstName || user?.lastName ? `${user?.firstName} ${user?.lastName}` : user?.email,
+				value: user?.id
+			}))
+
+			payload = {
+				data,
+				usersOptions
+			}
+
+			dispatch({ type: USERS.USERS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: USERS.USERS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}

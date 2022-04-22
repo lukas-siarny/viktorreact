@@ -1,9 +1,11 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Switch } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
-// starting page
+// authorized pages
 import EntryPage from '../pages/EntryPage/EntryPage'
+import HomePage from '../pages/HomePage/HomePage'
 
 // routes middlewares
 import PublicRoute from './PublicRoute'
@@ -12,22 +14,40 @@ import CreatePasswordRoute from './CreatePasswordRoute'
 
 // layouts
 import MainLayout from '../layouts/MainLayout'
-import SimpleLayout from '../layouts/SimpleLayout'
+import PublicLayout from '../layouts/PublicLayout'
+
+// redux
+import { refreshToken } from '../reducers/users/userActions'
+import { getCountries } from '../reducers/enumerations/enumerationActions'
 
 // utils
-// import { PAGE } from '../utils/enums'
-// import { SUBMENU_PARENT_ITEMS } from '../utils/helper'
-
-// import SubMenuPage from '../components/SubMenuPage'
+import { REFRESH_TOKEN_INTERVAL, PAGE } from '../utils/enums'
+import { setIntervalImmediately } from '../utils/helper'
 
 // User
 import LoginPage from '../pages/LoginPage/LoginPage'
-import ForgotPasswordPage from '../pages/ForgotPasswordPage/ForgotPasswordPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
+import ActivationPage from '../pages/ActivationPage/ActivationPage'
+import UserAccountPage from '../pages/AdminUsersPage/UserAccountPage'
+import CreateUserAccountPage from '../pages/AdminUsersPage/CreateUserAccountPage'
+import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
 
-// accommodationFacilities
-// import AccommodationFacilitiesPage from '../pages/AccommodationFacilityPage/AccommodationFacilitiesPage'
+// Categories
+import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
+
+// services
+import ServicesPage from '../pages/ServicesPage/ServicesPage'
+import ServicePage from '../pages/ServicesPage/ServicePage'
+
+// Salons
+import SalonsPage from '../pages/SalonsPage/SalonsPage'
+import SalonPage from '../pages/SalonsPage/SalonPage'
+
+// Customers
+import CustomersPage from '../pages/CustomersPage/CustomersPage'
+import CustomerPage from '../pages/CustomersPage/CustomerPage'
+import CreateCustomerPage from '../pages/CustomersPage/CreateCustomerPage'
 
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
@@ -35,78 +55,166 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
 const Routes: FC = (props) => {
 	const [t] = useTranslation()
-	return (
-		<Switch>
-			{/* <AuthRoute
-				{...props}
-				exact
-				page={PAGE.GENERAL}
-				path={t('paths:obecne')}
-				translatePathKey='paths:obecne'
-				component={SubMenuPage}
-				layout={MainLayout}
-				submenuParent={SUBMENU_PARENT_ITEMS().GENERAL}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:inventar')}
-				translatePathKey='paths:inventar'
-				component={SubMenuPage}
-				layout={MainLayout}
-				page={PAGE.INVENTORY}
-				submenuParent={SUBMENU_PARENT_ITEMS().INVENTORY}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:produkty')}
-				translatePathKey='paths:produkty'
-				component={SubMenuPage}
-				layout={MainLayout}
-				page={PAGE.PRODUCTS}
-				submenuParent={SUBMENU_PARENT_ITEMS().PRODUCTS}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:predaj')}
-				translatePathKey='paths:predaj'
-				component={SubMenuPage}
-				layout={MainLayout}
-				page={PAGE.SALES}
-				submenuParent={SUBMENU_PARENT_ITEMS().SALES}
-			/> */}
-			<PublicRoute {...props} exact path={t('paths:prihlasenie')} component={LoginPage} layout={SimpleLayout} />
-			<PublicRoute {...props} exact path={t('paths:registracia')} component={RegistrationPage} layout={SimpleLayout} />
-			<PublicRoute {...props} exact path={t('paths:zabudnute-heslo')} component={ForgotPasswordPage} layout={SimpleLayout} />
-			<CreatePasswordRoute exact path={t('paths:obnovenie-hesla')} translatePathKey={'paths:obnovenie-hesla'} component={CreatePasswordPage} layout={SimpleLayout} />
-			{/* <CreatePasswordRoute
-				exact
-				path={t('paths:dokoncenie-registracie')}
-				translatePathKey={'paths:dokoncenie-registracie'}
-				component={AdminConfirmUserPage}
-				layout={SimpleLayout}
-			/> */}
-			{/* <AuthRoute {...props} exact path={t('paths:index')} component={EntryPage} page={PAGE.ENTRY} translatePathKey={'paths:index'} layout={MainLayout} /> */}
-			<PublicRoute {...props} exact path={t('paths:index')} component={EntryPage} layout={SimpleLayout} />
+	const dispatch = useDispatch()
+	const [tokenLoading, setTokenLoading] = useState<boolean>(true)
 
-			{/* <AuthRoute
-				{...props}
-				exact
-				path={t('paths:inventar/ubytovacie-zariadenia')}
-				component={AccommodationFacilitiesPage}
-				translatePathKey={'paths:inventar/ubytovacie-zariadenia'}
-				page={PAGE.ACCOMMODATION_FACILITIES}
-				layout={MainLayout}
-			/> */}
-			<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
-			<AuthRoute
-				{...props}
-				component={NotFoundPage} // NOTE: for non auth route just let the user redirect on login page
-				layout={MainLayout}
-			/>
-		</Switch>
+	useEffect(() => {
+		// set accessible enumeration data for whole app
+		dispatch(getCountries())
+		// repeat refreshing of tokens
+		const refreshInterval = setIntervalImmediately(async () => {
+			await dispatch(refreshToken())
+			if (tokenLoading) {
+				setTokenLoading(false)
+			}
+		}, REFRESH_TOKEN_INTERVAL)
+
+		return () => {
+			if (refreshInterval) {
+				clearInterval(refreshInterval)
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch])
+
+	return (
+		<>
+			{!tokenLoading ? (
+				<Switch>
+					<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} />
+					<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} />
+					<CreatePasswordRoute exact path={t('paths:reset-password')} translatePathKey={t('paths:reset-password')} component={CreatePasswordPage} layout={PublicLayout} />
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:users/create')}
+						component={CreateUserAccountPage}
+						translatePathKey={t('paths:users/create')}
+						layout={MainLayout}
+						page={PAGE.USERS}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:users/{{userID}}', { userID: ':userID' })}
+						translatePathKey={t('paths:users/{{userID}}', { userID: ':userID' })}
+						component={UserAccountPage}
+						layout={MainLayout}
+						page={PAGE.USERS}
+					/>
+					<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:my-account')}
+						translatePathKey={t('paths:my-account')}
+						component={UserAccountPage}
+						layout={MainLayout}
+						page={PAGE.MY_ACCOUNT}
+					/>
+					<AuthRoute {...props} exact path={t('paths:index')} component={EntryPage} translatePathKey={t('paths:index')} layout={MainLayout} />
+					<AuthRoute {...props} exact path={t('paths:home')} component={HomePage} translatePathKey={t('paths:home')} layout={MainLayout} page={PAGE.HOME} />
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:activation')}
+						component={ActivationPage}
+						translatePathKey={t('paths:activation')}
+						layout={MainLayout}
+						page={PAGE.ACTIVATION}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:salons/create')}
+						component={SalonPage}
+						translatePathKey={t('paths:salons/create')}
+						layout={MainLayout}
+						page={PAGE.SALONS}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })}
+						component={SalonPage}
+						translatePathKey={t('paths:salons/{{salonID}}', { salonID: ':salonID' })}
+						layout={MainLayout}
+						page={PAGE.SALONS}
+					/>
+					<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:categories')}
+						component={CategoriesPage}
+						translatePathKey={t('paths:categories')}
+						layout={MainLayout}
+						page={PAGE.CATEGORIES}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:customers/create')}
+						component={CreateCustomerPage}
+						translatePathKey={t('paths:customers/create')}
+						layout={MainLayout}
+						page={PAGE.CUSTOMERS}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:customers/{{customerID}}', { customerID: ':customerID' })}
+						component={CustomerPage}
+						translatePathKey={t('paths:customers/{{customerID}}', { customerID: ':customerID' })}
+						layout={MainLayout}
+						page={PAGE.CUSTOMERS}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:customers')}
+						component={CustomersPage}
+						translatePathKey={t('paths:customers')}
+						layout={MainLayout}
+						page={PAGE.CUSTOMERS}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:services')}
+						component={ServicesPage}
+						translatePathKey={t('paths:services')}
+						layout={MainLayout}
+						page={PAGE.SERVICES}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:services/create')}
+						component={ServicePage}
+						translatePathKey={t('paths:services/create')}
+						layout={MainLayout}
+						page={PAGE.SERVICES}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:services/{{serviceID}}', { serviceID: ':serviceID' })}
+						component={ServicePage}
+						translatePathKey={t('paths:services/{{serviceID}}', { serviceID: ':serviceID' })}
+						layout={MainLayout}
+						page={PAGE.SERVICES}
+					/>
+					{/* NOTE: add all private routes before this declaration */}
+					<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
+					<AuthRoute
+						{...props}
+						component={NotFoundPage} // NOTE: for non auth route just let the user redirect on login page
+						layout={MainLayout}
+					/>
+				</Switch>
+			) : undefined}
+		</>
 	)
 }
 

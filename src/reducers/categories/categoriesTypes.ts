@@ -1,0 +1,6 @@
+// eslint-disable-next-line import/prefer-default-export
+export enum CATEGORIES {
+	CATEGORIES_LOAD_START = 'CATEGORIES_LOAD_START',
+	CATEGORIES_LOAD_DONE = 'CATEGORIES_LOAD_DONE',
+	CATEGORIES_LOAD_FAIL = 'CATEGORIES_LOAD_FAIL'
+}

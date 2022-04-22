@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { MSG_TYPE } from '../utils/enums'
+import { GENDER, MSG_TYPE } from '../utils/enums'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -16,6 +16,7 @@ export interface IResponsePagination {
 export interface ISelectOptionItem {
 	key: number | string
 	label: string
+	value: number | string
 	disabled?: boolean
 	hardSelected?: boolean
 	extra?: any
@@ -35,6 +36,67 @@ export interface ILoginForm {
 	email: string
 	password: string
 }
+
+export interface ICreateUserForm {
+	email: string
+	phonePrefixCountryCode: string
+	phone: string
+	roleID: number
+}
+
+export interface IUserAccountForm {
+	firstName: string
+	lastName: string
+	email: string
+	phone: string
+	phonePrefixCountryCode: string
+	companyName?: string
+	businessID?: string
+	vatID?: string
+	zipCode?: string
+	city?: string
+	street?: string
+	countryCode?: string
+}
+
+interface GalleryItem {
+	id: number
+}
+
+export interface IServiceForm {
+	name: string
+	description: string
+	salonID: number
+	durationFrom: number
+	durationTo: number
+	variableDuration: boolean
+	priceFrom: number
+	priceTo: number
+	variablePrice: boolean
+	gallery: GalleryItem[]
+	categoryRoot: number
+	categoryFirstLevel: number
+	categorySecondLevel: number
+}
+
+export interface IRegistrationForm {
+	email: string
+	password: string
+	phonePrefixCountryCode: string
+	phone: string
+	gdpr: boolean
+	gtc: boolean
+	marketing: boolean
+}
+
+export interface IForgotPasswordForm {
+	email: string
+}
+
+export interface IActivationForm {
+	code: string
+}
+
 export interface IJwtPayload {
 	aud: string
 	exp: number
@@ -57,4 +119,62 @@ export interface ILoadingAndFailure {
 export interface IConfirmUserForm extends ICreatePasswordForm {
 	name: string
 	surname: string
+}
+
+export interface IComputedMatch<Params> {
+	isExact: boolean
+	params: Params
+	path: string
+	url: string
+}
+
+export interface IBreadcrumbItem {
+	name: string
+	link?: string
+	action?: any
+	titleName?: string | null | undefined
+}
+
+export interface IBreadcrumbs {
+	items: IBreadcrumbItem[]
+}
+
+export interface ICountryLabel {
+	[key: string]: string
+}
+
+export interface IStructuredAddress {
+	streetNumber: string | null
+	zip: string | null
+	street: string | null
+	city: string | null
+	country: string | null
+}
+
+export interface IOpenHoursNoteForm {
+	hoursNote: {
+		note: string
+		range: {
+			dateFrom: string
+			dateTo: string
+		}
+	}
+}
+
+export interface ISearchFilter {
+	search: string
+}
+
+export interface ICustomerForm {
+	firstName: string
+	lastName: string
+	email?: string
+	phonePrefixCountryCode: string
+	phone: string
+	gender?: GENDER
+	zipCode?: string
+	city?: string
+	street?: string
+	countryCode?: string
+	salonID: number
 }

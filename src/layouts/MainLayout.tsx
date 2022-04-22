@@ -1,19 +1,24 @@
 import React, { ReactNode, FC } from 'react'
 import { Layout } from 'antd'
 
-import { PAGE } from '../utils/enums'
+// components
+import LayoutSider, { LayoutSiderProps } from '../components/LayoutComponents/LayoutSider'
 
-type Props = {
+const { Content } = Layout
+
+type Props = LayoutSiderProps & {
 	children: ReactNode
-	page?: PAGE
 }
 
 const MainLayout: FC<Props> = (props) => {
-	const { children, page } = props
+	const { children } = props
+
 	return (
-		<Layout className={'tp-layout'}>
-			{/* <LayoutHeader page={page} /> */}
-			<Layout className={'tp-content'}>{children}</Layout>
+		<Layout className='min-h-screen noti-main-layout' hasSider>
+			<LayoutSider {...props} />
+			<Layout>
+				<Content className='p-4 pl-10'>{children}</Content>
+			</Layout>
 		</Layout>
 	)
 }

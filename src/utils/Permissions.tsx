@@ -24,6 +24,7 @@ export const checkPermissions = (authUserPermissions: PERMISSION[] = [], allowed
 	}
 	return true
 }
+
 export const withPermissions =
 	(allowed: PERMISSION[] = [], except: PERMISSION[] = []) =>
 	(WrappedComponent: any) => {
@@ -79,7 +80,7 @@ export const withPermissions =
 			}
 		}
 		const mapStateToProps = (state: RootState) => ({
-			authUserPermissions: state.user.authUser?.data?.uniqPermissions || []
+			authUserPermissions: state.user.authUser?.data?.uniqPermissions
 		})
 
 		const mapDispatchToProps = (dispatch: any) => ({
@@ -97,7 +98,7 @@ type Props = {
 
 const Permissions: FC<Props> = (props) => {
 	const { render, allowed, except, children } = props
-	const authUserPermissions = useSelector((state: RootState) => state.user.authUser?.data?.uniqPermissions || [])
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const hasPermissions = checkPermissions(authUserPermissions, allowed, except)
 	const [visibleModal, setVisibleModal] = useState(false)
 	const [t] = useTranslation()
@@ -122,7 +123,7 @@ const Permissions: FC<Props> = (props) => {
 						status='warning'
 						title={t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')}
 						extra={
-							<Button className={'tp-btn'} onClick={() => setVisibleModal(false)} type='primary'>
+							<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
 								{t('loc:Zatvoriť')}
 							</Button>
 						}

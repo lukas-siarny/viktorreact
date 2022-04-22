@@ -1,0 +1,24 @@
+@import tailwind-variables
+@import "variables"
+
+.pin-field, input.pin-field
+        height: 68px
+        width: 45px
+        border: 1px solid $borderColor-notino-grayLight
+        box-sizing: border-box
+        border-radius: $borderRadius-DEFAULT
+        text-align: center
+        &:hover
+            border-color: $borderColor-notino-grayDark
+        &:focus
+            border-color: $borderColor-notino-black
+            box-shadow: $field-shadow-focus-default
+        &:focus-visible
+            outline: none
+
+.pin-error
+    input.pin-field
+        border-color: $borderColor-danger !important
+
+.pin-field:nth-of-type(3)
+    margin-right: $margin-4 !important

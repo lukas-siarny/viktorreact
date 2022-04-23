@@ -4,6 +4,12 @@
 .ant-form-item
 	.ant-input.noti-input, .noti-input-number
 		border-radius: 8px
+		.ant-input-number-handler-wrap
+			border-radius: 8px
+		.ant-input-number-handler-up
+			border-top-right-radius: 8px
+		.ant-input-number-handler-down
+			border-bottom-right-radius: 8px
 
 .ant-form-item:not(.ant-form-item-has-error)
 	// Normal state
@@ -16,9 +22,19 @@
 		.ant-input-number-input
 			&::placeholder
 				color: $borderColor-notino-gray
-		.ant-input-number-handler-wrap
-			border-radius: 8px
-		.ant-input-number-handler-up
-			border-top-right-radius: 8px
-		.ant-input-number-handler-down
-			border-bottom-right-radius: 8px
+
+.ant-form-item
+	// Error state
+	&.ant-form-item-has-error
+		.ant-input-number.noti-input-number
+			border: 1px solid $borderColor-red-400
+			&::placeholder
+				color: $textColor-red-300
+			&:hover
+				border: 1px solid $borderColor-red-500
+				// box-shadow: $field-shadow-focus-error
+			&.ant-input-number-focused
+				border: 1px solid $borderColor-red-500
+				box-shadow: $field-shadow-focus-error
+		.ant-form-item-explain-error
+			color: $textColor-red-500

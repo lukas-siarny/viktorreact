@@ -39,7 +39,8 @@ const DateRangePickerField = (props: Props) => {
 		itemRef,
 		required,
 		meta,
-		size
+		size,
+		disabled
 	} = props
 
 	const onFocus = (e: any) => {
@@ -106,6 +107,7 @@ const DateRangePickerField = (props: Props) => {
 					renderExtraFooter={renderExtraFooter}
 					getPopupContainer={getPopupContainer || ((node) => node)}
 					size={size}
+					disabled={disabled}
 				/>
 			</div>
 		</Form.Item>

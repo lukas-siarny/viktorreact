@@ -45,7 +45,7 @@ const LoginForm: FC<Props> = (props) => {
 				</Button>
 				<span className='table m-auto text-notino-black'>
 					{t('loc:Ešte nemáte účet?')}
-					<Link to={t('paths:signup') as string} className='inline-block'>
+					<Link to={`${t('paths:signup')}`} className='inline-block'>
 						<Button style={{ paddingRight: 0 }} type={'link'} htmlType={'button'}>
 							{t('loc:Registrovať sa')}
 						</Button>

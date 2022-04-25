@@ -75,7 +75,7 @@ export const SelectWithFetchPagination: ComponentStory<typeof InputField> = () =
 	React.useEffect(() => {
 		dispatch(
 			initialize(STORYBOOK_FORM, {
-				salonID: 1
+				salonID: 10
 			})
 		)
 	}, [dispatch])
@@ -88,6 +88,40 @@ export const SelectWithFetchPagination: ComponentStory<typeof InputField> = () =
 	return (
 		<Form layout='vertical'>
 			<Field component={SelectField} allowClear placeholder={'Salón'} name='salonID' onSearch={searchSalon} onDidMountSearch size={'large'} allowInfinityScroll showSearch />
+		</Form>
+	)
+}
+
+export const MultiSelectWithFetchPagination: ComponentStory<typeof InputField> = () => {
+	const dispatch = useDispatch()
+
+	React.useEffect(() => {
+		dispatch(
+			initialize(STORYBOOK_FORM, {
+				salonID: [1, 2, 3]
+			})
+		)
+	}, [dispatch])
+
+	const searchSalon = React.useCallback(async (search: string, page: number) => {
+		const { data, pagination }: any = await mock(true, 200, generatePaginationData(page))
+		return { data, pagination }
+	}, [])
+
+	return (
+		<Form layout='vertical'>
+			<Field
+				component={SelectField}
+				allowClear
+				placeholder={'Salón'}
+				name='salonID'
+				onSearch={searchSalon}
+				onDidMountSearch
+				size={'large'}
+				allowInfinityScroll
+				showSearch
+				mode='multiple'
+			/>
 		</Form>
 	)
 }

@@ -43,7 +43,7 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 	const dispatch = useDispatch()
 
 	const onChange = useCallback(
-		(page: number, pageSize?: number | undefined) => {
+		(page: number, pageSize: number) => {
 			if (props.pagination && props.pagination.onChange) {
 				props.pagination.onChange(page, pageSize)
 			}

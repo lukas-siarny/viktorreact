@@ -76,7 +76,7 @@ const RegistrationForm: FC<Props> = (props) => {
 
 				<span className='flex items-center justify-center text-notino-black'>
 					{t('loc:Už ste registrovaný? ')}
-					<Link to='paths:zabudnute-heslo'>
+					<Link to={`${t('paths:login')}`}>
 						<Button className='p-0 ml-1' type={'link'} htmlType={'button'}>
 							{t('loc:Prihlásiť sa')}
 						</Button>

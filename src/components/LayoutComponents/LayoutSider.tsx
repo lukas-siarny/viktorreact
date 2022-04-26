@@ -74,7 +74,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
-					<Link className='flex justify-start pt-2 pb-2' to={t('paths:my-account') as string}>
+					<Link className='flex justify-start pt-2 pb-2' to={`${t('paths:my-account')}`}>
 						{t('loc: Môj účet')}
 					</Link>
 					<Button block onClick={() => dispatch(logOutUser())}>

@@ -310,9 +310,7 @@ const SelectField = (props: Props) => {
 			}
 			if (onSearch) {
 				setSelectState({ ...selectState, fetching: true, searchValue: value })
-				// console.log(input.value)
 				const newState = await fetchSearchData({ selectState, value, page, onSearch, dataSourcePath, allowInfinityScroll, missingValues })
-				// console.log(newState)
 				setSelectState(newState)
 			}
 		},

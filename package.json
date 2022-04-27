@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "0.0.4",
+  "version": "0.0.5-RC.0",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -63,7 +63,7 @@
     "less-loader": "7.3.0",
     "lodash": "4.17.21",
     "lodash-checkit": "2.4.1",
-	"sass": "1.50.1",
+    "sass": "1.50.1",
     "npm-run-all": "4.1.5",
     "openapi-client-axios": "5.1.2",
     "openapi-client-axios-typegen": "5.0.2",

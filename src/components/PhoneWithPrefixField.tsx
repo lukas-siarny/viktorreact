@@ -28,10 +28,10 @@ const fallbackDefaultValue = 'SK'
 
 const PhoneWithPrefixField = (props: Props) => {
 	const { placeholder, label, size, prefixName = 'phonePrefixCountryCode', phoneName = 'phone', required = false } = props
-	const prefixOptions = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
+	const prefixOptions = useSelector((state: RootState) => state?.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
-	let options = prefixOptions.enumerationsOptions
-	if (options.length === 0) options = fallbackOptions
+	let options = prefixOptions?.enumerationsOptions
+	if (!options || options.length === 0) options = fallbackOptions
 
 	return (
 		<Row gutter={8} wrap={false}>
@@ -42,7 +42,7 @@ const PhoneWithPrefixField = (props: Props) => {
 					name={prefixName}
 					size={size}
 					options={options}
-					loading={prefixOptions.isLoading}
+					loading={prefixOptions?.isLoading}
 					defaultValue={fallbackDefaultValue}
 					required={required}
 				/>

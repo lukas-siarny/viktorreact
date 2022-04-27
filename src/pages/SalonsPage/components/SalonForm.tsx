@@ -192,8 +192,8 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row className={'mx-9 mb-2 h-full block w-1/2'} justify='center'>
 					<h3 className={'mb-0 mt-3'}>{t('loc:Sociálne siete')}</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<Field component={InputField} label={t('loc:Facebook')} name={'socialLinkFB'} size={'large'} prefix={<FacebookIcon />} />
-					<Field component={InputField} label={t('loc:Instagram')} name={'socialLinkInstagram'} size={'large'} prefix={<InstagramIcon />} />
+					<Field component={InputField} label={t('loc:Facebook')} name={'socialLinkFB'} size={'large'} prefix={(<FacebookIcon />) as any} />
+					<Field component={InputField} label={t('loc:Instagram')} name={'socialLinkInstagram'} size={'large'} prefix={(<InstagramIcon />) as any} />
 					<Field component={InputField} label={t('loc:Webstránka')} name={'socialLinkWebPage'} size={'large'} />
 				</Row>
 				<Row className={'mx-9 mb-2 h-full block w-1/2'} justify='center'>

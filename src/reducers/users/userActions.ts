@@ -5,7 +5,7 @@ import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { ILoginForm, IJwtPayload, ICreatePasswordForm, ISelectOptionItem } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
@@ -13,7 +13,7 @@ import { Paths } from '../../types/api'
 // utils
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
 import { history } from '../../utils/history'
-import { getReq, postReq, PostUrls, ICustomConfig } from '../../utils/request'
+import { getReq, postReq } from '../../utils/request'
 import { PERMISSION } from '../../utils/enums'
 
 export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers
@@ -50,63 +50,36 @@ export interface IUsersPayload {
 	usersOptions: ISelectOptionItem[]
 }
 
-const authorize = async <T extends keyof Pick<PostUrls, '/api/b2b/admin/auth/login' | '/api/b2b/admin/users/registration' | '/api/b2b/admin/auth/reset-password'>>(
-	dispatch: any,
-	url: T,
-	input: any,
-	config?: ICustomConfig,
-	redirectPath = i18next.t('paths:index')
-): Promise<IAuthUserPayload | null> => {
-	try {
-		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
-
-		const { data } = await postReq(url, null, input, config)
-		setAccessToken(data.accessToken)
-		setRefreshToken(data.refreshToken)
-
-		// parse permissions from role
-		const rolePermissions = flatten(map(get(data, 'user.roles'), (role) => get(role, 'permissions')))
-		const uniqPermissions = uniq(map([...rolePermissions], 'name'))
-
-		const payload = {
-			data: {
-				...data.user,
-				uniqPermissions
-			}
-		}
-
-		dispatch({
-			type: AUTH_USER.AUTH_USER_LOAD_DONE,
-			payload
-		})
-
-		history.push(redirectPath)
-		return payload
-	} catch (e) {
-		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
-		history.push(i18next.t('paths:login'))
-		// eslint-disable-next-line no-console
-		console.log(e)
-		return null
-	}
-}
-
-export const logInUser =
-	(input: ILoginForm): ThunkResult<void> =>
+export const processAuthorizationResult =
+	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>
 	async (dispatch) => {
-		await authorize(dispatch, '/api/b2b/admin/auth/login', input)
-	}
+		try {
+			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
+			setAccessToken(result.accessToken)
+			setRefreshToken(result.refreshToken)
+			// parse permissions from role
+			const rolePermissions = flatten(map(get(result, 'user.roles'), (role) => get(role, 'permissions')))
+			const uniqPermissions = uniq(map([...rolePermissions], 'name'))
 
-export const resetPassword =
-	(input: Pick<ICreatePasswordForm, 'password'>, token: string): ThunkResult<void> =>
-	async (dispatch) => {
-		const config = {
-			headers: {
-				Authorization: `Bearer ${token}`
+			const payload = {
+				data: {
+					...result.user,
+					uniqPermissions
+				}
 			}
-		}
 
-		await authorize(dispatch, '/api/b2b/admin/auth/reset-password', input, config)
+			dispatch({
+				type: AUTH_USER.AUTH_USER_LOAD_DONE,
+				payload
+			})
+
+			history.push(redirectPath)
+		} catch (e) {
+			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
+			history.push(i18next.t('paths:login'))
+			// eslint-disable-next-line no-console
+			console.log(e)
+		}
 	}
 
 export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch) => {
@@ -172,12 +145,6 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 		}
 	}
 }
-
-export const registerUser =
-	(input: Paths.PostApiB2BAdminUsersRegistration.RequestBody): ThunkResult<void> =>
-	async (dispatch) => {
-		return authorize(dispatch, '/api/b2b/admin/users/registration', input, undefined, i18next.t('paths:activation'))
-	}
 
 export const getUserAccountDetails =
 	(userID: number): ThunkResult<Promise<void>> =>

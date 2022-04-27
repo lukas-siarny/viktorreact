@@ -4,8 +4,6 @@ import { withDesign } from 'storybook-addon-designs'
 import { initialize } from 'redux-form'
 import { useDispatch } from 'react-redux'
 import { Form, Divider } from 'antd'
-import { ComponentStory } from '@storybook/react'
-import InputField from '../../atoms/InputField'
 import PhoneWithPrefixField from '../../components/PhoneWithPrefixField'
 import withReduxForm, { STORYBOOK_FORM } from '../utils/withReduxForm'
 
@@ -14,7 +12,7 @@ export default {
 	decorators: [withDesign, withReduxForm]
 }
 
-export const PhoneWithPrefix: ComponentStory<typeof InputField> = () => {
+export const PhoneWithPrefix = () => {
 	const dispatch = useDispatch()
 
 	React.useEffect(() => {

@@ -29,8 +29,8 @@
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
     "download:apidoc": "cross-env APIDOC=https://notino-development.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
-    "translations-csv-to-json": "cross-env ts-node scripts/translationsCSVToJSON.ts",
-    "translations-json-to-csv": "cross-env ts-node scripts/translationsJSONToCSV.ts",
+    "translations-csv-to-json": "npx convert-csv-to-json GoodRequest/i18nextJsonToCsv",
+    "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
@@ -132,6 +132,7 @@
     "@types/sortablejs": "1.10.7",
     "chai": "4.3.4",
     "chromedriver": "95.0.0",
+    "convert-translations-i18next": "1.0.0",
     "eslint-plugin-chai-friendly": "0.7.2",
     "eslint-watch": "8.0.0",
     "faker": "5.5.3",

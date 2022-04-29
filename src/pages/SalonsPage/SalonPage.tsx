@@ -439,6 +439,7 @@ const SalonPage: FC<Props> = (props) => {
 					changeSalonVisibility={changeVisibility}
 					publishSalon={publishSalon}
 					switchDisabled={submitting}
+					salonID={salonID}
 				/>
 				<OpenHoursNoteModal
 					visible={visible}

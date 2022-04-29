@@ -51,8 +51,7 @@ const UserAccountPage: FC<Props> = (props) => {
 			dispatch(getUserAccountDetails(userID))
 		}
 	}, [dispatch, userID])
-	console.log('authUser.data?.id ', authUser.data?.id)
-	console.log('userID', userID)
+
 	// init forms
 	useEffect(() => {
 		dispatch(initialize(FORM.USER_ACCOUNT, { ...userAccountDetail.data, ...get(userAccountDetail, 'data.company') }))

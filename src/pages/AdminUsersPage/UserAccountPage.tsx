@@ -16,7 +16,7 @@ import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums
 
 // reducers
 import { RootState } from '../../reducers'
-import { getUserAccountDetails } from '../../reducers/users/userActions'
+import { getCurrentUser, getUserAccountDetails } from '../../reducers/users/userActions'
 
 // types
 import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
@@ -51,7 +51,8 @@ const UserAccountPage: FC<Props> = (props) => {
 			dispatch(getUserAccountDetails(userID))
 		}
 	}, [dispatch, userID])
-
+	console.log('authUser.data?.id ', authUser.data?.id)
+	console.log('userID', userID)
 	// init forms
 	useEffect(() => {
 		dispatch(initialize(FORM.USER_ACCOUNT, { ...userAccountDetail.data, ...get(userAccountDetail, 'data.company') }))
@@ -83,6 +84,7 @@ const UserAccountPage: FC<Props> = (props) => {
 				}
 			}
 			await patchReq('/api/b2b/admin/users/{userID}', { userID: data?.id }, userData)
+			if (!userID || Number(authUser.data?.id) === Number(userID)) dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

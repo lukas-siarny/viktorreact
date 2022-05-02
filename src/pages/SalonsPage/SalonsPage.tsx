@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Progress, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
@@ -9,16 +9,18 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize } from 'redux-form'
 
 // components
+import dayjs from 'dayjs'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
+import { DEFAULT_LANGUAGE, FORM, LANGUAGE, LOCALES, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import showNotifications from '../../utils/tsxHelpers'
+import i18n from '../../utils/i18n'
 
 // reducers
 import { getSalons } from '../../reducers/salons/salonsActions'
@@ -39,10 +41,15 @@ const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN,
 const SalonsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const [locale, setLocale] = useState<string>()
 
 	const salons = useSelector((state: RootState) => state.salons.salons)
 
 	useEffect(() => {
+		i18n.on('languageChanged', (language) => {
+			const loc = LOCALES[language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]
+			setLocale(loc.ISO_639)
+		})
 		dispatch(getCategories())
 	}, [dispatch])
 
@@ -141,7 +148,13 @@ const SalonsPage = () => {
 			key: 'createdAt',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'createdAt')
+			sortOrder: setOrder(query.order, 'createdAt'),
+			render: (value) => {
+				if (locale === LOCALES[LANGUAGE.SK].ISO_639 || locale === LOCALES[LANGUAGE.CZ].ISO_639) {
+					return dayjs(value).format('DD.MM.YYYY HH:MM')
+				}
+				return dayjs(value).format('MM.DD.YYYY HH:MM')
+			}
 		}
 	]
 

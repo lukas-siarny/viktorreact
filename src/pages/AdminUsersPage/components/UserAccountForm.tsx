@@ -66,6 +66,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							/>
 							<Field className={'w-12/25'} component={InputField} label={t('loc:IČ DPH')} placeholder={t('loc:Zadajte ič dph')} name={'vatID'} size={'large'} />
 						</Row>
+						<Field component={InputField} label={t('loc:DIČ')} placeholder={t('loc:Zadajte dič')} name={'taxID'} size={'large'} />
 						<Field component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} required />
 						<Row justify={'space-between'}>
 							<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} required />

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { GENDER, MSG_TYPE } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE } from '../utils/enums'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -177,4 +177,8 @@ export interface ICustomerForm {
 	street?: string
 	countryCode?: string
 	salonID: number
+}
+
+export interface ILanguagePickerForm {
+	language: LANGUAGE
 }

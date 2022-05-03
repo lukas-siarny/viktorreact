@@ -8,6 +8,9 @@ import { ReactComponent as Chevron } from '../assets/icons/chevron-right.svg'
 // utils
 import { MIN_SUPPORTED_RESOLUTION } from '../utils/enums'
 
+// components
+import LanguagePicker from '../components/LanguagePicker'
+
 interface Props {
 	children: ReactNode
 }
@@ -53,9 +56,10 @@ const PublicLayout = (props: Props) => {
 	return (
 		<>
 			{isMobile ? (
-				<div className='simple-layout grid place-items-center h-screen w-screen bg-notino-grayLighter'>
+				<div className='simple-layout grid place-items-center h-screen w-screen bg-notino-grayLighter relative'>
 					<div className='bg-notino-grayLighter pt-4 flex flex-col items-center overflow-hidden'>
 						<Logo />
+						<LanguagePicker className='top-12 right-2 absolute' />
 						<div className='flex-auto'>{props.children}</div>
 					</div>
 				</div>
@@ -76,8 +80,9 @@ const PublicLayout = (props: Props) => {
 							</Carousel>
 							<Chevron onClick={handleNext} className='absolute bottom-45px right-45px cursor-pointer' />
 						</div>
-						<div className='bg-notino-grayLighter pt-12 pb-12 flex flex-col items-center'>
+						<div className='bg-notino-grayLighter pt-12 pb-12 flex flex-col items-center relative'>
 							<Logo />
+							<LanguagePicker className='top-12 right-2 absolute' />
 							<div className='flex-auto'>{props.children}</div>
 						</div>
 					</div>

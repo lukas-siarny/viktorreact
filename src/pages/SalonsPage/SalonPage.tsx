@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
@@ -246,8 +246,19 @@ const SalonPage: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
 
+	const updateOnlyOpeningHours = useRef(false)
 	const fetchData = async (salonData: ISalonPayload & ILoadingAndFailure) => {
-		if (!isEmpty(salonData.data)) {
+		if (updateOnlyOpeningHours.current) {
+			if (salon?.isLoading) return
+			dispatch(
+				change(FORM.SALON, 'openingHoursNote', {
+					note: salonData.data?.salon?.openingHoursNote?.note,
+					noteFrom: salonData.data?.salon?.openingHoursNote?.validFrom,
+					noteTo: salonData.data?.salon?.openingHoursNote?.validTo
+				})
+			)
+			updateOnlyOpeningHours.current = false
+		} else if (!isEmpty(salonData.data)) {
 			// init data for existing salon
 			const openOverWeekend: boolean = checkWeekend(salonData.data?.salon?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.salon?.openingHours)
@@ -421,6 +432,12 @@ const SalonPage: FC<Props> = (props) => {
 		}
 	}
 
+	const onOpenHoursNoteModalClose = () => {
+		updateOnlyOpeningHours.current = true
+		setVisible(false)
+		dispatch(getSalon(salonID))
+	}
+
 	const rowClass = cx({
 		'justify-between': showDeleteBtn,
 		'justify-center': !showDeleteBtn
@@ -439,15 +456,13 @@ const SalonPage: FC<Props> = (props) => {
 					changeSalonVisibility={changeVisibility}
 					publishSalon={publishSalon}
 					switchDisabled={submitting}
+					salonID={salonID}
 				/>
 				<OpenHoursNoteModal
 					visible={visible}
 					salonID={salon?.data?.salon?.id || 0}
 					openingHoursNote={salon?.data?.salon?.openingHoursNote}
-					onClose={() => {
-						setVisible(false)
-						dispatch(getSalon(salonID))
-					}}
+					onClose={onOpenHoursNoteModalClose}
 				/>
 				<div className={'content-footer'}>
 					<Row className={`${rowClass} w-full`}>

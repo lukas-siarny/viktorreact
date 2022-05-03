@@ -32,7 +32,7 @@ const CheckboxGroupField = (props: Props) => {
 		large
 	} = props
 
-	const checkboxes = map(options, (option) => {
+	const checkboxes = map(options, (option: any) => {
 		if (typeof option === 'string') {
 			return (
 				<Checkbox key={option} value={option} className={cx({ large, 'inline-flex': horizontal })}>

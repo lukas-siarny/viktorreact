@@ -16,7 +16,7 @@ import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums
 
 // reducers
 import { RootState } from '../../reducers'
-import { getUserAccountDetails } from '../../reducers/users/userActions'
+import { getCurrentUser, getUserAccountDetails } from '../../reducers/users/userActions'
 
 // types
 import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
@@ -74,6 +74,7 @@ const UserAccountPage: FC<Props> = (props) => {
 					company: {
 						businessID: data?.businessID,
 						vatID: data?.vatID,
+						taxID: data?.taxID,
 						companyName: data?.companyName,
 						zipCode: data?.zipCode,
 						city: data?.city,
@@ -82,7 +83,8 @@ const UserAccountPage: FC<Props> = (props) => {
 					}
 				}
 			}
-			await patchReq('/api/b2b/admin/users/{userID}', { userID: data?.id }, userData)
+			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
+			if (!userID || Number(authUser.data?.id) === Number(userID)) dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

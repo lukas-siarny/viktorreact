@@ -97,7 +97,7 @@ const SalonsPage = () => {
 			key: 'address',
 			ellipsis: true,
 			sorter: false,
-			render: (value) => <>{`${value?.city}, ${value?.street}`}</>
+			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
 		},
 		{
 			title: t('loc:Kategórie'),

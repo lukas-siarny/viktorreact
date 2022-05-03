@@ -82,6 +82,7 @@ export interface IServiceForm {
 export interface IRegistrationForm {
 	email: string
 	password: string
+	confirmPassword: string
 	phonePrefixCountryCode: string
 	phone: string
 	gdpr: boolean

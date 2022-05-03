@@ -10,6 +10,16 @@ $inner-padding: 45px
 	overflow: auto
 	background: $backgroundColor-notino-grayLight
 
+	@media (max-width: 380px)
+		.ant-form-item
+			margin-bottom: 0.3rem
+		.noti-switch
+			padding-left: 0
+			padding-right: 0
+		.ant-form-item-with-help .ant-form-item-explain
+			font-size: $fontSize-xxs
+			min-height: auto
+
 	.layout-content
 		box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.21)
 		height: $layout-height

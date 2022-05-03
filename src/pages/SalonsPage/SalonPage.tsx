@@ -325,7 +325,7 @@ const SalonPage: FC<Props> = (props) => {
 				latitude: data.latitude,
 				longitude: data.longitude,
 				street: data.street,
-				zipCode: data.zip,
+				zipCode: data.zipCode,
 				phonePrefixCountryCode: data.phonePrefixCountryCode,
 				phone: data.phone,
 				email: data.email,

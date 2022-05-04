@@ -7,8 +7,7 @@ declare global {
 			 * Command to login into app
 			 * @example cy.login('test@test.com', 't123')
 			 */
-			login(email: string, password: string): Chainable<Element>,
-			fastLogin(): Chainable<Element>
+			login(email: string, password: string): Chainable<Element>
 		}
 	}
 }

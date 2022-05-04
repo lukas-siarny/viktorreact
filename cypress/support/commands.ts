@@ -19,16 +19,3 @@ Cypress.Commands.add('login', (email: string, password: string) => {
 	})
 	cy.location('pathname').should('eq', '/')
 })
-
-Cypress.Commands.add('fastLogin', () => {
-	// save tokens to local storage
-	cy.getCookies().then((cookies) => {
-		if (cookies) {
-			// TODO -
-			const accessTokenIndex: number = cookies.findIndex((cookie) => cookie.name === 'accessToken')
-			// const refreshTokenIndex: number = cookies.findIndex((cookie) => cookie.name === 'refreshToken')
-			window.localStorage.setItem('access_token', cookies[accessTokenIndex].value)
-			// window.localStorage.setItem('refresh_token', cookies[refreshTokenIndex].value)
-		}
-	})
-})

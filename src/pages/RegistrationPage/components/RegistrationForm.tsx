@@ -75,7 +75,7 @@ const RegistrationForm: FC<Props> = (props) => {
 				customLabel={<SwitchLabel label={t('loc:Udeľujem súhlas so spracúvaním osobných údajov na')} anchorText={t('loc:Marketingové účely')} href={MARKETING_URL} />}
 				size={size}
 			/>
-			<div className='mt-1 sm:mt-4'>
+			<div className='mt-2 sm:mt-4'>
 				<Button type={'primary'} block size={size} className={`noti-btn m-regular mb-1 sm:mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Registrovať')}
 				</Button>

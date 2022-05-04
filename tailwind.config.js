@@ -4,7 +4,7 @@ const colors = require('tailwindcss/colors')
 module.exports = {
 	// NOTE: Prefix pre všetky classy, tailwind štýly tak majú väčšiu váhu ako ant štýly
 	important: '#tailwind',
-	purge: {
+	content: {
 		enabled: process.env.NODE_ENV === 'production',
 		content: [
 			'./src/**/*.tsx',
@@ -12,7 +12,6 @@ module.exports = {
 		]
 	},
 	presets: [],
-	darkMode: false, // or 'media' or 'class'
 	theme: {
 		screens: {
 			sm: '640px',

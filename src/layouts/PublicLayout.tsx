@@ -59,14 +59,14 @@ const PublicLayout = (props: Props) => {
 				<div className='simple-layout grid place-items-center h-screen w-screen bg-notino-grayLighter relative'>
 					<div className='bg-notino-grayLighter sm:pt-4 flex flex-col items-center overflow-hidden'>
 						<Logo />
-						<LanguagePicker className='top-12 right-2 absolute' />
+						<LanguagePicker className='top-16 sm:top-12 right-2 absolute' />
 						<div className='flex-auto'>{props.children}</div>
 					</div>
 				</div>
 			) : (
 				<div className='simple-layout grid place-items-center h-screen w-screen'>
 					<div className='layout-content grid md:grid-cols-2 grid-cols-1 gap-0'>
-						<div className='bg-white p-45px relative block'>
+						<div className='bg-white px-45px py-4 relative block'>
 							<Carousel ref={carouselRef}>
 								{mock.map((item, index) => (
 									<div key={index} className='carousel-content rounded-3xl flex flex-col justify-between'>
@@ -80,9 +80,9 @@ const PublicLayout = (props: Props) => {
 							</Carousel>
 							<Chevron onClick={handleNext} className='absolute bottom-45px right-45px cursor-pointer' />
 						</div>
-						<div className='bg-notino-grayLighter pt-12 pb-12 flex flex-col items-center relative'>
+						<div className='bg-notino-grayLighter py-4 flex flex-col items-center relative'>
 							<Logo />
-							<LanguagePicker className='top-12 right-2 absolute' />
+							<LanguagePicker className='top-4 right-2 absolute' />
 							<div className='flex-auto'>{props.children}</div>
 						</div>
 					</div>

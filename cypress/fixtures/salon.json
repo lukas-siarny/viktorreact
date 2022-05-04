@@ -1,4 +1,6 @@
 {
-  "name": "Jane",
-  "email": "jane@example.com"
+  "name": "Test salon",
+  "email": "test@example.com",
+	"phone": "913120700",
+"paymentMethods": "cash, coupons"
 }

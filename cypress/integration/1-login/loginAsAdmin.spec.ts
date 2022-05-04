@@ -20,6 +20,8 @@ context('Login', () => {
 		cy.wait('@authLogin').then((interception: any) => {
 			// check status code of login request
 			expect(interception.response.statusCode).to.equal(200)
+			// take local storage snapshot
+			cy.saveLocalStorage()
 		})
 		cy.location('pathname').should('eq', '/')
 	})

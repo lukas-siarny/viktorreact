@@ -28,6 +28,9 @@ export default (values: IRegistrationForm) => {
 	if (!get(values, 'password')) {
 		errors.password = i18next.t('loc:Toto pole je povinné')
 	}
+	if (!get(values, 'confirmPassword')) {
+		errors.confirmPassword = i18next.t('loc:Toto pole je povinné')
+	}
 	if (get(values, 'password') && get(values, 'confirmPassword') && get(values, 'password') !== get(values, 'confirmPassword')) {
 		errors.confirmPassword = i18next.t('loc:Heslá sa nezhodujú')
 	}

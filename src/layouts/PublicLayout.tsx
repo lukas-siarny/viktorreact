@@ -54,7 +54,7 @@ const PublicLayout = (props: Props) => {
 		<>
 			{isMobile ? (
 				<div className='simple-layout grid place-items-center h-screen w-screen bg-notino-grayLighter'>
-					<div className='bg-notino-grayLighter pt-4 flex flex-col items-center overflow-hidden'>
+					<div className='bg-notino-grayLighter sm:pt-4 flex flex-col items-center overflow-hidden'>
 						<Logo />
 						<div className='flex-auto'>{props.children}</div>
 					</div>

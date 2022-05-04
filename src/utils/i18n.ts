@@ -35,7 +35,7 @@ i18n.use(Backend)
 		debug: process.env.NODE_ENV === 'development',
 		detection: {
 			// order and from where user language should be detected
-			order: ['querystring', 'path', 'navigator'],
+			order: ['querystring', 'localStorage', 'path', 'navigator'],
 			// keys or params to lookup language from
 			lookupFromPathIndex: 0,
 			lookupQuerystring: 'lang'

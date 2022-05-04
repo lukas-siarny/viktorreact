@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "0.0.5-RC.0",
+  "version": "0.0.5",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -29,6 +29,8 @@
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
     "download:apidoc": "cross-env APIDOC=https://notino-development.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
+    "translations-csv-to-json": "npx convert-csv-to-json GoodRequest/i18nextJsonToCsv",
+    "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
@@ -128,6 +130,7 @@
     "@types/sortablejs": "1.10.7",
     "chai": "4.3.6",
     "chromedriver": "95.0.0",
+    "convert-translations-i18next": "github:GoodRequest/i18nextJsonToCsv",
     "eslint-plugin-chai-friendly": "0.7.2",
     "eslint-watch": "8.0.0",
     "husky": "7.0.4",

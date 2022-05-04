@@ -16,7 +16,7 @@ import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import showNotifications from '../../utils/tsxHelpers'
 
@@ -97,7 +97,7 @@ const SalonsPage = () => {
 			key: 'address',
 			ellipsis: true,
 			sorter: false,
-			render: (value) => <>{`${value?.city}, ${value?.street}`}</>
+			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
 		},
 		{
 			title: t('loc:Kategórie'),
@@ -141,7 +141,8 @@ const SalonsPage = () => {
 			key: 'createdAt',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'createdAt')
+			sortOrder: setOrder(query.order, 'createdAt'),
+			render: (value) => formatDateByLocale(value)
 		}
 	]
 

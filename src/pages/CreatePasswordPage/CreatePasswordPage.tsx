@@ -9,7 +9,10 @@ import ForgottenPasswordModal from '../../components/ForgottenPassword/Forgotten
 import { ICreatePasswordForm } from '../../types/interfaces'
 
 // actions
-import { resetPassword } from '../../reducers/users/userActions'
+import { processAuthorizationResult } from '../../reducers/users/userActions'
+
+// utils
+import { postReq } from '../../utils/request'
 
 type Props = {
 	token: string
@@ -21,12 +24,21 @@ const CreatePasswordPage: FC<Props> = (props) => {
 
 	const handleSubmit = async (values: ICreatePasswordForm) => {
 		try {
-			const data = {
+			const input = {
 				password: values.confirmPassword
 			}
 
-			return dispatch(resetPassword(data, props.token))
+			const config = {
+				headers: {
+					Authorization: `Bearer ${props.token}`
+				}
+			}
+
+			const { data } = await postReq('/api/b2b/admin/auth/reset-password', null, input, config)
+			return dispatch(processAuthorizationResult(data))
 		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
 			return e
 		}
 	}

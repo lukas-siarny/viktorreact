@@ -35,7 +35,7 @@ const PhoneWithPrefixField = (props: Props) => {
 
 	return (
 		<Row gutter={8} wrap={false}>
-			<Col flex='102px'>
+			<Col>
 				<Field
 					label={label}
 					component={PhonePrefixField}

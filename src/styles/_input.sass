@@ -26,7 +26,7 @@
 		&.ant-input-affix-wrapper-focused
 			border: 1px solid $borderColor-notino-black
 			box-sizing: border-box
-			box-shadow: 0px 0px 0px 2px $field-shadow-focus-default
+			box-shadow: $field-shadow-focus-default
 			background-color: $backgroundColor-notino-white
 			input
 				background-color: $backgroundColor-notino-white
@@ -36,6 +36,7 @@
 			.ant-input-suffix
 				display: flex !important
 
+// input field
 .ant-form-item:not(.ant-form-item-has-error)
 	// Normal state
 	.ant-input.noti-input
@@ -47,6 +48,21 @@
 			box-shadow: $field-shadow-focus-default
 		&::placeholder
 			color: $borderColor-notino-gray
+
+.ant-form-item
+	// Error state
+	&.ant-form-item-has-error
+		.ant-input.noti-input
+			border: 1px solid $borderColor-red-400
+			&::placeholder
+				color: $textColor-red-300
+			&:hover
+				border: 1px solid $borderColor-red-500
+			&:focus
+				border: 1px solid $borderColor-red-500
+				box-shadow: $field-shadow-focus-error
+		.ant-form-item-explain-error
+			color: $textColor-red-500
 
 // password field
 .ant-form-item
@@ -65,8 +81,30 @@
 		.ant-input::placeholder
 			color: $borderColor-notino-gray
 
+.ant-form-item
+	&.ant-form-item-has-error
+		// error state
+		.ant-input-password.noti-input-password
+			border: 1px solid $borderColor-red-400
+			&:hover
+				border: 1px solid $borderColor-red-500
+			&.ant-input-affix-wrapper-focused
+				border: 1px solid $borderColor-red-500
+				box-shadow: $field-shadow-focus-error
+			.ant-input::placeholder
+				color: $textColor-red-300
+		.ant-form-item-explain-error
+			color: $textColor-red-500
+
 .addon-before
 	margin: 0
 
 span.ant-input-suffix svg circle
 	fill: $borderColor-notino-black
+
+// Masked input
+.ant-form-item
+	.noti-input-masked
+		&--large
+			padding: 6.5px 11px
+			font-size: 16px

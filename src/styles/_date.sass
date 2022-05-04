@@ -2,32 +2,33 @@
 @import "variables"
 
 .ant-form-item
-	.ant-input.noti-textarea
-		border-radius: 8px
-
-.ant-form-item:not(.ant-form-item-has-error)
 	// Normal state
-	.ant-input.noti-textarea
+	.ant-picker.noti-date-input
+		border-radius: 8px
 		border: 1px solid $borderColor-notino-grayLight
 		&:hover
 			border: 1px solid $borderColor-notino-grayDark
-		&:focus
+		&.ant-picker-focused
 			border: 1px solid $borderColor-notino-black
 			box-shadow: $field-shadow-focus-default
-		&::placeholder
-			color: $borderColor-notino-gray
+		.ant-picker-input
+			input::placeholder
+				color: $textColor-notino-gray
 
-.ant-form-item
+	// Error state
 	&.ant-form-item-has-error
-		// Normal state
-		.ant-input.noti-textarea
+		.ant-picker.noti-date-input
 			border: 1px solid $borderColor-red-400
+			.ant-picker-input
+				input::placeholder
+					color: $textColor-red-300
 			&:hover
 				border: 1px solid $borderColor-red-500
-			&:focus
+			&.ant-picker-focused
 				border: 1px solid $borderColor-red-500
 				box-shadow: $field-shadow-focus-error
-			&::placeholder
-				color: $textColor-red-300
 		.ant-form-item-explain-error
 			color: $textColor-red-500
+		.ant-picker-suffix
+			svg
+				color: $textColor-red-500 !important

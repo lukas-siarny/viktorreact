@@ -13,6 +13,7 @@ yarn-error.log
 .eslintcache
 .DS_Store
 apidoc
+translations.csv
 
 src/styles/main.css
 src/styles/tailwind-variables.sass

@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormAction, WrappedFieldProps } from 'redux-form'
 import cx from 'classnames'
-import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, take } from 'lodash'
+import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, some, take } from 'lodash'
 
 // ant
 import { Button, Divider, Empty, Form, Select, Spin } from 'antd'
@@ -177,7 +177,8 @@ const fetchSearchData = async ({
 	page,
 	onSearch,
 	dataSourcePath,
-	allowInfinityScroll
+	allowInfinityScroll,
+	missingValues
 }: {
 	selectState: SelectStateTypes
 	value: string
@@ -185,14 +186,14 @@ const fetchSearchData = async ({
 	onSearch: any
 	dataSourcePath: string
 	allowInfinityScroll: boolean | undefined
+	missingValues: number[] // used in select with pagination (allowInfinityScroll) when not all options are loaded during initialization
 }) => {
 	let newState = {}
-
 	try {
 		let collectedData = []
 		if (page !== 1 && selectState.data) collectedData = selectState.data
 
-		const newData: any = await onSearch(value, page)
+		const newData: any = await onSearch(value, page, missingValues)
 		const dataOptions = get(newData, dataSourcePath)
 		if (newData.pagination || dataOptions) {
 			const mergedData = [...collectedData, ...dataOptions]
@@ -302,14 +303,14 @@ const SelectField = (props: Props) => {
 	)
 
 	const handleSearch = useCallback(
-		async (value = '', page = 1) => {
+		async (value = '', page = 1, missingValues = []) => {
 			const onSearch = props.onSearch as any
 			if (selectState.fetching) {
 				return
 			}
 			if (onSearch) {
 				setSelectState({ ...selectState, fetching: true, searchValue: value })
-				const newState = await fetchSearchData({ selectState, value, page, onSearch, dataSourcePath, allowInfinityScroll })
+				const newState = await fetchSearchData({ selectState, value, page, onSearch, dataSourcePath, allowInfinityScroll, missingValues })
 				setSelectState(newState)
 			}
 		},
@@ -404,6 +405,30 @@ const SelectField = (props: Props) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [onDidMountSearch])
+
+	/**
+	 * check if initial selected values are all loaded
+	 * only for select with pagination (allowInfinityScroll)
+	 */
+	const checkInitialSelectedValues = useRef(true)
+	useEffect(() => {
+		// options must be loaded and input value available to run the check
+		if (!onDidMountSearch || !allowInfinityScroll || selectState.data?.length === 0 || !input.value || !checkInitialSelectedValues.current) return
+
+		// check if all input values are loaded
+		const values = isArray(input.value) ? new Set([...input.value]) : new Set([input.value])
+		some(selectState.data, (item) => {
+			if (values.has(item.value)) values.delete(item.value)
+			if (values.size === 0) return true
+			return false
+		})
+
+		// refetch options if any value is missing
+		if (values.size > 0) handleSearch('', 1, [...values])
+
+		checkInitialSelectedValues.current = false
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [input.value, selectState.data])
 
 	const localFilterOption = (inputValue: any, option: any) => createSlug(option.label.toLowerCase()).indexOf(createSlug(inputValue.toLowerCase())) >= 0
 

@@ -4,6 +4,8 @@ import { FORM } from '../../../src/utils/enums'
 const salon = require('../../fixtures/salon.json')
 
 context('Salon', () => {
+	// id of created salon
+	let createdSalonID: number = 0
 	beforeEach(() => {
 		cy.restoreLocalStorage()
 	})
@@ -19,40 +21,35 @@ context('Salon', () => {
 		}).as('createSalon')
 		cy.visit('/salons/create')
 		cy.get(`#${FORM.SALON}-name`)
-			.type(salon.name).should('have.value', salon.name)
+			.type(salon.create.name).should('have.value', salon.create.name)
 		cy.get(`#${FORM.SALON}-phone`)
-			.type(salon.phone).should('have.value', salon.phone)
+			.type(salon.create.phone).should('have.value', salon.create.phone)
 		cy.get(`#${FORM.SALON}-email`)
-			.type(salon.email).should('have.value', salon.email)
+			.type(salon.create.email).should('have.value', salon.create.email)
 		cy.get(`#${FORM.SALON}-otherPaymentMethods`)
-			.type(salon.paymentMethods).should('have.value', salon.paymentMethods)
-		// cy.get('form').submit()
-		/* cy.wait('@createSalon').then((interception: any) => {
+			.type(salon.create.paymentMethods).should('have.value', salon.create.paymentMethods)
+		cy.get('form').submit()
+		cy.wait('@createSalon').then((interception: any) => {
 			// check status code
 			expect(interception.response.statusCode).to.equal(200)
-		}) */
-		// cy.location('pathname').should('eq', '/api/b2b/admin/salons')
+			createdSalonID = interception.response.body.id
+		})
+		cy.location('pathname').should('eq', `/api/b2b/admin/salons/${createdSalonID}`)
 	})
 
-	it('update salon as ADMIN user', () => {
+	it('update created salon as ADMIN user', () => {
 		cy.intercept({
-			method: 'POST',
-			url: '/api/b2b/admin/salons',
-		}).as('createSalon')
-		cy.visit('/salons/create')
+			method: 'PATCH',
+			url: `/api/b2b/admin/salons/${createdSalonID}`,
+		}).as('updateSalon')
+		cy.visit(`/salons/${createdSalonID}`)
 		cy.get(`#${FORM.SALON}-name`)
-			.type(salon.name).should('have.value', salon.name)
-		cy.get(`#${FORM.SALON}-phone`)
-			.type(salon.phone).should('have.value', salon.phone)
-		cy.get(`#${FORM.SALON}-email`)
-			.type(salon.email).should('have.value', salon.email)
-		cy.get(`#${FORM.SALON}-otherPaymentMethods`)
-			.type(salon.paymentMethods).should('have.value', salon.paymentMethods)
-		// cy.get('form').submit()
-		/* cy.wait('@createSalon').then((interception: any) => {
+			.type(salon.update.name).should('have.value', salon.update.name)
+		cy.get('form').submit()
+		cy.wait('@updateSalon').then((interception: any) => {
 			// check status code
 			expect(interception.response.statusCode).to.equal(200)
-		}) */
-		// cy.location('pathname').should('eq', '/api/b2b/admin/salons')
+			expect(interception.response.body.name).to.equal(salon.update.name)
+		})
 	})
 })

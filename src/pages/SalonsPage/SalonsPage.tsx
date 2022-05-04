@@ -23,6 +23,7 @@ import showNotifications from '../../utils/tsxHelpers'
 // reducers
 import { getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
@@ -40,6 +41,10 @@ const SalonsPage = () => {
 	const dispatch = useDispatch()
 
 	const salons = useSelector((state: RootState) => state.salons.salons)
+
+	useEffect(() => {
+		dispatch(getCategories())
+	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,

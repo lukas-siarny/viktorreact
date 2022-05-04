@@ -112,7 +112,9 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
  *
  * Returns formatted date by location
  */
-export const formatDateByLocale = (date: string | Date | undefined | Dayjs, locale: string) => {
+export const formatDateByLocale = (date: string | Date | undefined | Dayjs) => {
+	const locale = (LOCALES[i18next.language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]).ISO_639
+
 	if (locale === LOCALES[LANGUAGE.SK].ISO_639 || locale === LOCALES[LANGUAGE.CZ].ISO_639) {
 		return dayjs(date).format(DEFAULT_DATE_WITH_TIME_FORMAT)
 	}

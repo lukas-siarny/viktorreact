@@ -15,16 +15,14 @@ import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 
 // utils
 import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { DEFAULT_LANGUAGE, FORM, LANGUAGE, LOCALES, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
+import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import showNotifications from '../../utils/tsxHelpers'
-import i18n from '../../utils/i18n'
 
 // reducers
 import { getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
-import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
@@ -40,17 +38,8 @@ const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN,
 const SalonsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const [locale, setLocale] = useState<string>('')
 
 	const salons = useSelector((state: RootState) => state.salons.salons)
-
-	useEffect(() => {
-		i18n.on('languageChanged', (language) => {
-			const loc = LOCALES[language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]
-			setLocale(loc.ISO_639)
-		})
-		dispatch(getCategories())
-	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -148,7 +137,7 @@ const SalonsPage = () => {
 			ellipsis: true,
 			sorter: true,
 			sortOrder: setOrder(query.order, 'createdAt'),
-			render: (value) => formatDateByLocale(value, locale)
+			render: (value) => formatDateByLocale(value)
 		}
 	]
 

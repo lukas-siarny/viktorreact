@@ -133,6 +133,8 @@
     "chromedriver": "95.0.0",
     "convert-translations-i18next": "github:GoodRequest/i18nextJsonToCsv",
     "cypress": "9.6.0",
+    "cypress-localstorage-commands": "1.7.0",
+    "cypress-wait-until": "1.7.2",
     "eslint-plugin-chai-friendly": "0.7.2",
     "eslint-watch": "8.0.0",
     "husky": "7.0.4",

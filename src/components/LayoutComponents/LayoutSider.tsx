@@ -16,6 +16,9 @@ import { logOutUser } from '../../reducers/users/userActions'
 import { checkPermissions } from '../../utils/Permissions'
 import { RootState } from '../../reducers'
 
+// components
+import LanguagePicker from '../LanguagePicker'
+
 const { Sider } = Layout
 
 export type LayoutSiderProps = {
@@ -74,6 +77,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
+					<LanguagePicker />
 					<Link className='flex justify-start pt-2 pb-2' to={`${t('paths:my-account')}`}>
 						{t('loc: Môj účet')}
 					</Link>

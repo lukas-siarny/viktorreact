@@ -4,6 +4,7 @@ import { WrappedFieldProps } from 'redux-form'
 import { InputProps } from 'antd/lib/input'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import InputMask from 'react-input-mask'
+import cx from 'classnames'
 
 const { Item } = Form
 
@@ -24,7 +25,8 @@ const InputMaskedField = (props: Props) => {
 		meta: { error, touched },
 		mask,
 		uppercaseOnChange,
-		placeholder
+		placeholder,
+		size
 	} = props
 
 	const handleChange = useCallback(
@@ -41,7 +43,15 @@ const InputMaskedField = (props: Props) => {
 
 	return (
 		<Item label={label} required={required} style={style} help={touched && error} validateStatus={error && touched ? 'error' : undefined}>
-			<InputMask {...input} className='ant-input noti-input' mask={mask} onChange={handleChange} value={input.value} disabled={disabled} placeholder={placeholder} />
+			<InputMask
+				{...input}
+				className={cx('ant-input', 'noti-input', 'noti-input-masked', { 'noti-input-masked--large': size === 'large' })}
+				mask={mask}
+				onChange={handleChange}
+				value={input.value}
+				disabled={disabled}
+				placeholder={placeholder}
+			/>
 		</Item>
 	)
 }

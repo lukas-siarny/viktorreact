@@ -1,6 +1,11 @@
 {
-  "name": "Test salon",
-  "email": "test@example.com",
-	"phone": "913120700",
-"paymentMethods": "cash, coupons"
+	"create" : {
+		"name": "Test salon",
+		"email": "test@example.com",
+		"phone": "913120700",
+		"paymentMethods": "cash, coupons"
+	},
+	"update" : {
+		"name": "Update test salon"
+	}
 }

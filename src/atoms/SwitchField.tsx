@@ -72,7 +72,7 @@ const SwitchField = (props: Props) => {
 					tabIndex={0}
 				>
 					<div className={'flex items-center justify-between w-full'}>
-						<div className={'noti-switch__label flex items-center w-8/12'}>
+						<div className={'noti-switch__label flex items-center w-11/12'}>
 							{customLabel || (
 								<Typography.Paragraph ellipsis={{ rows: 1, tooltip: true }} className={'label'}>
 									{label}
@@ -84,7 +84,7 @@ const SwitchField = (props: Props) => {
 								</Tooltip>
 							)}
 						</div>
-						<div className={cx('flex justify-end extra-text w-4/12 text-right', { 'text-blue-600': checkedState })}>
+						<div className={cx('flex justify-end extra-text w-2/12 sm:w-4/12 text-right', { 'text-blue-600': checkedState })}>
 							<div>{extraText}</div>
 							<span id={formFieldID(form, input.name)}>
 								<Switch className={'ml-2'} checked={checkedState} disabled={disabled} size={size} onClick={onClick} tabIndex={-1} />

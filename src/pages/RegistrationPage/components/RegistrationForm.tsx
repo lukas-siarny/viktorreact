@@ -26,52 +26,57 @@ import { FORM, GDPR_URL, GTC_URL, MARKETING_URL } from '../../../utils/enums'
 // eslint-disable-next-line import/no-cycle
 import validateRegistrationForm from './validateRegistrationForm'
 
+// hooks
+import useMedia from '../../../hooks/useMedia'
+
 type ComponentProps = {}
 
 type Props = InjectedFormProps<IRegistrationForm, ComponentProps> & ComponentProps
 
 const RegistrationForm: FC<Props> = (props) => {
+	const size = useMedia(['(min-width: 380px)'], ['large'], 'medium')
+
 	const [t] = useTranslation()
 	const { handleSubmit, submitting } = props
 	return (
-		<Form layout={'vertical'} className={'form h-full mt-4 max-w-48 flex flex-col'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form registration-form h-full mt-2 sm:mt-4 max-w-80 sm:max-w-48 flex flex-col'} onSubmitCapture={handleSubmit}>
 			<h3>{t('loc:Registrácia')}</h3>
-			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
+			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={size} />
 			<Field
 				component={InputPasswordField}
 				label={t('loc:Heslo')}
 				placeholder={t('loc:Zadajte heslo')}
 				type={'password'}
-				size={'large'}
+				size={size}
 				name={'password'}
 				tooltip={{ title: t('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'), icon: <InfoIcon /> }}
 			/>
-			<Field component={InputField} label={t('loc:Zopakujte heslo')} placeholder={t('loc:Zopakujte nové heslo')} name={'confirmPassword'} type={'password'} size={'large'} />
-			<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
+			<Field component={InputField} label={t('loc:Zopakujte heslo')} placeholder={t('loc:Zopakujte nové heslo')} name={'confirmPassword'} type={'password'} size={size} />
+			<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={size} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
 
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
 				customLabel={<SwitchLabel label={t('loc:Vyhlasujem, že som sa oboznámil so')} anchorText={t('loc:Zásadami spracovania osobných údajov')} href={GDPR_URL} />}
 				name={'gdpr'}
-				size={'large'}
+				size={size}
 			/>
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
 				name={'gtc'}
 				customLabel={<SwitchLabel label={t('loc:Vyhlasujem, že som sa oboznámil s')} anchorText={t('loc:Obchodnými podmienkami')} href={GTC_URL} />}
-				size={'large'}
+				size={size}
 			/>
 			<Field
-				className='noti-registration-switch'
+				className='noti-registration-switch marketing-field'
 				component={SwitchField}
 				name={'marketing'}
 				customLabel={<SwitchLabel label={t('loc:Udeľujem súhlas so spracúvaním osobných údajov na')} anchorText={t('loc:Marketingové účely')} href={MARKETING_URL} />}
-				size={'large'}
+				size={size}
 			/>
-			<div className='mt-4'>
-				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+			<div className='mt-2 sm:mt-4'>
+				<Button type={'primary'} block size={size} className={`noti-btn m-regular mb-1 sm:mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Registrovať')}
 				</Button>
 

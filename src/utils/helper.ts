@@ -43,7 +43,10 @@ import {
 	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER,
 	MONDAY_TO_FRIDAY,
-	DAY
+	DAY,
+	LOCALES,
+	LANGUAGE,
+	EN_DATE_WITH_TIME_FORMAT
 } from './enums'
 import { IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -100,6 +103,22 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
 		}
 		return normalizeVal
 	})
+}
+
+/**
+ * @param date Date
+ * @param locale iso country code sk,cz,en,... etc.
+ * @return string
+ *
+ * Returns formatted date by location
+ */
+export const formatDateByLocale = (date: string | Date | undefined | Dayjs) => {
+	const locale = (LOCALES[i18next.language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]).ISO_639
+
+	if (locale === LOCALES[LANGUAGE.SK].ISO_639 || locale === LOCALES[LANGUAGE.CZ].ISO_639) {
+		return dayjs(date).format(DEFAULT_DATE_WITH_TIME_FORMAT)
+	}
+	return dayjs(date).format(EN_DATE_WITH_TIME_FORMAT)
 }
 
 /**

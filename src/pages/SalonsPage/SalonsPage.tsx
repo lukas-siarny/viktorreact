@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Progress, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'

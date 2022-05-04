@@ -64,6 +64,12 @@ export default (values: any) => {
 		})
 	}
 
+	if (values?.taxID && values.taxID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+		errors.taxID = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_20
+		})
+	}
+
 	if (!values.street) {
 		errors.street = i18next.t('loc:Toto pole je povinné')
 	}

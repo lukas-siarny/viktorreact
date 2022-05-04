@@ -59,7 +59,8 @@ class TimeField extends React.Component<Props> {
 			minuteStep,
 			getPopupContainer,
 			popupClassName,
-			clearIcon
+			clearIcon,
+			size
 		} = this.props
 
 		let value
@@ -74,7 +75,6 @@ class TimeField extends React.Component<Props> {
 					<TimePicker
 						id={formFieldID(form, input.name)}
 						dropdownAlign={DROPDOWN_POSITION.BOTTOM_LEFT}
-						style={{ width: '100%' }}
 						onSelect={this.onChangeWrap} // NOTE: workaround https://github.com/ant-design/ant-design/issues/21189
 						onChange={this.onClear}
 						format={timeFormat}
@@ -88,6 +88,7 @@ class TimeField extends React.Component<Props> {
 						allowClear={allowClear}
 						minuteStep={minuteStep}
 						getPopupContainer={getPopupContainer || ((node: any) => node)}
+						size={size}
 						{...control}
 					/>
 				</div>

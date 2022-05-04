@@ -26,7 +26,7 @@ export default (values: any) => {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!(values?.zip && values?.city && values?.street && values?.latitude && values?.longitude && values?.country)) {
+	if (!(values?.zipCode && values?.city && values?.street && values?.latitude && values?.longitude && values?.country)) {
 		errors.address = i18next.t('loc:Upresnite adresu vo vyhľadávaní alebo priamo v mape')
 	}
 

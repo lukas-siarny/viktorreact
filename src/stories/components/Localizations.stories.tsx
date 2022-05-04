@@ -4,7 +4,6 @@ import { withDesign } from 'storybook-addon-designs'
 import { Field, FieldArray, initialize } from 'redux-form'
 import { useDispatch } from 'react-redux'
 import { Form, Divider } from 'antd'
-import { ComponentStory } from '@storybook/react'
 import InputField from '../../atoms/InputField'
 import Localizations from '../../components/Localizations'
 import withReduxForm, { STORYBOOK_FORM } from '../utils/withReduxForm'
@@ -14,7 +13,7 @@ export default {
 	decorators: [withDesign, withReduxForm]
 }
 
-export const SeparateMainField: ComponentStory<typeof InputField> = () => {
+export const SeparateMainField = () => {
 	const dispatch = useDispatch()
 
 	React.useEffect(() => {
@@ -53,7 +52,7 @@ export const SeparateMainField: ComponentStory<typeof InputField> = () => {
 	)
 }
 
-export const IncludedMainField: ComponentStory<typeof InputField> = () => {
+export const IncludedMainField = () => {
 	const dispatch = useDispatch()
 
 	React.useEffect(() => {

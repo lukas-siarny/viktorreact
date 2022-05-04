@@ -120,7 +120,14 @@ const CategoriesTree = () => {
 											<Button
 												type='link'
 												className={'noti-btn icon-center'}
-												onClick={hasPermission ? () => createCategoryHandler(id, title, children?.length) : openForbiddenModal}
+												onClick={
+													hasPermission
+														? (event: any) => {
+																event.stopPropagation()
+																createCategoryHandler(id, title, children?.length)
+														  }
+														: openForbiddenModal
+												}
 												icon={<PlusIcon />}
 											/>
 											<Button
@@ -128,7 +135,8 @@ const CategoriesTree = () => {
 												className={'noti-btn icon-center'}
 												onClick={
 													hasPermission
-														? () => {
+														? (event: any) => {
+																event.stopPropagation()
 																updateCategoryHandler(id, title, parentId, index, nameLocalizations)
 														  }
 														: openForbiddenModal
@@ -137,7 +145,14 @@ const CategoriesTree = () => {
 											/>
 											<DeleteButton
 												className={'icon-center'}
-												onConfirm={hasPermission ? () => deleteCategoryHandler(id, disabled) : openForbiddenModal}
+												onConfirm={
+													hasPermission
+														? (event: any) => {
+																event.stopPropagation()
+																deleteCategoryHandler(id, disabled)
+														  }
+														: openForbiddenModal
+												}
 												onlyIcon
 												entityName={t('loc:kategóriu')}
 											/>

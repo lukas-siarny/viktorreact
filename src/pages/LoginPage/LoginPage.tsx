@@ -10,7 +10,10 @@ import ForgottenPasswordModal from '../../components/ForgottenPassword/Forgotten
 import { ILoginForm } from '../../types/interfaces'
 
 // actions
-import { logInUser } from '../../reducers/users/userActions'
+import { processAuthorizationResult } from '../../reducers/users/userActions'
+
+// utils
+import { postReq } from '../../utils/request'
 
 type Props = {}
 
@@ -19,7 +22,16 @@ const LoginPage: FC<Props> = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 
-	const handleLoginSubmit = async (values: ILoginForm) => dispatch(logInUser(values))
+	const handleLoginSubmit = async (values: ILoginForm) => {
+		try {
+			const { data } = await postReq('/api/b2b/admin/auth/login', null, values)
+			return dispatch(processAuthorizationResult(data))
+		} catch (error) {
+			// eslint-disable-next-line no-console
+			console.error(error)
+			return error
+		}
+	}
 
 	return (
 		<div className='mt-16'>

@@ -30,7 +30,7 @@ export interface ISalonPayload {
 export interface SalonOptionItem {
 	label: string | undefined | number
 	value: number
-	key: number
+	key: string
 }
 
 export interface ISalonsPayload {
@@ -53,7 +53,7 @@ export const getSalons =
 			dispatch({ type: SALONS.SALONS_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/salons/', { page: page || 1, limit: limit || PAGINATION.limit, order, search, categoryFirstLevelIDs, statuses } as any)
 			const salonsOptions = map(data.salons, (salon) => {
-				return { label: salon.name || salon.id, value: salon.id, key: salon.id }
+				return { label: salon.name || salon.id, value: salon.id, key: `${salon.id}-key` }
 			})
 
 			payload = {

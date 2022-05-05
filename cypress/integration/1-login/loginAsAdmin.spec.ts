@@ -7,6 +7,7 @@ const credentials = require('../../fixtures/adminCredentials.json')
 
 context('Login', () => {
 	it('Login into app as ADMIN user', () => {
+		cy.clearLocalStorage()
 		cy.intercept({
 			method: 'POST',
 			url: '/api/b2b/admin/auth/login',

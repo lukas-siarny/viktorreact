@@ -16,6 +16,8 @@
  * @type {Cypress.PluginConfig}
  */
 export default (on: any, config: any) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
+	config.env.auth_email = process.env.AUTH_EMIAL
+	config.env.auth_password = process.env.AUTH_PASSWORD
+
+	return config
 }

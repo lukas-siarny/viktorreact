@@ -4,10 +4,10 @@ declare global {
 	namespace Cypress {
 		interface Chainable {
 			/**
-			 * Command to login into app
-			 * @example cy.login('test@test.com', 't123')
+			 * Command to login into app via api endpoint
+			 * @example cy.apiAuth('test@test.com', 't123')
 			 */
-			login(email: string, password: string): Chainable<Element>
+			apiAuth(email: string, password: string): Chainable<Element>
 		}
 	}
 }

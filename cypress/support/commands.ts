@@ -1,21 +1,18 @@
 import 'cypress-localstorage-commands'
-import { FORM } from '../../src/utils/enums'
+import 'cypress-file-upload'
 
-Cypress.Commands.add('login', (email: string, password: string) => {
-	cy.log(`Logging with ${email} email`)
-	cy.intercept({
+Cypress.Commands.add('apiAuth', (email: string, password: string) => {
+	cy.log(`Login as ${email}`)
+	cy.request({
 		method: 'POST',
 		url: '/api/b2b/admin/auth/login',
-	}).as('authLogin')
-	cy.visit('/login')
-	cy.get(`#${FORM.LOGIN}-email`)
-		.type(email).should('have.value', email)
-	cy.get(`#${FORM.LOGIN}-password`)
-		.type(password).should('have.value', password)
-	cy.get('form').submit()
-	cy.wait('@authLogin').then((interception: any) => {
-		// check status code of login request
-		expect(interception.response.statusCode).to.equal(200)
+		body: {
+			email: email,
+			password: password,
+		},
+	}).then(({ body }) => {
+		window.localStorage.setItem('access_token', body.accessToken)
+		window.localStorage.setItem('refresh_token', body.refreshToken)
+		cy.saveLocalStorage()
 	})
-	cy.location('pathname').should('eq', '/')
 })

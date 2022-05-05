@@ -133,7 +133,7 @@ const AddressFields = (props: Props) => {
 							containerElement={locationSearchElements.containerElement}
 							label={t('loc:Vyhľadať')}
 							onPlaceSelected={selectLocation}
-							type='search'
+							type={'search'}
 							placeholder={t('loc:Vyhľadajte miesto na mape')}
 							error={error && touched}
 						/>
@@ -172,7 +172,7 @@ const AddressFields = (props: Props) => {
 					<Col xl={1} className={'flex-center'}>
 						<Divider type={'vertical'} className='h-full' />
 					</Col>
-					<Col xl={17} md={14}>
+					<Col id={'google-view-map'} xl={17} md={14}>
 						<MapContainer
 							googleMapURL={googleMapUrl}
 							containerElement={mapContainerElements.containerElement}

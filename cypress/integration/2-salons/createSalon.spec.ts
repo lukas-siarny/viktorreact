@@ -31,7 +31,7 @@ context('Salon', () => {
 		cy.get(`#${FORM.SALON}-email`)
 			.type(salon.create.email).should('have.value', salon.create.email)
 		cy.get('#address-search')
-			.type('Kosice, Rampova 2, Slovakia').should('have.value', 'Kosice, Rampova 2, Slovakia')
+			.type(salon.create.address).should('have.value', salon.create.address)
 		cy.get('.pac-item', { timeout: 10000 }).should('be.visible')
 		cy.get('#address-search').type('{downarrow}')
 		cy.get('#address-search').type('{enter}')
@@ -55,7 +55,7 @@ context('Salon', () => {
 		cy.location('pathname').should('eq', `/salons/${createdSalonID}`)
 	})
 
-	/* it('update created salon as ADMIN user', () => {
+	it('update created salon as ADMIN user', () => {
 		cy.intercept({
 			method: 'PATCH',
 			url: `/api/b2b/admin/salons/${createdSalonID}`,
@@ -69,5 +69,5 @@ context('Salon', () => {
 			expect(interception.response.statusCode).to.equal(200)
 			expect(interception.response.body.name).to.equal(salon.update.name)
 		})
-	}) */
+	})
 })

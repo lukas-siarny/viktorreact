@@ -1,6 +1,6 @@
 import './commands'
 
-const credentials = require('../fixtures/adminCredentials.json')
+const credentials = require('../fixtures/credentials.json')
 
 describe('Hooks', () => {
 	it ('loginViaApi', () => {

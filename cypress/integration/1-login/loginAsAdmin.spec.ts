@@ -3,7 +3,7 @@ import Cypress from 'cypress'
 // utils
 import { FORM } from '../../../src/utils/enums'
 
-const credentials = require('../../fixtures/adminCredentials.json')
+const credentials = require('../../fixtures/credentials.json')
 
 context('Login', () => {
 	it('Login into app as ADMIN user', () => {

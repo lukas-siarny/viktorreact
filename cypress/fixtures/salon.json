@@ -1,9 +1,10 @@
 {
 	"create" : {
 		"name": "Test salon",
-		"email": "test@example.com",
+		"email": "test.confirmed_partneruser@goodrequest.com",
 		"phone": "913120700",
-		"paymentMethods": "cash, coupons"
+		"paymentMethods": "cash, coupons",
+		"address": "Kosice, Rampova 2, Slovakia"
 	},
 	"update" : {
 		"name": "Update test salon"

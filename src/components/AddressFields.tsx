@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState, ReactElement } from 'react'
 import { InjectedFormProps, WrappedFieldProps } from 'redux-form'
-import { Col, Divider, Row } from 'antd'
+import { Col, Row } from 'antd'
 import cx from 'classnames'
 import { get } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -11,7 +11,7 @@ import Geocode from 'react-geocode'
 import MapContainer from './MapContainer'
 
 // utils
-import { GOOGLE_MAPS_API_KEY, MAP, ROW_GUTTER_X_DEFAULT } from '../utils/enums'
+import { GOOGLE_MAPS_API_KEY, MAP, ROW_GUTTER_X_M } from '../utils/enums'
 import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents } from '../utils/helper'
 
 // atoms
@@ -125,66 +125,68 @@ const AddressFields = (props: Props) => {
 	return (
 		<>
 			{googleMapUrl && (
-				<Row gutter={ROW_GUTTER_X_DEFAULT} justify={'space-around'}>
-					<Col xl={6} md={9}>
-						<LocationSearchInputField
-							googleMapURL={googleMapUrl}
-							loadingElement={locationSearchElements.loadingElement}
-							containerElement={locationSearchElements.containerElement}
-							label={t('loc:Vyhľadať')}
-							onPlaceSelected={selectLocation}
-							type='search'
-							placeholder={t('loc:Vyhľadajte miesto na mape')}
-							error={error && touched}
-						/>
-						<div className={cx('text-danger h-6', { invisible: !(error && touched) })}>{error}</div>
-						<Divider type={'horizontal'} className='w-full' />
-						{/* Display only fields defined in inputValues */}
-						{'city' in inputValues && (
-							<div>
-								{getLabelField(t('loc:Mesto'))}
-								<h4>{get(inputValues, 'city')}</h4>
-							</div>
-						)}
-						{'street' in inputValues && (
-							<div>
-								{getLabelField(t('loc:Ulica'))}
-								<h4>{get(inputValues, 'street')}</h4>
-							</div>
-						)}
-						{'zipCode' in inputValues && (
-							<div>
-								{getLabelField(t('loc:PSČ'))}
-								<h4>{get(inputValues, 'zipCode')}</h4>
-							</div>
-						)}
-						{'country' in inputValues && (
-							<div>
-								{getLabelField(t('loc:Krajina'))}
-								<h4>{get(inputValues, 'country')}</h4>
-							</div>
-						)}
-						{/* <Field disabled component={InputField} label={t('loc:Mesto')} name={'city'} size={'large'} />
+				<>
+					<Row>
+						<Col span={24}>
+							<LocationSearchInputField
+								googleMapURL={googleMapUrl}
+								loadingElement={locationSearchElements.loadingElement}
+								containerElement={locationSearchElements.containerElement}
+								label={t('loc:Vyhľadať')}
+								onPlaceSelected={selectLocation}
+								type='search'
+								placeholder={t('loc:Vyhľadajte miesto na mape')}
+								error={error && touched}
+							/>
+							<div className={cx('text-danger h-6', { hidden: !(error && touched) })}>{error}</div>
+						</Col>
+					</Row>
+					<Row gutter={ROW_GUTTER_X_M} justify={'space-around'} className={'mb-6'}>
+						<Col xl={18} md={15}>
+							<MapContainer
+								googleMapURL={googleMapUrl}
+								containerElement={mapContainerElements.containerElement}
+								mapElement={mapContainerElements.mapElement}
+								loadingElement={mapContainerElements.loadingElement}
+								onLocationChange={changeLocation}
+								lat={get(inputValues, 'latitude')}
+								long={get(inputValues, 'longitude')}
+								zoom={zoom}
+							/>
+						</Col>
+						<Col xl={6} md={9}>
+							{/* Display only fields defined in inputValues */}
+							{'city' in inputValues && (
+								<div>
+									{getLabelField(t('loc:Mesto'))}
+									<h4>{get(inputValues, 'city')}</h4>
+								</div>
+							)}
+							{'street' in inputValues && (
+								<div>
+									{getLabelField(t('loc:Ulica'))}
+									<h4>{get(inputValues, 'street')}</h4>
+								</div>
+							)}
+							{'zipCode' in inputValues && (
+								<div>
+									{getLabelField(t('loc:PSČ'))}
+									<h4>{get(inputValues, 'zipCode')}</h4>
+								</div>
+							)}
+							{'country' in inputValues && (
+								<div>
+									{getLabelField(t('loc:Krajina'))}
+									<h4>{get(inputValues, 'country')}</h4>
+								</div>
+							)}
+							{/* <Field disabled component={InputField} label={t('loc:Mesto')} name={'city'} size={'large'} />
 						<Field readOnly component={InputField} label={t('loc:Ulica')} name={'street'} size={'large'} />
 						<Field component={InputField} label={t('loc:PSČ')} name={'zip'} size={'large'} />
 						<Field component={InputField} label={t('loc:Krajina')} name={'country'} size={'large'} /> */}
-					</Col>
-					<Col xl={1} className={'flex-center'}>
-						<Divider type={'vertical'} className='h-full' />
-					</Col>
-					<Col xl={17} md={14}>
-						<MapContainer
-							googleMapURL={googleMapUrl}
-							containerElement={mapContainerElements.containerElement}
-							mapElement={mapContainerElements.mapElement}
-							loadingElement={mapContainerElements.loadingElement}
-							onLocationChange={changeLocation}
-							lat={get(inputValues, 'latitude')}
-							long={get(inputValues, 'longitude')}
-							zoom={zoom}
-						/>
-					</Col>
-				</Row>
+						</Col>
+					</Row>
+				</>
 			)}
 		</>
 	)

@@ -50,9 +50,9 @@ context('Salon', () => {
 		cy.wait('@createSalon').then((interception: any) => {
 			// check status code
 			expect(interception.response.statusCode).to.equal(200)
-			createdSalonID = interception.response.body.id
+			createdSalonID = interception.response.body.salon.id
+			cy.location('pathname').should('eq', `/salons/${createdSalonID}`)
 		})
-		cy.location('pathname').should('eq', `/salons/${createdSalonID}`)
 	})
 
 	it('update created salon as ADMIN user', () => {
@@ -61,13 +61,12 @@ context('Salon', () => {
 			url: `/api/b2b/admin/salons/${createdSalonID}`,
 		}).as('updateSalon')
 		cy.visit(`/salons/${createdSalonID}`)
-		cy.get(`#${FORM.SALON}-name`)
+		cy.get(`#${FORM.SALON}-name`).clear()
 			.type(salon.update.name).should('have.value', salon.update.name)
 		cy.get('form').submit()
 		cy.wait('@updateSalon').then((interception: any) => {
 			// check status code
 			expect(interception.response.statusCode).to.equal(200)
-			expect(interception.response.body.name).to.equal(salon.update.name)
 		})
 	})
 })

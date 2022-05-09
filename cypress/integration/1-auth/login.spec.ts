@@ -13,6 +13,7 @@ context('Login', () => {
 			url: '/api/b2b/admin/auth/login',
 		}).as('authLogin')
 		cy.visit('/login')
+		// TODO - load credentials from process env Cypress.env('auth_email') Cypress.env('auth_password')
 		cy.get(`#${FORM.LOGIN}-email`)
 			.type(credentials.email).should('have.value', credentials.email)
 		cy.get(`#${FORM.LOGIN}-password`)

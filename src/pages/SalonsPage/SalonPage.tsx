@@ -468,6 +468,7 @@ const SalonPage: FC<Props> = (props) => {
 					<Row className={`${rowClass} w-full`}>
 						{showDeleteBtn ? (
 							<DeleteButton
+								id={`${FORM.SALON}-delete-btn`}
 								className={'w-1/3'}
 								onConfirm={deleteSalon}
 								entityName={t('loc:salón')}

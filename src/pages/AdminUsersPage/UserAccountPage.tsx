@@ -41,7 +41,7 @@ const UserAccountPage: FC<Props> = (props) => {
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 
 	const authUserPermissions = authUser?.data?.uniqPermissions || []
-	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
+	const userAccountDetail: any = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
 
 	const showDeleteBtn: boolean =
 		authUser.data?.id !== get(userAccountDetail, 'data.id') && checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE])
@@ -83,7 +83,8 @@ const UserAccountPage: FC<Props> = (props) => {
 					}
 				}
 			}
-			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
+			const id: number = userID || userAccountDetail?.data?.id
+			await patchReq('/api/b2b/admin/users/{userID}', { userID: id }, userData)
 			if (!userID || Number(authUser.data?.id) === Number(userID)) dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

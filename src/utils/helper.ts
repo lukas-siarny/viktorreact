@@ -420,12 +420,14 @@ export const parseAddressComponents = (addressComponents: any[] = []): IStructur
 		zip: null,
 		street: null,
 		city: null,
-		country: null
+		country: null,
+		houseNumber: null
 	}
 
 	if (!isEmpty(addressComponents)) {
 		const addressProperties = {
 			streetNumber: ['street_number'],
+			houseNumber: ['premise'],
 			zip: ['postal_code'],
 			street: ['street_address', 'route'],
 			city: ['locality', 'sublocality', 'political', 'sublocality_level_1', 'sublocality_level_2', 'sublocality_level_3', 'sublocality_level_4'],

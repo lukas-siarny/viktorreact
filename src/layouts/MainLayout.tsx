@@ -17,7 +17,7 @@ const MainLayout: FC<Props> = (props) => {
 		<Layout className='min-h-screen noti-main-layout' hasSider>
 			<LayoutSider {...props} />
 			<Layout>
-				<Content className='p-4 pl-10'>{children}</Content>
+				<Content className='p-4 px-10'>{children}</Content>
 			</Layout>
 		</Layout>
 	)

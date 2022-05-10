@@ -448,7 +448,7 @@ const SalonPage: FC<Props> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
 			</Row>
-			<div className='content-body'>
+			<div className='content-body small'>
 				<SalonForm
 					isAdmin={checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN])}
 					onSubmit={handleSubmit}

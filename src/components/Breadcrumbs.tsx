@@ -29,13 +29,13 @@ const Breadcrumbs = (props: Props) => {
 					<Item className={cx({ last: index + 1 === breadcrumbs.items.length })} key={index}>
 						{item.link ? (
 							<Link onClick={item.action} to={item.link} className={'group flex'}>
-								<span className='text-gray-600 text-xs group-hover:text-notino-black font-normal'>{item.name}</span>
-								{item.titleName && <span className={'text-gray-900 group-hover:text-notino-black text-xs'}> - {item.titleName}</span>}
+								<span className='text-gray-600 text-base group-hover:text-notino-black font-normal'>{item.name}</span>
+								{item.titleName && <span className={'text-gray-600 group-hover:text-notino-black text-base'}> - {item.titleName}</span>}
 							</Link>
 						) : (
 							<>
-								<span className='text-gray-600 text-xs font-normal'>{item.name}</span>{' '}
-								{item.titleName && <span className={'text-gray-900 text-sm'}>&nbsp; - {item.titleName}</span>}
+								<span className='text-gray-600 text-base font-normal'>{item.name}</span>{' '}
+								{item.titleName && <span className={'text-gray-600 text-base'}>&nbsp; - {item.titleName}</span>}
 							</>
 						)}
 					</Item>

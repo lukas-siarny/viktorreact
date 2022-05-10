@@ -182,10 +182,11 @@ const ServiceForm = (props: Props) => {
 					maxCount={10}
 					category='SALON'
 				/>
-				<Row className='bg-notino-white mt-3 px-3 py-3 sticky bottom-0' id={'content-footer-container'}>
-					<Col span={12} className={'text-left'}>
+				<Row className={'content-footer'} id={'content-footer-container'}>
+					<Col span={8}>
 						{serviceID ? (
 							<DeleteButton
+								className={'noti-btn w-full'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								onConfirm={onConfirmDelete}
 								entityName={t('loc:službu')}
@@ -193,10 +194,10 @@ const ServiceForm = (props: Props) => {
 							/>
 						) : null}
 					</Col>
-					<Col span={12} className={'text-right'}>
+					<Col span={8} offset={8}>
 						<Button
 							type={'primary'}
-							className={'noti-btn'}
+							className={'noti-btn w-full'}
 							htmlType={'submit'}
 							icon={serviceID ? <EditIcon /> : <CreateIcon />}
 							disabled={submitting || isPristineForm}

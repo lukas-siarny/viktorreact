@@ -42,7 +42,7 @@ const RegistrationPage: FC<Props> = () => {
 
 			const { data } = await postReq('/api/b2b/admin/users/registration', null, reqData)
 			dispatch(reset(FORM.REGISTRATION))
-			return processAuthorizationResult(data, t('paths:activation'))
+			return dispatch(processAuthorizationResult(data, t('paths:activation')))
 			// return res
 		} catch (e) {
 			// eslint-disable-next-line no-console

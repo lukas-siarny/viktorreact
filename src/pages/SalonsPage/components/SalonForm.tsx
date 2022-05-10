@@ -31,13 +31,13 @@ import { RootState } from '../../../reducers'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // assets
-import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-circle-icon.svg'
-import { ReactComponent as FacebookIcon } from '../../../assets/icons/social-facebook-circle-icon.svg'
-import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card-icon.svg'
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-notino-icon.svg'
-import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-icon.svg'
+import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-icon.svg'
+import { ReactComponent as FacebookIcon } from '../../../assets/icons/social-facebook-icon.svg'
+import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card-outlined-icon.svg'
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
+import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as UserIcon } from '../../../assets/icons/user-bold-icon.svg'
+import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { getUsers } from '../../../reducers/users/userActions'
 
 type ComponentProps = {
@@ -81,11 +81,11 @@ const UserAccountForm: FC<Props> = (props) => {
 					<Col span={24}>
 						<div className={'flex justify-between w-full items-center'}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
-								<InfoIcon className={'text-notino-black mr-2 -mt-1'} />
+								<InfoIcon className={'text-notino-black mr-2'} />
 								{t('loc:Základné údaje')}
 							</h3>
 							{salonID ? (
-								<div className={'flex justify-between w-2/5'}>
+								<div className={'flex justify-between w-1/2'}>
 									<Field
 										className={'mt-2 mb-2 w-12/25'}
 										component={SwitchField}
@@ -113,7 +113,7 @@ const UserAccountForm: FC<Props> = (props) => {
 
 						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
 						<Field component={TextareaField} label={t('loc:O nás')} name={'aboutUsFirst'} size={'large'} />
-						<Field component={TextareaField} label={t('loc:Doplnujúci popis')} name={'aboutUsSecond'} size={'large'} />
+						<Field component={TextareaField} label={t('loc:Doplňujúci popis')} name={'aboutUsSecond'} size={'large'} />
 						<Field
 							className={'m-0'}
 							component={ImgUploadField}
@@ -140,7 +140,7 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row>
 					<Col span={24}>
 						<h3 className={'mb-0 flex items-center'}>
-							<PhoneIcon className={'text-notino-black mr-2 -mt-1'} />
+							<PhoneIcon width={20} height={20} className={'text-notino-black mr-2'} />
 							{t('loc:Kontaktné údaje')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
@@ -171,7 +171,7 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row>
 					<Col span={24}>
 						<h3 className={'mb-0 flex items-center'}>
-							<TimerIcon width={24} height={24} className={'text-notino-black mr-2 -mt-1'} /> {t('loc:Otváracie hodiny')}
+							<TimerIcon width={24} height={24} className={'text-notino-black mr-2'} /> {t('loc:Otváracie hodiny')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
 						<Field className={'mb-0'} component={SwitchField} label={t('loc:Pon - Pi rovnaké otváracie hodiny')} name={'sameOpenHoursOverWeek'} size={'middle'} />
@@ -184,7 +184,7 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row>
 					<Col span={24}>
 						<h3 className={'mb-0 flex items-center'}>
-							<CreditCardIcon className={'text-notino-black mr-2 -mt-1'} />
+							<CreditCardIcon className={'text-notino-black mr-2'} />
 							{t('loc:Možnosti platby')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
@@ -207,7 +207,7 @@ const UserAccountForm: FC<Props> = (props) => {
 					<Row>
 						<Col span={24}>
 							<h3 className={'mb-0 flex items-center'}>
-								<UserIcon className={'text-notino-black mr-2 -mt-1'} />
+								<UserIcon width={20} height={20} className={'text-notino-black mr-2'} />
 								{t('loc:Oprávnenie')}
 							</h3>
 							<Divider className={'mb-3 mt-3'} />

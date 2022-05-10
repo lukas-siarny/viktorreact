@@ -2,6 +2,7 @@ import Cypress from 'cypress'
 
 // utils
 import { FORM } from '../../../src/utils/enums'
+import { generateRandomString } from '../../support/helpers'
 
 const credentials = require('../../fixtures/credentials.json')
 const user = require('../../fixtures/user.json')
@@ -14,7 +15,7 @@ context('Auth', () => {
 			url: '/api/b2b/admin/auth/login',
 		}).as('registration')
 		cy.visit('/signup')
-		cy.setInputValue(FORM.REGISTRATION, 'email',  user.email)
+		cy.setInputValue(FORM.REGISTRATION, 'email',  `${generateRandomString(5)}${user.email}`)
 		cy.setInputValue(FORM.REGISTRATION, 'password',  user.password)
 		cy.setInputValue(FORM.REGISTRATION, 'confirmPassword',  user.password)
 		cy.setInputValue(FORM.REGISTRATION, 'phone',  user.phone)

@@ -152,6 +152,7 @@ const UserAccountPage: FC<Props> = (props) => {
 					<Row className={rowClass}>
 						{showDeleteBtn ? (
 							<DeleteButton
+								id={`${FORM.USER_ACCOUNT}-delete-btn`}
 								className={'w-1/3'}
 								onConfirm={deleteUser}
 								entityName={t('loc:používateľa')}

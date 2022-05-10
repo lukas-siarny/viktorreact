@@ -30,6 +30,22 @@ Cypress.Commands.add('setInputValue', (form: string, key: string, value: string,
 	}
 })
 
+Cypress.Commands.add('selectOptionDropdown', (form: string, key: string, value?: string) => {
+	const elementId: string = generateElementId(key, form)
+	cy.get(elementId).click()
+	if (value) {
+		// check for specific value in dropdown
+		cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 }).should('be.visible').find('.ant-select-item-option').each((el: any) => {
+			if (el.text() === value) {
+				cy.wrap(el).click()
+			}
+		})
+	} else {
+		// default select first option in list
+		cy.get('.ant-select-dropdown :not(.ant-select-dropdown-hidden)', { timeout: 10000 }).should('be.visible').find('.ant-select-item-option').first().click({ force: true })
+	}
+})
+
 Cypress.Commands.add('setSearchBoxValueAndSelectFirstOption', (key: string, value: string, selectListKey: string, form?: string, googleGeocoding?: boolean, clear?: boolean) => {
 	const elementId: string = generateElementId(key, form)
 	if (clear) {

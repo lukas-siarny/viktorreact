@@ -15,6 +15,12 @@ declare global {
 			 */
 			setInputValue(form: string, key: string, value: string, clear?: boolean): Chainable<Element>
 			/**
+			 * Command to get dropdown and select option
+			 * default selecting first option
+			 * @example cy.selectOptionDropdown('ADMIN_CREATE_USER', 'roleID', 'partner')
+			 */
+			selectOptionDropdown(form: string, key: string, value?: string)
+			/**
 			 * Command to get search box, set value and select first listed option
 			 * attribute clear input value before its set
 			 * @example cy.setSearchBoxValueAndSelectFirstOption('email', 'test@test.com', 'LOGIN')

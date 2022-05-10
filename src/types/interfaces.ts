@@ -150,6 +150,7 @@ export interface IStructuredAddress {
 	street: string | null
 	city: string | null
 	country: string | null
+	houseNumber: string | null
 }
 
 export interface IOpenHoursNoteForm {

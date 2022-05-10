@@ -89,12 +89,19 @@ const AddressFields = (props: Props) => {
 	const parseAddressObject = (addressComponents: any[]) => {
 		const address = parseAddressComponents(addressComponents)
 
-		const { streetNumber } = address
+		const { streetNumber, houseNumber } = address
 
 		changeFormFieldValue('city', address.city)
-		changeFormFieldValue('street', streetNumber ? `${address.street} ${streetNumber}` : address.street)
 		changeFormFieldValue('country', address.country)
 		changeFormFieldValue('zipCode', address.zip)
+
+		if (streetNumber) {
+			changeFormFieldValue('street', `${address.street} ${streetNumber}`)
+		} else if (houseNumber) {
+			changeFormFieldValue('street', `${address.city} ${houseNumber}`)
+		} else {
+			changeFormFieldValue('street', address.street)
+		}
 
 		input.onChange(true)
 	}
@@ -164,10 +171,6 @@ const AddressFields = (props: Props) => {
 								<h4>{get(inputValues, 'country')}</h4>
 							</div>
 						)}
-						{/* <Field disabled component={InputField} label={t('loc:Mesto')} name={'city'} size={'large'} />
-						<Field readOnly component={InputField} label={t('loc:Ulica')} name={'street'} size={'large'} />
-						<Field component={InputField} label={t('loc:PSČ')} name={'zip'} size={'large'} />
-						<Field component={InputField} label={t('loc:Krajina')} name={'country'} size={'large'} /> */}
 					</Col>
 					<Col xl={1} className={'flex-center'}>
 						<Divider type={'vertical'} className='h-full' />

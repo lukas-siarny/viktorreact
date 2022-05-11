@@ -19,7 +19,7 @@ import { RootState } from '../../../reducers'
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, LANGUAGE } from '../../../utils/enums'
-import Permissions from '../../../utils/Permissions'
+import Permissions, { checkPermissions } from '../../../utils/Permissions'
 import { convertCountriesToLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
@@ -56,6 +56,7 @@ const CategoriesTree = () => {
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore.countries)
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_NAME_LANGUAGE), [countries])
 
@@ -190,17 +191,19 @@ const CategoriesTree = () => {
 		</>
 	)
 
+	const onCategoryClickHandler = (keys: any, e: any) => {
+		if (!checkPermissions(authUserPermissions, editPermissions)) return
+
+		updateCategoryHandler(get(e, 'node'))
+		setSelectedKeys(keys)
+	}
+
 	const titleBuilder2 = (category: any) => {
 		const { name, deletedAt } = category
 		if (!deletedAt) return <span>{name}</span>
 
-		const onClickHandler = () => {
-			setSelectedKeys([])
-			updateCategoryHandler(category)
-		}
-
 		return (
-			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={onClickHandler}>
+			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={() => onCategoryClickHandler([], { node: category })}>
 				{name}
 			</button>
 		)
@@ -264,14 +267,6 @@ const CategoriesTree = () => {
 			})
 		})
 		setTreeNodeData(handledData as TreeCategories[] & DataNode[])
-	}
-
-	const onCategoryClickHandler = (keys: any, e: any) => {
-		const { title, parentId, index, nameLocalizations, level, id, image, deletedAt } = get(e, 'node')
-		console.log(e)
-		// updateCategoryHandler(id, title, parentId, index, nameLocalizations, level, image, deletedAt)
-		updateCategoryHandler(get(e, 'node'))
-		setSelectedKeys(keys)
 	}
 
 	useEffect(() => {

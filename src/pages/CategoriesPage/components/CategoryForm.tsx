@@ -57,7 +57,6 @@ const CategoryForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm } = props
 
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
-	console.log(values)
 	return (
 		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
@@ -109,15 +108,17 @@ const CategoryForm: FC<Props> = (props) => {
 							</Button>
 						) : undefined}
 
-						{values?.id && values?.level < 2 ? (
+						{values?.id && values?.level < 2 && !values?.deletedAt ? (
 							<Button className={'noti-btn'} size='middle' onClick={() => createCategory(values?.id, values?.name, values?.childrenLength, values?.level || 0 + 1)}>
 								{t('loc:Pridať podkategóriu')}
 							</Button>
 						) : undefined}
 
-						<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
-							{t('loc:Uložiť')}
-						</Button>
+						{!values?.deletedAt ? (
+							<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
+								{t('loc:Uložiť')}
+							</Button>
+						) : undefined}
 					</div>
 				</Row>
 			</Col>

@@ -62,8 +62,6 @@ const CategoriesTree = () => {
 
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
-			console.log('parentId', parentId)
-			console.log('parentTitle', parentTitle)
 			setShowForm(true)
 			dispatch(
 				initialize(FORM.CATEGORY, {
@@ -210,7 +208,6 @@ const CategoriesTree = () => {
 	}
 
 	const childrenRecursive = (parentId: number, children: any[], level = 1) => {
-		console.log(children)
 		const childs: TreeCategories[] & any = children
 		const items: any = map(childs, (child, index) => {
 			const data = {
@@ -260,7 +257,6 @@ const CategoriesTree = () => {
 				deletedAt: get(category, 'deletedAt')
 			}
 
-			console.log(category)
 			handledData.push({
 				title: titleBuilder2(data),
 				...data
@@ -274,9 +270,7 @@ const CategoriesTree = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categories])
 
-	console.log(treeNodeData)
 	const onDrop = async (droppedData: any) => {
-		console.log('droppedData', droppedData)
 		try {
 			// key of dropped node
 			const dropKey: number = droppedData.node.key
@@ -338,8 +332,6 @@ const CategoriesTree = () => {
 
 	const handleSubmit = async (formData: ICategoryForm) => {
 		const cat: any | null = categories?.data
-		console.log('hjhjkhjkh', formData)
-		// console.log('ddd', get(formData, 'image[0].id'))
 		try {
 			let body: any = {
 				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,

@@ -37,6 +37,11 @@ type TreeCategories = {
 	parentId?: number | null
 	children?: TreeCategories[] | null
 	nameLocalizations?: any
+	level: number
+	index: number
+	image: any
+	deletedAt?: string
+	id: number
 }
 
 const editPermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_EDIT]
@@ -47,6 +52,7 @@ const CategoriesTree = () => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [showForm, setShowForm] = useState<boolean>(false)
 	const [treeNodeData, setTreeNodeData] = useState<any[]>([])
+	const [selectedKeys, setSelectedKeys] = useState<any[]>([])
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore.countries)
@@ -54,14 +60,17 @@ const CategoriesTree = () => {
 	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_NAME_LANGUAGE), [countries])
 
 	const createCategoryHandler = useCallback(
-		(parentId: number, parentTitle: string, childrenLength: number) => {
+		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
+			console.log('parentId', parentId)
+			console.log('parentTitle', parentTitle)
 			setShowForm(true)
 			dispatch(
 				initialize(FORM.CATEGORY, {
 					parentId,
 					parentTitle,
 					childrenLength,
-					nameLocalizations: emptyNameLocalizations
+					nameLocalizations: emptyNameLocalizations,
+					level
 				})
 			)
 		},
@@ -69,15 +78,20 @@ const CategoriesTree = () => {
 	)
 
 	const updateCategoryHandler = useCallback(
-		(id: number, title: string, parentId: number, index: number, nameLocalizations: any) => {
+		// (id: number, title: string, parentId: number, index: number, nameLocalizations: any, level = 0, image?: any, deletedAt?: string) => {
+		(node) => {
+			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt } = node
 			setShowForm(true)
 			dispatch(
 				initialize(FORM.CATEGORY, {
 					id,
-					name: title,
+					name,
 					parentId,
 					orderIndex: index,
-					nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE)
+					nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
+					level,
+					image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
+					deletedAt
 				})
 			)
 		},
@@ -104,7 +118,7 @@ const CategoriesTree = () => {
 		[dispatch, isRemoving]
 	)
 
-	const titleBuilder = (title: string, id: number, parentId: number, index: number, disabled: boolean, children: any, nameLocalizations: any) => (
+	const titleBuilder = (title: string, id: number, parentId: number, index: number, disabled: boolean, children: any, nameLocalizations: any, level: number) => (
 		<>
 			<Popover
 				placement='right'
@@ -137,7 +151,7 @@ const CategoriesTree = () => {
 													hasPermission
 														? (event: any) => {
 																event.stopPropagation()
-																updateCategoryHandler(id, title, parentId, index, nameLocalizations)
+																// updateCategoryHandler(id, title, parentId, index, nameLocalizations, level)
 														  }
 														: openForbiddenModal
 												}
@@ -176,50 +190,88 @@ const CategoriesTree = () => {
 		</>
 	)
 
-	const childrenRecursive = (parentId: number, children: any[]) => {
+	const titleBuilder2 = (category: any) => {
+		const { name, deletedAt } = category
+		if (!deletedAt) return <span>{name}</span>
+
+		const onClickHandler = () => {
+			setSelectedKeys([])
+			updateCategoryHandler(category)
+		}
+
+		return (
+			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={onClickHandler}>
+				{name}
+			</button>
+		)
+	}
+
+	const childrenRecursive = (parentId: number, children: any[], level = 1) => {
+		console.log(children)
 		const childs: TreeCategories[] & any = children
-		const items: any = map(childs, (child, index) => ({
-			title: titleBuilder(
-				get(child, 'name'),
-				get(child, 'id'),
+		const items: any = map(childs, (child, index) => {
+			const data = {
+				id: get(child, 'id'),
+				key: get(child, 'id'),
+				name: get(child, 'name'),
+				disabled: !!get(child, 'deletedAt'),
 				parentId,
-				parseInt(index, 10),
-				!!get(child, 'deletedAt'),
-				get(child, 'children'),
-				get(child, 'nameLocalizations')
-			),
-			key: get(child, 'id'),
-			name: get(child, 'name'),
-			disabled: !!get(child, 'deletedAt'),
-			parentId,
-			children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children')) : null,
-			nameLocalizations: get(child, 'nameLocalizations')
-		}))
+				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1) : null,
+				nameLocalizations: get(child, 'nameLocalizations'),
+				level,
+				index,
+				image: get(child, 'image'),
+				deletedAt: get(child, 'deletedAt')
+			}
+			return { title: titleBuilder2(data), ...data }
+			// title: titleBuilder(
+			// 	get(child, 'name'),
+			// 	get(child, 'id'),
+			// 	parentId,
+			// 	parseInt(index, 10),
+			// 	!!get(child, 'deletedAt'),
+			// 	get(child, 'children'),
+			// 	get(child, 'nameLocalizations'),
+			// 	level
+			// ),
+			// title: get(child, 'name'),
+		})
 		return items as any[] & TreeCategories[]
 	}
 
 	const treeData = () => {
 		const handledData: TreeCategories[] = []
+		const level = 0
 		forEach(categories?.data, (category: any, index: number) => {
-			handledData.push({
-				title: titleBuilder(
-					get(category, 'name'),
-					get(category, 'id'),
-					-1,
-					index,
-					!!get(category, 'deletedAt'),
-					get(category, 'children'),
-					get(category, 'nameLocalizations')
-				),
+			const data = {
+				id: get(category, 'id'),
 				key: get(category, 'id'),
 				name: get(category, 'name'),
 				parentId: null,
 				disabled: !!get(category, 'deletedAt'),
 				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[]) : null,
-				nameLocalizations: get(category, 'nameLocalizations')
+				nameLocalizations: get(category, 'nameLocalizations'),
+				level,
+				index,
+				image: get(category, 'image'),
+				deletedAt: get(category, 'deletedAt')
+			}
+
+			console.log(category)
+			handledData.push({
+				title: titleBuilder2(data),
+				...data
 			})
 		})
 		setTreeNodeData(handledData as TreeCategories[] & DataNode[])
+	}
+
+	const onCategoryClickHandler = (keys: any, e: any) => {
+		const { title, parentId, index, nameLocalizations, level, id, image, deletedAt } = get(e, 'node')
+		console.log(e)
+		// updateCategoryHandler(id, title, parentId, index, nameLocalizations, level, image, deletedAt)
+		updateCategoryHandler(get(e, 'node'))
+		setSelectedKeys(keys)
 	}
 
 	useEffect(() => {
@@ -227,6 +279,7 @@ const CategoriesTree = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categories])
 
+	console.log(treeNodeData)
 	const onDrop = async (droppedData: any) => {
 		try {
 			// key of dropped node
@@ -288,10 +341,13 @@ const CategoriesTree = () => {
 
 	const handleSubmit = async (formData: ICategoryForm) => {
 		const cat: any | null = categories?.data
+		// console.log('hjhjkhjkh', formData)
+		// console.log('ddd', get(formData, 'image[0].id'))
 		try {
 			let body: any = {
 				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,
-				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value)
+				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
+				imageID: get(formData, 'image[0].id')
 			}
 			if (formData.parentId >= 0) {
 				body = {
@@ -325,7 +381,7 @@ const CategoriesTree = () => {
 				<Col span={6}>
 					<Button
 						onClick={() => {
-							dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations }))
+							dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations, level: 0 }))
 							setShowForm(true)
 						}}
 						type='primary'
@@ -337,14 +393,29 @@ const CategoriesTree = () => {
 					</Button>
 				</Col>
 			</Row>
+			dfsdfsd
 			<div className={'w-full flex'}>
 				<div className={formClass}>
-					<Tree className={'noti-tree'} treeData={treeNodeData} onDrop={onDrop} showIcon showLine draggable />
+					<Tree
+						className={'noti-tree'}
+						treeData={treeNodeData}
+						onDrop={onDrop}
+						showIcon
+						showLine
+						draggable
+						onSelect={onCategoryClickHandler}
+						selectedKeys={selectedKeys}
+					/>
 				</div>
 				{showForm ? (
 					<div className={'w-6/12 flex justify-around items-start'}>
 						<Divider className={'h-full'} type={'vertical'} />
-						<CategoryForm deleteCategory={(id: number) => deleteCategoryHandler(id, false)} onSubmit={handleSubmit} />
+						<CategoryForm
+							deleteCategory={(id: number) => deleteCategoryHandler(id, false)}
+							onSubmit={handleSubmit}
+							createCategory={createCategoryHandler}
+							closeCategoryForm={() => setShowForm(false)}
+						/>
 					</div>
 				) : undefined}
 			</div>

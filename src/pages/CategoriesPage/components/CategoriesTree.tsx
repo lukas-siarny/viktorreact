@@ -276,6 +276,7 @@ const CategoriesTree = () => {
 
 	console.log(treeNodeData)
 	const onDrop = async (droppedData: any) => {
+		console.log('droppedData', droppedData)
 		try {
 			// key of dropped node
 			const dropKey: number = droppedData.node.key
@@ -321,7 +322,8 @@ const CategoriesTree = () => {
 				body = {
 					...body,
 					parentID: droppedData.node.props.data.parentId,
-					orderIndex
+					orderIndex,
+					imageID: get(droppedData, 'dragNode.image.id')
 				}
 			}
 			// check and update categories on be
@@ -336,13 +338,13 @@ const CategoriesTree = () => {
 
 	const handleSubmit = async (formData: ICategoryForm) => {
 		const cat: any | null = categories?.data
-		// console.log('hjhjkhjkh', formData)
+		console.log('hjhjkhjkh', formData)
 		// console.log('ddd', get(formData, 'image[0].id'))
 		try {
 			let body: any = {
 				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
-				imageID: get(formData, 'image[0].id')
+				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
 			}
 			if (formData.parentId >= 0) {
 				body = {

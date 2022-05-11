@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
-import { Button, Col, Row, Popover, Tree, Divider } from 'antd'
+import { Button, Col, Row, Tree, Divider } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { filter, forEach, get, map } from 'lodash'
 import { initialize } from 'redux-form'
@@ -9,8 +9,6 @@ import cx from 'classnames'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import { ReactComponent as ResetIcon } from '../../../assets/icons/reset-icon.svg'
 
 // redux
 import { getCategories } from '../../../reducers/categories/categoriesActions'
@@ -19,11 +17,10 @@ import { RootState } from '../../../reducers'
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, LANGUAGE } from '../../../utils/enums'
-import Permissions, { checkPermissions } from '../../../utils/Permissions'
+import { checkPermissions } from '../../../utils/Permissions'
 import { convertCountriesToLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
-import DeleteButton from '../../../components/DeleteButton'
 import CategoryForm, { ICategoryForm } from './CategoryForm'
 
 const DEFAULT_NAME_LANGUAGE = LANGUAGE.EN
@@ -118,78 +115,6 @@ const CategoriesTree = () => {
 		[dispatch, isRemoving]
 	)
 
-	const titleBuilder = (title: string, id: number, parentId: number, index: number, disabled: boolean, children: any, nameLocalizations: any, level: number) => (
-		<>
-			<Popover
-				placement='right'
-				trigger='click'
-				content={
-					<div className={'flex'}>
-						<Permissions
-							allowed={editPermissions}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<>
-									{!disabled ? (
-										<>
-											<Button
-												type='link'
-												className={'noti-btn icon-center'}
-												onClick={
-													hasPermission
-														? (event: any) => {
-																event.stopPropagation()
-																createCategoryHandler(id, title, children?.length)
-														  }
-														: openForbiddenModal
-												}
-												icon={<PlusIcon />}
-											/>
-											<Button
-												type='link'
-												className={'noti-btn icon-center'}
-												onClick={
-													hasPermission
-														? (event: any) => {
-																event.stopPropagation()
-																// updateCategoryHandler(id, title, parentId, index, nameLocalizations, level)
-														  }
-														: openForbiddenModal
-												}
-												icon={<EditIcon />}
-											/>
-											<DeleteButton
-												className={'icon-center'}
-												onConfirm={
-													hasPermission
-														? (event: any) => {
-																event.stopPropagation()
-																deleteCategoryHandler(id, disabled)
-														  }
-														: openForbiddenModal
-												}
-												onlyIcon
-												entityName={t('loc:kategóriu')}
-											/>
-										</>
-									) : (
-										<Button
-											type='link'
-											className={'noti-btn icon-center'}
-											onClick={hasPermission ? () => deleteCategoryHandler(id, disabled) : openForbiddenModal}
-											icon={<ResetIcon />}
-										/>
-									)}
-								</>
-							)}
-						/>
-					</div>
-				}
-			>
-				<span>{title}</span>
-			</Popover>
-		</>
-	)
-
 	const onCategoryClickHandler = (keys: any, e: any) => {
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
 
@@ -197,7 +122,7 @@ const CategoriesTree = () => {
 		setSelectedKeys(keys)
 	}
 
-	const titleBuilder2 = (category: any) => {
+	const titleBuilder = (category: any) => {
 		const { name, deletedAt } = category
 		if (!deletedAt) return <span>{name}</span>
 
@@ -225,18 +150,7 @@ const CategoriesTree = () => {
 				deletedAt: get(child, 'deletedAt'),
 				isParentDeleted
 			}
-			return { title: titleBuilder2(data), ...data }
-			// title: titleBuilder(
-			// 	get(child, 'name'),
-			// 	get(child, 'id'),
-			// 	parentId,
-			// 	parseInt(index, 10),
-			// 	!!get(child, 'deletedAt'),
-			// 	get(child, 'children'),
-			// 	get(child, 'nameLocalizations'),
-			// 	level
-			// ),
-			// title: get(child, 'name'),
+			return { title: titleBuilder(data), ...data }
 		})
 		return items as any[] & TreeCategories[]
 	}
@@ -261,7 +175,7 @@ const CategoriesTree = () => {
 			}
 
 			handledData.push({
-				title: titleBuilder2(data),
+				title: titleBuilder(data),
 				...data
 			})
 		})

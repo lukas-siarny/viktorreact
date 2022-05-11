@@ -406,7 +406,7 @@ const CategoriesTree = () => {
 					<div className={'w-6/12 flex justify-around items-start'}>
 						<Divider className={'h-full'} type={'vertical'} />
 						<CategoryForm
-							deleteCategory={(id: number) => deleteCategoryHandler(id, false)}
+							deleteCategory={deleteCategoryHandler}
 							onSubmit={handleSubmit}
 							createCategory={createCategoryHandler}
 							closeCategoryForm={() => setShowForm(false)}

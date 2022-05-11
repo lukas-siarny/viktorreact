@@ -70,7 +70,6 @@ const CategoryForm: FC<Props> = (props) => {
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<FieldArray
-						className={'mb-6'}
 						key='nameLocalizations'
 						name='nameLocalizations'
 						component={Localizations}
@@ -94,11 +93,10 @@ const CategoryForm: FC<Props> = (props) => {
 					{values?.level === 0 ? (
 						<Field className='m-0' component={ImgUploadField} name='image' label={t('loc:Obrázok')} maxCount={1} signUrl={URL_UPLOAD_IMAGES} category='SALON' />
 					) : undefined}
-					{/* <div className={'flex justify-between flex-wrap-reverse flex-row-reverse gap-2'}> */}
 					<div className={'flex justify-between flex-wrap gap-2'}>
 						{values?.id && !values?.deletedAt ? (
 							<DeleteButton
-								onConfirm={() => deleteCategory(values?.id)}
+								onConfirm={() => deleteCategory(values?.id, false)}
 								entityName={''}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
@@ -106,7 +104,7 @@ const CategoryForm: FC<Props> = (props) => {
 						) : undefined}
 
 						{values?.id && values?.deletedAt ? (
-							<Button className={'noti-btn'} size='middle'>
+							<Button className={'noti-btn'} size='middle' onClick={() => deleteCategory(values?.id, true)}>
 								{t('loc:Obnoviť')}
 							</Button>
 						) : undefined}

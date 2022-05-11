@@ -42,6 +42,7 @@ type TreeCategories = {
 	image: any
 	deletedAt?: string
 	id: number
+	isParentDeleted: boolean
 }
 
 const editPermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_EDIT]
@@ -77,9 +78,8 @@ const CategoriesTree = () => {
 	)
 
 	const updateCategoryHandler = useCallback(
-		// (id: number, title: string, parentId: number, index: number, nameLocalizations: any, level = 0, image?: any, deletedAt?: string) => {
 		(node) => {
-			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt } = node
+			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted } = node
 			setShowForm(true)
 			dispatch(
 				initialize(FORM.CATEGORY, {
@@ -90,7 +90,8 @@ const CategoriesTree = () => {
 					nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
 					level,
 					image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
-					deletedAt
+					deletedAt,
+					isParentDeleted
 				})
 			)
 		},
@@ -207,7 +208,7 @@ const CategoriesTree = () => {
 		)
 	}
 
-	const childrenRecursive = (parentId: number, children: any[], level = 1) => {
+	const childrenRecursive = (parentId: number, children: any[], level = 1, isParentDeleted = false) => {
 		const childs: TreeCategories[] & any = children
 		const items: any = map(childs, (child, index) => {
 			const data = {
@@ -216,12 +217,13 @@ const CategoriesTree = () => {
 				name: get(child, 'name'),
 				disabled: !!get(child, 'deletedAt'),
 				parentId,
-				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1) : null,
+				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1, !!get(child, 'deletedAt')) : null,
 				nameLocalizations: get(child, 'nameLocalizations'),
 				level,
 				index,
 				image: get(child, 'image'),
-				deletedAt: get(child, 'deletedAt')
+				deletedAt: get(child, 'deletedAt'),
+				isParentDeleted
 			}
 			return { title: titleBuilder2(data), ...data }
 			// title: titleBuilder(
@@ -249,12 +251,13 @@ const CategoriesTree = () => {
 				name: get(category, 'name'),
 				parentId: null,
 				disabled: !!get(category, 'deletedAt'),
-				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[]) : null,
+				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[], 1, !!get(category, 'deletedAt')) : null,
 				nameLocalizations: get(category, 'nameLocalizations'),
 				level,
 				index,
 				image: get(category, 'image'),
-				deletedAt: get(category, 'deletedAt')
+				deletedAt: get(category, 'deletedAt'),
+				isParentDeleted: false
 			}
 
 			handledData.push({
@@ -382,7 +385,6 @@ const CategoriesTree = () => {
 					</Button>
 				</Col>
 			</Row>
-			dfsdfsd
 			<div className={'w-full flex'}>
 				<div className={formClass}>
 					<Tree

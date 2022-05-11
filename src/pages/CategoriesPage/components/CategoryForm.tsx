@@ -102,7 +102,7 @@ const CategoryForm: FC<Props> = (props) => {
 							/>
 						) : undefined}
 
-						{values?.id && values?.deletedAt ? (
+						{values?.id && values?.deletedAt && !values?.isParentDeleted ? (
 							<Button className={'noti-btn'} size='middle' onClick={() => deleteCategory(values?.id, true)}>
 								{t('loc:Obnoviť')}
 							</Button>

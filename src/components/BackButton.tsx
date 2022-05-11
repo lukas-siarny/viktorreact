@@ -18,8 +18,8 @@ const BackButton = ({ path, defaultBackButtonAction }: Props) => {
 	return backUrlLink ? (
 		<div className={'flex items-center'}>
 			<Link className={'flex items-center group'} onClick={defaultBackButtonAction} to={backUrlLink}>
-				<BackButtonIcon className={'small-icon text-gray-600 group-hover:textColor-notino-black'} />
-				<span className='text-gray-600 align-text-bottom text-xs font-normal group-hover:textColor-notino-black'>{t('loc:Späť')}</span>
+				<BackButtonIcon className={'small-icon text-gray-600 group-hover:textColor-notino-black mr-1'} />
+				<span className='text-gray-600 align-text-bottom text-base font-normal group-hover:textColor-notino-black'>{t('loc:Späť')}</span>
 			</Link>
 			<BreadcrumbSeparator className={'text-gray-600'} />
 		</div>

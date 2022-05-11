@@ -9,11 +9,11 @@
 	.ant-table-thead
 		font-size: 12px
 	.ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td
-		padding: 0
+		padding: 4px
 	&.table-fixed
 		.ant-table-thead > tr > th
 			position: sticky
-			top: $header-height
+			top: 0
 			z-index: 2
 			height: 30px
 		.ant-pagination
@@ -24,8 +24,8 @@
 			border-bottom-left-radius: 4px
 			border-bottom-right-radius: 4px
 			height: $footer-table-height
-			width: calc(100% + 16px)
-			margin-left: -8px
+			width: calc(100% + 48px)
+			margin-left: -24px
 			margin-top: 24px
 			margin-bottom: -24px
 			background: $backgroundColor-gray-50

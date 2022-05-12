@@ -5,6 +5,7 @@
         // repeated from base config's "include" setting
         "src",
         "tests",
+        "cypress",
 
         // these are the eslint-only inclusions
         ".eslintrc.js",

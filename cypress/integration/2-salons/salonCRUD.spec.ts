@@ -1,11 +1,11 @@
 // utils
 import { FORM } from '../../../src/utils/enums'
 
-const salon = require('../../fixtures/salon.json')
+import salon from '../../fixtures/salon.json'
 
 context('Salon', () => {
 	// id of created salon
-	let createdSalonID: number = 0
+	let createdSalonID = 0
 	beforeEach(() => {
 		// restore local storage with tokens from snapshot
 		cy.restoreLocalStorage()
@@ -20,7 +20,7 @@ context('Salon', () => {
 		// prepare image for upload
 		cy.intercept({
 			method: 'POST',
-			url: '/api/b2b/admin/salons',
+			url: '/api/b2b/admin/salons'
 		}).as('createSalon')
 		cy.visit('/salons/create')
 		cy.setInputValue(FORM.SALON, 'name', salon.create.name)
@@ -45,7 +45,7 @@ context('Salon', () => {
 	it('Update created salon', () => {
 		cy.intercept({
 			method: 'PATCH',
-			url: `/api/b2b/admin/salons/${createdSalonID}`,
+			url: `/api/b2b/admin/salons/${createdSalonID}`
 		}).as('updateSalon')
 		cy.visit(`/salons/${createdSalonID}`)
 		cy.setInputValue(FORM.SALON, 'name', salon.update.name, true)
@@ -61,7 +61,7 @@ context('Salon', () => {
 	it('Delete created salon', () => {
 		cy.intercept({
 			method: 'DELETE',
-			url: `/api/b2b/admin/salons/${createdSalonID}`,
+			url: `/api/b2b/admin/salons/${createdSalonID}`
 		}).as('deleteSalon')
 		cy.visit(`/salons/${createdSalonID}`)
 		cy.clickDeleteButtonWithConf(FORM.SALON)

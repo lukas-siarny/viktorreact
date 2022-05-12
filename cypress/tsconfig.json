@@ -3,6 +3,8 @@
 	"compilerOptions": {
 		"noEmit": true,
 		"types": ["cypress", "./support/types"],
+		"esModuleInterop": true,
+		"resolveJsonModule": true
 	},
 	"include": [
 		"../node_modules/cypress",

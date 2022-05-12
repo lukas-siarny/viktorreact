@@ -122,6 +122,11 @@ const CategoriesTree = () => {
 		setSelectedKeys(keys)
 	}
 
+	const closeCategoryHandler = () => {
+		setSelectedKeys([])
+		setShowForm(false)
+	}
+
 	const titleBuilder = (category: any) => {
 		const { name, deletedAt } = category
 		if (!deletedAt) return <span>{name}</span>
@@ -319,7 +324,7 @@ const CategoriesTree = () => {
 							deleteCategory={deleteCategoryHandler}
 							onSubmit={handleSubmit}
 							createCategory={createCategoryHandler}
-							closeCategoryForm={() => setShowForm(false)}
+							closeCategoryForm={closeCategoryHandler}
 						/>
 					</div>
 				) : undefined}

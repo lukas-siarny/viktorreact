@@ -48,6 +48,11 @@ declare global {
 			 * @example cy.checkSuccessToastMessage()
 			 */
 			checkSuccessToastMessage()
+			/**
+			 * Command to clear selected value from dropdown
+			 * @example cy.clearDropdownSelection('gender')
+			 */
+			clearDropdownSelection(fieldName: string)
 		}
 	}
 }

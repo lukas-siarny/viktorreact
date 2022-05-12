@@ -1,5 +1,3 @@
-import Cypress from 'cypress'
-
 // utils
 import { FORM } from '../../../src/utils/enums'
 import { generateRandomString } from '../../support/helpers'
@@ -22,6 +20,33 @@ context('Auth', () => {
 		cy.setInputValue(FORM.REGISTRATION, 'phone', user.phone)
 		cy.clickButton('gdpr', FORM.REGISTRATION, true)
 		cy.clickButton('gtc', FORM.REGISTRATION, true)
+		cy.get('form').submit()
+		cy.wait('@registration').then((interception: any) => {
+			// check status code of login request
+			expect(interception.response.statusCode).to.equal(200)
+			// take local storage snapshot
+			cy.saveLocalStorage()
+		})
+		// check redirect to activation page
+		cy.location('pathname').should('eq', '/activation')
+	})
+
+	it('Sign out', () => {
+		cy.restoreLocalStorage()
+		cy.intercept({
+			method: 'POST',
+			url: '/api/b2b/admin/auth/logout'
+		}).as('authLogout')
+		cy.visit('/')
+		cy.clickButton('logout-btn')
+		cy.wait('@authLogout').then((interception: any) => {
+			// check status code of login request
+			expect(interception.response.statusCode).to.equal(200)
+			assert.isNull(localStorage.getItem('refresh_token'))
+			assert.isNull(localStorage.getItem('access_token'))
+		})
+		// check redirect to home page
+		cy.location('pathname').should('eq', '/login')
 	})
 
 	it('Sign in', () => {

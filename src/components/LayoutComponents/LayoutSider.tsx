@@ -82,7 +82,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						{t('loc: Môj účet')}
 					</Link>
 					<p className='s-medium'>v{process.env.REACT_APP_VERSION}</p>
-					<Button block onClick={() => dispatch(logOutUser())}>
+					<Button id='logout-btn' block onClick={() => dispatch(logOutUser())}>
 						{t('loc:Odhlásiť')}
 					</Button>
 				</div>

@@ -132,6 +132,7 @@ const CustomerPage = (props: Props) => {
 				<div className={'content-footer'}>
 					<Row className={'justify-between'}>
 						<DeleteButton
+							id={`${FORM.CUSTOMER}-delete-btn`}
 							className={'w-1/3'}
 							onConfirm={() => {
 								if (editPermissions) {

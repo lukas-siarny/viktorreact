@@ -117,9 +117,8 @@ const CategoriesTree = () => {
 
 	const onCategoryClickHandler = (keys: any, e: any) => {
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
-
+		if (keys.length > 0) setSelectedKeys(keys)
 		updateCategoryHandler(get(e, 'node'))
-		setSelectedKeys(keys)
 	}
 
 	const closeCategoryHandler = () => {

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import 'cypress-localstorage-commands'
 import 'cypress-file-upload'
 

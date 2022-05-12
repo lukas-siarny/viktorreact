@@ -22,7 +22,7 @@ context('Auth', () => {
 		cy.clickButton('gtc', FORM.REGISTRATION, true)
 		cy.get('form').submit()
 		cy.wait('@registration').then((interception: any) => {
-			// check status code of login request
+			// check status code of registration request
 			expect(interception.response.statusCode).to.equal(200)
 			// take local storage snapshot
 			cy.saveLocalStorage()
@@ -40,12 +40,13 @@ context('Auth', () => {
 		cy.visit('/')
 		cy.clickButton('logout-btn')
 		cy.wait('@authLogout').then((interception: any) => {
-			// check status code of login request
+			// check status code of logout request
 			expect(interception.response.statusCode).to.equal(200)
+			// check if tokens are erased
 			assert.isNull(localStorage.getItem('refresh_token'))
 			assert.isNull(localStorage.getItem('access_token'))
 		})
-		// check redirect to home page
+		// check redirect to login page
 		cy.location('pathname').should('eq', '/login')
 	})
 

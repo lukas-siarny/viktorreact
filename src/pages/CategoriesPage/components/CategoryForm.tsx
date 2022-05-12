@@ -110,7 +110,7 @@ const CategoryForm: FC<Props> = (props) => {
 
 						{values?.id && values?.level < 2 && !values?.deletedAt ? (
 							<Button className={'noti-btn'} size='middle' onClick={() => createCategory(values?.id, values?.name, values?.childrenLength, values?.level || 0 + 1)}>
-								{t('loc:Pridať podkategóriu')}
+								{t('loc:Vytvoriť podkategóriu')}
 							</Button>
 						) : undefined}
 

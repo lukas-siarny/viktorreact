@@ -57,6 +57,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm } = props
 
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
+
 	return (
 		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
@@ -86,6 +87,7 @@ const CategoryForm: FC<Props> = (props) => {
 								name='nameLocalizations[0].value'
 								required
 								validate={fixLength100}
+								focused={!values?.nameLocalizations?.[0]?.value}
 							/>
 						}
 					/>

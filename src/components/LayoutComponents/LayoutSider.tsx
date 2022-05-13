@@ -44,7 +44,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				<div className='px-2 flex flex-col flex-grow overflow-y-auto'>
 					{showNavigation && (
 						<Menu mode='inline' selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
-							<Menu.Item key={PAGE.HOME} onClick={() => history.push(t('paths:home'))} icon={<ThumbnailIcon />}>
+							<Menu.Item key={PAGE.HOME} onClick={() => history.push(t('paths:index'))} icon={<ThumbnailIcon />}>
 								{t('loc:Home')}
 							</Menu.Item>
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]}>

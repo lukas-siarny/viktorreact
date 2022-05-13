@@ -22,7 +22,7 @@ const LanguagePicker: FC<Props> = (props) => {
 
 	return (
 		<div className={`${className} ant-form-item`}>
-			<Select defaultValue={i18next.language} onChange={handleLanguageChange} className={'noti-select-input'} dropdownClassName={'noti-select-dropdown'}>
+			<Select defaultValue={i18next.resolvedLanguage} onChange={handleLanguageChange} className={'noti-select-input'} dropdownClassName={'noti-select-dropdown'}>
 				{options.map((option: any, index: number) => (
 					<Option value={option.value} key={index}>
 						{option.label}

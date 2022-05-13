@@ -5,6 +5,10 @@ import en_GB from 'antd/lib/locale-provider/en_GB'
 import sk_SK from 'antd/lib/locale-provider/sk_SK'
 import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
 
+import { ReactComponent as SK_Flag } from '../assets/flags/SK.svg'
+import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
+import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
+
 // types
 // eslint-disable-next-line import/no-cycle
 import { ICountryLabel } from '../types/interfaces'
@@ -33,15 +37,18 @@ export const DEFAULT_LANGUAGE = LANGUAGE.SK
 export const LOCALES = {
 	[LANGUAGE.SK]: {
 		ISO_639: 'sk',
-		antD: sk_SK
+		antD: sk_SK,
+		icon: SK_Flag
 	},
 	[LANGUAGE.CZ]: {
 		ISO_639: 'cs',
-		antD: cs_CZ
+		antD: cs_CZ,
+		icon: CZ_Flag
 	},
 	[LANGUAGE.EN]: {
 		ISO_639: 'en',
-		antD: en_GB
+		antD: en_GB,
+		icon: EN_Flag
 	}
 }
 

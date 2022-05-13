@@ -14,11 +14,10 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 
 // utils
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
+import Permissions, { withPermissions } from '../../utils/Permissions'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
-import showNotifications from '../../utils/tsxHelpers'
 
 // reducers
 import { getSalons } from '../../reducers/salons/salonsActions'
@@ -162,53 +161,56 @@ const SalonsPage = () => {
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<div className='content-body'>
-						<SalonsFilter
-							createSalon={() => {
-								if (checkPermissions(editPermissions)) {
-									history.push(t('paths:salons/create'))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							onSubmit={handleSubmit}
-						/>
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={salons?.data?.salons}
-							rowClassName={'clickable-row'}
-							loading={salons?.isLoading}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									if (checkPermissions(editPermissions)) {
-										history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
-									} else {
-										showNotifications(
-											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
-											NOTIFICATION_TYPE.NOTIFICATION
-										)
-									}
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: salons?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: salons?.data?.pagination?.totalPages,
-								current: salons?.data?.pagination?.page
-							}}
-						/>
-					</div>
+					<Permissions
+						allowed={editPermissions}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<div className='content-body'>
+								<SalonsFilter
+									createSalon={() => {
+										if (hasPermission) {
+											history.push(t('paths:salons/create'))
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									onSubmit={handleSubmit}
+								/>
+								<CustomTable
+									className='table-fixed'
+									onChange={onChangeTable}
+									columns={columns}
+									dataSource={salons?.data?.salons}
+									rowClassName={'clickable-row'}
+									loading={salons?.isLoading}
+									twoToneRows
+									onRow={(record) => ({
+										onClick: (e) => {
+											if (hasPermission) {
+												history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}
+									})}
+									pagination={{
+										showTotal: (total, [from, to]) =>
+											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+												total,
+												from,
+												to
+											}),
+										defaultPageSize: PAGINATION.defaultPageSize,
+										pageSizeOptions: PAGINATION.pageSizeOptions,
+										pageSize: salons?.data?.pagination?.limit,
+										showSizeChanger: true,
+										total: salons?.data?.pagination?.totalPages,
+										current: salons?.data?.pagination?.page
+									}}
+								/>
+							</div>
+						)}
+					/>
 				</Col>
 			</Row>
 		</>

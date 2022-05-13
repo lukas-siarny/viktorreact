@@ -14,10 +14,10 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import ServicesFilter from './components/ServicesFilter'
 
 // utils
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -25,7 +25,6 @@ import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
-import showNotifications from '../../utils/tsxHelpers'
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
 
@@ -128,54 +127,57 @@ const ServicesPage = () => {
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<div className='content-body'>
-						<ServicesFilter
-							createService={() => {
-								if (checkPermissions(editPermissions)) {
-									history.push(t('paths:services/create'))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							onSubmit={handleSubmit}
-							total={services?.data?.pagination?.totalPages}
-						/>
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={services?.tableData}
-							rowClassName={'clickable-row'}
-							loading={services?.isLoading}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									if (checkPermissions(editPermissions)) {
-										history.push(t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
-									} else {
-										showNotifications(
-											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
-											NOTIFICATION_TYPE.NOTIFICATION
-										)
-									}
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								showSizeChanger: true,
-								pageSize: services?.data?.pagination?.limit,
-								total: services?.data?.pagination?.totalPages,
-								current: services?.data?.pagination?.page
-							}}
-						/>
-					</div>
+					<Permissions
+						allowed={editPermissions}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<div className='content-body'>
+								<ServicesFilter
+									createService={() => {
+										if (hasPermission) {
+											history.push(t('paths:services/create'))
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									onSubmit={handleSubmit}
+									total={services?.data?.pagination?.totalPages}
+								/>
+								<CustomTable
+									className='table-fixed'
+									onChange={onChangeTable}
+									columns={columns}
+									dataSource={services?.tableData}
+									rowClassName={'clickable-row'}
+									loading={services?.isLoading}
+									twoToneRows
+									onRow={(record) => ({
+										onClick: (e) => {
+											if (hasPermission) {
+												history.push(t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}
+									})}
+									pagination={{
+										showTotal: (total, [from, to]) =>
+											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+												total,
+												from,
+												to
+											}),
+										defaultPageSize: PAGINATION.defaultPageSize,
+										pageSizeOptions: PAGINATION.pageSizeOptions,
+										showSizeChanger: true,
+										pageSize: services?.data?.pagination?.limit,
+										total: services?.data?.pagination?.totalPages,
+										current: services?.data?.pagination?.page
+									}}
+								/>
+							</div>
+						)}
+					/>
 				</Col>
 			</Row>
 		</>

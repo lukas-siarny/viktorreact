@@ -12,7 +12,7 @@ import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // enums
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -24,8 +24,7 @@ import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import { checkPermissions } from '../../utils/Permissions'
-import showNotifications from '../../utils/tsxHelpers'
+import Permissions from '../../utils/Permissions'
 
 type Props = {
 	computedMatch: IComputedMatch<{ userID: number }>
@@ -39,12 +38,9 @@ const UserPage: FC<Props> = (props) => {
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-
-	const authUserPermissions = authUser?.data?.uniqPermissions || []
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
 
-	const showDeleteBtn: boolean =
-		authUser.data?.id !== get(userAccountDetail, 'data.id') && checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE])
+	const showDeleteBtn: boolean = authUser.data?.id !== get(userAccountDetail, 'data.id')
 
 	useEffect(() => {
 		if (userID) {
@@ -151,6 +147,7 @@ const UserPage: FC<Props> = (props) => {
 					<Row className={rowClass}>
 						{showDeleteBtn ? (
 							<DeleteButton
+								permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE]}
 								className={'w-1/3'}
 								onConfirm={deleteUser}
 								entityName={t('loc:používateľa')}
@@ -158,24 +155,30 @@ const UserPage: FC<Props> = (props) => {
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 							/>
 						) : undefined}
-						<Button
-							type={'primary'}
-							block
-							size={'middle'}
-							className={'noti-btn m-regular w-1/3'}
-							htmlType={'submit'}
-							onClick={() => {
-								if (checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
-									dispatch(submit(FORM.USER_ACCOUNT))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							disabled={submitting}
-							loading={submitting}
-						>
-							{t('loc:Uložiť')}
-						</Button>
+						<Permissions
+							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									type={'primary'}
+									block
+									size={'middle'}
+									className={'noti-btn m-regular w-1/3'}
+									htmlType={'submit'}
+									onClick={(e) => {
+										if (hasPermission) {
+											dispatch(submit(FORM.USER_ACCOUNT))
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+									disabled={submitting}
+									loading={submitting}
+								>
+									{t('loc:Uložiť')}
+								</Button>
+							)}
+						/>
 					</Row>
 				</div>
 			</div>

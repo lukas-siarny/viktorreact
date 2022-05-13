@@ -17,8 +17,9 @@ import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
 import SelectField from '../../../atoms/SelectField'
 
-// enums
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+// utils
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION } from '../../../utils/enums'
+import Permissions from '../../../utils/Permissions'
 
 // types
 import { IUserAccountForm } from '../../../types/interfaces'
@@ -85,28 +86,45 @@ const UserAccountForm: FC<Props> = (props) => {
 								{t('loc:Základné údaje')}
 							</h3>
 							{salonID ? (
-								<div className={'flex justify-between w-1/2'}>
-									<Field
-										className={'mt-2 mb-2 w-12/25'}
-										component={SwitchField}
-										label={t('loc:Viditeľný')}
-										name={'isVisible'}
-										size={'middle'}
-										required
-										customOnChange={changeSalonVisibility}
-										disabled={switchDisabled}
-									/>
-									<Field
-										className={'mt-2 mb-2 w-12/25'}
-										component={SwitchField}
-										label={t('loc:Publikovaný')}
-										name={'isPublished'}
-										size={'middle'}
-										required
-										customOnChange={publishSalon}
-										disabled={switchDisabled}
-									/>
-								</div>
+								<Permissions
+									allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<div className={'flex justify-between w-1/2'}>
+											<Field
+												className={'mt-2 mb-2 w-12/25'}
+												component={SwitchField}
+												label={t('loc:Viditeľný')}
+												name={'isVisible'}
+												size={'middle'}
+												required
+												customOnChange={(value: boolean) => {
+													if (!hasPermission) {
+														openForbiddenModal()
+													} else {
+														changeSalonVisibility(value)
+													}
+												}}
+												disabled={switchDisabled}
+											/>
+											<Field
+												className={'mt-2 mb-2 w-12/25'}
+												component={SwitchField}
+												label={t('loc:Publikovaný')}
+												name={'isPublished'}
+												size={'middle'}
+												required
+												customOnChange={(value: boolean) => {
+													if (!hasPermission) {
+														openForbiddenModal()
+													} else {
+														publishSalon(value)
+													}
+												}}
+												disabled={switchDisabled}
+											/>
+										</div>
+									)}
+								/>
 							) : null}
 						</div>
 						<Divider className={'mb-3 mt-3'} />

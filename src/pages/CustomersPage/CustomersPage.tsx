@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row } from 'antd'
@@ -14,10 +14,10 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
 
 // utils
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -25,11 +25,8 @@ import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
 import { IBreadcrumbs, ISearchFilter } from '../../types/interfaces'
-import showNotifications from '../../utils/tsxHelpers'
 
 type Columns = ColumnsType<any>
-
-const EDIT_PERMISSIONS = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]
 
 const CustomersPage = () => {
 	const [t] = useTranslation()
@@ -140,14 +137,6 @@ const CustomersPage = () => {
 		]
 	}
 
-	const createCustomer = useCallback(() => {
-		if (checkPermissions(EDIT_PERMISSIONS)) {
-			history.push(t('paths:customers/create'))
-		} else {
-			showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-		}
-	}, [t])
-
 	return (
 		<>
 			<Row>
@@ -156,41 +145,59 @@ const CustomersPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<CustomersFilter onSubmit={handleSubmit} total={customers?.data?.pagination?.totalCount} createCustomer={createCustomer} />
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={customers?.data?.customers}
-							rowClassName={'clickable-row'}
-							loading={customers?.isLoading}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									if (checkPermissions(EDIT_PERMISSIONS)) {
-										history.push(t('paths:customers/{{customerID}}', { customerID: record.id }))
-									} else {
-										showNotifications(
-											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
-											NOTIFICATION_TYPE.NOTIFICATION
-										)
-									}
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								showSizeChanger: true,
-								pageSize: customers?.data?.pagination?.limit,
-								total: customers?.data?.pagination?.totalPages,
-								current: customers?.data?.pagination?.page
-							}}
+						<Permissions
+							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<CustomersFilter
+									onSubmit={handleSubmit}
+									total={customers?.data?.pagination?.totalCount}
+									createCustomer={() => {
+										if (!hasPermission) {
+											openForbiddenModal()
+										} else {
+											history.push(t('paths:customers/create'))
+										}
+									}}
+								/>
+							)}
+						/>
+
+						<Permissions
+							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<CustomTable
+									className='table-fixed'
+									onChange={onChangeTable}
+									columns={columns}
+									dataSource={customers?.data?.customers}
+									rowClassName={'clickable-row'}
+									loading={customers?.isLoading}
+									twoToneRows
+									onRow={(record) => ({
+										onClick: () => {
+											if (!hasPermission) {
+												openForbiddenModal()
+											} else {
+												history.push(t('paths:customers/{{customerID}}', { customerID: record.id }))
+											}
+										}
+									})}
+									pagination={{
+										showTotal: (total, [from, to]) =>
+											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+												total,
+												from,
+												to
+											}),
+										defaultPageSize: PAGINATION.defaultPageSize,
+										pageSizeOptions: PAGINATION.pageSizeOptions,
+										showSizeChanger: true,
+										pageSize: customers?.data?.pagination?.limit,
+										total: customers?.data?.pagination?.totalPages,
+										current: customers?.data?.pagination?.page
+									}}
+								/>
+							)}
 						/>
 					</div>
 				</Col>

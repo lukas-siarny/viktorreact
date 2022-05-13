@@ -1,9 +1,11 @@
 import React from 'react'
 import { Layout, Menu, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import cx from 'classnames'
 
+// assets
 import { ReactComponent as ThumbnailIcon } from '../../assets/icons/thumbail-icon.svg'
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
 
@@ -14,13 +16,13 @@ import Permissions from '../../utils/Permissions'
 
 // redux
 import { logOutUser } from '../../reducers/users/userActions'
-// import { checkPermissions } from '../../utils/Permissions'
-import { RootState } from '../../reducers'
 
 // components
 import LanguagePicker from '../LanguagePicker'
 
 const { Sider } = Layout
+
+const MENU_ITEM_LEFT_PADDING = '24px'
 
 export type LayoutSiderProps = {
 	page?: PAGE
@@ -48,26 +50,60 @@ const LayoutSider = (props: LayoutSiderProps) => {
 								{t('loc:Home')}
 							</Menu.Item>
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]}>
-								<Menu.Item key={PAGE.USERS} onClick={() => history.push(t('paths:users'))} icon={<ThumbnailIcon />}>
+								<Menu.Item
+									key={PAGE.USERS}
+									onClick={() => history.push(t('paths:users'))}
+									icon={<ThumbnailIcon />}
+									// fix style issue due wrapped item into <Permission> component
+									className={cx({ 'ant-menu-item-selected': page === PAGE.USERS })}
+									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
+								>
 									{t('loc:Používatelia')}
 								</Menu.Item>
 							</Permissions>
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]}>
-								<Menu.Item key={PAGE.CATEGORIES} onClick={() => history.push(t('paths:categories'))} icon={<ThumbnailIcon />}>
+								<Menu.Item
+									key={PAGE.CATEGORIES}
+									onClick={() => history.push(t('paths:categories'))}
+									icon={<ThumbnailIcon />}
+									// fix style issue due wrapped item into <Permission> component
+									className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
+									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
+								>
 									{t('loc:Kategórie')}
 								</Menu.Item>
 							</Permissions>
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]}>
-								<Menu.Item key={PAGE.SALONS} onClick={() => history.push(t('paths:salons'))} icon={<ThumbnailIcon />}>
+								<Menu.Item
+									key={PAGE.SALONS}
+									onClick={() => history.push(t('paths:salons'))}
+									icon={<ThumbnailIcon />}
+									// fix style issue due wrapped item into <Permission> component
+									className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
+									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
+								>
 									{t('loc:Salóny')}
 								</Menu.Item>
-								<Menu.Item key={PAGE.SERVICES} onClick={() => history.push(t('paths:services'))} icon={<ThumbnailIcon />}>
+								<Menu.Item
+									key={PAGE.SERVICES}
+									onClick={() => history.push(t('paths:services'))}
+									icon={<ThumbnailIcon />}
+									// fix style issue due wrapped item into <Permission> component
+									className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
+									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
+								>
 									{t('loc:Služby')}
 								</Menu.Item>
 							</Permissions>
 
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]}>
-								<Menu.Item key={PAGE.CUSTOMERS} onClick={() => history.push(t('paths:customers'))} icon={<ThumbnailIcon />}>
+								<Menu.Item
+									key={PAGE.CUSTOMERS}
+									onClick={() => history.push(t('paths:customers'))}
+									icon={<ThumbnailIcon />} // fix style issue due wrapped item into <Permission> component
+									className={cx({ 'ant-menu-item-selected': page === PAGE.CUSTOMERS })}
+									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
+								>
 									{t('loc:Zákazníci')}
 								</Menu.Item>
 							</Permissions>

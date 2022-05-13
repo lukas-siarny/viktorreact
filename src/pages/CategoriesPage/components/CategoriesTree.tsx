@@ -1,16 +1,14 @@
 import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
-import { Button, Col, Row, Popover, Tree, Divider } from 'antd'
+import { Button, Col, Row, Tree, Divider } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { filter, forEach, get, map } from 'lodash'
+import { filter, forEach, get, includes, map } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
-import { ReactComponent as ResetIcon } from '../../../assets/icons/reset-icon.svg'
 
 // redux
 import { getCategories } from '../../../reducers/categories/categoriesActions'
@@ -19,11 +17,10 @@ import { RootState } from '../../../reducers'
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, LANGUAGE } from '../../../utils/enums'
-import Permissions from '../../../utils/Permissions'
+import { checkPermissions } from '../../../utils/Permissions'
 import { convertCountriesToLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
-import DeleteButton from '../../../components/DeleteButton'
 import CategoryForm, { ICategoryForm } from './CategoryForm'
 
 const DEFAULT_NAME_LANGUAGE = LANGUAGE.EN
@@ -37,6 +34,12 @@ type TreeCategories = {
 	parentId?: number | null
 	children?: TreeCategories[] | null
 	nameLocalizations?: any
+	level: number
+	index: number
+	image: any
+	deletedAt?: string
+	id: number
+	isParentDeleted: boolean
 }
 
 const editPermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_EDIT]
@@ -47,21 +50,25 @@ const CategoriesTree = () => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [showForm, setShowForm] = useState<boolean>(false)
 	const [treeNodeData, setTreeNodeData] = useState<any[]>([])
+	const [selectedKeys, setSelectedKeys] = useState<any[]>([])
+	const [expandedKeys, setExpandedKeys] = useState<any[]>([])
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore.countries)
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_NAME_LANGUAGE), [countries])
 
 	const createCategoryHandler = useCallback(
-		(parentId: number, parentTitle: string, childrenLength: number) => {
+		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
 			setShowForm(true)
 			dispatch(
 				initialize(FORM.CATEGORY, {
 					parentId,
 					parentTitle,
 					childrenLength,
-					nameLocalizations: emptyNameLocalizations
+					nameLocalizations: emptyNameLocalizations,
+					level
 				})
 			)
 		},
@@ -69,15 +76,20 @@ const CategoriesTree = () => {
 	)
 
 	const updateCategoryHandler = useCallback(
-		(id: number, title: string, parentId: number, index: number, nameLocalizations: any) => {
+		(node) => {
+			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted } = node
 			setShowForm(true)
 			dispatch(
 				initialize(FORM.CATEGORY, {
 					id,
-					name: title,
+					name,
 					parentId,
 					orderIndex: index,
-					nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE)
+					nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
+					level,
+					image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
+					deletedAt,
+					isParentDeleted
 				})
 			)
 		},
@@ -104,119 +116,77 @@ const CategoriesTree = () => {
 		[dispatch, isRemoving]
 	)
 
-	const titleBuilder = (title: string, id: number, parentId: number, index: number, disabled: boolean, children: any, nameLocalizations: any) => (
-		<>
-			<Popover
-				placement='right'
-				trigger='click'
-				content={
-					<div className={'flex'}>
-						<Permissions
-							allowed={editPermissions}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<>
-									{!disabled ? (
-										<>
-											<Button
-												type='link'
-												className={'noti-btn icon-center'}
-												onClick={
-													hasPermission
-														? (event: any) => {
-																event.stopPropagation()
-																createCategoryHandler(id, title, children?.length)
-														  }
-														: openForbiddenModal
-												}
-												icon={<PlusIcon />}
-											/>
-											<Button
-												type='link'
-												className={'noti-btn icon-center'}
-												onClick={
-													hasPermission
-														? (event: any) => {
-																event.stopPropagation()
-																updateCategoryHandler(id, title, parentId, index, nameLocalizations)
-														  }
-														: openForbiddenModal
-												}
-												icon={<EditIcon />}
-											/>
-											<DeleteButton
-												className={'icon-center'}
-												onConfirm={
-													hasPermission
-														? (event: any) => {
-																event.stopPropagation()
-																deleteCategoryHandler(id, disabled)
-														  }
-														: openForbiddenModal
-												}
-												onlyIcon
-												entityName={t('loc:kategóriu')}
-											/>
-										</>
-									) : (
-										<Button
-											type='link'
-											className={'noti-btn icon-center'}
-											onClick={hasPermission ? () => deleteCategoryHandler(id, disabled) : openForbiddenModal}
-											icon={<ResetIcon />}
-										/>
-									)}
-								</>
-							)}
-						/>
-					</div>
-				}
-			>
-				<span>{title}</span>
-			</Popover>
-		</>
-	)
+	const onCategoryClickHandler = (keys: any, e: any) => {
+		if (!checkPermissions(authUserPermissions, editPermissions)) return
 
-	const childrenRecursive = (parentId: number, children: any[]) => {
+		const key = get(e, 'node.key')
+		const haveChildren = get(e, 'node.children.length') > 0
+		if (haveChildren && !includes(expandedKeys, key)) setExpandedKeys([...expandedKeys, key])
+
+		if (keys.length > 0) setSelectedKeys(keys)
+		updateCategoryHandler(get(e, 'node'))
+	}
+
+	const closeCategoryHandler = () => {
+		setSelectedKeys([])
+		setShowForm(false)
+	}
+
+	const titleBuilder = (category: any) => {
+		const { name, deletedAt } = category
+		if (!deletedAt) return <span>{name}</span>
+
+		return (
+			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={() => onCategoryClickHandler([], { node: category })}>
+				{name}
+			</button>
+		)
+	}
+
+	const childrenRecursive = (parentId: number, children: any[], level = 1, isParentDeleted = false) => {
 		const childs: TreeCategories[] & any = children
-		const items: any = map(childs, (child, index) => ({
-			title: titleBuilder(
-				get(child, 'name'),
-				get(child, 'id'),
+		const items: any = map(childs, (child, index) => {
+			const data = {
+				id: get(child, 'id'),
+				key: get(child, 'id'),
+				name: get(child, 'name'),
+				disabled: !!get(child, 'deletedAt'),
 				parentId,
-				parseInt(index, 10),
-				!!get(child, 'deletedAt'),
-				get(child, 'children'),
-				get(child, 'nameLocalizations')
-			),
-			key: get(child, 'id'),
-			name: get(child, 'name'),
-			disabled: !!get(child, 'deletedAt'),
-			parentId,
-			children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children')) : null,
-			nameLocalizations: get(child, 'nameLocalizations')
-		}))
+				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1, !!get(child, 'deletedAt')) : null,
+				nameLocalizations: get(child, 'nameLocalizations'),
+				level,
+				index,
+				image: get(child, 'image'),
+				deletedAt: get(child, 'deletedAt'),
+				isParentDeleted
+			}
+			return { title: titleBuilder(data), ...data }
+		})
 		return items as any[] & TreeCategories[]
 	}
 
 	const treeData = () => {
 		const handledData: TreeCategories[] = []
+		const level = 0
 		forEach(categories?.data, (category: any, index: number) => {
-			handledData.push({
-				title: titleBuilder(
-					get(category, 'name'),
-					get(category, 'id'),
-					-1,
-					index,
-					!!get(category, 'deletedAt'),
-					get(category, 'children'),
-					get(category, 'nameLocalizations')
-				),
+			const data = {
+				id: get(category, 'id'),
 				key: get(category, 'id'),
 				name: get(category, 'name'),
 				parentId: null,
 				disabled: !!get(category, 'deletedAt'),
-				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[]) : null,
-				nameLocalizations: get(category, 'nameLocalizations')
+				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[], 1, !!get(category, 'deletedAt')) : null,
+				nameLocalizations: get(category, 'nameLocalizations'),
+				level,
+				index,
+				image: get(category, 'image'),
+				deletedAt: get(category, 'deletedAt'),
+				isParentDeleted: false
+			}
+
+			handledData.push({
+				title: titleBuilder(data),
+				...data
 			})
 		})
 		setTreeNodeData(handledData as TreeCategories[] & DataNode[])
@@ -273,7 +243,8 @@ const CategoriesTree = () => {
 				body = {
 					...body,
 					parentID: droppedData.node.props.data.parentId,
-					orderIndex
+					orderIndex,
+					imageID: get(droppedData, 'dragNode.image.id')
 				}
 			}
 			// check and update categories on be
@@ -291,7 +262,8 @@ const CategoriesTree = () => {
 		try {
 			let body: any = {
 				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,
-				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value)
+				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
+				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
 			}
 			if (formData.parentId >= 0) {
 				body = {
@@ -325,7 +297,7 @@ const CategoriesTree = () => {
 				<Col span={6}>
 					<Button
 						onClick={() => {
-							dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations }))
+							dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations, level: 0 }))
 							setShowForm(true)
 						}}
 						type='primary'
@@ -339,12 +311,28 @@ const CategoriesTree = () => {
 			</Row>
 			<div className={'w-full flex'}>
 				<div className={formClass}>
-					<Tree className={'noti-tree'} treeData={treeNodeData} onDrop={onDrop} showIcon showLine draggable />
+					<Tree
+						className={'noti-tree'}
+						treeData={treeNodeData}
+						onDrop={onDrop}
+						showIcon
+						showLine
+						draggable
+						onSelect={onCategoryClickHandler}
+						selectedKeys={selectedKeys}
+						onExpand={(keys) => setExpandedKeys(keys)}
+						expandedKeys={expandedKeys}
+					/>
 				</div>
 				{showForm ? (
 					<div className={'w-6/12 flex justify-around items-start'}>
 						<Divider className={'h-full'} type={'vertical'} />
-						<CategoryForm deleteCategory={(id: number) => deleteCategoryHandler(id, false)} onSubmit={handleSubmit} />
+						<CategoryForm
+							deleteCategory={deleteCategoryHandler}
+							onSubmit={handleSubmit}
+							createCategory={createCategoryHandler}
+							closeCategoryForm={closeCategoryHandler}
+						/>
 					</div>
 				) : undefined}
 			</div>

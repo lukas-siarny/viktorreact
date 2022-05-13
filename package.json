@@ -31,7 +31,7 @@
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
     "translations-csv-to-json": "npx convert-csv-to-json GoodRequest/i18nextJsonToCsv",
     "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
-    "storybook": "start-storybook -p 6006 -s public",
+    "storybook": "npm run build:tailwind && start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public"
   },
   "dependencies": {

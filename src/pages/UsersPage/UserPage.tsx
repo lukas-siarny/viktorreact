@@ -31,7 +31,7 @@ type Props = {
 	computedMatch: IComputedMatch<{ userID: number }>
 }
 
-const UserAccountPage: FC<Props> = (props) => {
+const UserPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { computedMatch } = props
 	const { userID } = computedMatch.params
@@ -183,4 +183,4 @@ const UserAccountPage: FC<Props> = (props) => {
 	)
 }
 
-export default UserAccountPage
+export default UserPage

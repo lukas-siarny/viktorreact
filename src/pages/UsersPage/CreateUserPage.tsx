@@ -24,7 +24,7 @@ import { getRoles } from '../../reducers/roles/rolesActions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { RootState } from '../../reducers'
 
-const CreateUserAccountPage = () => {
+const CreateUserPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -104,4 +104,4 @@ const CreateUserAccountPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE]))(CreateUserAccountPage)
+export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE]))(CreateUserPage)

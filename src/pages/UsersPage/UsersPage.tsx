@@ -29,7 +29,7 @@ import showNotifications from '../../utils/tsxHelpers'
 
 type Columns = ColumnsType<any>
 
-const AdminUsersPage = () => {
+const UsersPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -209,4 +209,4 @@ const AdminUsersPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]))(AdminUsersPage)
+export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]))(UsersPage)

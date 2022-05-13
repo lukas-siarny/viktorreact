@@ -14,10 +14,10 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 
 // utils
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { getUsers } from '../../reducers/users/userActions'
@@ -25,11 +25,10 @@ import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
-import showNotifications from '../../utils/tsxHelpers'
 
 type Columns = ColumnsType<any>
 
-const AdminUsersPage = () => {
+const UsersPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -157,50 +156,59 @@ const AdminUsersPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<AdminUsersFilter
-							createUser={() => {
-								if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE])) {
-									history.push(t('paths:users/create'))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							onSubmit={handleSubmit}
+						<Permissions
+							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<AdminUsersFilter
+									createUser={() => {
+										if (hasPermission) {
+											history.push(t('paths:users/create'))
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									onSubmit={handleSubmit}
+								/>
+							)}
 						/>
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={users?.data?.users}
-							rowClassName={'clickable-row'}
-							loading={users?.isLoading}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									if (checkPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT])) {
-										history.push(t('paths:users/{{userID}}', { userID: record.id }))
-									} else {
-										showNotifications(
-											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
-											NOTIFICATION_TYPE.NOTIFICATION
-										)
-									}
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: users?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: users?.data?.pagination?.totalPages,
-								current: users?.data?.pagination?.page
-							}}
+
+						<Permissions
+							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<CustomTable
+									className='table-fixed'
+									onChange={onChangeTable}
+									columns={columns}
+									dataSource={users?.data?.users}
+									rowClassName={'clickable-row'}
+									loading={users?.isLoading}
+									twoToneRows
+									onRow={(record) => ({
+										onClick: (e) => {
+											if (hasPermission) {
+												history.push(t('paths:users/{{userID}}', { userID: record.id }))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}
+									})}
+									pagination={{
+										showTotal: (total, [from, to]) =>
+											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+												total,
+												from,
+												to
+											}),
+										defaultPageSize: PAGINATION.defaultPageSize,
+										pageSizeOptions: PAGINATION.pageSizeOptions,
+										pageSize: users?.data?.pagination?.limit,
+										showSizeChanger: true,
+										total: users?.data?.pagination?.totalPages,
+										current: users?.data?.pagination?.page
+									}}
+								/>
+							)}
 						/>
 					</div>
 				</Col>
@@ -209,4 +217,4 @@ const AdminUsersPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]))(AdminUsersPage)
+export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]))(UsersPage)

@@ -53,7 +53,7 @@ const SalonsFilter = (props: Props) => {
 			className={'h-10 p-0 m-0'}
 			component={InputField}
 			size={'large'}
-			placeholder={t('loc:Vyhľadajte podľa názvu')}
+			placeholder={t('loc:Hľadať podľa názvu alebo adresy')}
 			name={'search'}
 			fieldMode={FIELD_MODE.FILTER}
 			search

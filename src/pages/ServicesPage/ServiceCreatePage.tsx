@@ -43,7 +43,7 @@ const ServiceCreatePage = () => {
 			const { data } = await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 
 			const serviceID = get(data, 'service.id', 0)
-			history.push(serviceID > 0 ? t('paths:services/{{serviceID}', { serviceID }) : t('paths:services'))
+			history.push(serviceID > 0 ? t('paths:services/{{serviceID}}', { serviceID }) : t('paths:services'))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

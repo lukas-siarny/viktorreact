@@ -445,13 +445,15 @@ const SalonPage: FC<Props> = (props) => {
 						/>
 					)}
 				/>
+				{salonExists && (
+					<OpenHoursNoteModal
+						visible={visible}
+						salonID={salon?.data?.salon?.id || 0}
+						openingHoursNote={salon?.data?.salon?.openingHoursNote}
+						onClose={onOpenHoursNoteModalClose}
+					/>
+				)}
 
-				<OpenHoursNoteModal
-					visible={visible}
-					salonID={salon?.data?.salon?.id || 0}
-					openingHoursNote={salon?.data?.salon?.openingHoursNote}
-					onClose={onOpenHoursNoteModalClose}
-				/>
 				<div className={'content-footer'}>
 					<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
 						{salonExists && (

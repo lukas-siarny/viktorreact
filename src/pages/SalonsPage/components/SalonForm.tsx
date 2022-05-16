@@ -194,9 +194,11 @@ const UserAccountForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 						<Field className={'mb-0'} component={SwitchField} label={t('loc:Pon - Pi rovnaké otváracie hodiny')} name={'sameOpenHoursOverWeek'} size={'middle'} />
 						<FieldArray component={OpeningHours} name={'openingHours'} />
-						<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4 mb-6 mt-3`} onClick={() => openNoteModal()}>
-							{t('loc:Pridať poznámku')}
-						</Button>
+						{salonID && (
+							<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4 mb-6 mt-3`} onClick={() => openNoteModal()}>
+								{t('loc:Pridať poznámku')}
+							</Button>
+						)}
 					</Col>
 				</Row>
 				<Row>

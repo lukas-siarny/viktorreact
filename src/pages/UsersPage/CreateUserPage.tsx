@@ -4,9 +4,9 @@ import { Button, Row } from 'antd'
 import { initialize, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
+import { map, get } from 'lodash'
 
 // components
-import { map } from 'lodash'
 import CreateUserAccountForm from './components/CreateUserAccountForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
@@ -56,16 +56,19 @@ const CreateUserPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [phonePrefixes])
 
-	const createUser = async (data: any) => {
+	const createUser = async (input: any) => {
 		try {
 			setSubmitting(true)
-			await postReq('/api/b2b/admin/users' as any, null, {
-				email: data?.email,
-				phone: data?.phone,
-				phonePrefixCountryCode: data?.phonePrefixCountryCode,
-				roleID: data?.roleID
+
+			const { data } = await postReq('/api/b2b/admin/users/', null, {
+				email: input?.email,
+				phone: input?.phone,
+				phonePrefixCountryCode: input?.phonePrefixCountryCode,
+				roleID: input?.roleID
 			})
-			history.push(t('paths:users'))
+
+			const userID = data.user.id
+			history.push(userID > 0 ? t('paths:users/{{userID}}', { userID }) : t('paths:users'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

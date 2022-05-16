@@ -14,7 +14,7 @@ context('Auth', () => {
 			url: '/api/b2b/admin/users/registration'
 		}).as('registration')
 		cy.visit('/signup')
-		cy.setInputValue(FORM.REGISTRATION, 'email', `${generateRandomString(5)}${user.email}`)
+		cy.setInputValue(FORM.REGISTRATION, 'email', `${generateRandomString(5)}_${user.emailSuffix}`)
 		cy.setInputValue(FORM.REGISTRATION, 'password', user.password)
 		cy.setInputValue(FORM.REGISTRATION, 'confirmPassword', user.password)
 		cy.setInputValue(FORM.REGISTRATION, 'phone', user.phone)

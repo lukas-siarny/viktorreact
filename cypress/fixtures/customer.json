@@ -1,11 +1,11 @@
 {
 	"create": {
-		"email": "notino.test@testt.com",
+		"emailSuffix": "test@goodrequest.com",
 		"street": "Teslova 234/11",
 		"phone": "904123321"
 	},
 	"update": {
-		"email": "notino.test@goodrequest.com",
+		"emailSuffix": "test@goodrequest.com",
 		"street": "Metodova 8",
 		"phone": "905123321"
 	}

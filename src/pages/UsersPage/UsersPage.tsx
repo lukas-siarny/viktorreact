@@ -88,6 +88,7 @@ const UsersPage = () => {
 			ellipsis: true,
 			sorter: true,
 			sortOrder: setOrder(query.order, 'fullName'),
+			width: '20%',
 			render: (value, record) => (
 				<>
 					{record?.firstName} {record?.lastName}
@@ -100,6 +101,7 @@ const UsersPage = () => {
 			key: 'email',
 			ellipsis: true,
 			sorter: true,
+			width: '25%',
 			sortOrder: setOrder(query.order, 'email')
 		},
 		{
@@ -108,6 +110,7 @@ const UsersPage = () => {
 			key: 'phone',
 			ellipsis: true,
 			sorter: false,
+			width: '15%',
 			render: (value, record) => (
 				<>
 					{prefixOptions[record?.phonePrefixCountryCode]} {value}
@@ -121,6 +124,7 @@ const UsersPage = () => {
 			ellipsis: {
 				showTitle: false
 			},
+			width: '15%',
 			render(value) {
 				return value.map((role: any) => {
 					return role?.name

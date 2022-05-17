@@ -88,6 +88,7 @@ const SalonsPage = () => {
 			key: 'name',
 			ellipsis: true,
 			sorter: true,
+			width: '22%',
 			sortOrder: setOrder(query.order, 'name')
 		},
 		{
@@ -96,6 +97,7 @@ const SalonsPage = () => {
 			key: 'address',
 			ellipsis: true,
 			sorter: false,
+			width: '20%',
 			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
 		},
 		{
@@ -112,7 +114,7 @@ const SalonsPage = () => {
 			key: 'isPublished',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '7%',
 			render: (value) => (
 				<div className={'flex justify-start'}>{value ? <CircleCheckIcon color={'$textColor-green-600'} /> : <CircleCloseIcon color={'$textColor-green-600'} />}</div>
 			)
@@ -123,7 +125,7 @@ const SalonsPage = () => {
 			key: 'isVisible',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '7%',
 			render: (value) => <div className={'flex justify-start'}>{value ? <CircleCheckIcon /> : <CircleCloseIcon />}</div>
 		},
 		{

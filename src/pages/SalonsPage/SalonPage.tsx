@@ -423,6 +423,8 @@ const SalonPage: FC<Props> = (props) => {
 		dispatch(getSalon(salonID))
 	}
 
+	const salonExists = salonID > 0
+
 	return (
 		<>
 			<Row>
@@ -451,15 +453,17 @@ const SalonPage: FC<Props> = (props) => {
 					onClose={onOpenHoursNoteModalClose}
 				/>
 				<div className={'content-footer'}>
-					<Row className={'justify-between w-full'}>
-						<DeleteButton
-							permissions={editPermissions}
-							className={'w-1/3'}
-							onConfirm={deleteSalon}
-							entityName={t('loc:salón')}
-							type={'default'}
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
+					<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
+						{salonExists && (
+							<DeleteButton
+								permissions={editPermissions}
+								className={'w-1/3'}
+								onConfirm={deleteSalon}
+								entityName={t('loc:salón')}
+								type={'default'}
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							/>
+						)}
 						<Permissions
 							allowed={editPermissions}
 							render={(hasPermission, { openForbiddenModal }) => (

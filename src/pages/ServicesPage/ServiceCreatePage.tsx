@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map } from 'lodash'
+import { map, get } from 'lodash'
 import { useDispatch } from 'react-redux'
 
 // components
@@ -40,10 +40,10 @@ const ServiceCreatePage = () => {
 				imageIDs: map(values?.gallery, (image) => image.id)
 			}
 
-			await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			const { data } = await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 
-			const url = t('paths:services')
-			history.push(url)
+			const serviceID = get(data, 'service.id', 0)
+			history.push(serviceID > 0 ? t('paths:services/{{serviceID}}', { serviceID }) : t('paths:services'))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

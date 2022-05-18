@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 // authorized pages
-import EntryPage from '../pages/EntryPage/EntryPage'
 import HomePage from '../pages/HomePage/HomePage'
 
 // routes middlewares

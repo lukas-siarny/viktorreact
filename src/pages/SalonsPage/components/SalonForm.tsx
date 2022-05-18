@@ -130,8 +130,14 @@ const UserAccountForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 
 						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
-						<Field component={TextareaField} label={t('loc:O nás')} name={'aboutUsFirst'} size={'large'} />
-						<Field component={TextareaField} label={t('loc:Doplňujúci popis')} name={'aboutUsSecond'} size={'large'} />
+						<Field component={TextareaField} label={t('loc:O nás')} name={'aboutUsFirst'} size={'large'} placeholder={t('loc:Zadajte základné informácie o salóne')} />
+						<Field
+							component={TextareaField}
+							label={t('loc:Doplňujúci popis')}
+							name={'aboutUsSecond'}
+							size={'large'}
+							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
+						/>
 						<Field
 							className={'m-0'}
 							component={ImgUploadField}
@@ -208,7 +214,13 @@ const UserAccountForm: FC<Props> = (props) => {
 							{t('loc:Možnosti platby')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Field component={InputField} label={t('loc:Iné spôsoby platby')} name={'otherPaymentMethods'} size={'large'} />
+						<Field
+							component={InputField}
+							label={t('loc:Iné spôsoby platby')}
+							name={'otherPaymentMethods'}
+							size={'large'}
+							placeholder={t('loc:Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...')}
+						/>
 						<Field className={'mb-6'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} required />
 					</Col>
 				</Row>
@@ -216,9 +228,23 @@ const UserAccountForm: FC<Props> = (props) => {
 					<Col span={24}>
 						<h3 className={'mb-0'}>{t('loc:Sociálne siete')}</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Field component={InputField} label={t('loc:Facebook')} name={'socialLinkFB'} size={'large'} prefix={(<FacebookIcon />) as any} />
-						<Field component={InputField} label={t('loc:Instagram')} name={'socialLinkInstagram'} size={'large'} prefix={(<InstagramIcon />) as any} />
-						<Field component={InputField} label={t('loc:Webstránka')} name={'socialLinkWebPage'} size={'large'} />
+						<Field
+							component={InputField}
+							label={t('loc:Facebook')}
+							name={'socialLinkFB'}
+							size={'large'}
+							prefix={(<FacebookIcon />) as any}
+							placeholder={t('loc:Odkaz na Facebook')}
+						/>
+						<Field
+							component={InputField}
+							label={t('loc:Instagram')}
+							name={'socialLinkInstagram'}
+							size={'large'}
+							prefix={(<InstagramIcon />) as any}
+							placeholder={t('loc:Odkaz na Instagram')}
+						/>
+						<Field component={InputField} label={t('loc:Webstránka')} name={'socialLinkWebPage'} size={'large'} placeholder={t('loc:Odkaz na webovú stránku salóna')} />
 					</Col>
 				</Row>
 

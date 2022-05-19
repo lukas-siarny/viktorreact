@@ -18,7 +18,7 @@ import TextareaField from '../../../atoms/TextareaField'
 import SelectField from '../../../atoms/SelectField'
 
 // utils
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
 // types
@@ -130,13 +130,23 @@ const UserAccountForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 
 						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
-						<Field component={TextareaField} label={t('loc:O nás')} name={'aboutUsFirst'} size={'large'} placeholder={t('loc:Zadajte základné informácie o salóne')} />
+						<Field
+							component={TextareaField}
+							label={t('loc:O nás')}
+							name={'aboutUsFirst'}
+							size={'large'}
+							placeholder={t('loc:Zadajte základné informácie o salóne')}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+							showLettersCount
+						/>
 						<Field
 							component={TextareaField}
 							label={t('loc:Doplňujúci popis')}
 							name={'aboutUsSecond'}
 							size={'large'}
 							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
+							showLettersCount
 						/>
 						<Field
 							className={'m-0'}
@@ -220,6 +230,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							name={'otherPaymentMethods'}
 							size={'large'}
 							placeholder={t('loc:Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...')}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
 						/>
 						<Field className={'mb-6'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} required />
 					</Col>

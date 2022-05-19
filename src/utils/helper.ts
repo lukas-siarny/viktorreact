@@ -580,7 +580,7 @@ export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsI
 type SelectDataItem = {
 	id: number
 	children?: any
-	name: string
+	name?: string | undefined
 }
 
 export const getSelectOptionsFromData = (data: SelectDataItem[] | null) => {

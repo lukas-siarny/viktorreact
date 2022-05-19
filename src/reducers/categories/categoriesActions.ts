@@ -32,7 +32,7 @@ export const getCategories = (): ThunkResult<Promise<ICategoriesPayload>> => asy
 		const { data } = await getReq('/api/b2b/admin/enums/categories/', null)
 		const enumerationsOptions: ISelectOptionItem[] = map(data?.categories, (item) => ({
 			key: `Cat_${get(item, 'id')}`,
-			label: get(item, 'name'),
+			label: get(item, 'name') as string,
 			value: `${get(item, 'id')}`
 		}))
 		payload = { data: data?.categories, enumerationsOptions }

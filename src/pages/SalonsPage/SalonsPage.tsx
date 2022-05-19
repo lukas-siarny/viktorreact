@@ -7,6 +7,7 @@ import { Col, Progress, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize } from 'redux-form'
+import cx from 'classnames'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -29,7 +30,6 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
-import { ReactComponent as CircleCloseIcon } from '../../assets/icons/close-circle-icon.svg'
 
 type Columns = ColumnsType<any>
 
@@ -109,24 +109,46 @@ const SalonsPage = () => {
 			render: (value) => <>{value.map((category: any, index: number) => (index === value.length - 1 ? category?.name : `${category?.name}, `))} </>
 		},
 		{
-			title: t('loc:Publikované'),
+			title: t('loc:Vymazaný'),
+			dataIndex: 'deletedAt',
+			key: 'deletedAt',
+			ellipsis: true,
+			sorter: false,
+			width: '8%',
+			render: (value) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} />
+					</div>
+				) : null
+		},
+		{
+			title: t('loc:Publikovaný'),
 			dataIndex: 'isPublished',
 			key: 'isPublished',
 			ellipsis: true,
 			sorter: false,
-			width: '7%',
-			render: (value) => (
-				<div className={'flex justify-start'}>{value ? <CircleCheckIcon color={'$textColor-green-600'} /> : <CircleCloseIcon color={'$textColor-green-600'} />}</div>
-			)
+			width: '8%',
+			render: (value, record) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
+					</div>
+				) : null
 		},
 		{
-			title: t('loc:Viditeľné'),
+			title: t('loc:Viditeľný'),
 			dataIndex: 'isVisible',
 			key: 'isVisible',
 			ellipsis: true,
 			sorter: false,
-			width: '7%',
-			render: (value) => <div className={'flex justify-start'}>{value ? <CircleCheckIcon /> : <CircleCloseIcon />}</div>
+			width: '8%',
+			render: (value, record) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
+					</div>
+				) : null
 		},
 		{
 			title: t('loc:Vyplnenia profilu'),

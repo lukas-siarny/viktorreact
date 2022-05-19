@@ -35,6 +35,8 @@ type Columns = ColumnsType<any>
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
 
+const PROGRESS_PERCENTAGE = 33
+
 const SalonsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -152,11 +154,16 @@ const SalonsPage = () => {
 		},
 		{
 			title: t('loc:Vyplnenia profilu'),
-			dataIndex: 'fillingProgress',
-			key: 'fillingProgress',
+			dataIndex: 'fillingProgressSalon',
+			key: 'fillingProgressSalon',
 			ellipsis: true,
 			sorter: false,
-			render: (value) => <Progress percent={value} steps={5} />
+			render: (value, record) => {
+				const progressVariables = [Number(value), Number(record.fillingProgressServices), Number(record.fillingProgressCompany)]
+				// 34%, 67%, 100%
+				const result = progressVariables.reduce((a, b) => a + b, 0) * PROGRESS_PERCENTAGE + 1
+				return <Progress percent={result} showInfo={false} strokeColor={'#000'} />
+			}
 		},
 		{
 			title: t('loc:Vytvorené'),

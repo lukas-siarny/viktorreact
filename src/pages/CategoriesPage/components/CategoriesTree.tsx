@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
-import { Button, Col, Row, Tree, Divider } from 'antd'
+import { Button, Col, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { filter, forEach, get, includes, map } from 'lodash'
 import { initialize } from 'redux-form'
@@ -197,7 +197,29 @@ const CategoriesTree = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categories])
 
+	const checkIfParentIsDisabled = (path: string): boolean => {
+		const pathArray = path.split('-').map((pathIndex: string) => parseInt(pathIndex, 10))
+		if (treeNodeData?.[pathArray[1]]?.children?.[pathArray[2]]) {
+			// return disabled for second level
+			return treeNodeData?.[pathArray[1]]?.children?.[pathArray[2]].disabled
+		}
+		// return disabled for first/root level
+		return treeNodeData?.[pathArray[1]].disabled
+	}
+
 	const onDrop = async (droppedData: any) => {
+		// if dropping category on disabled parent category or drop subcategory to root level or the other way
+		if (
+			checkIfParentIsDisabled(droppedData.node.pos) ||
+			(droppedData.node.level === 0 && droppedData.dragNode.level > 0) ||
+			(droppedData.node.level > 0 && droppedData.dragNode.level === 0)
+		) {
+			notification.warning({
+				message: t('loc:Upozornenie'),
+				description: t('loc:Táto operácia nie je povolená.')
+			})
+			return
+		}
 		try {
 			// key of dropped node
 			const dropKey: number = droppedData.node.key

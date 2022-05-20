@@ -4,7 +4,7 @@ import { Button, Row } from 'antd'
 import { initialize, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { map, get } from 'lodash'
+import { map } from 'lodash'
 
 // components
 import CreateUserAccountForm from './components/CreateUserAccountForm'

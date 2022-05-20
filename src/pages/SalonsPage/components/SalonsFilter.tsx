@@ -45,7 +45,8 @@ const SalonsFilter = (props: Props) => {
 		{ label: t('loc:Všetky'), value: SALON_STATUSES.ALL, key: SALON_STATUSES.ALL },
 		{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED },
 		{ label: t('loc:Publikované'), value: SALON_STATUSES.PUBLISHED, key: SALON_STATUSES.PUBLISHED },
-		{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE, key: SALON_STATUSES.VISIBLE }
+		{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE, key: SALON_STATUSES.VISIBLE },
+		{ label: t('loc:Nevymazané'), value: SALON_STATUSES.NOT_DELETED, key: SALON_STATUSES.NOT_DELETED }
 	]
 
 	const searchInput = (

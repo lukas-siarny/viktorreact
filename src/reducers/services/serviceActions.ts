@@ -47,7 +47,7 @@ export const getServices =
 					serviceID: item.id,
 					name: item.name || '-',
 					employees: join(
-						map(item.employees, (employee) => employee.name),
+						map(item.employees, (employee) => `${employee.firstName} ${employee.lastName}`),
 						'\n'
 					),
 					price: getServiceRange(item.priceFrom, item.priceTo),

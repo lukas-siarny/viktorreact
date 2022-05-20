@@ -7,6 +7,7 @@ import { Col, Progress, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize } from 'redux-form'
+import cx from 'classnames'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -29,11 +30,12 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
-import { ReactComponent as CircleCloseIcon } from '../../assets/icons/close-circle-icon.svg'
 
 type Columns = ColumnsType<any>
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
+
+const PROGRESS_PERCENTAGE = 33
 
 const SalonsPage = () => {
 	const [t] = useTranslation()
@@ -109,32 +111,59 @@ const SalonsPage = () => {
 			render: (value) => <>{value.map((category: any, index: number) => (index === value.length - 1 ? category?.name : `${category?.name}, `))} </>
 		},
 		{
-			title: t('loc:Publikované'),
+			title: t('loc:Vymazaný'),
+			dataIndex: 'deletedAt',
+			key: 'deletedAt',
+			ellipsis: true,
+			sorter: false,
+			width: '8%',
+			render: (value) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} />
+					</div>
+				) : null
+		},
+		{
+			title: t('loc:Publikovaný'),
 			dataIndex: 'isPublished',
 			key: 'isPublished',
 			ellipsis: true,
 			sorter: false,
-			width: '7%',
-			render: (value) => (
-				<div className={'flex justify-start'}>{value ? <CircleCheckIcon color={'$textColor-green-600'} /> : <CircleCloseIcon color={'$textColor-green-600'} />}</div>
-			)
+			width: '8%',
+			render: (value, record) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
+					</div>
+				) : null
 		},
 		{
-			title: t('loc:Viditeľné'),
+			title: t('loc:Viditeľný'),
 			dataIndex: 'isVisible',
 			key: 'isVisible',
 			ellipsis: true,
 			sorter: false,
-			width: '7%',
-			render: (value) => <div className={'flex justify-start'}>{value ? <CircleCheckIcon /> : <CircleCloseIcon />}</div>
+			width: '8%',
+			render: (value, record) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
+					</div>
+				) : null
 		},
 		{
 			title: t('loc:Vyplnenia profilu'),
-			dataIndex: 'fillingProgress',
-			key: 'fillingProgress',
+			dataIndex: 'fillingProgressSalon',
+			key: 'fillingProgressSalon',
 			ellipsis: true,
 			sorter: false,
-			render: (value) => <Progress percent={value} steps={5} />
+			render: (value, record) => {
+				const progressVariables = [Number(value), Number(record.fillingProgressServices), Number(record.fillingProgressCompany)]
+				// 34%, 67%, 100%
+				const result = progressVariables.reduce((a, b) => a + b, 0) * PROGRESS_PERCENTAGE + 1
+				return <Progress percent={result} showInfo={false} strokeColor={'#000'} />
+			}
 		},
 		{
 			title: t('loc:Vytvorené'),

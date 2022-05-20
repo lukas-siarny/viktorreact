@@ -21,13 +21,14 @@ type Props = {
 	prefixName?: string
 	phoneName?: string
 	required?: boolean
+	disabled?: boolean
 }
 
 const fallbackOptions = [{ key: 1, label: '+421', value: 'SK', flag: 'https://flagcdn.com/h20/sk.png' }]
 const fallbackDefaultValue = 'SK'
 
 const PhoneWithPrefixField = (props: Props) => {
-	const { placeholder, label, size, prefixName = 'phonePrefixCountryCode', phoneName = 'phone', required = false } = props
+	const { placeholder, label, size, prefixName = 'phonePrefixCountryCode', phoneName = 'phone', disabled, required = false } = props
 	const prefixOptions = useSelector((state: RootState) => state?.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	let options = prefixOptions?.enumerationsOptions
@@ -45,10 +46,19 @@ const PhoneWithPrefixField = (props: Props) => {
 					loading={prefixOptions?.isLoading}
 					defaultValue={fallbackDefaultValue}
 					required={required}
+					disabled={disabled}
 				/>
 			</Col>
 			<Col flex='auto'>
-				<Field label={label ? ' ' : undefined} component={InputField} placeholder={placeholder} name={phoneName} size={size} validate={validationPhone} />
+				<Field
+					label={label ? ' ' : undefined}
+					component={InputField}
+					placeholder={placeholder}
+					name={phoneName}
+					size={size}
+					disabled={disabled}
+					validate={validationPhone}
+				/>
 			</Col>
 		</Row>
 	)

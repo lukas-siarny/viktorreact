@@ -47,6 +47,7 @@ type ComponentProps = {
 	changeSalonVisibility: (visible: boolean) => void
 	publishSalon: (published: boolean) => void
 	switchDisabled: boolean
+	disabledForm: boolean
 	salonID?: number
 }
 
@@ -63,7 +64,7 @@ const validateUsersSelect = (value: string, formValues: any, props: any) => {
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, change, openNoteModal, isAdmin, changeSalonVisibility, publishSalon, switchDisabled, salonID } = props
+	const { handleSubmit, change, openNoteModal, isAdmin, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const onSearchUsers = useCallback(
@@ -104,7 +105,7 @@ const UserAccountForm: FC<Props> = (props) => {
 														changeSalonVisibility(value)
 													}
 												}}
-												disabled={switchDisabled}
+												disabled={switchDisabled || disabledForm}
 											/>
 											<Field
 												className={'mt-2 mb-2 w-12/25'}
@@ -120,7 +121,7 @@ const UserAccountForm: FC<Props> = (props) => {
 														publishSalon(value)
 													}
 												}}
-												disabled={switchDisabled}
+												disabled={switchDisabled || disabledForm}
 											/>
 										</div>
 									)}
@@ -129,13 +130,23 @@ const UserAccountForm: FC<Props> = (props) => {
 						</div>
 						<Divider className={'mb-3 mt-3'} />
 
-						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
+						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
 						<Field
 							component={TextareaField}
 							label={t('loc:O nás')}
 							name={'aboutUsFirst'}
 							size={'large'}
 							placeholder={t('loc:Zadajte základné informácie o salóne')}
+							disabled={disabledForm}
+						/>
+						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
+						<Field
+							component={TextareaField}
+							label={t('loc:O nás')}
+							name={'aboutUsFirst'}
+							size={'large'}
+							placeholder={t('loc:Zadajte základné informácie o salóne')}
+							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
 							showLettersCount
 						/>
@@ -145,6 +156,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							name={'aboutUsSecond'}
 							size={'large'}
 							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
+							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
 							showLettersCount
 						/>
@@ -157,6 +169,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							multiple={false}
 							maxCount={1}
 							category={UPLOAD_IMG_CATEGORIES.SALON}
+							disabled={disabledForm}
 						/>
 						<Field
 							className={'m-0'}
@@ -168,6 +181,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							required
 							maxCount={10}
 							category={UPLOAD_IMG_CATEGORIES.SALON}
+							disabled={disabledForm}
 						/>
 					</Col>
 				</Row>
@@ -184,9 +198,19 @@ const UserAccountForm: FC<Props> = (props) => {
 							size={'large'}
 							prefixName={'phonePrefixCountryCode'}
 							phoneName={'phone'}
+							disabled={disabledForm}
 							required
 						/>
-						<Field className={'w-full'} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
+						<Field
+							className={'w-full'}
+							component={InputField}
+							label={t('loc:Email')}
+							placeholder={t('loc:Zadajte email')}
+							name={'email'}
+							size={'large'}
+							disabled={disabledForm}
+							required
+						/>
 						<Field
 							component={AddressFields}
 							inputValues={{
@@ -198,6 +222,7 @@ const UserAccountForm: FC<Props> = (props) => {
 								country: get(formValues, 'country')
 							}}
 							changeFormFieldValue={change}
+							disabled={disabledForm}
 							name={'address'}
 						/>
 					</Col>
@@ -208,10 +233,17 @@ const UserAccountForm: FC<Props> = (props) => {
 							<TimerIcon width={24} height={24} className={'text-notino-black mr-2'} /> {t('loc:Otváracie hodiny')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Field className={'mb-0'} component={SwitchField} label={t('loc:Pon - Pi rovnaké otváracie hodiny')} name={'sameOpenHoursOverWeek'} size={'middle'} />
-						<FieldArray component={OpeningHours} name={'openingHours'} />
+						<Field
+							className={'mb-0'}
+							component={SwitchField}
+							label={t('loc:Pon - Pi rovnaké otváracie hodiny')}
+							name={'sameOpenHoursOverWeek'}
+							size={'middle'}
+							disabled={disabledForm}
+						/>
+						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
 						{salonID && (
-							<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4 mb-6 mt-3`} onClick={() => openNoteModal()}>
+							<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4 mb-6 mt-3`} onClick={() => openNoteModal()} disabled={disabledForm}>
 								{t('loc:Pridať poznámku')}
 							</Button>
 						)}
@@ -230,9 +262,10 @@ const UserAccountForm: FC<Props> = (props) => {
 							name={'otherPaymentMethods'}
 							size={'large'}
 							placeholder={t('loc:Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...')}
+							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
 						/>
-						<Field className={'mb-6'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} required />
+						<Field className={'mb-6'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} disabled={disabledForm} required />
 					</Col>
 				</Row>
 				<Row>
@@ -246,6 +279,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							size={'large'}
 							prefix={(<FacebookIcon />) as any}
 							placeholder={t('loc:Odkaz na Facebook')}
+							disabled={disabledForm}
 						/>
 						<Field
 							component={InputField}
@@ -254,8 +288,16 @@ const UserAccountForm: FC<Props> = (props) => {
 							size={'large'}
 							prefix={(<InstagramIcon />) as any}
 							placeholder={t('loc:Odkaz na Instagram')}
+							disabled={disabledForm}
 						/>
-						<Field component={InputField} label={t('loc:Webstránka')} name={'socialLinkWebPage'} size={'large'} placeholder={t('loc:Odkaz na webovú stránku salóna')} />
+						<Field
+							component={InputField}
+							label={t('loc:Webstránka')}
+							name={'socialLinkWebPage'}
+							size={'large'}
+							placeholder={t('loc:Odkaz na webovú stránku salóna')}
+							disabled={disabledForm}
+						/>
 					</Col>
 				</Row>
 
@@ -281,6 +323,7 @@ const UserAccountForm: FC<Props> = (props) => {
 								labelInValue
 								showSearch
 								allowInfinityScroll
+								disabled={disabledForm}
 								required
 							/>
 						</Col>

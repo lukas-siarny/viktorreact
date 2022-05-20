@@ -53,6 +53,7 @@ type Props = WrappedFieldProps & {
 	zoom?: number
 	locationSearchElements?: LocationSearchElements
 	mapContainerElements?: MapContainerElements
+	disabled?: boolean
 }
 
 const FULL_H_ELEMENT = <div className='h-full' />
@@ -72,7 +73,8 @@ const AddressFields = (props: Props) => {
 			loadingElement: FULL_H_ELEMENT,
 			mapElement: FULL_H_ELEMENT,
 			containerElement: <div className='h-96' />
-		}
+		},
+		disabled
 	} = props
 	const { t } = useTranslation()
 
@@ -144,6 +146,7 @@ const AddressFields = (props: Props) => {
 								type='search'
 								placeholder={t('loc:Vyhľadajte miesto na mape')}
 								error={error && touched}
+								disabled={disabled}
 							/>
 							<div className={cx('text-danger h-6', { hidden: !(error && touched) })}>{error}</div>
 						</Col>
@@ -159,6 +162,7 @@ const AddressFields = (props: Props) => {
 								lat={get(inputValues, 'latitude')}
 								long={get(inputValues, 'longitude')}
 								zoom={zoom}
+								disabled={disabled}
 							/>
 						</Col>
 						<Col xl={6} md={9}>

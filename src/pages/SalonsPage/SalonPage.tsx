@@ -191,6 +191,7 @@ const SalonPage: FC<Props> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
+	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -442,6 +443,7 @@ const SalonPage: FC<Props> = (props) => {
 							publishSalon={publishSalon}
 							switchDisabled={submitting}
 							salonID={salonID}
+							disabledForm={deletedSalon}
 						/>
 					)}
 				/>
@@ -464,6 +466,7 @@ const SalonPage: FC<Props> = (props) => {
 								entityName={t('loc:salón')}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								disabled={deletedSalon}
 							/>
 						)}
 						<Permissions
@@ -483,7 +486,7 @@ const SalonPage: FC<Props> = (props) => {
 											openForbiddenModal()
 										}
 									}}
-									disabled={submitting}
+									disabled={submitting || deletedSalon}
 									loading={submitting}
 								>
 									{t('loc:Uložiť')}

@@ -207,17 +207,17 @@ const CategoriesTree = () => {
 		return treeNodeData?.[pathArray[1]].disabled
 	}
 
+	const notifyUser = () => {
+		notification.warning({
+			message: t('loc:Upozornenie'),
+			description: t('loc:Táto operácia nie je povolená.')
+		})
+	}
+
 	const onDrop = async (droppedData: any) => {
-		// if dropping category on disabled parent category or drop subcategory to root level or the other way
-		if (
-			checkIfParentIsDisabled(droppedData.node.pos) ||
-			(droppedData.node.level === 0 && droppedData.dragNode.level > 0) ||
-			(droppedData.node.level > 0 && droppedData.dragNode.level === 0)
-		) {
-			notification.warning({
-				message: t('loc:Upozornenie'),
-				description: t('loc:Táto operácia nie je povolená.')
-			})
+		// check if dropping category on disabled parent category
+		if (checkIfParentIsDisabled(droppedData.node.pos)) {
+			notifyUser()
 			return
 		}
 		try {
@@ -245,6 +245,12 @@ const CategoriesTree = () => {
 					}
 				}
 			} else {
+				// check if drop subcategory to root level or the other way
+				if ((droppedData.dragNode.level === 0 && droppedData.node.level > 0) || (droppedData.dragNode.level > 0 && droppedData.node.level === 0)) {
+					notifyUser()
+					return
+				}
+
 				//  dropped node inside of gap between nodes or dropped node to start or end of children nodes array
 				let orderIndex: number
 				// if drop position is not detected

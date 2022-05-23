@@ -12,7 +12,7 @@ import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-24
 import { ReactComponent as SalonIcon } from '../../assets/icons/salon-24-icon.svg'
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
 import { ReactComponent as UsersIcon } from '../../assets/icons/users-24-icon.svg'
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-2-icon.svg'
+import { ReactComponent as CustomerIcon } from '../../assets/icons/customer-24-icon.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -105,7 +105,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 								<Menu.Item
 									key={PAGE.CUSTOMERS}
 									onClick={() => history.push(t('paths:customers'))}
-									icon={<PhoneIcon />} // fix style issue due wrapped item into <Permission> component
+									icon={<CustomerIcon />} // fix style issue due wrapped item into <Permission> component
 									className={cx({ 'ant-menu-item-selected': page === PAGE.CUSTOMERS })}
 									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
 								>

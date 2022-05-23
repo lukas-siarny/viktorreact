@@ -96,8 +96,8 @@
     "regenerator-runtime": "0.13.9",
     "sass": "1.50.1",
     "slugify": "1.6.5",
-    "tailwindcss": "3.0.24",
-    "tailwindcss-export-config": "4.0.1",
+    "tailwindcss": "2.2.19",
+    "tailwindcss-export-config": "2.3.0",
     "use-query-params": "1.2.3"
   },
   "devDependencies": {

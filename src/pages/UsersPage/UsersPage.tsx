@@ -20,6 +20,7 @@ import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
+import { getRoles } from '../../reducers/roles/rolesActions'
 import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 
@@ -40,23 +41,25 @@ const UsersPage = () => {
 		search: StringParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'fullName:ASC')
+		order: withDefault(StringParam, 'fullName:ASC'),
+		roleID: withDefault(NumberParam, undefined)
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search }))
-		dispatch(getUsers(query.page, query.limit, query.order, query.search))
-	}, [dispatch, query.page, query.limit, query.search, query.order])
+		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search, roleID: query.roleID }))
+		dispatch(getUsers(query.page, query.limit, query.order, query.search, query.roleID))
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.roleID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
+		dispatch(getRoles())
 
 		phonePrefixes.forEach((option) => {
 			prefixes[option.key] = option.label
 		})
 
 		setPrefixOptions(prefixes)
-	}, [phonePrefixes])
+	}, [phonePrefixes, dispatch])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {

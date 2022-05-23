@@ -28,6 +28,7 @@ import {
 	size,
 	filter
 } from 'lodash'
+import { notification } from 'antd'
 import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
@@ -599,4 +600,18 @@ export const getDefaultFormCategories = (id: number | undefined, categories: any
 		if (categories[index].children) return getDefaultFormCategories(id, categories[index].children, currentCategories)
 	}
 	return parentCategories
+}
+
+export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any) => {
+	if (errors && props.form) {
+		scrollToFirstError(errors, props.form)
+		const isErrors: boolean = Object.keys(errors).length > 1
+		return notification.error({
+			message: i18next.t('loc:Chybne vyplnený formulár'),
+			description: i18next.t(
+				`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
+			)
+		})
+	}
+	return undefined
 }

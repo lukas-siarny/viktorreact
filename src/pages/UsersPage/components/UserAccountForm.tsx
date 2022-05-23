@@ -2,11 +2,8 @@ import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row } from 'antd'
-import cx from 'classnames'
-
-// enums
 import { useSelector } from 'react-redux'
-import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
+import cx from 'classnames'
 
 // types
 import { IUserAccountForm } from '../../../types/interfaces'
@@ -20,7 +17,13 @@ import SelectField from '../../../atoms/SelectField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+
+// reducers
 import { RootState } from '../../../reducers'
+
+// utils
+import { showErrorNotification } from '../../../utils/helper'
+import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
 
 type ComponentProps = {
 	isCompany: boolean
@@ -102,6 +105,7 @@ const form = reduxForm<IUserAccountForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
+	onSubmitFail: showErrorNotification,
 	validate: validateUserAccountForm
 })(UserAccountForm)
 

@@ -2,10 +2,11 @@ import React, { FC, useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row } from 'antd'
-
-// enums
 import { useDispatch, useSelector } from 'react-redux'
+
+// utils
 import { ENUMERATIONS_KEYS, FORM, GENDER } from '../../../utils/enums'
+import { showErrorNotification } from '../../../utils/helper'
 
 // types
 import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -97,6 +98,7 @@ const form = reduxForm<ICustomerForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
+	onSubmitFail: showErrorNotification,
 	validate: validateCustomerForm
 })(CustomerForm)
 

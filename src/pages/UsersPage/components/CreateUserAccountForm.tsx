@@ -4,9 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
-// enums
-import { FORM } from '../../../utils/enums'
-
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
@@ -20,6 +17,10 @@ import validateCreateUserAccountForm from './validateCreateUserAccountForm'
 // reducers
 import { RootState } from '../../../reducers'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+
+// utils
+import { FORM } from '../../../utils/enums'
+import { showErrorNotification } from '../../../utils/helper'
 
 type ComponentProps = {}
 
@@ -59,6 +60,7 @@ const form = reduxForm<ICreateUserForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
+	onSubmitFail: showErrorNotification,
 	validate: validateCreateUserAccountForm
 })(CreateUserAccountForm)
 

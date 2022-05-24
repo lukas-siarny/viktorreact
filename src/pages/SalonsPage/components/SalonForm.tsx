@@ -16,8 +16,10 @@ import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
 import SelectField from '../../../atoms/SelectField'
+import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // utils
+import { showErrorNotification } from '../../../utils/helper'
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
@@ -29,7 +31,7 @@ import validateSalonForm from './validateSalonForm'
 
 // reducers
 import { RootState } from '../../../reducers'
-import ImgUploadField from '../../../atoms/ImgUploadField'
+import { getUsers } from '../../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-icon.svg'
@@ -39,7 +41,6 @@ import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
-import { getUsers } from '../../../reducers/users/userActions'
 
 type ComponentProps = {
 	openNoteModal: Function
@@ -130,15 +131,6 @@ const UserAccountForm: FC<Props> = (props) => {
 						</div>
 						<Divider className={'mb-3 mt-3'} />
 
-						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
-						<Field
-							component={TextareaField}
-							label={t('loc:O nás')}
-							name={'aboutUsFirst'}
-							size={'large'}
-							placeholder={t('loc:Zadajte základné informácie o salóne')}
-							disabled={disabledForm}
-						/>
 						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
 						<Field
 							component={TextareaField}
@@ -339,6 +331,7 @@ const form = reduxForm<IUserAccountForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
+	onSubmitFail: showErrorNotification,
 	validate: validateSalonForm
 })(UserAccountForm)
 

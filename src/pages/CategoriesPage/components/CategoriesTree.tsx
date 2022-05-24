@@ -245,8 +245,17 @@ const CategoriesTree = () => {
 					}
 				}
 			} else {
-				// check if drop subcategory to root level or the other way
-				if ((droppedData.dragNode.level === 0 && droppedData.node.level > 0) || (droppedData.dragNode.level > 0 && droppedData.node.level === 0)) {
+				// check if drop subcategory to root level
+				if (droppedData.dragNode.level > 0 && droppedData.node.level === 0) {
+					notification.warning({
+						message: t('loc:Upozornenie'),
+						description: t('loc:Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo "Pridať kategóriu".')
+					})
+					return
+				}
+
+				// check if drop root category to subcategory level
+				if (droppedData.dragNode.level === 0 && droppedData.node.level > 0) {
 					notifyUser()
 					return
 				}

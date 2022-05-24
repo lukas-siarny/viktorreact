@@ -1,5 +1,5 @@
 import React from 'react'
-import { Layout, Menu, Button } from 'antd'
+import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
@@ -12,7 +12,11 @@ import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-24
 import { ReactComponent as SalonIcon } from '../../assets/icons/salon-24-icon.svg'
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
 import { ReactComponent as UsersIcon } from '../../assets/icons/users-24-icon.svg'
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-2-icon.svg'
+import { ReactComponent as CustomerIcon } from '../../assets/icons/customer-24-icon.svg'
+import { ReactComponent as ProfileIcon } from '../../assets/icons/profile-icon.svg'
+import { ReactComponent as LogOutIcon } from '../../assets/icons/logout-icon.svg'
+import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
+import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -27,8 +31,6 @@ import LanguagePicker from '../LanguagePicker'
 
 const { Sider } = Layout
 
-const MENU_ITEM_LEFT_PADDING = '24px'
-
 export type LayoutSiderProps = {
 	page?: PAGE
 	showNavigation?: boolean
@@ -36,10 +38,25 @@ export type LayoutSiderProps = {
 
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true } = props
-	// const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
+
+	const MY_ACCOUNT_MENU = (
+		<Menu className='noti-sider-menu'>
+			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
+				{t('loc:Môj profil')}
+			</Menu.Item>
+			<LanguagePicker asMenuItem />
+			<Menu.Item key='logOut' onClick={() => dispatch(logOutUser())} icon={<LogOutIcon />}>
+				{t('loc:Odhlásiť')}
+			</Menu.Item>
+			<Menu.Divider />
+			<Menu.Item key='version' disabled icon={<VersionIcon />}>
+				<span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
+			</Menu.Item>
+		</Menu>
+	)
 
 	return (
 		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0'>
@@ -50,52 +67,52 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 				<div className='px-2 flex flex-col flex-grow overflow-y-auto'>
 					{showNavigation && (
-						<Menu mode='inline' selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
-							<Menu.Item key={PAGE.HOME} onClick={() => history.push(t('paths:index'))} icon={<HomeIcon />}>
+						<Menu mode='inline' inlineIndent={8} selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
+							<Menu.Item eventKey={PAGE.HOME} key={PAGE.HOME} onClick={() => history.push(t('paths:index'))} icon={<HomeIcon />}>
 								{t('loc:Home')}
 							</Menu.Item>
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]}>
 								<Menu.Item
+									eventKey={PAGE.USERS}
 									key={PAGE.USERS}
 									onClick={() => history.push(t('paths:users'))}
 									icon={<UsersIcon />}
 									// fix style issue due wrapped item into <Permission> component
 									className={cx({ 'ant-menu-item-selected': page === PAGE.USERS })}
-									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
 								>
 									{t('loc:Používatelia')}
 								</Menu.Item>
 							</Permissions>
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]}>
 								<Menu.Item
+									eventKey={PAGE.CATEGORIES}
 									key={PAGE.CATEGORIES}
 									onClick={() => history.push(t('paths:categories'))}
 									icon={<CategoryIcon />}
 									// fix style issue due wrapped item into <Permission> component
 									className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
-									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
 								>
 									{t('loc:Kategórie')}
 								</Menu.Item>
 							</Permissions>
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]}>
 								<Menu.Item
+									eventKey={PAGE.SALONS}
 									key={PAGE.SALONS}
 									onClick={() => history.push(t('paths:salons'))}
 									icon={<SalonIcon />}
 									// fix style issue due wrapped item into <Permission> component
 									className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
-									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
 								>
 									{t('loc:Salóny')}
 								</Menu.Item>
 								<Menu.Item
+									eventKey={PAGE.SERVICES}
 									key={PAGE.SERVICES}
 									onClick={() => history.push(t('paths:services'))}
 									icon={<ServiceIcon />}
 									// fix style issue due wrapped item into <Permission> component
 									className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
-									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
 								>
 									{t('loc:Služby')}
 								</Menu.Item>
@@ -103,11 +120,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]}>
 								<Menu.Item
+									eventKey={PAGE.CUSTOMERS}
 									key={PAGE.CUSTOMERS}
 									onClick={() => history.push(t('paths:customers'))}
-									icon={<PhoneIcon />} // fix style issue due wrapped item into <Permission> component
+									icon={<CustomerIcon />} // fix style issue due wrapped item into <Permission> component
 									className={cx({ 'ant-menu-item-selected': page === PAGE.CUSTOMERS })}
-									style={{ paddingLeft: MENU_ITEM_LEFT_PADDING }}
 								>
 									{t('loc:Zákazníci')}
 								</Menu.Item>
@@ -117,14 +134,24 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
-					<LanguagePicker />
-					<Link className='flex justify-start pt-2 pb-2' to={`${t('paths:my-account')}`}>
-						{t('loc: Môj účet')}
-					</Link>
-					<p className='s-medium'>v{process.env.REACT_APP_VERSION}</p>
-					<Button block onClick={() => dispatch(logOutUser())}>
-						{t('loc:Odhlásiť')}
-					</Button>
+					<Dropdown overlay={MY_ACCOUNT_MENU} placement='topLeft' trigger={['click']}>
+						<div
+							role='button'
+							className='cursor-pointer hover:bg-notino-grayLighter py-2'
+							tabIndex={-1}
+							onClick={(e) => e.preventDefault()}
+							onKeyPress={(e) => e.preventDefault()}
+						>
+							<Row className='ml-2' justify='space-between'>
+								<Row>
+									<ProfileIcon className='mr-2-5' />
+									{t('loc:Moje konto')}
+								</Row>
+
+								<ChevronIcon />
+							</Row>
+						</div>
+					</Dropdown>
 				</div>
 			</div>
 		</Sider>

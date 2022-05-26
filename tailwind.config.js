@@ -12,7 +12,6 @@ module.exports = {
 		]
 	},
 	presets: [],
-	darkMode: false,
 	theme: {
 		screens: {
 			sm: '640px',

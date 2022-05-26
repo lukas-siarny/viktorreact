@@ -10,22 +10,26 @@
 	color: $textColor-notino-black
 
 .ant-form-item
-	margin-bottom: 1.5rem
+	margin-bottom: 1rem
 
 @media (max-width: $min-supported-resoulution)
 	.ant-form-item
 		margin-bottom: 1rem
 
 .registration-form
-	.noti-switch
-		padding: 0
+	.noti-registration-switch.ant-form-item-has-error
+		.noti-switch
+			background-color: #D2141433
 	.ant-form-item.noti-registration-switch:not(.marketing-field)
 		margin-bottom: $gap-1
 
 // Label
 .ant-form-item-label,
 .ant-form-vertical .ant-form-item-label // this is for higher specificity so it can override the original style
-	padding-bottom: 4px
+	margin-bottom: 4px
+	height: 14px
+	line-height: 100%
+
 	label
 		color: $textColor-notino-black
 		width: 100%

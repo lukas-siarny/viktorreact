@@ -20,7 +20,10 @@ pipelines:
               caches:
                 - node
               script:
-                - CI=false npm run build
+                # push source maps to sentry service
+                - HOST=testServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                # remove source maps from bundle build
+                - find build/static/js/ -name "*.map" -type f -delete
                 - docker build -t registry.goodrequest.com/notino-b2b-web:development -f docker/development/Dockerfile.web .
                 - docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
                 - docker push registry.goodrequest.com/notino-b2b-web:development
@@ -43,7 +46,10 @@ pipelines:
               caches:
                 - node
               script:
+                # push source maps to sentry service
                 - HOST=testServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                # remove source maps from bundle build
+                - find build/static/js/ -name "*.map" -type f -delete
                 - docker build -t registry.goodrequest.com/notino-b2b-web:test -f docker/test/Dockerfile.web .
                 - docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
                 - docker push registry.goodrequest.com/notino-b2b-web:test

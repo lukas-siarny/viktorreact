@@ -12,6 +12,7 @@ import { ILoginForm } from '../../../types/interfaces'
 
 // utils
 import { FORM } from '../../../utils/enums'
+import { showErrorNotification } from '../../../utils/helper'
 
 // validate
 // eslint-disable-next-line import/no-cycle
@@ -40,7 +41,7 @@ const LoginForm: FC<Props> = (props) => {
 				</Button>
 			</Row>
 			<div className='mt-6'>
-				<Button type={'primary'} block size={'large'} className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
+				<Button type={'primary'} block className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Prihlásiť sa')}
 				</Button>
 				<span className='table m-auto text-notino-black font-medium'>
@@ -61,6 +62,7 @@ const form = reduxForm<ILoginForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
+	onSubmitFail: showErrorNotification,
 	validate: validateLoginForm
 })(LoginForm)
 

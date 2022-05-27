@@ -48,7 +48,7 @@ const RegistrationForm: FC<Props> = (props) => {
 				required
 				tooltip={{ title: t('loc:Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak'), icon: <InfoIcon width={14} height={14} /> }}
 			/>
-			{/* <Field component={InputField} label={t('loc:Zopakujte heslo')} placeholder={t('loc:Zopakujte nové heslo')} name={'confirmPassword'} type={'password'} size={'large'} /> */}
+			{/* TODO: <Field component={InputField} label={t('loc:Zopakujte heslo')} placeholder={t('loc:Zopakujte nové heslo')} name={'confirmPassword'} type={'password'} size={'large'} /> */}
 			<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} required />
 
 			<Field

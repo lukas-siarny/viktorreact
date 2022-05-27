@@ -12,7 +12,6 @@ import useMedia from '../hooks/useMedia'
 // assets
 import { ReactComponent as MdLogo } from '../assets/images/md-device-logo.svg'
 import { ReactComponent as SmLogo } from '../assets/images/sm-device-logo.svg'
-import { ReactComponent as MainImg } from '../assets/images/public-layout.svg'
 import FullLogo from '../assets/images/public-logo-full.png'
 import ThinLogo from '../assets/images/public-logo-thin.png'
 
@@ -21,6 +20,7 @@ interface Props {
 }
 
 const PublicLayout = (props: Props) => {
+	// breakpoints are defined in tailwind config
 	const size = useMedia(['(max-width: 744px)', '(max-width: 1280px)'], [RESOLUTIONS.SM, RESOLUTIONS.MD], RESOLUTIONS.XL)
 
 	const content = useMemo(() => {

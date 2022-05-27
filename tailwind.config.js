@@ -12,7 +12,6 @@ module.exports = {
 		]
 	},
 	presets: [],
-	darkMode: false,
 	theme: {
 		screens: {
 			sm: '640px',
@@ -26,8 +25,8 @@ module.exports = {
 			// specific colors
 			transparent: 'transparent',
 			current: 'currentColor',
-			primary: '#2563EB', // blue-600
-			danger: '#DC2626',
+			primary: colors.black, // #000
+			danger: '#D21414',
 			notino: {
 				black: colors.black,
 				grayDarker: '#404040', // trueGray-700
@@ -35,7 +34,12 @@ module.exports = {
 				gray: '#BFBFBF',
 				grayLight: '#E6E6E6',
 				grayLighter: '#F5F5F5', // trueGray-100
-				white: colors.white
+				white: colors.white,
+				pink: '#DC0069',
+				redLight: '#EE4A4A',
+				red: '#D21414',
+				redDark: '#6C0A0A',
+				success: '#008700'
 			},
 			// Tailwind colors
 			black: colors.black,

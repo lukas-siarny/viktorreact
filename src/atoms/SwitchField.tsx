@@ -84,7 +84,7 @@ const SwitchField = (props: Props) => {
 								</Tooltip>
 							)}
 						</div>
-						<div className={cx('flex justify-end extra-text w-2/12 sm:w-4/12 text-right', { 'text-blue-600': checkedState })}>
+						<div className={cx('flex justify-end extra-text w-1/5 text-right', { 'text-blue-600': checkedState })}>
 							<div>{extraText}</div>
 							<span id={formFieldID(form, input.name)}>
 								<Switch className={'ml-2'} checked={checkedState} disabled={disabled} size={size} onClick={onClick} tabIndex={-1} />

@@ -14,6 +14,8 @@
 		input
 			color: $textColor-gray-900
 			background-color: $backgroundColor-notino-grayLighter
+			font-size: 0.875rem
+			padding-left: 8px
 			&::placeholder
 				color: $borderColor-notino-gray
 		&:hover
@@ -49,21 +51,6 @@
 		&::placeholder
 			color: $borderColor-notino-gray
 
-.ant-form-item
-	// Error state
-	&.ant-form-item-has-error
-		.ant-input.noti-input
-			border: 1px solid $borderColor-red-400
-			&::placeholder
-				color: $textColor-red-300
-			&:hover
-				border: 1px solid $borderColor-red-500
-			&:focus
-				border: 1px solid $borderColor-red-500
-				box-shadow: $field-shadow-focus-error
-		.ant-form-item-explain-error
-			color: $textColor-red-500
-
 // password field
 .ant-form-item
 	.ant-input-password.noti-input-password
@@ -85,16 +72,9 @@
 	&.ant-form-item-has-error
 		// error state
 		.ant-input-password.noti-input-password
-			border: 1px solid $borderColor-red-400
-			&:hover
-				border: 1px solid $borderColor-red-500
 			&.ant-input-affix-wrapper-focused
-				border: 1px solid $borderColor-red-500
+				border: 1px solid $borderColor-red-600
 				box-shadow: $field-shadow-focus-error
-			.ant-input::placeholder
-				color: $textColor-red-300
-		.ant-form-item-explain-error
-			color: $textColor-red-500
 
 .addon-before
 	margin: 0

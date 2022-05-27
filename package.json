@@ -32,7 +32,8 @@
     "translations-csv-to-json": "npx convert-csv-to-json GoodRequest/i18nextJsonToCsv",
     "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
     "storybook": "npm run build:tailwind && start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "@sentry/cli": "1.71.0",
@@ -139,7 +140,7 @@
     "obj-flatten": "2.0.6",
     "postcss-loader": "3.0.0",
     "prettier": "2.6.2",
-    "react-error-overlay": "6.0.11",
+    "react-error-overlay": "6.0.9",
     "selenium-webdriver": "4.1.1",
     "storybook-addon-customize-antd-theme": "1.1.0",
     "storybook-addon-designs": "6.2.1",
@@ -159,9 +160,8 @@
     ]
   },
   "resolutions": {
-    "//": "See https://github.com/facebook/create-react-app/issues/11773",
-    "react-error-overlay": "6.0.11"
-  },
+    "react-error-overlay": "6.0.9"
+  }, 
   "eslintConfig": {
     "overrides": [
       {

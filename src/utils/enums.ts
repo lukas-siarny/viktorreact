@@ -205,6 +205,15 @@ export enum PERMISSION {
 	CUSTOMER_EDIT = 'CUSTOMER_EDIT'
 }
 
+export enum RESOLUTIONS {
+	SM = 'SM',
+	MD = 'MD',
+	L = 'L',
+	XL = 'XL',
+	XXL = 'XXL',
+	XXXL = 'XXXL'
+}
+
 export enum SUBMENU_PARENT {
 	GENERAL = 'GENERAL',
 	INVENTORY = 'INVENTORY',

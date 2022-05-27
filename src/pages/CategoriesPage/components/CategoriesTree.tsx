@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Col, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { filter, forEach, get, includes, map } from 'lodash'
+import { filter, forEach, get, map } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 
@@ -50,8 +50,6 @@ const CategoriesTree = () => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [showForm, setShowForm] = useState<boolean>(false)
 	const [treeNodeData, setTreeNodeData] = useState<any[]>([])
-	const [selectedKeys, setSelectedKeys] = useState<any[]>([])
-	const [expandedKeys, setExpandedKeys] = useState<any[]>([])
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore.countries)
@@ -118,26 +116,17 @@ const CategoriesTree = () => {
 
 	const onCategoryClickHandler = (keys: any, e: any) => {
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
-
-		const key = get(e, 'node.key')
-		const haveChildren = get(e, 'node.children.length') > 0
-		if (haveChildren && !includes(expandedKeys, key)) setExpandedKeys([...expandedKeys, key])
-
-		if (keys.length > 0) setSelectedKeys(keys)
 		updateCategoryHandler(get(e, 'node'))
 	}
 
 	const closeCategoryHandler = () => {
-		setSelectedKeys([])
 		setShowForm(false)
 	}
 
 	const titleBuilder = (category: any) => {
 		const { name, deletedAt } = category
-		if (!deletedAt) return <span>{name}</span>
-
 		return (
-			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={() => onCategoryClickHandler([], { node: category })}>
+			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={() => onCategoryClickHandler([], { node: category })} disabled={!!deletedAt}>
 				{name}
 			</button>
 		)
@@ -348,18 +337,7 @@ const CategoriesTree = () => {
 			</Row>
 			<div className={'w-full flex'}>
 				<div className={formClass}>
-					<Tree
-						className={'noti-tree'}
-						treeData={treeNodeData}
-						onDrop={onDrop}
-						showIcon
-						showLine
-						draggable
-						onSelect={onCategoryClickHandler}
-						selectedKeys={selectedKeys}
-						onExpand={(keys) => setExpandedKeys(keys)}
-						expandedKeys={expandedKeys}
-					/>
+					<Tree className={'noti-tree'} treeData={treeNodeData} onDrop={onDrop} showIcon showLine draggable onSelect={onCategoryClickHandler} />
 				</div>
 				{showForm ? (
 					<div className={'w-6/12 flex justify-around items-start'}>

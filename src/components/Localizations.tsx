@@ -91,7 +91,7 @@ const Localizations = (param: any) => {
 					<div className='mt-2'>{otherFields}</div>
 				</Collapse.Panel>
 			</Collapse>
-			<button type='button' className={'absolute top-0 right-0 flex items-center justify-end cursor-pointer border-none bg-none p-0 bg-transparent'} onClick={onChange}>
+			<button type='button' className={'absolute -top-1 right-0 flex items-center justify-end cursor-pointer border-none bg-none p-0 bg-transparent'} onClick={onChange}>
 				<LanguageIcon className={'text-blue-600'} />
 				<div className={'text-blue-600'}>{i18next.t('loc:Jazyk')}</div>
 				<div className={'ml-2'}>{`${filter(formValueLocalizations, (item) => !!item.value)?.length}/${formValueLocalizations?.length || 0}`}</div>

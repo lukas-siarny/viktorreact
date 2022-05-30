@@ -313,7 +313,7 @@ const CategoriesTree = () => {
 	})
 
 	// close or reopen parent category if user go back from child category form
-	const closeOrOpenedParentCategory = () => {
+	const closeOrOpenParentCategory = () => {
 		// check if is actual form data is not same as last opened parent node and also check if is user not closing create root category form
 		if (lastOpenedNode?.id !== values?.id && values?.name) {
 			dispatch(initialize(FORM.CATEGORY, lastOpenedNode))
@@ -357,7 +357,7 @@ const CategoriesTree = () => {
 							deleteCategory={deleteCategoryHandler}
 							onSubmit={handleSubmit}
 							createCategory={createCategoryHandler}
-							closeCategoryForm={closeOrOpenedParentCategory}
+							closeCategoryForm={closeOrOpenParentCategory}
 						/>
 					</div>
 				) : undefined}

@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "0.0.8-rc.0",
+  "version": "0.0.8",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -161,7 +161,7 @@
   },
   "resolutions": {
     "react-error-overlay": "6.0.9"
-  }, 
+  },
   "eslintConfig": {
     "overrides": [
       {

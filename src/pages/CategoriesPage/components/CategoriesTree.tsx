@@ -50,10 +50,12 @@ const CategoriesTree = () => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [showForm, setShowForm] = useState<boolean>(false)
 	const [treeNodeData, setTreeNodeData] = useState<any[]>([])
+	const [lastOpenedNode, setLastOpenedNode] = useState<any>()
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore.countries)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
 	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_NAME_LANGUAGE), [countries])
 
@@ -77,19 +79,19 @@ const CategoriesTree = () => {
 		(node) => {
 			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted } = node
 			setShowForm(true)
-			dispatch(
-				initialize(FORM.CATEGORY, {
-					id,
-					name,
-					parentId,
-					orderIndex: index,
-					nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
-					level,
-					image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
-					deletedAt,
-					isParentDeleted
-				})
-			)
+			const formData = {
+				id,
+				name,
+				parentId,
+				orderIndex: index,
+				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
+				level,
+				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
+				deletedAt,
+				isParentDeleted
+			}
+			dispatch(initialize(FORM.CATEGORY, formData))
+			setLastOpenedNode(formData)
 		},
 		[dispatch]
 	)
@@ -117,10 +119,6 @@ const CategoriesTree = () => {
 	const onCategoryClickHandler = (keys: any, e: any) => {
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
 		updateCategoryHandler(get(e, 'node'))
-	}
-
-	const closeCategoryHandler = () => {
-		setShowForm(false)
 	}
 
 	const titleBuilder = (category: any) => {
@@ -314,6 +312,19 @@ const CategoriesTree = () => {
 		'w-6/12': showForm
 	})
 
+	// close or reopen parent category if user go back from child category form
+	const closeOrOpenedParentCategory = () => {
+		// check if is actual form data is not same as last opened parent node and also check if is user not closing create root category form
+		if (lastOpenedNode?.id !== values?.id && values?.name) {
+			dispatch(initialize(FORM.CATEGORY, lastOpenedNode))
+			// after init clear
+			setLastOpenedNode(null)
+		} else {
+			// close form
+			setShowForm(false)
+		}
+	}
+
 	return (
 		<>
 			<Row className={'flex justify-between'}>
@@ -346,7 +357,7 @@ const CategoriesTree = () => {
 							deleteCategory={deleteCategoryHandler}
 							onSubmit={handleSubmit}
 							createCategory={createCategoryHandler}
-							closeCategoryForm={closeCategoryHandler}
+							closeCategoryForm={closeOrOpenedParentCategory}
 						/>
 					</div>
 				) : undefined}

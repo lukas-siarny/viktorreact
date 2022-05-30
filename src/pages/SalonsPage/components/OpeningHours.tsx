@@ -33,6 +33,7 @@ const TimeRangesComponent = (props: any) => {
 				itemClassName={'m-0'}
 				validate={validationRequired}
 				disabled={disabled}
+				minuteStep={15}
 			/>
 			<DeleteButton className={'ml-1 bg-red-100'} onClick={() => fields.remove(index)} onlyIcon noConfirm smallIcon size={'small'} disabled={disabled} />
 		</div>

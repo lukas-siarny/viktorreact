@@ -222,6 +222,67 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row>
 					<Col span={24}>
 						<h3 className={'mb-0 flex items-center'}>
+							<UserIcon width={20} height={20} className={'text-notino-black mr-2'} />
+							{t('loc:Kontaktná osoba')}
+						</h3>
+
+						<Divider className={'mb-3 mt-3'} />
+						<Field
+							className={'mb-4'}
+							component={SwitchField}
+							label={t('loc:Nastaviť kontaktnú osobu')}
+							name={'useContactPerson'}
+							size={'middle'}
+							disabled={disabledForm}
+						/>
+						{get(formValues, 'useContactPerson', false) && (
+							<>
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:Meno')}
+										placeholder={t('loc:Zadajte meno')}
+										name={'companyContactPerson.firstName'}
+										size={'large'}
+									/>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:Priezvisko')}
+										placeholder={t('loc:Zadajte priezvisko')}
+										name={'companyContactPerson.lastName'}
+										size={'large'}
+									/>
+								</Row>
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:Email')}
+										placeholder={t('loc:Zadajte email')}
+										name={'companyContactPerson.email'}
+										size={'large'}
+										disabled={disabledForm}
+										required
+									/>
+									<PhoneWithPrefixField
+										label={'Telefón'}
+										placeholder={t('loc:Zadajte telefón')}
+										size={'large'}
+										prefixName={'companyContactPerson.phonePrefixCountryCode'}
+										phoneName={'companyContactPerson.phone'}
+										disabled={disabledForm}
+										style={{ width: 'calc(50% - 8px' }}
+									/>
+								</Row>
+							</>
+						)}
+					</Col>
+				</Row>
+				<Row>
+					<Col span={24}>
+						<h3 className={'mb-0 flex items-center'}>
 							<TimerIcon width={24} height={24} className={'text-notino-black mr-2'} /> {t('loc:Otváracie hodiny')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { change, initialize, submit } from 'redux-form'
-import { get, isEmpty, map, unionBy } from 'lodash'
+import { get, isEmpty, map, unionBy, isEqual, pick } from 'lodash'
 import { compose } from 'redux'
 
 // components
@@ -257,6 +257,9 @@ const SalonPage: FC<Props> = (props) => {
 			const openOverWeekend: boolean = checkWeekend(salonData.data?.salon?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.salon?.openingHours)
 			const openingHours: OpeningHours = initOpeningHours(salonData.data?.salon?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+
+			const invoiceAddress = salonData.data?.salon.companyInvoiceAddress as any
+
 			dispatch(
 				initialize(FORM.SALON, {
 					...salonData.data?.salon,
@@ -272,6 +275,12 @@ const SalonPage: FC<Props> = (props) => {
 					street: salonData.data?.salon?.address?.street,
 					zipCode: salonData.data?.salon?.address?.zipCode,
 					country: salonData.data?.salon?.address?.countryCode,
+					useCompanyContactPerson: !isEmpty(salonData.data?.salon.companyContactPerson),
+					companyContactPerson: salonData.data?.salon.companyContactPerson,
+					isInvoiceAddressSame: isEqual(invoiceAddress, pick(salonData.data?.salon?.address, Object.keys(invoiceAddress))),
+					companyInvoiceAddress: salonData.data?.salon.companyInvoiceAddress,
+					useCompanyInfo: !isEmpty(salonData.data?.salon.companyInfo),
+					companyInfo: salonData.data?.salon.companyInfo,
 					gallery: map(salonData.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
 					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null,
 					userID: { label: salonData.data?.salon?.user?.name || salonData.data?.salon?.user?.email, value: salonData.data?.salon?.user?.id }
@@ -288,9 +297,9 @@ const SalonPage: FC<Props> = (props) => {
 					openOverWeekend: false,
 					sameOpenHoursOverWeek: true,
 					openingHours: initOpeningHours(salonData.data?.salon?.openingHours, true, false),
-					isVisible: true,
 					payByCard: false,
-					phonePrefixCountryCode
+					phonePrefixCountryCode,
+					isInvoiceAddressSame: true
 				})
 			)
 		}
@@ -330,6 +339,31 @@ const SalonPage: FC<Props> = (props) => {
 				otherPaymentMethods: data.otherPaymentMethods,
 				userID: data?.user?.id || data?.userID?.value || authUser?.data?.id
 			}
+
+			if (data.useContactPerson) {
+				salonData.companyContactPerson = data.companyContactPerson
+			}
+
+			if (data.useCompanyInfo) {
+				salonData.companyInfo = data.companyInfo
+			}
+
+			if (data.isInvoiceAddressSame) {
+				salonData.companyInvoiceAddress = {
+					city: data.city,
+					countryCode: data.country,
+					street: data.street,
+					zipCode: data.zipCode
+				}
+			} else {
+				salonData.companyInvoiceAddress = {
+					city: data.companyInvoiceAddress.city,
+					countryCode: data.companyInvoiceAddress.country,
+					street: data.companyInvoiceAddress.street,
+					zipCode: data.companyInvoiceAddress.zipCode
+				}
+			}
+
 			if (salonID > 0) {
 				// update existing salon
 				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: data?.id }, salonData)

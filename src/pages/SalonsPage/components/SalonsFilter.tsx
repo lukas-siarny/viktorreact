@@ -42,7 +42,6 @@ const SalonsFilter = (props: Props) => {
 	const categories = useSelector((state: RootState) => state.categories.categories)
 
 	const statusOptions = [
-		{ label: t('loc:Všetky'), value: SALON_STATUSES.ALL, key: SALON_STATUSES.ALL },
 		{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED },
 		{ label: t('loc:Publikované'), value: SALON_STATUSES.PUBLISHED, key: SALON_STATUSES.PUBLISHED },
 		{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE, key: SALON_STATUSES.VISIBLE },

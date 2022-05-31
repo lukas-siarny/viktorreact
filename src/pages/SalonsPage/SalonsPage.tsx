@@ -50,7 +50,7 @@ const SalonsPage = () => {
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		categoryFirstLevelIDs: ArrayParam,
-		statuses: withDefault(ArrayParam, [SALON_STATUSES.ALL]),
+		statuses: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:DESC')

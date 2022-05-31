@@ -47,6 +47,7 @@ const PhoneWithPrefixField = (props: Props) => {
 					defaultValue={fallbackDefaultValue}
 					required={required}
 					disabled={disabled}
+					className='phone-prefix'
 				/>
 			</Col>
 			<Col flex='auto'>

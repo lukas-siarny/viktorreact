@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { initialize, submit } from 'redux-form'
+import { initialize, submit, isPristine } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
 
@@ -39,6 +39,7 @@ const UserPage: FC<Props> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
+	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.USER_ACCOUNT)(state))
 
 	const showDeleteBtn: boolean = authUser.data?.id !== get(userAccountDetail, 'data.id')
 
@@ -172,7 +173,7 @@ const UserPage: FC<Props> = (props) => {
 											openForbiddenModal()
 										}
 									}}
-									disabled={submitting}
+									disabled={submitting || isFormPristine}
 									loading={submitting}
 								>
 									{t('loc:Uložiť')}

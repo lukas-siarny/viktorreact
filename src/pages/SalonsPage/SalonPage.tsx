@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { change, initialize, submit } from 'redux-form'
+import { change, initialize, submit, isPristine } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 
@@ -189,6 +189,7 @@ const SalonPage: FC<Props> = (props) => {
 
 	const salon = useSelector((state: RootState) => state.salons.salon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
+	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.SALON)(state))
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)
@@ -486,7 +487,7 @@ const SalonPage: FC<Props> = (props) => {
 											openForbiddenModal()
 										}
 									}}
-									disabled={submitting || deletedSalon}
+									disabled={submitting || deletedSalon || isFormPristine}
 									loading={submitting}
 								>
 									{t('loc:Uložiť')}

@@ -93,6 +93,13 @@ const ServicesPage = () => {
 			render: (value) => <span className='whitespace-pre'>{value}</span>
 		},
 		{
+			title: t('loc:Salón'),
+			dataIndex: 'salon',
+			key: 'salon',
+			ellipsis: true,
+			render: (value) => <span>{value}</span>
+		},
+		{
 			title: t('loc:Trvanie'),
 			dataIndex: 'duration',
 			key: 'duration',

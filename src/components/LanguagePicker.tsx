@@ -7,6 +7,9 @@ import i18next from 'i18next'
 // utils
 import { LANGUAGE, LOCALES, DEFAULT_LANGUAGE } from '../utils/enums'
 
+// hooks
+import useMedia from '../hooks/useMedia'
+
 const { Option } = Select
 const { SubMenu } = Menu
 
@@ -19,6 +22,7 @@ type Props = {
 
 const LanguagePicker: FC<Props> = (props) => {
 	const { className, asMenuItem } = props
+	const isSmallDevice = useMedia(['(max-width: 744px)'], [true], false)
 
 	const handleLanguageChange = (value: any) => {
 		i18next.changeLanguage(value)
@@ -57,7 +61,7 @@ const LanguagePicker: FC<Props> = (props) => {
 							<Option value={option.value} key={index}>
 								<Row>
 									<Icon className='mr-2 language-picker-icon' component={option.icon} />
-									{option.label.toUpperCase()}
+									{!isSmallDevice && option.label.toUpperCase()}
 								</Row>
 							</Option>
 						))}

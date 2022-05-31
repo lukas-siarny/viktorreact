@@ -44,10 +44,10 @@ const LoginForm: FC<Props> = (props) => {
 				<Button type={'primary'} block className={`noti-btn m-regular mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>
 					{t('loc:Prihlásiť sa')}
 				</Button>
-				<span className='table m-auto text-notino-black font-medium'>
+				<span className='flex items-center md:justify-center text-notino-black font-medium'>
 					{t('loc:Ešte nemáte účet?')}
 					<Link to={`${t('paths:signup')}`} className='inline-block'>
-						<Button className='pr-0' type={'link'} htmlType={'button'}>
+						<Button className='p-0 ml-1 font-medium' type={'link'} htmlType={'button'}>
 							{t('loc:Registrovať sa')}
 						</Button>
 					</Link>

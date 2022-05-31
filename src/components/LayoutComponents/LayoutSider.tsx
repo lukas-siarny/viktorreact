@@ -143,9 +143,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onKeyPress={(e) => e.preventDefault()}
 						>
 							<Row className='ml-2' justify='space-between'>
-								<Row>
+								<Row className='noti-my-account'>
 									<ProfileIcon className='mr-2-5' />
-									{t('loc:Moje konto')}
+									<div className='truncate item-label'>{t('loc:Moje konto')}</div>
 								</Row>
 
 								<ChevronIcon />

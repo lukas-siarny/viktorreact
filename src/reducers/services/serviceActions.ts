@@ -26,6 +26,7 @@ interface ServicesTableData {
 	price: string
 	duration: string
 	category: string
+	salon: string
 }
 
 export interface IServicesPayload {
@@ -52,7 +53,8 @@ export const getServices =
 					),
 					price: getServiceRange(item.priceFrom, item.priceTo),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
-					category: item.category.name || '-'
+					category: item.category.name || '-',
+					salon: item.salon.name
 				}
 				return tableItem
 			})

@@ -21,6 +21,9 @@ import i18n from './utils/i18n'
 import { history } from './utils/history'
 import { LOCALES, LANGUAGE, DEFAULT_LANGUAGE } from './utils/enums'
 
+// components
+import ScrollToTop from './components/ScrollToTop'
+
 const queryStringifyOptions: ExtendedStringifyOptions = {
 	transformSearchString: transformSearchStringJsonSafe
 }
@@ -59,7 +62,9 @@ const App = () => {
 						<Provider store={store}>
 							<Router history={history}>
 								<QueryParamProvider ReactRouterRoute={Route} stringifyOptions={queryStringifyOptions}>
-									<Routes />
+									<ScrollToTop>
+										<Routes />
+									</ScrollToTop>
 								</QueryParamProvider>
 							</Router>
 						</Provider>

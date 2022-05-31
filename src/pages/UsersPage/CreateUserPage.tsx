@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { initialize, submit } from 'redux-form'
+import { initialize, submit, isPristine } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { map } from 'lodash'
@@ -28,6 +28,7 @@ const CreateUserPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
+	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.ADMIN_CREATE_USER)(state))
 	const [submitting, setSubmitting] = useState<boolean>(false)
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -82,7 +83,7 @@ const CreateUserPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<CreateUserAccountForm onSubmit={createUser} />
 				<div className={'content-footer'}>
 					<Row justify='center'>
@@ -95,7 +96,7 @@ const CreateUserPage = () => {
 							onClick={() => {
 								dispatch(submit(FORM.ADMIN_CREATE_USER))
 							}}
-							disabled={submitting}
+							disabled={submitting || isFormPristine}
 							loading={submitting}
 						>
 							{t('loc:Uložiť')}

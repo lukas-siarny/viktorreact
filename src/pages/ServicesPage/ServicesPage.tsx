@@ -93,6 +93,13 @@ const ServicesPage = () => {
 			render: (value) => <span className='whitespace-pre'>{value}</span>
 		},
 		{
+			title: t('loc:Salón'),
+			dataIndex: 'salon',
+			key: 'salon',
+			ellipsis: true,
+			render: (value) => <span>{value}</span>
+		},
+		{
 			title: t('loc:Trvanie'),
 			dataIndex: 'duration',
 			key: 'duration',
@@ -140,7 +147,7 @@ const ServicesPage = () => {
 										}
 									}}
 									onSubmit={handleSubmit}
-									total={services?.data?.pagination?.totalPages}
+									total={services?.data?.pagination?.totalCount}
 								/>
 								<CustomTable
 									className='table-fixed'
@@ -171,7 +178,7 @@ const ServicesPage = () => {
 										pageSizeOptions: PAGINATION.pageSizeOptions,
 										showSizeChanger: true,
 										pageSize: services?.data?.pagination?.limit,
-										total: services?.data?.pagination?.totalPages,
+										total: services?.data?.pagination?.totalCount,
 										current: services?.data?.pagination?.page
 									}}
 								/>

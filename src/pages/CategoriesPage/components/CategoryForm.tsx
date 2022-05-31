@@ -55,7 +55,7 @@ type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
 
 const CategoryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm } = props
+	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm, pristine } = props
 
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
 	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))
@@ -166,7 +166,7 @@ const CategoryForm: FC<Props> = (props) => {
 						{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 
 						{!values?.deletedAt ? (
-							<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
+							<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
 								{t('loc:Uložiť')}
 							</Button>
 						) : undefined}

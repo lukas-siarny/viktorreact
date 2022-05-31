@@ -42,7 +42,7 @@ type ComponentProps = {
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
 
 const ServiceForm = (props: Props) => {
-	const { serviceID, handleSubmit } = props
+	const { serviceID, handleSubmit, pristine } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -50,7 +50,6 @@ const ServiceForm = (props: Props) => {
 	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
 
-	const isPristineForm: boolean = useSelector((state: RootState) => isPristine(FORM.SERVICE_FORM)(state))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
 	const isLoading = serviceLoading || categoriesLoading || isRemoving
@@ -93,7 +92,7 @@ const ServiceForm = (props: Props) => {
 					label={t('loc:Salón')}
 					component={SelectField}
 					allowClear
-					placeholder={t('loc:Salón')}
+					placeholder={t('loc:Vyberte salón')}
 					name='salonID'
 					showSearch
 					onSearch={searchSalon}
@@ -201,7 +200,7 @@ const ServiceForm = (props: Props) => {
 							className={'noti-btn w-full'}
 							htmlType={'submit'}
 							icon={serviceID ? <EditIcon /> : <CreateIcon />}
-							disabled={submitting || isPristineForm}
+							disabled={submitting || pristine}
 							loading={submitting}
 						>
 							{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}

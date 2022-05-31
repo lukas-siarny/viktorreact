@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { get } from 'lodash'
 import { compose } from 'redux'
-import { initialize, submit } from 'redux-form'
+import { initialize, submit, isPristine } from 'redux-form'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -34,7 +34,7 @@ const CustomerPage = (props: Props) => {
 	const { customerID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
-
+	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.CUSTOMER)(state))
 	const customer = useSelector((state: RootState) => state.customers.customer)
 
 	useEffect(() => {
@@ -121,7 +121,7 @@ const CustomerPage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={updateCustomer} />
 				<div className={'content-footer'}>
 					<Row className={'justify-between'}>
@@ -150,7 +150,7 @@ const CustomerPage = (props: Props) => {
 											openForbiddenModal()
 										}
 									}}
-									disabled={submitting}
+									disabled={submitting || isFormPristine}
 									loading={submitting}
 								>
 									{t('loc:Uložiť')}

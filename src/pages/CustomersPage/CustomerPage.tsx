@@ -34,7 +34,7 @@ const CustomerPage = (props: Props) => {
 	const { customerID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
-	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.CUSTOMER)(state))
+	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const customer = useSelector((state: RootState) => state.customers.customer)
 
 	useEffect(() => {

@@ -92,7 +92,7 @@ const ServiceForm = (props: Props) => {
 					label={t('loc:Salón')}
 					component={SelectField}
 					allowClear
-					placeholder={t('loc:Salón')}
+					placeholder={t('loc:Vyberte salón')}
 					name='salonID'
 					showSearch
 					onSearch={searchSalon}

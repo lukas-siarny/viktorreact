@@ -67,26 +67,18 @@ const UserAccountForm: FC<Props> = (props) => {
 								size={'large'}
 								required
 							/>
-							<Field className={'w-12/25'} component={InputField} label={t('loc:IČ DPH')} placeholder={t('loc:Zadajte ič dph')} name={'vatID'} size={'large'} />
+							<Field className={'w-12/25'} component={InputField} label={t('loc:IČ DPH')} placeholder={t('loc:Zadajte IČ DPH')} name={'vatID'} size={'large'} />
 						</Row>
-						<Field component={InputField} label={t('loc:DIČ')} placeholder={t('loc:Zadajte dič')} name={'taxID'} size={'large'} />
+						<Field component={InputField} label={t('loc:DIČ')} placeholder={t('loc:Zadajte DIČ')} name={'taxID'} size={'large'} />
 						<Field component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} required />
 						<Row justify={'space-between'}>
 							<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} required />
-							<Field
-								className={'w-12/25'}
-								component={InputField}
-								label={t('loc:PSČ')}
-								placeholder={t('loc:Zadajte smerovacie číslo')}
-								name={'zipCode'}
-								size={'large'}
-								required
-							/>
+							<Field className={'w-12/25'} component={InputField} label={t('loc:PSČ')} placeholder={t('loc:Zadajte PSČ')} name={'zipCode'} size={'large'} required />
 						</Row>
 						<Field
 							component={SelectField}
 							label={t('loc:Štát')}
-							placeholder={t('loc:Vyber krajinu')}
+							placeholder={t('loc:Vyberte krajinu')}
 							options={countries?.enumerationsOptions || []}
 							name={'countryCode'}
 							size={'large'}

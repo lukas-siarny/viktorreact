@@ -140,7 +140,6 @@ const CategoryForm: FC<Props> = (props) => {
 								name='nameLocalizations[0].value'
 								required
 								validate={fixLength100}
-								focused={!values?.nameLocalizations?.[0]?.value}
 							/>
 						}
 					/>

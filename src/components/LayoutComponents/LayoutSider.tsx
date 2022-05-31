@@ -52,7 +52,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				{t('loc:Odhlásiť')}
 			</Menu.Item>
 			<Menu.Divider />
-			<Menu.Item key='version' disabled icon={<VersionIcon />}>
+			<Menu.Item key='version' className='cursor-text' disabled icon={<VersionIcon />}>
 				<span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
 			</Menu.Item>
 		</Menu>

@@ -28,7 +28,7 @@ const CreateUserPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.ADMIN_CREATE_USER)(state))
+	const isFormPristine = useSelector(isPristine(FORM.ADMIN_CREATE_USER))
 	const [submitting, setSubmitting] = useState<boolean>(false)
 
 	const breadcrumbs: IBreadcrumbs = {

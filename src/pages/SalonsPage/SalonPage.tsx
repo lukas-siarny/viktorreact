@@ -189,7 +189,7 @@ const SalonPage: FC<Props> = (props) => {
 
 	const salon = useSelector((state: RootState) => state.salons.salon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
-	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.SALON)(state))
+	const isFormPristine = useSelector(isPristine(FORM.SALON))
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)

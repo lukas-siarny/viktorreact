@@ -27,7 +27,7 @@ const CreateCustomerPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
-	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.CUSTOMER)(state))
+	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	// View

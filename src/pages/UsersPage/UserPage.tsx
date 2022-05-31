@@ -39,7 +39,7 @@ const UserPage: FC<Props> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
-	const isFormPristine = useSelector((state: RootState) => isPristine(FORM.USER_ACCOUNT)(state))
+	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
 	const showDeleteBtn: boolean = authUser.data?.id !== get(userAccountDetail, 'data.id')
 

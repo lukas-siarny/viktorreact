@@ -235,7 +235,7 @@ const SalonsPage = () => {
 										pageSizeOptions: PAGINATION.pageSizeOptions,
 										pageSize: salons?.data?.pagination?.limit,
 										showSizeChanger: true,
-										total: salons?.data?.pagination?.totalPages,
+										total: salons?.data?.pagination?.totalCount,
 										current: salons?.data?.pagination?.page
 									}}
 								/>

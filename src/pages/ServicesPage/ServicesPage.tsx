@@ -140,7 +140,7 @@ const ServicesPage = () => {
 										}
 									}}
 									onSubmit={handleSubmit}
-									total={services?.data?.pagination?.totalPages}
+									total={services?.data?.pagination?.totalCount}
 								/>
 								<CustomTable
 									className='table-fixed'
@@ -171,7 +171,7 @@ const ServicesPage = () => {
 										pageSizeOptions: PAGINATION.pageSizeOptions,
 										showSizeChanger: true,
 										pageSize: services?.data?.pagination?.limit,
-										total: services?.data?.pagination?.totalPages,
+										total: services?.data?.pagination?.totalCount,
 										current: services?.data?.pagination?.page
 									}}
 								/>

@@ -121,7 +121,7 @@ const CustomerPage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={updateCustomer} />
 				<div className={'content-footer'}>
 					<Row className={'justify-between'}>

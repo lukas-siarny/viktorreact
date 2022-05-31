@@ -432,7 +432,7 @@ const SalonPage: FC<Props> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<Permissions
 					allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN]}
 					render={(hasPermission) => (

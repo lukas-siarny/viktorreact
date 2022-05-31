@@ -142,7 +142,7 @@ const UserPage: FC<Props> = (props) => {
 			<Row className={hideClass}>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!!isPartner(get(userAccountDetail?.data, 'roles'))} />
 				<div className={'content-footer'}>
 					<Row className={rowClass}>

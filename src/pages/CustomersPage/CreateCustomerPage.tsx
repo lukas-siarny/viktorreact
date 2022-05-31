@@ -88,7 +88,7 @@ const CreateCustomerPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={createCustomer} />
 				<div className={'content-footer'}>
 					<Row justify='center'>

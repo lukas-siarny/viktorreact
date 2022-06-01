@@ -4,8 +4,6 @@ import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { InputField } from 'antd-form-fields'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
@@ -13,7 +11,7 @@ import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
-// import InputField from '../../../atoms/InputField'
+import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
 // components

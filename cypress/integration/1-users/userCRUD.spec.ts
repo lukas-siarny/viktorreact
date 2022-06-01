@@ -31,7 +31,7 @@ context('User', () => {
 			url: '/api/b2b/admin/users'
 		}).as('createPartner')
 		cy.visit('/users/create')
-		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', `${generateRandomString(5)}${user.email}`)
+		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', `${generateRandomString(5)}${user.emailSuffix}`)
 		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'phone', user.phone)
 		cy.selectOptionDropdown(FORM.ADMIN_CREATE_USER, 'roleID', 'Partner')
 		cy.get('form').submit()

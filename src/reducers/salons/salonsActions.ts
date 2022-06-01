@@ -45,7 +45,7 @@ export const getSalons =
 		order?: string | undefined,
 		search?: string | undefined | null,
 		categoryFirstLevelIDs?: (string | null)[] | null | undefined,
-		statuses?: (string | null)[] | SALON_STATUSES[]
+		statuses?: (string | null)[] | SALON_STATUSES[] | null
 	): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload

@@ -10,7 +10,6 @@
 @import "modal"
 @import "select"
 @import "layout"
-@import "carousel"
 @import "collapse"
 @import "form"
 @import "button"
@@ -24,13 +23,18 @@
 
 $searchProductTop: 166px
 
-*
-	font-family: $font-family
+*, input, textarea, button
+	font-family: '#{$font-family}', #{$font-family-sans-serif} !important
 	font-feature-settings: normal!important
 	font-variant: normal!important
 
 html
 	scroll-behavior: smooth
+
+html, body
+	height: 100%
+	width: 100%
+	margin: 0
 
 body, .ant-layout
 	color: $textColor-black
@@ -876,142 +880,6 @@ td.ant-table-cell.track
 				span // option label
 					color: $textColor-gray-900
 
-.products-destinations-filter, .product-dates-filter, .products-transport-filter, .product-rooms-filter
-	border-width: 2px
-	border-color: white
-	border-style: solid
-	border-bottom-left-radius: 4px
-	border-top-left-radius: 4px
-	&:not(.product-rooms-filter)
-		border-right: 1px solid $borderColor-gray-200
-	label
-		display: block
-		font-weight: 700
-		color: $textColor-gray-900
-		font-size: 12px
-		padding-top: 12px
-		padding-left: 12px
-		padding-bottom: 0
-		position: relative
-	.ant-form-item
-		position: relative
-		margin-bottom: 0
-	.ant-form-item:after
-		content: ''
-		position: absolute
-		left: 8px
-		bottom: 0
-		width: calc(100% - 8px)
-		height: 30px
-		background: rgb(255,255,255)
-		background: linear-gradient(0deg, white 0%, rgba(255,255,255,0) 100%)
-		pointer-events: none
-	input
-		color: $textColor-gray-900
-		&::placeholder
-			color: $textColor-gray-600
-	// Select
-	.ant-tag
-		color: $textColor-gray-900
-	.ant-form-item-control
-		height: 49px
-		overflow: auto
-	.ant-form-item-control-input
-		align-items: baseline
-	.ant-select-selector
-		padding-left: 22px
-	.ant-select-selection-placeholder
-		color: $textColor-gray-600
-		padding-left: 12px
-	.ant-select-selection-search
-		margin-inline-start: 2px
-		-webkit-margin-inline-start: 2px
-		z-index: 1
-	// Date range
-	.ant-picker-range
-		padding-left: 23px
-		padding-right: 38px
-		.ant-picker-input
-			padding: 2px
-		.ant-picker-input:hover
-			background: $backgroundColor-gray-100
-			border-radius: 4px
-		&.ant-picker-focused
-			.ant-picker-input.ant-picker-input-active
-				background: $backgroundColor-blue-600
-				border-radius: 4px
-				input
-					color: $textColor-white
-				input::placeholder
-					color: $textColor-white
-	.ant-picker-range
-		width: 100%
-		border: none
-		box-shadow: none
-		.ant-picker-active-bar
-			display: none
-.products-filter-date-range-dropdown
-	top: $searchProductTop !important
-	padding: 0
-	.ant-picker-range-arrow
-		display: none
-.products-filter-rooms-dropdown, .destination-transport-filter, .destination-product-filter
-	z-index: $z-index-field-dropdown
-	top: $searchProductTop !important
-	.ant-picker-panel-container
-		border-radius: 0 0 4px 4px
-	.ant-picker-range-arrow
-		display: none
-	.counter-divider
-		position: relative
-		min-width: 284px
-		width: 1000%
-		&:not(:last-child)
-			margin-right: 48px
-		&:not(:last-child):after
-			content: ''
-			position: absolute
-			top: 0
-			right: -24px
-			width: 1px
-			height: 90%
-			background-color: $borderColor-gray-200
-	.ant-dropdown-menu
-		padding-bottom: 0
-		border-radius: 0 0 4px 4px
-		.ant-dropdown-menu-item
-			background: none
-			cursor: unset
-.products-filter-rooms-dropdown
-	min-width: 370px !important
-	.ant-dropdown-menu-title-content
-		width: 100%
-
-// active filter state
-.products-destinations-filter.active,
-.product-dates-filter.active,
-.product-rooms-filter.active,
-.products-transport-filter.active
-	height: 100%
-	border-width: 2px
-	border-color: $textColor-blue-600
-	label
-		color: $textColor-blue-600
-	.ant-picker-focused
-		.ant-picker-range-separator
-			color: $textColor-blue-600
-
-.product-dates-filter.active,
-.products-transport-filter.active,
-.product-rooms-filter.active,
-.products-transport-filter.active
-	border-bottom-left-radius: unset
-	border-top-left-radius: unset
-
-.product-rooms-filter.active
-	border-bottom-right-radius: 4px
-	border-top-right-radius: 4px
-
 .advanced-filters-list
 	.ant-collapse-item
 		.ant-collapse-header
@@ -1045,3 +913,11 @@ a
 
 .ant-spin-dot-item
 	background-color: $backgroundColor-notino-black
+
+.noti-my-account
+	max-width: calc(100% - 24px)
+	.item-label
+		max-width: 77%
+
+.phone-prefix
+	width: 110px

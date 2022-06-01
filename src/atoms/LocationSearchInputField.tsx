@@ -68,7 +68,7 @@ class LocationSearchInputField extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { placeholder, label, required, type, style, className, error } = this.props
+		const { placeholder, label, required, type, style, className, error, disabled } = this.props
 		const { onSearchBoxMounted, onPlacesChanged, place } = this.state
 
 		return (
@@ -82,7 +82,7 @@ class LocationSearchInputField extends React.Component<Props, State> {
 						value={place.placeName}
 						onChange={this.onChange}
 						prefix={<SearchIcon />}
-						id={'address-search'}
+						disabled={disabled}
 					/>
 				</StandaloneSearchBox>
 			</Item>

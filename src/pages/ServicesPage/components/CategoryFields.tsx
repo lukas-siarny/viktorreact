@@ -45,7 +45,7 @@ const CategoryFields = () => {
 				label={t('loc:Kategória')}
 				component={SelectField}
 				allowClear
-				placeholder={t('loc:Kategória')}
+				placeholder={t('loc:Vyberte kategóriu')}
 				name='categoryRoot'
 				options={categoryRootOptions}
 				onChange={() => {

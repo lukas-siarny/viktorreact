@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -31,8 +31,9 @@
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
     "translations-csv-to-json": "npx convert-csv-to-json GoodRequest/i18nextJsonToCsv",
     "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
-    "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "storybook": "npm run build:tailwind && start-storybook -p 6006 -s public",
+    "build-storybook": "build-storybook -s public",
+    "preinstall": "npx npm-force-resolutions"
   },
   "dependencies": {
     "@sentry/cli": "1.71.0",
@@ -96,8 +97,8 @@
     "regenerator-runtime": "0.13.9",
     "sass": "1.50.1",
     "slugify": "1.6.5",
-    "tailwindcss": "3.0.24",
-    "tailwindcss-export-config": "4.0.1",
+    "tailwindcss": "2.2.19",
+    "tailwindcss-export-config": "2.3.0",
     "use-query-params": "1.2.3"
   },
   "devDependencies": {
@@ -140,7 +141,8 @@
     "obj-flatten": "2.0.6",
     "postcss-loader": "3.0.0",
     "prettier": "2.6.2",
-    "react-error-overlay": "6.0.11",
+    "react-error-overlay": "6.0.9",
+    "selenium-webdriver": "4.1.1",
     "storybook-addon-customize-antd-theme": "1.1.0",
     "storybook-addon-designs": "6.2.1",
     "typescript": "4.4.4"
@@ -158,8 +160,7 @@
     ]
   },
   "resolutions": {
-    "//": "See https://github.com/facebook/create-react-app/issues/11773",
-    "react-error-overlay": "6.0.10"
+    "react-error-overlay": "6.0.9"
   },
   "eslintConfig": {
     "overrides": [

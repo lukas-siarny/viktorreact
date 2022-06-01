@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { initialize, submit } from 'redux-form'
+import { initialize, submit, isPristine } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { map } from 'lodash'
+import { map, get } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -27,7 +27,7 @@ const CreateCustomerPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
-
+	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	// View
@@ -56,23 +56,25 @@ const CreateCustomerPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const createCustomer = async (data: ICustomerForm) => {
+	const createCustomer = async (formInput: ICustomerForm) => {
 		try {
 			setSubmitting(true)
-			await postReq('/api/b2b/admin/customers/', null, {
-				email: data.email,
-				city: data.city,
-				countryCode: data.countryCode,
-				firstName: data.firstName,
-				gender: data.gender,
-				lastName: data.lastName,
-				salonID: data.salonID,
-				street: data.street,
-				zipCode: data.zipCode,
-				phone: data.phone,
-				phonePrefixCountryCode: data.phonePrefixCountryCode
+			const { data } = await postReq('/api/b2b/admin/customers/', null, {
+				email: formInput.email,
+				city: formInput.city,
+				countryCode: formInput.countryCode,
+				firstName: formInput.firstName,
+				gender: formInput.gender,
+				lastName: formInput.lastName,
+				salonID: formInput.salonID,
+				street: formInput.street,
+				zipCode: formInput.zipCode,
+				phone: formInput.phone,
+				phonePrefixCountryCode: formInput.phonePrefixCountryCode
 			})
-			history.push(t('paths:customers'))
+
+			const customerID = get(data, 'cusomer.id', 0)
+			history.push(customerID > 0 ? t('paths:customers/{{customerID}}', { customerID }) : t('paths:customers'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -86,7 +88,7 @@ const CreateCustomerPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={createCustomer} />
 				<div className={'content-footer'}>
 					<Row justify='center'>
@@ -99,7 +101,7 @@ const CreateCustomerPage = () => {
 							onClick={() => {
 								dispatch(submit(FORM.CUSTOMER))
 							}}
-							disabled={submitting}
+							disabled={submitting || isFormPristine}
 							loading={submitting}
 						>
 							{t('loc:Uložiť')}

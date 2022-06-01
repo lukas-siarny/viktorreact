@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 // authorized pages
-import EntryPage from '../pages/EntryPage/EntryPage'
 import HomePage from '../pages/HomePage/HomePage'
 
 // routes middlewares
@@ -29,9 +28,9 @@ import LoginPage from '../pages/LoginPage/LoginPage'
 import CreatePasswordPage from '../pages/CreatePasswordPage/CreatePasswordPage'
 import RegistrationPage from '../pages/RegistrationPage/RegistrationPage'
 import ActivationPage from '../pages/ActivationPage/ActivationPage'
-import UserAccountPage from '../pages/AdminUsersPage/UserAccountPage'
-import CreateUserAccountPage from '../pages/AdminUsersPage/CreateUserAccountPage'
-import AdminUsersPage from '../pages/AdminUsersPage/AdminUsersPage'
+import UserPage from '../pages/UsersPage/UserPage'
+import CreateUserPage from '../pages/UsersPage/CreateUserPage'
+import UsersPage from '../pages/UsersPage/UsersPage'
 
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
@@ -88,7 +87,7 @@ const Routes: FC = (props) => {
 						{...props}
 						exact
 						path={t('paths:users/create')}
-						component={CreateUserAccountPage}
+						component={CreateUserPage}
 						translatePathKey={t('paths:users/create')}
 						layout={MainLayout}
 						page={PAGE.USERS}
@@ -98,22 +97,21 @@ const Routes: FC = (props) => {
 						exact
 						path={t('paths:users/{{userID}}', { userID: ':userID' })}
 						translatePathKey={t('paths:users/{{userID}}', { userID: ':userID' })}
-						component={UserAccountPage}
+						component={UserPage}
 						layout={MainLayout}
 						page={PAGE.USERS}
 					/>
-					<AuthRoute {...props} exact path={t('paths:users')} component={AdminUsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
+					<AuthRoute {...props} exact path={t('paths:users')} component={UsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
 					<AuthRoute
 						{...props}
 						exact
 						path={t('paths:my-account')}
 						translatePathKey={t('paths:my-account')}
-						component={UserAccountPage}
+						component={UserPage}
 						layout={MainLayout}
 						page={PAGE.MY_ACCOUNT}
 					/>
-					<AuthRoute {...props} exact path={t('paths:index')} component={EntryPage} translatePathKey={t('paths:index')} layout={MainLayout} />
-					<AuthRoute {...props} exact path={t('paths:home')} component={HomePage} translatePathKey={t('paths:home')} layout={MainLayout} page={PAGE.HOME} />
+					<AuthRoute {...props} exact path={t('paths:index')} component={HomePage} translatePathKey={t('paths:index')} layout={MainLayout} page={PAGE.HOME} />
 					<AuthRoute
 						{...props}
 						exact

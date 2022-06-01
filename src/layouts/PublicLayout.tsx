@@ -1,95 +1,79 @@
-import React, { ReactNode, useRef, useCallback, useLayoutEffect, useState } from 'react'
-import { Carousel } from 'antd'
-import { CarouselRef } from 'antd/lib/carousel'
-
-import { ReactComponent as Logo } from '../assets/images/logo.svg'
-import { ReactComponent as Chevron } from '../assets/icons/chevron-right.svg'
+import React, { ReactNode, useMemo } from 'react'
 
 // utils
-import { MIN_SUPPORTED_RESOLUTION } from '../utils/enums'
+import { RESOLUTIONS } from '../utils/enums'
 
 // components
 import LanguagePicker from '../components/LanguagePicker'
+
+// hooks
+import useMedia from '../hooks/useMedia'
+
+// assets
+import { ReactComponent as MdLogo } from '../assets/images/md-device-logo.svg'
+import { ReactComponent as SmLogo } from '../assets/images/sm-device-logo.svg'
+import FullLogo from '../assets/images/public-logo-full.png'
+import ThinLogo from '../assets/images/public-logo-thin.png'
 
 interface Props {
 	children: ReactNode
 }
 
-const mock = [
-	{
-		src: 'https://cdn.notinoimg.com/images/gallery/act/1/notino_gift_w08_20220218_14.jpg',
-		title: 'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae.',
-		description: '15 % zľava na značku Notino a hodnotná sada štetcov k nákupu produktov Notino Beauty Electro Collection ZADARMO.'
-	},
-	{
-		src: 'https://cdn.notinoimg.com/images/gallery/act/1/tommy_hilfiger_gift_w08_20220216_30.jpg',
-		title: 'Vestibulum ac diam sit amet quam vehicula elementum sed sit amet dui.',
-		description: 'Nakúpte produkty značky Tommy Hilfiger nad 30 € a spríjemníme vám deň výberom jednej z 2 kozmetických taštičiek ZADARMO.'
-	},
-	{
-		src: 'https://cdn.notinoimg.com/images/gallery/act/1/comme_des_gorcons_gift_w03_20220113_15.jpg',
-		title: 'Curabitur aliquet quam id dui posuere blandit. Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a.',
-		description: 'K nákupu parfémov značky Comme Des Garçons si v košíku vyberiete mini vôňu. A naviac vám objednávku doručíme bez poštovného.'
-	}
-]
-
 const PublicLayout = (props: Props) => {
-	const carouselRef = useRef(null)
-	const [isMobile, setIsMobile] = useState(false)
+	// breakpoints are defined in tailwind config
+	const size = useMedia(['(max-width: 744px)', '(max-width: 1280px)'], [RESOLUTIONS.SM, RESOLUTIONS.MD], RESOLUTIONS.XL)
 
-	useLayoutEffect(() => {
-		const detectMobile = () => setIsMobile(window.innerWidth < MIN_SUPPORTED_RESOLUTION)
+	const content = useMemo(() => {
+		switch (size) {
+			case RESOLUTIONS.SM:
+				return (
+					<div className='public-layout grid place-items-center h-screen w-screen bg-notino-grayLighter'>
+						<div className='bg-notino-grayLighter flex flex-col items-center overflow-hidden'>
+							<SmLogo className='mb-6' />
 
-		window.addEventListener('resize', detectMobile)
-		detectMobile()
+							<div className='flex-auto relative'>
+								{props.children}
+								<LanguagePicker className='bottom-0 right-0 absolute mb-0' />
+							</div>
+						</div>
+					</div>
+				)
 
-		return () => window.removeEventListener('resize', detectMobile)
-	}, [])
+			case RESOLUTIONS.MD:
+				return (
+					<div className='public-layout grid place-items-center h-screen w-screen'>
+						<div className='layout-content flex'>
+							<div className='block' style={{ width: '248px' }}>
+								<img src={ThinLogo} alt='propagation logo' className='block' />
+							</div>
+							<div className='bg-notino-grayLighter flex flex-col items-center relative w-full'>
+								<MdLogo className='mt-8 mb-6' />
+								<LanguagePicker className='bottom-5 right-5 absolute mb-0' />
+								{props.children}
+							</div>
+						</div>
+					</div>
+				)
 
-	const handleNext = useCallback(() => {
-		const ref = carouselRef?.current
-		if (ref) {
-			;(ref as CarouselRef).next()
+			default:
+				return (
+					<div className='public-layout grid place-items-center h-screen w-screen'>
+						<div className='layout-content grid grid-cols-2 gap-0'>
+							<div className='block'>
+								<img src={FullLogo} alt='propagation logo' className='block' />
+							</div>
+							<div className='bg-notino-grayLighter flex flex-col items-center relative'>
+								<MdLogo className='mt-8 mb-6' />
+								<LanguagePicker className='bottom-5 right-5 absolute mb-0' />
+								{props.children}
+							</div>
+						</div>
+					</div>
+				)
 		}
-	}, [carouselRef])
+	}, [size, props.children])
 
-	return (
-		<>
-			{isMobile ? (
-				<div className='simple-layout grid place-items-center h-screen w-screen bg-notino-grayLighter relative'>
-					<div className='bg-notino-grayLighter sm:pt-4 flex flex-col items-center overflow-hidden'>
-						<Logo />
-						<LanguagePicker className='top-16 sm:top-12 right-2 absolute' />
-						<div className='flex-auto'>{props.children}</div>
-					</div>
-				</div>
-			) : (
-				<div className='simple-layout grid place-items-center h-screen w-screen'>
-					<div className='layout-content grid md:grid-cols-2 grid-cols-1 gap-0'>
-						<div className='bg-white px-45px py-4 relative block'>
-							<Carousel ref={carouselRef}>
-								{mock.map((item, index) => (
-									<div key={index} className='carousel-content rounded-3xl flex flex-col justify-between'>
-										<img src={item.src} alt={item.title} className='rounded-3xl' />
-										<div>
-											<h4 className='mt-11'>{item.title}</h4>
-											<div className='mt-3 mb-12 base-regular'>{item.description}</div>
-										</div>
-									</div>
-								))}
-							</Carousel>
-							<Chevron onClick={handleNext} className='absolute bottom-45px right-45px cursor-pointer' />
-						</div>
-						<div className='bg-notino-grayLighter py-4 flex flex-col items-center relative'>
-							<Logo />
-							<LanguagePicker className='top-4 right-2 absolute' />
-							<div className='flex-auto'>{props.children}</div>
-						</div>
-					</div>
-				</div>
-			)}
-		</>
-	)
+	return <>{content}</>
 }
 
 export default PublicLayout

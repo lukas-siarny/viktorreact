@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { initialize, submit } from 'redux-form'
+import { initialize, submit, isPristine } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
+import { map } from 'lodash'
 
 // components
-import { map } from 'lodash'
 import CreateUserAccountForm from './components/CreateUserAccountForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
@@ -24,10 +24,11 @@ import { getRoles } from '../../reducers/roles/rolesActions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { RootState } from '../../reducers'
 
-const CreateUserAccountPage = () => {
+const CreateUserPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
+	const isFormPristine = useSelector(isPristine(FORM.ADMIN_CREATE_USER))
 	const [submitting, setSubmitting] = useState<boolean>(false)
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -56,16 +57,19 @@ const CreateUserAccountPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [phonePrefixes])
 
-	const createUser = async (data: any) => {
+	const createUser = async (input: any) => {
 		try {
 			setSubmitting(true)
-			await postReq('/api/b2b/admin/users' as any, null, {
-				email: data?.email,
-				phone: data?.phone,
-				phonePrefixCountryCode: data?.phonePrefixCountryCode,
-				roleID: data?.roleID
+
+			const { data } = await postReq('/api/b2b/admin/users/', null, {
+				email: input?.email,
+				phone: input?.phone,
+				phonePrefixCountryCode: input?.phonePrefixCountryCode,
+				roleID: input?.roleID
 			})
-			history.push(t('paths:users'))
+
+			const userID = data.user.id
+			history.push(userID > 0 ? t('paths:users/{{userID}}', { userID }) : t('paths:users'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -79,7 +83,7 @@ const CreateUserAccountPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<CreateUserAccountForm onSubmit={createUser} />
 				<div className={'content-footer'}>
 					<Row justify='center'>
@@ -92,7 +96,7 @@ const CreateUserAccountPage = () => {
 							onClick={() => {
 								dispatch(submit(FORM.ADMIN_CREATE_USER))
 							}}
-							disabled={submitting}
+							disabled={submitting || isFormPristine}
 							loading={submitting}
 						>
 							{t('loc:Uložiť')}
@@ -104,4 +108,4 @@ const CreateUserAccountPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE]))(CreateUserAccountPage)
+export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE]))(CreateUserPage)

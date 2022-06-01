@@ -1,9 +1,9 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState, useMemo } from 'react'
 import { WrappedFieldProps } from 'redux-form'
 
 import { get, trimStart } from 'lodash'
 
-import { Form, Input } from 'antd'
+import { Form, Input, Row } from 'antd'
 import { TextAreaProps } from 'antd/lib/input'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { TextAreaRef } from 'antd/lib/input/TextArea'
@@ -13,6 +13,7 @@ type Props = WrappedFieldProps &
 	TextAreaProps &
 	FormItemLabelProps & {
 		focusRow?: number
+		showLettersCount?: boolean
 	}
 
 const TextareaField = (props: Props) => {
@@ -32,7 +33,8 @@ const TextareaField = (props: Props) => {
 		focusRow,
 		readOnly,
 		className,
-		size
+		size,
+		showLettersCount
 	} = props
 
 	const [autoSizeState, setSutoSizeState] = useState(undefined as { minRows?: number; maxRows?: number } | undefined)
@@ -78,9 +80,18 @@ const TextareaField = (props: Props) => {
 		[focusRow, input, setSutoSizeState]
 	)
 
+	const lettersCount = useMemo(() => {
+		return (
+			<Row className={'justify-between w-full pr-2'}>
+				<span>{label}</span>
+				<i className='xs-regular letters-count' style={{ lineHeight: '22px' }}>{`${input.value.length}/${maxLength}`}</i>
+			</Row>
+		)
+	}, [maxLength, input, label])
+
 	return (
 		<Form.Item
-			label={label}
+			label={showLettersCount ? lettersCount : label}
 			required={required}
 			style={style}
 			help={touched && error}

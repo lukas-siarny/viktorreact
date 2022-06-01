@@ -10,102 +10,59 @@
 	color: $textColor-notino-black
 
 .ant-form-item
-	margin-bottom: 1.5rem
+	margin-bottom: 1rem
 
 @media (max-width: $min-supported-resoulution)
 	.ant-form-item
 		margin-bottom: 1rem
 
 .registration-form
-	.noti-switch
-		padding: 0
+	.noti-registration-switch.ant-form-item-has-error
+		.noti-switch
+			background-color: #D2141433
 	.ant-form-item.noti-registration-switch:not(.marketing-field)
 		margin-bottom: $gap-1
 
 // Label
 .ant-form-item-label,
 .ant-form-vertical .ant-form-item-label // this is for higher specificity so it can override the original style
-	padding-bottom: 4px
+	margin-bottom: 4px
+	height: 14px
+	line-height: 100%
+
 	label
 		color: $textColor-notino-black
+		width: 100%
 
-.noti-input-label
+label.ant-form-item-required::before
+	color: $textColor-notino-redLight !important
+
+.ant-form-item-label, .noti-input-label
 	&.required:before
 		display: inline-block
 		margin-right: 4px
-		color: $textColor-red-500
+		color: $textColor-notino-redLight
 		font-size: 14px
 		font-family: SimSun, sans-serif
 		line-height: 1
 		content: '* '
 		vertical-align: text-top
 
-// Error form item
-.ant-form-item-control
-	.ant-form-item-explain.ant-form-item-explain-error
-		padding-top: 0
-		min-height: 1rem
-		margin-top: 0.25rem
-		@extend .s-regular
-
-// Forms
-// .form
-// 	width: calc(420px + 10%)
-// 	min-height: 100px
-// 	border-radius: 2px
-// 	background: $textColor-white
-
-// .login-form,
-// .create-password-form,
-// .forgot-password-form,
-// .create-user-form,
-// .confirm-user-form,
-// .update-user-form
-// 	width: 518px
-// 	padding: 25px
-// 	min-height: 100px
-// 	border-radius: 4px
-// 	background: $backgroundColor-gray-50
-
-// // Label
-// .ant-form-item-label
-// 	padding-bottom: 0 !important
-// .ant-form-item
-// 	margin-bottom: 6px
-
-// .ant-form-item-label label,
-// .noti-input-label
-// 	margin-left: 3px
-// 	color: $textColor-gray-900
-// 	font-weight: 600
-// 	padding: 2px
-// 	&.required:before
-// 		display: inline-block
-// 		margin-right: 4px
-// 		color: #ff4d4f // ant required color
-// 		font-size: 14px
-// 		font-family: SimSun, sans-serif
-// 		line-height: 1
-// 		content: '* '
-// 		vertical-align: text-top
-
-// .form-floating-item
-// 	height: 40px
-// 	width: calc(100% + 48px)
-// 	margin: -24px
-// 	padding: 12px 24px
-// 	background-color: $backgroundColor-gray-200
-// // Error form item
-// .ant-form-item-control
-// 	.ant-form-item-explain.ant-form-item-explain-error
-// 		padding-top: 0
-// 		min-height: 16px
-
-// .language-content-2
-// 	position: absolute
-// 	right: 4px
-// 	top: 4px
-// 	display: flex
-// 	align-items: center
-// 	justify-content: end
-// 	cursor: pointer
+.ant-form-item.ant-form-item-has-error
+	// wrapper
+	.ant-form-item-control
+		// inputs
+		[class*="ant-input"][class*="noti-input"]
+			border: 1px solid $borderColor-notino-red
+			&:hover
+				border: 1px solid $borderColor-red-600
+			&:focus
+				border: 1px solid $borderColor-red-600
+				box-shadow: $field-shadow-focus-error
+		// error message
+		.ant-form-item-explain
+			min-height: auto
+			height: 12px
+			line-height: 100%
+			margin-top: 0.25rem
+			font-size: 12px

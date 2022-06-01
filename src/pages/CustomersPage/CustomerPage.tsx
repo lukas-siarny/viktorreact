@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { get } from 'lodash'
 import { compose } from 'redux'
-import { initialize, submit } from 'redux-form'
+import { initialize, submit, isPristine } from 'redux-form'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -19,11 +19,10 @@ import { getCustomer } from '../../reducers/customers/customerActions'
 import { RootState } from '../../reducers'
 
 // utils
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import Permissions, { withPermissions } from '../../utils/Permissions'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import showNotifications from '../../utils/tsxHelpers'
 
 type Props = {
 	computedMatch: IComputedMatch<{ customerID: number }>
@@ -35,12 +34,7 @@ const CustomerPage = (props: Props) => {
 	const { customerID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
-
-	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const authUserPermissions = authUser?.data?.uniqPermissions || []
-
-	const editPermissions: boolean = checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER])
-
+	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const customer = useSelector((state: RootState) => state.customers.customer)
 
 	useEffect(() => {
@@ -127,42 +121,42 @@ const CustomerPage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={updateCustomer} />
 				<div className={'content-footer'}>
 					<Row className={'justify-between'}>
 						<DeleteButton
-							id={`${FORM.CUSTOMER}-delete-btn`}
+							permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
 							className={'w-1/3'}
-							onConfirm={() => {
-								if (editPermissions) {
-									deleteCustomer()
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
+							onConfirm={deleteCustomer}
 							entityName={t('loc:zákazníka')}
 							type={'default'}
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
-						<Button
-							type={'primary'}
-							block
-							size={'middle'}
-							className={'noti-btn m-regular mb-2 w-1/3'}
-							htmlType={'submit'}
-							onClick={() => {
-								if (editPermissions) {
-									dispatch(submit(FORM.CUSTOMER))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							disabled={submitting}
-							loading={submitting}
-						>
-							{t('loc:Uložiť')}
-						</Button>
+						<Permissions
+							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									type={'primary'}
+									block
+									size={'middle'}
+									className={'noti-btn m-regular mb-2 w-1/3'}
+									htmlType={'submit'}
+									onClick={(e) => {
+										if (hasPermission) {
+											dispatch(submit(FORM.CUSTOMER))
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+									disabled={submitting || isFormPristine}
+									loading={submitting}
+								>
+									{t('loc:Uložiť')}
+								</Button>
+							)}
+						/>
 					</Row>
 				</div>
 			</div>

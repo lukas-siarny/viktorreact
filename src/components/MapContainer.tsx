@@ -8,10 +8,11 @@ type Props = GoogleMapProps & {
 	long: number
 	onLocationChange: (e: any) => void
 	zoomChanged?: (newZoom: number) => void
+	disabled?: boolean
 }
 
 const MapContainer = (props: Props) => {
-	const { onLocationChange, lat, long, zoom = MAP.defaultZoom, zoomChanged } = props
+	const { onLocationChange, lat, long, zoom = MAP.defaultZoom, zoomChanged, disabled } = props
 
 	const mapRef: any = useRef()
 
@@ -47,7 +48,7 @@ const MapContainer = (props: Props) => {
 				minZoom: MAP.minZoom
 			}}
 		>
-			<Marker position={position} draggable={true} onDragEnd={onChange} onRightClick={onChange} />
+			<Marker position={position} draggable={!disabled} onDragEnd={onChange} onRightClick={onChange} />
 		</GoogleMap>
 	)
 }

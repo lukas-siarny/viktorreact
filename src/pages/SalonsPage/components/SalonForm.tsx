@@ -16,9 +16,12 @@ import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
 import SelectField from '../../../atoms/SelectField'
+import ImgUploadField from '../../../atoms/ImgUploadField'
 
-// enums
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+// utils
+import { showErrorNotification } from '../../../utils/helper'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import Permissions from '../../../utils/Permissions'
 
 // types
 import { IUserAccountForm } from '../../../types/interfaces'
@@ -28,7 +31,7 @@ import validateSalonForm from './validateSalonForm'
 
 // reducers
 import { RootState } from '../../../reducers'
-import ImgUploadField from '../../../atoms/ImgUploadField'
+import { getUsers } from '../../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-icon.svg'
@@ -38,7 +41,6 @@ import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
-import { getUsers } from '../../../reducers/users/userActions'
 
 type ComponentProps = {
 	openNoteModal: Function
@@ -46,6 +48,7 @@ type ComponentProps = {
 	changeSalonVisibility: (visible: boolean) => void
 	publishSalon: (published: boolean) => void
 	switchDisabled: boolean
+	disabledForm: boolean
 	salonID?: number
 }
 
@@ -62,7 +65,7 @@ const validateUsersSelect = (value: string, formValues: any, props: any) => {
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, change, openNoteModal, isAdmin, changeSalonVisibility, publishSalon, switchDisabled, salonID } = props
+	const { handleSubmit, change, openNoteModal, isAdmin, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const onSearchUsers = useCallback(
@@ -85,35 +88,70 @@ const UserAccountForm: FC<Props> = (props) => {
 								{t('loc:Základné údaje')}
 							</h3>
 							{salonID ? (
-								<div className={'flex justify-between w-1/2'}>
-									<Field
-										className={'mt-2 mb-2 w-12/25'}
-										component={SwitchField}
-										label={t('loc:Viditeľný')}
-										name={'isVisible'}
-										size={'middle'}
-										required
-										customOnChange={changeSalonVisibility}
-										disabled={switchDisabled}
-									/>
-									<Field
-										className={'mt-2 mb-2 w-12/25'}
-										component={SwitchField}
-										label={t('loc:Publikovaný')}
-										name={'isPublished'}
-										size={'middle'}
-										required
-										customOnChange={publishSalon}
-										disabled={switchDisabled}
-									/>
-								</div>
+								<Permissions
+									allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<div className={'flex justify-between w-1/2'}>
+											<Field
+												className={'mt-2 mb-2 w-12/25'}
+												component={SwitchField}
+												label={t('loc:Viditeľný')}
+												name={'isVisible'}
+												size={'middle'}
+												required
+												customOnChange={(value: boolean) => {
+													if (!hasPermission) {
+														openForbiddenModal()
+													} else {
+														changeSalonVisibility(value)
+													}
+												}}
+												disabled={switchDisabled || disabledForm}
+											/>
+											<Field
+												className={'mt-2 mb-2 w-12/25'}
+												component={SwitchField}
+												label={t('loc:Publikovaný')}
+												name={'isPublished'}
+												size={'middle'}
+												required
+												customOnChange={(value: boolean) => {
+													if (!hasPermission) {
+														openForbiddenModal()
+													} else {
+														publishSalon(value)
+													}
+												}}
+												disabled={switchDisabled || disabledForm}
+											/>
+										</div>
+									)}
+								/>
 							) : null}
 						</div>
 						<Divider className={'mb-3 mt-3'} />
 
-						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
-						<Field component={TextareaField} label={t('loc:O nás')} name={'aboutUsFirst'} size={'large'} />
-						<Field component={TextareaField} label={t('loc:Doplňujúci popis')} name={'aboutUsSecond'} size={'large'} />
+						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
+						<Field
+							component={TextareaField}
+							label={t('loc:O nás')}
+							name={'aboutUsFirst'}
+							size={'large'}
+							placeholder={t('loc:Zadajte základné informácie o salóne')}
+							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+							showLettersCount
+						/>
+						<Field
+							component={TextareaField}
+							label={t('loc:Doplňujúci popis')}
+							name={'aboutUsSecond'}
+							size={'large'}
+							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
+							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
+							showLettersCount
+						/>
 						<Field
 							className={'m-0'}
 							component={ImgUploadField}
@@ -123,6 +161,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							multiple={false}
 							maxCount={1}
 							category={UPLOAD_IMG_CATEGORIES.SALON}
+							disabled={disabledForm}
 						/>
 						<Field
 							className={'m-0'}
@@ -134,6 +173,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							required
 							maxCount={10}
 							category={UPLOAD_IMG_CATEGORIES.SALON}
+							disabled={disabledForm}
 						/>
 					</Col>
 				</Row>
@@ -150,9 +190,19 @@ const UserAccountForm: FC<Props> = (props) => {
 							size={'large'}
 							prefixName={'phonePrefixCountryCode'}
 							phoneName={'phone'}
+							disabled={disabledForm}
 							required
 						/>
-						<Field className={'w-full'} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
+						<Field
+							className={'w-full'}
+							component={InputField}
+							label={t('loc:Email')}
+							placeholder={t('loc:Zadajte email')}
+							name={'email'}
+							size={'large'}
+							disabled={disabledForm}
+							required
+						/>
 						<Field
 							component={AddressFields}
 							inputValues={{
@@ -164,6 +214,7 @@ const UserAccountForm: FC<Props> = (props) => {
 								country: get(formValues, 'country')
 							}}
 							changeFormFieldValue={change}
+							disabled={disabledForm}
 							name={'address'}
 						/>
 					</Col>
@@ -174,11 +225,20 @@ const UserAccountForm: FC<Props> = (props) => {
 							<TimerIcon width={24} height={24} className={'text-notino-black mr-2'} /> {t('loc:Otváracie hodiny')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Field className={'mb-0'} component={SwitchField} label={t('loc:Pon - Pi rovnaké otváracie hodiny')} name={'sameOpenHoursOverWeek'} size={'middle'} />
-						<FieldArray component={OpeningHours} name={'openingHours'} />
-						<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4 mb-6 mt-3`} onClick={() => openNoteModal()}>
-							{t('loc:Pridať poznámku')}
-						</Button>
+						<Field
+							className={'mb-0'}
+							component={SwitchField}
+							label={t('loc:Pon - Pi rovnaké otváracie hodiny')}
+							name={'sameOpenHoursOverWeek'}
+							size={'middle'}
+							disabled={disabledForm}
+						/>
+						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
+						{salonID && (
+							<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4 mb-6 mt-3`} onClick={() => openNoteModal()} disabled={disabledForm}>
+								{t('loc:Pridať poznámku')}
+							</Button>
+						)}
 					</Col>
 				</Row>
 				<Row>
@@ -188,17 +248,48 @@ const UserAccountForm: FC<Props> = (props) => {
 							{t('loc:Možnosti platby')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Field component={InputField} label={t('loc:Iné spôsoby platby')} name={'otherPaymentMethods'} size={'large'} />
-						<Field className={'mb-6'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} required />
+						<Field
+							component={InputField}
+							label={t('loc:Iné spôsoby platby')}
+							name={'otherPaymentMethods'}
+							size={'large'}
+							placeholder={t('loc:Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...')}
+							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
+						/>
+						<Field className={'mb-6'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} disabled={disabledForm} required />
 					</Col>
 				</Row>
 				<Row>
 					<Col span={24}>
 						<h3 className={'mb-0'}>{t('loc:Sociálne siete')}</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Field component={InputField} label={t('loc:Facebook')} name={'socialLinkFB'} size={'large'} prefix={(<FacebookIcon />) as any} />
-						<Field component={InputField} label={t('loc:Instagram')} name={'socialLinkInstagram'} size={'large'} prefix={(<InstagramIcon />) as any} />
-						<Field component={InputField} label={t('loc:Webstránka')} name={'socialLinkWebPage'} size={'large'} />
+						<Field
+							component={InputField}
+							label={t('loc:Facebook')}
+							name={'socialLinkFB'}
+							size={'large'}
+							prefix={(<FacebookIcon />) as any}
+							placeholder={t('loc:Odkaz na Facebook')}
+							disabled={disabledForm}
+						/>
+						<Field
+							component={InputField}
+							label={t('loc:Instagram')}
+							name={'socialLinkInstagram'}
+							size={'large'}
+							prefix={(<InstagramIcon />) as any}
+							placeholder={t('loc:Odkaz na Instagram')}
+							disabled={disabledForm}
+						/>
+						<Field
+							component={InputField}
+							label={t('loc:Webstránka')}
+							name={'socialLinkWebPage'}
+							size={'large'}
+							placeholder={t('loc:Odkaz na webovú stránku salóna')}
+							disabled={disabledForm}
+						/>
 					</Col>
 				</Row>
 
@@ -224,6 +315,7 @@ const UserAccountForm: FC<Props> = (props) => {
 								labelInValue
 								showSearch
 								allowInfinityScroll
+								disabled={disabledForm}
 								required
 							/>
 						</Col>
@@ -239,6 +331,7 @@ const form = reduxForm<IUserAccountForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
+	onSubmitFail: showErrorNotification,
 	validate: validateSalonForm
 })(UserAccountForm)
 

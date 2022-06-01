@@ -42,7 +42,7 @@ const ServicePage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:services')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				{serviceID ? <ServiceEditPage serviceID={serviceID} /> : undefined}
 				{!serviceID ? <ServiceCreatePage /> : undefined}
 			</div>

@@ -1,18 +1,23 @@
 import React, { FC } from 'react'
-import { Field, InjectedFormProps, reduxForm, FieldArray } from 'redux-form'
+import { Field, InjectedFormProps, reduxForm, FieldArray, isDirty } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row } from 'antd'
+import { useSelector } from 'react-redux'
 
 // enums
-import { useSelector } from 'react-redux'
-import { FORM } from '../../../utils/enums'
+import { FORM, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+
+// assets
+import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 
 // atoms
 import InputField from '../../../atoms/InputField'
+import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // components
 import Localizations from '../../../components/Localizations'
 import DeleteButton from '../../../components/DeleteButton'
+import PopConfirmComponent from '../../../components/PopConfirmComponent'
 
 // validate
 import validateCategoryFrom from './validateCategoryFrom'
@@ -25,6 +30,8 @@ import { RootState } from '../../../reducers'
 
 type ComponentProps = {
 	deleteCategory: any
+	createCategory: any
+	closeCategoryForm: any
 }
 
 type NameLocalizationsItem = {
@@ -39,6 +46,7 @@ export interface ICategoryForm {
 	parentId: number
 	childrenLength: number
 	nameLocalizations: NameLocalizationsItem[]
+	image: any
 }
 
 const fixLength100 = validationString(100)
@@ -47,20 +55,74 @@ type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
 
 const CategoryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, deleteCategory } = props
+	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm, pristine } = props
 
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
+	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))
+
+	const renderFormTitle = () => {
+		if (values?.id) {
+			return t('loc:Upraviť kategóriu')
+		}
+		if (values?.parentTitle) {
+			return `${t('loc:Vytvoriť podkategóriu pre')} - ${values?.parentTitle}`
+		}
+		return t('loc:Vytvoriť kategóriu')
+	}
+
+	const documentFooter = document.getElementById('content-footer-container') || document.body
+
+	const renderCreatSubcategoryButton = () => {
+		if (isFormDirty) {
+			return (
+				<PopConfirmComponent
+					placement={'left'}
+					title={t('loc:Máte neuložené zmeny fo formulári. Želáte si pokračovať ďalej?')}
+					onConfirm={() => createCategory(values?.id, values?.name, values?.childrenLength, values?.level || 0 + 1)}
+					okText={t('loc:Pokračovať')}
+					getPopupContainer={() => documentFooter}
+					allowedButton={
+						<Button className={'noti-btn'} size='middle'>
+							{t('loc:Vytvoriť podkategóriu')}
+						</Button>
+					}
+				/>
+			)
+		}
+		return (
+			<Button className={'noti-btn'} size='middle' onClick={() => createCategory(values?.id, values?.name, values?.childrenLength, values?.level || 0 + 1)}>
+				{t('loc:Vytvoriť podkategóriu')}
+			</Button>
+		)
+	}
 
 	return (
 		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3'}>
-						{values?.id ? t('loc:Upraviť kategóriu') : `${t('loc:Vytvoriť kategóriu')}${values?.parentTitle ? ` - ${values?.parentTitle}` : ''}`}
+					<h3 className={'mb-0 mt-3 relative pr-7'}>
+						{renderFormTitle()}
+						{isFormDirty ? (
+							<PopConfirmComponent
+								placement={'left'}
+								title={t('loc:Máte neuložené zmeny fo formulári. Želáte si pokračovať ďalej?')}
+								onConfirm={closeCategoryForm}
+								okText={t('loc:Pokračovať')}
+								getPopupContainer={() => documentFooter}
+								allowedButton={
+									<Button className='absolute top-1 right-0 p-0 border-none shadow-none'>
+										<CloseIcon />
+									</Button>
+								}
+							/>
+						) : (
+							<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={closeCategoryForm}>
+								<CloseIcon />
+							</Button>
+						)}
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<FieldArray
-						className={'mb-6'}
 						key='nameLocalizations'
 						name='nameLocalizations'
 						component={Localizations}
@@ -81,17 +143,31 @@ const CategoryForm: FC<Props> = (props) => {
 							/>
 						}
 					/>
-					<div className={'flex justify-between'}>
-						<Button className={'noti-btn w-1/3'} block size='middle' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
-							{t('loc:Uložiť')}
-						</Button>
-						{values?.id ? (
+					{values?.level === 0 ? (
+						<Field className='m-0' component={ImgUploadField} name='image' label={t('loc:Obrázok')} maxCount={1} signUrl={URL_UPLOAD_IMAGES} category='SALON' />
+					) : undefined}
+					<div className={'flex justify-between flex-wrap gap-2'}>
+						{values?.id && !values?.deletedAt ? (
 							<DeleteButton
-								onConfirm={() => deleteCategory(values?.id)}
+								onConfirm={() => deleteCategory(values?.id, false)}
 								entityName={''}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 							/>
+						) : undefined}
+
+						{values?.id && values?.deletedAt && !values?.isParentDeleted ? (
+							<Button className={'noti-btn'} size='middle' onClick={() => deleteCategory(values?.id, true)}>
+								{t('loc:Obnoviť')}
+							</Button>
+						) : undefined}
+
+						{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
+
+						{!values?.deletedAt ? (
+							<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+								{t('loc:Uložiť')}
+							</Button>
 						) : undefined}
 					</div>
 				</Row>

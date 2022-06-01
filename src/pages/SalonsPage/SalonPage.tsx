@@ -2,9 +2,8 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { change, initialize, submit } from 'redux-form'
+import { change, initialize, submit, isPristine } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
-import cx from 'classnames'
 import { compose } from 'redux'
 
 // components
@@ -14,7 +13,7 @@ import SalonForm from './components/SalonForm'
 import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 
 // enums
-import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, MSG_TYPE, NOTIFICATION_TYPE, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -27,17 +26,14 @@ import { Paths } from '../../types/api'
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import showNotifications from '../../utils/tsxHelpers'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 
 type Props = {
 	computedMatch: IComputedMatch<{ salonID: number }>
 }
 
-const visibilityPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT]
-
-const editPermissions: PERMISSION[] = [...visibilityPermissions, PERMISSION.PARTNER]
+const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT, PERMISSION.PARTNER]
 // TODO - check how to get nested interface
 type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -188,16 +184,15 @@ const SalonPage: FC<Props> = (props) => {
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const authUserPermissions = authUser?.data?.uniqPermissions || []
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const [visible, setVisible] = useState<boolean>(false)
 
-	const showDeleteBtn: boolean = checkPermissions(authUserPermissions, editPermissions)
-
 	const salon = useSelector((state: RootState) => state.salons.salon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
+	const isFormPristine = useSelector(isPristine(FORM.SALON))
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
+	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -391,44 +386,36 @@ const SalonPage: FC<Props> = (props) => {
 	}
 
 	const publishSalon = async (published: boolean) => {
-		if (checkPermissions(authUserPermissions, editPermissions)) {
-			if (submitting) {
-				return
-			}
+		if (submitting) {
+			return
+		}
 
-			setSubmitting(true)
-			try {
-				await patchReq('/api/b2b/admin/salons/{salonID}/publish', { salonID }, { publish: published })
-				dispatch(getSalon(salonID))
-			} catch (error: any) {
-				// eslint-disable-next-line no-console
-				console.error(error.message)
-			} finally {
-				setSubmitting(false)
-			}
-		} else {
-			showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
+		setSubmitting(true)
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/publish', { salonID }, { publish: published })
+			dispatch(getSalon(salonID))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setSubmitting(false)
 		}
 	}
 
 	const changeVisibility = async (isVisible: boolean) => {
-		if (checkPermissions(authUserPermissions, visibilityPermissions)) {
-			if (submitting) {
-				return
-			}
+		if (submitting) {
+			return
+		}
 
-			setSubmitting(true)
-			try {
-				await patchReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
-				dispatch(getSalon(salonID))
-			} catch (error: any) {
-				// eslint-disable-next-line no-console
-				console.error(error.message)
-			} finally {
-				setSubmitting(false)
-			}
-		} else {
-			showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
+		setSubmitting(true)
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
+			dispatch(getSalon(salonID))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setSubmitting(false)
 		}
 	}
 
@@ -438,62 +425,75 @@ const SalonPage: FC<Props> = (props) => {
 		dispatch(getSalon(salonID))
 	}
 
-	const rowClass = cx({
-		'justify-between': showDeleteBtn,
-		'justify-center': !showDeleteBtn
-	})
+	const salonExists = salonID > 0
 
 	return (
 		<>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
 			</Row>
-			<div className='content-body small'>
-				<SalonForm
-					isAdmin={checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN])}
-					onSubmit={handleSubmit}
-					openNoteModal={() => setVisible(true)}
-					changeSalonVisibility={changeVisibility}
-					publishSalon={publishSalon}
-					switchDisabled={submitting}
-					salonID={salonID}
+			<div className='content-body small mt-2'>
+				<Permissions
+					allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN]}
+					render={(hasPermission) => (
+						<SalonForm
+							isAdmin={hasPermission}
+							onSubmit={handleSubmit}
+							openNoteModal={() => setVisible(true)}
+							changeSalonVisibility={changeVisibility}
+							publishSalon={publishSalon}
+							switchDisabled={submitting}
+							salonID={salonID}
+							disabledForm={deletedSalon}
+						/>
+					)}
 				/>
-				<OpenHoursNoteModal
-					visible={visible}
-					salonID={salon?.data?.salon?.id || 0}
-					openingHoursNote={salon?.data?.salon?.openingHoursNote}
-					onClose={onOpenHoursNoteModalClose}
-				/>
+				{salonExists && (
+					<OpenHoursNoteModal
+						visible={visible}
+						salonID={salon?.data?.salon?.id || 0}
+						openingHoursNote={salon?.data?.salon?.openingHoursNote}
+						onClose={onOpenHoursNoteModalClose}
+					/>
+				)}
+
 				<div className={'content-footer'}>
-					<Row className={`${rowClass} w-full`}>
-						{showDeleteBtn ? (
+					<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
+						{salonExists && (
 							<DeleteButton
-								id={`${FORM.SALON}-delete-btn`}
+								permissions={editPermissions}
 								className={'w-1/3'}
 								onConfirm={deleteSalon}
 								entityName={t('loc:salón')}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								disabled={deletedSalon}
 							/>
-						) : undefined}
-						<Button
-							type={'primary'}
-							block
-							size={'middle'}
-							className={'noti-btn m-regular w-1/3'}
-							htmlType={'submit'}
-							onClick={() => {
-								if (checkPermissions(authUserPermissions, editPermissions)) {
-									dispatch(submit(FORM.SALON))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							disabled={submitting}
-							loading={submitting}
-						>
-							{t('loc:Uložiť')}
-						</Button>
+						)}
+						<Permissions
+							allowed={editPermissions}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									type={'primary'}
+									block
+									size={'middle'}
+									className={'noti-btn m-regular w-1/3'}
+									htmlType={'submit'}
+									onClick={(e) => {
+										if (hasPermission) {
+											dispatch(submit(FORM.SALON))
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+									disabled={submitting || deletedSalon || isFormPristine}
+									loading={submitting}
+								>
+									{t('loc:Uložiť')}
+								</Button>
+							)}
+						/>
 					</Row>
 				</div>
 			</div>

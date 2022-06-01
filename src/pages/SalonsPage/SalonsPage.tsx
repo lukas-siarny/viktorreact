@@ -7,6 +7,7 @@ import { Col, Progress, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize } from 'redux-form'
+import cx from 'classnames'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -14,11 +15,10 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 
 // utils
-import { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { FORM, MSG_TYPE, NOTIFICATION_TYPE, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
+import Permissions, { withPermissions } from '../../utils/Permissions'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
-import showNotifications from '../../utils/tsxHelpers'
 
 // reducers
 import { getSalons } from '../../reducers/salons/salonsActions'
@@ -30,11 +30,12 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
-import { ReactComponent as CircleCloseIcon } from '../../assets/icons/close-circle-icon.svg'
 
 type Columns = ColumnsType<any>
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
+
+const PROGRESS_PERCENTAGE = 33
 
 const SalonsPage = () => {
 	const [t] = useTranslation()
@@ -49,7 +50,7 @@ const SalonsPage = () => {
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		categoryFirstLevelIDs: ArrayParam,
-		statuses: withDefault(ArrayParam, [SALON_STATUSES.ALL]),
+		statuses: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:DESC')
@@ -89,6 +90,7 @@ const SalonsPage = () => {
 			key: 'name',
 			ellipsis: true,
 			sorter: true,
+			width: '22%',
 			sortOrder: setOrder(query.order, 'name')
 		},
 		{
@@ -97,6 +99,7 @@ const SalonsPage = () => {
 			key: 'address',
 			ellipsis: true,
 			sorter: false,
+			width: '20%',
 			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
 		},
 		{
@@ -108,32 +111,59 @@ const SalonsPage = () => {
 			render: (value) => <>{value.map((category: any, index: number) => (index === value.length - 1 ? category?.name : `${category?.name}, `))} </>
 		},
 		{
-			title: t('loc:Publikované'),
+			title: t('loc:Vymazaný'),
+			dataIndex: 'deletedAt',
+			key: 'deletedAt',
+			ellipsis: true,
+			sorter: false,
+			width: '8%',
+			render: (value) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} />
+					</div>
+				) : null
+		},
+		{
+			title: t('loc:Publikovaný'),
 			dataIndex: 'isPublished',
 			key: 'isPublished',
 			ellipsis: true,
 			sorter: false,
 			width: '8%',
-			render: (value) => (
-				<div className={'flex justify-start'}>{value ? <CircleCheckIcon color={'$textColor-green-600'} /> : <CircleCloseIcon color={'$textColor-green-600'} />}</div>
-			)
+			render: (value, record) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
+					</div>
+				) : null
 		},
 		{
-			title: t('loc:Viditeľné'),
+			title: t('loc:Viditeľný'),
 			dataIndex: 'isVisible',
 			key: 'isVisible',
 			ellipsis: true,
 			sorter: false,
 			width: '8%',
-			render: (value) => <div className={'flex justify-start'}>{value ? <CircleCheckIcon /> : <CircleCloseIcon />}</div>
+			render: (value, record) =>
+				value ? (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
+					</div>
+				) : null
 		},
 		{
 			title: t('loc:Vyplnenia profilu'),
-			dataIndex: 'fillingProgress',
-			key: 'fillingProgress',
+			dataIndex: 'fillingProgressSalon',
+			key: 'fillingProgressSalon',
 			ellipsis: true,
 			sorter: false,
-			render: (value) => <Progress percent={value} steps={5} />
+			render: (value, record) => {
+				const progressVariables = [Number(value), Number(record.fillingProgressServices), Number(record.fillingProgressCompany)]
+				// 34%, 67%, 100%
+				const result = progressVariables.reduce((a, b) => a + b, 0) * PROGRESS_PERCENTAGE + 1
+				return <Progress percent={result} showInfo={false} strokeColor={'#000'} />
+			}
 		},
 		{
 			title: t('loc:Vytvorené'),
@@ -162,53 +192,56 @@ const SalonsPage = () => {
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<div className='content-body'>
-						<SalonsFilter
-							createSalon={() => {
-								if (checkPermissions(editPermissions)) {
-									history.push(t('paths:salons/create'))
-								} else {
-									showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }], NOTIFICATION_TYPE.NOTIFICATION)
-								}
-							}}
-							onSubmit={handleSubmit}
-						/>
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={salons?.data?.salons}
-							rowClassName={'clickable-row'}
-							loading={salons?.isLoading}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									if (checkPermissions(editPermissions)) {
-										history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
-									} else {
-										showNotifications(
-											[{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia!') }],
-											NOTIFICATION_TYPE.NOTIFICATION
-										)
-									}
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: salons?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: salons?.data?.pagination?.totalPages,
-								current: salons?.data?.pagination?.page
-							}}
-						/>
-					</div>
+					<Permissions
+						allowed={editPermissions}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<div className='content-body'>
+								<SalonsFilter
+									createSalon={() => {
+										if (hasPermission) {
+											history.push(t('paths:salons/create'))
+										} else {
+											openForbiddenModal()
+										}
+									}}
+									onSubmit={handleSubmit}
+								/>
+								<CustomTable
+									className='table-fixed'
+									onChange={onChangeTable}
+									columns={columns}
+									dataSource={salons?.data?.salons}
+									rowClassName={'clickable-row'}
+									loading={salons?.isLoading}
+									twoToneRows
+									onRow={(record) => ({
+										onClick: (e) => {
+											if (hasPermission) {
+												history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}
+									})}
+									pagination={{
+										showTotal: (total, [from, to]) =>
+											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+												total,
+												from,
+												to
+											}),
+										defaultPageSize: PAGINATION.defaultPageSize,
+										pageSizeOptions: PAGINATION.pageSizeOptions,
+										pageSize: salons?.data?.pagination?.limit,
+										showSizeChanger: true,
+										total: salons?.data?.pagination?.totalCount,
+										current: salons?.data?.pagination?.page
+									}}
+								/>
+							</div>
+						)}
+					/>
 				</Col>
 			</Row>
 		</>

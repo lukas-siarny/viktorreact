@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import i18next from 'i18next'
 import { InjectedFormProps, reduxForm, Field, isPristine } from 'redux-form'
-import { Form, notification, Spin, Divider, Row, Col, Button } from 'antd'
+import { Form, Spin, Divider, Row, Col, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // assets
@@ -10,7 +9,6 @@ import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.sv
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // atoms
-import { IServiceForm } from '../../../types/interfaces'
 import SelectField from '../../../atoms/SelectField'
 import validateServiceForm from './validateServiceForm'
 import InputField from '../../../atoms/InputField'
@@ -28,10 +26,13 @@ import { RootState } from '../../../reducers'
 import { getSalons } from '../../../reducers/salons/salonsActions'
 
 // utils
-import { scrollToFirstError, validationNumberMin } from '../../../utils/helper'
+import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
+
+// types
+import { IServiceForm } from '../../../types/interfaces'
 
 const numberMin0 = validationNumberMin(0)
 
@@ -41,7 +42,7 @@ type ComponentProps = {
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
 
 const ServiceForm = (props: Props) => {
-	const { serviceID, handleSubmit } = props
+	const { serviceID, handleSubmit, pristine } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -49,7 +50,6 @@ const ServiceForm = (props: Props) => {
 	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
 
-	const isPristineForm: boolean = useSelector((state: RootState) => isPristine(FORM.SERVICE_FORM)(state))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
 	const isLoading = serviceLoading || categoriesLoading || isRemoving
@@ -92,7 +92,7 @@ const ServiceForm = (props: Props) => {
 					label={t('loc:Salón')}
 					component={SelectField}
 					allowClear
-					placeholder={t('loc:Salón')}
+					placeholder={t('loc:Vyberte salón')}
 					name='salonID'
 					showSearch
 					onSearch={searchSalon}
@@ -200,7 +200,7 @@ const ServiceForm = (props: Props) => {
 							className={'noti-btn w-full'}
 							htmlType={'submit'}
 							icon={serviceID ? <EditIcon /> : <CreateIcon />}
-							disabled={submitting || isPristineForm}
+							disabled={submitting || pristine}
 							loading={submitting}
 						>
 							{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
@@ -217,16 +217,8 @@ const form = reduxForm<IServiceForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateServiceForm,
-	onSubmitFail: (errors, dispatch, submitError, props) => {
-		if (errors && props.form) {
-			scrollToFirstError(errors, props.form)
-			notification.error({
-				message: i18next.t('loc:Chybne vyplnený formulár'),
-				description: i18next.t('loc:Skontrolujte správnosť vyplnených polí vo formulári')
-			})
-		}
-	}
+	onSubmitFail: showErrorNotification,
+	validate: validateServiceForm
 })(ServiceForm)
 
 export default form

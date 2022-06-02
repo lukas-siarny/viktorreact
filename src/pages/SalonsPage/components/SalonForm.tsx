@@ -20,7 +20,7 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, ENUMERATIONS_KEYS } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
 // types
@@ -41,6 +41,10 @@ import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
+import { ReactComponent as PermissionsIcon } from '../../../assets/icons/unlock-icon.svg'
+import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 
 type ComponentProps = {
 	openNoteModal: Function
@@ -49,6 +53,8 @@ type ComponentProps = {
 	publishSalon: (published: boolean) => void
 	switchDisabled: boolean
 	disabledForm: boolean
+	showContactPersonSwitch?: boolean
+	showCompanyInfoSwitch?: boolean
 	salonID?: number
 }
 
@@ -65,8 +71,22 @@ const validateUsersSelect = (value: string, formValues: any, props: any) => {
 const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, change, openNoteModal, isAdmin, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
+	// NOTE: switches (showCompanyInfoSwitch, showContactPersonSwitch) are hidden, if related objects are not empty
+	const {
+		handleSubmit,
+		change,
+		openNoteModal,
+		isAdmin,
+		changeSalonVisibility,
+		publishSalon,
+		switchDisabled,
+		salonID,
+		disabledForm,
+		showCompanyInfoSwitch = true,
+		showContactPersonSwitch = true
+	} = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const onSearchUsers = useCallback(
 		async (searchText: string, page: number) => {
@@ -222,19 +242,125 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row>
 					<Col span={24}>
 						<h3 className={'mb-0 flex items-center'}>
+							<CompanyIcon width={24} height={24} className={'text-notino-black mr-2'} />
+							{t('loc:Firemné údaje')}
+						</h3>
+						<Divider className={'mb-3 mt-3'} />
+						{showCompanyInfoSwitch && (
+							<Field component={SwitchField} label={t('loc:Nastaviť firemné údaje')} name={'useCompanyInfo'} size={'middle'} disabled={disabledForm} />
+						)}
+						{get(formValues, 'useCompanyInfo', false) && (
+							<>
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:Názov')}
+										placeholder={t('loc:Zadajte názov')}
+										name={'companyInfo.companyName'}
+										size={'large'}
+										required
+									/>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:IČO')}
+										placeholder={t('loc:Zadajte ičo')}
+										name={'companyInfo.businessID'}
+										size={'large'}
+										required
+									/>
+								</Row>
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:IČ DPH')}
+										placeholder={t('loc:Zadajte IČ DPH')}
+										name={'companyInfo.vatID'}
+										size={'large'}
+										required
+									/>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:DIČ')}
+										placeholder={t('loc:Zadajte DIČ')}
+										name={'companyInfo.taxID'}
+										size={'large'}
+										required
+									/>
+								</Row>
+							</>
+						)}
+						<Field component={SwitchField} label={t('loc:Fakturačná adresa je rovnaká')} name={'isInvoiceAddressSame'} size={'middle'} disabled={disabledForm} />
+						{!get(formValues, 'isInvoiceAddressSame', false) && (
+							<>
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:Ulica')}
+										placeholder={t('loc:Zadajte ulicu')}
+										name={'companyInvoiceAddress.street'}
+										size={'large'}
+										required
+									/>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:Mesto')}
+										placeholder={t('loc:Zadajte mesto')}
+										name={'companyInvoiceAddress.city'}
+										size={'large'}
+										required
+									/>
+								</Row>
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:PSČ')}
+										placeholder={t('loc:Zadajte smerovacie číslo')}
+										name={'companyInvoiceAddress.zipCode'}
+										size={'large'}
+										required
+									/>
+									<Field
+										className={'w-12/25'}
+										component={SelectField}
+										label={t('loc:Štát')}
+										placeholder={t('loc:Vyber krajinu')}
+										options={countries?.enumerationsOptions || []}
+										name={'companyInvoiceAddress.countryCode'}
+										size={'large'}
+										loading={countries?.isLoading}
+										allowClear
+										required
+									/>
+								</Row>
+							</>
+						)}
+					</Col>
+				</Row>
+				<Row>
+					<Col span={24}>
+						<h3 className={'mb-0 flex items-center'}>
 							<UserIcon width={20} height={20} className={'text-notino-black mr-2'} />
 							{t('loc:Kontaktná osoba')}
 						</h3>
 
 						<Divider className={'mb-3 mt-3'} />
-						<Field
-							className={'mb-4'}
-							component={SwitchField}
-							label={t('loc:Nastaviť kontaktnú osobu')}
-							name={'useContactPerson'}
-							size={'middle'}
-							disabled={disabledForm}
-						/>
+						{showContactPersonSwitch && (
+							<Field
+								className={'mb-4'}
+								component={SwitchField}
+								label={t('loc:Nastaviť kontaktnú osobu')}
+								name={'useContactPerson'}
+								size={'middle'}
+								disabled={disabledForm}
+							/>
+						)}
 						{get(formValues, 'useContactPerson', false) && (
 							<>
 								<Row justify={'space-between'}>
@@ -274,6 +400,7 @@ const UserAccountForm: FC<Props> = (props) => {
 										phoneName={'companyContactPerson.phone'}
 										disabled={disabledForm}
 										style={{ width: 'calc(50% - 8px' }}
+										required
 									/>
 								</Row>
 							</>
@@ -323,7 +450,10 @@ const UserAccountForm: FC<Props> = (props) => {
 				</Row>
 				<Row>
 					<Col span={24}>
-						<h3 className={'mb-0'}>{t('loc:Sociálne siete')}</h3>
+						<h3 className={'mb-0 flex items-center'}>
+							<SocialIcon className={'text-notino-black mr-2'} />
+							{t('loc:Sociálne siete')}
+						</h3>
 						<Divider className={'mb-3 mt-3'} />
 						<Field
 							component={InputField}
@@ -348,6 +478,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							label={t('loc:Webstránka')}
 							name={'socialLinkWebPage'}
 							size={'large'}
+							prefix={(<GlobeIcon />) as any}
 							placeholder={t('loc:Odkaz na webovú stránku salóna')}
 							disabled={disabledForm}
 						/>
@@ -359,7 +490,7 @@ const UserAccountForm: FC<Props> = (props) => {
 					<Row>
 						<Col span={24}>
 							<h3 className={'mb-0 flex items-center'}>
-								<UserIcon width={20} height={20} className={'text-notino-black mr-2'} />
+								<PermissionsIcon width={24} height={24} className={'text-notino-black mr-2'} />
 								{t('loc:Oprávnenie')}
 							</h3>
 							<Divider className={'mb-3 mt-3'} />

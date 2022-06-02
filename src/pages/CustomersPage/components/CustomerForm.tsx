@@ -58,7 +58,14 @@ const CustomerForm: FC<Props> = (props) => {
 					<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
 					<Field component={SelectField} label={t('loc:Pohlavie')} placeholder={t('loc:Vyber pohlavie')} options={genders} name={'gender'} size={'large'} allowClear />
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
-					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
+					<PhoneWithPrefixField
+						label={'Telefón'}
+						placeholder={t('loc:Zadajte telefón')}
+						size={'large'}
+						prefixName={'phonePrefixCountryCode'}
+						phoneName={'phone'}
+						required
+					/>
 					<Field component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
 					<Row justify={'space-between'}>
 						<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} />

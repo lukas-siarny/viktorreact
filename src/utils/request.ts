@@ -289,6 +289,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 	showLoading = false,
 	allowCancelToken = false
 ): Promise<ReturnType<PatchUrls[T]['patch']>> => {
+	console.log('🚀 ~ file: request.ts ~ line 292 ~ reqBody', reqBody)
 	const { fullfilURL, queryParams } = fullFillURL(url, params)
 	let token = {}
 	if (allowCancelToken) {

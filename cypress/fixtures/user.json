@@ -1,0 +1,12 @@
+{
+	"emailSuffix": "test@goodrequest.com",
+	"password": "Test 123.",
+	"phone": "956520900",
+	"firstName": "Jozko",
+	"lastName": "Mrkvicka",
+	"companyName": "Test s.r.o.",
+	"businessID": "01234567",
+	"street": "Teslova 23",
+	"city": "Bratislava",
+	"zipCode": "84107"
+}

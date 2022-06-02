@@ -52,7 +52,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				{t('loc:Odhlásiť')}
 			</Menu.Item>
 			<Menu.Divider />
-			<Menu.Item key='version' disabled icon={<VersionIcon />}>
+			<Menu.Item key='version' className='cursor-text' disabled icon={<VersionIcon />}>
 				<span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
 			</Menu.Item>
 		</Menu>
@@ -143,9 +143,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onKeyPress={(e) => e.preventDefault()}
 						>
 							<Row className='ml-2' justify='space-between'>
-								<Row>
+								<Row className='noti-my-account'>
 									<ProfileIcon className='mr-2-5' />
-									{t('loc:Moje konto')}
+									<div className='truncate item-label'>{t('loc:Moje konto')}</div>
 								</Row>
 
 								<ChevronIcon />

@@ -193,7 +193,7 @@ const CustomersPage = () => {
 										pageSizeOptions: PAGINATION.pageSizeOptions,
 										showSizeChanger: true,
 										pageSize: customers?.data?.pagination?.limit,
-										total: customers?.data?.pagination?.totalPages,
+										total: customers?.data?.pagination?.totalCount,
 										current: customers?.data?.pagination?.page
 									}}
 								/>

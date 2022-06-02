@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { initialize, submit } from 'redux-form'
+import { initialize, submit, isPristine } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { map, get } from 'lodash'
@@ -27,7 +27,7 @@ const CreateCustomerPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
-
+	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	// View
@@ -88,7 +88,7 @@ const CreateCustomerPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
 			</Row>
-			<div className='content-body small'>
+			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={createCustomer} />
 				<div className={'content-footer'}>
 					<Row justify='center'>
@@ -101,7 +101,7 @@ const CreateCustomerPage = () => {
 							onClick={() => {
 								dispatch(submit(FORM.CUSTOMER))
 							}}
-							disabled={submitting}
+							disabled={submitting || isFormPristine}
 							loading={submitting}
 						>
 							{t('loc:Uložiť')}

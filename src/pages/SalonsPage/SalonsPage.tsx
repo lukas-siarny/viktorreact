@@ -50,7 +50,7 @@ const SalonsPage = () => {
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		categoryFirstLevelIDs: ArrayParam,
-		statuses: withDefault(ArrayParam, [SALON_STATUSES.ALL]),
+		statuses: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:DESC')
@@ -235,7 +235,7 @@ const SalonsPage = () => {
 										pageSizeOptions: PAGINATION.pageSizeOptions,
 										pageSize: salons?.data?.pagination?.limit,
 										showSizeChanger: true,
-										total: salons?.data?.pagination?.totalPages,
+										total: salons?.data?.pagination?.totalCount,
 										current: salons?.data?.pagination?.page
 									}}
 								/>

@@ -43,7 +43,7 @@ const CreateUserAccountForm: FC<Props> = (props) => {
 						component={SelectField}
 						options={roles?.data}
 						label={t('loc:Rola')}
-						placeholder={t('loc:Vyber rolu')}
+						placeholder={t('loc:Vyberte rolu')}
 						name={'roleID'}
 						size={'large'}
 						loading={roles?.isLoading}

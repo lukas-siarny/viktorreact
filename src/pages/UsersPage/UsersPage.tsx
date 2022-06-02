@@ -211,7 +211,7 @@ const UsersPage = () => {
 										pageSizeOptions: PAGINATION.pageSizeOptions,
 										pageSize: users?.data?.pagination?.limit,
 										showSizeChanger: true,
-										total: users?.data?.pagination?.totalPages,
+										total: users?.data?.pagination?.totalCount,
 										current: users?.data?.pagination?.page
 									}}
 								/>

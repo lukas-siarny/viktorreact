@@ -1,9 +1,9 @@
 import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
-import { Button, Col, Row, Tree, Divider } from 'antd'
+import { Button, Col, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { filter, forEach, get, includes, map } from 'lodash'
+import { filter, forEach, get, map } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 
@@ -50,12 +50,12 @@ const CategoriesTree = () => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [showForm, setShowForm] = useState<boolean>(false)
 	const [treeNodeData, setTreeNodeData] = useState<any[]>([])
-	const [selectedKeys, setSelectedKeys] = useState<any[]>([])
-	const [expandedKeys, setExpandedKeys] = useState<any[]>([])
+	const [lastOpenedNode, setLastOpenedNode] = useState<any>()
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore.countries)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
 	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_NAME_LANGUAGE), [countries])
 
@@ -79,19 +79,19 @@ const CategoriesTree = () => {
 		(node) => {
 			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted } = node
 			setShowForm(true)
-			dispatch(
-				initialize(FORM.CATEGORY, {
-					id,
-					name,
-					parentId,
-					orderIndex: index,
-					nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
-					level,
-					image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
-					deletedAt,
-					isParentDeleted
-				})
-			)
+			const formData = {
+				id,
+				name,
+				parentId,
+				orderIndex: index,
+				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
+				level,
+				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
+				deletedAt,
+				isParentDeleted
+			}
+			dispatch(initialize(FORM.CATEGORY, formData))
+			setLastOpenedNode(formData)
 		},
 		[dispatch]
 	)
@@ -118,26 +118,13 @@ const CategoriesTree = () => {
 
 	const onCategoryClickHandler = (keys: any, e: any) => {
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
-
-		const key = get(e, 'node.key')
-		const haveChildren = get(e, 'node.children.length') > 0
-		if (haveChildren && !includes(expandedKeys, key)) setExpandedKeys([...expandedKeys, key])
-
-		if (keys.length > 0) setSelectedKeys(keys)
 		updateCategoryHandler(get(e, 'node'))
-	}
-
-	const closeCategoryHandler = () => {
-		setSelectedKeys([])
-		setShowForm(false)
 	}
 
 	const titleBuilder = (category: any) => {
 		const { name, deletedAt } = category
-		if (!deletedAt) return <span>{name}</span>
-
 		return (
-			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={() => onCategoryClickHandler([], { node: category })}>
+			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={() => onCategoryClickHandler([], { node: category })} disabled={!!deletedAt}>
 				{name}
 			</button>
 		)
@@ -197,7 +184,29 @@ const CategoriesTree = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [categories])
 
+	const checkIfParentIsDisabled = (path: string): boolean => {
+		const pathArray = path.split('-').map((pathIndex: string) => parseInt(pathIndex, 10))
+		if (treeNodeData?.[pathArray[1]]?.children?.[pathArray[2]]) {
+			// return disabled for second level
+			return treeNodeData?.[pathArray[1]]?.children?.[pathArray[2]].disabled
+		}
+		// return disabled for first/root level
+		return treeNodeData?.[pathArray[1]].disabled
+	}
+
+	const notifyUser = () => {
+		notification.warning({
+			message: t('loc:Upozornenie'),
+			description: t('loc:Táto operácia nie je povolená.')
+		})
+	}
+
 	const onDrop = async (droppedData: any) => {
+		// check if dropping category on disabled parent category
+		if (checkIfParentIsDisabled(droppedData.node.pos)) {
+			notifyUser()
+			return
+		}
 		try {
 			// key of dropped node
 			const dropKey: number = droppedData.node.key
@@ -223,6 +232,21 @@ const CategoriesTree = () => {
 					}
 				}
 			} else {
+				// check if drop subcategory to root level
+				if (droppedData.dragNode.level > 0 && droppedData.node.level === 0) {
+					notification.warning({
+						message: t('loc:Upozornenie'),
+						description: t('loc:Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo "Pridať kategóriu".')
+					})
+					return
+				}
+
+				// check if drop root category to subcategory level
+				if (droppedData.dragNode.level === 0 && droppedData.node.level > 0) {
+					notifyUser()
+					return
+				}
+
 				//  dropped node inside of gap between nodes or dropped node to start or end of children nodes array
 				let orderIndex: number
 				// if drop position is not detected
@@ -288,6 +312,19 @@ const CategoriesTree = () => {
 		'w-6/12': showForm
 	})
 
+	// close or reopen parent category if user go back from child category form
+	const closeOrOpenParentCategory = () => {
+		// check if is actual form data is not same as last opened parent node and also check if is user not closing create root category form
+		if (lastOpenedNode?.id !== values?.id && values?.name) {
+			dispatch(initialize(FORM.CATEGORY, lastOpenedNode))
+			// after init clear
+			setLastOpenedNode(null)
+		} else {
+			// close form
+			setShowForm(false)
+		}
+	}
+
 	return (
 		<>
 			<Row className={'flex justify-between'}>
@@ -311,18 +348,7 @@ const CategoriesTree = () => {
 			</Row>
 			<div className={'w-full flex'}>
 				<div className={formClass}>
-					<Tree
-						className={'noti-tree'}
-						treeData={treeNodeData}
-						onDrop={onDrop}
-						showIcon
-						showLine
-						draggable
-						onSelect={onCategoryClickHandler}
-						selectedKeys={selectedKeys}
-						onExpand={(keys) => setExpandedKeys(keys)}
-						expandedKeys={expandedKeys}
-					/>
+					<Tree className={'noti-tree'} treeData={treeNodeData} onDrop={onDrop} showIcon showLine draggable onSelect={onCategoryClickHandler} />
 				</div>
 				{showForm ? (
 					<div className={'w-6/12 flex justify-around items-start'}>
@@ -331,7 +357,7 @@ const CategoriesTree = () => {
 							deleteCategory={deleteCategoryHandler}
 							onSubmit={handleSubmit}
 							createCategory={createCategoryHandler}
-							closeCategoryForm={closeCategoryHandler}
+							closeCategoryForm={closeOrOpenParentCategory}
 						/>
 					</div>
 				) : undefined}

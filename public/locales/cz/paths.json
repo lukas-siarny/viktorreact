@@ -4,7 +4,6 @@
   "customers": "/customers",
   "customers/create": "/customers/create",
   "customers/{{customerID}}": "/customers/{{customerID}}",
-  "home": "/home",
   "index": "/",
   "login": "/login",
   "my-account": "/my-account",

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 
@@ -28,6 +28,8 @@ import { logOutUser } from '../../reducers/users/userActions'
 
 // components
 import LanguagePicker from '../LanguagePicker'
+import AvatarComponents from '../AvatarComponents'
+import { RootState } from '../../reducers'
 
 const { Sider } = Layout
 
@@ -38,6 +40,8 @@ export type LayoutSiderProps = {
 
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true } = props
+
+	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
@@ -142,13 +146,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							onClick={(e) => e.preventDefault()}
 							onKeyPress={(e) => e.preventDefault()}
 						>
-							<Row className='ml-2' justify='space-between'>
+							<Row className='ml-2 flex items-center' justify='space-between'>
 								<Row className='noti-my-account'>
-									<ProfileIcon className='mr-2-5' />
-									<div className='truncate item-label'>{t('loc:Moje konto')}</div>
+									<AvatarComponents className='mr-2-5' src={currentUser?.image?.original} text={`${currentUser?.firstName?.[0]}${currentUser?.lastName?.[0]}`} />
+									<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
 								</Row>
 
-								<ChevronIcon />
+								<ChevronIcon className='items-center' />
 							</Row>
 						</div>
 					</Dropdown>

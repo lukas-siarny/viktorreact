@@ -371,7 +371,8 @@ export enum BYTE_MULTIPLIER {
 export const LOCALIZATIONS = 'LOCALIZATIONS'
 
 export enum UPLOAD_IMG_CATEGORIES {
-	SALON = 'SALON'
+	SALON = 'SALON',
+	USER = 'USER'
 }
 
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'

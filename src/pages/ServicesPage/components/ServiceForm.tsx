@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { InjectedFormProps, reduxForm, Field, isPristine } from 'redux-form'
+import { InjectedFormProps, reduxForm, Field } from 'redux-form'
 import { Form, Spin, Divider, Row, Col, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 

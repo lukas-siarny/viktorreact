@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { EMPLOYEES } from './employeesTypes'

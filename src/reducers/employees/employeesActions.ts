@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { ThunkResult } from '../index'
 import { EMPLOYEES } from './employeesTypes'
 

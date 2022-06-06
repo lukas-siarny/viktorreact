@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
@@ -19,6 +19,7 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
+import { getSalons } from '../../../reducers/salons/salonsActions'
 
 type ComponentProps = {
 	createEmployee: Function
@@ -35,9 +36,17 @@ const fixLength100 = validationString(100)
 const EmployeesFilter = (props: Props) => {
 	const { handleSubmit, createEmployee } = props
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
-	const salons = useSelector((state: RootState) => state.salons.salons)
+
+	const onSearchSalons = useCallback(
+		async (searchText: string, page: number) => {
+			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, searchText))
+			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
+		},
+		[dispatch]
+	)
 
 	const searchInput = (
 		<Field
@@ -69,10 +78,11 @@ const EmployeesFilter = (props: Props) => {
 							placeholder={t('loc:Salón')}
 							allowClear
 							size={'middle'}
-							filterOptions
-							onDidMountSearch
-							options={salons?.data}
-							loadinf={salons?.isLoading}
+							onSearch={onSearchSalons}
+							optionLabelProp={'label'}
+							filterOption={true}
+							showSearch
+							allowInfinityScroll
 						/>
 					</Col>
 				</Row>

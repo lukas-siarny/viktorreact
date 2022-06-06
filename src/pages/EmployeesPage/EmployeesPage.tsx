@@ -25,7 +25,6 @@ import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
-import { getSalons } from '../../reducers/salons/salonsActions'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
@@ -55,7 +54,6 @@ const UsersPage = () => {
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
-		dispatch(getSalons(1))
 
 		phonePrefixes.forEach((option) => {
 			prefixes[option.key] = option.label
@@ -90,7 +88,7 @@ const UsersPage = () => {
 		{
 			title: t('loc:Meno'),
 			dataIndex: 'fullName',
-			key: 'fullName',
+			key: 'lastName',
 			ellipsis: true,
 			sorter: true,
 			sortOrder: setOrder(query.order, 'lastName'),
@@ -106,7 +104,6 @@ const UsersPage = () => {
 			dataIndex: 'email',
 			key: 'email',
 			ellipsis: true,
-			sorter: true,
 			width: '25%'
 		},
 		{
@@ -137,7 +134,6 @@ const UsersPage = () => {
 			dataIndex: 'services',
 			key: 'services',
 			ellipsis: true,
-			sorter: true,
 			render: (value) => {
 				return value?.map((service: any) => {
 					return <p className={'mb-0'}>{service?.name}</p>
@@ -164,9 +160,6 @@ const UsersPage = () => {
 		]
 	}
 
-	useEffect(() => {
-		console.log('employees', employees)
-	}, [employees?.data?.employees])
 	return (
 		<>
 			<Row>

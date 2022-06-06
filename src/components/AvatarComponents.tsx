@@ -35,4 +35,8 @@ const UserAvatar = (props: Props) => {
 	)
 }
 
+export const AvatarGroup = (avatars: Props[]) => {
+	return avatars.map((avatarProps) => <UserAvatar {...avatarProps} />)
+}
+
 export default UserAvatar

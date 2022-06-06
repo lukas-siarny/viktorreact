@@ -16,7 +16,7 @@ import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 

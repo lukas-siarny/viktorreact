@@ -23,7 +23,8 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
-import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import ImgUploadField from '../../../atoms/ImgUploadField'
 
 type ComponentProps = {
 	isCompany: boolean
@@ -47,8 +48,24 @@ const UserAccountForm: FC<Props> = (props) => {
 				<Row className={`${editClass} mx-9 h-full block`} justify='center'>
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} />
-					<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} />
+					<div className={'flex space-between w-full'}>
+						<div className={'w-1/5'}>
+							<Field
+								className={'m-0'}
+								component={ImgUploadField}
+								name={'avatar'}
+								label={t('loc:Avatar')}
+								signUrl={URL_UPLOAD_IMAGES}
+								multiple={false}
+								maxCount={1}
+								category={UPLOAD_IMG_CATEGORIES.USER}
+							/>
+						</div>
+						<div className={'w-full'}>
+							<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} />
+							<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} />
+						</div>
+					</div>
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled />
 					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
 				</Row>

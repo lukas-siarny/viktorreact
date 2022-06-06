@@ -1,13 +1,13 @@
 import React from 'react'
 import { Avatar } from 'antd'
-import { AvatarProps } from 'antd/lib/avatar'
+import { AvatarProps, GroupProps } from 'antd/lib/avatar'
 
-type Props = AvatarProps & {
+type UserAvatarProps = AvatarProps & {
 	className?: string
 	text?: string
 }
 
-const UserAvatar = (props: Props) => {
+const UserAvatar = (props: UserAvatarProps) => {
 	const { alt, gap, icon, shape, size, src, srcSet, draggable, crossOrigin, onError, text, className } = props
 
 	return (
@@ -35,8 +35,21 @@ const UserAvatar = (props: Props) => {
 	)
 }
 
-export const AvatarGroup = (avatars: Props[]) => {
-	return avatars.map((avatarProps) => <UserAvatar {...avatarProps} />)
+type AvatarGroupProps = GroupProps & {
+	avatars: UserAvatarProps[]
+	className?: string
+}
+
+export const AvatarGroup = (props: AvatarGroupProps) => {
+	const { avatars, className, maxCount, maxPopoverPlacement, maxPopoverTrigger, maxStyle, size } = props
+
+	return (
+		<Avatar.Group className={className} maxCount={maxCount} maxPopoverPlacement={maxPopoverPlacement} maxPopoverTrigger={maxPopoverTrigger} maxStyle={maxStyle} size={size}>
+			{avatars.map((avatarProps) => (
+				<UserAvatar {...avatarProps} />
+			))}
+		</Avatar.Group>
+	)
 }
 
 export default UserAvatar

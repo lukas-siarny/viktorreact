@@ -17,6 +17,7 @@ import { ReactComponent as ProfileIcon } from '../../assets/icons/profile-icon.s
 import { ReactComponent as LogOutIcon } from '../../assets/icons/logout-icon.svg'
 import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
 import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -135,7 +136,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									eventKey={PAGE.EMPLOYEES}
 									key={PAGE.EMPLOYEES}
 									onClick={() => history.push(t('paths:employees'))}
-									icon={<UsersIcon />} // fix style issue due wrapped item into <Permission> component
+									icon={<EmployeesIcon />} // fix style issue due wrapped item into <Permission> component
 									className={cx({ 'ant-menu-item-selected': page === PAGE.EMPLOYEES })}
 								>
 									{t('loc:Zamestnanci')}

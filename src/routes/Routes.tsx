@@ -48,6 +48,9 @@ import CustomersPage from '../pages/CustomersPage/CustomersPage'
 import CustomerPage from '../pages/CustomersPage/CustomerPage'
 import CreateCustomerPage from '../pages/CustomersPage/CreateCustomerPage'
 
+// Employees
+import EmployeesPage from '../pages/EmployeesPage/EmployeesPage'
+
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -202,6 +205,15 @@ const Routes: FC = (props) => {
 						translatePathKey={t('paths:services/{{serviceID}}', { serviceID: ':serviceID' })}
 						layout={MainLayout}
 						page={PAGE.SERVICES}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:employees')}
+						component={EmployeesPage}
+						translatePathKey={t('paths:employees')}
+						layout={MainLayout}
+						page={PAGE.EMPLOYEES}
 					/>
 					{/* NOTE: add all private routes before this declaration */}
 					<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />

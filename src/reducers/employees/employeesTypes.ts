@@ -1,0 +1,6 @@
+// eslint-disable-next-line import/prefer-default-export
+export enum EMPLOYEES {
+	EMPLOYEES_LOAD_START = 'EMPLOYEES_LOAD_START',
+	EMPLOYEES_LOAD_DONE = 'EMPLOYEES_LOAD_DONE',
+	EMPLOYEES_LOAD_FAIL = 'EMPLOYEES_LOAD_FAIL'
+}

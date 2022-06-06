@@ -129,6 +129,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									{t('loc:Zákazníci')}
 								</Menu.Item>
 							</Permissions>
+
+							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_BROWSING, PERMISSION.PARTNER]}>
+								<Menu.Item
+									eventKey={PAGE.EMPLOYEES}
+									key={PAGE.EMPLOYEES}
+									onClick={() => history.push(t('paths:employees'))}
+									icon={<UsersIcon />} // fix style issue due wrapped item into <Permission> component
+									className={cx({ 'ant-menu-item-selected': page === PAGE.EMPLOYEES })}
+								>
+									{t('loc:Zamestnanci')}
+								</Menu.Item>
+							</Permissions>
 						</Menu>
 					)}
 				</div>

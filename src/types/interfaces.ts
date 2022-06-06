@@ -184,3 +184,10 @@ export interface ICustomerForm {
 export interface ILanguagePickerForm {
 	language: LANGUAGE
 }
+
+export interface IUserAvatar {
+	src?: string
+	alt?: string
+	text?: string
+	key?: string | number
+}

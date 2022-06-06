@@ -12,10 +12,11 @@ import { compose } from 'redux'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ServicesFilter from './components/ServicesFilter'
+import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -24,7 +25,7 @@ import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, IUserAvatar } from '../../types/interfaces'
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
 
@@ -95,17 +96,16 @@ const ServicesPage = () => {
 			title: t('loc:Zamestnanec'),
 			dataIndex: 'employees',
 			key: 'employees',
-			ellipsis: true,
-			render: (value) => <span className='whitespace-pre'>{value}</span>
+			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} /> : null)
 		},
 		{
-			title: t('loc:Trvanie'),
+			title: t('loc:Trvanie (min)'),
 			dataIndex: 'duration',
 			key: 'duration',
 			ellipsis: true
 		},
 		{
-			title: t('loc:Cena'),
+			title: t('loc:Cena (€)'),
 			dataIndex: 'price',
 			key: 'price',
 			ellipsis: true
@@ -115,6 +115,15 @@ const ServicesPage = () => {
 			dataIndex: 'category',
 			key: 'category',
 			ellipsis: true
+		},
+		{
+			title: t('loc:Vytvorené'),
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			ellipsis: true,
+			sorter: true,
+			sortOrder: setOrder(query.order, 'createdAt'),
+			render: (value) => formatDateByLocale(value)
 		}
 	]
 

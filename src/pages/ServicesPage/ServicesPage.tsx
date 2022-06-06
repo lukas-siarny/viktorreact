@@ -106,7 +106,8 @@ const ServicesPage = () => {
 			title: t('loc:Zamestnanec'),
 			dataIndex: 'employees',
 			key: 'employees',
-			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} /> : null)
+			ellipsis: true,
+			render: (value) => <span className='whitespace-pre'>{value}</span>
 		},
 		{
 			title: t('loc:Trvanie (min)'),

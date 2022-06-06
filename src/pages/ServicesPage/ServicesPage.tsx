@@ -86,18 +86,17 @@ const ServicesPage = () => {
 			sortOrder: setOrder(query.order, 'name')
 		},
 		{
+			title: t('loc:Salón'),
+			dataIndex: 'salon',
+			key: 'salon',
+			ellipsis: true
+		},
+		{
 			title: t('loc:Zamestnanec'),
 			dataIndex: 'employees',
 			key: 'employees',
 			ellipsis: true,
 			render: (value) => <span className='whitespace-pre'>{value}</span>
-		},
-		{
-			title: t('loc:Salón'),
-			dataIndex: 'salon',
-			key: 'salon',
-			ellipsis: true,
-			render: (value) => <span>{value}</span>
 		},
 		{
 			title: t('loc:Trvanie'),

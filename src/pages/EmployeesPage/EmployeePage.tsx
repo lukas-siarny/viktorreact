@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { Button, Row } from 'antd'
-import { get } from 'lodash'
-import { initialize, isPristine, submit } from 'redux-form'
+import { Button, notification, Row } from 'antd'
+import { get, intersection } from 'lodash'
+import { change, initialize, isPristine, submit } from 'redux-form'
 import cx from 'classnames'
 
 // components
-import { notInitialized } from 'react-redux/es/utils/useSyncExternalStore'
+import i18next from 'i18next'
 import EmployeeForm from './components/EmployeeForm'
 
 // types
@@ -40,6 +40,8 @@ const EmployeePage = (props: Props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
 	const employee = useSelector((state: RootState) => state.employees.employee)
+	const services = useSelector((state: RootState) => state.service.services)
+	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 
 	const showDeleteBtn = !!employee?.data?.employee?.id
@@ -48,11 +50,79 @@ const EmployeePage = (props: Props) => {
 		dispatch(getEmployee(employeeID))
 	}, [employeeID])
 
+	const checkAndUpdateServices = (ser: any[]) => {
+		return ser.map((service) => {
+			let updatedService = { ...service }
+			if (service?.salonData?.durationFrom && service?.salonData?.durationTo) {
+				updatedService = {
+					...updatedService,
+					variableDuration: true
+				}
+			}
+			if (service?.salonData?.priceFrom && service?.salonData?.priceTo) {
+				updatedService = {
+					...updatedService,
+					variablePrice: true
+				}
+			}
+			return updatedService
+		})
+	}
+
 	useEffect(() => {
 		if (employee.data?.employee) {
-			dispatch(initialize(FORM.EMPLOYEE, { ...employee.data?.employee }))
+			dispatch(
+				initialize(FORM.EMPLOYEE, {
+					...employee.data?.employee,
+					avatar: employee.data?.employee?.image ? [{ url: employee.data?.employee?.image?.resizedImages?.thumbnail, uid: employee.data?.employee?.image?.id }] : [],
+					services: checkAndUpdateServices(employee.data?.employee?.services),
+					salonID: employee.data?.employee?.salon?.id
+				})
+			)
 		}
 	}, [employee.data])
+
+	const addService = () => {
+		const selectedServicesID = form?.values?.service
+		if (form.values?.services.find((service: any) => service?.id === selectedServicesID)) {
+			notification.warning({
+				message: i18next.t('loc:Upozornenie'),
+				description: i18next.t('Vybraná služba je už priradená!')
+			})
+		} else {
+			const serviceData = services?.data?.services?.find((service: any) => service?.id === selectedServicesID)
+			if (form?.values?.services && serviceData) {
+				let newServiceData = {
+					id: serviceData?.id,
+					name: serviceData?.name,
+					salonData: {
+						durationFrom: serviceData?.durationFrom,
+						durationTo: serviceData?.durationTo,
+						priceFrom: serviceData?.priceFrom,
+						priceTo: serviceData?.priceTo
+					},
+					variableDuration: false,
+					variablePrice: false
+				}
+				if (serviceData?.durationFrom && serviceData?.durationTo) {
+					newServiceData = {
+						...newServiceData,
+						variableDuration: true
+					}
+				}
+				if (serviceData?.priceFrom && serviceData?.priceTo) {
+					newServiceData = {
+						...newServiceData,
+						variablePrice: true
+					}
+				}
+				// update filed array services with new added service
+				dispatch(change(FORM.EMPLOYEE, 'services', [...form.values.services, newServiceData]))
+			}
+		}
+		// clear selected value
+		dispatch(change(FORM.EMPLOYEE, 'service', null))
+	}
 
 	const updateEmployee = async (data: any) => {
 		try {
@@ -114,7 +184,7 @@ const EmployeePage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				<EmployeeForm onSubmit={updateEmployee} />
+				<EmployeeForm addService={() => addService()} salonID={form?.values?.salonID} onSubmit={updateEmployee} />
 				<div className={'content-footer'}>
 					<Row className={rowClass}>
 						{showDeleteBtn ? (

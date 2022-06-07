@@ -9,8 +9,8 @@ import { Paths } from '../../types/api'
 
 // utils
 import { getReq } from '../../utils/request'
-// import { PERMISSION } from '../../utils/enums'
 import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
+import { ISalonsPayload } from '../salons/salonsActions'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
@@ -21,28 +21,37 @@ interface IGetServices {
 
 interface ServicesTableData {
 	key: number
+	serviceID: number
 	name: string
 	employees: string
 	price: string
 	duration: string
 	category: string
-	salon: string
+	salon: string | undefined
+}
+
+export interface ServiceOptionItem {
+	label: string | undefined | number
+	value: number
+	key: string
 }
 
 export interface IServicesPayload {
 	data: Paths.GetApiB2BAdminServices.Responses.$200 | null
 	tableData: ServicesTableData[] | undefined
+	servicesOptions: ServiceOptionItem[] | undefined
 }
 
 export const getServices =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<void>> =>
+	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<IServicesPayload>> =>
 	async (dispatch) => {
+		let payload = {} as IServicesPayload
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
 			const pageLimit = limit
 
 			const { data } = await getReq('/api/b2b/admin/services/', { page: page || 1, limit: pageLimit, order, ...normalizeQueryParams(queryParams) })
-			const tableData = map(data.services, (item) => {
+			const tableData: ServicesTableData[] = map(data.services, (item) => {
 				const tableItem = {
 					key: item.id,
 					serviceID: item.id,
@@ -58,9 +67,13 @@ export const getServices =
 				}
 				return tableItem
 			})
-			const payload = {
+			const servicesOptions = map(data.services, (service) => {
+				return { label: service.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
+			})
+			payload = {
 				data,
-				tableData
+				tableData,
+				servicesOptions
 			}
 
 			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })
@@ -69,6 +82,8 @@ export const getServices =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}
 
 interface IGetService {

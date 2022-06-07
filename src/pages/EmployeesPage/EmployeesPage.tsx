@@ -203,8 +203,7 @@ const EmployeesPage = () => {
 												e.preventDefault()
 												openForbiddenModal()
 											}
-										},
-										rowKey: record?.id
+										}
 									})}
 									pagination={{
 										showTotal: (total, [from, to]) =>

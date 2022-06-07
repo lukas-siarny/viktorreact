@@ -20,14 +20,15 @@ export interface IEmployeesPayload {
 }
 
 export const getEmployees =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<void>> =>
+	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<IEmployeesPayload>> =>
 	async (dispatch) => {
+		let payload = {} as IEmployeesPayload
 		try {
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_START })
 
 			const { data } = await getReq('/api/b2b/admin/employees/', { page: page || 1, limit, order, ...normalizeQueryParams(queryParams) })
 
-			const payload = {
+			payload = {
 				data
 			}
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_DONE, payload })
@@ -36,4 +37,6 @@ export const getEmployees =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}

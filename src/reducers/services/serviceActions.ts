@@ -60,7 +60,7 @@ export const getServices =
 				}
 				return tableItem
 			})
-			console.log('🚀 ~ file: serviceActions.ts ~ line 62 ~ tableData ~ tableData', tableData)
+
 			const payload = {
 				data,
 				tableData

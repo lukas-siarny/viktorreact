@@ -13,7 +13,7 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
 
 // utils
 import { uploadFile, postReq } from '../utils/request'
-import { getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
+import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
 import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
 
@@ -41,7 +41,7 @@ const ImgUploadField: FC<Props> = (props) => {
 		label,
 		input,
 		required,
-		meta: { error, touched },
+		meta: { form, error, touched },
 		staticMode,
 		accept = 'image/jpeg,image/png',
 		maxFileSize,
@@ -92,6 +92,7 @@ const ImgUploadField: FC<Props> = (props) => {
 
 	const uploader = (
 		<Upload
+			id={formFieldID(form, input.name)}
 			className={'-mb-2'}
 			accept={accept}
 			action={handleAction}

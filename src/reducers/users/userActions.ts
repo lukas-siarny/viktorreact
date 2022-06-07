@@ -120,16 +120,16 @@ export const logOutUser = (): ThunkResult<Promise<void>> => async (dispatch) => 
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.log(error)
+	} finally {
+		clearAccessToken()
+		clearRefreshToken()
+
+		dispatch({
+			type: RESET_STORE
+		})
+
+		history.push(i18next.t('paths:login'))
 	}
-
-	clearAccessToken()
-	clearRefreshToken()
-
-	dispatch({
-		type: RESET_STORE
-	})
-
-	history.push(i18next.t('paths:login'))
 }
 
 export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) => {

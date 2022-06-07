@@ -1,0 +1,12 @@
+{
+	"create" : {
+		"name": "Test salon",
+		"email": "test.confirmed_partneruser@goodrequest.com",
+		"phone": "956520900",
+		"paymentMethods": "cash, coupons",
+		"address": "Kosice, Rampova 2, Slovakia"
+	},
+	"update" : {
+		"name": "Update test salon"
+	}
+}

@@ -1,0 +1,12 @@
+{
+	"create": {
+		"emailSuffix": "test@goodrequest.com",
+		"street": "Teslova 234/11",
+		"phone": "904123321"
+	},
+	"update": {
+		"emailSuffix": "test@goodrequest.com",
+		"street": "Metodova 8",
+		"phone": "905123321"
+	}
+}

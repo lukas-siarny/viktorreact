@@ -1,5 +1,6 @@
 import React, { useRef, memo } from 'react'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, GoogleMapProps } from 'react-google-maps'
+import { Col } from 'antd'
 import { MAP } from '../utils/enums'
 
 type Props = GoogleMapProps & {

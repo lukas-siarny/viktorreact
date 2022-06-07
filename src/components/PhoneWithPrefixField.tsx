@@ -22,20 +22,22 @@ type Props = {
 	phoneName?: string
 	required?: boolean
 	disabled?: boolean
+	className?: string
+	style?: React.CSSProperties
 }
 
 const fallbackOptions = [{ key: 1, label: '+421', value: 'SK', flag: 'https://flagcdn.com/h20/sk.png' }]
 const fallbackDefaultValue = 'SK'
 
 const PhoneWithPrefixField = (props: Props) => {
-	const { placeholder, label, size, prefixName = 'phonePrefixCountryCode', phoneName = 'phone', disabled, required = false } = props
+	const { placeholder, label, size, prefixName = 'phonePrefixCountryCode', phoneName = 'phone', disabled, required = false, className, style } = props
 	const prefixOptions = useSelector((state: RootState) => state?.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	let options = prefixOptions?.enumerationsOptions
 	if (!options || options.length === 0) options = fallbackOptions
 
 	return (
-		<Row gutter={8} wrap={false}>
+		<Row gutter={8} wrap={false} className={className} style={style}>
 			<Col>
 				<Field
 					label={label}

@@ -12,7 +12,7 @@ import { processAuthorizationResult } from '../../reducers/users/userActions'
 
 // utils
 import { postReq } from '../../utils/request'
-import { FORM, LANGUAGE, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { getPrefixCountryCode } from '../../utils/helper'
 
 // interfaces
@@ -52,10 +52,7 @@ const RegistrationPage: FC<Props> = () => {
 	}
 
 	const fetchData = () => {
-		const phonePrefixCountryCode = getPrefixCountryCode(
-			map(phonePrefixes?.data, (item) => item.code),
-			LANGUAGE.SK.toUpperCase()
-		)
+		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
 		const initData = {
 			phonePrefixCountryCode

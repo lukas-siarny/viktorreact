@@ -15,7 +15,7 @@ import { IBreadcrumbs, ICustomerForm } from '../../types/interfaces'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { ENUMERATIONS_KEYS, FORM, LANGUAGE, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { getPrefixCountryCode } from '../../utils/helper'
@@ -44,10 +44,7 @@ const CreateCustomerPage = () => {
 	}
 
 	const fetchData = async () => {
-		const phonePrefixCountryCode = getPrefixCountryCode(
-			map(countriesPhonePrefix?.data, (item) => item.code),
-			LANGUAGE.SK.toUpperCase()
-		)
+		const phonePrefixCountryCode = getPrefixCountryCode(map(countriesPhonePrefix?.data, (item) => item.code))
 		dispatch(initialize(FORM.CUSTOMER, { phonePrefixCountryCode }))
 	}
 

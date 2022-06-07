@@ -54,15 +54,15 @@ const CreateUserPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [phonePrefixes])
 
-	const createUser = async (input: any) => {
+	const createUser = async (formData: any) => {
 		try {
 			setSubmitting(true)
 
 			const { data } = await postReq('/api/b2b/admin/users/', null, {
-				email: input?.email,
-				phone: input?.phone,
-				phonePrefixCountryCode: input?.phonePrefixCountryCode,
-				roleID: input?.roleID
+				email: formData?.email,
+				phone: formData?.phone,
+				phonePrefixCountryCode: formData?.phonePrefixCountryCode,
+				roleID: formData?.roleID
 			})
 
 			const userID = data.user.id

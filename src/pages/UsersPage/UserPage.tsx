@@ -38,7 +38,7 @@ const UserPage: FC<Props> = (props) => {
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
+	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
 	const showDeleteBtn: boolean = authUser.data?.id !== get(userAccountDetail, 'data.id')
@@ -51,7 +51,13 @@ const UserPage: FC<Props> = (props) => {
 
 	// init forms
 	useEffect(() => {
-		dispatch(initialize(FORM.USER_ACCOUNT, { ...userAccountDetail.data, ...get(userAccountDetail, 'data.company') }))
+		dispatch(
+			initialize(FORM.USER_ACCOUNT, {
+				...userAccountDetail.data,
+				...get(userAccountDetail, 'data.company'),
+				avatar: userAccountDetail?.data?.image ? [{ url: userAccountDetail?.data?.image?.original, uid: userAccountDetail?.data?.image?.id }] : null
+			})
+		)
 	}, [userAccountDetail, dispatch])
 
 	const handleUserAccountFormSubmit = async (data: any) => {
@@ -61,7 +67,8 @@ const UserPage: FC<Props> = (props) => {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
-				phone: data?.phone
+				phone: data?.phone,
+				imageID: data?.avatar?.[0]?.id || null
 			}
 
 			// check one required field for company info

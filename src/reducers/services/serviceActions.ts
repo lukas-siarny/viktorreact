@@ -1,16 +1,16 @@
 /* eslint-disable import/no-cycle */
-import { map, join } from 'lodash'
+import { map } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
 import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { IUserAvatar } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
 import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
-import { ISalonsPayload } from '../salons/salonsActions'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
@@ -23,7 +23,7 @@ interface ServicesTableData {
 	key: number
 	serviceID: number
 	name: string
-	employees: string
+	employees: IUserAvatar[]
 	price: string
 	duration: string
 	category: string
@@ -56,10 +56,12 @@ export const getServices =
 					key: item.id,
 					serviceID: item.id,
 					name: item.name || '-',
-					employees: join(
-						map(item.employees, (employee) => `${employee.firstName} ${employee.lastName}`),
-						'\n'
-					),
+					employees: item.employees.map((employee) => ({
+						src: employee.image?.resizedImages?.thumbnail,
+						alt: `${employee.firstName} ${employee.lastName}`,
+						text: `${employee.firstName} ${employee.lastName}`,
+						key: employee.id
+					})),
 					price: getServiceRange(item.priceFrom, item.priceTo),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
 					category: item.category.name || '-',

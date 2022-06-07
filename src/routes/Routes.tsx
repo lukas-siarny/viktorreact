@@ -50,6 +50,8 @@ import CreateCustomerPage from '../pages/CustomersPage/CreateCustomerPage'
 
 // Employees
 import EmployeesPage from '../pages/EmployeesPage/EmployeesPage'
+import EmployeePage from '../pages/EmployeesPage/EmployeePage'
+import CreateEmployeePage from '../pages/EmployeesPage/CreateEmployeePage'
 
 // 404, 403
 import ForbiddenPage from '../pages/ErrorPages/ForbiddenPage'
@@ -212,6 +214,24 @@ const Routes: FC = (props) => {
 						path={t('paths:employees')}
 						component={EmployeesPage}
 						translatePathKey={t('paths:employees')}
+						layout={MainLayout}
+						page={PAGE.EMPLOYEES}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:employees/create')}
+						component={CreateEmployeePage}
+						translatePathKey={t('paths:employees/create')}
+						layout={MainLayout}
+						page={PAGE.EMPLOYEES}
+					/>
+					<AuthRoute
+						{...props}
+						exact
+						path={t('paths:employees/{{employeeID}}', { employeeID: ':employeeID' })}
+						component={EmployeePage}
+						translatePathKey={t('paths:employees/{{employeeID}}', { employeeID: ':employeeID' })}
 						layout={MainLayout}
 						page={PAGE.EMPLOYEES}
 					/>

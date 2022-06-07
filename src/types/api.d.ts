@@ -340,6 +340,37 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BV1UsersUserId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type UserID = number;
+        }
+        export interface PathParameters {
+            userID: Parameters.UserID;
+        }
+        namespace Responses {
+            export interface $200 {
+                user: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace GetApiB2BAdminCustomers {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -378,10 +409,11 @@ declare namespace Paths {
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     address: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     salon: {
                         id: number;
@@ -430,10 +462,11 @@ declare namespace Paths {
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     address: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     salon: {
                         id: number;
@@ -615,7 +648,7 @@ declare namespace Paths {
                     };
                     user?: {
                         id: number;
-                        email: string;
+                        email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
                         firstName?: string;
@@ -633,7 +666,7 @@ declare namespace Paths {
                             }[];
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
-                        image: {
+                        image?: {
                             id: number;
                             original: string;
                             resizedImages: {
@@ -902,7 +935,7 @@ declare namespace Paths {
             export type Order = string;
             export type Page = number;
             export type Search = string | null;
-            export type Statuses = ("PUBLISHED" | "VISIBLE" | "DELETED" | "NOT_DELETED" | "ALL")[];
+            export type Statuses = ("PUBLISHED" | "NOT_PUBLISHED" | "NOT_VISIBLE" | "VISIBLE" | "DELETED" | "NOT_DELETED" | "ALL")[];
         }
         export interface QueryParameters {
             search?: Parameters.Search;
@@ -921,12 +954,13 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     email?: string;
                     address?: {
+                        countryCode: string;
                         zipCode: string;
                         city: string;
                         street: string;
+                        streetNumber?: string;
                         latitude: number; // float
                         longitude: number; // float
-                        countryCode: string;
                     };
                     categories: {
                         id: number;
@@ -1015,12 +1049,13 @@ declare namespace Paths {
                         validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                     };
                     address?: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
+                        streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
-                        countryCode?: string;
                     };
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
@@ -1042,7 +1077,7 @@ declare namespace Paths {
                     user: {
                         id: number;
                         name: string;
-                        email: string;
+                        email?: string;
                     };
                     images: {
                         id: number;
@@ -1058,6 +1093,10 @@ declare namespace Paths {
                             [key: string]: any;
                         };
                     };
+                    pricelists: {
+                        id: number;
+                        original: string;
+                    }[];
                     companyContactPerson?: {
                         email?: string;
                         firstName?: string;
@@ -1066,10 +1105,11 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddress?: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     companyInfo?: {
                         businessID?: string;
@@ -1319,7 +1359,7 @@ declare namespace Paths {
             export interface $200 {
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -1337,7 +1377,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -1389,10 +1429,11 @@ declare namespace Paths {
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     address: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     salon: {
                         id: number;
@@ -1441,10 +1482,11 @@ declare namespace Paths {
                     phone: string; // ^\d+$
                     gender?: "MALE" | "FEMALE";
                     address: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     salon: {
                         id: number;
@@ -1626,7 +1668,7 @@ declare namespace Paths {
                     };
                     user?: {
                         id: number;
-                        email: string;
+                        email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
                         firstName?: string;
@@ -1644,7 +1686,7 @@ declare namespace Paths {
                             }[];
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
-                        image: {
+                        image?: {
                             id: number;
                             original: string;
                             resizedImages: {
@@ -1901,10 +1943,11 @@ declare namespace Paths {
                         };
                     };
                     address?: {
-                        street?: string;
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
-                        countryCode?: string;
+                        street?: string;
+                        streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
                     };
@@ -2084,6 +2127,7 @@ declare namespace Paths {
                         zipCode?: string;
                         city?: string;
                         street?: string;
+                        streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
                         phonePrefixCountryCode?: string;
@@ -2105,16 +2149,23 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     companyInfoSegment?: {
                         businessID?: string;
                         taxID?: string;
                         vatID?: string;
                         companyName?: string;
+                    };
+                    pricelistSegment?: {
+                        pricelists: {
+                            id: number;
+                            original: string;
+                        }[];
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -2290,6 +2341,7 @@ declare namespace Paths {
                         zipCode?: string;
                         city?: string;
                         street?: string;
+                        streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
                         phonePrefixCountryCode?: string;
@@ -2311,16 +2363,23 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     companyInfoSegment?: {
                         businessID?: string;
                         taxID?: string;
                         vatID?: string;
                         companyName?: string;
+                    };
+                    pricelistSegment?: {
+                        pricelists: {
+                            id: number;
+                            original: string;
+                        }[];
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -2583,7 +2642,7 @@ declare namespace Paths {
             export interface $200 {
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -2601,7 +2660,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -2910,6 +2969,258 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2CV1SalonsSalonId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type LatMy = number; // float
+            export type LonMy = number; // float
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface QueryParameters {
+            latMy?: Parameters.LatMy /* float */;
+            lonMy?: Parameters.LonMy /* float */;
+        }
+        namespace Responses {
+            export interface $200 {
+                id: number;
+                name?: string;
+                aboutUsFirst?: string;
+                aboutUsSecond?: string;
+                countryCode?: string;
+                zipCode?: string;
+                city?: string;
+                street?: string;
+                phonePrefixCountryCode?: string;
+                phone?: string; // ^\d+$
+                email?: string;
+                socialLinkFB?: string;
+                socialLinkInstagram?: string;
+                socialLinkWebPage?: string;
+                payByCard?: boolean;
+                otherPaymentMethods?: string;
+                liked: boolean;
+                distance?: number; // float
+                travelTime?: number;
+                openingHours: [
+                    {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        isCurrentDate: boolean;
+                        isOpen: boolean;
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: {
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[];
+                    },
+                    {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        isCurrentDate: boolean;
+                        isOpen: boolean;
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: {
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[];
+                    },
+                    {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        isCurrentDate: boolean;
+                        isOpen: boolean;
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: {
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[];
+                    },
+                    {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        isCurrentDate: boolean;
+                        isOpen: boolean;
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: {
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[];
+                    },
+                    {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        isCurrentDate: boolean;
+                        isOpen: boolean;
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: {
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[];
+                    },
+                    {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        isCurrentDate: boolean;
+                        isOpen: boolean;
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: {
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[];
+                    },
+                    {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        isCurrentDate: boolean;
+                        isOpen: boolean;
+                        /**
+                         * example:
+                         * MONDAY
+                         */
+                        day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                        timeRanges: {
+                            timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                            timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        }[];
+                    }
+                ];
+                openingHoursNote?: {
+                    note: string;
+                    validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                };
+                images: {
+                    id: number;
+                    original: string;
+                    resizedImages: {
+                        [key: string]: any;
+                    };
+                }[];
+                logo?: {
+                    id: number;
+                    original: string;
+                    resizedImages: {
+                        [key: string]: any;
+                    };
+                };
+                pricelists: {
+                    id: number;
+                    original: string;
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CV1SalonsSalonIdEmployees {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Limit = 25 | 50 | 100;
+            export type Page = number;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface QueryParameters {
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                employees: {
+                    id: number;
+                    firstName?: string;
+                    image: {
+                        id: number;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CV1SalonsSalonIdServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Limit = 25 | 50 | 100;
+            export type Page = number;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface QueryParameters {
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                services: {
+                    id: number;
+                    name: string;
+                    description?: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BAdminCustomersCustomerId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -2958,6 +3269,11 @@ declare namespace Paths {
             gender?: "MALE" | "FEMALE";
             /**
              * example:
+             * SK
+             */
+            countryCode?: string | null;
+            /**
+             * example:
              * 010 01
              */
             zipCode?: string | null;
@@ -2973,9 +3289,9 @@ declare namespace Paths {
             street?: string | null;
             /**
              * example:
-             * SK
+             * 1
              */
-            countryCode?: string | null;
+            streetNumber?: string | null;
             salonID: number;
         }
         namespace Responses {
@@ -3125,7 +3441,7 @@ declare namespace Paths {
                     };
                     user?: {
                         id: number;
-                        email: string;
+                        email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
                         firstName?: string;
@@ -3143,7 +3459,7 @@ declare namespace Paths {
                             }[];
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
-                        image: {
+                        image?: {
                             id: number;
                             original: string;
                             resizedImages: {
@@ -3278,6 +3594,11 @@ declare namespace Paths {
             }[];
             /**
              * example:
+             * SK
+             */
+            countryCode: string;
+            /**
+             * example:
              * 010 01
              */
             zipCode: string;
@@ -3293,6 +3614,11 @@ declare namespace Paths {
             street: string;
             /**
              * example:
+             * 1
+             */
+            streetNumber?: string;
+            /**
+             * example:
              * 49.226666
              */
             latitude: number; // float
@@ -3301,11 +3627,6 @@ declare namespace Paths {
              * 18.7348681
              */
             longitude: number; // float
-            /**
-             * example:
-             * SK
-             */
-            countryCode: string;
             /**
              * example:
              * SK
@@ -3360,6 +3681,11 @@ declare namespace Paths {
              * 1
              */
             logoID?: null | number;
+            /**
+             * example:
+             * 1
+             */
+            pricelistIDs?: number[];
             companyContactPerson?: {
                 /**
                  * example:
@@ -3390,6 +3716,11 @@ declare namespace Paths {
             companyInvoiceAddress?: {
                 /**
                  * example:
+                 * SK
+                 */
+                countryCode: string;
+                /**
+                 * example:
                  * 010 01
                  */
                 zipCode: string;
@@ -3405,9 +3736,9 @@ declare namespace Paths {
                 street: string;
                 /**
                  * example:
-                 * SK
+                 * 1
                  */
-                countryCode: string;
+                streetNumber?: string;
             };
             companyInfo?: {
                 /**
@@ -3719,7 +4050,7 @@ declare namespace Paths {
             export interface $200 {
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -3737,7 +4068,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -3803,6 +4134,11 @@ declare namespace Paths {
             gender?: "MALE" | "FEMALE";
             /**
              * example:
+             * SK
+             */
+            countryCode?: string | null;
+            /**
+             * example:
              * 010 01
              */
             zipCode?: string | null;
@@ -3818,9 +4154,9 @@ declare namespace Paths {
             street?: string | null;
             /**
              * example:
-             * SK
+             * 1
              */
-            countryCode?: string | null;
+            streetNumber?: string | null;
             salonID: number;
         }
         namespace Responses {
@@ -3970,7 +4306,7 @@ declare namespace Paths {
                     };
                     user?: {
                         id: number;
-                        email: string;
+                        email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
                         firstName?: string;
@@ -3988,7 +4324,7 @@ declare namespace Paths {
                             }[];
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
-                        image: {
+                        image?: {
                             id: number;
                             original: string;
                             resizedImages: {
@@ -4083,21 +4419,9 @@ declare namespace Paths {
                     ];
                 }[];
                 openingHoursNote?: {
-                    /**
-                     * example:
-                     * Poznámka
-                     */
                     note: string;
-                    /**
-                     * example:
-                     * 2022-03-22
-                     */
-                    validFrom?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                    /**
-                     * example:
-                     * 2022-03-22
-                     */
-                    validTo?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                 } | null;
             } | null;
             aboutUsSegment?: {
@@ -4135,6 +4459,11 @@ declare namespace Paths {
                 street: string;
                 /**
                  * example:
+                 * 1
+                 */
+                streetNumber?: string;
+                /**
+                 * example:
                  * 49.226666
                  */
                 latitude: number; // float
@@ -4155,7 +4484,7 @@ declare namespace Paths {
                 phone: string; // ^\d+$
                 /**
                  * example:
-                 * test_notino.goodrequest.com
+                 * test_notino@goodrequest.com
                  */
                 email: string; // email
                 /**
@@ -4216,6 +4545,11 @@ declare namespace Paths {
             companyInvoiceAddressSegment?: {
                 /**
                  * example:
+                 * SK
+                 */
+                countryCode: string;
+                /**
+                 * example:
                  * 010 01
                  */
                 zipCode: string;
@@ -4231,9 +4565,9 @@ declare namespace Paths {
                 street: string;
                 /**
                  * example:
-                 * SK
+                 * 1
                  */
-                countryCode: string;
+                streetNumber?: string;
             };
             companyInfoSegment?: {
                 /**
@@ -4256,6 +4590,13 @@ declare namespace Paths {
                  * Company
                  */
                 companyName: string;
+            };
+            pricelistSegment?: {
+                /**
+                 * example:
+                 * 1
+                 */
+                pricelistIDs?: number[];
             };
         }
         namespace Responses {
@@ -4406,6 +4747,7 @@ declare namespace Paths {
                         zipCode?: string;
                         city?: string;
                         street?: string;
+                        streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
                         phonePrefixCountryCode?: string;
@@ -4427,16 +4769,23 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     companyInfoSegment?: {
                         businessID?: string;
                         taxID?: string;
                         vatID?: string;
                         companyName?: string;
+                    };
+                    pricelistSegment?: {
+                        pricelists: {
+                            id: number;
+                            original: string;
+                        }[];
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -4691,7 +5040,7 @@ declare namespace Paths {
             export interface $200 {
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -4709,7 +5058,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -4720,6 +5069,37 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2CV1SalonsSalonIdLike {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            like: boolean;
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -4791,7 +5171,7 @@ declare namespace Paths {
                 refreshToken: string;
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -4809,7 +5189,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -4902,7 +5282,7 @@ declare namespace Paths {
                 refreshToken: string;
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -4920,7 +5300,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -4982,6 +5362,11 @@ declare namespace Paths {
             gender?: "MALE" | "FEMALE";
             /**
              * example:
+             * SK
+             */
+            countryCode?: string | null;
+            /**
+             * example:
              * 010 01
              */
             zipCode?: string | null;
@@ -4997,9 +5382,9 @@ declare namespace Paths {
             street?: string | null;
             /**
              * example:
-             * SK
+             * 1
              */
-            countryCode?: string | null;
+            streetNumber?: string;
             salonID: number;
         }
         namespace Responses {
@@ -5150,7 +5535,7 @@ declare namespace Paths {
                     };
                     user?: {
                         id: number;
-                        email: string;
+                        email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
                         firstName?: string;
@@ -5168,7 +5553,7 @@ declare namespace Paths {
                             }[];
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
-                        image: {
+                        image?: {
                             id: number;
                             original: string;
                             resizedImages: {
@@ -5322,7 +5707,7 @@ declare namespace Paths {
                     mimeType: string;
                 }[]
             ];
-            category: "SALON" | "EMPLOYEE" | "USER";
+            category: "SALON" | "EMPLOYEE" | "USER" | "SALON_PRICELIST";
         }
         namespace Responses {
             export interface $200 {
@@ -5403,6 +5788,11 @@ declare namespace Paths {
             }[];
             /**
              * example:
+             * SK
+             */
+            countryCode: string;
+            /**
+             * example:
              * 010 01
              */
             zipCode: string;
@@ -5418,6 +5808,11 @@ declare namespace Paths {
             street: string;
             /**
              * example:
+             * 1
+             */
+            streetNumber?: string;
+            /**
+             * example:
              * 49.226666
              */
             latitude: number; // float
@@ -5426,11 +5821,6 @@ declare namespace Paths {
              * 18.7348681
              */
             longitude: number; // float
-            /**
-             * example:
-             * SK
-             */
-            countryCode: string;
             /**
              * example:
              * SK
@@ -5485,6 +5875,11 @@ declare namespace Paths {
              * 1
              */
             logoID?: null | number;
+            /**
+             * example:
+             * 1
+             */
+            pricelistIDs?: number[];
             companyContactPerson?: {
                 /**
                  * example:
@@ -5515,6 +5910,11 @@ declare namespace Paths {
             companyInvoiceAddress?: {
                 /**
                  * example:
+                 * SK
+                 */
+                countryCode: string;
+                /**
+                 * example:
                  * 010 01
                  */
                 zipCode: string;
@@ -5530,9 +5930,9 @@ declare namespace Paths {
                 street: string;
                 /**
                  * example:
-                 * SK
+                 * 1
                  */
-                countryCode: string;
+                streetNumber?: string;
             };
             companyInfo?: {
                 /**
@@ -5765,7 +6165,7 @@ declare namespace Paths {
             export interface $200 {
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -5783,7 +6183,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -5890,7 +6290,7 @@ declare namespace Paths {
                 refreshToken: string;
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -5908,7 +6308,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -5986,7 +6386,7 @@ declare namespace Paths {
                 refreshToken: string;
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -6004,7 +6404,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -6042,7 +6442,7 @@ declare namespace Paths {
                 refreshToken: string;
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -6060,7 +6460,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -6163,7 +6563,7 @@ declare namespace Paths {
                 refreshToken: string;
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -6181,7 +6581,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -6243,6 +6643,11 @@ declare namespace Paths {
             gender?: "MALE" | "FEMALE";
             /**
              * example:
+             * SK
+             */
+            countryCode?: string | null;
+            /**
+             * example:
              * 010 01
              */
             zipCode?: string | null;
@@ -6258,9 +6663,9 @@ declare namespace Paths {
             street?: string | null;
             /**
              * example:
-             * SK
+             * 1
              */
-            countryCode?: string | null;
+            streetNumber?: string;
             salonID: number;
         }
         namespace Responses {
@@ -6411,7 +6816,7 @@ declare namespace Paths {
                     };
                     user?: {
                         id: number;
-                        email: string;
+                        email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
                         firstName?: string;
@@ -6429,7 +6834,7 @@ declare namespace Paths {
                             }[];
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
-                        image: {
+                        image?: {
                             id: number;
                             original: string;
                             resizedImages: {
@@ -6544,7 +6949,7 @@ declare namespace Paths {
                     mimeType: string;
                 }[]
             ];
-            category: "SALON" | "EMPLOYEE" | "USER";
+            category: "SALON" | "EMPLOYEE" | "USER" | "SALON_PRICELIST";
         }
         namespace Responses {
             export interface $200 {
@@ -6770,6 +7175,7 @@ declare namespace Paths {
                         zipCode?: string;
                         city?: string;
                         street?: string;
+                        streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
                         phonePrefixCountryCode?: string;
@@ -6791,16 +7197,23 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                     };
                     companyInvoiceAddressSegment?: {
+                        countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
-                        countryCode?: string;
+                        streetNumber?: string;
                     };
                     companyInfoSegment?: {
                         businessID?: string;
                         taxID?: string;
                         vatID?: string;
                         companyName?: string;
+                    };
+                    pricelistSegment?: {
+                        pricelists: {
+                            id: number;
+                            original: string;
+                        }[];
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
@@ -6959,7 +7372,7 @@ declare namespace Paths {
             export interface $200 {
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -6977,7 +7390,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -7115,7 +7528,7 @@ declare namespace Paths {
                 refreshToken: string;
                 user: {
                     id: number;
-                    email: string;
+                    email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
                     firstName?: string;
@@ -7133,7 +7546,7 @@ declare namespace Paths {
                         }[];
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
-                    image: {
+                    image?: {
                         id: number;
                         original: string;
                         resizedImages: {
@@ -7351,6 +7764,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
   /**
+   * deleteApiB2BV1UsersUserId - PERMISSION: NO
+   */
+  'deleteApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
+  /**
    * postApiB2BV1UsersRegistration - PERMISSION: NO
    */
   'postApiB2BV1UsersRegistration'(
@@ -7462,6 +7883,38 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonId - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonId'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonId.PathParameters & Paths.GetApiB2CV1SalonsSalonId.QueryParameters & Paths.GetApiB2CV1SalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonId.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdServices - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonIdServices'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdServices.PathParameters & Paths.GetApiB2CV1SalonsSalonIdServices.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdServices.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdServices.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdEmployees - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonIdEmployees'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdEmployees.Responses.$200>
+  /**
+   * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
+   */
+  'patchApiB2CV1SalonsSalonIdLike'(
+    parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdLike.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
+    data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
   /**
    * getApiB2CV1EnumsCategories - PERMISSION: NO
    */
@@ -8166,6 +8619,14 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
+    /**
+     * deleteApiB2BV1UsersUserId - PERMISSION: NO
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
   }
   ['/api/b2b/v1/users/registration']: {
     /**
@@ -8306,6 +8767,46 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}']: {
+    /**
+     * getApiB2CV1SalonsSalonId - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonId.PathParameters & Paths.GetApiB2CV1SalonsSalonId.QueryParameters & Paths.GetApiB2CV1SalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonId.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/services']: {
+    /**
+     * getApiB2CV1SalonsSalonIdServices - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdServices.PathParameters & Paths.GetApiB2CV1SalonsSalonIdServices.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdServices.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdServices.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/employees']: {
+    /**
+     * getApiB2CV1SalonsSalonIdEmployees - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdEmployees.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/like']: {
+    /**
+     * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdLike.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
+      data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
   }
   ['/api/b2c/v1/enums/categories/']: {
     /**

@@ -39,7 +39,8 @@ const SwitchField = (props: Props) => {
 		description,
 		offsetLabel,
 		customLabel,
-		customOnChange
+		customOnChange,
+		defaultChecked
 	} = props
 	// NOTE: ak existuje label znamena to ze switch je pouzity ako label vo forme a vtedy sa pouzije novy layout ikona + label text + switch
 	// Ak nie je label pouzite je v tabulke alebo vo filtri a vtedy sa nerenderuje label ani ikona ale len samotny switch field
@@ -87,7 +88,7 @@ const SwitchField = (props: Props) => {
 						<div className={cx('flex justify-end extra-text w-1/5 text-right', { 'text-blue-600': checkedState })}>
 							<div>{extraText}</div>
 							<span id={formFieldID(form, input.name)}>
-								<Switch className={'ml-2'} checked={checkedState} disabled={disabled} size={size} onClick={onClick} tabIndex={-1} />
+								<Switch className={'ml-2'} checked={checkedState} disabled={disabled} size={size} onClick={onClick} tabIndex={-1} defaultChecked={defaultChecked} />
 							</span>
 						</div>
 					</div>

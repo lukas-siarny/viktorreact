@@ -21,6 +21,7 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { getSalons } from '../../../reducers/salons/salonsActions'
+import { getEmployees } from '../../../reducers/employees/employeesActions'
 import { RootState } from '../../../reducers'
 
 type ComponentProps = {
@@ -61,7 +62,21 @@ const ServicesFilter = (props: Props) => {
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
 			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
-			return { pagination: data?.pagination?.page, data: salonsOptions }
+			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
+		},
+		[dispatch]
+	)
+
+	const searchEmployee = useCallback(
+		async (search: string, page: number) => {
+			const { data } = await dispatch(getEmployees(page, undefined, undefined, { search }))
+			const options = data?.employees.map((employee) => ({
+				label: `${employee.firstName} ${employee.lastName}` || `${employee.id}`,
+				value: employee.id,
+				key: `${employee.id}-key`
+			}))
+
+			return { pagination: data?.pagination, page: data?.pagination?.page, data: options }
 		},
 		[dispatch]
 	)
@@ -108,18 +123,21 @@ const ServicesFilter = (props: Props) => {
 							disabled={isFilterDisabled}
 						/>
 					</Col>
-					{/* TODO currently not needed */}
-					{/* <Col span={6}>
+					<Col span={6}>
 						<Field
 							className='m-0'
 							component={SelectField}
 							allowClear
 							placeholder={t('loc:Zamestnanec')}
 							name='employeeID'
-							options={EMPLOYEES_OPTIONS}
+							showSearch
+							onSearch={searchEmployee}
+							onDidMountSearch
 							disabled={isFilterDisabled}
+							allowInfinityScroll
+							filterOption={false}
 						/>
-					</Col> */}
+					</Col>
 					<Col span={6}>
 						<Field
 							className='m-0'
@@ -131,6 +149,8 @@ const ServicesFilter = (props: Props) => {
 							onSearch={searchSalon}
 							onDidMountSearch
 							disabled={isFilterDisabled}
+							allowInfinityScroll
+							filterOption={false}
 						/>
 					</Col>
 				</Row>

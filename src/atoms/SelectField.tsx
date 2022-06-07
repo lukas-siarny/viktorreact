@@ -484,6 +484,7 @@ const SelectField = (props: Props) => {
 				clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
 				allowClear={allowClear}
 				showSearch={showSearch}
+				// NOTE: set to FALSE when we expect filtering on BE
 				filterOption={filterOption && localFilterOption}
 				onSearch={showSearch ? onSearchDebounced : undefined}
 				suffixIcon={suffIcon}

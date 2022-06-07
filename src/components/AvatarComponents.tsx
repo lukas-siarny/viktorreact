@@ -5,12 +5,13 @@ import { SizeContextProvider } from 'antd/lib/avatar/SizeContext'
 import { PopoverProps } from 'antd/lib/popover'
 
 type UserAvatarProps = AvatarProps & {
+	fallBackSrc?: string
 	className?: string
 	text?: string
 }
 
 const UserAvatar = (props: UserAvatarProps) => {
-	const { alt, gap, icon, shape, size, src, srcSet, draggable, crossOrigin, onError, text, className } = props
+	const { alt, gap, icon, shape, size, src, srcSet, draggable, crossOrigin, onError, text, className, fallBackSrc } = props
 
 	return (
 		<>
@@ -27,7 +28,9 @@ const UserAvatar = (props: UserAvatarProps) => {
 					draggable={draggable}
 					crossOrigin={crossOrigin}
 					onError={onError}
-				/>
+				>
+					<img src={fallBackSrc} alt={'avatar'} />
+				</Avatar>
 			) : (
 				<Avatar className={className} alt={alt} gap={gap} icon={icon} shape={shape} size={size} draggable={draggable} crossOrigin={crossOrigin} onError={onError}>
 					{text}

@@ -27,6 +27,7 @@ import validateEmployeeForm from './validateEmployeeForm'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 import { getServices } from '../../../reducers/services/serviceActions'
+import DeleteButton from '../../../components/DeleteButton'
 
 const { Panel } = Collapse
 
@@ -44,6 +45,21 @@ const renderListFields = (props: any) => {
 	const [t] = useTranslation()
 	const { fields } = props
 
+	const genExtra = (index: number) => (
+		<DeleteButton
+			onConfirm={(event) => {
+				fields.remove(index)
+				event?.stopPropagation()
+			}}
+			smallIcon
+			size={'small'}
+			entityName={t('loc:službu')}
+			type={'default'}
+			getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+			onlyIcon
+		/>
+	)
+
 	return (
 		<>
 			<h3>{t('loc:Zoznam priradených služieb')}</h3>
@@ -53,7 +69,7 @@ const renderListFields = (props: any) => {
 					const variableDuration = fields.get(index)?.variableDuration
 					const variablePrice = fields.get(index)?.variablePrice
 					return (
-						<Panel header={fields.get(index)?.name} key={index}>
+						<Panel header={fields.get(index)?.name} key={index} extra={genExtra(index)}>
 							<Row gutter={8}>
 								<Col span={variableDuration ? 12 : 24}>
 									<Field

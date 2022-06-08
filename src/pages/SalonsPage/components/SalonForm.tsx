@@ -153,7 +153,6 @@ const UserAccountForm: FC<Props> = (props) => {
 							showLettersCount
 						/>
 						<Field
-							className={'m-0'}
 							component={ImgUploadField}
 							name={'logo'}
 							label={t('loc:Logo')}

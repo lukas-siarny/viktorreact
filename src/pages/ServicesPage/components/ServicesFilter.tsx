@@ -61,7 +61,7 @@ const ServicesFilter = (props: Props) => {
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
 			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
-			return { pagination: data?.pagination?.page, data: salonsOptions }
+			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
 		},
 		[dispatch]
 	)
@@ -129,6 +129,8 @@ const ServicesFilter = (props: Props) => {
 							name='salonID'
 							showSearch
 							onSearch={searchSalon}
+							filterOption={false}
+							allowInfinityScroll
 							onDidMountSearch
 							disabled={isFilterDisabled}
 						/>

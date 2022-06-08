@@ -77,7 +77,7 @@ const CategoryForm: FC<Props> = (props) => {
 			return (
 				<PopConfirmComponent
 					placement={'left'}
-					title={t('loc:Máte neuložené zmeny fo formulári. Želáte si pokračovať ďalej?')}
+					title={t('loc:Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?')}
 					onConfirm={() => createCategory(values?.id, values?.name, values?.childrenLength, values?.level || 0 + 1)}
 					okText={t('loc:Pokračovať')}
 					getPopupContainer={() => documentFooter}
@@ -96,6 +96,8 @@ const CategoryForm: FC<Props> = (props) => {
 		)
 	}
 
+	const localizationInputCss = values?.level === 0 ? 'w-2/3' : 'w-full'
+
 	return (
 		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
@@ -105,7 +107,7 @@ const CategoryForm: FC<Props> = (props) => {
 						{isFormDirty ? (
 							<PopConfirmComponent
 								placement={'left'}
-								title={t('loc:Máte neuložené zmeny fo formulári. Želáte si pokračovať ďalej?')}
+								title={t('loc:Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?')}
 								onConfirm={closeCategoryForm}
 								okText={t('loc:Pokračovať')}
 								getPopupContainer={() => documentFooter}
@@ -122,30 +124,42 @@ const CategoryForm: FC<Props> = (props) => {
 						)}
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<FieldArray
-						key='nameLocalizations'
-						name='nameLocalizations'
-						component={Localizations}
-						placeholder={t('loc:Zadajte názov')}
-						horizontal
-						ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
-						customValidate={fixLength100}
-						mainField={
+					<Row justify={'space-between'} className={'w-full'}>
+						<FieldArray
+							key='nameLocalizations'
+							name='nameLocalizations'
+							component={Localizations}
+							placeholder={t('loc:Zadajte názov')}
+							horizontal
+							ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
+							customValidate={fixLength100}
+							className={localizationInputCss}
+							mainField={
+								<Field
+									className='mb-0'
+									component={InputField}
+									label={t('loc:Názov kategórie (en)')}
+									placeholder={t('loc:Zadajte názov')}
+									key='nameLocalizations[0].value'
+									name='nameLocalizations[0].value'
+									required
+									validate={fixLength100}
+								/>
+							}
+						/>
+						{values?.level === 0 ? (
 							<Field
-								className='mb-0'
-								component={InputField}
-								label={t('loc:Názov kategórie (en)')}
-								placeholder={t('loc:Zadajte názov')}
-								key='nameLocalizations[0].value'
-								name='nameLocalizations[0].value'
+								className='w-1/4'
+								component={ImgUploadField}
+								name='image'
+								label={t('loc:Obrázok')}
+								maxCount={1}
+								signUrl={URL_UPLOAD_IMAGES}
+								category='SALON'
 								required
-								validate={fixLength100}
 							/>
-						}
-					/>
-					{values?.level === 0 ? (
-						<Field className='m-0' component={ImgUploadField} name='image' label={t('loc:Obrázok')} maxCount={1} signUrl={URL_UPLOAD_IMAGES} category='SALON' />
-					) : undefined}
+						) : undefined}
+					</Row>
 					<div className={'flex justify-between flex-wrap gap-2'}>
 						{values?.id && !values?.deletedAt ? (
 							<DeleteButton

@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef, useState } from 'react'
+import React, { CSSProperties, FC, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps } from 'redux-form'
 import { isEmpty, isEqual, get } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -29,6 +29,7 @@ type Props = WrappedFieldProps &
 		maxFileSize: number
 		// endpoint which returns signed url for image upload
 		signUrl: string
+		className?: CSSProperties
 	}
 
 // export type ImgUploadParam = { [key: string]: { uid: string } }
@@ -49,7 +50,8 @@ const ImgUploadField: FC<Props> = (props) => {
 		signUrl,
 		multiple,
 		maxCount = 20,
-		category
+		category,
+		className = ''
 	} = props
 
 	const [t] = useTranslation()
@@ -131,7 +133,13 @@ const ImgUploadField: FC<Props> = (props) => {
 	)
 
 	return (
-		<Item className='w-full' label={label} required={required} help={touched && error ? error : undefined} validateStatus={touched && error ? 'error' : undefined}>
+		<Item
+			className={`${className ?? 'w-full'}`}
+			label={label}
+			required={required}
+			help={touched && error ? error : undefined}
+			validateStatus={touched && error ? 'error' : undefined}
+		>
 			{staticMode && !input.value && '-'}
 			{uploader}
 			<Modal visible={!!previewUrl} onCancel={() => setPreviewUrl('')} footer={null} closeIcon={<CloseIcon />}>

@@ -127,6 +127,7 @@ const EmployeePage = (props: Props) => {
 	const updateEmployee = async (data: any) => {
 		try {
 			setSubmitting(true)
+			console.log(data)
 			await patchReq(
 				'/api/b2b/admin/employees/{employeeID}',
 				{ employeeID },
@@ -208,7 +209,7 @@ const EmployeePage = (props: Props) => {
 									htmlType={'submit'}
 									onClick={(e) => {
 										if (hasPermission) {
-											dispatch(submit(FORM.USER_ACCOUNT))
+											dispatch(submit(FORM.EMPLOYEE))
 										} else {
 											e.preventDefault()
 											openForbiddenModal()

@@ -9,7 +9,7 @@ import { Paths } from '../../types/api'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
+import { decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
 import { ISalonsPayload } from '../salons/salonsActions'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
@@ -60,7 +60,7 @@ export const getServices =
 						map(item.employees, (employee) => `${employee.firstName} ${employee.lastName}`),
 						'\n'
 					),
-					price: getServiceRange(item.priceFrom, item.priceTo),
+					price: getServiceRange(decodePrice(item.priceFrom), decodePrice(item.priceTo)),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
 					category: item.category.name || '-',
 					salon: item.salon.name

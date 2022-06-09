@@ -1,5 +1,5 @@
 import React, { FC, MouseEventHandler, useCallback } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Button } from 'antd'
 import { useDispatch } from 'react-redux'
@@ -46,18 +46,19 @@ const renderListFields = (props: any) => {
 	const { fields } = props
 
 	const genExtra = (index: number) => (
-		<DeleteButton
-			onConfirm={(event) => {
-				fields.remove(index)
-				event?.stopPropagation()
-			}}
-			smallIcon
-			size={'small'}
-			entityName={t('loc:službu')}
-			type={'default'}
-			getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-			onlyIcon
-		/>
+		<div className={'flex'} onClick={(e) => e.stopPropagation()}>
+			<DeleteButton
+				onConfirm={() => {
+					fields.remove(index)
+				}}
+				smallIcon
+				size={'small'}
+				entityName={t('loc:službu')}
+				type={'default'}
+				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+				onlyIcon
+			/>
+		</div>
 	)
 
 	return (

@@ -181,8 +181,24 @@ export interface ICustomerForm {
 	salonID: number
 }
 
+export interface IEmployeeForm {
+	firstName: string
+	lastName: string
+	salonID: number
+	email?: string
+	phonePrefixCountryCode?: string
+	phone?: string
+	services?: any
+	imageID?: number
+}
+
 export interface ILanguagePickerForm {
 	language: LANGUAGE
+}
+
+export interface IPrice {
+	exponent: number
+	significand: number
 }
 
 export interface IUserAvatar {

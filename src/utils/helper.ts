@@ -26,7 +26,9 @@ import {
 	replace,
 	map,
 	size,
-	filter
+	filter,
+	trimEnd,
+	repeat
 } from 'lodash'
 import { notification } from 'antd'
 import slugify from 'slugify'
@@ -48,7 +50,7 @@ import {
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT
 } from './enums'
-import { IStructuredAddress } from '../types/interfaces'
+import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
@@ -494,6 +496,63 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
 	return result
 }
 
+/**
+ * Transforms number to normalized form
+ * @param {number} price
+ * @returns {{ exponent: number, significand: number }}
+ */
+export const encodePrice = (price: number) => {
+	const stringPrice = `${price}`
+
+	let exponent = 0
+	const significand = +trimEnd(stringPrice.replace('.', ''), '0')
+
+	if (price % 1 !== 0) {
+		exponent = -stringPrice.split('.')[1].length
+	} else {
+		const reversedSplittedStringPrice = stringPrice.split('').reverse()
+
+		some(reversedSplittedStringPrice, (char) => {
+			if (char === '0') {
+				exponent += 1
+
+				return false
+			}
+
+			return true
+		})
+	}
+
+	return {
+		exponent,
+		significand
+	}
+}
+
+/**
+ * Transforms normalized form to number
+ * @param {IPrice | null} [price]
+ * @returns {number}
+ */
+export const decodePrice = (price?: IPrice | null) => {
+	if (price === null) {
+		return null
+	}
+
+	if (price === undefined) {
+		return undefined
+	}
+
+	const stringPrice = `${price.significand}`
+
+	if (price.exponent < 0) {
+		const index = stringPrice.length + price.exponent
+		return +`${stringPrice.substring(0, index)}.${stringPrice.substring(index)}`
+	}
+
+	return +(stringPrice + repeat('0', price.exponent))
+}
+
 export const getMaxSizeNotifMessage = (maxFileSize: any) => {
 	let notifMaxSize
 	if (maxFileSize >= BYTE_MULTIPLIER.MEGA) {
@@ -527,10 +586,10 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 	return values
 }
 
-export const getServiceRange = (from: number, to?: number, unit = '') => {
-	if (!to) return `${from}${unit}+`
+export const getServiceRange = (from: number | undefined | null, to?: number | undefined | null, unit = '') => {
+	if (!to) return `${from || ''}${unit}+`
 	if (from === to) return `${from}${unit}`
-	return `${from} - ${to}${unit}`
+	return `${from || ''} - ${to || ''}${unit}`
 }
 
 export const isValidDateRange = (from: string, to: string) => {

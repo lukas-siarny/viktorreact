@@ -9,7 +9,7 @@ import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/e
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 
 // types
-import { ICustomerForm } from '../../../types/interfaces'
+import { IEmployeeForm } from '../../../types/interfaces'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -36,7 +36,7 @@ type ComponentProps = {
 	addService: MouseEventHandler<HTMLElement>
 }
 
-type Props = InjectedFormProps<ICustomerForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
 
 const numberMin0 = validationNumberMin(0)
 
@@ -235,7 +235,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ICustomerForm, ComponentProps>({
+const form = reduxForm<IEmployeeForm, ComponentProps>({
 	form: FORM.EMPLOYEE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

@@ -28,6 +28,7 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
+import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
 
 type Columns = ColumnsType<any>
 
@@ -150,7 +151,12 @@ const EmployeesPage = () => {
 			sorter: true,
 			width: '10%',
 			sortOrder: setOrder(query.order, 'status'),
-			render: (value) => <div className={'flex justify-center'}>{value ? undefined : <CloudOfflineIcon />}</div>
+			render: (value, record) => (
+				<div className={'flex justify-center'}>
+					{value === false && !record?.inviteEmail ? <QuestionIcon /> : undefined}
+					{value === false && record?.inviteEmail ? <CloudOfflineIcon /> : undefined}
+				</div>
+			)
 		}
 	]
 
@@ -174,7 +180,7 @@ const EmployeesPage = () => {
 							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<EmployeesFilter
-									createUser={() => {
+									createEmployee={() => {
 										if (hasPermission) {
 											history.push(t('paths:employees/create'))
 										} else {

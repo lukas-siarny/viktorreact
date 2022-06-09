@@ -21,6 +21,7 @@ import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { getDefaultFormCategories } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
+import { decodePrice, encodePrice, getDefaultFormCategories } from '../../utils/helper'
 
 type Props = {
 	serviceID: number
@@ -46,8 +47,8 @@ const ServiceEditPage = (props: Props) => {
 				durationFrom: data?.service?.durationFrom,
 				durationTo: data?.service?.durationTo,
 				variableDuration: !!data?.service?.durationTo,
-				priceFrom: data?.service?.priceFrom,
-				priceTo: data?.service?.priceTo,
+				priceFrom: decodePrice(data?.service?.priceFrom),
+				priceTo: decodePrice(data?.service?.priceTo),
 				variablePrice: !!data?.service?.priceTo,
 				gallery: map(data?.service?.images, (image) => ({ id: image.id, url: image.original })),
 				categoryRoot: category?.[0]?.id,
@@ -70,8 +71,8 @@ const ServiceEditPage = (props: Props) => {
 				description: values.description,
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
-				priceFrom: values.priceFrom as any,
-				priceTo: values.variablePrice ? values.priceTo : (undefined as any),
+				priceFrom: encodePrice(values.priceFrom),
+				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
 				salonID: values.salonID,
 				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
 				// TODO add employee

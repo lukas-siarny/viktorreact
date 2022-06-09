@@ -58,29 +58,13 @@ const UserPage: FC<Props> = (props) => {
 	const handleUserAccountFormSubmit = async (data: any) => {
 		try {
 			setSubmitting(true)
-			let userData: any = {
+			const userData: any = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
 				phone: data?.phone
 			}
 
-			// check one required field for company info
-			if (data?.companyName) {
-				userData = {
-					...userData,
-					company: {
-						businessID: data?.businessID,
-						vatID: data?.vatID,
-						taxID: data?.taxID,
-						companyName: data?.companyName,
-						zipCode: data?.zipCode,
-						city: data?.city,
-						street: data?.street,
-						countryCode: data?.countryCode
-					}
-				}
-			}
 			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
 			if (!userID || Number(authUser.data?.id) === Number(userID)) dispatch(getCurrentUser())
 		} catch (error: any) {
@@ -133,18 +117,13 @@ const UserPage: FC<Props> = (props) => {
 		'justify-center': !showDeleteBtn
 	})
 
-	// check role partner for show company form
-	const isPartner = (roles: any) => {
-		return roles?.find((role: any) => role?.name === 'Partner' && role?.id === 3)
-	}
-
 	return (
 		<>
 			<Row className={hideClass}>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!!isPartner(get(userAccountDetail?.data, 'roles'))} />
+				<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
 				<div className={'content-footer'}>
 					<Row className={rowClass}>
 						{showDeleteBtn ? (

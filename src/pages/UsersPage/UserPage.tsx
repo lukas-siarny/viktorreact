@@ -32,12 +32,13 @@ type Props = {
 
 const UserPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const { computedMatch } = props
-	const { userID } = computedMatch.params
+	const userID = computedMatch.params.userID || get(authUser, 'data.id')
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
-	const authUser = useSelector((state: RootState) => state.user.authUser)
+
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser))
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 

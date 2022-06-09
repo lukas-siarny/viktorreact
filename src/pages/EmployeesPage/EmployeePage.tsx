@@ -25,13 +25,27 @@ import { history } from '../../utils/history'
 // reducers
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
-import { decodePrice } from '../../utils/helper'
+import { decodePrice, encodePrice } from '../../utils/helper'
 
 type Props = {
 	computedMatch: IComputedMatch<{ employeeID: number }>
 }
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+
+export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
+	return oldServices.map((service: any) => {
+		return {
+			id: service?.id,
+			employeeData: {
+				durationFrom: service?.salonData?.durationFrom,
+				durationTo: service?.salonData?.durationTo,
+				priceFrom: encodePrice(service?.salonData?.priceFrom),
+				priceTo: service?.salonData?.priceFrom && service?.salonData?.priceTo ? encodePrice(service?.salonData?.priceTo) : undefined
+			}
+		}
+	})
+}
 
 export const addService = (services: any, form: any, dispatch: any) => {
 	const selectedServicesID = form?.values?.service
@@ -42,7 +56,6 @@ export const addService = (services: any, form: any, dispatch: any) => {
 		})
 	} else {
 		const serviceData = services?.data?.services?.find((service: any) => service?.id === selectedServicesID)
-		console.log('serviceData: ', serviceData)
 		if (serviceData) {
 			let newServiceData = {
 				id: serviceData?.id,
@@ -50,8 +63,8 @@ export const addService = (services: any, form: any, dispatch: any) => {
 				salonData: {
 					durationFrom: serviceData?.durationFrom,
 					durationTo: serviceData?.durationTo,
-					priceFrom: serviceData?.priceFrom,
-					priceTo: serviceData?.priceTo
+					priceFrom: decodePrice(serviceData?.priceFrom),
+					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
 				},
 				variableDuration: false,
 				variablePrice: false
@@ -100,17 +113,27 @@ const EmployeePage = (props: Props) => {
 		dispatch(getEmployee(employeeID))
 	}, [employeeID])
 
-	const checkAndUpdateServices = (ser: any[]) => {
+	const checkAndParseServices = (ser: any[]) => {
 		return ser.map((service) => {
-			// decode and set price
-			let updatedService = { ...service, priceFrom: decodePrice(service?.salonData.priceFrom), priceTo: decodePrice(service?.salonData.priceTo) }
-			if (service?.salonData?.durationFrom && service?.salonData?.durationTo) {
+			let updatedService = {
+				id: service?.id,
+				name: service?.name,
+				variableDuration: false,
+				variablePrice: false,
+				salonData: {
+					...service.employeeData,
+					// decode and set price
+					priceFrom: decodePrice(service?.employeeData.priceFrom),
+					priceTo: decodePrice(service?.employeeData.priceTo)
+				}
+			}
+			if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
 				updatedService = {
 					...updatedService,
 					variableDuration: true
 				}
 			}
-			if (service?.salonData?.priceFrom && service?.salonData?.priceTo) {
+			if (service?.employeeData?.priceFrom && service?.employeeData?.priceTo) {
 				updatedService = {
 					...updatedService,
 					variablePrice: true
@@ -126,8 +149,8 @@ const EmployeePage = (props: Props) => {
 				initialize(FORM.EMPLOYEE, {
 					...employee.data?.employee,
 					avatar: employee.data?.employee?.image ? [{ url: employee.data?.employee?.image?.resizedImages?.thumbnail, uid: employee.data?.employee?.image?.id }] : [],
-					services: checkAndUpdateServices(employee.data?.employee?.services),
-					salonID: employee.data?.employee?.salon?.id
+					services: checkAndParseServices(employee.data?.employee?.services),
+					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id }
 				})
 			)
 		}
@@ -145,7 +168,7 @@ const EmployeePage = (props: Props) => {
 					email: data?.email,
 					phonePrefixCountryCode: data?.phonePrefixCountryCode,
 					phone: data?.phone,
-					services: data?.services,
+					services: parseServicesForCreateAndUpdate(data?.services),
 					imageID: data?.imageID
 				}
 			)

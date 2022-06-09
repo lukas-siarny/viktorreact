@@ -42,9 +42,5 @@ export default (values: any) => {
 		})
 	}
 
-	if (values?.phone && !values?.phonePrefixCountryCode) {
-		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
-	}
-
 	return errors
 }

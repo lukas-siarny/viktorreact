@@ -8,7 +8,7 @@ import React, { useState } from 'react'
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeeForm from './components/EmployeeForm'
-import { addService } from './EmployeePage'
+import { addService, parseServicesForCreateAndUpdate } from './EmployeePage'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -56,7 +56,8 @@ const CreateEmployeePage = () => {
 				email: formData?.email,
 				phonePrefixCountryCode: formData?.phonePrefixCountryCode,
 				phone: formData?.phone,
-				services: formData?.services,
+				services: parseServicesForCreateAndUpdate(formData?.services),
+				salonID: formData?.salonID,
 				imageID: formData?.imageID
 			} as any)
 			if (data?.employee?.id) {

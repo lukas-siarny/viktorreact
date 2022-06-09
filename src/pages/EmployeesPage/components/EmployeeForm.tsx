@@ -1,8 +1,8 @@
-import React, { FC, MouseEventHandler, useCallback } from 'react'
+import React, { FC, MouseEventHandler, useCallback, useEffect } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Button } from 'antd'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // utils
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
@@ -28,6 +28,7 @@ import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 import { getServices } from '../../../reducers/services/serviceActions'
 import DeleteButton from '../../../components/DeleteButton'
+import { RootState } from '../../../reducers'
 
 const { Panel } = Collapse
 
@@ -154,9 +155,16 @@ const EmployeeForm: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const { handleSubmit, salonID, addService } = props
 
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
+	const services = useSelector((state: RootState) => state.service.services)
+
+	useEffect(() => {
+		dispatch(getServices({ page: 1, salonID }))
+	}, [salonID])
+
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search))
+			const { data, salonsOptions } = await dispatch(getSalons({ page, search }))
 			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
 		},
 		[dispatch]
@@ -164,7 +172,7 @@ const EmployeeForm: FC<Props> = (props) => {
 
 	const searchService = useCallback(
 		async (search: string, page: number) => {
-			const { data, servicesOptions } = await dispatch(getServices(page, undefined, undefined, { search, salonID }))
+			const { data, servicesOptions } = await dispatch(getServices({ page, search, salonID }))
 			return { pagination: data?.pagination, page: data?.pagination?.page, data: servicesOptions }
 		},
 		[dispatch, salonID]
@@ -221,10 +229,12 @@ const EmployeeForm: FC<Props> = (props) => {
 							name={'service'}
 							onSearch={searchService}
 							filterOption={true}
+							options={services?.servicesOptions}
 							showSearch
 							allowInfinityScroll
+							disabled={!formValues?.salonID}
 						/>
-						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService}>
+						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={!formValues?.salonID}>
 							{t('loc:Pridať službu')}
 						</Button>
 					</div>

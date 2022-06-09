@@ -9,9 +9,19 @@ import { ThunkResult } from '../index'
 
 // utils
 import { getReq } from '../../utils/request'
-import { PAGINATION, SALON_STATUSES } from '../../utils/enums'
+import { SALON_STATUSES } from '../../utils/enums'
+import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
+
+interface IGetSalonsQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	categoryFirstLevelIDs?: (string | null)[] | null | undefined
+	statuses?: (string | null)[] | SALON_STATUSES[] | null
+}
 
 interface IGetSalons {
 	type: SALONS
@@ -39,19 +49,12 @@ export interface ISalonsPayload {
 }
 
 export const getSalons =
-	(
-		page: number,
-		limit?: any | undefined,
-		order?: string | undefined,
-		search?: string | undefined | null,
-		categoryFirstLevelIDs?: (string | null)[] | null | undefined,
-		statuses?: (string | null)[] | SALON_STATUSES[] | null
-	): ThunkResult<Promise<ISalonsPayload>> =>
+	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 		try {
 			dispatch({ type: SALONS.SALONS_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/salons/', { page: page || 1, limit: limit || PAGINATION.limit, order, search, categoryFirstLevelIDs, statuses } as any)
+			const { data } = await getReq('/api/b2b/admin/salons/', { ...normalizeQueryParams(queryParams) } as any)
 			const salonsOptions = map(data.salons, (salon) => {
 				return { label: salon.name || `${salon.id}`, value: salon.id, key: `${salon.id}-key` }
 			})

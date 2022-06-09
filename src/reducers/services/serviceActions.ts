@@ -10,13 +10,23 @@ import { IUserAvatar } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
+import { decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
 interface IGetServices {
 	type: SERVICES
 	payload: IServicesPayload
+}
+
+interface IGetServicesQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	categoryID?: number | undefined | null
+	employeeID?: number | undefined | null
+	salonID?: number | undefined | null
 }
 
 interface ServicesTableData {
@@ -43,14 +53,13 @@ export interface IServicesPayload {
 }
 
 export const getServices =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<IServicesPayload>> =>
+	(queryParams: IGetServicesQueryParams): ThunkResult<Promise<IServicesPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IServicesPayload
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
-			const pageLimit = limit
 
-			const { data } = await getReq('/api/b2b/admin/services/', { page: page || 1, limit: pageLimit, order, ...normalizeQueryParams(queryParams) })
+			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) })
 			const tableData: ServicesTableData[] = map(data.services, (item) => {
 				const tableItem = {
 					key: item.id,

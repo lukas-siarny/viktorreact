@@ -3,34 +3,84 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { Button, notification, Row } from 'antd'
-import { get, intersection } from 'lodash'
+import { get } from 'lodash'
 import { change, initialize, isPristine, submit } from 'redux-form'
 import cx from 'classnames'
+import i18next from 'i18next'
 
 // components
-import i18next from 'i18next'
 import EmployeeForm from './components/EmployeeForm'
+import Breadcrumbs from '../../components/Breadcrumbs'
+import DeleteButton from '../../components/DeleteButton'
 
 // types
-import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, IEmployeeForm } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
+import Permissions, { withPermissions } from '../../utils/Permissions'
+import { FORM, PERMISSION } from '../../utils/enums'
+import { history } from '../../utils/history'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
-import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION } from '../../utils/enums'
-import Breadcrumbs from '../../components/Breadcrumbs'
-import DeleteButton from '../../components/DeleteButton'
-import { history } from '../../utils/history'
+import { decodePrice } from '../../utils/helper'
 
 type Props = {
 	computedMatch: IComputedMatch<{ employeeID: number }>
 }
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_EDIT, PERMISSION.PARTNER]
+
+export const addService = (services: any, form: any, dispatch: any) => {
+	const selectedServicesID = form?.values?.service
+	if (form?.values?.services?.find((service: any) => service?.id === selectedServicesID)) {
+		notification.warning({
+			message: i18next.t('loc:Upozornenie'),
+			description: i18next.t('Vybraná služba je už priradená!')
+		})
+	} else {
+		const serviceData = services?.data?.services?.find((service: any) => service?.id === selectedServicesID)
+		console.log('serviceData: ', serviceData)
+		if (serviceData) {
+			let newServiceData = {
+				id: serviceData?.id,
+				name: serviceData?.name,
+				salonData: {
+					durationFrom: serviceData?.durationFrom,
+					durationTo: serviceData?.durationTo,
+					priceFrom: serviceData?.priceFrom,
+					priceTo: serviceData?.priceTo
+				},
+				variableDuration: false,
+				variablePrice: false
+			}
+			if (serviceData?.durationFrom && serviceData?.durationTo) {
+				newServiceData = {
+					...newServiceData,
+					variableDuration: true
+				}
+			}
+			if (serviceData?.priceFrom && serviceData?.priceTo) {
+				newServiceData = {
+					...newServiceData,
+					variablePrice: true
+				}
+			}
+			let updatedServices = []
+			if (form?.values?.services) {
+				updatedServices = [...form.values.services, newServiceData]
+			} else {
+				updatedServices.push(newServiceData)
+			}
+			// update filed array services with new added service
+			dispatch(change(FORM.EMPLOYEE, 'services', [...updatedServices]))
+		}
+	}
+	// clear selected value
+	dispatch(change(FORM.EMPLOYEE, 'service', null))
+}
 
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
@@ -52,7 +102,8 @@ const EmployeePage = (props: Props) => {
 
 	const checkAndUpdateServices = (ser: any[]) => {
 		return ser.map((service) => {
-			let updatedService = { ...service }
+			// decode and set price
+			let updatedService = { ...service, priceFrom: decodePrice(service?.salonData.priceFrom), priceTo: decodePrice(service?.salonData.priceTo) }
 			if (service?.salonData?.durationFrom && service?.salonData?.durationTo) {
 				updatedService = {
 					...updatedService,
@@ -82,49 +133,7 @@ const EmployeePage = (props: Props) => {
 		}
 	}, [employee.data])
 
-	const addService = () => {
-		const selectedServicesID = form?.values?.service
-		if (form.values?.services.find((service: any) => service?.id === selectedServicesID)) {
-			notification.warning({
-				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t('Vybraná služba je už priradená!')
-			})
-		} else {
-			const serviceData = services?.data?.services?.find((service: any) => service?.id === selectedServicesID)
-			if (form?.values?.services && serviceData) {
-				let newServiceData = {
-					id: serviceData?.id,
-					name: serviceData?.name,
-					salonData: {
-						durationFrom: serviceData?.durationFrom,
-						durationTo: serviceData?.durationTo,
-						priceFrom: serviceData?.priceFrom,
-						priceTo: serviceData?.priceTo
-					},
-					variableDuration: false,
-					variablePrice: false
-				}
-				if (serviceData?.durationFrom && serviceData?.durationTo) {
-					newServiceData = {
-						...newServiceData,
-						variableDuration: true
-					}
-				}
-				if (serviceData?.priceFrom && serviceData?.priceTo) {
-					newServiceData = {
-						...newServiceData,
-						variablePrice: true
-					}
-				}
-				// update filed array services with new added service
-				dispatch(change(FORM.EMPLOYEE, 'services', [...form.values.services, newServiceData]))
-			}
-		}
-		// clear selected value
-		dispatch(change(FORM.EMPLOYEE, 'service', null))
-	}
-
-	const updateEmployee = async (data: any) => {
+	const updateEmployee = async (data: IEmployeeForm) => {
 		try {
 			setSubmitting(true)
 			await patchReq(
@@ -132,7 +141,12 @@ const EmployeePage = (props: Props) => {
 				{ employeeID },
 				{
 					firstName: data?.firstName,
-					lastName: data?.lastName
+					lastName: data?.lastName,
+					email: data?.email,
+					phonePrefixCountryCode: data?.phonePrefixCountryCode,
+					phone: data?.phone,
+					services: data?.services,
+					imageID: data?.imageID
 				}
 			)
 			dispatch(getEmployee(employeeID))
@@ -184,7 +198,7 @@ const EmployeePage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				<EmployeeForm addService={() => addService()} salonID={form?.values?.salonID} onSubmit={updateEmployee} />
+				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={form?.values?.salonID} onSubmit={updateEmployee} />
 				<div className={'content-footer'}>
 					<Row className={rowClass}>
 						{showDeleteBtn ? (
@@ -208,7 +222,7 @@ const EmployeePage = (props: Props) => {
 									htmlType={'submit'}
 									onClick={(e) => {
 										if (hasPermission) {
-											dispatch(submit(FORM.USER_ACCOUNT))
+											dispatch(submit(FORM.EMPLOYEE))
 										} else {
 											e.preventDefault()
 											openForbiddenModal()

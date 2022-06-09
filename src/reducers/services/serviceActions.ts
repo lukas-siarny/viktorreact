@@ -9,7 +9,7 @@ import { IUserAvatar } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
+import { decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
@@ -63,7 +63,7 @@ export const getServices =
 						text: `${employee.firstName} ${employee.lastName}`,
 						key: employee.id
 					})),
-					price: getServiceRange(item.priceFrom, item.priceTo),
+					price: getServiceRange(decodePrice(item.priceFrom), decodePrice(item.priceTo)),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
 					category: item.category.name || '-',
 					salon: item.salon.name

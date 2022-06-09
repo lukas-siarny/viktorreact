@@ -1,5 +1,5 @@
 import React, { FC, MouseEventHandler, useCallback } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Button } from 'antd'
 import { useDispatch } from 'react-redux'
@@ -9,7 +9,7 @@ import { FORM, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 
 // types
-import { ICustomerForm } from '../../../types/interfaces'
+import { IEmployeeForm } from '../../../types/interfaces'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -27,6 +27,7 @@ import validateEmployeeForm from './validateEmployeeForm'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 import { getServices } from '../../../reducers/services/serviceActions'
+import DeleteButton from '../../../components/DeleteButton'
 
 const { Panel } = Collapse
 
@@ -35,7 +36,7 @@ type ComponentProps = {
 	addService: MouseEventHandler<HTMLElement>
 }
 
-type Props = InjectedFormProps<ICustomerForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
 
 const numberMin0 = validationNumberMin(0)
 
@@ -43,6 +44,22 @@ const renderListFields = (props: any) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
 	const { fields } = props
+
+	const genExtra = (index: number) => (
+		<div className={'flex'} onClick={(e) => e.stopPropagation()}>
+			<DeleteButton
+				onConfirm={() => {
+					fields.remove(index)
+				}}
+				smallIcon
+				size={'small'}
+				entityName={t('loc:službu')}
+				type={'default'}
+				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+				onlyIcon
+			/>
+		</div>
+	)
 
 	return (
 		<>
@@ -53,7 +70,7 @@ const renderListFields = (props: any) => {
 					const variableDuration = fields.get(index)?.variableDuration
 					const variablePrice = fields.get(index)?.variablePrice
 					return (
-						<Panel header={fields.get(index)?.name} key={index}>
+						<Panel header={fields.get(index)?.name} key={index} extra={genExtra(index)}>
 							<Row gutter={8}>
 								<Col span={variableDuration ? 12 : 24}>
 									<Field
@@ -209,7 +226,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ICustomerForm, ComponentProps>({
+const form = reduxForm<IEmployeeForm, ComponentProps>({
 	form: FORM.EMPLOYEE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

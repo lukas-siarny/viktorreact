@@ -19,6 +19,16 @@ interface IGetServices {
 	payload: IServicesPayload
 }
 
+interface IGetServicesQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	categoryID?: number | undefined | null
+	employeeID?: number | undefined | null
+	salonID?: number | undefined | null
+}
+
 interface ServicesTableData {
 	key: number
 	serviceID: number

@@ -69,9 +69,9 @@ const UserAccountForm: FC<Props> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const onSearchUsers = useCallback(
-		async (searchText: string, page: number) => {
+		async (search: string, page: number) => {
 			// roleID = 3 for PARTNER users
-			const { data, usersOptions } = await dispatch(getUsers(page, undefined, undefined, searchText, 3))
+			const { data, usersOptions } = await dispatch(getUsers({ page, limit: undefined, order: undefined, search, roleID: 3 }))
 			return { pagination: data?.pagination, page: data?.pagination?.page, data: usersOptions }
 		},
 		[dispatch]

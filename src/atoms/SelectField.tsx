@@ -477,7 +477,8 @@ const SelectField = (props: Props) => {
 				onFocus={onFocus}
 				onChange={onChange}
 				size={size || 'middle'}
-				value={value}
+				// if is only one option select it
+				value={value || (opt?.length === 1 ? opt[0]?.value : undefined)}
 				onBlur={onBlur}
 				placeholder={placeholder || ''}
 				loading={loading || selectState.fetching}

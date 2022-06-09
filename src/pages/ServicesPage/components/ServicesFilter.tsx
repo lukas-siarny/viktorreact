@@ -60,7 +60,7 @@ const ServicesFilter = (props: Props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
+			const { data, salonsOptions } = await dispatch(getSalons({ page, limit: undefined, order: undefined, search }))
 			return { pagination: data?.pagination?.page, data: salonsOptions }
 		},
 		[dispatch]

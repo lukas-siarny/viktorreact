@@ -10,6 +10,14 @@ import { Paths } from '../../types/api'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
 
+interface IGetEmployeesQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	salonID?: number | undefined | null
+}
+
 interface IGetEmployees {
 	type: EMPLOYEES
 	payload: IEmployeesPayload
@@ -29,12 +37,12 @@ export interface IEmployeesPayload {
 }
 
 export const getEmployees =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<void>> =>
+	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
 		try {
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/employees/', { page: page || 1, limit, order, ...normalizeQueryParams(queryParams) })
+			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
 
 			const payload = {
 				data

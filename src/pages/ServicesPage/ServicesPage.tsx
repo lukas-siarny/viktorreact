@@ -51,7 +51,17 @@ const ServicesPage = () => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID: query.salonID }))
-		dispatch(getServices(query.page, query.limit, query.order, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID: query.salonID }))
+		dispatch(
+			getServices({
+				page: query.page,
+				limit: query.limit,
+				order: query.order,
+				search: query.search,
+				categoryID: query.categoryID,
+				employeeID: query.employeeID,
+				salonID: query.salonID
+			})
+		)
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, query.salonID])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {

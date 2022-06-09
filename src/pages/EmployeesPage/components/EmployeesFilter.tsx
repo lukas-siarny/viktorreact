@@ -41,8 +41,8 @@ const EmployeesFilter = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
 
 	const onSearchSalons = useCallback(
-		async (searchText: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, searchText))
+		async (search: string, page: number) => {
+			const { data, salonsOptions } = await dispatch(getSalons({ page, limit: undefined, order: undefined, search }))
 			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
 		},
 		[dispatch]

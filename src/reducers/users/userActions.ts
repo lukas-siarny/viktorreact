@@ -15,6 +15,7 @@ import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRef
 import { history } from '../../utils/history'
 import { getReq, postReq } from '../../utils/request'
 import { PERMISSION } from '../../utils/enums'
+import { normalizeQueryParams } from '../../utils/helper'
 
 export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers
 
@@ -35,6 +36,14 @@ interface IGetUsers {
 
 interface IPermissions {
 	uniqPermissions?: PERMISSION[]
+}
+
+interface IGetUsersQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	roleID?: number | undefined | null
 }
 
 export interface IAuthUserPayload {
@@ -161,13 +170,13 @@ export const getUserAccountDetails =
 	}
 
 export const getUsers =
-	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null, roleID?: number | undefined): ThunkResult<Promise<IUsersPayload>> =>
+	(queryParams: IGetUsersQueryParams): ThunkResult<Promise<IUsersPayload>> =>
 	// eslint-disable-next-line consistent-return
 	async (dispatch) => {
 		let payload = {} as IUsersPayload
 		try {
 			dispatch({ type: USERS.USERS_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/users/', { page: page || 1, limit, order, search, roleID })
+			const { data } = await getReq('/api/b2b/admin/users/', { ...normalizeQueryParams(queryParams) })
 
 			const usersOptions: ISelectOptionItem[] = map(data?.users, (user) => ({
 				key: user?.id,

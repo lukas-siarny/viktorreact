@@ -16,6 +16,7 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 import { postReq } from '../../utils/request'
 import { NOTIFICATION_TYPE } from '../../utils/enums'
 import { history } from '../../utils/history'
+import { encodePrice } from '../../utils/helper'
 
 const ServiceCreatePage = () => {
 	const { t } = useTranslation()
@@ -31,12 +32,13 @@ const ServiceCreatePage = () => {
 				name: values.name,
 				description: values.description,
 				durationFrom: values.durationFrom,
-				durationTo: values.durationTo,
-				priceFrom: values.priceFrom,
-				priceTo: values.priceTo,
+				durationTo: values.variableDuration ? values.durationTo : undefined,
+				priceFrom: encodePrice(values.priceFrom),
+				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
 				salonID: values.salonID,
-				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
+				// TODO add employee
 				// employeeIDs
+				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
 				imageIDs: map(values?.gallery, (image) => image.id)
 			}
 

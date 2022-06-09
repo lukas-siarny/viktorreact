@@ -528,14 +528,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -621,14 +685,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -954,13 +1082,13 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     email?: string;
                     address?: {
-                        countryCode: string;
-                        zipCode: string;
-                        city: string;
-                        street: string;
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
                         streetNumber?: string;
-                        latitude: number; // float
-                        longitude: number; // float
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     categories: {
                         id: number;
@@ -1044,8 +1172,20 @@ declare namespace Paths {
                         ];
                     }[];
                     openingHoursNote?: {
+                        /**
+                         * example:
+                         * Poznámka
+                         */
                         note: string;
+                        /**
+                         * example:
+                         * 2022-03-22
+                         */
                         validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        /**
+                         * example:
+                         * 2022-03-22
+                         */
                         validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                     };
                     address?: {
@@ -1162,8 +1302,40 @@ declare namespace Paths {
                     name: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         firstName: string;
@@ -1232,8 +1404,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -1247,8 +1451,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -1548,14 +1784,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -1641,14 +1941,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -2113,8 +2477,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -2327,8 +2703,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -2462,8 +2850,40 @@ declare namespace Paths {
                         name: string;
                         durationFrom: number;
                         durationTo?: number;
-                        priceFrom: number; // float
-                        priceTo?: number; // float
+                        priceFrom: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
                         employeesCount: number;
                         employees: {
                             id: number;
@@ -2528,8 +2948,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -2543,8 +2995,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -3116,8 +3600,20 @@ declare namespace Paths {
                     }
                 ];
                 openingHoursNote?: {
+                    /**
+                     * example:
+                     * Poznámka
+                     */
                     note: string;
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
                     validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
                     validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                 };
                 images: {
@@ -3138,6 +3634,26 @@ declare namespace Paths {
                     id: number;
                     original: string;
                 }[];
+                employees: {
+                    id: number;
+                    firstName?: string;
+                    image: {
+                        id: number;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                    };
+                }[];
+                services: {
+                    id: number;
+                    name: string;
+                    description?: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                }[];
             }
         }
     }
@@ -3155,7 +3671,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = 25 | 50 | 100 | 1000;
             export type Page = number;
             export type SalonID = number;
         }
@@ -3196,7 +3712,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = 25 | 50 | 100 | 1000;
             export type Page = number;
             export type SalonID = number;
         }
@@ -3215,8 +3731,76 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminAuthChangePassword {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Lopaty123.
+             */
+            oldPassword: string;
+            /**
+             * example:
+             * Lopaty123.
+             */
+            newPassword: string; // (?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d+)
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
                 }[];
             }
         }
@@ -3373,16 +3957,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -3414,14 +4012,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -3796,8 +4458,20 @@ declare namespace Paths {
         }
         export interface RequestBody {
             openingHoursNote: {
+                /**
+                 * example:
+                 * Poznámka
+                 */
                 note: string;
+                /**
+                 * example:
+                 * 2022-03-22
+                 */
                 validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                /**
+                 * example:
+                 * 2022-03-22
+                 */
                 validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
             } | null;
         }
@@ -3921,16 +4595,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -3947,8 +4635,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -3962,8 +4682,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -4079,6 +4831,42 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1AuthChangePassword {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Lopaty123.
+             */
+            oldPassword: string;
+            /**
+             * example:
+             * Lopaty123.
+             */
+            newPassword: string; // (?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d+)
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -4238,16 +5026,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -4279,14 +5081,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -4419,9 +5285,21 @@ declare namespace Paths {
                     ];
                 }[];
                 openingHoursNote?: {
+                    /**
+                     * example:
+                     * Poznámka
+                     */
                     note: string;
-                    validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                    validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
+                    validFrom?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
+                    validTo?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                 } | null;
             } | null;
             aboutUsSegment?: {
@@ -4733,8 +5611,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -4910,16 +5800,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -4936,8 +5840,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -4951,8 +5887,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -5462,16 +6430,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -5508,14 +6490,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -6005,16 +7051,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -6036,8 +7096,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -6051,8 +7143,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -6743,16 +7867,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -6789,14 +7927,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -7161,8 +8363,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -7262,16 +8476,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -7293,8 +8521,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -7308,8 +8568,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -7596,6 +8888,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   /**
+   * patchApiB2BAdminAuthChangePassword - PERMISSION: NO
+   */
+  'patchApiB2BAdminAuthChangePassword'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminAuthChangePassword.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
+  /**
    * getApiB2BAdminUsersUserId - PERMISSION: NO
    */
   'getApiB2BAdminUsersUserId'(
@@ -7747,6 +9047,14 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
+  /**
+   * patchApiB2BV1AuthChangePassword - PERMISSION: NO
+   */
+  'patchApiB2BV1AuthChangePassword'(
+    parameters?: Parameters<Paths.PatchApiB2BV1AuthChangePassword.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1AuthChangePassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
   /**
    * getApiB2BV1UsersUserId - PERMISSION: NO
    */
@@ -8422,6 +9730,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   }
+  ['/api/b2b/admin/auth/change-password']: {
+    /**
+     * patchApiB2BAdminAuthChangePassword - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminAuthChangePassword.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
+  }
   ['/api/b2b/admin/users/{userID}']: {
     /**
      * getApiB2BAdminUsersUserId - PERMISSION: NO
@@ -8601,6 +9919,16 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/change-password']: {
+    /**
+     * patchApiB2BV1AuthChangePassword - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1AuthChangePassword.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1AuthChangePassword.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
   }
   ['/api/b2b/v1/users/{userID}']: {
     /**

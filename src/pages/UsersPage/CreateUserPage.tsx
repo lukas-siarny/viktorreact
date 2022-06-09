@@ -15,7 +15,7 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // utils
 import { history } from '../../utils/history'
-import { FORM, LANGUAGE, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
@@ -44,10 +44,7 @@ const CreateUserPage = () => {
 	}
 
 	const fetchData = async () => {
-		const phonePrefixCountryCode = getPrefixCountryCode(
-			map(phonePrefixes?.data, (item) => item.code),
-			LANGUAGE.SK.toUpperCase()
-		)
+		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		dispatch(initialize(FORM.ADMIN_CREATE_USER, { phonePrefixCountryCode }))
 		dispatch(getRoles())
 	}

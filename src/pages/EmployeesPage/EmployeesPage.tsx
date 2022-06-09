@@ -31,7 +31,7 @@ import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-off
 
 type Columns = ColumnsType<any>
 
-const UsersPage = () => {
+const EmployeesPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -155,7 +155,7 @@ const UsersPage = () => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam používateľov')
+				name: t('loc:Zoznam zamestnancov')
 			}
 		]
 	}
@@ -229,4 +229,4 @@ const UsersPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_BROWSING, PERMISSION.PARTNER]))(UsersPage)
+export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_BROWSING, PERMISSION.PARTNER]))(EmployeesPage)

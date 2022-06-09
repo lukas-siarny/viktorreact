@@ -375,10 +375,10 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 	}
 }
 
-export const getPrefixCountryCode = (options: string[], fallback: string) => {
+export const getPrefixCountryCode = (options: string[], fallback: string = DEFAULT_LANGUAGE) => {
 	const locale = split(lowerCase(i18next.language), '-')
 	const language = locale[1] || locale[0]
-	let prefix = fallback
+	let prefix = fallback.toUpperCase()
 
 	some(options, (item) => {
 		if (!includes(language, lowerCase(item))) return false

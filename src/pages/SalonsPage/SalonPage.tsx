@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
 import { change, initialize, submit, isPristine } from 'redux-form'
-import { get, isEmpty, map, unionBy } from 'lodash'
+import { get, isEmpty, map, unionBy, isEqual } from 'lodash'
 import { compose } from 'redux'
 
 // components
@@ -11,9 +11,10 @@ import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonForm from './components/SalonForm'
 import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
+import { scrollToTopFn } from '../../components/ScrollToTop'
 
 // enums
-import { DAY, FORM, LANGUAGE, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { DAY, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -178,18 +179,24 @@ const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWee
 
 const SalonPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
+
 	const { computedMatch } = props
 	const { salonID } = computedMatch.params
-	const dispatch = useDispatch()
+
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
+	const [visible, setVisible] = useState<boolean>(false)
+	// NOTE: Determine, if switches are used in edit mode (on init). Once is related data filled, can't be deleted
+	const [contactPersonIsEmpty, setContactPersonIsEmpty] = useState<boolean>(true)
+	const [companyInfoIsEmpty, setCompanyInfoIsEmpty] = useState<boolean>(true)
+
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-	const [visible, setVisible] = useState<boolean>(false)
-
 	const salon = useSelector((state: RootState) => state.salons.salon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
+
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)
@@ -243,6 +250,11 @@ const SalonPage: FC<Props> = (props) => {
 
 	const updateOnlyOpeningHours = useRef(false)
 	const fetchData = async (salonData: ISalonPayload & ILoadingAndFailure) => {
+		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
+		const defaultContactPerson = {
+			phonePrefixCountryCode
+		}
+
 		if (updateOnlyOpeningHours.current) {
 			if (salon?.isLoading) return
 			dispatch(
@@ -258,6 +270,16 @@ const SalonPage: FC<Props> = (props) => {
 			const openOverWeekend: boolean = checkWeekend(salonData.data?.salon?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.salon?.openingHours)
 			const openingHours: OpeningHours = initOpeningHours(salonData.data?.salon?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+
+			const { longitude, latitude, ...addressBase } = get(salonData, 'data.salon.address', {})
+			const invoiceAddress = salonData.data?.salon.companyInvoiceAddress as any
+
+			const isFilledContactPerson = !isEmpty(salonData.data?.salon.companyContactPerson)
+			const isFilledCompanyInfo = !isEmpty(salonData.data?.salon.companyInfo)
+
+			setContactPersonIsEmpty(!isFilledContactPerson)
+			setCompanyInfoIsEmpty(!isFilledCompanyInfo)
+
 			dispatch(
 				initialize(FORM.SALON, {
 					...salonData.data?.salon,
@@ -273,25 +295,28 @@ const SalonPage: FC<Props> = (props) => {
 					street: salonData.data?.salon?.address?.street,
 					zipCode: salonData.data?.salon?.address?.zipCode,
 					country: salonData.data?.salon?.address?.countryCode,
+					useContactPerson: isFilledContactPerson,
+					companyContactPerson: salonData.data?.salon.companyContactPerson || defaultContactPerson,
+					isInvoiceAddressSame: isEqual(invoiceAddress, addressBase),
+					companyInvoiceAddress: salonData.data?.salon.companyInvoiceAddress,
+					useCompanyInfo: isFilledCompanyInfo,
+					companyInfo: salonData.data?.salon.companyInfo,
 					gallery: map(salonData.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
 					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null,
 					userID: { label: salonData.data?.salon?.user?.name || salonData.data?.salon?.user?.email, value: salonData.data?.salon?.user?.id }
 				})
 			)
 		} else if (!salon?.isLoading) {
-			const phonePrefixCountryCode = getPrefixCountryCode(
-				map(phonePrefixes?.data, (item) => item.code),
-				LANGUAGE.SK.toUpperCase()
-			)
 			// init data for new "creating process" salon
 			dispatch(
 				initialize(FORM.SALON, {
 					openOverWeekend: false,
 					sameOpenHoursOverWeek: true,
 					openingHours: initOpeningHours(salonData.data?.salon?.openingHours, true, false),
-					isVisible: true,
 					payByCard: false,
-					phonePrefixCountryCode
+					phonePrefixCountryCode,
+					isInvoiceAddressSame: true,
+					companyContactPerson: defaultContactPerson
 				})
 			)
 		}
@@ -329,8 +354,19 @@ const SalonPage: FC<Props> = (props) => {
 				socialLinkWebPage: data.socialLinkWebPage,
 				payByCard: data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
+				companyContactPerson: data.useContactPerson ? data.companyContactPerson : undefined,
+				companyInfo: data.useCompanyInfo ? data.companyInfo : undefined,
+				companyInvoiceAddress: data.isInvoiceAddressSame
+					? {
+							city: data.city,
+							countryCode: data.country,
+							street: data.street,
+							zipCode: data.zipCode
+					  }
+					: data.companyInvoiceAddress,
 				userID: data?.user?.id || data?.userID?.value || authUser?.data?.id
 			}
+
 			if (salonID > 0) {
 				// update existing salon
 				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: data?.id }, salonData)
@@ -347,6 +383,7 @@ const SalonPage: FC<Props> = (props) => {
 			console.error(error.message)
 		} finally {
 			setSubmitting(false)
+			scrollToTopFn()
 		}
 	}
 
@@ -445,6 +482,8 @@ const SalonPage: FC<Props> = (props) => {
 							switchDisabled={submitting}
 							salonID={salonID}
 							disabledForm={deletedSalon}
+							showCompanyInfoSwitch={companyInfoIsEmpty}
+							showContactPersonSwitch={contactPersonIsEmpty}
 						/>
 					)}
 				/>

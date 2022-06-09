@@ -84,7 +84,7 @@ const TextareaField = (props: Props) => {
 		return (
 			<Row className={'justify-between w-full pr-2'}>
 				<span>{label}</span>
-				<i className='xs-regular letters-count' style={{ lineHeight: '22px' }}>{`${input.value.length}/${maxLength}`}</i>
+				<i className='xs-regular'>{`${input.value.length}/${maxLength}`}</i>
 			</Row>
 		)
 	}, [maxLength, input, label])

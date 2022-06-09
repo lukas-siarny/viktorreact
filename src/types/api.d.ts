@@ -1,18 +1,18 @@
 import type {
-    OpenAPIClient,
-    Parameters,
-    UnknownParamsObject,
-    OperationResponse,
-    AxiosRequestConfig,
-} from 'openapi-client-axios';
+  OpenAPIClient,
+  Parameters,
+  UnknownParamsObject,
+  OperationResponse,
+  AxiosRequestConfig,
+} from 'openapi-client-axios'; 
 
 declare namespace Paths {
     namespace DeleteApiB2BAdminCustomersCustomerId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -41,9 +41,9 @@ declare namespace Paths {
     namespace DeleteApiB2BAdminEmployeesEmployeeId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -72,9 +72,9 @@ declare namespace Paths {
     namespace DeleteApiB2BAdminEnumsCategoriesCategoryId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -107,9 +107,9 @@ declare namespace Paths {
     namespace DeleteApiB2BAdminSalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -138,9 +138,9 @@ declare namespace Paths {
     namespace DeleteApiB2BAdminServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -169,9 +169,9 @@ declare namespace Paths {
     namespace DeleteApiB2BAdminUsersUserId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -200,9 +200,9 @@ declare namespace Paths {
     namespace DeleteApiB2BV1CustomersCustomerId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -231,9 +231,9 @@ declare namespace Paths {
     namespace DeleteApiB2BV1EmployeesEmployeeId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -269,9 +269,9 @@ declare namespace Paths {
         }
         export interface PathParameters {
             deviceID: /**
-               * example:
-               * 12DXXS
-               */
+             * example:
+             * 12DXXS
+             */
             Parameters.DeviceID;
         }
         namespace Responses {
@@ -281,9 +281,9 @@ declare namespace Paths {
     namespace DeleteApiB2BV1SalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -312,9 +312,9 @@ declare namespace Paths {
     namespace DeleteApiB2BV1ServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -343,9 +343,9 @@ declare namespace Paths {
     namespace DeleteApiB2BV1UsersUserId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -374,9 +374,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminCustomers {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -435,9 +435,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminCustomersCustomerId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -482,9 +482,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminEmployees {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -528,14 +528,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -582,9 +646,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminEmployeesEmployeeId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -621,14 +685,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -687,9 +815,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminEnumsCategories {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -755,9 +883,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminEnumsCategoriesCategoryId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -827,9 +955,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminEnumsCountries {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -861,9 +989,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminEnumsCurrencies {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -888,9 +1016,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminRoles {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -919,9 +1047,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminSalons {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -954,13 +1082,13 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     email?: string;
                     address?: {
-                        countryCode: string;
-                        zipCode: string;
-                        city: string;
-                        street: string;
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
                         streetNumber?: string;
-                        latitude: number; // float
-                        longitude: number; // float
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     categories: {
                         id: number;
@@ -987,9 +1115,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminSalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1044,8 +1172,20 @@ declare namespace Paths {
                         ];
                     }[];
                     openingHoursNote?: {
+                        /**
+                         * example:
+                         * Poznámka
+                         */
                         note: string;
+                        /**
+                         * example:
+                         * 2022-03-22
+                         */
                         validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        /**
+                         * example:
+                         * 2022-03-22
+                         */
                         validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                     };
                     address?: {
@@ -1127,9 +1267,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminServices {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1162,8 +1302,40 @@ declare namespace Paths {
                     name: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         firstName: string;
@@ -1208,9 +1380,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1232,8 +1404,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -1247,8 +1451,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -1284,9 +1520,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminUsers {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1339,9 +1575,9 @@ declare namespace Paths {
     namespace GetApiB2BAdminUsersUserId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1394,9 +1630,9 @@ declare namespace Paths {
     namespace GetApiB2BV1Customers {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1455,9 +1691,9 @@ declare namespace Paths {
     namespace GetApiB2BV1CustomersCustomerId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1502,9 +1738,9 @@ declare namespace Paths {
     namespace GetApiB2BV1Employees {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1548,14 +1784,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -1602,9 +1902,9 @@ declare namespace Paths {
     namespace GetApiB2BV1EmployeesEmployeeId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1641,14 +1941,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -1707,9 +2071,9 @@ declare namespace Paths {
     namespace GetApiB2BV1EnumsCategories {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1775,9 +2139,9 @@ declare namespace Paths {
     namespace GetApiB2BV1EnumsCategoriesCategoryId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1847,9 +2211,9 @@ declare namespace Paths {
     namespace GetApiB2BV1EnumsCountries {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1881,9 +2245,9 @@ declare namespace Paths {
     namespace GetApiB2BV1EnumsCurrencies {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1908,9 +2272,9 @@ declare namespace Paths {
     namespace GetApiB2BV1Salons {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -1967,9 +2331,9 @@ declare namespace Paths {
     namespace GetApiB2BV1SalonsPreview {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2113,8 +2477,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -2177,9 +2553,9 @@ declare namespace Paths {
     namespace GetApiB2BV1SalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2327,8 +2703,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -2391,9 +2779,9 @@ declare namespace Paths {
     namespace GetApiB2BV1SalonsSalonIdDashboard {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2432,9 +2820,9 @@ declare namespace Paths {
     namespace GetApiB2BV1Services {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2462,8 +2850,40 @@ declare namespace Paths {
                         name: string;
                         durationFrom: number;
                         durationTo?: number;
-                        priceFrom: number; // float
-                        priceTo?: number; // float
+                        priceFrom: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
                         employeesCount: number;
                         employees: {
                             id: number;
@@ -2504,9 +2924,9 @@ declare namespace Paths {
     namespace GetApiB2BV1ServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2528,8 +2948,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -2543,8 +2995,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -2580,9 +3064,9 @@ declare namespace Paths {
     namespace GetApiB2BV1UsersPartners {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2622,9 +3106,9 @@ declare namespace Paths {
     namespace GetApiB2BV1UsersUserId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2677,9 +3161,9 @@ declare namespace Paths {
     namespace GetApiB2BV1UsersUserIdPendingEmployeeInvites {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2707,9 +3191,9 @@ declare namespace Paths {
     namespace GetApiB2CV1EnumsCategories {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2775,9 +3259,9 @@ declare namespace Paths {
     namespace GetApiB2CV1Salons {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2834,9 +3318,9 @@ declare namespace Paths {
     namespace GetApiB2CV1SalonsFilter {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2889,9 +3373,9 @@ declare namespace Paths {
     namespace GetApiB2CV1SalonsFilterCitiesPlaceId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2918,9 +3402,9 @@ declare namespace Paths {
     namespace GetApiB2CV1SalonsMap {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -2972,9 +3456,9 @@ declare namespace Paths {
     namespace GetApiB2CV1SalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3116,8 +3600,20 @@ declare namespace Paths {
                     }
                 ];
                 openingHoursNote?: {
+                    /**
+                     * example:
+                     * Poznámka
+                     */
                     note: string;
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
                     validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
                     validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                 };
                 images: {
@@ -3138,15 +3634,35 @@ declare namespace Paths {
                     id: number;
                     original: string;
                 }[];
+                employees: {
+                    id: number;
+                    firstName?: string;
+                    image: {
+                        id: number;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                    };
+                }[];
+                services: {
+                    id: number;
+                    name: string;
+                    description?: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                }[];
             }
         }
     }
     namespace GetApiB2CV1SalonsSalonIdEmployees {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3155,7 +3671,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = 25 | 50 | 100 | 1000;
             export type Page = number;
             export type SalonID = number;
         }
@@ -3185,9 +3701,9 @@ declare namespace Paths {
     namespace GetApiB2CV1SalonsSalonIdServices {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3196,7 +3712,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = 25 | 50 | 100 | 1000;
             export type Page = number;
             export type SalonID = number;
         }
@@ -3215,8 +3731,76 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminAuthChangePassword {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Lopaty123.
+             */
+            oldPassword: string;
+            /**
+             * example:
+             * Lopaty123.
+             */
+            newPassword: string; // (?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d+)
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
                 }[];
             }
         }
@@ -3224,9 +3808,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminCustomersCustomerId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3309,9 +3893,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminEmployeesEmployeeId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3373,16 +3957,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -3414,14 +4012,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -3484,9 +4146,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminEnumsCategoriesCategoryId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3527,9 +4189,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminSalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3778,9 +4440,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminSalonsSalonIdOpenHoursNote {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3796,8 +4458,20 @@ declare namespace Paths {
         }
         export interface RequestBody {
             openingHoursNote: {
+                /**
+                 * example:
+                 * Poznámka
+                 */
                 note: string;
+                /**
+                 * example:
+                 * 2022-03-22
+                 */
                 validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                /**
+                 * example:
+                 * 2022-03-22
+                 */
                 validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
             } | null;
         }
@@ -3816,9 +4490,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminSalonsSalonIdPublish {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3850,9 +4524,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminSalonsSalonIdVisible {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3884,9 +4558,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -3921,16 +4595,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -3947,8 +4635,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -3962,8 +4682,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -4003,9 +4755,9 @@ declare namespace Paths {
     namespace PatchApiB2BAdminUsersUserId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -4086,12 +4838,48 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BV1AuthChangePassword {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Lopaty123.
+             */
+            oldPassword: string;
+            /**
+             * example:
+             * Lopaty123.
+             */
+            newPassword: string; // (?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d+)
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BV1CustomersCustomerId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -4174,9 +4962,9 @@ declare namespace Paths {
     namespace PatchApiB2BV1EmployeesEmployeeId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -4238,16 +5026,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -4279,14 +5081,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -4349,9 +5215,9 @@ declare namespace Paths {
     namespace PatchApiB2BV1SalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -4419,9 +5285,21 @@ declare namespace Paths {
                     ];
                 }[];
                 openingHoursNote?: {
+                    /**
+                     * example:
+                     * Poznámka
+                     */
                     note: string;
-                    validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                    validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
+                    validFrom?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
+                    validTo?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                 } | null;
             } | null;
             aboutUsSegment?: {
@@ -4733,8 +5611,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -4801,9 +5691,9 @@ declare namespace Paths {
     namespace PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -4839,9 +5729,9 @@ declare namespace Paths {
     namespace PatchApiB2BV1SalonsSalonIdPublish {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -4873,9 +5763,9 @@ declare namespace Paths {
     namespace PatchApiB2BV1ServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -4910,16 +5800,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -4936,8 +5840,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -4951,8 +5887,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -4992,9 +5960,9 @@ declare namespace Paths {
     namespace PatchApiB2BV1UsersUserId {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5079,9 +6047,9 @@ declare namespace Paths {
     namespace PatchApiB2CV1SalonsSalonIdLike {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5110,9 +6078,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminAuthForgotPassword {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5141,9 +6109,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminAuthLogin {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5206,9 +6174,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminAuthLogout {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5232,9 +6200,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminAuthRefreshToken {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5257,9 +6225,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminAuthResetPassword {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5321,9 +6289,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminCustomers {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5402,9 +6370,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminEmployees {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5462,16 +6430,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -5508,14 +6490,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -5578,9 +6624,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminEmployeesInvite {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5619,9 +6665,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminEnumsCategories {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5658,9 +6704,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminFilesSignUrls {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5725,9 +6771,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminSalons {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -5972,9 +7018,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminServices {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6005,16 +7051,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -6036,8 +7096,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -6051,8 +7143,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -6092,9 +7216,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminUsers {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6142,9 +7266,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminUsersActivation {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6204,9 +7328,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminUsersActivationResend {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6230,9 +7354,9 @@ declare namespace Paths {
     namespace PostApiB2BAdminUsersRegistration {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6325,9 +7449,9 @@ declare namespace Paths {
     namespace PostApiB2BV1AuthForgotPassword {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6356,9 +7480,9 @@ declare namespace Paths {
     namespace PostApiB2BV1AuthLogin {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6421,9 +7545,9 @@ declare namespace Paths {
     namespace PostApiB2BV1AuthLoginAsPartner {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6477,14 +7601,14 @@ declare namespace Paths {
     namespace PostApiB2BV1AuthLogout {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
             "device-id": /**
-               * example:
-               * 12DXXS
-               */
+             * example:
+             * 12DXXS
+             */
             Parameters.DeviceId;
         }
         namespace Parameters {
@@ -6513,9 +7637,9 @@ declare namespace Paths {
     namespace PostApiB2BV1AuthRefreshToken {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6538,9 +7662,9 @@ declare namespace Paths {
     namespace PostApiB2BV1AuthResetPassword {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6602,9 +7726,9 @@ declare namespace Paths {
     namespace PostApiB2BV1Customers {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6683,9 +7807,9 @@ declare namespace Paths {
     namespace PostApiB2BV1Employees {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6743,16 +7867,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -6789,14 +7927,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -6859,9 +8061,9 @@ declare namespace Paths {
     namespace PostApiB2BV1EmployeesInvite {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6900,9 +8102,9 @@ declare namespace Paths {
     namespace PostApiB2BV1FilesSignUrls {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -6967,9 +8169,9 @@ declare namespace Paths {
     namespace PostApiB2BV1PushNotificationsSubscribe {
         export interface HeaderParameters {
             "accept-language": /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -7013,9 +8215,9 @@ declare namespace Paths {
     namespace PostApiB2BV1Salons {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -7161,8 +8363,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -7229,9 +8443,9 @@ declare namespace Paths {
     namespace PostApiB2BV1Services {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -7262,16 +8476,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -7293,8 +8521,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -7308,8 +8568,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -7349,9 +8641,9 @@ declare namespace Paths {
     namespace PostApiB2BV1UsersActivation {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -7411,9 +8703,9 @@ declare namespace Paths {
     namespace PostApiB2BV1UsersActivationResend {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -7437,9 +8729,9 @@ declare namespace Paths {
     namespace PostApiB2BV1UsersInvite {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -7468,9 +8760,9 @@ declare namespace Paths {
     namespace PostApiB2BV1UsersRegistration {
         export interface HeaderParameters {
             "accept-language"?: /**
-               * example:
-               * sk
-               */
+             * example:
+             * sk
+             */
             Parameters.AcceptLanguage;
         }
         namespace Parameters {
@@ -7563,1781 +8855,1817 @@ declare namespace Paths {
 }
 
 export interface OperationMethods {
+  /**
+   * postApiB2BAdminAuthRefreshToken - PERMISSION: NO
+   */
+  'postApiB2BAdminAuthRefreshToken'(
+    parameters?: Parameters<Paths.PostApiB2BAdminAuthRefreshToken.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
+  /**
+   * postApiB2BAdminAuthLogout - PERMISSION: NO
+   */
+  'postApiB2BAdminAuthLogout'(
+    parameters?: Parameters<Paths.PostApiB2BAdminAuthLogout.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
+  /**
+   * postApiB2BAdminAuthForgotPassword - PERMISSION: NO
+   */
+  'postApiB2BAdminAuthForgotPassword'(
+    parameters?: Parameters<Paths.PostApiB2BAdminAuthForgotPassword.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
+  /**
+   * postApiB2BAdminAuthResetPassword - PERMISSION: NO
+   */
+  'postApiB2BAdminAuthResetPassword'(
+    parameters?: Parameters<Paths.PostApiB2BAdminAuthResetPassword.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
+  /**
+   * patchApiB2BAdminAuthChangePassword - PERMISSION: NO
+   */
+  'patchApiB2BAdminAuthChangePassword'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminAuthChangePassword.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
+  /**
+   * getApiB2BAdminUsersUserId - PERMISSION: NO
+   */
+  'getApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * patchApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
+   */
+  'patchApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * deleteApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_DELETE]
+   */
+  'deleteApiB2BAdminUsersUserId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
+  /**
+   * postApiB2BAdminUsersRegistration - PERMISSION: NO
+   */
+  'postApiB2BAdminUsersRegistration'(
+    parameters?: Parameters<Paths.PostApiB2BAdminUsersRegistration.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
+  /**
+   * postApiB2BAdminUsersActivation - PERMISSION: NO
+   */
+  'postApiB2BAdminUsersActivation'(
+    parameters?: Parameters<Paths.PostApiB2BAdminUsersActivation.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
+  /**
+   * postApiB2BAdminUsersActivationResend - PERMISSION: NO
+   */
+  'postApiB2BAdminUsersActivationResend'(
+    parameters?: Parameters<Paths.PostApiB2BAdminUsersActivationResend.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
+  /**
+   * getApiB2BAdminEnumsCategories - PERMISSION: NO
+   */
+  'getApiB2BAdminEnumsCategories'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategories.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
+  /**
+   * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   */
+  'postApiB2BAdminEnumsCategories'(
+    parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
+  /**
+   * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: NO
+   */
+  'getApiB2BAdminEnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   */
+  'patchApiB2BAdminEnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   */
+  'deleteApiB2BAdminEnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * getApiB2BAdminEnumsCountries - PERMISSION: NO
+   */
+  'getApiB2BAdminEnumsCountries'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCountries.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
+  /**
+   * getApiB2BAdminEnumsCurrencies - PERMISSION: NO
+   */
+  'getApiB2BAdminEnumsCurrencies'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsCurrencies.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
+  /**
+   * postApiB2BAdminFilesSignUrls - PERMISSION: NO
+   */
+  'postApiB2BAdminFilesSignUrls'(
+    parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  /**
+   * postApiB2BV1AuthLogin - PERMISSION: NO
+   */
+  'postApiB2BV1AuthLogin'(
+    parameters?: Parameters<Paths.PostApiB2BV1AuthLogin.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
+  /**
+   * postApiB2BV1AuthRefreshToken - PERMISSION: NO
+   */
+  'postApiB2BV1AuthRefreshToken'(
+    parameters?: Parameters<Paths.PostApiB2BV1AuthRefreshToken.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
+  /**
+   * postApiB2BV1AuthLogout - PERMISSION: NO
+   */
+  'postApiB2BV1AuthLogout'(
+    parameters?: Parameters<Paths.PostApiB2BV1AuthLogout.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
+  /**
+   * postApiB2BV1AuthForgotPassword - PERMISSION: NO
+   */
+  'postApiB2BV1AuthForgotPassword'(
+    parameters?: Parameters<Paths.PostApiB2BV1AuthForgotPassword.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
+  /**
+   * postApiB2BV1AuthResetPassword - PERMISSION: NO
+   */
+  'postApiB2BV1AuthResetPassword'(
+    parameters?: Parameters<Paths.PostApiB2BV1AuthResetPassword.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
+  /**
+   * patchApiB2BV1AuthChangePassword - PERMISSION: NO
+   */
+  'patchApiB2BV1AuthChangePassword'(
+    parameters?: Parameters<Paths.PatchApiB2BV1AuthChangePassword.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1AuthChangePassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
+  /**
+   * getApiB2BV1UsersUserId - PERMISSION: NO
+   */
+  'getApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
+  /**
+   * patchApiB2BV1UsersUserId - PERMISSION: NO
+   */
+  'patchApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
+  /**
+   * deleteApiB2BV1UsersUserId - PERMISSION: NO
+   */
+  'deleteApiB2BV1UsersUserId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
+  /**
+   * postApiB2BV1UsersRegistration - PERMISSION: NO
+   */
+  'postApiB2BV1UsersRegistration'(
+    parameters?: Parameters<Paths.PostApiB2BV1UsersRegistration.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
+  /**
+   * postApiB2BV1UsersActivation - PERMISSION: NO
+   */
+  'postApiB2BV1UsersActivation'(
+    parameters?: Parameters<Paths.PostApiB2BV1UsersActivation.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
+  /**
+   * postApiB2BV1UsersActivationResend - PERMISSION: NO
+   */
+  'postApiB2BV1UsersActivationResend'(
+    parameters?: Parameters<Paths.PostApiB2BV1UsersActivationResend.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
+  /**
+   * getApiB2BV1EnumsCategories - PERMISSION: NO
+   */
+  'getApiB2BV1EnumsCategories'(
+    parameters?: Parameters<Paths.GetApiB2BV1EnumsCategories.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
+  /**
+   * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: NO
+   */
+  'getApiB2BV1EnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BV1EnumsCategoriesCategoryId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * getApiB2BV1EnumsCountries - PERMISSION: NO
+   */
+  'getApiB2BV1EnumsCountries'(
+    parameters?: Parameters<Paths.GetApiB2BV1EnumsCountries.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
+  /**
+   * getApiB2BV1EnumsCurrencies - PERMISSION: NO
+   */
+  'getApiB2BV1EnumsCurrencies'(
+    parameters?: Parameters<Paths.GetApiB2BV1EnumsCurrencies.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
+  /**
+   * postApiB2BV1FilesSignUrls - PERMISSION: NO
+   */
+  'postApiB2BV1FilesSignUrls'(
+    parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
+  /**
+   * postApiB2BV1PushNotificationsSubscribe - PERMISSION: NO
+   */
+  'postApiB2BV1PushNotificationsSubscribe'(
+    parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
+  /**
+   * deleteApiB2BV1PushNotificationsUnsubscribeDeviceId - PERMISSION: NO
+   */
+  'deleteApiB2BV1PushNotificationsUnsubscribeDeviceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
+  /**
+   * getApiB2CV1Salons - PERMISSION: NO
+   */
+  'getApiB2CV1Salons'(
+    parameters?: Parameters<Paths.GetApiB2CV1Salons.QueryParameters & Paths.GetApiB2CV1Salons.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1Salons.Responses.$200>
+  /**
+   * getApiB2CV1SalonsMap - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsMap'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsMap.QueryParameters & Paths.GetApiB2CV1SalonsMap.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsMap.Responses.$200>
+  /**
+   * getApiB2CV1SalonsFilter - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsFilter'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsFilter.QueryParameters & Paths.GetApiB2CV1SalonsFilter.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsFilter.Responses.$200>
+  /**
+   * getApiB2CV1SalonsFilterCitiesPlaceId - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsFilterCitiesPlaceId'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.PathParameters & Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonId - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonId'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonId.PathParameters & Paths.GetApiB2CV1SalonsSalonId.QueryParameters & Paths.GetApiB2CV1SalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonId.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdServices - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonIdServices'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdServices.PathParameters & Paths.GetApiB2CV1SalonsSalonIdServices.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdServices.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdServices.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdEmployees - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonIdEmployees'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdEmployees.Responses.$200>
+  /**
+   * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
+   */
+  'patchApiB2CV1SalonsSalonIdLike'(
+    parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdLike.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
+    data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
+  /**
+   * getApiB2CV1EnumsCategories - PERMISSION: NO
+   */
+  'getApiB2CV1EnumsCategories'(
+    parameters?: Parameters<Paths.GetApiB2CV1EnumsCategories.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1EnumsCategories.Responses.$200>
+  /**
+   * postApiB2BAdminAuthLogin - PERMISSION: NO
+   */
+  'postApiB2BAdminAuthLogin'(
+    parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+  /**
+   * getApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_BROWSING]
+   */
+  'getApiB2BAdminUsers'(
+    parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
+  /**
+   * postApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
+   */
+  'postApiB2BAdminUsers'(
+    parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminUsers.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
+  /**
+   * getApiB2BAdminRoles - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
+   */
+  'getApiB2BAdminRoles'(
+    parameters?: Parameters<Paths.GetApiB2BAdminRoles.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
+  /**
+   * getApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   */
+  'getApiB2BAdminSalons'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
+  /**
+   * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'postApiB2BAdminSalons'(
+    parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminSalons.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   */
+  'getApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'deleteApiB2BAdminSalonsSalonId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminSalonsSalonIdPublish'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT]
+   */
+  'patchApiB2BAdminSalonsSalonIdVisible'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdVisible.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdVisible.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdVisible.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdVisible.Responses.$200>
+  /**
+   * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   */
+  'getApiB2BAdminServices'(
+    parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
+  /**
+   * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'postApiB2BAdminServices'(
+    parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
+  /**
+   * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   */
+  'getApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   */
+  'deleteApiB2BAdminServicesServiceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
+  /**
+   * getApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, PARTNER]
+   */
+  'getApiB2BAdminCustomers'(
+    parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
+  /**
+   * postApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   */
+  'postApiB2BAdminCustomers'(
+    parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminCustomers.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
+  /**
+   * getApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, CUSTOMER_EDIT, PARTNER]
+   */
+  'getApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
+   * patchApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
+   * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   */
+  'deleteApiB2BAdminCustomersCustomerId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
+  /**
+   * getApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
+   */
+  'getApiB2BAdminEmployees'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
+  /**
+   * postApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   */
+  'postApiB2BAdminEmployees'(
+    parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminEmployees.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
+  /**
+   * getApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
+   */
+  'getApiB2BAdminEmployeesEmployeeId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
+  /**
+   * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   */
+  'patchApiB2BAdminEmployeesEmployeeId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
+  /**
+   * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   */
+  'deleteApiB2BAdminEmployeesEmployeeId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
+  /**
+   * postApiB2BAdminEmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   */
+  'postApiB2BAdminEmployeesInvite'(
+    parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
+  /**
+   * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
+   */
+  'postApiB2BV1AuthLoginAsPartner'(
+    parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
+  /**
+   * getApiB2BV1UsersPartners - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
+   */
+  'getApiB2BV1UsersPartners'(
+    parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
+  /**
+   * getApiB2BV1UsersUserIdPendingEmployeeInvites - PERMISSION: NO
+   */
+  'getApiB2BV1UsersUserIdPendingEmployeeInvites'(
+    parameters?: Parameters<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
+  /**
+   * postApiB2BV1UsersInvite - PERMISSION: [PARTNER]
+   */
+  'postApiB2BV1UsersInvite'(
+    parameters?: Parameters<Paths.PostApiB2BV1UsersInvite.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1UsersInvite.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1UsersInvite.Responses.$200>
+  /**
+   * getApiB2BV1Salons - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1Salons'(
+    parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
+  /**
+   * postApiB2BV1Salons - PERMISSION: [PARTNER]
+   */
+  'postApiB2BV1Salons'(
+    parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1Salons.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
+  /**
+   * getApiB2BV1SalonsPreview - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1SalonsPreview'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1SalonsSalonId'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1SalonsSalonId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
+  /**
+   * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+   */
+  'deleteApiB2BV1SalonsSalonId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
+  /**
+   * getApiB2BV1SalonsSalonIdDashboard - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1SalonsSalonIdDashboard'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BV1SalonsSalonIdDashboard.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1SalonsSalonIdPublish'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
+  /**
+   * getApiB2BV1Services - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1Services'(
+    parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
+  /**
+   * postApiB2BV1Services - PERMISSION: [PARTNER]
+   */
+  'postApiB2BV1Services'(
+    parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1Services.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
+  /**
+   * getApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
+  /**
+   * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
+  /**
+   * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+   */
+  'deleteApiB2BV1ServicesServiceId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
+  /**
+   * getApiB2BV1Customers - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1Customers'(
+    parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
+  /**
+   * postApiB2BV1Customers - PERMISSION: [PARTNER]
+   */
+  'postApiB2BV1Customers'(
+    parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1Customers.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1Customers.Responses.$200>
+  /**
+   * getApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1CustomersCustomerId'(
+    parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
+  /**
+   * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1CustomersCustomerId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1CustomersCustomerId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
+  /**
+   * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+   */
+  'deleteApiB2BV1CustomersCustomerId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
+  /**
+   * getApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
+   */
+  'getApiB2BV1Employees'(
+    parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
+  /**
+   * postApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   */
+  'postApiB2BV1Employees'(
+    parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1Employees.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1Employees.Responses.$200>
+  /**
+   * getApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
+   */
+  'getApiB2BV1EmployeesEmployeeId'(
+    parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
+  /**
+   * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   */
+  'patchApiB2BV1EmployeesEmployeeId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1EmployeesEmployeeId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
+  /**
+   * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   */
+  'deleteApiB2BV1EmployeesEmployeeId'(
+    parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
+  /**
+   * postApiB2BV1EmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   */
+  'postApiB2BV1EmployeesInvite'(
+    parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1EmployeesInvite.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
+}
+
+export interface PathsDictionary {
+  ['/api/b2b/admin/auth/refresh-token']: {
     /**
      * postApiB2BAdminAuthRefreshToken - PERMISSION: NO
      */
-    'postApiB2BAdminAuthRefreshToken'(
-        parameters?: Parameters<Paths.PostApiB2BAdminAuthRefreshToken.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminAuthRefreshToken.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
+  }
+  ['/api/b2b/admin/auth/logout']: {
     /**
      * postApiB2BAdminAuthLogout - PERMISSION: NO
      */
-    'postApiB2BAdminAuthLogout'(
-        parameters?: Parameters<Paths.PostApiB2BAdminAuthLogout.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminAuthLogout.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
+  }
+  ['/api/b2b/admin/auth/forgot-password']: {
     /**
      * postApiB2BAdminAuthForgotPassword - PERMISSION: NO
      */
-    'postApiB2BAdminAuthForgotPassword'(
-        parameters?: Parameters<Paths.PostApiB2BAdminAuthForgotPassword.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminAuthForgotPassword.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
+  }
+  ['/api/b2b/admin/auth/reset-password']: {
     /**
      * postApiB2BAdminAuthResetPassword - PERMISSION: NO
      */
-    'postApiB2BAdminAuthResetPassword'(
-        parameters?: Parameters<Paths.PostApiB2BAdminAuthResetPassword.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminAuthResetPassword.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
+  }
+  ['/api/b2b/admin/auth/change-password']: {
+    /**
+     * patchApiB2BAdminAuthChangePassword - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminAuthChangePassword.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
+  }
+  ['/api/b2b/admin/users/{userID}']: {
     /**
      * getApiB2BAdminUsersUserId - PERMISSION: NO
      */
-    'getApiB2BAdminUsersUserId'(
-        parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
     /**
      * patchApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
      */
-    'patchApiB2BAdminUsersUserId'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
     /**
      * deleteApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_DELETE]
      */
-    'deleteApiB2BAdminUsersUserId'(
-        parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
+  }
+  ['/api/b2b/admin/users/registration']: {
     /**
      * postApiB2BAdminUsersRegistration - PERMISSION: NO
      */
-    'postApiB2BAdminUsersRegistration'(
-        parameters?: Parameters<Paths.PostApiB2BAdminUsersRegistration.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminUsersRegistration.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
+  }
+  ['/api/b2b/admin/users/activation']: {
     /**
      * postApiB2BAdminUsersActivation - PERMISSION: NO
      */
-    'postApiB2BAdminUsersActivation'(
-        parameters?: Parameters<Paths.PostApiB2BAdminUsersActivation.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminUsersActivation.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
+  }
+  ['/api/b2b/admin/users/activation-resend']: {
     /**
      * postApiB2BAdminUsersActivationResend - PERMISSION: NO
      */
-    'postApiB2BAdminUsersActivationResend'(
-        parameters?: Parameters<Paths.PostApiB2BAdminUsersActivationResend.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminUsersActivationResend.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/categories/']: {
     /**
      * getApiB2BAdminEnumsCategories - PERMISSION: NO
      */
-    'getApiB2BAdminEnumsCategories'(
-        parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategories.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategories.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
     /**
      * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
-    'postApiB2BAdminEnumsCategories'(
-        parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/categories/{categoryID}']: {
     /**
      * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: NO
      */
-    'getApiB2BAdminEnumsCategoriesCategoryId'(
-        parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
      * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
-    'patchApiB2BAdminEnumsCategoriesCategoryId'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
      * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
      */
-    'deleteApiB2BAdminEnumsCategoriesCategoryId'(
-        parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/countries']: {
     /**
      * getApiB2BAdminEnumsCountries - PERMISSION: NO
      */
-    'getApiB2BAdminEnumsCountries'(
-        parameters?: Parameters<Paths.GetApiB2BAdminEnumsCountries.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCountries.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/currencies']: {
     /**
      * getApiB2BAdminEnumsCurrencies - PERMISSION: NO
      */
-    'getApiB2BAdminEnumsCurrencies'(
-        parameters?: Parameters<Paths.GetApiB2BAdminEnumsCurrencies.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsCurrencies.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
+  }
+  ['/api/b2b/admin/files/sign-urls']: {
     /**
      * postApiB2BAdminFilesSignUrls - PERMISSION: NO
      */
-    'postApiB2BAdminFilesSignUrls'(
-        parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/login']: {
     /**
      * postApiB2BV1AuthLogin - PERMISSION: NO
      */
-    'postApiB2BV1AuthLogin'(
-        parameters?: Parameters<Paths.PostApiB2BV1AuthLogin.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1AuthLogin.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/refresh-token']: {
     /**
      * postApiB2BV1AuthRefreshToken - PERMISSION: NO
      */
-    'postApiB2BV1AuthRefreshToken'(
-        parameters?: Parameters<Paths.PostApiB2BV1AuthRefreshToken.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1AuthRefreshToken.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/logout']: {
     /**
      * postApiB2BV1AuthLogout - PERMISSION: NO
      */
-    'postApiB2BV1AuthLogout'(
-        parameters?: Parameters<Paths.PostApiB2BV1AuthLogout.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1AuthLogout.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/forgot-password']: {
     /**
      * postApiB2BV1AuthForgotPassword - PERMISSION: NO
      */
-    'postApiB2BV1AuthForgotPassword'(
-        parameters?: Parameters<Paths.PostApiB2BV1AuthForgotPassword.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1AuthForgotPassword.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/reset-password']: {
     /**
      * postApiB2BV1AuthResetPassword - PERMISSION: NO
      */
-    'postApiB2BV1AuthResetPassword'(
-        parameters?: Parameters<Paths.PostApiB2BV1AuthResetPassword.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1AuthResetPassword.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/change-password']: {
+    /**
+     * patchApiB2BV1AuthChangePassword - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1AuthChangePassword.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1AuthChangePassword.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
+  }
+  ['/api/b2b/v1/users/{userID}']: {
     /**
      * getApiB2BV1UsersUserId - PERMISSION: NO
      */
-    'getApiB2BV1UsersUserId'(
-        parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
     /**
      * patchApiB2BV1UsersUserId - PERMISSION: NO
      */
-    'patchApiB2BV1UsersUserId'(
-        parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
     /**
      * deleteApiB2BV1UsersUserId - PERMISSION: NO
      */
-    'deleteApiB2BV1UsersUserId'(
-        parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
+  }
+  ['/api/b2b/v1/users/registration']: {
     /**
      * postApiB2BV1UsersRegistration - PERMISSION: NO
      */
-    'postApiB2BV1UsersRegistration'(
-        parameters?: Parameters<Paths.PostApiB2BV1UsersRegistration.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1UsersRegistration.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
+  }
+  ['/api/b2b/v1/users/activation']: {
     /**
      * postApiB2BV1UsersActivation - PERMISSION: NO
      */
-    'postApiB2BV1UsersActivation'(
-        parameters?: Parameters<Paths.PostApiB2BV1UsersActivation.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1UsersActivation.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
+  }
+  ['/api/b2b/v1/users/activation-resend']: {
     /**
      * postApiB2BV1UsersActivationResend - PERMISSION: NO
      */
-    'postApiB2BV1UsersActivationResend'(
-        parameters?: Parameters<Paths.PostApiB2BV1UsersActivationResend.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1UsersActivationResend.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
+  }
+  ['/api/b2b/v1/enums/categories/']: {
     /**
      * getApiB2BV1EnumsCategories - PERMISSION: NO
      */
-    'getApiB2BV1EnumsCategories'(
-        parameters?: Parameters<Paths.GetApiB2BV1EnumsCategories.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1EnumsCategories.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
+  }
+  ['/api/b2b/v1/enums/categories/{categoryID}']: {
     /**
      * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: NO
      */
-    'getApiB2BV1EnumsCategoriesCategoryId'(
-        parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BV1EnumsCategoriesCategoryId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BV1EnumsCategoriesCategoryId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
+  }
+  ['/api/b2b/v1/enums/countries']: {
     /**
      * getApiB2BV1EnumsCountries - PERMISSION: NO
      */
-    'getApiB2BV1EnumsCountries'(
-        parameters?: Parameters<Paths.GetApiB2BV1EnumsCountries.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1EnumsCountries.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
+  }
+  ['/api/b2b/v1/enums/currencies']: {
     /**
      * getApiB2BV1EnumsCurrencies - PERMISSION: NO
      */
-    'getApiB2BV1EnumsCurrencies'(
-        parameters?: Parameters<Paths.GetApiB2BV1EnumsCurrencies.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1EnumsCurrencies.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
+  }
+  ['/api/b2b/v1/files/sign-urls']: {
     /**
      * postApiB2BV1FilesSignUrls - PERMISSION: NO
      */
-    'postApiB2BV1FilesSignUrls'(
-        parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
+  }
+  ['/api/b2b/v1/push-notifications/subscribe']: {
     /**
      * postApiB2BV1PushNotificationsSubscribe - PERMISSION: NO
      */
-    'postApiB2BV1PushNotificationsSubscribe'(
-        parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
+  }
+  ['/api/b2b/v1/push-notifications/unsubscribe/{deviceID}']: {
     /**
      * deleteApiB2BV1PushNotificationsUnsubscribeDeviceId - PERMISSION: NO
      */
-    'deleteApiB2BV1PushNotificationsUnsubscribeDeviceId'(
-        parameters?: Parameters<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/']: {
     /**
      * getApiB2CV1Salons - PERMISSION: NO
      */
-    'getApiB2CV1Salons'(
-        parameters?: Parameters<Paths.GetApiB2CV1Salons.QueryParameters & Paths.GetApiB2CV1Salons.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1Salons.QueryParameters & Paths.GetApiB2CV1Salons.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1Salons.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/map']: {
     /**
      * getApiB2CV1SalonsMap - PERMISSION: NO
      */
-    'getApiB2CV1SalonsMap'(
-        parameters?: Parameters<Paths.GetApiB2CV1SalonsMap.QueryParameters & Paths.GetApiB2CV1SalonsMap.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsMap.QueryParameters & Paths.GetApiB2CV1SalonsMap.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsMap.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/filter']: {
     /**
      * getApiB2CV1SalonsFilter - PERMISSION: NO
      */
-    'getApiB2CV1SalonsFilter'(
-        parameters?: Parameters<Paths.GetApiB2CV1SalonsFilter.QueryParameters & Paths.GetApiB2CV1SalonsFilter.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsFilter.QueryParameters & Paths.GetApiB2CV1SalonsFilter.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsFilter.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/filter/cities/{placeID}']: {
     /**
      * getApiB2CV1SalonsFilterCitiesPlaceId - PERMISSION: NO
      */
-    'getApiB2CV1SalonsFilterCitiesPlaceId'(
-        parameters?: Parameters<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.PathParameters & Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.PathParameters & Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}']: {
     /**
      * getApiB2CV1SalonsSalonId - PERMISSION: NO
      */
-    'getApiB2CV1SalonsSalonId'(
-        parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonId.PathParameters & Paths.GetApiB2CV1SalonsSalonId.QueryParameters & Paths.GetApiB2CV1SalonsSalonId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonId.PathParameters & Paths.GetApiB2CV1SalonsSalonId.QueryParameters & Paths.GetApiB2CV1SalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonId.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/services']: {
     /**
      * getApiB2CV1SalonsSalonIdServices - PERMISSION: NO
      */
-    'getApiB2CV1SalonsSalonIdServices'(
-        parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdServices.PathParameters & Paths.GetApiB2CV1SalonsSalonIdServices.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdServices.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdServices.PathParameters & Paths.GetApiB2CV1SalonsSalonIdServices.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdServices.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdServices.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/employees']: {
     /**
      * getApiB2CV1SalonsSalonIdEmployees - PERMISSION: NO
      */
-    'getApiB2CV1SalonsSalonIdEmployees'(
-        parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdEmployees.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/like']: {
     /**
      * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
      */
-    'patchApiB2CV1SalonsSalonIdLike'(
-        parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdLike.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
-        data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdLike.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
+      data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
+  }
+  ['/api/b2c/v1/enums/categories/']: {
     /**
      * getApiB2CV1EnumsCategories - PERMISSION: NO
      */
-    'getApiB2CV1EnumsCategories'(
-        parameters?: Parameters<Paths.GetApiB2CV1EnumsCategories.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1EnumsCategories.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsCategories.Responses.$200>
+  }
+  ['/api/b2b/admin/auth/login']: {
     /**
      * postApiB2BAdminAuthLogin - PERMISSION: NO
      */
-    'postApiB2BAdminAuthLogin'(
-        parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+  }
+  ['/api/b2b/admin/users/']: {
     /**
      * getApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_BROWSING]
      */
-    'getApiB2BAdminUsers'(
-        parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
     /**
      * postApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
      */
-    'postApiB2BAdminUsers'(
-        parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminUsers.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminUsers.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
+  }
+  ['/api/b2b/admin/roles/']: {
     /**
      * getApiB2BAdminRoles - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
      */
-    'getApiB2BAdminRoles'(
-        parameters?: Parameters<Paths.GetApiB2BAdminRoles.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminRoles.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/']: {
     /**
      * getApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
      */
-    'getApiB2BAdminSalons'(
-        parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
     /**
      * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
-    'postApiB2BAdminSalons'(
-        parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminSalons.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminSalons.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}']: {
     /**
      * getApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
      */
-    'getApiB2BAdminSalonsSalonId'(
-        parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
     /**
      * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
-    'patchApiB2BAdminSalonsSalonId'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
     /**
      * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
-    'deleteApiB2BAdminSalonsSalonId'(
-        parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
     /**
      * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
-    'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/publish']: {
     /**
      * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
-    'patchApiB2BAdminSalonsSalonIdPublish'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/visible']: {
     /**
      * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT]
      */
-    'patchApiB2BAdminSalonsSalonIdVisible'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdVisible.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdVisible.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminSalonsSalonIdVisible.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdVisible.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdVisible.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdVisible.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdVisible.Responses.$200>
+  }
+  ['/api/b2b/admin/services/']: {
     /**
      * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
      */
-    'getApiB2BAdminServices'(
-        parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
     /**
      * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
-    'postApiB2BAdminServices'(
-        parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminServices.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminServices.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
+  }
+  ['/api/b2b/admin/services/{serviceID}']: {
     /**
      * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
      */
-    'getApiB2BAdminServicesServiceId'(
-        parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
     /**
      * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
-    'patchApiB2BAdminServicesServiceId'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
     /**
      * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
      */
-    'deleteApiB2BAdminServicesServiceId'(
-        parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
+  }
+  ['/api/b2b/admin/customers/']: {
     /**
      * getApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, PARTNER]
      */
-    'getApiB2BAdminCustomers'(
-        parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
     /**
      * postApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
      */
-    'postApiB2BAdminCustomers'(
-        parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminCustomers.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminCustomers.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
+  }
+  ['/api/b2b/admin/customers/{customerID}']: {
     /**
      * getApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, CUSTOMER_EDIT, PARTNER]
      */
-    'getApiB2BAdminCustomersCustomerId'(
-        parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
     /**
      * patchApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
      */
-    'patchApiB2BAdminCustomersCustomerId'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
     /**
      * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
      */
-    'deleteApiB2BAdminCustomersCustomerId'(
-        parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/']: {
     /**
      * getApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
      */
-    'getApiB2BAdminEmployees'(
-        parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
     /**
      * postApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
      */
-    'postApiB2BAdminEmployees'(
-        parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminEmployees.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminEmployees.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/{employeeID}']: {
     /**
      * getApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
      */
-    'getApiB2BAdminEmployeesEmployeeId'(
-        parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
     /**
      * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
      */
-    'patchApiB2BAdminEmployeesEmployeeId'(
-        parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
     /**
      * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
      */
-    'deleteApiB2BAdminEmployeesEmployeeId'(
-        parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/invite']: {
     /**
      * postApiB2BAdminEmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
      */
-    'postApiB2BAdminEmployeesInvite'(
-        parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
-        data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/login-as-partner']: {
     /**
      * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
      */
-    'postApiB2BV1AuthLoginAsPartner'(
-        parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
+  }
+  ['/api/b2b/v1/users/partners']: {
     /**
      * getApiB2BV1UsersPartners - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
      */
-    'getApiB2BV1UsersPartners'(
-        parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
+  }
+  ['/api/b2b/v1/users/{userID}/pending-employee-invites']: {
     /**
      * getApiB2BV1UsersUserIdPendingEmployeeInvites - PERMISSION: NO
      */
-    'getApiB2BV1UsersUserIdPendingEmployeeInvites'(
-        parameters?: Parameters<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
+  }
+  ['/api/b2b/v1/users/invite']: {
     /**
      * postApiB2BV1UsersInvite - PERMISSION: [PARTNER]
      */
-    'postApiB2BV1UsersInvite'(
-        parameters?: Parameters<Paths.PostApiB2BV1UsersInvite.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1UsersInvite.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1UsersInvite.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1UsersInvite.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersInvite.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/']: {
     /**
      * getApiB2BV1Salons - PERMISSION: [PARTNER]
      */
-    'getApiB2BV1Salons'(
-        parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
     /**
      * postApiB2BV1Salons - PERMISSION: [PARTNER]
      */
-    'postApiB2BV1Salons'(
-        parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1Salons.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1Salons.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/preview']: {
     /**
      * getApiB2BV1SalonsPreview - PERMISSION: [PARTNER]
      */
-    'getApiB2BV1SalonsPreview'(
-        parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}']: {
     /**
      * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
      */
-    'getApiB2BV1SalonsSalonId'(
-        parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
     /**
      * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
      */
-    'patchApiB2BV1SalonsSalonId'(
-        parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
     /**
      * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
      */
-    'deleteApiB2BV1SalonsSalonId'(
-        parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/dashboard']: {
     /**
      * getApiB2BV1SalonsSalonIdDashboard - PERMISSION: [PARTNER]
      */
-    'getApiB2BV1SalonsSalonIdDashboard'(
-        parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BV1SalonsSalonIdDashboard.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BV1SalonsSalonIdDashboard.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/publish']: {
     /**
      * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
      */
-    'patchApiB2BV1SalonsSalonIdPublish'(
-        parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/accept-employee-invite']: {
     /**
      * patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite - PERMISSION: [PARTNER]
      */
-    'patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite'(
-        parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
+  }
+  ['/api/b2b/v1/services/']: {
     /**
      * getApiB2BV1Services - PERMISSION: [PARTNER]
      */
-    'getApiB2BV1Services'(
-        parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
     /**
      * postApiB2BV1Services - PERMISSION: [PARTNER]
      */
-    'postApiB2BV1Services'(
-        parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1Services.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1Services.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
+  }
+  ['/api/b2b/v1/services/{serviceID}']: {
     /**
      * getApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
      */
-    'getApiB2BV1ServicesServiceId'(
-        parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
     /**
      * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
      */
-    'patchApiB2BV1ServicesServiceId'(
-        parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
     /**
      * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
      */
-    'deleteApiB2BV1ServicesServiceId'(
-        parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
+  }
+  ['/api/b2b/v1/customers/']: {
     /**
      * getApiB2BV1Customers - PERMISSION: [PARTNER]
      */
-    'getApiB2BV1Customers'(
-        parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
     /**
      * postApiB2BV1Customers - PERMISSION: [PARTNER]
      */
-    'postApiB2BV1Customers'(
-        parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1Customers.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1Customers.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1Customers.Responses.$200>
+  }
+  ['/api/b2b/v1/customers/{customerID}']: {
     /**
      * getApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
      */
-    'getApiB2BV1CustomersCustomerId'(
-        parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
     /**
      * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
      */
-    'patchApiB2BV1CustomersCustomerId'(
-        parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BV1CustomersCustomerId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1CustomersCustomerId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
     /**
      * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
      */
-    'deleteApiB2BV1CustomersCustomerId'(
-        parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
+  }
+  ['/api/b2b/v1/employees/']: {
     /**
      * getApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
      */
-    'getApiB2BV1Employees'(
-        parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
     /**
      * postApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
      */
-    'postApiB2BV1Employees'(
-        parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1Employees.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1Employees.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1Employees.Responses.$200>
+  }
+  ['/api/b2b/v1/employees/{employeeID}']: {
     /**
      * getApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
      */
-    'getApiB2BV1EmployeesEmployeeId'(
-        parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
     /**
      * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
      */
-    'patchApiB2BV1EmployeesEmployeeId'(
-        parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
-        data?: Paths.PatchApiB2BV1EmployeesEmployeeId.RequestBody,
-        config?: AxiosRequestConfig
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1EmployeesEmployeeId.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
     /**
      * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
      */
-    'deleteApiB2BV1EmployeesEmployeeId'(
-        parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
-        data?: any,
-        config?: AxiosRequestConfig
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
+  }
+  ['/api/b2b/v1/employees/invite']: {
     /**
      * postApiB2BV1EmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
      */
-    'postApiB2BV1EmployeesInvite'(
-        parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
-        data?: Paths.PostApiB2BV1EmployeesInvite.RequestBody,
-        config?: AxiosRequestConfig
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1EmployeesInvite.RequestBody,
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
-}
-
-export interface PathsDictionary {
-    ['/api/b2b/admin/auth/refresh-token']: {
-        /**
-         * postApiB2BAdminAuthRefreshToken - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminAuthRefreshToken.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
-    }
-    ['/api/b2b/admin/auth/logout']: {
-        /**
-         * postApiB2BAdminAuthLogout - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminAuthLogout.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
-    }
-    ['/api/b2b/admin/auth/forgot-password']: {
-        /**
-         * postApiB2BAdminAuthForgotPassword - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminAuthForgotPassword.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
-    }
-    ['/api/b2b/admin/auth/reset-password']: {
-        /**
-         * postApiB2BAdminAuthResetPassword - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminAuthResetPassword.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
-    }
-    ['/api/b2b/admin/users/{userID}']: {
-        /**
-         * getApiB2BAdminUsersUserId - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
-        /**
-         * patchApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
-        /**
-         * deleteApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_DELETE]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
-    }
-    ['/api/b2b/admin/users/registration']: {
-        /**
-         * postApiB2BAdminUsersRegistration - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminUsersRegistration.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
-    }
-    ['/api/b2b/admin/users/activation']: {
-        /**
-         * postApiB2BAdminUsersActivation - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminUsersActivation.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
-    }
-    ['/api/b2b/admin/users/activation-resend']: {
-        /**
-         * postApiB2BAdminUsersActivationResend - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminUsersActivationResend.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
-    }
-    ['/api/b2b/admin/enums/categories/']: {
-        /**
-         * getApiB2BAdminEnumsCategories - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategories.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
-        /**
-         * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
-    }
-    ['/api/b2b/admin/enums/categories/{categoryID}']: {
-        /**
-         * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
-        /**
-         * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
-        /**
-         * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
-    }
-    ['/api/b2b/admin/enums/countries']: {
-        /**
-         * getApiB2BAdminEnumsCountries - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminEnumsCountries.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
-    }
-    ['/api/b2b/admin/enums/currencies']: {
-        /**
-         * getApiB2BAdminEnumsCurrencies - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminEnumsCurrencies.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
-    }
-    ['/api/b2b/admin/files/sign-urls']: {
-        /**
-         * postApiB2BAdminFilesSignUrls - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
-    }
-    ['/api/b2b/v1/auth/login']: {
-        /**
-         * postApiB2BV1AuthLogin - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1AuthLogin.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
-    }
-    ['/api/b2b/v1/auth/refresh-token']: {
-        /**
-         * postApiB2BV1AuthRefreshToken - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1AuthRefreshToken.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
-    }
-    ['/api/b2b/v1/auth/logout']: {
-        /**
-         * postApiB2BV1AuthLogout - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1AuthLogout.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
-    }
-    ['/api/b2b/v1/auth/forgot-password']: {
-        /**
-         * postApiB2BV1AuthForgotPassword - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1AuthForgotPassword.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
-    }
-    ['/api/b2b/v1/auth/reset-password']: {
-        /**
-         * postApiB2BV1AuthResetPassword - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1AuthResetPassword.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
-    }
-    ['/api/b2b/v1/users/{userID}']: {
-        /**
-         * getApiB2BV1UsersUserId - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
-        /**
-         * patchApiB2BV1UsersUserId - PERMISSION: NO
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
-        /**
-         * deleteApiB2BV1UsersUserId - PERMISSION: NO
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
-    }
-    ['/api/b2b/v1/users/registration']: {
-        /**
-         * postApiB2BV1UsersRegistration - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1UsersRegistration.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
-    }
-    ['/api/b2b/v1/users/activation']: {
-        /**
-         * postApiB2BV1UsersActivation - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1UsersActivation.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
-    }
-    ['/api/b2b/v1/users/activation-resend']: {
-        /**
-         * postApiB2BV1UsersActivationResend - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1UsersActivationResend.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
-    }
-    ['/api/b2b/v1/enums/categories/']: {
-        /**
-         * getApiB2BV1EnumsCategories - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1EnumsCategories.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
-    }
-    ['/api/b2b/v1/enums/categories/{categoryID}']: {
-        /**
-         * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BV1EnumsCategoriesCategoryId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
-    }
-    ['/api/b2b/v1/enums/countries']: {
-        /**
-         * getApiB2BV1EnumsCountries - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1EnumsCountries.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
-    }
-    ['/api/b2b/v1/enums/currencies']: {
-        /**
-         * getApiB2BV1EnumsCurrencies - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1EnumsCurrencies.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
-    }
-    ['/api/b2b/v1/files/sign-urls']: {
-        /**
-         * postApiB2BV1FilesSignUrls - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
-    }
-    ['/api/b2b/v1/push-notifications/subscribe']: {
-        /**
-         * postApiB2BV1PushNotificationsSubscribe - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
-    }
-    ['/api/b2b/v1/push-notifications/unsubscribe/{deviceID}']: {
-        /**
-         * deleteApiB2BV1PushNotificationsUnsubscribeDeviceId - PERMISSION: NO
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
-    }
-    ['/api/b2c/v1/salons/']: {
-        /**
-         * getApiB2CV1Salons - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2CV1Salons.QueryParameters & Paths.GetApiB2CV1Salons.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2CV1Salons.Responses.$200>
-    }
-    ['/api/b2c/v1/salons/map']: {
-        /**
-         * getApiB2CV1SalonsMap - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2CV1SalonsMap.QueryParameters & Paths.GetApiB2CV1SalonsMap.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2CV1SalonsMap.Responses.$200>
-    }
-    ['/api/b2c/v1/salons/filter']: {
-        /**
-         * getApiB2CV1SalonsFilter - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2CV1SalonsFilter.QueryParameters & Paths.GetApiB2CV1SalonsFilter.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2CV1SalonsFilter.Responses.$200>
-    }
-    ['/api/b2c/v1/salons/filter/cities/{placeID}']: {
-        /**
-         * getApiB2CV1SalonsFilterCitiesPlaceId - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.PathParameters & Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.Responses.$200>
-    }
-    ['/api/b2c/v1/salons/{salonID}']: {
-        /**
-         * getApiB2CV1SalonsSalonId - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonId.PathParameters & Paths.GetApiB2CV1SalonsSalonId.QueryParameters & Paths.GetApiB2CV1SalonsSalonId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2CV1SalonsSalonId.Responses.$200>
-    }
-    ['/api/b2c/v1/salons/{salonID}/services']: {
-        /**
-         * getApiB2CV1SalonsSalonIdServices - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdServices.PathParameters & Paths.GetApiB2CV1SalonsSalonIdServices.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdServices.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdServices.Responses.$200>
-    }
-    ['/api/b2c/v1/salons/{salonID}/employees']: {
-        /**
-         * getApiB2CV1SalonsSalonIdEmployees - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdEmployees.Responses.$200>
-    }
-    ['/api/b2c/v1/salons/{salonID}/like']: {
-        /**
-         * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdLike.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
-            data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
-    }
-    ['/api/b2c/v1/enums/categories/']: {
-        /**
-         * getApiB2CV1EnumsCategories - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2CV1EnumsCategories.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2CV1EnumsCategories.Responses.$200>
-    }
-    ['/api/b2b/admin/auth/login']: {
-        /**
-         * postApiB2BAdminAuthLogin - PERMISSION: NO
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
-    }
-    ['/api/b2b/admin/users/']: {
-        /**
-         * getApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_BROWSING]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
-        /**
-         * postApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminUsers.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
-    }
-    ['/api/b2b/admin/roles/']: {
-        /**
-         * getApiB2BAdminRoles - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminRoles.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
-    }
-    ['/api/b2b/admin/salons/']: {
-        /**
-         * getApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
-        /**
-         * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminSalons.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
-    }
-    ['/api/b2b/admin/salons/{salonID}']: {
-        /**
-         * getApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
-        /**
-         * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
-        /**
-         * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
-    }
-    ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
-        /**
-         * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
-    }
-    ['/api/b2b/admin/salons/{salonID}/publish']: {
-        /**
-         * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminSalonsSalonIdPublish.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
-    }
-    ['/api/b2b/admin/salons/{salonID}/visible']: {
-        /**
-         * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdVisible.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdVisible.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminSalonsSalonIdVisible.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdVisible.Responses.$200>
-    }
-    ['/api/b2b/admin/services/']: {
-        /**
-         * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
-        /**
-         * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminServices.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
-    }
-    ['/api/b2b/admin/services/{serviceID}']: {
-        /**
-         * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
-        /**
-         * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
-        /**
-         * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
-    }
-    ['/api/b2b/admin/customers/']: {
-        /**
-         * getApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
-        /**
-         * postApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminCustomers.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
-    }
-    ['/api/b2b/admin/customers/{customerID}']: {
-        /**
-         * getApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, CUSTOMER_EDIT, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
-        /**
-         * patchApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
-        /**
-         * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
-    }
-    ['/api/b2b/admin/employees/']: {
-        /**
-         * getApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
-        /**
-         * postApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminEmployees.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
-    }
-    ['/api/b2b/admin/employees/{employeeID}']: {
-        /**
-         * getApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
-        /**
-         * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
-        /**
-         * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
-    }
-    ['/api/b2b/admin/employees/invite']: {
-        /**
-         * postApiB2BAdminEmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
-            data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
-    }
-    ['/api/b2b/v1/auth/login-as-partner']: {
-        /**
-         * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
-    }
-    ['/api/b2b/v1/users/partners']: {
-        /**
-         * getApiB2BV1UsersPartners - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
-    }
-    ['/api/b2b/v1/users/{userID}/pending-employee-invites']: {
-        /**
-         * getApiB2BV1UsersUserIdPendingEmployeeInvites - PERMISSION: NO
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
-    }
-    ['/api/b2b/v1/users/invite']: {
-        /**
-         * postApiB2BV1UsersInvite - PERMISSION: [PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1UsersInvite.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1UsersInvite.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1UsersInvite.Responses.$200>
-    }
-    ['/api/b2b/v1/salons/']: {
-        /**
-         * getApiB2BV1Salons - PERMISSION: [PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
-        /**
-         * postApiB2BV1Salons - PERMISSION: [PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1Salons.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
-    }
-    ['/api/b2b/v1/salons/preview']: {
-        /**
-         * getApiB2BV1SalonsPreview - PERMISSION: [PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
-    }
-    ['/api/b2b/v1/salons/{salonID}']: {
-        /**
-         * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
-        /**
-         * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
-        /**
-         * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
-    }
-    ['/api/b2b/v1/salons/{salonID}/dashboard']: {
-        /**
-         * getApiB2BV1SalonsSalonIdDashboard - PERMISSION: [PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BV1SalonsSalonIdDashboard.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
-    }
-    ['/api/b2b/v1/salons/{salonID}/publish']: {
-        /**
-         * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BV1SalonsSalonIdPublish.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdPublish.Responses.$200>
-    }
-    ['/api/b2b/v1/salons/{salonID}/accept-employee-invite']: {
-        /**
-         * patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite - PERMISSION: [PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
-    }
-    ['/api/b2b/v1/services/']: {
-        /**
-         * getApiB2BV1Services - PERMISSION: [PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
-        /**
-         * postApiB2BV1Services - PERMISSION: [PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1Services.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
-    }
-    ['/api/b2b/v1/services/{serviceID}']: {
-        /**
-         * getApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
-        /**
-         * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
-        /**
-         * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
-    }
-    ['/api/b2b/v1/customers/']: {
-        /**
-         * getApiB2BV1Customers - PERMISSION: [PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
-        /**
-         * postApiB2BV1Customers - PERMISSION: [PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1Customers.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1Customers.Responses.$200>
-    }
-    ['/api/b2b/v1/customers/{customerID}']: {
-        /**
-         * getApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
-        /**
-         * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BV1CustomersCustomerId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
-        /**
-         * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
-    }
-    ['/api/b2b/v1/employees/']: {
-        /**
-         * getApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
-        /**
-         * postApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1Employees.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1Employees.Responses.$200>
-    }
-    ['/api/b2b/v1/employees/{employeeID}']: {
-        /**
-         * getApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
-         */
-        'get'(
-            parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
-        /**
-         * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
-         */
-        'patch'(
-            parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
-            data?: Paths.PatchApiB2BV1EmployeesEmployeeId.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
-        /**
-         * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
-         */
-        'delete'(
-            parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
-            data?: any,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
-    }
-    ['/api/b2b/v1/employees/invite']: {
-        /**
-         * postApiB2BV1EmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
-         */
-        'post'(
-            parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
-            data?: Paths.PostApiB2BV1EmployeesInvite.RequestBody,
-            config?: AxiosRequestConfig
-        ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
-    }
+  }
 }
 
 export type Client = OpenAPIClient<OperationMethods, PathsDictionary>

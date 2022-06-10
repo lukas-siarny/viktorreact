@@ -22,6 +22,7 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 import { showErrorNotification } from '../../../utils/helper'
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, ENUMERATIONS_KEYS } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
+import { searchUsersWrapper } from '../../../utils/filters'
 
 // types
 import { IUserAccountForm } from '../../../types/interfaces'
@@ -31,7 +32,6 @@ import validateSalonForm from './validateSalonForm'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getUsers } from '../../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-icon.svg'
@@ -90,9 +90,8 @@ const UserAccountForm: FC<Props> = (props) => {
 
 	const onSearchUsers = useCallback(
 		async (search: string, page: number) => {
-			// roleID = 3 for PARTNER users
-			const { data, usersOptions } = await dispatch(getUsers({ page, limit: undefined, order: undefined, search, roleID: 3 }))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: usersOptions }
+			// roleID = 3 only for PARTNER users
+			return searchUsersWrapper(dispatch, { page, search, roleID: 3 })
 		},
 		[dispatch]
 	)

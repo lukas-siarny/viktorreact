@@ -9,23 +9,23 @@ import { ThunkResult } from '../index'
 
 // utils
 import { getReq } from '../../utils/request'
-import { PAGINATION, SALON_STATUSES } from '../../utils/enums'
+import { SALON_STATUSES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
 
-interface IGetSalonsQueryParams {
+interface IGetSalons {
+	type: SALONS
+	payload: ISalonsPayload
+}
+
+export interface IGetSalonsQueryParams {
 	page: number
 	limit?: any | undefined
 	order?: string | undefined
 	search?: string | undefined | null
 	categoryFirstLevelIDs?: (string | null)[] | null | undefined
 	statuses?: (string | null)[] | SALON_STATUSES[] | null
-}
-
-interface IGetSalons {
-	type: SALONS
-	payload: ISalonsPayload
 }
 
 export interface IGetSalon {

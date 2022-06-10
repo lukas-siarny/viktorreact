@@ -23,13 +23,13 @@ import CategoryFields from './CategoryFields'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getSalons } from '../../../reducers/salons/salonsActions'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
+import { searchSalonWrapper } from '../../../utils/filters'
 
 // types
 import { IServiceForm } from '../../../types/interfaces'
@@ -72,8 +72,7 @@ const ServiceForm = (props: Props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons({ page, limit: undefined, order: undefined, search }))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
+			return searchSalonWrapper(dispatch, { page, search })
 		},
 		[dispatch]
 	)

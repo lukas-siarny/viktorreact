@@ -37,6 +37,11 @@ export interface ILoginForm {
 	password: string
 }
 
+
+export interface IInviteEmployeeForm {
+	email: string
+}
+
 export interface ICreateUserForm {
 	email: string
 	phonePrefixCountryCode: string
@@ -194,6 +199,11 @@ export interface IEmployeeForm {
 
 export interface ILanguagePickerForm {
 	language: LANGUAGE
+}
+
+export interface IPrice {
+	exponent: number
+	significand: number
 }
 
 export interface IUserAvatar {

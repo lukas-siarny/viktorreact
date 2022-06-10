@@ -28,6 +28,15 @@ interface IGetSalons {
 	payload: ISalonsPayload
 }
 
+export interface IGetSalonsQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	categoryFirstLevelIDs?: (string | null)[] | null | undefined
+	statuses?: (string | null)[] | SALON_STATUSES[] | null
+}
+
 export interface IGetSalon {
 	type: SALON
 	payload: ISalonPayload

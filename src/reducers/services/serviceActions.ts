@@ -20,16 +20,6 @@ interface IGetServices {
 
 type IService = Paths.GetApiB2BAdminServices.Responses.$200['services']['0']
 
-interface IGetServicesQueryParams {
-	page: number
-	limit?: any | undefined
-	order?: string | undefined
-	search?: string | undefined | null
-	categoryID?: number | undefined | null
-	employeeID?: number | undefined | null
-	salonID?: number | undefined | null
-}
-
 interface ServicesTableData {
 	key: number
 	serviceID: number
@@ -39,6 +29,16 @@ interface ServicesTableData {
 	duration: string
 	category: string
 	salon: string | undefined
+}
+
+export interface IGetServicesQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	categoryID?: number | undefined | null
+	employeeID?: number | undefined | null
+	salonID?: number | undefined | null
 }
 
 export interface ServiceOptionItem {
@@ -59,6 +59,7 @@ export const getServices =
 		let payload = {} as IServicesPayload
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
+
 			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) })
 			const tableData: ServicesTableData[] = data.services.map((item) => {
 				const tableItem = {

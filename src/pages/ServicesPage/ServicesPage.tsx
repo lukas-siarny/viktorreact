@@ -106,7 +106,7 @@ const ServicesPage = () => {
 			title: t('loc:Zamestnanec'),
 			dataIndex: 'employees',
 			key: 'employees',
-			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} /> : null)
+			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} /> : null)
 		},
 		{
 			title: t('loc:Trvanie (min)'),

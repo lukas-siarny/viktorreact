@@ -38,7 +38,7 @@ interface IPermissions {
 	uniqPermissions?: PERMISSION[]
 }
 
-interface IGetUsersQueryParams {
+export interface IGetUsersQueryParams {
 	page: number
 	limit?: any | undefined
 	order?: string | undefined

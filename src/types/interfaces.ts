@@ -37,6 +37,11 @@ export interface ILoginForm {
 	password: string
 }
 
+
+export interface IInviteEmployeeForm {
+	email: string
+}
+
 export interface ICreateUserForm {
 	email: string
 	phonePrefixCountryCode: string

@@ -12,6 +12,7 @@ import { compose } from 'redux'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeesFilter, { IEmployeesFilter } from './components/EmployeesFilter'
+import PopoverList from '../../components/PopoverList'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
@@ -29,7 +30,6 @@ import { IBreadcrumbs } from '../../types/interfaces'
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
-import TooltipList from '../../components/TooltipList'
 
 type Columns = ColumnsType<any>
 
@@ -139,7 +139,7 @@ const EmployeesPage = () => {
 			key: 'services',
 			ellipsis: true,
 			render: (value) => {
-				return <TooltipList elements={value} />
+				return <PopoverList elements={value} />
 			}
 		},
 		{
@@ -148,12 +148,12 @@ const EmployeesPage = () => {
 			key: 'status',
 			ellipsis: true,
 			sorter: true,
-			width: 80,
+			width: 90,
 			sortOrder: setOrder(query.order, 'status'),
 			render: (value, record) => (
 				<div className={'flex justify-center'}>
-					{value === false && !record?.inviteEmail ? <QuestionIcon /> : undefined}
-					{value === false && record?.inviteEmail ? <CloudOfflineIcon /> : undefined}
+					{value === false && !record?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
+					{value === false && record?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
 				</div>
 			)
 		}

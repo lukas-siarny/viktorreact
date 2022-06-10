@@ -534,7 +534,7 @@ export const encodePrice = (price: number) => {
  * @param {IPrice | null} [price]
  * @returns {number}
  */
-export const decodePrice = (price?: IPrice | null) => {
+export const decodePrice = (price?: IPrice | null): number | null | undefined => {
 	if (price === null) {
 		return null
 	}

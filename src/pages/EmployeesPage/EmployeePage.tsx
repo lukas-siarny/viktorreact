@@ -2,30 +2,34 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { Button, notification, Row } from 'antd'
+import { Button, Modal, notification, Row } from 'antd'
 import { get } from 'lodash'
-import { change, initialize, isPristine, submit } from 'redux-form'
+import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
 
 // components
-import EmployeeForm from './components/EmployeeForm'
+import EmployeeForm, { parseSalonID } from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
+import InviteForm from './components/InviteForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEmployeeForm } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, IEmployeeForm, IInviteEmployeeForm } from '../../types/interfaces'
 
 // utils
-import { deleteReq, patchReq } from '../../utils/request'
+import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
+import { decodePrice, encodePrice } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
-import { decodePrice, encodePrice } from '../../utils/helper'
+
+// assets
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 type Props = {
 	computedMatch: IComputedMatch<{ employeeID: number }>
@@ -101,16 +105,19 @@ const EmployeePage = (props: Props) => {
 	const { employeeID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
+	const [visible, setVisible] = useState<boolean>(false)
 
 	const employee = useSelector((state: RootState) => state.employees.employee)
 	const services = useSelector((state: RootState) => state.service.services)
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
+	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
 
 	const showDeleteBtn = !!employee?.data?.employee?.id
 
 	useEffect(() => {
 		dispatch(getEmployee(employeeID))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
 
 	const checkAndParseServices = (ser: any[]) => {
@@ -154,6 +161,7 @@ const EmployeePage = (props: Props) => {
 				})
 			)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employee.data])
 
 	const updateEmployee = async (data: IEmployeeForm) => {
@@ -210,9 +218,40 @@ const EmployeePage = (props: Props) => {
 		]
 	}
 
+	const inviteEmployee = async (formData: IInviteEmployeeForm) => {
+		try {
+			await postReq(
+				'/api/b2b/admin/employees/invite',
+				{},
+				{
+					inviteEmail: formData?.email,
+					employeeID,
+					salonID: parseSalonID(form?.values?.salonID)
+				}
+			)
+			dispatch(getEmployee(employeeID))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setVisible(false)
+		}
+	}
+
 	const rowClass = cx({
 		'justify-between': showDeleteBtn,
 		'justify-center': !showDeleteBtn
+	})
+
+	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
+
+	const buttonWidthClass = cx({
+		'w-12/25': isProfileInActive
+	})
+
+	const wrapperWidthClass = cx({
+		'w-1/2': isProfileInActive,
+		'w-1/3': !isProfileInActive
 	})
 
 	return (
@@ -237,27 +276,63 @@ const EmployeePage = (props: Props) => {
 						<Permissions
 							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular w-1/3'}
-									htmlType={'submit'}
-									onClick={(e) => {
-										if (hasPermission) {
-											dispatch(submit(FORM.EMPLOYEE))
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									disabled={submitting || isFormPristine}
-									loading={submitting}
-								>
-									{t('loc:Uložiť')}
-								</Button>
+								<div className={`flex justify-between ${wrapperWidthClass}`}>
+									{isProfileInActive ? (
+										<Button
+											type={'primary'}
+											block
+											size={'middle'}
+											className={'noti-btn m-regular w-12/25'}
+											htmlType={'submit'}
+											onClick={(e) => {
+												if (hasPermission) {
+													setVisible(true)
+													dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail }))
+												} else {
+													e.preventDefault()
+													openForbiddenModal()
+												}
+											}}
+											disabled={isInviteFromSubmitting}
+											loading={isInviteFromSubmitting}
+										>
+											{t('loc:Pozvať do tímu')}
+										</Button>
+									) : undefined}
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={`noti-btn m-regular ${buttonWidthClass}`}
+										htmlType={'submit'}
+										onClick={(e) => {
+											if (hasPermission) {
+												dispatch(submit(FORM.EMPLOYEE))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={submitting || isFormPristine}
+										loading={submitting}
+									>
+										{t('loc:Uložiť')}
+									</Button>
+								</div>
 							)}
 						/>
+						<Modal
+							className='rounded-fields'
+							title={t('loc:Pozvať do tímu')}
+							centered
+							visible={visible}
+							footer={null}
+							onCancel={() => setVisible(false)}
+							closeIcon={<CloseIcon />}
+							width={394}
+						>
+							<InviteForm onSubmit={inviteEmployee} />
+						</Modal>
 					</Row>
 				</div>
 			</div>

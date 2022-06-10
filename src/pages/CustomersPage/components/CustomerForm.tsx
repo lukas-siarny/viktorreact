@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // utils
 import { ENUMERATIONS_KEYS, FORM, GENDER } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
+import { searchSalonWrapper } from '../../../utils/filters'
 
 // types
 import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -23,7 +24,6 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getSalons } from '../../../reducers/salons/salonsActions'
 
 type ComponentProps = {}
 
@@ -42,8 +42,7 @@ const CustomerForm: FC<Props> = (props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons({ page, limit: undefined, order: undefined, search }))
-			return { pagination: data?.pagination?.page, data: salonsOptions }
+			return searchSalonWrapper(dispatch, { search, page })
 		},
 		[dispatch]
 	)

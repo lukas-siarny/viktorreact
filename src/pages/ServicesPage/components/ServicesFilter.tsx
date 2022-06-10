@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // utils
 import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
+import { searchSalonWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -20,7 +21,6 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import Filters from '../../../components/Filters'
 
 // reducers
-import { getSalons } from '../../../reducers/salons/salonsActions'
 import { getEmployees } from '../../../reducers/employees/employeesActions'
 import { RootState } from '../../../reducers'
 
@@ -61,8 +61,7 @@ const ServicesFilter = (props: Props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons({ page, limit: undefined, order: undefined, search }))
-			return { pagination: data?.pagination?.page, data: salonsOptions }
+			return searchSalonWrapper(dispatch, { page, search })
 		},
 		[dispatch]
 	)

@@ -19,9 +19,6 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
-// reducers
-import { getSalons } from '../../../reducers/salons/salonsActions'
-
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
 import InputNumberField from '../../../atoms/InputNumberField'
@@ -29,11 +26,12 @@ import SwitchField from '../../../atoms/SwitchField'
 import { getServices } from '../../../reducers/services/serviceActions'
 import DeleteButton from '../../../components/DeleteButton'
 import { RootState } from '../../../reducers'
+import { searchSalonWrapper, searchServiceWrapper } from '../../../utils/filters'
 
 const { Panel } = Collapse
 
 type ComponentProps = {
-	salonID: number | null
+	salonID: number | null | any
 	addService: MouseEventHandler<HTMLElement>
 }
 
@@ -47,7 +45,7 @@ const renderListFields = (props: any) => {
 	const { fields } = props
 
 	const genExtra = (index: number) => (
-		<div className={'flex'} onClick={(e) => e.stopPropagation()}>
+		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
 			<DeleteButton
 				onConfirm={() => {
 					fields.remove(index)
@@ -66,7 +64,7 @@ const renderListFields = (props: any) => {
 		<>
 			<h3>{t('loc:Zoznam priradených služieb')}</h3>
 			<Divider className={'mb-3 mt-3'} />
-			<Collapse bordered={false}>
+			<Collapse className={'collapse-list'} bordered={false}>
 				{fields.map((field: any, index: any) => {
 					const variableDuration = fields.get(index)?.variableDuration
 					const variablePrice = fields.get(index)?.variablePrice
@@ -150,6 +148,13 @@ const renderListFields = (props: any) => {
 	)
 }
 
+export const parseSalonID = (salonID: any) => {
+	if (salonID?.value) {
+		return salonID?.value
+	}
+	return salonID
+}
+
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -159,21 +164,20 @@ const EmployeeForm: FC<Props> = (props) => {
 	const services = useSelector((state: RootState) => state.service.services)
 
 	useEffect(() => {
-		dispatch(getServices({ page: 1, salonID }))
+		dispatch(getServices({ page: 1, salonID: parseSalonID(salonID) }))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons({ page, search }))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
+			return searchSalonWrapper(dispatch, { search, page })
 		},
 		[dispatch]
 	)
 
 	const searchService = useCallback(
 		async (search: string, page: number) => {
-			const { data, servicesOptions } = await dispatch(getServices({ page, search, salonID }))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: servicesOptions }
+			return searchServiceWrapper(dispatch, { page, search, salonID: parseSalonID(salonID) })
 		},
 		[dispatch, salonID]
 	)

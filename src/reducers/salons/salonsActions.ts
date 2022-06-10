@@ -14,18 +14,18 @@ import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
 
-interface IGetSalonsQueryParams {
+interface IGetSalons {
+	type: SALONS
+	payload: ISalonsPayload
+}
+
+export interface IGetSalonsQueryParams {
 	page: number
 	limit?: any | undefined
 	order?: string | undefined
 	search?: string | undefined | null
 	categoryFirstLevelIDs?: (string | null)[] | null | undefined
 	statuses?: (string | null)[] | SALON_STATUSES[] | null
-}
-
-interface IGetSalons {
-	type: SALONS
-	payload: ISalonsPayload
 }
 
 export interface IGetSalon {

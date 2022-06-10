@@ -11,6 +11,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 // utils
 import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
+import { searchSalonWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -20,7 +21,6 @@ import SelectField from '../../../atoms/SelectField'
 import Filters from '../../../components/Filters'
 
 // reducers
-import { getSalons } from '../../../reducers/salons/salonsActions'
 import { RootState } from '../../../reducers'
 
 type ComponentProps = {
@@ -45,8 +45,7 @@ const CustomersFilter = (props: Props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons({ page, limit: undefined, order: undefined, search }))
-			return { pagination: data?.pagination?.page, data: salonsOptions }
+			return searchSalonWrapper(dispatch, { search, page })
 		},
 		[dispatch]
 	)

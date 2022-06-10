@@ -11,6 +11,14 @@ import { normalizeQueryParams } from '../../utils/helper'
 
 export type ICustomerActions = IResetStore | IGetCustomers | IGetCustomer
 
+interface IGetCustomersQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	salonID?: number | undefined | null
+}
+
 interface IGetCustomers {
 	type: CUSTOMERS
 	payload: ICustomersPayload
@@ -30,13 +38,12 @@ export interface ICustomersPayload {
 }
 
 export const getCustomers =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<void>> =>
+	(queryParams: IGetCustomersQueryParams): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
 		try {
 			dispatch({ type: CUSTOMERS.CUSTOMERS_LOAD_START })
-			const pageLimit = limit
 
-			const { data } = await getReq('/api/b2b/admin/customers/', { page: page || 1, limit: pageLimit, order, ...normalizeQueryParams(queryParams) })
+			const { data } = await getReq('/api/b2b/admin/customers/', { ...normalizeQueryParams(queryParams) })
 
 			const payload = {
 				data

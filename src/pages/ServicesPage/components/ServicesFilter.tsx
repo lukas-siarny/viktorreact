@@ -61,7 +61,7 @@ const ServicesFilter = (props: Props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
+			const { data, salonsOptions } = await dispatch(getSalons({ page, search }))
 			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
 		},
 		[dispatch]
@@ -69,7 +69,7 @@ const ServicesFilter = (props: Props) => {
 
 	const searchEmployee = useCallback(
 		async (search: string, page: number) => {
-			const { data } = await dispatch(getEmployees(page, undefined, undefined, { search }))
+			const { data } = await dispatch(getEmployees({ page, search }))
 			const options = data?.employees.map((employee) => ({
 				label: `${employee.firstName} ${employee.lastName}` || `${employee.id}`,
 				value: employee.id,

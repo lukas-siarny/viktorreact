@@ -1,12 +1,12 @@
 import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { change, Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -85,12 +85,13 @@ const renderListFields = (props: any) => {
 					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.variableDuration
 					const variablePrice = fieldData?.variablePrice
+					const category = fieldData?.category?.child ? showServiceCategory(fieldData?.category) : fieldData?.category?.name
 					return (
 						<Panel
 							header={
-								<div>
-									{fieldData?.name}
-									{fieldData?.category?.child?.child?.name ? <Tag className={'ml-5'}>{fieldData?.category?.child?.child?.name}</Tag> : undefined}
+								<div className={'flex align-center'}>
+									<div className={'list-title leading-7'}>{fieldData?.name}</div>
+									<Tag className={'ml-5'}>{category}</Tag>
 								</div>
 							}
 							key={index}
@@ -246,6 +247,7 @@ const EmployeeForm: FC<Props> = (props) => {
 						filterOption={true}
 						showSearch
 						allowInfinityScroll
+						confirmSelection
 						required
 					/>
 					<div className={'flex w-full justify-between'}>
@@ -264,6 +266,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							showSearch
 							allowInfinityScroll
 							disabled={!formValues?.salonID}
+							formName={FORM.EMPLOYEE}
 						/>
 						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={!formValues?.salonID}>
 							{t('loc:Pridať službu')}

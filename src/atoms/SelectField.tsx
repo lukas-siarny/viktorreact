@@ -1,21 +1,27 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FormAction, WrappedFieldProps } from 'redux-form'
+import { change, FormAction, WrappedFieldProps } from 'redux-form'
+import { useDispatch } from 'react-redux'
 import cx from 'classnames'
 import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, some, take } from 'lodash'
 
 // ant
-import { Button, Divider, Empty, Form, Select, Spin } from 'antd'
+import { Button, Divider, Empty, Form, Popconfirm, Select, Spin } from 'antd'
 import { SelectProps } from 'antd/lib/select'
 import { FormItemProps } from 'antd/lib/form/FormItem'
-import { createSlug, formFieldID } from '../utils/helper'
+
 // icons
+import { useTranslation } from 'react-i18next'
 import { ReactComponent as ArrowIcon } from '../assets/icons/select-arrow-icon.svg'
 import { ReactComponent as CheckedIcon } from '../assets/icons/checkbox-checked-icon-24.svg'
 import { ReactComponent as CloseIconSmall } from '../assets/icons/close-icon-16.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
 
-import { FIELD_MODE } from '../utils/enums'
+// utils
+import { FIELD_MODE, FORM } from '../utils/enums'
+import { createSlug, formFieldID } from '../utils/helper'
+
+// assets
 import { ReactComponent as LoadingIcon } from '../assets/icons/loading-icon.svg'
 
 const { Item } = Form
@@ -58,6 +64,8 @@ export type Props = {
 	disableMenuItemSelectedIcon?: boolean // niekedy tuto ikonu renderujeme nie cez propu ale cez position absolute a vtedy by sa tu dve zobrazovali lebo je || SearchIcon (vo filtroch pre vyhladavanie)
 	onSelect?: (opt: any, option: any, value: any) => any
 	optionRender?: any // custom render for item(option)
+	formName?: FORM
+	confirmSelection?: boolean
 } & WrappedFieldProps &
 	SelectProps<any> &
 	FormItemProps
@@ -281,9 +289,13 @@ const SelectField = (props: Props) => {
 		maxTagLength,
 		maxTagsLimit,
 		autoBlur,
-		hasExtra
+		hasExtra,
+		formName,
+		confirmSelection
 	} = props
 
+	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const localItemRef = useRef()
 	const itemRef = props.itemRef || localItemRef
 
@@ -441,6 +453,17 @@ const SelectField = (props: Props) => {
 		opt = selectState.data
 	}
 
+	// select first option
+	useEffect(() => {
+		if (opt?.length === 1 && formName) {
+			if (mode === 'tags' || mode === 'multiple') {
+				dispatch(change(formName, input?.name, [opt[0]?.value]))
+			} else {
+				dispatch(change(formName, input?.name, opt[0]?.value))
+			}
+		}
+	}, [opt, formName])
+
 	let suffIcon
 	if (!loading && !selectState.fetching) {
 		if (showSearch && !suffixIcon) {
@@ -478,7 +501,7 @@ const SelectField = (props: Props) => {
 				onChange={onChange}
 				size={size || 'middle'}
 				// if is only one option select it
-				value={value || (opt?.length === 1 ? opt[0]?.value : undefined)}
+				value={value}
 				onBlur={onBlur}
 				placeholder={placeholder || ''}
 				loading={loading || selectState.fetching}

@@ -135,7 +135,8 @@ const EmployeePage = (props: Props) => {
 					// decode and set price
 					priceFrom: decodePrice(service?.employeeData?.priceFrom),
 					priceTo: decodePrice(service?.employeeData?.priceTo)
-				}
+				},
+				category: service?.category
 			}
 			if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
 				updatedService = {

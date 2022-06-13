@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { compose } from 'redux'
+import { Action, compose, Dispatch } from 'redux'
 import { Button, Modal, notification, Row } from 'antd'
-import { get } from 'lodash'
+import { get, forEach } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
@@ -15,7 +15,7 @@ import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEmployeeForm, IInviteEmployeeForm } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -27,6 +27,7 @@ import { decodePrice, encodePrice } from '../../utils/helper'
 // reducers
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
+import { IServicesPayload } from '../../reducers/services/serviceActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -43,24 +44,26 @@ export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
 			id: service?.id,
 			employeeData: {
 				durationFrom: service?.salonData?.durationFrom,
-				durationTo: service?.salonData?.durationTo,
+				durationTo: service?.variableDuration ? service?.salonData?.durationTo : undefined,
 				priceFrom: encodePrice(service?.salonData?.priceFrom),
-				priceTo: service?.salonData?.priceFrom && service?.salonData?.priceTo ? encodePrice(service?.salonData?.priceTo) : undefined
+				priceTo: service?.variablePrice ? encodePrice(service?.salonData?.priceTo) : undefined
 			}
 		}
 	})
 }
 
-export const addService = (services: any, form: any, dispatch: any) => {
-	const selectedServicesID = form?.values?.service
-	if (form?.values?.services?.find((service: any) => service?.id === selectedServicesID)) {
-		notification.warning({
-			message: i18next.t('loc:Upozornenie'),
-			description: i18next.t('Vybraná služba je už priradená!')
-		})
-	} else {
-		const serviceData = services?.data?.services?.find((service: any) => service?.id === selectedServicesID)
-		if (serviceData) {
+export const addService = (services: IServicesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
+	const selectedServiceIDs = form?.values?.service
+	const updatedServices: any[] = []
+	// go through selected services
+	forEach(selectedServiceIDs, (serviceId) => {
+		const serviceData = services?.data?.services?.find((service: any) => service?.id === serviceId)
+		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
+			notification.warning({
+				message: i18next.t('loc:Upozornenie'),
+				description: i18next.t(`Služba ${serviceData?.name} je už priradená!`)
+			})
+		} else if (serviceData) {
 			let newServiceData = {
 				id: serviceData?.id,
 				name: serviceData?.name,
@@ -71,7 +74,8 @@ export const addService = (services: any, form: any, dispatch: any) => {
 					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
 				},
 				variableDuration: false,
-				variablePrice: false
+				variablePrice: false,
+				category: serviceData?.category
 			}
 			if (serviceData?.durationFrom && serviceData?.durationTo) {
 				newServiceData = {
@@ -85,15 +89,14 @@ export const addService = (services: any, form: any, dispatch: any) => {
 					variablePrice: true
 				}
 			}
-			let updatedServices = []
-			if (form?.values?.services) {
-				updatedServices = [...form.values.services, newServiceData]
-			} else {
-				updatedServices.push(newServiceData)
-			}
-			// update filed array services with new added service
-			dispatch(change(FORM.EMPLOYEE, 'services', [...updatedServices]))
+			updatedServices.push(newServiceData)
 		}
+	})
+	// update filed array services with new added service
+	if (form?.values?.services) {
+		dispatch(change(FORM.EMPLOYEE, 'services', [...form.values.services, ...updatedServices]))
+	} else {
+		dispatch(change(FORM.EMPLOYEE, 'services', [...updatedServices]))
 	}
 	// clear selected value
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
@@ -130,8 +133,8 @@ const EmployeePage = (props: Props) => {
 				salonData: {
 					...service.employeeData,
 					// decode and set price
-					priceFrom: decodePrice(service?.employeeData.priceFrom),
-					priceTo: decodePrice(service?.employeeData.priceTo)
+					priceFrom: decodePrice(service?.employeeData?.priceFrom),
+					priceTo: decodePrice(service?.employeeData?.priceTo)
 				}
 			}
 			if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {

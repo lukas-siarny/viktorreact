@@ -177,7 +177,6 @@ const ServicesPage = () => {
 									twoToneRows
 									onRow={(record) => ({
 										onClick: (e) => {
-											console.log('🚀 ~ file: Clicked ROW ~ line 170 ~ ServicesPage ~ e', e)
 											if (hasPermission) {
 												history.push(t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
 											} else {

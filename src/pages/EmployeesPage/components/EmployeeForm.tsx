@@ -1,7 +1,7 @@
-import React, { FC, MouseEventHandler, useCallback, useEffect } from 'react'
+import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Collapse, Button } from 'antd'
+import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
@@ -30,6 +30,10 @@ import validateEmployeeForm from './validateEmployeeForm'
 import { getServices } from '../../../reducers/services/serviceActions'
 import { RootState } from '../../../reducers'
 
+// assets
+import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
+import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+
 const { Panel } = Collapse
 
 type ComponentProps = {
@@ -46,8 +50,20 @@ const renderListFields = (props: any) => {
 	const [t] = useTranslation()
 	const { fields } = props
 
-	const genExtra = (index: number) => (
+	const renderFromTo = (form: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
+		<div className={'flex items-center mr-3'}>
+			{icon}
+			{form}
+			{variable && to ? ` - ${to}` : undefined}
+		</div>
+	)
+
+	const genExtra = (index: number, field: any) => (
 		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
+			<div className={'flex'}>
+				{renderFromTo(field?.salonData?.durationFrom, field?.salonData?.durationTo, field?.variableDuration, <ClockIcon />)}
+				{renderFromTo(field?.salonData?.priceFrom, field?.salonData?.priceTo, field?.variablePrice, <CouponIcon />)}
+			</div>
 			<DeleteButton
 				onConfirm={() => {
 					fields.remove(index)
@@ -67,11 +83,21 @@ const renderListFields = (props: any) => {
 			<h3>{t('loc:Zoznam priradených služieb')}</h3>
 			<Divider className={'mb-3 mt-3'} />
 			<Collapse className={'collapse-list'} bordered={false}>
-				{fields.map((field: any, index: any) => {
-					const variableDuration = fields.get(index)?.variableDuration
-					const variablePrice = fields.get(index)?.variablePrice
+				{fields.map((field: any, index: number) => {
+					const fieldData = fields.get(index)
+					const variableDuration = fieldData?.variableDuration
+					const variablePrice = fieldData?.variablePrice
 					return (
-						<Panel header={fields.get(index)?.name} key={index} extra={genExtra(index)}>
+						<Panel
+							header={
+								<div>
+									{fieldData?.name}
+									{fieldData?.category?.child?.child?.name ? <Tag className={'ml-5'}>{fieldData?.category?.child?.child?.name}</Tag> : undefined}
+								</div>
+							}
+							key={index}
+							extra={genExtra(index, fieldData)}
+						>
 							<Row gutter={8}>
 								<Col span={variableDuration ? 12 : 24}>
 									<Field
@@ -227,6 +253,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							onSearch={searchService}
 							filterOption={true}
 							options={services?.options}
+							mode={'multiple'}
 							showSearch
 							allowInfinityScroll
 							disabled={!formValues?.salonID}

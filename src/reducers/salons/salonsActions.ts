@@ -6,6 +6,7 @@ import { IResetStore } from '../generalTypes'
 import { SALON, SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
+import { IQueryParams, ISearchablePayload } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -14,25 +15,12 @@ import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
 
-interface IGetSalonsQueryParams {
-	page: number
-	limit?: any | undefined
-	order?: string | undefined
-	search?: string | undefined | null
-	categoryFirstLevelIDs?: (string | null)[] | null | undefined
-	statuses?: (string | null)[] | SALON_STATUSES[] | null
-}
-
 interface IGetSalons {
 	type: SALONS
 	payload: ISalonsPayload
 }
 
-export interface IGetSalonsQueryParams {
-	page: number
-	limit?: any | undefined
-	order?: string | undefined
-	search?: string | undefined | null
+export interface IGetSalonsQueryParams extends IQueryParams {
 	categoryFirstLevelIDs?: (string | null)[] | null | undefined
 	statuses?: (string | null)[] | SALON_STATUSES[] | null
 }
@@ -46,16 +34,7 @@ export interface ISalonPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 | null
 }
 
-export interface SalonOptionItem {
-	label: string | undefined | number
-	value: number
-	key: string
-}
-
-export interface ISalonsPayload {
-	data: Paths.GetApiB2BAdminSalons.Responses.$200 | null
-	salonsOptions: SalonOptionItem[]
-}
+export interface ISalonsPayload extends ISearchablePayload<Paths.GetApiB2BAdminSalons.Responses.$200> {}
 
 export const getSalons =
 	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
@@ -70,7 +49,7 @@ export const getSalons =
 
 			payload = {
 				data,
-				salonsOptions
+				options: salonsOptions
 			}
 
 			dispatch({ type: SALONS.SALONS_LOAD_DONE, payload })

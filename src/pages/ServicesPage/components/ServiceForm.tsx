@@ -26,10 +26,10 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
-import { searchSalonWrapper } from '../../../utils/filters'
+import searchWrapper from '../../../utils/filters'
 
 // types
 import { IServiceForm } from '../../../types/interfaces'
@@ -72,7 +72,7 @@ const ServiceForm = (props: Props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { page, search })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SALON)
 		},
 		[dispatch]
 	)

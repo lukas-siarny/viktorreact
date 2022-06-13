@@ -5,8 +5,9 @@ import { Col, Divider, Form, Row, Collapse, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
-import { FORM, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import searchWrapper from '../../../utils/filters'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -15,18 +16,19 @@ import { IEmployeeForm } from '../../../types/interfaces'
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+import InputNumberField from '../../../atoms/InputNumberField'
+import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import DeleteButton from '../../../components/DeleteButton'
 
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+
+// reducers
 import { getServices } from '../../../reducers/services/serviceActions'
-import DeleteButton from '../../../components/DeleteButton'
 import { RootState } from '../../../reducers'
-import { searchSalonWrapper, searchServiceWrapper } from '../../../utils/filters'
 
 const { Panel } = Collapse
 
@@ -170,14 +172,14 @@ const EmployeeForm: FC<Props> = (props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SALON)
 		},
 		[dispatch]
 	)
 
 	const searchService = useCallback(
 		async (search: string, page: number) => {
-			return searchServiceWrapper(dispatch, { page, search, salonID: parseSalonID(salonID) })
+			return searchWrapper(dispatch, { page, search, salonID: parseSalonID(salonID) } as any, FILTER_ENTITY.SERVICE)
 		},
 		[dispatch, salonID]
 	)
@@ -224,7 +226,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							name={'service'}
 							onSearch={searchService}
 							filterOption={true}
-							options={services?.servicesOptions}
+							options={services?.options}
 							showSearch
 							allowInfinityScroll
 							disabled={!formValues?.salonID}

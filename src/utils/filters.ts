@@ -1,27 +1,48 @@
 import { Action, Dispatch } from 'redux'
+import { ThunkResult } from '../reducers'
+import { IQueryParams, ISearchablePayload, ISelectOptionItem } from '../types/interfaces'
+import { FILTER_ENTITY } from './enums'
 
 // reducers
-import { getSalons, IGetSalonsQueryParams } from '../reducers/salons/salonsActions'
-import { getServices, IGetServicesQueryParams } from '../reducers/services/serviceActions'
-import { getUsers, IGetUsersQueryParams } from '../reducers/users/userActions'
-import { getEmployees, IGetEmployeesQueryParams } from '../reducers/employees/employeesActions'
+import { getSalons } from '../reducers/salons/salonsActions'
+import { getServices } from '../reducers/services/serviceActions'
+import { getUsers } from '../reducers/users/userActions'
+import { getEmployees } from '../reducers/employees/employeesActions'
 
-export const searchSalonWrapper = async (dispatch: Dispatch<Action>, queryParams: IGetSalonsQueryParams) => {
-	const { data, salonsOptions } = await dispatch(getSalons(queryParams))
-	return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
+const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResult<Promise<ISearchablePayload<any>>>) => {
+	switch (type) {
+		case FILTER_ENTITY.EMPLOYEE:
+			return getEmployees
+
+		case FILTER_ENTITY.SALON:
+			return getSalons
+
+		case FILTER_ENTITY.SERVICE:
+			return getServices
+
+		case FILTER_ENTITY.USER:
+			return getUsers
+
+		default:
+			throw new Error(`Unsupported entity type for filtering:${type}`)
+	}
 }
 
-export const searchServiceWrapper = async (dispatch: Dispatch<Action>, queryParams: IGetServicesQueryParams) => {
-	const { data, servicesOptions } = await dispatch(getServices(queryParams))
-	return { pagination: data?.pagination, page: data?.pagination?.page, data: servicesOptions }
+const searchWrapper = async (
+	dispatch: Dispatch<Action>,
+	queryParams: IQueryParams,
+	entity: FILTER_ENTITY,
+	modifyOptions?: (originalOptions?: ISelectOptionItem[]) => ISelectOptionItem[]
+) => {
+	try {
+		const searchFn = getSearchFn(entity)
+		const { data, options } = await dispatch(searchFn(queryParams))
+		return { pagination: data.pagination, page: data.pagination.page, data: modifyOptions ? modifyOptions(options) : options }
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.error(error)
+		return null
+	}
 }
 
-export const searchUsersWrapper = async (dispatch: Dispatch<Action>, queryParams: IGetUsersQueryParams) => {
-	const { data, usersOptions } = await dispatch(getUsers(queryParams))
-	return { pagination: data?.pagination, page: data?.pagination?.page, data: usersOptions }
-}
-
-export const searchEmployeeWrapper = async (dispatch: Dispatch<Action>, queryParams: IGetEmployeesQueryParams) => {
-	const { data, employeesOptions } = await dispatch(getEmployees(queryParams))
-	return { pagination: data?.pagination, page: data?.pagination?.page, data: employeesOptions }
-}
+export default searchWrapper

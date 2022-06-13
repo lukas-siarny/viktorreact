@@ -218,3 +218,20 @@ export interface IPrice {
 	exponent: number
 	significand: number
 }
+
+
+export interface IQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+}
+
+interface IDataPagination {
+	pagination: IResponsePagination
+}
+
+export interface ISearchablePayload<T extends IDataPagination> {
+	options: ISelectOptionItem[] | undefined
+	data: T | null
+}

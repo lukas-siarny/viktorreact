@@ -6,8 +6,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // utils
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
 import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
+import searchWrapper from '../../../utils/filters'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -16,18 +17,19 @@ import { IEmployeeForm } from '../../../types/interfaces'
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+import InputNumberField from '../../../atoms/InputNumberField'
+import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import DeleteButton from '../../../components/DeleteButton'
 
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+
+// reducers
 import { getServices } from '../../../reducers/services/serviceActions'
-import DeleteButton from '../../../components/DeleteButton'
 import { RootState } from '../../../reducers'
-import { searchSalonWrapper, searchServiceWrapper } from '../../../utils/filters'
 
 // assets
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
@@ -225,14 +227,14 @@ const EmployeeForm: FC<Props> = (props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SALON)
 		},
 		[dispatch]
 	)
 
 	const searchService = useCallback(
 		async (search: string, page: number) => {
-			return searchServiceWrapper(dispatch, { page, search, salonID: parsedSalonID })
+			return searchWrapper(dispatch, { page, search, salonID: parseSalonID(salonID) } as any, FILTER_ENTITY.SERVICE)
 		},
 		[dispatch, parsedSalonID]
 	)
@@ -291,7 +293,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							onSearch={searchService}
 							filterOption={true}
 							mode={'multiple'}
-							options={services?.servicesOptions}
+							options={services?.options}
 							showSearch
 							allowInfinityScroll
 							disabled={!formValues?.salonID}

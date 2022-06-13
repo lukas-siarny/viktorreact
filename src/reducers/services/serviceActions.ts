@@ -6,7 +6,7 @@ import { ThunkResult } from '../index'
 import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IUserAvatar } from '../../types/interfaces'
+import { IUserAvatar, IQueryParams, ISearchablePayload } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -30,26 +30,14 @@ interface ServicesTableData {
 	salon: string | undefined
 }
 
-export interface IGetServicesQueryParams {
-	page: number
-	limit?: any | undefined
-	order?: string | undefined
-	search?: string | undefined | null
+export interface IGetServicesQueryParams extends IQueryParams {
 	categoryID?: number | undefined | null
 	employeeID?: number | undefined | null
 	salonID?: number | undefined | null
 }
 
-export interface ServiceOptionItem {
-	label: string | undefined | number
-	value: number
-	key: string
-}
-
-export interface IServicesPayload {
-	data: Paths.GetApiB2BAdminServices.Responses.$200 | null
+export interface IServicesPayload extends ISearchablePayload<Paths.GetApiB2BAdminServices.Responses.$200> {
 	tableData: ServicesTableData[] | undefined
-	servicesOptions: ServiceOptionItem[] | undefined
 }
 
 export const getServices =
@@ -84,7 +72,7 @@ export const getServices =
 			payload = {
 				data,
 				tableData,
-				servicesOptions
+				options: servicesOptions
 			}
 
 			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })

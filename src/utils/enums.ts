@@ -48,6 +48,13 @@ export enum FIELD_MODE {
 	FILTER = 'FILTER'
 }
 
+export enum FILTER_ENTITY {
+	EMPLOYEE = 'EMPLOYEE',
+	SALON = 'SALON',
+	SERVICE = 'SERVICE',
+	USER = 'USER'
+}
+
 export enum TABS_TYPE {
 	LINE = 'line',
 	CARD = 'card',

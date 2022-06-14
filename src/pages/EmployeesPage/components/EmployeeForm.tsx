@@ -3,6 +3,8 @@ import { change, Field, FieldArray, InjectedFormProps, reduxForm, isDirty } from
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
+import cx from 'classnames'
+import { forEach } from 'lodash'
 
 // utils
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
@@ -56,11 +58,25 @@ const renderListFields = (props: any) => {
 		</div>
 	)
 
+	const compareSalonAndEmployeeData = (data: any): boolean => {
+		const salonData = data?.salonData
+		const employeeData = data?.employeeData
+		let checkVariableDuration = true
+		let checkVariablePrice = true
+		if (data?.variableDuration) {
+			checkVariableDuration = salonData?.durationTo === employeeData?.durationTo
+		}
+		if (data?.variablePrice) {
+			checkVariablePrice = salonData?.priceTo === employeeData?.priceTo
+		}
+		return !(salonData?.durationFrom === employeeData?.durationFrom && salonData?.priceFrom === employeeData?.priceFrom && checkVariableDuration && checkVariablePrice)
+	}
+
 	const genExtra = (index: number, field: any) => (
 		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
 			<div className={'flex'}>
-				{renderFromTo(field?.salonData?.durationFrom, field?.salonData?.durationTo, field?.variableDuration, <ClockIcon />)}
-				{renderFromTo(field?.salonData?.priceFrom, field?.salonData?.priceTo, field?.variablePrice, <CouponIcon />)}
+				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />)}
+				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />)}
 			</div>
 			<DeleteButton
 				onConfirm={() => {
@@ -90,7 +106,13 @@ const renderListFields = (props: any) => {
 						<Panel
 							header={
 								<div className={'flex align-center'}>
-									<div className={'list-title leading-7'}>{fieldData?.name}</div>
+									<div
+										className={cx('list-title leading-7', {
+											'changed-service-title': compareSalonAndEmployeeData(fieldData)
+										})}
+									>
+										{fieldData?.name}
+									</div>
 									<Tag className={'ml-5'}>{category}</Tag>
 								</div>
 							}
@@ -103,7 +125,7 @@ const renderListFields = (props: any) => {
 										component={InputNumberField}
 										label={variableDuration ? t('loc:Trvanie od') : t('loc:Trvanie')}
 										placeholder={t('loc:min')}
-										name={`${field}.salonData.durationFrom`}
+										name={`${field}.employeeData.durationFrom`}
 										precision={0}
 										step={1}
 										maxChars={3}
@@ -119,7 +141,7 @@ const renderListFields = (props: any) => {
 											component={InputNumberField}
 											label={t('loc:Trvanie do')}
 											placeholder={t('loc:min')}
-											name={`${field}.salonData.durationTo`}
+											name={`${field}.employeeData.durationTo`}
 											precision={0}
 											step={1}
 											maxChars={3}
@@ -139,7 +161,7 @@ const renderListFields = (props: any) => {
 										label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
 										// TODO add currency
 										// placeholder={t('loc:min')}
-										name={`${field}.salonData.priceFrom`}
+										name={`${field}.employeeData.priceFrom`}
 										precision={2}
 										step={1}
 										maxChars={5}
@@ -155,7 +177,7 @@ const renderListFields = (props: any) => {
 											label={t('loc:Cena do')}
 											// TODO add currency
 											// placeholder={t('loc:min')}
-											name={`${field}.salonData.priceTo`}
+											name={`${field}.employeeData.priceTo`}
 											precision={2}
 											step={1}
 											maxChars={5}

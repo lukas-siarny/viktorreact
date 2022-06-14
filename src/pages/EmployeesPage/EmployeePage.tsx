@@ -43,10 +43,10 @@ export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
 		return {
 			id: service?.id,
 			employeeData: {
-				durationFrom: service?.salonData?.durationFrom,
-				durationTo: service?.variableDuration ? service?.salonData?.durationTo : undefined,
-				priceFrom: encodePrice(service?.salonData?.priceFrom),
-				priceTo: service?.variablePrice ? encodePrice(service?.salonData?.priceTo) : undefined
+				durationFrom: service?.employeeData?.durationFrom,
+				durationTo: service?.variableDuration ? service?.employeeData?.durationTo : undefined,
+				priceFrom: encodePrice(service?.employeeData?.priceFrom),
+				priceTo: service?.variablePrice ? encodePrice(service?.employeeData?.priceTo) : undefined
 			}
 		}
 	})
@@ -68,6 +68,12 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 				id: serviceData?.id,
 				name: serviceData?.name,
 				salonData: {
+					durationFrom: serviceData?.durationFrom,
+					durationTo: serviceData?.durationTo,
+					priceFrom: decodePrice(serviceData?.priceFrom),
+					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
+				},
+				employeeData: {
 					durationFrom: serviceData?.durationFrom,
 					durationTo: serviceData?.durationTo,
 					priceFrom: decodePrice(serviceData?.priceFrom),
@@ -131,6 +137,12 @@ const EmployeePage = (props: Props) => {
 				variableDuration: false,
 				variablePrice: false,
 				salonData: {
+					...service.salonData,
+					// decode and set price
+					priceFrom: decodePrice(service?.salonData?.priceFrom),
+					priceTo: decodePrice(service?.salonData?.priceTo)
+				},
+				employeeData: {
 					...service.employeeData,
 					// decode and set price
 					priceFrom: decodePrice(service?.employeeData?.priceFrom),
@@ -138,6 +150,7 @@ const EmployeePage = (props: Props) => {
 				},
 				category: service?.category
 			}
+			// get data from employeeData
 			if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
 				updatedService = {
 					...updatedService,

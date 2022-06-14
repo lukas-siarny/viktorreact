@@ -1,7 +1,7 @@
-import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect, useState } from 'react'
-import { change, Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
+import { change, Field, FieldArray, InjectedFormProps, reduxForm, isDirty } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Collapse, Button, Tag, Popconfirm } from 'antd'
+import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
@@ -48,10 +48,10 @@ const renderListFields = (props: any) => {
 	const [t] = useTranslation()
 	const { fields } = props
 
-	const renderFromTo = (form: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
+	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
 		<div className={'flex items-center mr-3'}>
 			{icon}
-			{form}
+			{from}
 			{variable && to ? ` - ${to}` : undefined}
 		</div>
 	)
@@ -186,46 +186,18 @@ const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { handleSubmit, salonID, addService } = props
-	const [confVisibility, setConfVisibility] = useState<boolean>(false)
-	const [initSalonId, setInitSalonId] = useState<number>()
-	const [prevSalonID, setPrevSalonID] = useState<number>()
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
 	const services = useSelector((state: RootState) => state.service.services)
-	const employee = useSelector((state: RootState) => state.employees.employee)
-	const salons = useSelector((state: RootState) => state.salons.salons)
+	const isFormDirty = useSelector(isDirty(FORM.EMPLOYEE))
 
 	const parsedSalonID = parseSalonID(salonID)
 
-	const getSalonName = (id: number) => {
-		const filteredSalon: any = salons?.data?.salons?.filter((salon) => salon?.id === id)
-		return filteredSalon?.name
-	}
-
-	// parser salon option, when user cancel options selection
-	const parseSalonOption = (salon: any) => {
-		if (salon?.label) {
-			return salon
-		}
-		const salonLabel = getSalonName(salon)
-		return { label: salonLabel, value: salon }
-	}
-
 	useEffect(() => {
-		// save init salon id
-		setInitSalonId(employee?.data?.employee?.salon?.id)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
-
-	useEffect(() => {
-		// check when conf modal is showed to user
-		if (parsedSalonID && initSalonId && initSalonId !== parsedSalonID && parseSalonID(prevSalonID) !== parsedSalonID && formValues?.services?.length > 0) {
-			setConfVisibility(true)
-			// clear init salon value
-			setInitSalonId(-1)
-		} else {
-			// save prev value
-			setPrevSalonID(parseSalonOption(salonID))
+		dispatch(getServices({ page: 1, salonID: parsedSalonID }))
+		if (isFormDirty) {
+			// clear services if salon is changed
+			dispatch(change(FORM.EMPLOYEE, 'services', null))
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
@@ -271,48 +243,21 @@ const EmployeeForm: FC<Props> = (props) => {
 					</div>
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
-					<Popconfirm
-						visible={confVisibility}
-						placement={'bottom'}
-						title={t('loc:V prípade ak potvrdíte výber salónu, všetky priradené služby budú vymazané.')}
-						okButtonProps={{
-							type: 'default',
-							className: 'noti-btn'
-						}}
-						cancelButtonProps={{
-							type: 'primary',
-							className: 'noti-btn'
-						}}
-						okText={t('loc:Potvrdiť')}
-						onConfirm={() => {
-							dispatch(getServices({ page: 1, salonID: parsedSalonID }))
-							// clear services after change salon
-							dispatch(change(FORM.EMPLOYEE, 'services', null))
-							// save prev value
-							setPrevSalonID(parseSalonOption(salonID))
-							setConfVisibility(false)
-						}}
-						cancelText={t('loc:Zrušiť')}
-						onCancel={() => {
-							setConfVisibility(false)
-							dispatch(change(FORM.EMPLOYEE, 'salonID', prevSalonID))
-						}}
-						getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-					>
-						<Field
-							label={t('loc:Salón')}
-							size={'large'}
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Vyberte salón')}
-							name={'salonID'}
-							onSearch={searchSalon}
-							filterOption={true}
-							showSearch
-							allowInfinityScroll
-							required
-						/>
-					</Popconfirm>
+					<Field
+						label={t('loc:Salón')}
+						size={'large'}
+						component={SelectField}
+						allowClear
+						placeholder={t('loc:Vyberte salón')}
+						name={'salonID'}
+						onSearch={searchSalon}
+						filterOption={true}
+						showSearch
+						confirmModalExtraTitle={<p className={'m-0'}>{t('loc: Potvrdením zmeny salónu sa vymažú všetky priradené služby!')}</p>}
+						allowInfinityScroll
+						confirmSelection={!!formValues?.services}
+						required
+					/>
 					<div className={'flex w-full justify-between'}>
 						<Field
 							label={t('loc:Služby')}

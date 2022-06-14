@@ -1,5 +1,6 @@
 {
   " Muž": " Muž",
+  " Potvrdením zmeny salónu sa vymažú všetky priradené služby!": " Potvrdením zmeny salónu sa vymažú všetky priradené služby!",
   "Adresa": "Adresa",
   "Aktivovať": "Aktivovať",
   "Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...": "Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...",
@@ -168,6 +169,7 @@
   "Uložiť": "Uložiť",
   "Uložiť {{entity}}": "Uložiť {{entity}}",
   "Upozornenie": "Upozornenie",
+  "Upozornenie!": "Upozornenie!",
   "Upraviť kategóriu": "Upraviť kategóriu",
   "Upraviť {{entity}}": "Upraviť {{entity}}",
   "Upresnite adresu vo vyhľadávaní alebo priamo v mape": "Upresnite adresu vo vyhľadávaní alebo priamo v mape",
@@ -176,7 +178,6 @@
   "Utorok": "Utorok",
   "Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.": "Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.",
   "Už ste registrovaný? ": "Už ste registrovaný? ",
-  "V prípade ak potvrdíte výber salónu, všetky priradené služby budú vymazané.": "V prípade ak potvrdíte výber salónu, všetky priradené služby budú vymazané.",
   "Variabilná cena": "Variabilná cena",
   "Variabilné trvanie": "Variabilné trvanie",
   "Verifikácia": "Verifikácia",

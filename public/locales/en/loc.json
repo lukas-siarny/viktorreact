@@ -1,5 +1,6 @@
 {
   " Muž": "_NEPRELOZENE_",
+  " Potvrdením zmeny salónu sa vymažú všetky priradené služby!": "_NEPRELOZENE_",
   "Adresa": "_NEPRELOZENE_",
   "Aktivovať": "_NEPRELOZENE_",
   "Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...": "_NEPRELOZENE_",
@@ -168,6 +169,7 @@
   "Uložiť": "_NEPRELOZENE_",
   "Uložiť {{entity}}": "_NEPRELOZENE_",
   "Upozornenie": "_NEPRELOZENE_",
+  "Upozornenie!": "_NEPRELOZENE_",
   "Upraviť kategóriu": "_NEPRELOZENE_",
   "Upraviť {{entity}}": "_NEPRELOZENE_",
   "Upresnite adresu vo vyhľadávaní alebo priamo v mape": "_NEPRELOZENE_",
@@ -176,7 +178,6 @@
   "Utorok": "_NEPRELOZENE_",
   "Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.": "_NEPRELOZENE_",
   "Už ste registrovaný? ": "_NEPRELOZENE_",
-  "V prípade ak potvrdíte výber salónu, všetky priradené služby budú vymazané.": "_NEPRELOZENE_",
   "Variabilná cena": "_NEPRELOZENE_",
   "Variabilné trvanie": "_NEPRELOZENE_",
   "Verifikácia": "_NEPRELOZENE_",

@@ -5,12 +5,11 @@ import cx from 'classnames'
 import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, some, take } from 'lodash'
 
 // ant
-import { Button, Divider, Empty, Form, Popconfirm, Select, Spin } from 'antd'
+import { Button, Divider, Empty, Form, Select, Spin } from 'antd'
 import { SelectProps } from 'antd/lib/select'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 
 // icons
-import { useTranslation } from 'react-i18next'
 import { ReactComponent as ArrowIcon } from '../assets/icons/select-arrow-icon.svg'
 import { ReactComponent as CheckedIcon } from '../assets/icons/checkbox-checked-icon-24.svg'
 import { ReactComponent as CloseIconSmall } from '../assets/icons/close-icon-16.svg'
@@ -65,7 +64,6 @@ export type Props = {
 	onSelect?: (opt: any, option: any, value: any) => any
 	optionRender?: any // custom render for item(option)
 	formName?: FORM
-	confirmSelection?: boolean
 } & WrappedFieldProps &
 	SelectProps<any> &
 	FormItemProps
@@ -290,11 +288,9 @@ const SelectField = (props: Props) => {
 		maxTagsLimit,
 		autoBlur,
 		hasExtra,
-		formName,
-		confirmSelection
+		formName
 	} = props
 
-	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const localItemRef = useRef()
 	const itemRef = props.itemRef || localItemRef
@@ -462,6 +458,7 @@ const SelectField = (props: Props) => {
 				dispatch(change(formName, input?.name, opt[0]?.value))
 			}
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [opt, formName])
 
 	let suffIcon

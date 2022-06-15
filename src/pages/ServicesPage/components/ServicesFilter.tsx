@@ -147,10 +147,10 @@ const ServicesFilter = (props: Props) => {
 							name='salonID'
 							showSearch
 							onSearch={searchSalon}
+							filterOption={false}
+							allowInfinityScroll
 							onDidMountSearch
 							disabled={isFilterDisabled}
-							allowInfinityScroll
-							filterOption={false}
 						/>
 					</Col>
 				</Row>

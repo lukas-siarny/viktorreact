@@ -133,17 +133,6 @@ const UsersPage = () => {
 					return role?.name
 				})
 			}
-		},
-		{
-			title: t('loc:Spoločnosť'),
-			dataIndex: 'companyName',
-			key: 'companyName',
-			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'companyName'),
-			render: (value, record) => {
-				return <>{record?.company?.companyName}</>
-			}
 		}
 	]
 

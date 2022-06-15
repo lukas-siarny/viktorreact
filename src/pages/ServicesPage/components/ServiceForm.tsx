@@ -73,7 +73,7 @@ const ServiceForm = (props: Props) => {
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
 			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
-			return { pagination: data?.pagination?.page, data: salonsOptions }
+			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
 		},
 		[dispatch]
 	)
@@ -99,6 +99,8 @@ const ServiceForm = (props: Props) => {
 					onDidMountSearch
 					size={'large'}
 					required
+					filterOption={false}
+					allowInfinityScroll
 				/>
 				<Divider />
 				<Row gutter={8}>

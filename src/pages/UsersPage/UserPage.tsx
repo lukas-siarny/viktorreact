@@ -32,13 +32,14 @@ type Props = {
 
 const UserPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const { computedMatch } = props
-	const { userID } = computedMatch.params
+	const userID = computedMatch.params.userID || get(authUser, 'data.id')
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
-	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
+
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
 	const showDeleteBtn: boolean = authUser.data?.id !== get(userAccountDetail, 'data.id')
@@ -63,7 +64,7 @@ const UserPage: FC<Props> = (props) => {
 	const handleUserAccountFormSubmit = async (data: any) => {
 		try {
 			setSubmitting(true)
-			let userData: any = {
+			const userData: any = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
@@ -71,22 +72,6 @@ const UserPage: FC<Props> = (props) => {
 				imageID: data?.avatar?.[0]?.id || null
 			}
 
-			// check one required field for company info
-			if (data?.companyName) {
-				userData = {
-					...userData,
-					company: {
-						businessID: data?.businessID,
-						vatID: data?.vatID,
-						taxID: data?.taxID,
-						companyName: data?.companyName,
-						zipCode: data?.zipCode,
-						city: data?.city,
-						street: data?.street,
-						countryCode: data?.countryCode
-					}
-				}
-			}
 			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
 			if (!userID || Number(authUser.data?.id) === Number(userID)) dispatch(getCurrentUser())
 		} catch (error: any) {
@@ -139,18 +124,13 @@ const UserPage: FC<Props> = (props) => {
 		'justify-center': !showDeleteBtn
 	})
 
-	// check role partner for show company form
-	const isPartner = (roles: any) => {
-		return roles?.find((role: any) => role?.name === 'Partner' && role?.id === 3)
-	}
-
 	return (
 		<>
 			<Row className={hideClass}>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				<UserAccountForm onSubmit={handleUserAccountFormSubmit} isCompany={!!isPartner(get(userAccountDetail?.data, 'roles'))} />
+				<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
 				<div className={'content-footer'}>
 					<Row className={rowClass}>
 						{showDeleteBtn ? (

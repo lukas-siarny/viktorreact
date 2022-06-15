@@ -103,14 +103,6 @@ const SalonsPage = () => {
 			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
 		},
 		{
-			title: t('loc:Kategórie'),
-			dataIndex: 'categories',
-			key: 'categories',
-			ellipsis: true,
-			sorter: false,
-			render: (value) => <>{value.map((category: any, index: number) => (index === value.length - 1 ? category?.name : `${category?.name}, `))} </>
-		},
-		{
 			title: t('loc:Vymazaný'),
 			dataIndex: 'deletedAt',
 			key: 'deletedAt',
@@ -160,9 +152,9 @@ const SalonsPage = () => {
 			sorter: false,
 			render: (value, record) => {
 				const progressVariables = [Number(value), Number(record.fillingProgressServices), Number(record.fillingProgressCompany)]
-				// 34%, 67%, 100%
+				// 1% 34%, 67%, 100%
 				const result = progressVariables.reduce((a, b) => a + b, 0) * PROGRESS_PERCENTAGE + 1
-				return <Progress percent={result} showInfo={false} strokeColor={'#000'} />
+				return <Progress className='w-4/5' percent={result} showInfo={false} strokeColor={'#000'} />
 			}
 		},
 		{

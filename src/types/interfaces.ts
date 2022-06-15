@@ -151,9 +151,9 @@ export interface ICountryLabel {
 }
 
 export interface IStructuredAddress {
-	streetNumber: string | null
 	zip: string | null
 	street: string | null
+	streetNumber: string | null
 	city: string | null
 	country: string | null
 	houseNumber: string | null

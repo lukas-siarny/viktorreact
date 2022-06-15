@@ -233,6 +233,7 @@ const UserAccountForm: FC<Props> = (props) => {
 								longitude: get(formValues, 'longitude'),
 								city: get(formValues, 'city'),
 								street: get(formValues, 'street'),
+								streetNumber: get(formValues, 'streetNumber'),
 								zipCode: get(formValues, 'zipCode'),
 								country: get(formValues, 'country')
 							}}

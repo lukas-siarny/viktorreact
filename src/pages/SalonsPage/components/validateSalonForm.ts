@@ -26,7 +26,7 @@ export default (values: any) => {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!(values?.zipCode && values?.city && values?.street && values?.latitude && values?.longitude && values?.country)) {
+	if (!(values?.zipCode && values?.city && values?.street && values?.streetNumber && values?.latitude && values?.longitude && values?.country)) {
 		errors.address = i18next.t('loc:Upresnite adresu vo vyhľadávaní alebo priamo v mape')
 	}
 
@@ -128,6 +128,16 @@ export default (values: any) => {
 		if (invoiceAddress?.street && invoiceAddress?.street?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
 			addressErrors.street = i18next.t('loc:Max. počet znakov je {{max}}', {
 				max: VALIDATION_MAX_LENGTH.LENGTH_100
+			})
+		}
+
+		if (!invoiceAddress?.streetNumber) {
+			addressErrors.streetNumber = i18next.t('loc:Toto pole je povinné')
+		}
+
+		if (invoiceAddress?.streetNumber && invoiceAddress?.streetNumber?.length > VALIDATION_MAX_LENGTH.LENGTH_10) {
+			addressErrors.streetNumber = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_10
 			})
 		}
 

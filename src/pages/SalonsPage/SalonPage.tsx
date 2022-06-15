@@ -299,6 +299,7 @@ const SalonPage: FC<Props> = (props) => {
 					street: salonData.data?.salon?.address?.street,
 					zipCode: salonData.data?.salon?.address?.zipCode,
 					country: salonData.data?.salon?.address?.countryCode,
+					streetNumber: salonData.data?.salon?.address?.streetNumber,
 					useContactPerson: isFilledContactPerson,
 					companyContactPerson: salonData.data?.salon.companyContactPerson || defaultContactPerson,
 					isInvoiceAddressSame: isEqual(invoiceAddress, addressBase),
@@ -364,6 +365,7 @@ const SalonPage: FC<Props> = (props) => {
 							city: data.city,
 							countryCode: data.country,
 							street: data.street,
+							streetNumber: data.streetNumber,
 							zipCode: data.zipCode
 					  }
 					: data.companyInvoiceAddress,

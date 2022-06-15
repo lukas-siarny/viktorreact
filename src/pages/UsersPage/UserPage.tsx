@@ -7,7 +7,6 @@ import { get } from 'lodash'
 import cx from 'classnames'
 
 // components
-import i18next from 'i18next'
 import UserAccountForm from './components/UserAccountForm'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -113,7 +112,7 @@ const UserPage: FC<Props> = (props) => {
 			await deleteReq('/api/b2b/admin/users/{userID}', { userID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			if (isMyAccountPage) {
 				dispatch(logOutUser())
-				history.push(i18next.t('paths:login'))
+				history.push(t('paths:login'))
 			} else {
 				history.push(t('paths:users'))
 			}

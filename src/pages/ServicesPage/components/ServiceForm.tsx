@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { InjectedFormProps, reduxForm, Field } from 'redux-form'
 import { Form, Spin, Divider, Row, Col, Button } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
+import { isEmpty } from 'lodash'
 
 // assets
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
@@ -46,7 +47,8 @@ const ServiceForm = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM].values)
+	const employees = useSelector((state: RootState) => state.employees.employees)
 	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
 
@@ -54,6 +56,9 @@ const ServiceForm = (props: Props) => {
 
 	const isLoading = serviceLoading || categoriesLoading || isRemoving
 	const submitting = false
+
+	const variableDuration = formValues?.variableDuration
+	const variablePrice = formValues?.variablePrice
 
 	const onConfirmDelete = async () => {
 		if (isRemoving) {
@@ -77,17 +82,31 @@ const ServiceForm = (props: Props) => {
 		[dispatch]
 	)
 
-	const variableDuration = form?.values?.variableDuration
-	const variablePrice = form?.values?.variablePrice
+	const searchEmployees = useCallback(
+		async (search: string, page: number) => {
+			const salonID = formValues?.salonID
+			return searchWrapper(dispatch, { page, search, salonID: salonID?.value ?? salonID } as any, FILTER_ENTITY.EMPLOYEE)
+		},
+		[dispatch, formValues]
+	)
 
 	return (
 		<Spin tip={STRINGS(t).loading} spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-				<CategoryFields />
 				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
 				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
 				<Field
 					className='m-0'
+					component={ImgUploadField}
+					name='gallery'
+					label={t('loc:Referenčné obrázky')}
+					signUrl={URL_UPLOAD_IMAGES}
+					multiple
+					maxCount={10}
+					category='SALON'
+				/>
+				<CategoryFields />
+				<Field
 					label={t('loc:Salón')}
 					component={SelectField}
 					allowClear
@@ -101,9 +120,11 @@ const ServiceForm = (props: Props) => {
 					size={'large'}
 					required
 				/>
-				<Divider />
-				<Row gutter={8}>
-					<Col span={variableDuration ? 12 : 24}>
+				<Row gutter={8} align='middle'>
+					<Col span={8}>
+						<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
+					</Col>
+					<Col span={variableDuration ? 8 : 16}>
 						<Field
 							component={InputNumberField}
 							label={variableDuration ? t('loc:Trvanie od') : t('loc:Trvanie')}
@@ -119,7 +140,7 @@ const ServiceForm = (props: Props) => {
 					</Col>
 
 					{variableDuration && (
-						<Col span={12}>
+						<Col span={8}>
 							<Field
 								component={InputNumberField}
 								label={t('loc:Trvanie do')}
@@ -135,10 +156,12 @@ const ServiceForm = (props: Props) => {
 						</Col>
 					)}
 				</Row>
-				<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
-				<Divider />
-				<Row gutter={8}>
-					<Col span={variablePrice ? 12 : 24}>
+
+				<Row gutter={8} align='middle'>
+					<Col span={8}>
+						<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+					</Col>
+					<Col span={variablePrice ? 8 : 16}>
 						<Field
 							component={InputNumberField}
 							label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
@@ -154,7 +177,7 @@ const ServiceForm = (props: Props) => {
 						/>
 					</Col>
 					{variablePrice && (
-						<Col span={12}>
+						<Col span={8}>
 							<Field
 								component={InputNumberField}
 								label={t('loc:Cena do')}
@@ -171,18 +194,30 @@ const ServiceForm = (props: Props) => {
 						</Col>
 					)}
 				</Row>
-				<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+				<div className={'flex w-full justify-between'}>
+					<Field
+						label={t('loc:Zamestnanci')}
+						className={'w-4/5'}
+						size={'large'}
+						component={SelectField}
+						allowClear
+						placeholder={t('loc:Vyberte zamestnancov')}
+						name={'employees'}
+						onSearch={searchEmployees}
+						filterOption={true}
+						options={employees?.options}
+						mode={'multiple'}
+						showSearch
+						allowInfinityScroll
+						disabled={!formValues?.salonID}
+					/>
+					<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-1/6 mt-4'} onClick={undefined} disabled={isEmpty(formValues?.employees)}>
+						{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
+					</Button>
+				</div>
+
 				<Divider />
-				<Field
-					className='m-0'
-					component={ImgUploadField}
-					name='gallery'
-					label={t('loc:Referenčné obrázky')}
-					signUrl={URL_UPLOAD_IMAGES}
-					multiple
-					maxCount={10}
-					category='SALON'
-				/>
+
 				<Row className={'content-footer'} id={'content-footer-container'}>
 					<Col span={8}>
 						{serviceID ? (

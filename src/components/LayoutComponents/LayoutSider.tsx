@@ -111,16 +111,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 								>
 									{t('loc:Salóny')}
 								</Menu.Item>
-								<Menu.Item
-									eventKey={PAGE.SERVICES}
-									key={PAGE.SERVICES}
-									onClick={() => history.push(t('paths:services'))}
-									icon={<ServiceIcon />}
-									// fix style issue due wrapped item into <Permission> component
-									className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
-								>
-									{t('loc:Služby')}
-								</Menu.Item>
 							</Permissions>
 
 							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]}>
@@ -132,6 +122,19 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									className={cx({ 'ant-menu-item-selected': page === PAGE.CUSTOMERS })}
 								>
 									{t('loc:Zákazníci')}
+								</Menu.Item>
+							</Permissions>
+
+							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]}>
+								<Menu.Item
+									eventKey={PAGE.SERVICES}
+									key={PAGE.SERVICES}
+									onClick={() => history.push(t('paths:services'))}
+									icon={<ServiceIcon />}
+									// fix style issue due wrapped item into <Permission> component
+									className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
+								>
+									{t('loc:Služby')}
 								</Menu.Item>
 							</Permissions>
 

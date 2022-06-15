@@ -96,8 +96,6 @@ const ServiceForm = (props: Props) => {
 					showSearch
 					onSearch={searchSalon}
 					onDidMountSearch
-					filterOption={true}
-					allowInfinityScroll
 					size={'large'}
 					required
 					filterOption={false}

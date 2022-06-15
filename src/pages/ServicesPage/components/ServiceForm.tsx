@@ -27,7 +27,7 @@ import { getSalons } from '../../../reducers/salons/salonsActions'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 
@@ -182,7 +182,7 @@ const ServiceForm = (props: Props) => {
 					signUrl={URL_UPLOAD_IMAGES}
 					multiple
 					maxCount={10}
-					category='SALON'
+					category={UPLOAD_IMG_CATEGORIES.SALON}
 				/>
 				<Row className={'content-footer'} id={'content-footer-container'}>
 					<Col span={8}>

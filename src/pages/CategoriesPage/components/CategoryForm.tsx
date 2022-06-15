@@ -5,7 +5,7 @@ import { Button, Col, Divider, Form, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
 // enums
-import { FORM, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
@@ -155,7 +155,7 @@ const CategoryForm: FC<Props> = (props) => {
 								label={t('loc:Obrázok')}
 								maxCount={1}
 								signUrl={URL_UPLOAD_IMAGES}
-								category='SALON'
+								category={UPLOAD_IMG_CATEGORIES.CATEGORY}
 								required
 							/>
 						) : undefined}

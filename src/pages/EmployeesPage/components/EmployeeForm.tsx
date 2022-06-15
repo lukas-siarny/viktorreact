@@ -5,7 +5,7 @@ import { Col, Divider, Form, Row, Collapse, Button } from 'antd'
 import { useDispatch } from 'react-redux'
 
 // utils
-import { FORM, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
 
 // types
@@ -161,7 +161,16 @@ const EmployeeForm: FC<Props> = (props) => {
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>
 						<div className={'w-1/5'}>
-							<Field className={'m-0'} component={ImgUploadField} name={'avatar'} label={t('loc:Avatar')} signUrl={URL_UPLOAD_IMAGES} multiple={false} maxCount={1} />
+							<Field
+								className={'m-0'}
+								component={ImgUploadField}
+								name={'avatar'}
+								label={t('loc:Avatar')}
+								signUrl={URL_UPLOAD_IMAGES}
+								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
+								multiple={false}
+								maxCount={1}
+							/>
 						</div>
 
 						<div className={'w-full'}>

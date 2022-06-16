@@ -16,7 +16,7 @@ import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getCurrentUser, getUserAccountDetails } from '../../reducers/users/userActions'
+import { getCurrentUser, getUserAccountDetails, logOutUser } from '../../reducers/users/userActions'
 
 // types
 import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
@@ -42,7 +42,7 @@ const UserPage: FC<Props> = (props) => {
 
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
-	const showDeleteBtn: boolean = authUser.data?.id !== get(userAccountDetail, 'data.id')
+	const isMyAccountPage: boolean = authUser.data?.id === get(userAccountDetail, 'data.id')
 
 	useEffect(() => {
 		if (userID) {
@@ -104,9 +104,18 @@ const UserPage: FC<Props> = (props) => {
 			return
 		}
 		try {
+			let id = userID
+			if (isMyAccountPage && authUser.data) {
+				id = authUser.data.id
+			}
 			setIsRemoving(true)
-			await deleteReq('/api/b2b/admin/users/{userID}', { userID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(t('paths:users'))
+			await deleteReq('/api/b2b/admin/users/{userID}', { userID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			if (isMyAccountPage) {
+				dispatch(logOutUser())
+				history.push(t('paths:login'))
+			} else {
+				history.push(t('paths:users'))
+			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -119,11 +128,6 @@ const UserPage: FC<Props> = (props) => {
 		hidden: !userID
 	})
 
-	const rowClass = cx({
-		'justify-between': showDeleteBtn,
-		'justify-center': !showDeleteBtn
-	})
-
 	return (
 		<>
 			<Row className={hideClass}>
@@ -132,17 +136,15 @@ const UserPage: FC<Props> = (props) => {
 			<div className='content-body small mt-2'>
 				<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
 				<div className={'content-footer'}>
-					<Row className={rowClass}>
-						{showDeleteBtn ? (
-							<DeleteButton
-								permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE]}
-								className={'w-1/3'}
-								onConfirm={deleteUser}
-								entityName={t('loc:používateľa')}
-								type={'default'}
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-							/>
-						) : undefined}
+					<Row className={'justify-between'}>
+						<DeleteButton
+							permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE]}
+							className={'w-1/3'}
+							onConfirm={deleteUser}
+							entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
+							type={'default'}
+							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+						/>
 						<Permissions
 							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT]}
 							render={(hasPermission, { openForbiddenModal }) => (

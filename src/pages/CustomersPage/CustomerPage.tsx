@@ -87,6 +87,7 @@ const CustomerPage = (props: Props) => {
 					gender: data.gender,
 					lastName: data.lastName,
 					street: data.street,
+					streetNumber: data.streetNumber,
 					zipCode: data.zipCode,
 					phone: data.phone,
 					phonePrefixCountryCode: data.phonePrefixCountryCode

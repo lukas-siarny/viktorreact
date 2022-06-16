@@ -55,21 +55,22 @@ const CreateCustomerPage = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const createCustomer = async (formInput: ICustomerForm) => {
+	const createCustomer = async (formData: ICustomerForm) => {
 		try {
 			setSubmitting(true)
 			const { data } = await postReq('/api/b2b/admin/customers/', null, {
-				email: formInput.email,
-				city: formInput.city,
-				countryCode: formInput.countryCode,
-				firstName: formInput.firstName,
-				gender: formInput.gender,
-				lastName: formInput.lastName,
-				salonID: formInput.salonID,
-				street: formInput.street,
-				zipCode: formInput.zipCode,
-				phone: formInput.phone,
-				phonePrefixCountryCode: formInput.phonePrefixCountryCode
+				email: formData.email,
+				city: formData.city,
+				countryCode: formData.countryCode,
+				firstName: formData.firstName,
+				gender: formData.gender,
+				lastName: formData.lastName,
+				salonID: formData.salonID,
+				street: formData.street,
+				streetNumber: formData.streetNumber,
+				zipCode: formData.zipCode,
+				phone: formData.phone,
+				phonePrefixCountryCode: formData.phonePrefixCountryCode
 			})
 
 			const customerID = get(data, 'cusomer.id', 0)

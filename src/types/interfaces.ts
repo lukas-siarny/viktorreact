@@ -183,6 +183,7 @@ export interface ICustomerForm {
 	zipCode?: string
 	city?: string
 	street?: string
+	streetNumber?: string
 	countryCode?: string
 	salonID: number
 }

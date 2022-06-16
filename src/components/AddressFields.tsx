@@ -180,9 +180,7 @@ const AddressFields = (props: Props) => {
 							{'street' in inputValues && (
 								<div>
 									{getLabelField(t('loc:Ulica'))}
-									<h4>{`${get(inputValues, 'street') ? get(inputValues, 'street') : ''} ${
-										get(inputValues, 'streetNumber') ? get(inputValues, 'streetNumber') : ''
-									}`}</h4>
+									<h4>{`${get(inputValues, 'street') ?? ''} ${get(inputValues, 'streetNumber') ?? ''}`}</h4>
 								</div>
 							)}
 							{'zipCode' in inputValues && (

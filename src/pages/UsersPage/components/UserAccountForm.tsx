@@ -11,6 +11,7 @@ import validateUserAccountForm from './validateUserAccountForm'
 
 // atoms
 import InputField from '../../../atoms/InputField'
+import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -18,7 +19,6 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 // utils
 import { showErrorNotification } from '../../../utils/helper'
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import ImgUploadField from '../../../atoms/ImgUploadField'
 
 type ComponentProps = {}
 

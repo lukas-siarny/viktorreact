@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { initialize, submit, isPristine } from 'redux-form'
+import { initialize, isPristine, submit } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
 
@@ -146,7 +146,7 @@ const UserPage: FC<Props> = (props) => {
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT]}
+							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT, PERMISSION.PARTNER]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<Button
 									type={'primary'}

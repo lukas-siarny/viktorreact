@@ -5,10 +5,36 @@ import Icon from '@ant-design/icons'
 import i18next from 'i18next'
 
 // utils
-import { LANGUAGE, LOCALES, DEFAULT_LANGUAGE } from '../utils/enums'
+import sk_SK from 'antd/lib/locale-provider/sk_SK'
+import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
+import en_GB from 'antd/lib/locale-provider/en_GB'
+import { LANGUAGE, DEFAULT_LANGUAGE } from '../utils/enums'
 
 // hooks
 import useMedia from '../hooks/useMedia'
+
+// assets
+import { ReactComponent as SK_Flag } from '../assets/flags/SK.svg'
+import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
+import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
+
+export const LOCALES = {
+	[LANGUAGE.SK]: {
+		ISO_639: 'sk',
+		antD: sk_SK,
+		icon: SK_Flag
+	},
+	[LANGUAGE.CZ]: {
+		ISO_639: 'cs',
+		antD: cs_CZ,
+		icon: CZ_Flag
+	},
+	[LANGUAGE.EN]: {
+		ISO_639: 'en',
+		antD: en_GB,
+		icon: EN_Flag
+	}
+}
 
 const { Option } = Select
 const { SubMenu } = Menu

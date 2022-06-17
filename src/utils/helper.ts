@@ -45,7 +45,6 @@ import {
 	BYTE_MULTIPLIER,
 	MONDAY_TO_FRIDAY,
 	DAY,
-	LOCALES,
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT
 } from './enums'
@@ -54,6 +53,7 @@ import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
 import { RootState } from '../reducers'
+import { LOCALES } from '../components/LanguagePicker'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 

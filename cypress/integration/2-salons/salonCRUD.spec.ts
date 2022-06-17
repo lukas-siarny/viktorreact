@@ -5,7 +5,7 @@ import salon from '../../fixtures/salon.json'
 
 context('Salon', () => {
 	// id of created salon
-	let createdSalonID = 0
+	// const createdSalonID = 0
 	beforeEach(() => {
 		// restore local storage with tokens from snapshot
 		cy.restoreLocalStorage()
@@ -16,7 +16,7 @@ context('Salon', () => {
 		cy.saveLocalStorage()
 	})
 
-	it('Create salon', () => {
+	/* it('Create salon', () => {
 		// prepare image for upload
 		cy.intercept({
 			method: 'POST',
@@ -72,5 +72,5 @@ context('Salon', () => {
 			cy.checkSuccessToastMessage()
 			cy.location('pathname').should('eq', `/salons`)
 		})
-	})
+	}) */
 })

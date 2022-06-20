@@ -18,17 +18,18 @@ interface IGetRoles {
 }
 
 export interface IRolesPayload {
-	data: Paths.GetApiB2BAdminRoles.Responses.$200 | null
+	data: Paths.GetApiB2BAdminRolesSystemUser.Responses.$200 | null
 }
 
 export const getRoles = (): ThunkResult<Promise<void>> => async (dispatch) => {
 	try {
 		dispatch({ type: ROLES.ROLES_LOAD_START })
-		const { data } = await getReq('/api/b2b/admin/roles/', null)
+		// TODO - check and change api EP
+		const { data } = await getReq('/api/b2b/admin/roles/system-user', null)
 		const parsedData: ILabelInValueOption[] = []
 		data.roles.forEach((role) => {
 			parsedData.push({
-				label: role?.name,
+				label: role?.name || '',
 				value: role?.id,
 				key: role?.id,
 				extra: { permissions: role?.permissions }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { compose } from 'redux'
 
 // components
 import ServiceCreatePage from './ServiceCreatePage'
@@ -10,10 +9,6 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
 import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
-
-// utils
-import { PERMISSION } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
 
 type Props = {
 	computedMatch: IComputedMatch<{
@@ -50,4 +45,4 @@ const ServicePage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT, PERMISSION.SALON_BROWSING]))(ServicePage)
+export default ServicePage

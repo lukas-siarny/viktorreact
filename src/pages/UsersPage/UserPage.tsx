@@ -138,7 +138,7 @@ const UserPage: FC<Props> = (props) => {
 				<div className={'content-footer'}>
 					<Row className={'justify-between'}>
 						<DeleteButton
-							permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE]}
+							permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_DELETE]}
 							className={'w-1/3'}
 							onConfirm={deleteUser}
 							entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
@@ -146,7 +146,7 @@ const UserPage: FC<Props> = (props) => {
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT, PERMISSION.PARTNER]}
+							allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<Button
 									type={'primary'}

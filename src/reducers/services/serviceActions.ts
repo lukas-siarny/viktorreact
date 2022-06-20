@@ -62,7 +62,7 @@ export const getServices =
 						text: `${employee.firstName} ${employee.lastName}`,
 						key: employee.id
 					})),
-					price: getServiceRange(item.priceFrom, item.priceTo),
+					price: getServiceRange(item.priceFrom as any, item.priceTo as any),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
 					category: item.category.name || '-',
 					salon: item.salon.name

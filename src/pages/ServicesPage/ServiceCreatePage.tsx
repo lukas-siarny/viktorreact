@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, get } from 'lodash'
+import { get, map } from 'lodash'
 import { useDispatch } from 'react-redux'
+import { compose } from 'redux'
 
 // components
 import ServiceForm from './components/ServiceForm'
@@ -14,8 +15,11 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // utils
 import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE } from '../../utils/enums'
+import { NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
+import { withPermissions } from '../../utils/Permissions'
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]
 
 const ServiceCreatePage = () => {
 	const { t } = useTranslation()
@@ -32,8 +36,8 @@ const ServiceCreatePage = () => {
 				description: values.description,
 				durationFrom: values.durationFrom,
 				durationTo: values.durationTo,
-				priceFrom: values.priceFrom,
-				priceTo: values.priceTo,
+				priceFrom: values.priceFrom as any,
+				priceTo: values.priceTo as any,
 				salonID: values.salonID,
 				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
 				// employeeIDs
@@ -53,4 +57,4 @@ const ServiceCreatePage = () => {
 	return <ServiceForm onSubmit={handleSubmit} />
 }
 
-export default ServiceCreatePage
+export default compose(withPermissions(permissions))(ServiceCreatePage)

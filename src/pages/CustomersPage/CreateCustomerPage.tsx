@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { initialize, submit, isPristine } from 'redux-form'
+import { initialize, isPristine, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { map, get } from 'lodash'
+import { get, map } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -22,6 +22,8 @@ import { getPrefixCountryCode } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]
 
 const CreateCustomerPage = () => {
 	const [t] = useTranslation()
@@ -110,4 +112,4 @@ const CreateCustomerPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]))(CreateCustomerPage)
+export default compose(withPermissions(permissions))(CreateCustomerPage)

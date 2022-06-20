@@ -76,7 +76,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							<Menu.Item eventKey={PAGE.HOME} key={PAGE.HOME} onClick={() => history.push(t('paths:index'))} icon={<HomeIcon />}>
 								{t('loc:Home')}
 							</Menu.Item>
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]}>
+							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]}>
 								<Menu.Item
 									eventKey={PAGE.USERS}
 									key={PAGE.USERS}
@@ -88,7 +88,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									{t('loc:Používatelia')}
 								</Menu.Item>
 							</Permissions>
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]}>
+							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_BROWSING]}>
 								<Menu.Item
 									eventKey={PAGE.CATEGORIES}
 									key={PAGE.CATEGORIES}
@@ -100,7 +100,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									{t('loc:Kategórie')}
 								</Menu.Item>
 							</Permissions>
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]}>
+							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
 								<Menu.Item
 									eventKey={PAGE.SALONS}
 									key={PAGE.SALONS}
@@ -122,8 +122,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									{t('loc:Služby')}
 								</Menu.Item>
 							</Permissions>
-
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]}>
+							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
 								<Menu.Item
 									eventKey={PAGE.CUSTOMERS}
 									key={PAGE.CUSTOMERS}
@@ -134,8 +133,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									{t('loc:Zákazníci')}
 								</Menu.Item>
 							</Permissions>
-
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_BROWSING, PERMISSION.PARTNER]}>
+							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
 								<Menu.Item
 									eventKey={PAGE.EMPLOYEES}
 									key={PAGE.EMPLOYEES}

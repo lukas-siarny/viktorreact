@@ -20,7 +20,7 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, ENUMERATIONS_KEYS } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
 // types
@@ -108,10 +108,10 @@ const UserAccountForm: FC<Props> = (props) => {
 								{t('loc:Základné údaje')}
 							</h3>
 							{salonID ? (
-								<Permissions
-									allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT]}
-									render={(hasPermission, { openForbiddenModal }) => (
-										<div className={'flex justify-between w-1/2'}>
+								<div className={'flex justify-between w-1/2'}>
+									<Permissions
+										allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+										render={(hasPermission, { openForbiddenModal }) => (
 											<Field
 												className={'mt-2 mb-2 w-12/25'}
 												component={SwitchField}
@@ -128,6 +128,11 @@ const UserAccountForm: FC<Props> = (props) => {
 												}}
 												disabled={switchDisabled || disabledForm}
 											/>
+										)}
+									/>
+									<Permissions
+										allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+										render={(hasPermission, { openForbiddenModal }) => (
 											<Field
 												className={'mt-2 mb-2 w-12/25'}
 												component={SwitchField}
@@ -144,9 +149,9 @@ const UserAccountForm: FC<Props> = (props) => {
 												}}
 												disabled={switchDisabled || disabledForm}
 											/>
-										</div>
-									)}
-								/>
+										)}
+									/>
+								</div>
 							) : null}
 						</div>
 						<Divider className={'mb-3 mt-3'} />

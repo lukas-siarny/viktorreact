@@ -4,9 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
-// enums
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 
@@ -24,9 +21,11 @@ import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
 import { validationString } from '../../../utils/helper'
+import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 
 // redux
 import { RootState } from '../../../reducers'
+import Permissions from '../../../utils/Permissions'
 
 type ComponentProps = {
 	deleteCategory: any
@@ -52,6 +51,8 @@ export interface ICategoryForm {
 const fixLength100 = validationString(100)
 
 type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]
 
 const CategoryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -162,12 +163,14 @@ const CategoryForm: FC<Props> = (props) => {
 					</Row>
 					<div className={'flex justify-between flex-wrap gap-2'}>
 						{values?.id && !values?.deletedAt ? (
-							<DeleteButton
-								onConfirm={() => deleteCategory(values?.id, false)}
-								entityName={''}
-								type={'default'}
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-							/>
+							<Permissions allowed={permissions}>
+								<DeleteButton
+									onConfirm={() => deleteCategory(values?.id, false)}
+									entityName={''}
+									type={'default'}
+									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								/>
+							</Permissions>
 						) : undefined}
 
 						{values?.id && values?.deletedAt && !values?.isParentDeleted ? (
@@ -179,9 +182,11 @@ const CategoryForm: FC<Props> = (props) => {
 						{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 
 						{!values?.deletedAt ? (
-							<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-								{t('loc:Uložiť')}
-							</Button>
+							<Permissions allowed={permissions}>
+								<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+									{t('loc:Uložiť')}
+								</Button>
+							</Permissions>
 						) : undefined}
 					</div>
 				</Row>

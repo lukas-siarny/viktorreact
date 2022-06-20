@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { Button, notification, Row } from 'antd'
-import { get, intersection } from 'lodash'
+import { get } from 'lodash'
 import { change, initialize, isPristine, submit } from 'redux-form'
 import cx from 'classnames'
 
@@ -30,7 +30,7 @@ type Props = {
 	computedMatch: IComputedMatch<{ employeeID: number }>
 }
 
-const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_EDIT, PERMISSION.PARTNER]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
@@ -189,7 +189,7 @@ const EmployeePage = (props: Props) => {
 					<Row className={rowClass}>
 						{showDeleteBtn ? (
 							<DeleteButton
-								permissions={editPermissions}
+								permissions={permissions}
 								className={'w-1/3'}
 								onConfirm={deleteEmployee}
 								entityName={t('loc:zamestnanca')}
@@ -198,7 +198,7 @@ const EmployeePage = (props: Props) => {
 							/>
 						) : undefined}
 						<Permissions
-							allowed={editPermissions}
+							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<Button
 									type={'primary'}
@@ -228,4 +228,4 @@ const EmployeePage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_BROWSING, PERMISSION.PARTNER]))(EmployeePage)
+export default compose(withPermissions(permissions))(EmployeePage)

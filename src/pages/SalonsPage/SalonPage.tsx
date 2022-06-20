@@ -2,8 +2,8 @@ import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { change, initialize, submit, isPristine } from 'redux-form'
-import { get, isEmpty, map, unionBy, isEqual } from 'lodash'
+import { change, initialize, isPristine, submit } from 'redux-form'
+import { get, isEmpty, isEqual, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 
 // components
@@ -14,7 +14,7 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 
 // enums
-import { DAY, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -34,7 +34,6 @@ type Props = {
 	computedMatch: IComputedMatch<{ salonID: number }>
 }
 
-const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT, PERMISSION.PARTNER]
 // TODO - check how to get nested interface
 type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -177,6 +176,8 @@ const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWee
 	return openingHours?.filter((openingHour) => openingHour?.timeRanges?.length > 0)
 }
 
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+
 const SalonPage: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -200,6 +201,9 @@ const SalonPage: FC<Props> = (props) => {
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)
+
+	// check permissions for submit in case of create or update salon
+	const submitPermissions: PERMISSION[] = salonID > 0 ? [...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE] : permissions
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -471,7 +475,7 @@ const SalonPage: FC<Props> = (props) => {
 			</Row>
 			<div className='content-body small mt-2'>
 				<Permissions
-					allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN]}
+					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
 					render={(hasPermission) => (
 						<SalonForm
 							isAdmin={hasPermission}
@@ -500,7 +504,7 @@ const SalonPage: FC<Props> = (props) => {
 					<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
 						{salonExists && (
 							<DeleteButton
-								permissions={editPermissions}
+								permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_DELETE]}
 								className={'w-1/3'}
 								onConfirm={deleteSalon}
 								entityName={t('loc:salón')}
@@ -510,7 +514,7 @@ const SalonPage: FC<Props> = (props) => {
 							/>
 						)}
 						<Permissions
-							allowed={editPermissions}
+							allowed={submitPermissions}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<Button
 									type={'primary'}
@@ -540,4 +544,4 @@ const SalonPage: FC<Props> = (props) => {
 	)
 }
 
-export default compose(withPermissions(editPermissions))(SalonPage)
+export default compose(withPermissions(permissions))(SalonPage)

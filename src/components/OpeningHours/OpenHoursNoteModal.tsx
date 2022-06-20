@@ -39,7 +39,13 @@ const OpenHoursNoteModal = (props: Props) => {
 
 	const isModalVisible = useMemo(() => {
 		if (!visible) return false
-		const hasPermission = checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT])
+		const hasPermission = checkPermissions(authUserPermissions, [
+			PERMISSION.NOTINO_SUPER_ADMIN,
+			PERMISSION.NOTINO_ADMIN,
+			PERMISSION.PARTNER,
+			PERMISSION.PARTNER_ADMIN,
+			PERMISSION.SALON_UPDATE
+		])
 		if (hasPermission) return true
 
 		showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia.') }], NOTIFICATION_TYPE.NOTIFICATION)

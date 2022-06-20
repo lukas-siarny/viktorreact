@@ -33,7 +33,7 @@ import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circ
 
 type Columns = ColumnsType<any>
 
-const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const PROGRESS_PERCENTAGE = 33
 
@@ -184,10 +184,10 @@ const SalonsPage = () => {
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<Permissions
-						allowed={editPermissions}
-						render={(hasPermission, { openForbiddenModal }) => (
-							<div className='content-body'>
+					<div className='content-body'>
+						<Permissions
+							allowed={permissions}
+							render={(hasPermission, { openForbiddenModal }) => (
 								<SalonsFilter
 									createSalon={() => {
 										if (hasPermission) {
@@ -198,46 +198,41 @@ const SalonsPage = () => {
 									}}
 									onSubmit={handleSubmit}
 								/>
-								<CustomTable
-									className='table-fixed'
-									onChange={onChangeTable}
-									columns={columns}
-									dataSource={salons?.data?.salons}
-									rowClassName={'clickable-row'}
-									loading={salons?.isLoading}
-									twoToneRows
-									onRow={(record) => ({
-										onClick: (e) => {
-											if (hasPermission) {
-												history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
-											} else {
-												e.preventDefault()
-												openForbiddenModal()
-											}
-										}
-									})}
-									pagination={{
-										showTotal: (total, [from, to]) =>
-											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-												total,
-												from,
-												to
-											}),
-										defaultPageSize: PAGINATION.defaultPageSize,
-										pageSizeOptions: PAGINATION.pageSizeOptions,
-										pageSize: salons?.data?.pagination?.limit,
-										showSizeChanger: true,
-										total: salons?.data?.pagination?.totalCount,
-										current: salons?.data?.pagination?.page
-									}}
-								/>
-							</div>
-						)}
-					/>
+							)}
+						/>
+						<CustomTable
+							className='table-fixed'
+							onChange={onChangeTable}
+							columns={columns}
+							dataSource={salons?.data?.salons}
+							rowClassName={'clickable-row'}
+							loading={salons?.isLoading}
+							twoToneRows
+							onRow={(record) => ({
+								onClick: () => {
+									history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
+								}
+							})}
+							pagination={{
+								showTotal: (total, [from, to]) =>
+									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+										total,
+										from,
+										to
+									}),
+								defaultPageSize: PAGINATION.defaultPageSize,
+								pageSizeOptions: PAGINATION.pageSizeOptions,
+								pageSize: salons?.data?.pagination?.limit,
+								showSizeChanger: true,
+								total: salons?.data?.pagination?.totalCount,
+								current: salons?.data?.pagination?.page
+							}}
+						/>
+					</div>
 				</Col>
 			</Row>
 		</>
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]))(SalonsPage)
+export default compose(withPermissions(permissions))(SalonsPage)

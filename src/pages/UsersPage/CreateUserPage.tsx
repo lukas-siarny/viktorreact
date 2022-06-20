@@ -24,6 +24,8 @@ import { getRoles } from '../../reducers/roles/rolesActions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { RootState } from '../../reducers'
 
+const permission: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]
+
 const CreateUserPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -105,4 +107,4 @@ const CreateUserPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE]))(CreateUserPage)
+export default compose(withPermissions(permission))(CreateUserPage)

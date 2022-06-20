@@ -28,6 +28,8 @@ import { IBreadcrumbs, ISearchFilter } from '../../types/interfaces'
 
 type Columns = ColumnsType<any>
 
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+
 const CustomersPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -146,7 +148,7 @@ const CustomersPage = () => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
+							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<CustomersFilter
 									onSubmit={handleSubmit}
@@ -161,43 +163,33 @@ const CustomersPage = () => {
 								/>
 							)}
 						/>
-
-						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<CustomTable
-									className='table-fixed'
-									onChange={onChangeTable}
-									columns={columns}
-									dataSource={customers?.data?.customers}
-									rowClassName={'clickable-row'}
-									loading={customers?.isLoading}
-									twoToneRows
-									onRow={(record) => ({
-										onClick: () => {
-											if (!hasPermission) {
-												openForbiddenModal()
-											} else {
-												history.push(t('paths:customers/{{customerID}}', { customerID: record.id }))
-											}
-										}
-									})}
-									pagination={{
-										showTotal: (total, [from, to]) =>
-											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-												total,
-												from,
-												to
-											}),
-										defaultPageSize: PAGINATION.defaultPageSize,
-										pageSizeOptions: PAGINATION.pageSizeOptions,
-										showSizeChanger: true,
-										pageSize: customers?.data?.pagination?.limit,
-										total: customers?.data?.pagination?.totalCount,
-										current: customers?.data?.pagination?.page
-									}}
-								/>
-							)}
+						<CustomTable
+							className='table-fixed'
+							onChange={onChangeTable}
+							columns={columns}
+							dataSource={customers?.data?.customers}
+							rowClassName={'clickable-row'}
+							loading={customers?.isLoading}
+							twoToneRows
+							onRow={(record) => ({
+								onClick: () => {
+									history.push(t('paths:customers/{{customerID}}', { customerID: record.id }))
+								}
+							})}
+							pagination={{
+								showTotal: (total, [from, to]) =>
+									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+										total,
+										from,
+										to
+									}),
+								defaultPageSize: PAGINATION.defaultPageSize,
+								pageSizeOptions: PAGINATION.pageSizeOptions,
+								showSizeChanger: true,
+								pageSize: customers?.data?.pagination?.limit,
+								total: customers?.data?.pagination?.totalCount,
+								current: customers?.data?.pagination?.page
+							}}
 						/>
 					</div>
 				</Col>
@@ -206,4 +198,4 @@ const CustomersPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]))(CustomersPage)
+export default compose(withPermissions(permissions))(CustomersPage)

@@ -192,7 +192,7 @@ const ServiceForm = (props: Props) => {
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								onConfirm={onConfirmDelete}
 								entityName={t('loc:službu')}
-								permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]}
+								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
 							/>
 						) : null}
 					</Col>

@@ -26,7 +26,8 @@ services:
       - DEFAULT_REGION=eu-central-1
       - SERVICES=s3
     volumes:
-      - './notino_backend/docker/CI/localstack/docker-entrypoint-initaws.d:/docker-entrypoint-initaws.d'
+    # after init container create bucket
+      - '../notino_backend/docker/CI/localstack:/docker-entrypoint-initaws.d'
   backend:
     build:
         context: ../notino_backend/.

@@ -21,7 +21,8 @@ export enum LANGUAGE {
 	EN = 'en',
 	HU = 'hu',
 	RO = 'ro',
-	BG = 'bg'
+	BG = 'bg',
+	IT = 'it'
 }
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes

@@ -11,6 +11,7 @@ import en_GB from 'antd/lib/locale-provider/en_GB'
 import hu_HU from 'antd/lib/locale-provider/hu_HU'
 import ro_RO from 'antd/lib/locale-provider/ro_RO'
 import bg_BG from 'antd/lib/locale-provider/bg_BG'
+import it_IT from 'antd/lib/locale-provider/it_IT'
 import { useSelector } from 'react-redux'
 // eslint-disable-next-line import/no-cycle
 import { RootState } from '../reducers'
@@ -26,6 +27,7 @@ import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
 import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
 import { ReactComponent as RO_Flag } from '../assets/flags/RO.svg'
 import { ReactComponent as BG_Flag } from '../assets/flags/BG.svg'
+import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg'
 
 export const LOCALES = {
 	[LANGUAGE.SK]: {
@@ -57,6 +59,11 @@ export const LOCALES = {
 		ISO_639: 'bg',
 		antD: bg_BG,
 		icon: BG_Flag
+	},
+	[LANGUAGE.IT]: {
+		ISO_639: 'it',
+		antD: it_IT,
+		icon: IT_Flag
 	}
 }
 

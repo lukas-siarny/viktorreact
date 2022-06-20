@@ -36,8 +36,8 @@ const ServiceCreatePage = () => {
 				description: values.description,
 				durationFrom: values.durationFrom,
 				durationTo: values.durationTo,
-				priceFrom: values.priceFrom,
-				priceTo: values.priceTo,
+				priceFrom: values.priceFrom as any,
+				priceTo: values.priceTo as any,
 				salonID: values.salonID,
 				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
 				// employeeIDs

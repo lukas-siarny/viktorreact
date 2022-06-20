@@ -306,8 +306,7 @@ const SalonPage: FC<Props> = (props) => {
 					useCompanyInfo: isFilledCompanyInfo,
 					companyInfo: salonData.data?.salon.companyInfo,
 					gallery: map(salonData.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
-					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null,
-					userID: { label: salonData.data?.salon?.user?.name || salonData.data?.salon?.user?.email, value: salonData.data?.salon?.user?.id }
+					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null
 				})
 			)
 		} else if (!salon?.isLoading) {

@@ -528,14 +528,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -621,14 +685,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -656,14 +784,24 @@ declare namespace Paths {
                         phonePrefixCountryCode?: string;
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
-                        hasSalon: boolean;
                         roles: {
                             id: number;
-                            name: string;
+                            name?: string;
                             permissions: {
                                 id: number;
-                                name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
+                        }[];
+                        salons: {
+                            id: number;
+                            employeeID: number;
+                            role?: {
+                                id: number;
+                                permissions: {
+                                    id: number;
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                }[];
+                            };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
@@ -676,6 +814,14 @@ declare namespace Paths {
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: number;
+                        name?: string;
+                        permissions: {
+                            id: number;
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -885,7 +1031,7 @@ declare namespace Paths {
             }
         }
     }
-    namespace GetApiB2BAdminRoles {
+    namespace GetApiB2BAdminRolesSalon {
         export interface HeaderParameters {
             "accept-language"?: /**
              * example:
@@ -904,10 +1050,49 @@ declare namespace Paths {
             export interface $200 {
                 roles: {
                     id: number;
-                    name: string;
+                    name?: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
                     permissions: {
                         id: number;
-                        name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                    }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BAdminRolesSystemUser {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                roles: {
+                    id: number;
+                    name?: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
+                    permissions: {
+                        id: number;
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -954,13 +1139,13 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     email?: string;
                     address?: {
-                        countryCode: string;
-                        zipCode: string;
-                        city: string;
-                        street: string;
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
                         streetNumber?: string;
-                        latitude: number; // float
-                        longitude: number; // float
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     categories: {
                         id: number;
@@ -1044,8 +1229,20 @@ declare namespace Paths {
                         ];
                     }[];
                     openingHoursNote?: {
+                        /**
+                         * example:
+                         * Poznámka
+                         */
                         note: string;
+                        /**
+                         * example:
+                         * 2022-03-22
+                         */
                         validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        /**
+                         * example:
+                         * 2022-03-22
+                         */
                         validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                     };
                     address?: {
@@ -1074,11 +1271,6 @@ declare namespace Paths {
                     fillingProgressSalon: boolean;
                     fillingProgressServices: boolean;
                     fillingProgressCompany: boolean;
-                    user: {
-                        id: number;
-                        name: string;
-                        email?: string;
-                    };
                     images: {
                         id: number;
                         original: string;
@@ -1162,8 +1354,40 @@ declare namespace Paths {
                     name: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         firstName: string;
@@ -1232,8 +1456,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -1247,8 +1503,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -1321,7 +1609,7 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -1367,14 +1655,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -1548,14 +1846,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -1641,14 +2003,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -1676,14 +2102,24 @@ declare namespace Paths {
                         phonePrefixCountryCode?: string;
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
-                        hasSalon: boolean;
                         roles: {
                             id: number;
-                            name: string;
+                            name?: string;
                             permissions: {
                                 id: number;
-                                name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
+                        }[];
+                        salons: {
+                            id: number;
+                            employeeID: number;
+                            role?: {
+                                id: number;
+                                permissions: {
+                                    id: number;
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                }[];
+                            };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
@@ -1696,6 +2132,14 @@ declare namespace Paths {
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: number;
+                        name?: string;
+                        permissions: {
+                            id: number;
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -1898,6 +2342,41 @@ declare namespace Paths {
                 currencies: {
                     code: string;
                     symbol: string;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1RolesSalon {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                roles: {
+                    id: number;
+                    name?: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en";
+                        value: string | null;
+                    }[];
+                    permissions: {
+                        id: number;
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                    }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -2113,8 +2592,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -2327,8 +2818,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -2462,8 +2965,40 @@ declare namespace Paths {
                         name: string;
                         durationFrom: number;
                         durationTo?: number;
-                        priceFrom: number; // float
-                        priceTo?: number; // float
+                        priceFrom: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
                         employeesCount: number;
                         employees: {
                             id: number;
@@ -2528,8 +3063,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -2543,8 +3110,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -2650,14 +3249,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -3116,8 +3725,20 @@ declare namespace Paths {
                     }
                 ];
                 openingHoursNote?: {
+                    /**
+                     * example:
+                     * Poznámka
+                     */
                     note: string;
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
                     validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
                     validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                 };
                 images: {
@@ -3138,6 +3759,26 @@ declare namespace Paths {
                     id: number;
                     original: string;
                 }[];
+                employees: {
+                    id: number;
+                    firstName?: string;
+                    image: {
+                        id: number;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                    };
+                }[];
+                services: {
+                    id: number;
+                    name: string;
+                    description?: string;
+                    durationFrom: number;
+                    durationTo?: number;
+                    priceFrom: number; // float
+                    priceTo?: number; // float
+                }[];
             }
         }
     }
@@ -3155,7 +3796,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = 25 | 50 | 100 | 1000;
             export type Page = number;
             export type SalonID = number;
         }
@@ -3196,7 +3837,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = 25 | 50 | 100 | 1000;
             export type Page = number;
             export type SalonID = number;
         }
@@ -3215,8 +3856,76 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminAuthChangePassword {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Lopaty123.
+             */
+            oldPassword: string;
+            /**
+             * example:
+             * Lopaty123.
+             */
+            newPassword: string; // (?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d+)
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
                 }[];
             }
         }
@@ -3292,7 +4001,6 @@ declare namespace Paths {
              * 1
              */
             streetNumber?: string | null;
-            salonID: number;
         }
         namespace Responses {
             export interface $200 {
@@ -3373,16 +4081,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -3414,14 +4136,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -3449,14 +4235,24 @@ declare namespace Paths {
                         phonePrefixCountryCode?: string;
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
-                        hasSalon: boolean;
                         roles: {
                             id: number;
-                            name: string;
+                            name?: string;
                             permissions: {
                                 id: number;
-                                name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
+                        }[];
+                        salons: {
+                            id: number;
+                            employeeID: number;
+                            role?: {
+                                id: number;
+                                permissions: {
+                                    id: number;
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                }[];
+                            };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
@@ -3469,6 +4265,208 @@ declare namespace Paths {
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: number;
+                        name?: string;
+                        permissions: {
+                            id: number;
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminEmployeesEmployeeIdRole {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type EmployeeID = number;
+        }
+        export interface PathParameters {
+            employeeID: Parameters.EmployeeID;
+        }
+        export interface RequestBody {
+            roleID: number;
+        }
+        namespace Responses {
+            export interface $200 {
+                employee: {
+                    id: number;
+                    firstName?: string;
+                    lastName?: string;
+                    description?: string;
+                    email?: string;
+                    inviteEmail?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    hasActiveAccount: boolean;
+                    salon: {
+                        id: number;
+                        name?: string;
+                    };
+                    services: {
+                        id: number;
+                        name: string;
+                        description?: string;
+                        employeeData?: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                        };
+                        salonData: {
+                            durationFrom: number;
+                            durationTo?: number;
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                        };
+                        category: {
+                            id: number;
+                            name?: string;
+                            children: {
+                                id: number;
+                                name?: string;
+                            }[];
+                        };
+                    }[];
+                    image: {
+                        id: number;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                    };
+                    user?: {
+                        id: number;
+                        email?: string;
+                        lastAccess?: string; // date-time
+                        activateAt?: string; // date-time
+                        firstName?: string;
+                        lastName?: string;
+                        phonePrefixCountryCode?: string;
+                        phone?: string; // ^\d+$
+                        hasBasicInfo: boolean;
+                        roles: {
+                            id: number;
+                            name?: string;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        }[];
+                        salons: {
+                            id: number;
+                            employeeID: number;
+                            role?: {
+                                id: number;
+                                permissions: {
+                                    id: number;
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                }[];
+                            };
+                        }[];
+                        disabledNotificationTypes?: ("TEST")[];
+                        image?: {
+                            id: number;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                        };
+                        createdAt: string; // date-time
+                        updatedAt: string; // date-time
+                        deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: number;
+                        name?: string;
+                        permissions: {
+                            id: number;
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -3667,11 +4665,6 @@ declare namespace Paths {
              * Prevod na účet
              */
             otherPaymentMethods?: string | null;
-            /**
-             * example:
-             * 10
-             */
-            userID: number;
             imageIDs: [
                 number,
                 ...number[]
@@ -3686,7 +4679,7 @@ declare namespace Paths {
              * 1
              */
             pricelistIDs?: number[];
-            companyContactPerson?: {
+            companyContactPerson: {
                 /**
                  * example:
                  * test_notino@goodrequest.com
@@ -3713,7 +4706,62 @@ declare namespace Paths {
                  */
                 phone: string; // ^\d+$
             };
-            companyInvoiceAddress?: {
+            companyInfo: {
+                /**
+                 * example:
+                 * 01234567
+                 */
+                businessID: string;
+                /**
+                 * example:
+                 * 2012345678
+                 */
+                taxID: string;
+                /**
+                 * example:
+                 * SK2012345678
+                 */
+                vatID: string;
+                /**
+                 * example:
+                 * Company
+                 */
+                companyName: string;
+            };
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdInvoice {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            companyInvoiceAddress: {
                 /**
                  * example:
                  * SK
@@ -3739,28 +4787,6 @@ declare namespace Paths {
                  * 1
                  */
                 streetNumber?: string;
-            };
-            companyInfo?: {
-                /**
-                 * example:
-                 * 01234567
-                 */
-                businessID: string;
-                /**
-                 * example:
-                 * 2012345678
-                 */
-                taxID: string;
-                /**
-                 * example:
-                 * SK2012345678
-                 */
-                vatID: string;
-                /**
-                 * example:
-                 * Company
-                 */
-                companyName: string;
             };
         }
         namespace Responses {
@@ -3796,8 +4822,20 @@ declare namespace Paths {
         }
         export interface RequestBody {
             openingHoursNote: {
+                /**
+                 * example:
+                 * Poznámka
+                 */
                 note: string;
+                /**
+                 * example:
+                 * 2022-03-22
+                 */
                 validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                /**
+                 * example:
+                 * 2022-03-22
+                 */
                 validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
             } | null;
         }
@@ -3921,16 +4959,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -3947,8 +4999,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -3962,8 +5046,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -4058,14 +5174,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -4079,6 +5205,42 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1AuthChangePassword {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Lopaty123.
+             */
+            oldPassword: string;
+            /**
+             * example:
+             * Lopaty123.
+             */
+            newPassword: string; // (?=.{8,})^(?=.*[a-z]+)(?=.*[A-Z]+)(?=.*\d+)
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -4157,7 +5319,6 @@ declare namespace Paths {
              * 1
              */
             streetNumber?: string | null;
-            salonID: number;
         }
         namespace Responses {
             export interface $200 {
@@ -4238,16 +5399,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -4279,14 +5454,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -4314,14 +5553,24 @@ declare namespace Paths {
                         phonePrefixCountryCode?: string;
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
-                        hasSalon: boolean;
                         roles: {
                             id: number;
-                            name: string;
+                            name?: string;
                             permissions: {
                                 id: number;
-                                name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
+                        }[];
+                        salons: {
+                            id: number;
+                            employeeID: number;
+                            role?: {
+                                id: number;
+                                permissions: {
+                                    id: number;
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                }[];
+                            };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
@@ -4334,6 +5583,208 @@ declare namespace Paths {
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: number;
+                        name?: string;
+                        permissions: {
+                            id: number;
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1EmployeesEmployeeIdRole {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type EmployeeID = number;
+        }
+        export interface PathParameters {
+            employeeID: Parameters.EmployeeID;
+        }
+        export interface RequestBody {
+            roleID: number;
+        }
+        namespace Responses {
+            export interface $200 {
+                employee: {
+                    id: number;
+                    firstName?: string;
+                    lastName?: string;
+                    description?: string;
+                    email?: string;
+                    inviteEmail?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    hasActiveAccount: boolean;
+                    salon: {
+                        id: number;
+                        name?: string;
+                    };
+                    services: {
+                        id: number;
+                        name: string;
+                        description?: string;
+                        employeeData?: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                        };
+                        salonData: {
+                            durationFrom: number;
+                            durationTo?: number;
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                        };
+                        category: {
+                            id: number;
+                            name?: string;
+                            children: {
+                                id: number;
+                                name?: string;
+                            }[];
+                        };
+                    }[];
+                    image: {
+                        id: number;
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                    };
+                    user?: {
+                        id: number;
+                        email?: string;
+                        lastAccess?: string; // date-time
+                        activateAt?: string; // date-time
+                        firstName?: string;
+                        lastName?: string;
+                        phonePrefixCountryCode?: string;
+                        phone?: string; // ^\d+$
+                        hasBasicInfo: boolean;
+                        roles: {
+                            id: number;
+                            name?: string;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        }[];
+                        salons: {
+                            id: number;
+                            employeeID: number;
+                            role?: {
+                                id: number;
+                                permissions: {
+                                    id: number;
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                }[];
+                            };
+                        }[];
+                        disabledNotificationTypes?: ("TEST")[];
+                        image?: {
+                            id: number;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                        };
+                        createdAt: string; // date-time
+                        updatedAt: string; // date-time
+                        deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: number;
+                        name?: string;
+                        permissions: {
+                            id: number;
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -4419,9 +5870,21 @@ declare namespace Paths {
                     ];
                 }[];
                 openingHoursNote?: {
+                    /**
+                     * example:
+                     * Poznámka
+                     */
                     note: string;
-                    validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                    validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
+                    validFrom?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    /**
+                     * example:
+                     * 2022-03-22
+                     */
+                    validTo?: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                 } | null;
             } | null;
             aboutUsSegment?: {
@@ -4541,33 +6004,6 @@ declare namespace Paths {
                  * 906047188
                  */
                 phone: string; // ^\d+$
-            };
-            companyInvoiceAddressSegment?: {
-                /**
-                 * example:
-                 * SK
-                 */
-                countryCode: string;
-                /**
-                 * example:
-                 * 010 01
-                 */
-                zipCode: string;
-                /**
-                 * example:
-                 * Žilina
-                 */
-                city: string;
-                /**
-                 * example:
-                 * Framborska 58
-                 */
-                street: string;
-                /**
-                 * example:
-                 * 1
-                 */
-                streetNumber?: string;
             };
             companyInfoSegment?: {
                 /**
@@ -4733,8 +6169,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -4836,6 +6284,265 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BV1SalonsSalonIdInvoice {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            companyInvoiceAddressSegment: {
+                /**
+                 * example:
+                 * SK
+                 */
+                countryCode: string;
+                /**
+                 * example:
+                 * 010 01
+                 */
+                zipCode: string;
+                /**
+                 * example:
+                 * Žilina
+                 */
+                city: string;
+                /**
+                 * example:
+                 * Framborska 58
+                 */
+                street: string;
+                /**
+                 * example:
+                 * 1
+                 */
+                streetNumber?: string;
+            };
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                    fillingProgressSalon: boolean;
+                    fillingProgressServices: boolean;
+                    fillingProgressCompany: boolean;
+                    categorySegment?: {
+                        categories: {
+                            id: number;
+                            name?: string;
+                        }[];
+                    };
+                    gallerySegment?: {
+                        images: {
+                            id: number;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                        }[];
+                        logo?: {
+                            id: number;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                        };
+                    };
+                    nameSegment?: {
+                        name: string;
+                    };
+                    openingHoursSegment?: {
+                        openingHours: [
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                /**
+                                 * example:
+                                 * MONDAY
+                                 */
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            }
+                        ];
+                        openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
+                            note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
+                            validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
+                            validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        };
+                    };
+                    aboutUsSegment?: {
+                        aboutUsFirst?: string;
+                        aboutUsSecond?: string;
+                    };
+                    contactInfoSegment?: {
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
+                        phonePrefixCountryCode?: string;
+                        phone?: string; // ^\d+$
+                        email?: string;
+                        socialLinkFB?: string;
+                        socialLinkInstagram?: string;
+                        socialLinkWebPage?: string;
+                    };
+                    paymentSegment?: {
+                        payByCard?: boolean;
+                        otherPaymentMethods?: string;
+                    };
+                    companyContactPersonSegment?: {
+                        email?: string;
+                        firstName?: string;
+                        lastName?: string;
+                        phonePrefixCountryCode?: string;
+                        phone?: string; // ^\d+$
+                    };
+                    companyInvoiceAddressSegment?: {
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        streetNumber?: string;
+                    };
+                    companyInfoSegment?: {
+                        businessID?: string;
+                        taxID?: string;
+                        vatID?: string;
+                        companyName?: string;
+                    };
+                    pricelistSegment?: {
+                        pricelists: {
+                            id: number;
+                            original: string;
+                        }[];
+                    };
+                    createdAt?: string; // date-time
+                    updatedAt?: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BV1SalonsSalonIdPublish {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -4910,16 +6617,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -4936,8 +6657,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -4951,8 +6704,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -5048,14 +6833,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -5179,14 +6974,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -5290,14 +7095,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -5462,16 +7277,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -5508,14 +7337,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -5543,14 +7436,24 @@ declare namespace Paths {
                         phonePrefixCountryCode?: string;
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
-                        hasSalon: boolean;
                         roles: {
                             id: number;
-                            name: string;
+                            name?: string;
                             permissions: {
                                 id: number;
-                                name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
+                        }[];
+                        salons: {
+                            id: number;
+                            employeeID: number;
+                            role?: {
+                                id: number;
+                                permissions: {
+                                    id: number;
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                }[];
+                            };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
@@ -5563,6 +7466,14 @@ declare namespace Paths {
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: number;
+                        name?: string;
+                        permissions: {
+                            id: number;
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -5606,6 +7517,11 @@ declare namespace Paths {
              * 1
              */
             salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            roleID: number;
         }
         namespace Responses {
             export interface $200 {
@@ -5707,7 +7623,10 @@ declare namespace Paths {
                     mimeType: string;
                 }[]
             ];
-            category: "SALON" | "EMPLOYEE" | "USER" | "SALON_PRICELIST";
+            /**
+             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td></td> <td>salon logo</td> </tr> <tr> <td></td> <td>service images</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> </tbody> </table> </div>
+             */
+            category: "SALON_IMAGE" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "SALON_PRICELIST" | "CATEGORY_IMAGE";
         }
         namespace Responses {
             export interface $200 {
@@ -5861,11 +7780,6 @@ declare namespace Paths {
              * Prevod na účet
              */
             otherPaymentMethods?: string | null;
-            /**
-             * example:
-             * 9
-             */
-            userID: number;
             imageIDs: [
                 number,
                 ...number[]
@@ -5880,7 +7794,7 @@ declare namespace Paths {
              * 1
              */
             pricelistIDs?: number[];
-            companyContactPerson?: {
+            companyContactPerson: {
                 /**
                  * example:
                  * test_notino@goodrequest.com
@@ -5907,34 +7821,7 @@ declare namespace Paths {
                  */
                 phone: string; // ^\d+$
             };
-            companyInvoiceAddress?: {
-                /**
-                 * example:
-                 * SK
-                 */
-                countryCode: string;
-                /**
-                 * example:
-                 * 010 01
-                 */
-                zipCode: string;
-                /**
-                 * example:
-                 * Žilina
-                 */
-                city: string;
-                /**
-                 * example:
-                 * Framborska 58
-                 */
-                street: string;
-                /**
-                 * example:
-                 * 1
-                 */
-                streetNumber?: string;
-            };
-            companyInfo?: {
+            companyInfo: {
                 /**
                  * example:
                  * 01234567
@@ -6005,16 +7892,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -6036,8 +7937,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -6051,8 +7984,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -6173,14 +8138,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -6298,14 +8273,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -6394,14 +8379,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -6450,14 +8445,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -6571,14 +8576,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -6743,16 +8758,30 @@ declare namespace Paths {
                      * 10
                      */
                     durationTo?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceFrom?: number; // float
-                    /**
-                     * example:
-                     * 10
-                     */
-                    priceTo?: number; // float
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
                 } | null;
             }[] | null;
             /**
@@ -6789,14 +8818,78 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         salonData: {
                             durationFrom: number;
                             durationTo?: number;
-                            priceFrom: number; // float
-                            priceTo?: number; // float
+                            priceFrom: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                         category: {
                             id: number;
@@ -6824,14 +8917,24 @@ declare namespace Paths {
                         phonePrefixCountryCode?: string;
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
-                        hasSalon: boolean;
                         roles: {
                             id: number;
-                            name: string;
+                            name?: string;
                             permissions: {
                                 id: number;
-                                name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
+                        }[];
+                        salons: {
+                            id: number;
+                            employeeID: number;
+                            role?: {
+                                id: number;
+                                permissions: {
+                                    id: number;
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                }[];
+                            };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
@@ -6844,6 +8947,14 @@ declare namespace Paths {
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
+                    };
+                    role?: {
+                        id: number;
+                        name?: string;
+                        permissions: {
+                            id: number;
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -6887,6 +8998,11 @@ declare namespace Paths {
              * 1
              */
             salonID: number;
+            /**
+             * example:
+             * 1
+             */
+            roleID: number;
         }
         namespace Responses {
             export interface $200 {
@@ -6949,7 +9065,10 @@ declare namespace Paths {
                     mimeType: string;
                 }[]
             ];
-            category: "SALON" | "EMPLOYEE" | "USER" | "SALON_PRICELIST";
+            /**
+             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td></td> <td>salon logo</td> </tr> <tr> <td></td> <td>service images</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> </tbody> </table> </div>
+             */
+            category: "SALON_IMAGE" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "SALON_PRICELIST" | "CATEGORY_IMAGE";
         }
         namespace Responses {
             export interface $200 {
@@ -7161,8 +9280,20 @@ declare namespace Paths {
                             }
                         ];
                         openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
                             note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
                             validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
                         };
                     };
@@ -7262,16 +9393,30 @@ declare namespace Paths {
              * 10
              */
             durationTo?: null | number;
-            /**
-             * example:
-             * 10
-             */
-            priceFrom: number; // float
-            /**
-             * example:
-             * 10
-             */
-            priceTo?: number | null; // float
+            priceFrom: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            };
+            priceTo?: {
+                /**
+                 * example:
+                 * -1
+                 */
+                exponent: number;
+                /**
+                 * example:
+                 * 23
+                 */
+                significand: number;
+            } | null;
             /**
              * example:
              * 1
@@ -7293,8 +9438,40 @@ declare namespace Paths {
                     description?: string;
                     durationFrom: number;
                     durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceFrom: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
+                    priceTo?: {
+                        /**
+                         * example:
+                         * EUR
+                         */
+                        currency: string;
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    };
                     employees: {
                         id: number;
                         fullName: string;
@@ -7308,8 +9485,40 @@ declare namespace Paths {
                         employeeData?: {
                             durationFrom?: number;
                             durationTo?: number;
-                            priceFrom?: number; // float
-                            priceTo?: number; // float
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
                         };
                     }[];
                     category: {
@@ -7380,14 +9589,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -7536,14 +9755,24 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
-                    hasSalon: boolean;
                     roles: {
                         id: number;
-                        name: string;
+                        name?: string;
                         permissions: {
                             id: number;
-                            name: "SUPER_ADMIN" | "ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_BROWSING" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "SALON_BROWSING" | "SALON_EDIT" | "CUSTOMER_BROWSING" | "CUSTOMER_EDIT" | "EMPLOYEE_BROWSING" | "EMPLOYEE_EDIT";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
+                    }[];
+                    salons: {
+                        id: number;
+                        employeeID: number;
+                        role?: {
+                            id: number;
+                            permissions: {
+                                id: number;
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            }[];
+                        };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
@@ -7596,6 +9825,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   /**
+   * patchApiB2BAdminAuthChangePassword - PERMISSION: NO
+   */
+  'patchApiB2BAdminAuthChangePassword'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminAuthChangePassword.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
+  /**
    * getApiB2BAdminUsersUserId - PERMISSION: NO
    */
   'getApiB2BAdminUsersUserId'(
@@ -7604,7 +9841,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
   /**
-   * patchApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
+   * patchApiB2BAdminUsersUserId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]
    */
   'patchApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
@@ -7612,7 +9849,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
   /**
-   * deleteApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_DELETE]
+   * deleteApiB2BAdminUsersUserId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]
    */
   'deleteApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
@@ -7652,7 +9889,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
   /**
-   * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   * postApiB2BAdminEnumsCategories - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
    */
   'postApiB2BAdminEnumsCategories'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
@@ -7668,7 +9905,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
-   * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
    */
   'patchApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
@@ -7676,7 +9913,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
-   * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+   * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
    */
   'deleteApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
@@ -7747,6 +9984,14 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
+  /**
+   * patchApiB2BV1AuthChangePassword - PERMISSION: NO
+   */
+  'patchApiB2BV1AuthChangePassword'(
+    parameters?: Parameters<Paths.PatchApiB2BV1AuthChangePassword.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1AuthChangePassword.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
   /**
    * getApiB2BV1UsersUserId - PERMISSION: NO
    */
@@ -7932,7 +10177,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
   /**
-   * getApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_BROWSING]
+   * getApiB2BAdminUsers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]
    */
   'getApiB2BAdminUsers'(
     parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
@@ -7940,7 +10185,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
   /**
-   * postApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
+   * postApiB2BAdminUsers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]
    */
   'postApiB2BAdminUsers'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
@@ -7948,15 +10193,23 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
   /**
-   * getApiB2BAdminRoles - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
+   * getApiB2BAdminRolesSystemUser - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]
    */
-  'getApiB2BAdminRoles'(
-    parameters?: Parameters<Paths.GetApiB2BAdminRoles.HeaderParameters> | null,
+  'getApiB2BAdminRolesSystemUser'(
+    parameters?: Parameters<Paths.GetApiB2BAdminRolesSystemUser.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
+  ): OperationResponse<Paths.GetApiB2BAdminRolesSystemUser.Responses.$200>
   /**
-   * getApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   * getApiB2BAdminRolesSalon - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
+   */
+  'getApiB2BAdminRolesSalon'(
+    parameters?: Parameters<Paths.GetApiB2BAdminRolesSalon.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminRolesSalon.Responses.$200>
+  /**
+   * getApiB2BAdminSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminSalons'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
@@ -7964,7 +10217,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
   /**
-   * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   * postApiB2BAdminSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'postApiB2BAdminSalons'(
     parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
@@ -7972,7 +10225,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
   /**
-   * getApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   * getApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
@@ -7980,7 +10233,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   * patchApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
   'patchApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
@@ -7988,7 +10241,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
   /**
-   * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   * deleteApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_DELETE]
    */
   'deleteApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
@@ -7996,7 +10249,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
   'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
@@ -8004,7 +10257,15 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   * patchApiB2BAdminSalonsSalonIdInvoice - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_BILLING_UPDATE]
+   */
+  'patchApiB2BAdminSalonsSalonIdInvoice'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdInvoice.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdInvoice.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
   'patchApiB2BAdminSalonsSalonIdPublish'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
@@ -8012,7 +10273,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdPublish.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT]
+   * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]
    */
   'patchApiB2BAdminSalonsSalonIdVisible'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdVisible.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdVisible.HeaderParameters> | null,
@@ -8020,7 +10281,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdVisible.Responses.$200>
   /**
-   * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+   * getApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminServices'(
     parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
@@ -8028,7 +10289,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
   /**
-   * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   * postApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_CREATE]
    */
   'postApiB2BAdminServices'(
     parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
@@ -8036,7 +10297,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
   /**
-   * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+   * getApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
@@ -8044,7 +10305,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
   /**
-   * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   * patchApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
    */
   'patchApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
@@ -8052,7 +10313,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
   /**
-   * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+   * deleteApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
    */
   'deleteApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
@@ -8060,7 +10321,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   /**
-   * getApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, PARTNER]
+   * getApiB2BAdminCustomers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminCustomers'(
     parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
@@ -8068,7 +10329,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
   /**
-   * postApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   * postApiB2BAdminCustomers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_CREATE]
    */
   'postApiB2BAdminCustomers'(
     parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
@@ -8076,7 +10337,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
   /**
-   * getApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, CUSTOMER_EDIT, PARTNER]
+   * getApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminCustomersCustomerId'(
     parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
@@ -8084,7 +10345,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
-   * patchApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   * patchApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_UPDATE]
    */
   'patchApiB2BAdminCustomersCustomerId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
@@ -8092,7 +10353,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
-   * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+   * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_DELETE]
    */
   'deleteApiB2BAdminCustomersCustomerId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
@@ -8100,7 +10361,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
-   * getApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
+   * getApiB2BAdminEmployees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminEmployees'(
     parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
@@ -8108,7 +10369,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
   /**
-   * postApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   * postApiB2BAdminEmployees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
    */
   'postApiB2BAdminEmployees'(
     parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
@@ -8116,7 +10377,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
   /**
-   * getApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
+   * getApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminEmployeesEmployeeId'(
     parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
@@ -8124,7 +10385,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
   /**
-   * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_UPDATE]
    */
   'patchApiB2BAdminEmployeesEmployeeId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
@@ -8132,7 +10393,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
   /**
-   * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_DELETE]
    */
   'deleteApiB2BAdminEmployeesEmployeeId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
@@ -8140,7 +10401,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
   /**
-   * postApiB2BAdminEmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   * postApiB2BAdminEmployeesInvite - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
    */
   'postApiB2BAdminEmployeesInvite'(
     parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
@@ -8148,7 +10409,15 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
   /**
-   * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
+   * patchApiB2BAdminEmployeesEmployeeIdRole - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
+   */
+  'patchApiB2BAdminEmployeesEmployeeIdRole'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
+  /**
+   * postApiB2BV1AuthLoginAsPartner - PERMISSION: [NOTINO_ADMIN, LOGIN_AS_PARTNER]
    */
   'postApiB2BV1AuthLoginAsPartner'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
@@ -8156,7 +10425,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
   /**
-   * getApiB2BV1UsersPartners - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
+   * getApiB2BV1UsersPartners - PERMISSION: [NOTINO_ADMIN, LOGIN_AS_PARTNER]
    */
   'getApiB2BV1UsersPartners'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
@@ -8212,7 +10481,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+   * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
   'patchApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -8220,7 +10489,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
   /**
-   * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+   * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_DELETE]
    */
   'deleteApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -8236,7 +10505,15 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
   /**
-   * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
+   * patchApiB2BV1SalonsSalonIdInvoice - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_BILLING_UPDATE]
+   */
+  'patchApiB2BV1SalonsSalonIdInvoice'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdInvoice.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdInvoice.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
   'patchApiB2BV1SalonsSalonIdPublish'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
@@ -8260,7 +10537,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
   /**
-   * postApiB2BV1Services - PERMISSION: [PARTNER]
+   * postApiB2BV1Services - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_CREATE]
    */
   'postApiB2BV1Services'(
     parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
@@ -8276,7 +10553,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+   * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
    */
   'patchApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -8284,7 +10561,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+   * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
    */
   'deleteApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -8300,7 +10577,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
   /**
-   * postApiB2BV1Customers - PERMISSION: [PARTNER]
+   * postApiB2BV1Customers - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_CREATE]
    */
   'postApiB2BV1Customers'(
     parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
@@ -8316,7 +10593,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
   /**
-   * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+   * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_UPDATE]
    */
   'patchApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -8324,7 +10601,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
   /**
-   * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+   * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_DELETE]
    */
   'deleteApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -8332,7 +10609,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
   /**
-   * getApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
+   * getApiB2BV1Employees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BV1Employees'(
     parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
@@ -8340,7 +10617,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
   /**
-   * postApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   * postApiB2BV1Employees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
    */
   'postApiB2BV1Employees'(
     parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
@@ -8348,7 +10625,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1Employees.Responses.$200>
   /**
-   * getApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
+   * getApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -8356,7 +10633,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
-   * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_UPDATE]
    */
   'patchApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -8364,7 +10641,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
-   * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_DELETE]
    */
   'deleteApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -8372,13 +10649,29 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
-   * postApiB2BV1EmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+   * postApiB2BV1EmployeesInvite - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
    */
   'postApiB2BV1EmployeesInvite'(
     parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1EmployeesInvite.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
+  /**
+   * patchApiB2BV1EmployeesEmployeeIdRole - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
+   */
+  'patchApiB2BV1EmployeesEmployeeIdRole'(
+    parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdRole.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1EmployeesEmployeeIdRole.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
+  /**
+   * getApiB2BV1RolesSalon - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1RolesSalon'(
+    parameters?: Parameters<Paths.GetApiB2BV1RolesSalon.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1RolesSalon.Responses.$200>
 }
 
 export interface PathsDictionary {
@@ -8422,6 +10715,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   }
+  ['/api/b2b/admin/auth/change-password']: {
+    /**
+     * patchApiB2BAdminAuthChangePassword - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminAuthChangePassword.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
+  }
   ['/api/b2b/admin/users/{userID}']: {
     /**
      * getApiB2BAdminUsersUserId - PERMISSION: NO
@@ -8432,7 +10735,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
     /**
-     * patchApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_EDIT]
+     * patchApiB2BAdminUsersUserId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
@@ -8440,7 +10743,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
     /**
-     * deleteApiB2BAdminUsersUserId - PERMISSION: [SUPER_ADMIN, ADMIN, USER_DELETE]
+     * deleteApiB2BAdminUsersUserId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
@@ -8488,7 +10791,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
     /**
-     * postApiB2BAdminEnumsCategories - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+     * postApiB2BAdminEnumsCategories - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
@@ -8506,7 +10809,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
-     * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+     * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
@@ -8514,7 +10817,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
-     * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [SUPER_ADMIN, ADMIN, ENUM_EDIT]
+     * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.QueryParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
@@ -8601,6 +10904,16 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
+  }
+  ['/api/b2b/v1/auth/change-password']: {
+    /**
+     * patchApiB2BV1AuthChangePassword - PERMISSION: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1AuthChangePassword.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1AuthChangePassword.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
   }
   ['/api/b2b/v1/users/{userID}']: {
     /**
@@ -8830,7 +11143,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/users/']: {
     /**
-     * getApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_BROWSING]
+     * getApiB2BAdminUsers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
@@ -8838,7 +11151,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
     /**
-     * postApiB2BAdminUsers - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
+     * postApiB2BAdminUsers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
@@ -8846,19 +11159,29 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
   }
-  ['/api/b2b/admin/roles/']: {
+  ['/api/b2b/admin/roles/system-user']: {
     /**
-     * getApiB2BAdminRoles - PERMISSION: [SUPER_ADMIN, ADMIN, USER_CREATE]
+     * getApiB2BAdminRolesSystemUser - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminRoles.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2BAdminRolesSystemUser.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2BAdminRoles.Responses.$200>
+    ): OperationResponse<Paths.GetApiB2BAdminRolesSystemUser.Responses.$200>
+  }
+  ['/api/b2b/admin/roles/salon']: {
+    /**
+     * getApiB2BAdminRolesSalon - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminRolesSalon.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminRolesSalon.Responses.$200>
   }
   ['/api/b2b/admin/salons/']: {
     /**
-     * getApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+     * getApiB2BAdminSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
@@ -8866,7 +11189,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
     /**
-     * postApiB2BAdminSalons - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     * postApiB2BAdminSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
@@ -8876,7 +11199,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}']: {
     /**
-     * getApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+     * getApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
@@ -8884,7 +11207,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
     /**
-     * patchApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     * patchApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
@@ -8892,7 +11215,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
     /**
-     * deleteApiB2BAdminSalonsSalonId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     * deleteApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
@@ -8902,7 +11225,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
@@ -8910,9 +11233,19 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/invoice']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdInvoice - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_BILLING_UPDATE]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdInvoice.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdInvoice.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
+  }
   ['/api/b2b/admin/salons/{salonID}/publish']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     * patchApiB2BAdminSalonsSalonIdPublish - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdPublish.HeaderParameters> | null,
@@ -8922,7 +11255,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/visible']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT]
+     * patchApiB2BAdminSalonsSalonIdVisible - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdVisible.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdVisible.HeaderParameters> | null,
@@ -8932,7 +11265,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/services/']: {
     /**
-     * getApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, PARTNER]
+     * getApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
@@ -8940,7 +11273,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
     /**
-     * postApiB2BAdminServices - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     * postApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
@@ -8950,7 +11283,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/services/{serviceID}']: {
     /**
-     * getApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_BROWSING, SALON_EDIT, PARTNER]
+     * getApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
@@ -8958,7 +11291,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
     /**
-     * patchApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     * patchApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
@@ -8966,7 +11299,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
     /**
-     * deleteApiB2BAdminServicesServiceId - PERMISSION: [SUPER_ADMIN, ADMIN, SALON_EDIT, PARTNER]
+     * deleteApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
@@ -8976,7 +11309,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/customers/']: {
     /**
-     * getApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, PARTNER]
+     * getApiB2BAdminCustomers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
@@ -8984,7 +11317,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
     /**
-     * postApiB2BAdminCustomers - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+     * postApiB2BAdminCustomers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
@@ -8994,7 +11327,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/customers/{customerID}']: {
     /**
-     * getApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_BROWSING, CUSTOMER_EDIT, PARTNER]
+     * getApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
@@ -9002,7 +11335,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
     /**
-     * patchApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+     * patchApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
@@ -9010,7 +11343,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
     /**
-     * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [SUPER_ADMIN, ADMIN, CUSTOMER_EDIT, PARTNER]
+     * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
@@ -9020,7 +11353,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/employees/']: {
     /**
-     * getApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
+     * getApiB2BAdminEmployees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
@@ -9028,7 +11361,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
     /**
-     * postApiB2BAdminEmployees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+     * postApiB2BAdminEmployees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
@@ -9038,7 +11371,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/employees/{employeeID}']: {
     /**
-     * getApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
+     * getApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
@@ -9046,7 +11379,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
     /**
-     * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+     * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
@@ -9054,7 +11387,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
     /**
-     * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+     * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
@@ -9064,7 +11397,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/employees/invite']: {
     /**
-     * postApiB2BAdminEmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+     * postApiB2BAdminEmployeesInvite - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
@@ -9072,9 +11405,19 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
   }
+  ['/api/b2b/admin/employees/{employeeID}/role']: {
+    /**
+     * patchApiB2BAdminEmployeesEmployeeIdRole - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
+  }
   ['/api/b2b/v1/auth/login-as-partner']: {
     /**
-     * postApiB2BV1AuthLoginAsPartner - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
+     * postApiB2BV1AuthLoginAsPartner - PERMISSION: [NOTINO_ADMIN, LOGIN_AS_PARTNER]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
@@ -9084,7 +11427,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/users/partners']: {
     /**
-     * getApiB2BV1UsersPartners - PERMISSION: [ADMIN, LOGIN_AS_PARTNER]
+     * getApiB2BV1UsersPartners - PERMISSION: [NOTINO_ADMIN, LOGIN_AS_PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
@@ -9150,7 +11493,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
     /**
-     * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+     * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -9158,7 +11501,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
     /**
-     * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
+     * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
@@ -9176,9 +11519,19 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
   }
+  ['/api/b2b/v1/salons/{salonID}/invoice']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdInvoice - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_BILLING_UPDATE]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdInvoice.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdInvoice.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
+  }
   ['/api/b2b/v1/salons/{salonID}/publish']: {
     /**
-     * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER]
+     * patchApiB2BV1SalonsSalonIdPublish - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdPublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdPublish.HeaderParameters> | null,
@@ -9206,7 +11559,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
     /**
-     * postApiB2BV1Services - PERMISSION: [PARTNER]
+     * postApiB2BV1Services - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
@@ -9224,7 +11577,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+     * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -9232,7 +11585,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+     * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -9250,7 +11603,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
     /**
-     * postApiB2BV1Customers - PERMISSION: [PARTNER]
+     * postApiB2BV1Customers - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
@@ -9268,7 +11621,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
     /**
-     * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+     * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -9276,7 +11629,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
     /**
-     * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
+     * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
@@ -9286,7 +11639,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/']: {
     /**
-     * getApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, PARTNER]
+     * getApiB2BV1Employees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
@@ -9294,7 +11647,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
     /**
-     * postApiB2BV1Employees - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+     * postApiB2BV1Employees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
@@ -9304,7 +11657,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/{employeeID}']: {
     /**
-     * getApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_BROWSING, EMPLOYEE_EDIT, PARTNER]
+     * getApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -9312,7 +11665,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
     /**
-     * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+     * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -9320,7 +11673,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
     /**
-     * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+     * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
@@ -9330,13 +11683,33 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/employees/invite']: {
     /**
-     * postApiB2BV1EmployeesInvite - PERMISSION: [SUPER_ADMIN, ADMIN, EMPLOYEE_EDIT, PARTNER]
+     * postApiB2BV1EmployeesInvite - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1EmployeesInvite.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
+  }
+  ['/api/b2b/v1/employees/{employeeID}/role']: {
+    /**
+     * patchApiB2BV1EmployeesEmployeeIdRole - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdRole.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1EmployeesEmployeeIdRole.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
+  }
+  ['/api/b2b/v1/roles/salon']: {
+    /**
+     * getApiB2BV1RolesSalon - PERMISSION: [PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1RolesSalon.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1RolesSalon.Responses.$200>
   }
 }
 

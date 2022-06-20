@@ -70,8 +70,8 @@ const ServiceEditPage = (props: Props) => {
 				description: values.description,
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
-				priceFrom: values.priceFrom,
-				priceTo: values.variablePrice ? values.priceTo : undefined,
+				priceFrom: values.priceFrom as any,
+				priceTo: values.variablePrice ? values.priceTo : (undefined as any),
 				salonID: values.salonID,
 				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
 				// TODO add employee

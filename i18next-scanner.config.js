@@ -12,7 +12,7 @@ module.exports = {
 		sort: true,
 		trans: false,
 		removeUnusedKeys: true,
-		lngs: ['sk', 'cz', 'en'],
+		lngs: ['sk', 'cz', 'en', 'hu', 'bg', 'ro'],
 		ns: [
 			'paths',
 			'loc'

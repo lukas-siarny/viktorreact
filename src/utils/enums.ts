@@ -18,7 +18,10 @@ export enum NAMESPACE {
 export enum LANGUAGE {
 	SK = 'sk',
 	CZ = 'cz',
-	EN = 'en'
+	EN = 'en',
+	HU = 'hu',
+	RO = 'ro',
+	BG = 'bg'
 }
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
@@ -335,8 +338,8 @@ export enum VALIDATION_MAX_LENGTH {
 
 export const getTranslatedCountriesLabels = (): ICountryLabel => {
 	return {
-		SK: `${i18next.t('loc:Slovenská republika')}`,
-		CZ: `${i18next.t('loc:Česká republika')}`
+		[LANGUAGE.SK]: `${i18next.t('loc:Slovenská republika')}`,
+		[LANGUAGE.CZ]: `${i18next.t('loc:Česká republika')}`
 	} as ICountryLabel
 }
 

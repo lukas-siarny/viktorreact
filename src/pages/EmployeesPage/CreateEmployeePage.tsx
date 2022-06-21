@@ -22,8 +22,6 @@ import { IBreadcrumbs, IEmployeeForm } from '../../types/interfaces'
 // reducers
 import { RootState } from '../../reducers'
 
-const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_EDIT, PERMISSION.PARTNER]
-
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]
 
 const CreateEmployeePage = () => {
@@ -80,30 +78,20 @@ const CreateEmployeePage = () => {
 				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={form?.values?.salonID} onSubmit={createEmployee} />
 				<div className={'content-footer'}>
 					<Row className={'justify-center'}>
-						<Permissions
-							allowed={editPermissions}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular w-1/3'}
-									htmlType={'submit'}
-									onClick={(e) => {
-										if (hasPermission) {
-											dispatch(submit(FORM.EMPLOYEE))
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									disabled={submitting || isFormPristine}
-									loading={submitting}
-								>
-									{t('loc:Uložiť')}
-								</Button>
-							)}
-						/>
+						<Button
+							type={'primary'}
+							block
+							size={'middle'}
+							className={'noti-btn m-regular w-1/3'}
+							htmlType={'submit'}
+							onClick={(e) => {
+								dispatch(submit(FORM.EMPLOYEE))
+							}}
+							disabled={submitting || isFormPristine}
+							loading={submitting}
+						>
+							{t('loc:Uložiť')}
+						</Button>
 					</Row>
 				</div>
 			</div>

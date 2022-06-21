@@ -60,6 +60,10 @@ const ImgUploadField: FC<Props> = (props) => {
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
 			showNotifications([{ type: MSG_TYPE.ERROR, message: info.file.error.message }], NOTIFICATION_TYPE.NOTIFICATION)
+			// remove current uploaded image due to error when uploading to aws
+			const values = info.fileList
+			values.pop()
+			input.onChange(values)
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = getImagesFormValues(info.fileList, imagesUrls.current)

@@ -19,9 +19,8 @@ import { IServiceForm } from '../../types/interfaces'
 import { patchReq } from '../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { getDefaultFormCategories } from '../../utils/helper'
-import Permissions, { withPermissions } from '../../utils/Permissions'
 import { decodePrice, encodePrice, getDefaultFormCategories } from '../../utils/helper'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 
 type Props = {
 	serviceID: number

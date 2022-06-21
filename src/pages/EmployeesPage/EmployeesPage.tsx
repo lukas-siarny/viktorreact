@@ -12,6 +12,7 @@ import { compose } from 'redux'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeesFilter, { IEmployeesFilter } from './components/EmployeesFilter'
+import PopoverList from '../../components/PopoverList'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
@@ -28,6 +29,7 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
+import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
 
 type Columns = ColumnsType<any>
 
@@ -51,7 +53,7 @@ const EmployeesPage = () => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, salonID: query.salonID }))
-		dispatch(getEmployees(query.page, query.limit, query.order, { search: query.search, salonID: query.salonID }))
+		dispatch(getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID: query.salonID }))
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])
 
 	useEffect(() => {
@@ -137,20 +139,23 @@ const EmployeesPage = () => {
 			key: 'services',
 			ellipsis: true,
 			render: (value) => {
-				return value?.map((service: any) => {
-					return <p className={'mb-0'}>{service?.name}</p>
-				})
+				return <PopoverList elements={value} />
 			}
 		},
 		{
-			title: t('loc:Aktívne konto'),
+			title: t('loc:Stav konta'),
 			dataIndex: 'hasActiveAccount',
 			key: 'status',
 			ellipsis: true,
 			sorter: true,
-			width: '10%',
+			width: 90,
 			sortOrder: setOrder(query.order, 'status'),
-			render: (value) => <div className={'flex justify-center'}>{value ? undefined : <CloudOfflineIcon />}</div>
+			render: (value, record) => (
+				<div className={'flex justify-center'}>
+					{value === false && !record?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
+					{value === false && record?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
+				</div>
+			)
 		}
 	]
 
@@ -174,7 +179,7 @@ const EmployeesPage = () => {
 							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<EmployeesFilter
-									createUser={() => {
+									createEmployee={() => {
 										if (hasPermission) {
 											history.push(t('paths:employees/create'))
 										} else {

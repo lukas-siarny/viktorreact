@@ -9,6 +9,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 // utils
 import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
+import { searchSalonWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -19,7 +20,6 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getSalons } from '../../../reducers/salons/salonsActions'
 
 type ComponentProps = {
 	createEmployee: Function
@@ -41,9 +41,8 @@ const EmployeesFilter = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
 
 	const onSearchSalons = useCallback(
-		async (searchText: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, searchText))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
+		async (search: string, page: number) => {
+			return searchSalonWrapper(dispatch, { search, page })
 		},
 		[dispatch]
 	)

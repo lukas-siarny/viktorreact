@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import { map } from 'lodash'
 import { ThunkResult } from '../index'
 import { EMPLOYEE, EMPLOYEES } from './employeesTypes'
 
@@ -20,25 +21,48 @@ interface IGetEmployee {
 	payload: IEmployeePayload
 }
 
+export interface IGetEmployeesQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	salonID?: number | undefined | null
+}
+
+export interface EmployeesOptionItem {
+	label: string | undefined | number
+	value: number
+	key: string
+}
+
 export interface IEmployeePayload {
 	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
 }
 
 export interface IEmployeesPayload {
 	data: Paths.GetApiB2BAdminEmployees.Responses.$200 | null
+	employeesOptions: EmployeesOptionItem[] | undefined
 }
 
 export const getEmployees =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<IEmployeesPayload>> =>
+	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IEmployeesPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IEmployeesPayload
 		try {
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/employees/', { page: page || 1, limit, order, ...normalizeQueryParams(queryParams) })
+			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
+			const employeesOptions = map(data.employees, (employee) => {
+				return {
+					label: `${employee.firstName} ${employee.lastName}` || `${employee.id}`,
+					value: employee.id,
+					key: `${employee.id}-key`
+				}
+			})
 
 			payload = {
-				data
+				data,
+				employeesOptions
 			}
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_DONE, payload })
 		} catch (err) {

@@ -49,7 +49,7 @@ const UsersPage = () => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search, roleID: query.roleID }))
-		dispatch(getUsers(query.page, query.limit, query.order, query.search, query.roleID))
+		dispatch(getUsers({ page: query.page, limit: query.limit, order: query.order, search: query.search, roleID: query.roleID }))
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.roleID])
 
 	useEffect(() => {

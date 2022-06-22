@@ -15,14 +15,14 @@ import Routes from './routes/Routes'
 import rootReducer from './reducers'
 
 // utils
-
 import configureStore from './utils/configureStore'
 import i18n from './utils/i18n'
 import { history } from './utils/history'
-import { LOCALES, LANGUAGE, DEFAULT_LANGUAGE } from './utils/enums'
+import { LANGUAGE, DEFAULT_LANGUAGE } from './utils/enums'
 
 // components
 import ScrollToTop from './components/ScrollToTop'
+import { LOCALES } from './components/LanguagePicker'
 
 const queryStringifyOptions: ExtendedStringifyOptions = {
 	transformSearchString: transformSearchStringJsonSafe

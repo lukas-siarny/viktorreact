@@ -36,17 +36,17 @@ type Props = {
 	computedMatch: IComputedMatch<{ employeeID: number }>
 }
 
-const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_EDIT, PERMISSION.PARTNER]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
 	return oldServices.map((service: any) => {
 		return {
 			id: service?.id,
 			employeeData: {
-				durationFrom: service?.salonData?.durationFrom,
-				durationTo: service?.variableDuration ? service?.salonData?.durationTo : undefined,
-				priceFrom: encodePrice(service?.salonData?.priceFrom),
-				priceTo: service?.variablePrice ? encodePrice(service?.salonData?.priceTo) : undefined
+				durationFrom: service?.employeeData?.durationFrom,
+				durationTo: service?.variableDuration ? service?.employeeData?.durationTo : undefined,
+				priceFrom: encodePrice(service?.employeeData?.priceFrom),
+				priceTo: service?.variablePrice ? encodePrice(service?.employeeData?.priceTo) : undefined
 			}
 		}
 	})
@@ -68,6 +68,12 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 				id: serviceData?.id,
 				name: serviceData?.name,
 				salonData: {
+					durationFrom: serviceData?.durationFrom,
+					durationTo: serviceData?.durationTo,
+					priceFrom: decodePrice(serviceData?.priceFrom),
+					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
+				},
+				employeeData: {
 					durationFrom: serviceData?.durationFrom,
 					durationTo: serviceData?.durationTo,
 					priceFrom: decodePrice(serviceData?.priceFrom),
@@ -131,12 +137,20 @@ const EmployeePage = (props: Props) => {
 				variableDuration: false,
 				variablePrice: false,
 				salonData: {
+					...service.salonData,
+					// decode and set price
+					priceFrom: decodePrice(service?.salonData?.priceFrom),
+					priceTo: decodePrice(service?.salonData?.priceTo)
+				},
+				employeeData: {
 					...service.employeeData,
 					// decode and set price
 					priceFrom: decodePrice(service?.employeeData?.priceFrom),
 					priceTo: decodePrice(service?.employeeData?.priceTo)
-				}
+				},
+				category: service?.category
 			}
+			// get data from employeeData
 			if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
 				updatedService = {
 					...updatedService,
@@ -229,7 +243,9 @@ const EmployeePage = (props: Props) => {
 				{
 					inviteEmail: formData?.email,
 					employeeID,
-					salonID: parseSalonID(form?.values?.salonID)
+					salonID: parseSalonID(form?.values?.salonID),
+					// TODO add roleID
+					roleID: 0
 				}
 			)
 			dispatch(getEmployee(employeeID))
@@ -268,7 +284,7 @@ const EmployeePage = (props: Props) => {
 					<Row className={rowClass}>
 						{showDeleteBtn ? (
 							<DeleteButton
-								permissions={editPermissions}
+								permissions={permissions}
 								className={'w-1/3'}
 								onConfirm={deleteEmployee}
 								entityName={t('loc:zamestnanca')}
@@ -277,7 +293,7 @@ const EmployeePage = (props: Props) => {
 							/>
 						) : undefined}
 						<Permissions
-							allowed={editPermissions}
+							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<div className={`flex justify-between ${wrapperWidthClass}`}>
 									{isProfileInActive ? (
@@ -343,4 +359,4 @@ const EmployeePage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_BROWSING, PERMISSION.PARTNER]))(EmployeePage)
+export default compose(withPermissions(permissions))(EmployeePage)

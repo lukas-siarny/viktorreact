@@ -1,12 +1,13 @@
 import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { change, Field, FieldArray, InjectedFormProps, reduxForm, isDirty } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
+import cx from 'classnames'
 
 // utils
-import { FORM, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
-import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
+import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
 import searchWrapper from '../../../utils/filters'
 
 // types
@@ -50,19 +51,33 @@ const renderListFields = (props: any) => {
 	const [t] = useTranslation()
 	const { fields } = props
 
-	const renderFromTo = (form: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
+	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
 		<div className={'flex items-center mr-3'}>
 			{icon}
-			{form}
+			{from}
 			{variable && to ? ` - ${to}` : undefined}
 		</div>
 	)
 
+	const compareSalonAndEmployeeData = (data: any): boolean => {
+		const salonData = data?.salonData
+		const employeeData = data?.employeeData
+		let checkVariableDuration = true
+		let checkVariablePrice = true
+		if (data?.variableDuration) {
+			checkVariableDuration = salonData?.durationTo === employeeData?.durationTo
+		}
+		if (data?.variablePrice) {
+			checkVariablePrice = salonData?.priceTo === employeeData?.priceTo
+		}
+		return !(salonData?.durationFrom === employeeData?.durationFrom && salonData?.priceFrom === employeeData?.priceFrom && checkVariableDuration && checkVariablePrice)
+	}
+
 	const genExtra = (index: number, field: any) => (
 		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
 			<div className={'flex'}>
-				{renderFromTo(field?.salonData?.durationFrom, field?.salonData?.durationTo, field?.variableDuration, <ClockIcon />)}
-				{renderFromTo(field?.salonData?.priceFrom, field?.salonData?.priceTo, field?.variablePrice, <CouponIcon />)}
+				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />)}
+				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />)}
 			</div>
 			<DeleteButton
 				onConfirm={() => {
@@ -87,12 +102,19 @@ const renderListFields = (props: any) => {
 					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.variableDuration
 					const variablePrice = fieldData?.variablePrice
+					const category = fieldData?.category?.child ? showServiceCategory(fieldData?.category) : fieldData?.category?.name
 					return (
 						<Panel
 							header={
-								<div>
-									{fieldData?.name}
-									{fieldData?.category?.child?.child?.name ? <Tag className={'ml-5'}>{fieldData?.category?.child?.child?.name}</Tag> : undefined}
+								<div className={'flex align-center'}>
+									<div
+										className={cx('list-title leading-7', {
+											'changed-service-title': compareSalonAndEmployeeData(fieldData)
+										})}
+									>
+										{fieldData?.name}
+									</div>
+									<Tag className={'ml-5'}>{category}</Tag>
 								</div>
 							}
 							key={index}
@@ -104,7 +126,7 @@ const renderListFields = (props: any) => {
 										component={InputNumberField}
 										label={variableDuration ? t('loc:Trvanie od') : t('loc:Trvanie')}
 										placeholder={t('loc:min')}
-										name={`${field}.salonData.durationFrom`}
+										name={`${field}.employeeData.durationFrom`}
 										precision={0}
 										step={1}
 										maxChars={3}
@@ -120,7 +142,7 @@ const renderListFields = (props: any) => {
 											component={InputNumberField}
 											label={t('loc:Trvanie do')}
 											placeholder={t('loc:min')}
-											name={`${field}.salonData.durationTo`}
+											name={`${field}.employeeData.durationTo`}
 											precision={0}
 											step={1}
 											maxChars={3}
@@ -140,7 +162,7 @@ const renderListFields = (props: any) => {
 										label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
 										// TODO add currency
 										// placeholder={t('loc:min')}
-										name={`${field}.salonData.priceFrom`}
+										name={`${field}.employeeData.priceFrom`}
 										precision={2}
 										step={1}
 										maxChars={5}
@@ -156,7 +178,7 @@ const renderListFields = (props: any) => {
 											label={t('loc:Cena do')}
 											// TODO add currency
 											// placeholder={t('loc:min')}
-											name={`${field}.salonData.priceTo`}
+											name={`${field}.employeeData.priceTo`}
 											precision={2}
 											step={1}
 											maxChars={5}
@@ -190,9 +212,16 @@ const EmployeeForm: FC<Props> = (props) => {
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
 	const services = useSelector((state: RootState) => state.service.services)
+	const isFormDirty = useSelector(isDirty(FORM.EMPLOYEE))
+
+	const parsedSalonID = parseSalonID(salonID)
 
 	useEffect(() => {
-		dispatch(getServices({ page: 1, salonID: parseSalonID(salonID) }))
+		dispatch(getServices({ page: 1, salonID: parsedSalonID }))
+		if (isFormDirty) {
+			// clear services if salon is changed
+			dispatch(change(FORM.EMPLOYEE, 'services', null))
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
 
@@ -207,7 +236,7 @@ const EmployeeForm: FC<Props> = (props) => {
 		async (search: string, page: number) => {
 			return searchWrapper(dispatch, { page, search, salonID: parseSalonID(salonID) } as any, FILTER_ENTITY.SERVICE)
 		},
-		[dispatch, salonID]
+		[dispatch, parsedSalonID]
 	)
 
 	return (
@@ -218,7 +247,16 @@ const EmployeeForm: FC<Props> = (props) => {
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>
 						<div className={'w-1/5'}>
-							<Field className={'m-0'} component={ImgUploadField} name={'avatar'} label={t('loc:Avatar')} signUrl={URL_UPLOAD_IMAGES} multiple={false} maxCount={1} />
+							<Field
+								className={'m-0'}
+								component={ImgUploadField}
+								name={'avatar'}
+								label={t('loc:Avatar')}
+								signUrl={URL_UPLOAD_IMAGES}
+								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
+								multiple={false}
+								maxCount={1}
+							/>
 						</div>
 
 						<div className={'w-full'}>
@@ -238,7 +276,9 @@ const EmployeeForm: FC<Props> = (props) => {
 						onSearch={searchSalon}
 						filterOption={true}
 						showSearch
+						confirmModalExtraTitle={<p className={'m-0'}>{t('loc: Potvrdením zmeny salónu sa vymažú všetky priradené služby!')}</p>}
 						allowInfinityScroll
+						confirmSelection={!!formValues?.services}
 						required
 					/>
 					<div className={'flex w-full justify-between'}>
@@ -252,11 +292,12 @@ const EmployeeForm: FC<Props> = (props) => {
 							name={'service'}
 							onSearch={searchService}
 							filterOption={true}
-							options={services?.options}
 							mode={'multiple'}
+							options={services?.options}
 							showSearch
 							allowInfinityScroll
 							disabled={!formValues?.salonID}
+							formName={FORM.EMPLOYEE}
 						/>
 						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={!formValues?.salonID}>
 							{t('loc:Pridať službu')}

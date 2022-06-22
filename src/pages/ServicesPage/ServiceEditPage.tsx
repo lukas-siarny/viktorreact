@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { map } from 'lodash'
 import { useDispatch } from 'react-redux'
 import { initialize } from 'redux-form'
+import { compose } from 'redux'
 
 // components
 import ServiceForm from './components/ServiceForm'
@@ -16,13 +17,16 @@ import { IServiceForm } from '../../types/interfaces'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { decodePrice, encodePrice, getDefaultFormCategories } from '../../utils/helper'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 
 type Props = {
 	serviceID: number
 }
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.PARTNER]
 
 const ServiceEditPage = (props: Props) => {
 	const { serviceID } = props
@@ -84,7 +88,23 @@ const ServiceEditPage = (props: Props) => {
 			console.error(e)
 		}
 	}
-	return <ServiceForm onSubmit={handleSubmit} serviceID={serviceID} />
+	return (
+		<Permissions
+			allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
+			render={(hasPermission, { openForbiddenModal }) => (
+				<ServiceForm
+					onSubmit={(formData: IServiceForm) => {
+						if (hasPermission) {
+							handleSubmit(formData)
+						} else {
+							openForbiddenModal()
+						}
+					}}
+					serviceID={serviceID}
+				/>
+			)}
+		/>
+	)
 }
 
-export default ServiceEditPage
+export default compose(withPermissions(permissions))(ServiceEditPage)

@@ -27,7 +27,7 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES, FILTER_ENTITY, UPLOAD_IMG_CATEGORIES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
@@ -115,10 +115,9 @@ const ServiceForm = (props: Props) => {
 					showSearch
 					onSearch={searchSalon}
 					onDidMountSearch
-					filterOption={true}
-					allowInfinityScroll
-					size={'large'}
 					required
+					filterOption={false}
+					allowInfinityScroll
 				/>
 				<Row gutter={8} align='middle'>
 					<Col span={8}>
@@ -217,7 +216,16 @@ const ServiceForm = (props: Props) => {
 				</div>
 
 				<Divider />
-
+				<Field
+					className='m-0'
+					component={ImgUploadField}
+					name='gallery'
+					label={t('loc:Referenčné obrázky')}
+					signUrl={URL_UPLOAD_IMAGES}
+					multiple
+					maxCount={10}
+					category={UPLOAD_IMG_CATEGORIES.SALON}
+				/>
 				<Row className={'content-footer'} id={'content-footer-container'}>
 					<Col span={8}>
 						{serviceID ? (
@@ -226,7 +234,7 @@ const ServiceForm = (props: Props) => {
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								onConfirm={onConfirmDelete}
 								entityName={t('loc:službu')}
-								permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]}
+								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
 							/>
 						) : null}
 					</Col>

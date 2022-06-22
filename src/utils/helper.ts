@@ -47,7 +47,6 @@ import {
 	BYTE_MULTIPLIER,
 	MONDAY_TO_FRIDAY,
 	DAY,
-	LOCALES,
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT
 } from './enums'
@@ -56,6 +55,9 @@ import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
 import { RootState } from '../reducers'
+import { LOCALES } from '../components/LanguagePicker'
+
+type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -673,4 +675,14 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		})
 	}
 	return undefined
+}
+
+export const showServiceCategory = (category: serviceCategory): string | undefined => {
+	if (category?.child?.child) {
+		return category.child.child.name
+	}
+	if (category?.child) {
+		return category.child.name
+	}
+	return category?.name
 }

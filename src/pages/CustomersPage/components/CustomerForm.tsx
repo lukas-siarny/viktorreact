@@ -90,6 +90,8 @@ const CustomerForm: FC<Props> = (props) => {
 						name={'salonID'}
 						showSearch
 						onSearch={searchSalon}
+						filterOption={false}
+						allowInfinityScroll
 						onDidMountSearch
 						required
 					/>

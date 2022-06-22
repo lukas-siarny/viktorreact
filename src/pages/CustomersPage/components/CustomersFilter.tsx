@@ -90,6 +90,8 @@ const CustomersFilter = (props: Props) => {
 							name='salonID'
 							showSearch
 							onSearch={searchSalon}
+							filterOption={false}
+							allowInfinityScroll
 							onDidMountSearch
 							disabled={isFilterDisabled}
 						/>

@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { GENDER, MSG_TYPE, LANGUAGE } from '../utils/enums'
+import { Paths } from './api'
 
 export interface IErrorMessage {
 	type: MSG_TYPE

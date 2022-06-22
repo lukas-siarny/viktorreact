@@ -16,7 +16,7 @@ import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale } from '../../utils/helper'
+import { formatDateByLocale, normalizeDirectionKeys, normalizeQueryParams, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -27,7 +27,7 @@ import { getServices } from '../../reducers/services/serviceActions'
 // types
 import { IBreadcrumbs, IUserAvatar } from '../../types/interfaces'
 
-const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 type Columns = ColumnsType<any>
 
@@ -152,10 +152,10 @@ const ServicesPage = () => {
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<Permissions
-						allowed={editPermissions}
-						render={(hasPermission, { openForbiddenModal }) => (
-							<div className='content-body'>
+					<div className='content-body'>
+						<Permissions
+							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}
+							render={(hasPermission, { openForbiddenModal }) => (
 								<ServicesFilter
 									createService={() => {
 										if (hasPermission) {
@@ -167,46 +167,41 @@ const ServicesPage = () => {
 									onSubmit={handleSubmit}
 									total={services?.data?.pagination?.totalCount}
 								/>
-								<CustomTable
-									className='table-fixed'
-									onChange={onChangeTable}
-									columns={columns}
-									dataSource={services?.tableData}
-									rowClassName={'clickable-row'}
-									loading={services?.isLoading}
-									twoToneRows
-									onRow={(record) => ({
-										onClick: (e) => {
-											if (hasPermission) {
-												history.push(t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
-											} else {
-												e.preventDefault()
-												openForbiddenModal()
-											}
-										}
-									})}
-									pagination={{
-										showTotal: (total, [from, to]) =>
-											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-												total,
-												from,
-												to
-											}),
-										defaultPageSize: PAGINATION.defaultPageSize,
-										pageSizeOptions: PAGINATION.pageSizeOptions,
-										showSizeChanger: true,
-										pageSize: services?.data?.pagination?.limit,
-										total: services?.data?.pagination?.totalCount,
-										current: services?.data?.pagination?.page
-									}}
-								/>
-							</div>
-						)}
-					/>
+							)}
+						/>
+						<CustomTable
+							className='table-fixed'
+							onChange={onChangeTable}
+							columns={columns}
+							dataSource={services?.tableData}
+							rowClassName={'clickable-row'}
+							loading={services?.isLoading}
+							twoToneRows
+							onRow={(record) => ({
+								onClick: () => {
+									history.push(t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
+								}
+							})}
+							pagination={{
+								showTotal: (total, [from, to]) =>
+									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+										total,
+										from,
+										to
+									}),
+								defaultPageSize: PAGINATION.defaultPageSize,
+								pageSizeOptions: PAGINATION.pageSizeOptions,
+								showSizeChanger: true,
+								pageSize: services?.data?.pagination?.limit,
+								total: services?.data?.pagination?.totalCount,
+								current: services?.data?.pagination?.page
+							}}
+						/>
+					</div>
 				</Col>
 			</Row>
 		</>
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]))(ServicesPage)
+export default compose(withPermissions(permissions))(ServicesPage)

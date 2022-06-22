@@ -65,7 +65,17 @@ const CustomerForm: FC<Props> = (props) => {
 						phoneName={'phone'}
 						required
 					/>
-					<Field component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+					<Row justify={'space-between'}>
+						<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+						<Field
+							className={'w-1/6'}
+							component={InputField}
+							label={t('loc:Popisné číslo')}
+							placeholder={t('loc:Zadajte číslo')}
+							name={'streetNumber'}
+							size={'large'}
+						/>
+					</Row>
 					<Row justify={'space-between'}>
 						<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} />
 						<Field className={'w-12/25'} component={InputField} label={t('loc:PSČ')} placeholder={t('loc:Zadajte smerovacie číslo')} name={'zipCode'} size={'large'} />

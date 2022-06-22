@@ -233,6 +233,7 @@ const UserAccountForm: FC<Props> = (props) => {
 								longitude: get(formValues, 'longitude'),
 								city: get(formValues, 'city'),
 								street: get(formValues, 'street'),
+								streetNumber: get(formValues, 'streetNumber'),
 								zipCode: get(formValues, 'zipCode'),
 								country: get(formValues, 'country')
 							}}
@@ -301,7 +302,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							<>
 								<Row justify={'space-between'}>
 									<Field
-										className={'w-12/25'}
+										className={'w-4/5'}
 										component={InputField}
 										label={t('loc:Ulica')}
 										placeholder={t('loc:Zadajte ulicu')}
@@ -309,6 +310,17 @@ const UserAccountForm: FC<Props> = (props) => {
 										size={'large'}
 										required
 									/>
+									<Field
+										className={'w-1/6'}
+										component={InputField}
+										label={t('loc:Popisné číslo')}
+										placeholder={t('loc:Zadajte číslo')}
+										name={'streetNumber'}
+										size={'large'}
+										required
+									/>
+								</Row>
+								<Row justify={'space-between'}>
 									<Field
 										className={'w-12/25'}
 										component={InputField}
@@ -318,8 +330,6 @@ const UserAccountForm: FC<Props> = (props) => {
 										size={'large'}
 										required
 									/>
-								</Row>
-								<Row justify={'space-between'}>
 									<Field
 										className={'w-12/25'}
 										component={InputField}
@@ -329,19 +339,19 @@ const UserAccountForm: FC<Props> = (props) => {
 										size={'large'}
 										required
 									/>
-									<Field
-										className={'w-12/25'}
-										component={SelectField}
-										label={t('loc:Štát')}
-										placeholder={t('loc:Vyber krajinu')}
-										options={countries?.enumerationsOptions || []}
-										name={'companyInvoiceAddress.countryCode'}
-										size={'large'}
-										loading={countries?.isLoading}
-										allowClear
-										required
-									/>
 								</Row>
+								<Field
+									className={'w-full'}
+									component={SelectField}
+									label={t('loc:Štát')}
+									placeholder={t('loc:Vyber krajinu')}
+									options={countries?.enumerationsOptions || []}
+									name={'companyInvoiceAddress.countryCode'}
+									size={'large'}
+									loading={countries?.isLoading}
+									allowClear
+									required
+								/>
 							</>
 						)}
 					</Col>

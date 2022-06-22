@@ -151,9 +151,9 @@ export interface ICountryLabel {
 }
 
 export interface IStructuredAddress {
-	streetNumber: string | null
 	zip: string | null
 	street: string | null
+	streetNumber: string | null
 	city: string | null
 	country: string | null
 	houseNumber: string | null
@@ -183,6 +183,7 @@ export interface ICustomerForm {
 	zipCode?: string
 	city?: string
 	street?: string
+	streetNumber?: string
 	countryCode?: string
 	salonID: number
 }

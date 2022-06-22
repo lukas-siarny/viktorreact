@@ -48,7 +48,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
-		dispatch(getCustomers(query.page, query.limit, query.order, { search: query.search, salonID }))
+		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID }))
 	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
 
 	useEffect(() => {

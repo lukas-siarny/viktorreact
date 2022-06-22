@@ -53,7 +53,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search }))
-		dispatch(getEmployees(query.page, query.limit, query.order, { search: query.search, salonID }))
+		dispatch(getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID }))
 	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
 
 	useEffect(() => {

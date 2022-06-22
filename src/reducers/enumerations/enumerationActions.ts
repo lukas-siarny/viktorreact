@@ -25,6 +25,8 @@ interface IGetEnumerationsActions {
 export interface IEnumerationOptions {
 	key: string | number
 	label: string
+	value: string | number
+	flag?: string
 }
 
 export interface IEnumerationsPayload {
@@ -68,10 +70,11 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 				// eslint-disable-next-line no-console
 				console.error(`Missing translation for country with code ${item.code}!`)
 			}
+			const countryCode = item.code?.toLowerCase()
 			return {
-				key: item.code,
-				label: countryLabel || item.code,
-				value: item.code,
+				key: countryCode,
+				label: countryLabel || countryCode,
+				value: countryCode,
 				flag: item.flag
 			}
 		})

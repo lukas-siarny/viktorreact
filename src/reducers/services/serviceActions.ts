@@ -10,7 +10,7 @@ import { IUserAvatar } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
+import { decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
@@ -30,6 +30,16 @@ interface ServicesTableData {
 	salon: string | undefined
 }
 
+export interface IGetServicesQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+	categoryID?: number | undefined | null
+	employeeID?: number | undefined | null
+	salonID?: number | undefined | null
+}
+
 export interface ServiceOptionItem {
 	label: string | undefined | number
 	value: number
@@ -43,14 +53,13 @@ export interface IServicesPayload {
 }
 
 export const getServices =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<IServicesPayload>> =>
+	(queryParams: IGetServicesQueryParams): ThunkResult<Promise<IServicesPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IServicesPayload
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
-			const pageLimit = limit
 
-			const { data } = await getReq('/api/b2b/admin/services/', { page: page || 1, limit: pageLimit, order, ...normalizeQueryParams(queryParams) })
+			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) })
 			const tableData: ServicesTableData[] = map(data.services, (item) => {
 				const tableItem = {
 					key: item.id,
@@ -62,7 +71,7 @@ export const getServices =
 						text: `${employee.firstName} ${employee.lastName}`,
 						key: employee.id
 					})),
-					price: getServiceRange(item.priceFrom, item.priceTo),
+					price: getServiceRange(decodePrice(item.priceFrom), decodePrice(item.priceTo)),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
 					category: item.category.name || '-',
 					salon: item.salon.name

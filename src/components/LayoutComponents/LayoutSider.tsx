@@ -42,7 +42,6 @@ export type LayoutSiderProps = {
 }
 
 const LayoutSider = (props: LayoutSiderProps) => {
-	console.log('🚀 ~ file: LayoutSider.tsx ~ line 48 ~ LayoutSider ~ props', props)
 	const { page, showNavigation = true, salonID, parentPath } = props
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
@@ -84,7 +83,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							{/* ADMIN VIEW */}
 							{!salonID && (
 								<>
-									<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]}>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]}>
 										<Menu.Item
 											eventKey={PAGE.USERS}
 											key={PAGE.USERS}
@@ -96,7 +95,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											{t('loc:Používatelia')}
 										</Menu.Item>
 									</Permissions>
-									<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN]}>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
 										<Menu.Item
 											eventKey={PAGE.CATEGORIES}
 											key={PAGE.CATEGORIES}
@@ -108,7 +107,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											{t('loc:Kategórie')}
 										</Menu.Item>
 									</Permissions>
-									<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN]}>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
 										<Menu.Item
 											eventKey={PAGE.SALONS}
 											key={PAGE.SALONS}
@@ -125,7 +124,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 							{/* PARTNER VIEW */}
 							{salonID && (
-								<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER]}>
+								<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
 									<Menu.Item
 										eventKey={PAGE.SALONS}
 										key={PAGE.SALONS}

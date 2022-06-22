@@ -1,12 +1,12 @@
-import { generateRandomString, generateRandomInt } from '../../support/helpers'
+/* import { generateRandomString, generateRandomInt } from '../../support/helpers'
 import { FORM } from '../../../src/utils/enums'
 
-import customer from '../../fixtures/customer.json'
+import customer from '../../fixtures/customer.json' */
 
 describe(`Salon's customer`, () => {
 	context('CRUD operations', () => {
 		// id of customer
-		let customerID = 0
+		// const customerID = 0
 		beforeEach(() => {
 			// restore local storage with tokens from snapshot
 			cy.restoreLocalStorage()
@@ -17,7 +17,7 @@ describe(`Salon's customer`, () => {
 			cy.saveLocalStorage()
 		})
 
-		it('Create customer', () => {
+		/* it('Create customer', () => {
 			cy.intercept({
 				method: 'POST',
 				url: '/api/b2b/admin/customers'
@@ -82,6 +82,6 @@ describe(`Salon's customer`, () => {
 				cy.checkSuccessToastMessage()
 				cy.location('pathname').should('eq', `/customers`)
 			})
-		})
+		}) */
 	})
 })

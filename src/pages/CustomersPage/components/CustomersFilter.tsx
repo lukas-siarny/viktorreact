@@ -11,6 +11,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 // utils
 import { FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
+import { searchSalonWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'

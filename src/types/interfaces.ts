@@ -1,5 +1,6 @@
 /* eslint-disable import/no-cycle */
 import { GENDER, MSG_TYPE, LANGUAGE } from '../utils/enums'
+import { Paths } from './api'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -35,6 +36,11 @@ export interface ILabelInValueOption<ValueType = number, ExtraType = any> {
 export interface ILoginForm {
 	email: string
 	password: string
+}
+
+
+export interface IInviteEmployeeForm {
+	email: string
 }
 
 export interface ICreateUserForm {
@@ -145,9 +151,9 @@ export interface ICountryLabel {
 }
 
 export interface IStructuredAddress {
-	streetNumber: string | null
 	zip: string | null
 	street: string | null
+	streetNumber: string | null
 	city: string | null
 	country: string | null
 	houseNumber: string | null
@@ -177,12 +183,29 @@ export interface ICustomerForm {
 	zipCode?: string
 	city?: string
 	street?: string
+	streetNumber?: string
 	countryCode?: string
 	salonID: number
 }
 
+export interface IEmployeeForm {
+	firstName: string
+	lastName: string
+	salonID: number
+	email?: string
+	phonePrefixCountryCode?: string
+	phone?: string
+	services?: any
+	imageID?: number
+}
+
 export interface ILanguagePickerForm {
 	language: LANGUAGE
+}
+
+export interface IPrice {
+	exponent: number
+	significand: number
 }
 
 export interface IUserAvatar {

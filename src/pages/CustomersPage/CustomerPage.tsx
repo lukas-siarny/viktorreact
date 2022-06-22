@@ -30,6 +30,8 @@ type Props = SalonSubPageProps & {
 	}>
 }
 
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+
 const CustomerPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -87,8 +89,8 @@ const CustomerPage = (props: Props) => {
 					firstName: data.firstName,
 					gender: data.gender,
 					lastName: data.lastName,
-					salonID: data.salonID,
 					street: data.street,
+					streetNumber: data.streetNumber,
 					zipCode: data.zipCode,
 					phone: data.phone,
 					phonePrefixCountryCode: data.phonePrefixCountryCode
@@ -129,7 +131,7 @@ const CustomerPage = (props: Props) => {
 				<div className={'content-footer'}>
 					<Row className={'justify-between'}>
 						<DeleteButton
-							permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
+							permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}
 							className={'w-1/3'}
 							onConfirm={deleteCustomer}
 							entityName={t('loc:zákazníka')}
@@ -137,7 +139,7 @@ const CustomerPage = (props: Props) => {
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
+							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<Button
 									type={'primary'}
@@ -167,4 +169,4 @@ const CustomerPage = (props: Props) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]))(CustomerPage)
+export default compose(withPermissions(permissions))(CustomerPage)

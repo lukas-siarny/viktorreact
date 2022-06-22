@@ -1,15 +1,16 @@
-import React, { FC, MouseEventHandler, useCallback } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
+import { change, Field, FieldArray, InjectedFormProps, reduxForm, isDirty } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Collapse, Button } from 'antd'
-import { useDispatch } from 'react-redux'
+import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+import cx from 'classnames'
 
 // utils
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
 
 // types
-import { ICustomerForm } from '../../../types/interfaces'
+import { IEmployeeForm } from '../../../types/interfaces'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -19,23 +20,27 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
-// reducers
-import { getSalons } from '../../../reducers/salons/salonsActions'
-
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
 import { getServices } from '../../../reducers/services/serviceActions'
+import DeleteButton from '../../../components/DeleteButton'
+import { RootState } from '../../../reducers'
+import { searchSalonWrapper, searchServiceWrapper } from '../../../utils/filters'
+
+// assets
+import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
+import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 
 const { Panel } = Collapse
 
 type ComponentProps = {
-	salonID: number | null
+	salonID: number | null | any
 	addService: MouseEventHandler<HTMLElement>
 }
 
-type Props = InjectedFormProps<ICustomerForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
 
 const numberMin0 = validationNumberMin(0)
 
@@ -44,23 +49,82 @@ const renderListFields = (props: any) => {
 	const [t] = useTranslation()
 	const { fields } = props
 
+	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
+		<div className={'flex items-center mr-3'}>
+			{icon}
+			{from}
+			{variable && to ? ` - ${to}` : undefined}
+		</div>
+	)
+
+	const compareSalonAndEmployeeData = (data: any): boolean => {
+		const salonData = data?.salonData
+		const employeeData = data?.employeeData
+		let checkVariableDuration = true
+		let checkVariablePrice = true
+		if (data?.variableDuration) {
+			checkVariableDuration = salonData?.durationTo === employeeData?.durationTo
+		}
+		if (data?.variablePrice) {
+			checkVariablePrice = salonData?.priceTo === employeeData?.priceTo
+		}
+		return !(salonData?.durationFrom === employeeData?.durationFrom && salonData?.priceFrom === employeeData?.priceFrom && checkVariableDuration && checkVariablePrice)
+	}
+
+	const genExtra = (index: number, field: any) => (
+		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
+			<div className={'flex'}>
+				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />)}
+				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />)}
+			</div>
+			<DeleteButton
+				onConfirm={() => {
+					fields.remove(index)
+				}}
+				smallIcon
+				size={'small'}
+				entityName={t('loc:službu')}
+				type={'default'}
+				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+				onlyIcon
+			/>
+		</div>
+	)
+
 	return (
 		<>
 			<h3>{t('loc:Zoznam priradených služieb')}</h3>
 			<Divider className={'mb-3 mt-3'} />
-			<Collapse bordered={false}>
-				{fields.map((field: any, index: any) => {
-					const variableDuration = fields.get(index)?.variableDuration
-					const variablePrice = fields.get(index)?.variablePrice
+			<Collapse className={'collapse-list'} bordered={false}>
+				{fields.map((field: any, index: number) => {
+					const fieldData = fields.get(index)
+					const variableDuration = fieldData?.variableDuration
+					const variablePrice = fieldData?.variablePrice
+					const category = fieldData?.category?.child ? showServiceCategory(fieldData?.category) : fieldData?.category?.name
 					return (
-						<Panel header={fields.get(index)?.name} key={index}>
+						<Panel
+							header={
+								<div className={'flex align-center'}>
+									<div
+										className={cx('list-title leading-7', {
+											'changed-service-title': compareSalonAndEmployeeData(fieldData)
+										})}
+									>
+										{fieldData?.name}
+									</div>
+									<Tag className={'ml-5'}>{category}</Tag>
+								</div>
+							}
+							key={index}
+							extra={genExtra(index, fieldData)}
+						>
 							<Row gutter={8}>
 								<Col span={variableDuration ? 12 : 24}>
 									<Field
 										component={InputNumberField}
 										label={variableDuration ? t('loc:Trvanie od') : t('loc:Trvanie')}
 										placeholder={t('loc:min')}
-										name={`${field}.salonData.durationFrom`}
+										name={`${field}.employeeData.durationFrom`}
 										precision={0}
 										step={1}
 										maxChars={3}
@@ -76,7 +140,7 @@ const renderListFields = (props: any) => {
 											component={InputNumberField}
 											label={t('loc:Trvanie do')}
 											placeholder={t('loc:min')}
-											name={`${field}.salonData.durationTo`}
+											name={`${field}.employeeData.durationTo`}
 											precision={0}
 											step={1}
 											maxChars={3}
@@ -96,7 +160,7 @@ const renderListFields = (props: any) => {
 										label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
 										// TODO add currency
 										// placeholder={t('loc:min')}
-										name={`${field}.salonData.priceFrom`}
+										name={`${field}.employeeData.priceFrom`}
 										precision={2}
 										step={1}
 										maxChars={5}
@@ -112,7 +176,7 @@ const renderListFields = (props: any) => {
 											label={t('loc:Cena do')}
 											// TODO add currency
 											// placeholder={t('loc:min')}
-											name={`${field}.salonData.priceTo`}
+											name={`${field}.employeeData.priceTo`}
 											precision={2}
 											step={1}
 											maxChars={5}
@@ -132,25 +196,45 @@ const renderListFields = (props: any) => {
 	)
 }
 
+export const parseSalonID = (salonID: any) => {
+	if (salonID?.value) {
+		return salonID?.value
+	}
+	return salonID
+}
+
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { handleSubmit, salonID, addService } = props
 
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
+	const services = useSelector((state: RootState) => state.service.services)
+	const isFormDirty = useSelector(isDirty(FORM.EMPLOYEE))
+
+	const parsedSalonID = parseSalonID(salonID)
+
+	useEffect(() => {
+		dispatch(getServices({ page: 1, salonID: parsedSalonID }))
+		if (isFormDirty) {
+			// clear services if salon is changed
+			dispatch(change(FORM.EMPLOYEE, 'services', null))
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [salonID])
+
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
+			return searchSalonWrapper(dispatch, { search, page })
 		},
 		[dispatch]
 	)
 
 	const searchService = useCallback(
 		async (search: string, page: number) => {
-			const { data, servicesOptions } = await dispatch(getServices(page, undefined, undefined, { search, salonID }))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: servicesOptions }
+			return searchServiceWrapper(dispatch, { page, search, salonID: parsedSalonID })
 		},
-		[dispatch, salonID]
+		[dispatch, parsedSalonID]
 	)
 
 	return (
@@ -190,7 +274,9 @@ const EmployeeForm: FC<Props> = (props) => {
 						onSearch={searchSalon}
 						filterOption={true}
 						showSearch
+						confirmModalExtraTitle={<p className={'m-0'}>{t('loc: Potvrdením zmeny salónu sa vymažú všetky priradené služby!')}</p>}
 						allowInfinityScroll
+						confirmSelection={!!formValues?.services}
 						required
 					/>
 					<div className={'flex w-full justify-between'}>
@@ -204,10 +290,14 @@ const EmployeeForm: FC<Props> = (props) => {
 							name={'service'}
 							onSearch={searchService}
 							filterOption={true}
+							mode={'multiple'}
+							options={services?.servicesOptions}
 							showSearch
 							allowInfinityScroll
+							disabled={!formValues?.salonID}
+							formName={FORM.EMPLOYEE}
 						/>
-						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService}>
+						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={!formValues?.salonID}>
 							{t('loc:Pridať službu')}
 						</Button>
 					</div>
@@ -218,7 +308,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ICustomerForm, ComponentProps>({
+const form = reduxForm<IEmployeeForm, ComponentProps>({
 	form: FORM.EMPLOYEE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

@@ -20,8 +20,9 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, ENUMERATIONS_KEYS } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
+import { searchUsersWrapper } from '../../../utils/filters'
 
 // types
 import { IUserAccountForm } from '../../../types/interfaces'
@@ -31,7 +32,6 @@ import validateSalonForm from './validateSalonForm'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getUsers } from '../../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-icon.svg'
@@ -89,10 +89,9 @@ const UserAccountForm: FC<Props> = (props) => {
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const onSearchUsers = useCallback(
-		async (searchText: string, page: number) => {
-			// roleID = 3 for PARTNER users
-			const { data, usersOptions } = await dispatch(getUsers(page, undefined, undefined, searchText, 3))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: usersOptions }
+		async (search: string, page: number) => {
+			// roleID = 3 only for PARTNER users
+			return searchUsersWrapper(dispatch, { page, search, roleID: 3 })
 		},
 		[dispatch]
 	)
@@ -108,10 +107,10 @@ const UserAccountForm: FC<Props> = (props) => {
 								{t('loc:Základné údaje')}
 							</h3>
 							{salonID ? (
-								<Permissions
-									allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT]}
-									render={(hasPermission, { openForbiddenModal }) => (
-										<div className={'flex justify-between w-1/2'}>
+								<div className={'flex justify-between w-1/2'}>
+									<Permissions
+										allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+										render={(hasPermission, { openForbiddenModal }) => (
 											<Field
 												className={'mt-2 mb-2 w-12/25'}
 												component={SwitchField}
@@ -128,6 +127,11 @@ const UserAccountForm: FC<Props> = (props) => {
 												}}
 												disabled={switchDisabled || disabledForm}
 											/>
+										)}
+									/>
+									<Permissions
+										allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+										render={(hasPermission, { openForbiddenModal }) => (
 											<Field
 												className={'mt-2 mb-2 w-12/25'}
 												component={SwitchField}
@@ -144,9 +148,9 @@ const UserAccountForm: FC<Props> = (props) => {
 												}}
 												disabled={switchDisabled || disabledForm}
 											/>
-										</div>
-									)}
-								/>
+										)}
+									/>
+								</div>
 							) : null}
 						</div>
 						<Divider className={'mb-3 mt-3'} />
@@ -229,6 +233,7 @@ const UserAccountForm: FC<Props> = (props) => {
 								longitude: get(formValues, 'longitude'),
 								city: get(formValues, 'city'),
 								street: get(formValues, 'street'),
+								streetNumber: get(formValues, 'streetNumber'),
 								zipCode: get(formValues, 'zipCode'),
 								country: get(formValues, 'country')
 							}}
@@ -297,7 +302,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							<>
 								<Row justify={'space-between'}>
 									<Field
-										className={'w-12/25'}
+										className={'w-4/5'}
 										component={InputField}
 										label={t('loc:Ulica')}
 										placeholder={t('loc:Zadajte ulicu')}
@@ -305,6 +310,17 @@ const UserAccountForm: FC<Props> = (props) => {
 										size={'large'}
 										required
 									/>
+									<Field
+										className={'w-1/6'}
+										component={InputField}
+										label={t('loc:Popisné číslo')}
+										placeholder={t('loc:Zadajte číslo')}
+										name={'streetNumber'}
+										size={'large'}
+										required
+									/>
+								</Row>
+								<Row justify={'space-between'}>
 									<Field
 										className={'w-12/25'}
 										component={InputField}
@@ -314,8 +330,6 @@ const UserAccountForm: FC<Props> = (props) => {
 										size={'large'}
 										required
 									/>
-								</Row>
-								<Row justify={'space-between'}>
 									<Field
 										className={'w-12/25'}
 										component={InputField}
@@ -325,19 +339,19 @@ const UserAccountForm: FC<Props> = (props) => {
 										size={'large'}
 										required
 									/>
-									<Field
-										className={'w-12/25'}
-										component={SelectField}
-										label={t('loc:Štát')}
-										placeholder={t('loc:Vyber krajinu')}
-										options={countries?.enumerationsOptions || []}
-										name={'companyInvoiceAddress.countryCode'}
-										size={'large'}
-										loading={countries?.isLoading}
-										allowClear
-										required
-									/>
 								</Row>
+								<Field
+									className={'w-full'}
+									component={SelectField}
+									label={t('loc:Štát')}
+									placeholder={t('loc:Vyber krajinu')}
+									options={countries?.enumerationsOptions || []}
+									name={'companyInvoiceAddress.countryCode'}
+									size={'large'}
+									loading={countries?.isLoading}
+									allowClear
+									required
+								/>
 							</>
 						)}
 					</Col>

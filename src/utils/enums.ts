@@ -1,13 +1,6 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
-import en_GB from 'antd/lib/locale-provider/en_GB'
-import sk_SK from 'antd/lib/locale-provider/sk_SK'
-import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
-
-import { ReactComponent as SK_Flag } from '../assets/flags/SK.svg'
-import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
-import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
 
 // types
 // eslint-disable-next-line import/no-cycle
@@ -25,7 +18,11 @@ export enum NAMESPACE {
 export enum LANGUAGE {
 	SK = 'sk',
 	CZ = 'cz',
-	EN = 'en'
+	EN = 'en',
+	HU = 'hu',
+	RO = 'ro',
+	BG = 'bg',
+	IT = 'it'
 }
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
@@ -33,24 +30,6 @@ export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
 export const DEFAULT_LANGUAGE = LANGUAGE.SK
-
-export const LOCALES = {
-	[LANGUAGE.SK]: {
-		ISO_639: 'sk',
-		antD: sk_SK,
-		icon: SK_Flag
-	},
-	[LANGUAGE.CZ]: {
-		ISO_639: 'cs',
-		antD: cs_CZ,
-		icon: CZ_Flag
-	},
-	[LANGUAGE.EN]: {
-		ISO_639: 'en',
-		antD: en_GB,
-		icon: EN_Flag
-	}
-}
 
 export enum NOTIFICATION_TYPE {
 	MODAL = 'MODAL',
@@ -114,12 +93,14 @@ export enum FORM {
 	CUSTOMERS_FILTER = 'CUSTOMERS_FILTER',
 	SERVICES_FILTER = 'SERVICES_FILTER',
 	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE',
-	EMPLOYEE = 'EMPLOYEE'
+	EMPLOYEE = 'EMPLOYEE',
+	INVITE_EMPLOYEE = 'INVITE_EMPLOYEE'
 }
 
 export enum PERMISSION {
-	SUPER_ADMIN = 'SUPER_ADMIN',
-	ADMIN = 'ADMIN',
+	NOTINO_SUPER_ADMIN = 'NOTINO_SUPER_ADMIN',
+	NOTINO_ADMIN = 'NOTINO_ADMIN',
+	PARTNER_ADMIN = 'PARTNER_ADMIN',
 	PARTNER = 'PARTNER',
 	USER_CREATE = 'USER_CREATE',
 	USER_BROWSING = 'USER_BROWSING',
@@ -127,12 +108,18 @@ export enum PERMISSION {
 	USER_DELETE = 'USER_DELETE',
 	ENUM_BROWSING = 'ENUM_BROWSING',
 	ENUM_EDIT = 'ENUM_EDIT',
-	SALON_BROWSING = 'SALON_BROWSING',
-	SALON_EDIT = 'SALON_EDIT',
-	CUSTOMER_BROWSING = 'CUSTOMER_BROWSING',
-	CUSTOMER_EDIT = 'CUSTOMER_EDIT',
-	EMPLOYEE_BROWSING = 'EMPLOYEE_BROWSING',
-	EMPLOYEE_EDIT = 'EMPLOYEE_EDIT'
+	SALON_UPDATE = 'SALON_UPDATE',
+	SALON_DELETE = 'SALON_DELETE',
+	SALON_BILLING_UPDATE = 'SALON_BILLING_UPDATE',
+	SERVICE_CREATE = 'SERVICE_CREATE',
+	SERVICE_UPDATE = 'SERVICE_UDPATE',
+	SERVICE_DELETE = 'SERVICE_DELETE',
+	CUSTOMER_CREATE = 'CUSTOMER_CREATE',
+	CUSTOMER_UPDATE = 'CUSTOMER_UPDATE',
+	CUSTOMER_DELETE = 'CUSTOMER_DELETE',
+	EMPLOYEE_CREATE = 'EMPLOYEE_CREATE',
+	EMPLOYEE_UPDATE = 'EMPLOYEE_UPDATE',
+	EMPLOYEE_DELETE = 'EMPLOYEE_DELETE'
 }
 
 export enum RESOLUTIONS {
@@ -360,8 +347,8 @@ export enum VALIDATION_MAX_LENGTH {
 
 export const getTranslatedCountriesLabels = (): ICountryLabel => {
 	return {
-		SK: `${i18next.t('loc:Slovenská republika')}`,
-		CZ: `${i18next.t('loc:Česká republika')}`
+		[LANGUAGE.SK]: `${i18next.t('loc:Slovenská republika')}`,
+		[LANGUAGE.CZ]: `${i18next.t('loc:Česká republika')}`
 	} as ICountryLabel
 }
 

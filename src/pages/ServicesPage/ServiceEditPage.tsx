@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { map } from 'lodash'
 import { useDispatch } from 'react-redux'
 import { initialize } from 'redux-form'
+import { compose } from 'redux'
 
 // components
 import ServiceForm from './components/ServiceForm'
@@ -16,13 +17,16 @@ import { IServiceForm, SalonSubPageProps } from '../../types/interfaces'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { getDefaultFormCategories } from '../../utils/helper'
+import { decodePrice, encodePrice, getDefaultFormCategories } from '../../utils/helper'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 
 type Props = SalonSubPageProps & {
 	serviceID: number
 }
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.PARTNER]
 
 const ServiceEditPage = (props: Props) => {
 	const { serviceID, salonID } = props
@@ -42,8 +46,8 @@ const ServiceEditPage = (props: Props) => {
 				durationFrom: data?.service?.durationFrom,
 				durationTo: data?.service?.durationTo,
 				variableDuration: !!data?.service?.durationTo,
-				priceFrom: data?.service?.priceFrom,
-				priceTo: data?.service?.priceTo,
+				priceFrom: decodePrice(data?.service?.priceFrom),
+				priceTo: decodePrice(data?.service?.priceTo),
 				variablePrice: !!data?.service?.priceTo,
 				gallery: map(data?.service?.images, (image) => ({ id: image.id, url: image.original })),
 				categoryRoot: category?.[0]?.id,
@@ -66,8 +70,8 @@ const ServiceEditPage = (props: Props) => {
 				description: values.description,
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
-				priceFrom: values.priceFrom,
-				priceTo: values.variablePrice ? values.priceTo : undefined,
+				priceFrom: encodePrice(values.priceFrom),
+				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
 				salonID: values.salonID,
 				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
 				// TODO add employee
@@ -84,7 +88,23 @@ const ServiceEditPage = (props: Props) => {
 			console.error(e)
 		}
 	}
-	return <ServiceForm onSubmit={handleSubmit} serviceID={serviceID} />
+	return (
+		<Permissions
+			allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
+			render={(hasPermission, { openForbiddenModal }) => (
+				<ServiceForm
+					onSubmit={(formData: IServiceForm) => {
+						if (hasPermission) {
+							handleSubmit(formData)
+						} else {
+							openForbiddenModal()
+						}
+					}}
+					serviceID={serviceID}
+				/>
+			)}
+		/>
+	)
 }
 
-export default ServiceEditPage
+export default compose(withPermissions(permissions))(ServiceEditPage)

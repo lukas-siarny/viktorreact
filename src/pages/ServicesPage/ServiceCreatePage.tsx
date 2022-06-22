@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { map, get } from 'lodash'
+import { get, map } from 'lodash'
 import { useDispatch } from 'react-redux'
+import { compose } from 'redux'
 
 // components
 import ServiceForm from './components/ServiceForm'
@@ -14,8 +15,12 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // utils
 import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE } from '../../utils/enums'
+import { NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
+import { withPermissions } from '../../utils/Permissions'
+import { encodePrice } from '../../utils/helper'
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]
 
 const ServiceCreatePage = (props: SalonSubPageProps) => {
 	const { t } = useTranslation()
@@ -32,12 +37,13 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 				name: values.name,
 				description: values.description,
 				durationFrom: values.durationFrom,
-				durationTo: values.durationTo,
-				priceFrom: values.priceFrom,
-				priceTo: values.priceTo,
+				durationTo: values.variableDuration ? values.durationTo : undefined,
+				priceFrom: encodePrice(values.priceFrom),
+				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
 				salonID: values.salonID,
-				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
+				// TODO add employee
 				// employeeIDs
+				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
 				imageIDs: map(values?.gallery, (image) => image.id)
 			}
 
@@ -54,4 +60,4 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 	return <ServiceForm onSubmit={handleSubmit} />
 }
 
-export default ServiceCreatePage
+export default compose(withPermissions(permissions))(ServiceCreatePage)

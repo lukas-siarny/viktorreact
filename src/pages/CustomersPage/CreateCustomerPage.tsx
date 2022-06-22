@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
-import { initialize, submit, isPristine } from 'redux-form'
+import { initialize, isPristine, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { map, get } from 'lodash'
+import { get, map } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -22,6 +22,8 @@ import { getPrefixCountryCode } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]
 
 const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -54,21 +56,22 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	const createCustomer = async (formInput: ICustomerForm) => {
+	const createCustomer = async (formData: ICustomerForm) => {
 		try {
 			setSubmitting(true)
 			const { data } = await postReq('/api/b2b/admin/customers/', null, {
-				email: formInput.email,
-				city: formInput.city,
-				countryCode: formInput.countryCode,
-				firstName: formInput.firstName,
-				gender: formInput.gender,
-				lastName: formInput.lastName,
-				salonID: formInput.salonID,
-				street: formInput.street,
-				zipCode: formInput.zipCode,
-				phone: formInput.phone,
-				phonePrefixCountryCode: formInput.phonePrefixCountryCode
+				email: formData.email,
+				city: formData.city,
+				countryCode: formData.countryCode,
+				firstName: formData.firstName,
+				gender: formData.gender,
+				lastName: formData.lastName,
+				salonID: formData.salonID,
+				street: formData.street,
+				streetNumber: formData.streetNumber,
+				zipCode: formData.zipCode,
+				phone: formData.phone,
+				phonePrefixCountryCode: formData.phonePrefixCountryCode
 			})
 
 			const customerID = get(data, 'cusomer.id', 0)
@@ -111,4 +114,4 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]))(CreateCustomerPage)
+export default compose(withPermissions(permissions))(CreateCustomerPage)

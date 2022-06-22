@@ -11,7 +11,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomerForm from './components/CustomerForm'
 
 // types
-import { IBreadcrumbs, ICustomerForm } from '../../types/interfaces'
+import { IBreadcrumbs, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
@@ -23,9 +23,10 @@ import { getPrefixCountryCode } from '../../utils/helper'
 // reducers
 import { RootState } from '../../reducers'
 
-const CreateCustomerPage = () => {
+const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const { salonID } = props
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])

@@ -7,7 +7,6 @@
   "employees": "/employees",
   "employees/create": "/employees/create",
   "employees/{{employeeID}}": "/employees/{{employeeID}}",
-  "home": "/home",
   "index": "/",
   "login": "/login",
   "my-account": "/my-account",

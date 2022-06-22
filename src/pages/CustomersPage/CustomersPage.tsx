@@ -24,13 +24,14 @@ import { RootState } from '../../reducers'
 import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
-import { IBreadcrumbs, ISearchFilter } from '../../types/interfaces'
+import { IBreadcrumbs, ISearchFilter, SalonSubPageProps } from '../../types/interfaces'
 
 type Columns = ColumnsType<any>
 
-const CustomersPage = () => {
+const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const { salonID } = props
 	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
@@ -44,9 +45,9 @@ const CustomersPage = () => {
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search, salonID: query.salonID }))
-		dispatch(getCustomers(query.page, query.limit, query.order, { search: query.search, salonID: query.salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])
+		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
+		dispatch(getCustomers(query.page, query.limit, query.order, { search: query.search, salonID }))
+	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -155,7 +156,7 @@ const CustomersPage = () => {
 										if (!hasPermission) {
 											openForbiddenModal()
 										} else {
-											history.push(t('paths:customers/create'))
+											history.push(t('paths:salons/{{salonID}}/customers/create', { salonID }))
 										}
 									}}
 								/>
@@ -178,7 +179,7 @@ const CustomersPage = () => {
 											if (!hasPermission) {
 												openForbiddenModal()
 											} else {
-												history.push(t('paths:customers/{{customerID}}', { customerID: record.id }))
+												history.push(t('paths:salons/{{salonID}}/customers/{{customerID}}', { salonID, customerID: record.id }))
 											}
 										}
 									})}

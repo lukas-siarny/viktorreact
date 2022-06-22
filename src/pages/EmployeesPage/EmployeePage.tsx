@@ -12,7 +12,7 @@ import i18next from 'i18next'
 import EmployeeForm from './components/EmployeeForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, SalonSubPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -26,7 +26,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import { history } from '../../utils/history'
 
-type Props = {
+type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: number }>
 }
 
@@ -35,6 +35,7 @@ const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN,
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const { salonID } = props
 	const { employeeID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)

@@ -12,7 +12,7 @@ import { getService } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm } from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps } from '../../types/interfaces'
 
 // utils
 import { patchReq } from '../../utils/request'
@@ -20,12 +20,12 @@ import { FORM, NOTIFICATION_TYPE } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { getDefaultFormCategories } from '../../utils/helper'
 
-type Props = {
+type Props = SalonSubPageProps & {
 	serviceID: number
 }
 
 const ServiceEditPage = (props: Props) => {
-	const { serviceID } = props
+	const { serviceID, salonID } = props
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 

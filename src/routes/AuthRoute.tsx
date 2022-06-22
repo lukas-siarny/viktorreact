@@ -15,6 +15,8 @@ import { RootState } from '../reducers'
 import { isLoggedIn } from '../utils/auth'
 import { PAGE, SUBMENU_PARENT, REFRESH_PAGE_INTERVAL } from '../utils/enums'
 
+import { SalonSubPageProps } from '../types/interfaces'
+
 type Props = RouteProps & {
 	layout: React.ReactNode
 	component: React.ReactNode
@@ -26,6 +28,7 @@ type Props = RouteProps & {
 	}
 	/** e.g. tabKey or other extra props for page */
 	extra?: Dictionary<any>
+	salonID?: number
 }
 
 const onIdle = () => {

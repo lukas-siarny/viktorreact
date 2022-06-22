@@ -24,6 +24,7 @@ import { history } from '../../utils/history'
 import { getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
+import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
@@ -45,6 +46,7 @@ const SalonsPage = () => {
 
 	useEffect(() => {
 		dispatch(getCategories())
+		dispatch(selectSalon())
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
@@ -240,4 +242,4 @@ const SalonsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]))(SalonsPage)
+export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING]))(SalonsPage)

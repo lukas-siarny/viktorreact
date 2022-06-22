@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux'
 import ServiceForm from './components/ServiceForm'
 
 // types
-import { IServiceForm } from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
@@ -17,9 +17,10 @@ import { postReq } from '../../utils/request'
 import { NOTIFICATION_TYPE } from '../../utils/enums'
 import { history } from '../../utils/history'
 
-const ServiceCreatePage = () => {
+const ServiceCreatePage = (props: SalonSubPageProps) => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
+	const { salonID } = props
 
 	useEffect(() => {
 		dispatch(getCategories())

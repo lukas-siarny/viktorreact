@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { IResetStore } from '../generalTypes'
+import { IResetStore, RESET_STORE } from '../generalTypes'
 
 // types
 import SELECTED_SALON from './selectedSalonTypes'
@@ -16,7 +16,7 @@ export interface IGetSelectedSalon {
 	payload: ISelectedSalonPayload
 }
 
-interface IPayloadData extends Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 {
+type IPayloadData = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon'] & {
 	currency?: Pick<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0], 'code' | 'symbol'>
 }
 
@@ -25,21 +25,25 @@ export interface ISelectedSalonPayload {
 }
 
 export const selectSalon =
-	(salonID: number): ThunkResult<void> =>
+	(salonID?: number): ThunkResult<void> =>
 	async (dispatch) => {
 		if (!salonID || salonID < 1) {
-			dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_FAIL })
+			dispatch({ type: SELECTED_SALON.SELECTED_SALON_CLEAR })
 			return
 		}
 
-		dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_START })
-		const { data } = await getReq('/api/b2b/admin/salons/{salonID}', { salonID } as any)
+		try {
+			dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}', { salonID })
 
-		const payload = {
-			data: data.salon
+			// TODO Set currency salon.countryCode -> pick from enumsCountries currencyCode -> pick code and symbol from enumsCurrencies
+			const payload: ISelectedSalonPayload = {
+				data: data.salon
+			}
+			dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_DONE, payload })
+		} catch (error) {
+			// eslint-disable-next-line no-console
+			console.error(error)
+			dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_FAIL })
 		}
-
-		// TODO Set currency salon.countryCode -> pick from enumsCountries currencyCode -> pick code and symbol from enumsCurrencies
-
-		dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_DONE, payload })
 	}

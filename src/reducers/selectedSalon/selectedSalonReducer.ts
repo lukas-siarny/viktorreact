@@ -39,6 +39,7 @@ export default (state = initState, action: ISelectedSalonActions) => {
 					data: action.payload.data
 				}
 			}
+		case SELECTED_SALON.SELECTED_SALON_CLEAR:
 		case RESET_STORE:
 			return initState
 		default:

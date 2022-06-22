@@ -191,3 +191,8 @@ export interface IUserAvatar {
 	text?: string
 	key?: string | number
 }
+
+export interface SalonSubPageProps {
+	salonID: number
+	parentPath?: string
+}

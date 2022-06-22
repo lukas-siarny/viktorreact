@@ -21,7 +21,7 @@ import { RootState } from '../../reducers'
 import { emptySalon, getSalon, ISalonPayload } from '../../reducers/salons/salonsActions'
 
 // types
-import { IBreadcrumbs, IComputedMatch, ILoadingAndFailure } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps, ILoadingAndFailure } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -29,10 +29,6 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
-
-type Props = {
-	computedMatch: IComputedMatch<{ salonID: number }>
-}
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_EDIT, PERMISSION.PARTNER]
 // TODO - check how to get nested interface
@@ -177,12 +173,12 @@ const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWee
 	return openingHours?.filter((openingHour) => openingHour?.timeRanges?.length > 0)
 }
 
-const SalonPage: FC<Props> = (props) => {
+const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { computedMatch } = props
-	const { salonID } = computedMatch.params
+	const { salonID } = props
+	console.log('🚀 ~ file: SalonPage.tsx ~ line 186 ~ salonID', salonID)
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)

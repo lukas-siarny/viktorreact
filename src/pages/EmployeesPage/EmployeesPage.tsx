@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row } from 'antd'
@@ -24,17 +24,17 @@ import { getEmployees } from '../../reducers/employees/employeesActions'
 import { RootState } from '../../reducers'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 
 type Columns = ColumnsType<any>
 
-const EmployeesPage = () => {
+const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const { salonID } = props
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
@@ -44,13 +44,13 @@ const EmployeesPage = () => {
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:desc'),
-		salonID: withDefault(NumberParam, undefined)
+		salonID: NumberParam
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, salonID: query.salonID }))
-		dispatch(getEmployees(query.page, query.limit, query.order, { search: query.search, salonID: query.salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])
+		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search }))
+		dispatch(getEmployees(query.page, query.limit, query.order, { search: query.search, salonID }))
+	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -163,7 +163,7 @@ const EmployeesPage = () => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:home')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>

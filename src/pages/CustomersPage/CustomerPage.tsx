@@ -12,7 +12,7 @@ import DeleteButton from '../../components/DeleteButton'
 import CustomerForm from './components/CustomerForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, ICustomerForm } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
 import { getCustomer } from '../../reducers/customers/customerActions'
@@ -24,13 +24,16 @@ import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 
-type Props = {
-	computedMatch: IComputedMatch<{ customerID: number }>
+type Props = SalonSubPageProps & {
+	computedMatch: IComputedMatch<{
+		customerID: number
+	}>
 }
 
 const CustomerPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const { salonID } = props
 	const { customerID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -59,7 +62,7 @@ const CustomerPage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: t('paths:customers')
+				link: t('paths:salons/{{salonID}}/customers', { salonID })
 			},
 			{
 				name: t('loc:Detail zákazníka'),
@@ -107,7 +110,7 @@ const CustomerPage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/customers/{customerID}', { customerID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(t('paths:customers'))
+			history.push(t('paths:salons/{{salonID}}/customers', { salonID }))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -119,7 +122,7 @@ const CustomerPage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons/{{salonID}}/customers', { salonID })} />
 			</Row>
 			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={updateCustomer} />

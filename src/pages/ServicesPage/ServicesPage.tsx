@@ -25,7 +25,7 @@ import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
 
 // types
-import { IBreadcrumbs, IUserAvatar } from '../../types/interfaces'
+import { IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
 
 const editPermissions: PERMISSION[] = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]
 
@@ -35,10 +35,11 @@ interface IAdminUsersFilter {
 	search: string
 }
 
-const ServicesPage = () => {
+const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const services = useSelector((state: RootState) => state.service.services)
+	const { salonID } = props
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -51,9 +52,9 @@ const ServicesPage = () => {
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID: query.salonID }))
-		dispatch(getServices(query.page, query.limit, query.order, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID: query.salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, query.salonID])
+		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID }))
+		dispatch(getServices(query.page, query.limit, query.order, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID }))
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, salonID])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -149,7 +150,7 @@ const ServicesPage = () => {
 								<ServicesFilter
 									createService={() => {
 										if (hasPermission) {
-											history.push(t('paths:services/create'))
+											history.push(t('paths:salons/{{salonID}}/services/create', { salonID }))
 										} else {
 											openForbiddenModal()
 										}
@@ -167,9 +168,8 @@ const ServicesPage = () => {
 									twoToneRows
 									onRow={(record) => ({
 										onClick: (e) => {
-											console.log('🚀 ~ file: Clicked ROW ~ line 170 ~ ServicesPage ~ e', e)
 											if (hasPermission) {
-												history.push(t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
+												history.push(t('paths:salons/{{salonID}}/services/{{serviceID}}', { salonID, serviceID: record.serviceID }))
 											} else {
 												e.preventDefault()
 												openForbiddenModal()

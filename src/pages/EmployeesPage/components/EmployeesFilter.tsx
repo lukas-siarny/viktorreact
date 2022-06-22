@@ -69,24 +69,7 @@ const EmployeesFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(form?.values)}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={8}>
-						<Field
-							component={SelectField}
-							name={'salonID'}
-							placeholder={t('loc:Salón')}
-							allowClear
-							size={'middle'}
-							onSearch={onSearchSalons}
-							optionLabelProp={'label'}
-							filterOption={true}
-							showSearch
-							allowInfinityScroll
-						/>
-					</Col>
-				</Row>
-			</Filters>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(form?.values)} />
 		</Form>
 	)
 }

@@ -114,8 +114,8 @@ const LanguagePicker: FC<Props> = (props) => {
 
 	const getLanguageFlag = (countryCode: LANGUAGE) => {
 		if (countries?.enumerationsOptions) {
-			const [country] = countries.enumerationsOptions.filter((enumOption) => enumOption?.value === countryCode)
-			return <img className={'language-picker-icon'} src={country?.flag} alt={'flag'} />
+			const [country] = countries.enumerationsOptions.filter((enumOption: any) => enumOption?.value === countryCode)
+			return <img className={'language-picker-img'} src={country?.flag} alt={'flag'} />
 		}
 		// fallback for flag
 		return <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} />
@@ -125,18 +125,18 @@ const LanguagePicker: FC<Props> = (props) => {
 		<>
 			{asMenuItem ? (
 				<SubMenu className={'language-picker'} key='currentLanguage' title={currentLanguage.toUpperCase()} icon={getLanguageFlag(currentLanguage)}>
-					{options.map((option: any, index: number) => (
+					{options?.map((option: any, index: number) => (
 						<Menu.Item onClick={() => handleLanguageChange(option.value)} key={index} icon={getLanguageFlag(option.value)}>
 							{option.label.toUpperCase()}
 						</Menu.Item>
 					))}
 				</SubMenu>
 			) : (
-				<div className={`${className} ant-form-item`}>
+				<div className={`${className} language-picker-select ant-form-item`}>
 					<Select defaultValue={i18next.resolvedLanguage} onChange={handleLanguageChange} className={'noti-select-input'} dropdownClassName={'noti-select-dropdown'}>
-						{options.map((option: any, index: number) => (
+						{options?.map((option: any, index: number) => (
 							<Option value={option.value} key={index}>
-								<Row>
+								<Row className={'justify-center items-center'}>
 									{getLanguageFlag(option.value)}
 									{!isSmallDevice && option.label.toUpperCase()}
 								</Row>

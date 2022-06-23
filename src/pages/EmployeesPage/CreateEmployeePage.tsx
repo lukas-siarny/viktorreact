@@ -32,6 +32,8 @@ const CreateEmployeePage = () => {
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const services = useSelector((state: RootState) => state.service.services)
+	// TODO - add salonID
+	const salonID = 1
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -55,7 +57,7 @@ const CreateEmployeePage = () => {
 				phonePrefixCountryCode: formData?.phonePrefixCountryCode,
 				phone: formData?.phone,
 				services: parseServicesForCreateAndUpdate(formData?.services),
-				salonID: formData?.salonID,
+				salonID,
 				imageID: formData?.imageID
 			} as any)
 			if (data?.employee?.id) {
@@ -75,7 +77,7 @@ const CreateEmployeePage = () => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={form?.values?.salonID} onSubmit={createEmployee} />
+				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
 				<div className={'content-footer'}>
 					<Row className={'justify-center'}>
 						<Button

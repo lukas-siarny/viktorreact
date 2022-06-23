@@ -1,5 +1,5 @@
 import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
-import { change, Field, FieldArray, InjectedFormProps, reduxForm, isDirty } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
@@ -38,7 +38,7 @@ import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 const { Panel } = Collapse
 
 type ComponentProps = {
-	salonID: number | null | any
+	salonID: number
 	addService: MouseEventHandler<HTMLElement>
 }
 
@@ -95,8 +95,6 @@ const renderListFields = (props: any) => {
 
 	return (
 		<>
-			<h3>{t('loc:Zoznam priradených služieb')}</h3>
-			<Divider className={'mb-3 mt-3'} />
 			<Collapse className={'collapse-list'} bordered={false}>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
@@ -198,45 +196,23 @@ const renderListFields = (props: any) => {
 	)
 }
 
-export const parseSalonID = (salonID: any) => {
-	if (salonID?.value) {
-		return salonID?.value
-	}
-	return salonID
-}
-
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { handleSubmit, salonID, addService } = props
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
 	const services = useSelector((state: RootState) => state.service.services)
-	const isFormDirty = useSelector(isDirty(FORM.EMPLOYEE))
-
-	const parsedSalonID = parseSalonID(salonID)
 
 	useEffect(() => {
-		dispatch(getServices({ page: 1, salonID: parsedSalonID }))
-		if (isFormDirty) {
-			// clear services if salon is changed
-			dispatch(change(FORM.EMPLOYEE, 'services', null))
-		}
+		dispatch(getServices({ page: 1, salonID }))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
 
-	const searchSalon = useCallback(
-		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SALON)
-		},
-		[dispatch]
-	)
-
 	const searchService = useCallback(
 		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search, salonID: parseSalonID(salonID) } as any, FILTER_ENTITY.SERVICE)
+			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.SERVICE)
 		},
-		[dispatch, parsedSalonID]
+		[dispatch, salonID]
 	)
 
 	return (
@@ -266,21 +242,8 @@ const EmployeeForm: FC<Props> = (props) => {
 					</div>
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
-					<Field
-						label={t('loc:Salón')}
-						size={'large'}
-						component={SelectField}
-						allowClear
-						placeholder={t('loc:Vyberte salón')}
-						name={'salonID'}
-						onSearch={searchSalon}
-						filterOption={true}
-						showSearch
-						confirmModalExtraTitle={<p className={'m-0'}>{t('loc: Potvrdením zmeny salónu sa vymažú všetky priradené služby!')}</p>}
-						allowInfinityScroll
-						confirmSelection={!!formValues?.services}
-						required
-					/>
+					<h3>{t('loc:Zoznam priradených služieb')}</h3>
+					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex w-full justify-between'}>
 						<Field
 							label={t('loc:Služby')}
@@ -296,10 +259,9 @@ const EmployeeForm: FC<Props> = (props) => {
 							options={services?.options}
 							showSearch
 							allowInfinityScroll
-							disabled={!formValues?.salonID}
 							formName={FORM.EMPLOYEE}
 						/>
-						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={!formValues?.salonID}>
+						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService}>
 							{t('loc:Pridať službu')}
 						</Button>
 					</div>

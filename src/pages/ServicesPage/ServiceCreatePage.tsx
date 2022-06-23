@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { get, map } from 'lodash'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 
 // components
@@ -15,16 +15,26 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // utils
 import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { withPermissions } from '../../utils/Permissions'
 import { encodePrice } from '../../utils/helper'
+import { addEmployee } from './ServiceEditPage'
+import { RootState } from '../../reducers'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]
 
-const ServiceCreatePage = () => {
+type Props = {
+	salonID: number
+}
+
+const ServiceCreatePage = (props: Props) => {
 	const { t } = useTranslation()
+	const { salonID } = props
 	const dispatch = useDispatch()
+
+	const employees = useSelector((state: RootState) => state.employees.employees)
+	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -39,7 +49,7 @@ const ServiceCreatePage = () => {
 				durationTo: values.variableDuration ? values.durationTo : undefined,
 				priceFrom: encodePrice(values.priceFrom),
 				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
-				salonID: values.salonID,
+				salonID,
 				// TODO add employee
 				// employeeIDs
 				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
@@ -56,7 +66,7 @@ const ServiceCreatePage = () => {
 		}
 	}
 
-	return <ServiceForm onSubmit={handleSubmit} />
+	return <ServiceForm addEmployee={() => addEmployee(employees, form, dispatch)} onSubmit={handleSubmit} salonID={salonID} />
 }
 
 export default compose(withPermissions(permissions))(ServiceCreatePage)

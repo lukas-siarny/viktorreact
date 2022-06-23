@@ -19,6 +19,8 @@ type Props = {
 const ServicePage = (props: Props) => {
 	const serviceID = parseInt(props.computedMatch.params.serviceID, 10)
 	const { t } = useTranslation()
+	// TODO - add salonID
+	const salonID = 1
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -38,8 +40,8 @@ const ServicePage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:services')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				{serviceID ? <ServiceEditPage serviceID={serviceID} /> : undefined}
-				{!serviceID ? <ServiceCreatePage /> : undefined}
+				{serviceID ? <ServiceEditPage serviceID={serviceID} salonID={salonID} /> : undefined}
+				{!serviceID ? <ServiceCreatePage salonID={salonID} /> : undefined}
 			</div>
 		</>
 	)

@@ -83,6 +83,7 @@ export interface IServiceForm {
 	categoryRoot: number
 	categoryFirstLevel: number
 	categorySecondLevel: number
+	employees: any
 }
 
 export interface IRegistrationForm {

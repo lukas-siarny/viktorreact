@@ -55,7 +55,7 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			...item
 		}))
 
-		const enumerationsPhonePrefixOptions: ISelectOptionItem[] = map(data, (item) => ({
+		const enumerationsPhonePrefixOptions: IEnumerationOptions[] = map(data, (item) => ({
 			key: item.code,
 			label: item.phonePrefix,
 			value: item.code,

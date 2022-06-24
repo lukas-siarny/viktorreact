@@ -37,6 +37,8 @@ import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.sv
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
+import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
 
 const numberMin0 = validationNumberMin(0)
 
@@ -76,6 +78,8 @@ export const renderListFields = (props: any) => {
 							<div className={'title flex items-center'}>
 								<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
 								{fieldData?.name}
+								{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
+								{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
 							</div>
 							<div className={'flex items-center'}>
 								<div className={'flex items-center'}>

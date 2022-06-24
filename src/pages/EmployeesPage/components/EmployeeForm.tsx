@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // utils
+import { isEmpty } from 'lodash'
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
 import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
 import searchWrapper from '../../../utils/filters'
@@ -201,6 +202,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const { handleSubmit, salonID, addService } = props
 
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE].values)
 	const services = useSelector((state: RootState) => state.service.services)
 
 	useEffect(() => {
@@ -261,7 +263,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							allowInfinityScroll
 							formName={FORM.EMPLOYEE}
 						/>
-						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService}>
+						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={isEmpty(formValues?.service)}>
 							{t('loc:Pridať službu')}
 						</Button>
 					</div>

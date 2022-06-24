@@ -114,6 +114,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							</Permissions>
 							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
 								<Menu.Item
+									eventKey={PAGE.SERVICES}
+									key={PAGE.SERVICES}
+									onClick={() => history.push(t('paths:services'))}
+									icon={<ServiceIcon />}
+									// fix style issue due wrapped item into <Permission> component
+									className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
+								>
+									{t('loc:Služby')}
+								</Menu.Item>
+							</Permissions>
+							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
+								<Menu.Item
 									eventKey={PAGE.CUSTOMERS}
 									key={PAGE.CUSTOMERS}
 									onClick={() => history.push(t('paths:customers'))}

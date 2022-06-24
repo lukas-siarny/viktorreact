@@ -83,6 +83,9 @@ const LanguagePicker: FC<Props> = (props) => {
 	const options = countries?.enumerationsOptions || Object.values(LANGUAGE).map((value) => ({ label: value, value, icon: LOCALES[value].icon }))
 
 	const handleLanguageChange = (value: any) => {
+		// reload page after change language
+		// eslint-disable-next-line no-restricted-globals
+		location.reload()
 		i18next.changeLanguage(value)
 	}
 

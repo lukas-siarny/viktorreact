@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, ReactNode, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { InjectedFormProps, reduxForm, Field, FieldArray } from 'redux-form'
-import { Form, Spin, Divider, Row, Col, Button } from 'antd'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Button, Col, Divider, Form, Row, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
@@ -24,7 +24,7 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, URL_UPLOAD_IMAGES, FILTER_ENTITY, UPLOAD_IMG_CATEGORIES } from '../../../utils/enums'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
@@ -72,13 +72,13 @@ export const renderListFields = (props: any) => {
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					return (
-						<div className={'employee-list-item flex align-center justify-between'}>
-							<div className={'title'} onClick={() => history.push(t(`paths:/employees/${fieldData.id}`))}>
+						<div className={'employee-list-item flex items-center justify-between'}>
+							<div className={'title flex items-center'}>
 								<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
 								{fieldData?.name}
 							</div>
-							<div className={'flex align-center'}>
-								<div className={'flex align-center'}>
+							<div className={'flex items-center'}>
+								<div className={'flex items-center'}>
 									{renderFromTo(fieldData?.employeeData?.durationFrom, fieldData?.employeeData?.durationTo, <ClockIcon className={'mr-1'} />)}
 									{renderFromTo(fieldData?.employeeData?.priceFrom, fieldData?.employeeData?.priceTo, <CouponIcon className={'mr-1'} />)}
 								</div>
@@ -147,7 +147,6 @@ const ServiceForm = (props: Props) => {
 				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
 				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
 				<Field
-					className='m-0'
 					component={ImgUploadField}
 					name='gallery'
 					label={t('loc:Referenčné obrázky')}
@@ -236,7 +235,7 @@ const ServiceForm = (props: Props) => {
 				<div className={'flex w-full justify-between'}>
 					<Field
 						label={t('loc:Zamestnanci')}
-						className={'w-4/5'}
+						className={'w-9/12'}
 						size={'large'}
 						component={SelectField}
 						allowClear
@@ -249,7 +248,7 @@ const ServiceForm = (props: Props) => {
 						showSearch
 						allowInfinityScroll
 					/>
-					<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-1/6 mt-4'} onClick={addEmployee} disabled={isEmpty(formValues?.employee)}>
+					<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-1/5 mt-4'} onClick={addEmployee} disabled={isEmpty(formValues?.employee)}>
 						{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
 					</Button>
 				</div>

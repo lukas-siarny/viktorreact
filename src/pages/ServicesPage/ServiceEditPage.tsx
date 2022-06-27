@@ -65,28 +65,28 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 	dispatch(change(FORM.SERVICE_FORM, 'employee', null))
 }
 
+const parseEmployees = (employees: any[]) => {
+	return employees.map((employee) => {
+		return {
+			id: employee?.id,
+			name: employee?.fullName,
+			image: employee?.image,
+			employeeData: {
+				...employee.employeeData,
+				// decode and set price
+				priceFrom: decodePrice(employee?.employeeData?.priceFrom),
+				priceTo: decodePrice(employee?.employeeData?.priceTo)
+			}
+		}
+	})
+}
+
 const ServiceEditPage = (props: Props) => {
 	const { serviceID, salonID } = props
 	const dispatch = useDispatch()
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
-
-	const parseEmployees = (employees: any[]) => {
-		return employees.map((employee) => {
-			return {
-				id: employee?.id,
-				name: employee?.fullName,
-				image: employee?.image,
-				employeeData: {
-					...employee.employeeData,
-					// decode and set price
-					priceFrom: decodePrice(employee?.employeeData?.priceFrom),
-					priceTo: decodePrice(employee?.employeeData?.priceTo)
-				}
-			}
-		})
-	}
 
 	const fetchData = async () => {
 		const { data } = await dispatch(getService(serviceID))

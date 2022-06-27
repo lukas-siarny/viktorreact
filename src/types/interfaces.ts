@@ -69,6 +69,38 @@ interface GalleryItem {
 	id: number
 }
 
+export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+
+export interface ISalonForm {
+	id: number | null
+	name: string
+	aboutUsFirst?: string
+	aboutUsSecond?: string
+	openingHours: OpeningHours
+	sameOpenHoursOverWeek: boolean
+	openOverWeekend: boolean
+	country: string
+	zipCode: string
+	city: string
+	street: string
+	streetNumber: string
+	latitude: number
+	longitude: number
+	phonePrefixCountryCode: string
+	phone: string
+	email: string
+	socialLinkFB?: string
+	socialLinkInstagram?: string
+	socialLinkWebPage?: string
+	payByCard: boolean
+	otherPaymentMethods: string
+	gallery: any[]
+	logo: any
+	pricelistIDs?: number[]
+	companyContactPerson: any
+	companyInfo: any
+}
+
 export interface IServiceForm {
 	name: string
 	description: string

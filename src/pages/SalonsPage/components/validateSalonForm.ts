@@ -82,130 +82,75 @@ export default (values: any) => {
 		})
 	}
 
-	if (values?.useContactPerson) {
-		const contactPerson = values?.companyContactPerson
-		const contactPersonErrors: any = {}
+	const contactPerson = values?.companyContactPerson
+	const contactPersonErrors: any = {}
 
-		if (contactPerson?.firstName && contactPerson.firstName?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
-			contactPersonErrors.firstName = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_100
-			})
-		}
-
-		if (contactPerson?.lastName && contactPerson.lastName?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
-			contactPersonErrors.lastName = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_100
-			})
-		}
-
-		if (!contactPerson?.email) {
-			contactPersonErrors.email = i18next.t('loc:Toto pole je povinné')
-		} else if (!isEmail(contactPerson?.email)) {
-			contactPersonErrors.email = i18next.t('loc:Email nie je platný')
-		}
-
-		if (!contactPerson?.phone) {
-			contactPersonErrors.phone = i18next.t('loc:Toto pole je povinné')
-		}
-
-		if (contactPerson?.phone && contactPerson.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-			contactPersonErrors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_20
-			})
-		}
-
-		errors.companyContactPerson = contactPersonErrors
+	if (contactPerson?.firstName && contactPerson.firstName?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+		contactPersonErrors.firstName = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_100
+		})
 	}
 
-	if (!values?.isInvoiceAddressSame) {
-		const invoiceAddress = values?.companyInvoiceAddress
-		const addressErrors: any = {}
-
-		if (!invoiceAddress?.street) {
-			addressErrors.street = i18next.t('loc:Toto pole je povinné')
-		}
-
-		if (invoiceAddress?.street && invoiceAddress?.street?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
-			addressErrors.street = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_100
-			})
-		}
-
-		if (!invoiceAddress?.streetNumber) {
-			addressErrors.streetNumber = i18next.t('loc:Toto pole je povinné')
-		}
-
-		if (invoiceAddress?.streetNumber && invoiceAddress?.streetNumber?.length > VALIDATION_MAX_LENGTH.LENGTH_10) {
-			addressErrors.streetNumber = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_10
-			})
-		}
-
-		if (!invoiceAddress?.city) {
-			addressErrors.city = i18next.t('loc:Toto pole je povinné')
-		}
-
-		if (invoiceAddress?.city && invoiceAddress?.city?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
-			addressErrors.city = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_100
-			})
-		}
-
-		if (!invoiceAddress?.zipCode) {
-			addressErrors.zipCode = i18next.t('loc:Toto pole je povinné')
-		}
-
-		if (invoiceAddress?.zipCode && invoiceAddress?.zipCode?.length > VALIDATION_MAX_LENGTH.LENGTH_10) {
-			addressErrors.zipCode = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_10
-			})
-		}
-
-		if (!invoiceAddress?.countryCode) {
-			addressErrors.countryCode = i18next.t('loc:Toto pole je povinné')
-		}
-
-		errors.companyInvoiceAddress = addressErrors
+	if (contactPerson?.lastName && contactPerson.lastName?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+		contactPersonErrors.lastName = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_100
+		})
 	}
 
-	if (values?.useCompanyInfo) {
-		const companyInfo = values?.companyInfo
-		const companyErrors: any = {}
-
-		if (!companyInfo?.companyName) {
-			companyErrors.companyName = i18next.t('loc:Toto pole je povinné')
-		}
-
-		if (companyInfo?.companyName && companyInfo?.companyName?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-			companyErrors.companyName = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_255
-			})
-		}
-
-		if (!companyInfo?.businessID) {
-			companyErrors.businessID = i18next.t('loc:Toto pole je povinné')
-		}
-
-		if (companyInfo?.businessID && companyInfo?.businessID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-			companyErrors.businessID = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_20
-			})
-		}
-
-		if (companyInfo?.vatID && companyInfo?.vatID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-			companyErrors.vatID = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_20
-			})
-		}
-
-		if (companyInfo?.taxID && companyInfo?.taxID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-			companyErrors.taxID = i18next.t('loc:Max. počet znakov je {{max}}', {
-				max: VALIDATION_MAX_LENGTH.LENGTH_20
-			})
-		}
-
-		errors.companyInfo = companyErrors
+	if (!contactPerson?.email) {
+		contactPersonErrors.email = i18next.t('loc:Toto pole je povinné')
+	} else if (!isEmail(contactPerson?.email)) {
+		contactPersonErrors.email = i18next.t('loc:Email nie je platný')
 	}
+
+	if (!contactPerson?.phone) {
+		contactPersonErrors.phone = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (contactPerson?.phone && contactPerson.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+		contactPersonErrors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_20
+		})
+	}
+
+	errors.companyContactPerson = contactPersonErrors
+
+	const companyInfo = values?.companyInfo
+	const companyErrors: any = {}
+
+	if (!companyInfo?.companyName) {
+		companyErrors.companyName = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (companyInfo?.companyName && companyInfo?.companyName?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
+		companyErrors.companyName = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_255
+		})
+	}
+
+	if (!companyInfo?.businessID) {
+		companyErrors.businessID = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (companyInfo?.businessID && companyInfo?.businessID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+		companyErrors.businessID = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_20
+		})
+	}
+
+	if (companyInfo?.vatID && companyInfo?.vatID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+		companyErrors.vatID = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_20
+		})
+	}
+
+	if (companyInfo?.taxID && companyInfo?.taxID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+		companyErrors.taxID = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_20
+		})
+	}
+
+	errors.companyInfo = companyErrors
 
 	return errors
 }

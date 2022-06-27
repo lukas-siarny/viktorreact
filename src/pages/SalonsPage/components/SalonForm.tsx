@@ -25,7 +25,7 @@ import Permissions from '../../../utils/Permissions'
 import searchWrapper from '../../../utils/filters'
 
 // types
-import { IUserAccountForm } from '../../../types/interfaces'
+import { ISalonForm } from '../../../types/interfaces'
 
 // validate
 import validateSalonForm from './validateSalonForm'
@@ -53,12 +53,10 @@ type ComponentProps = {
 	publishSalon: (published: boolean) => void
 	switchDisabled: boolean
 	disabledForm: boolean
-	showContactPersonSwitch?: boolean
-	showCompanyInfoSwitch?: boolean
 	salonID?: number
 }
 
-type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 
 // validate user select only if auth user have SUPER ADMIN or ADMIN permissions
 const validateUsersSelect = (value: string, formValues: any, props: any) => {
@@ -72,19 +70,7 @@ const UserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	// NOTE: switches (showCompanyInfoSwitch, showContactPersonSwitch) are hidden, if related objects are not empty
-	const {
-		handleSubmit,
-		change,
-		openNoteModal,
-		isAdmin,
-		changeSalonVisibility,
-		publishSalon,
-		switchDisabled,
-		salonID,
-		disabledForm,
-		showCompanyInfoSwitch = true,
-		showContactPersonSwitch = true
-	} = props
+	const { handleSubmit, change, openNoteModal, isAdmin, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
@@ -250,110 +236,46 @@ const UserAccountForm: FC<Props> = (props) => {
 							{t('loc:Firemné údaje')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						{showCompanyInfoSwitch && (
-							<Field component={SwitchField} label={t('loc:Nastaviť firemné údaje')} name={'useCompanyInfo'} size={'middle'} disabled={disabledForm} />
-						)}
-						{get(formValues, 'useCompanyInfo', false) && (
-							<>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Názov')}
-										placeholder={t('loc:Zadajte názov')}
-										name={'companyInfo.companyName'}
-										size={'large'}
-										required
-									/>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:IČO')}
-										placeholder={t('loc:Zadajte ičo')}
-										name={'companyInfo.businessID'}
-										size={'large'}
-										required
-									/>
-								</Row>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:IČ DPH')}
-										placeholder={t('loc:Zadajte IČ DPH')}
-										name={'companyInfo.vatID'}
-										size={'large'}
-										required
-									/>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:DIČ')}
-										placeholder={t('loc:Zadajte DIČ')}
-										name={'companyInfo.taxID'}
-										size={'large'}
-										required
-									/>
-								</Row>
-							</>
-						)}
-						<Field component={SwitchField} label={t('loc:Fakturačná adresa je rovnaká')} name={'isInvoiceAddressSame'} size={'middle'} disabled={disabledForm} />
-						{!get(formValues, 'isInvoiceAddressSame', false) && (
-							<>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-4/5'}
-										component={InputField}
-										label={t('loc:Ulica')}
-										placeholder={t('loc:Zadajte ulicu')}
-										name={'companyInvoiceAddress.street'}
-										size={'large'}
-										required
-									/>
-									<Field
-										className={'w-1/6'}
-										component={InputField}
-										label={t('loc:Popisné číslo')}
-										placeholder={t('loc:Zadajte číslo')}
-										name={'streetNumber'}
-										size={'large'}
-										required
-									/>
-								</Row>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Mesto')}
-										placeholder={t('loc:Zadajte mesto')}
-										name={'companyInvoiceAddress.city'}
-										size={'large'}
-										required
-									/>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:PSČ')}
-										placeholder={t('loc:Zadajte smerovacie číslo')}
-										name={'companyInvoiceAddress.zipCode'}
-										size={'large'}
-										required
-									/>
-								</Row>
-								<Field
-									className={'w-full'}
-									component={SelectField}
-									label={t('loc:Štát')}
-									placeholder={t('loc:Vyber krajinu')}
-									options={countries?.enumerationsOptions || []}
-									name={'companyInvoiceAddress.countryCode'}
-									size={'large'}
-									loading={countries?.isLoading}
-									allowClear
-									required
-								/>
-							</>
-						)}
+						<Row justify={'space-between'}>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Názov')}
+								placeholder={t('loc:Zadajte názov')}
+								name={'companyInfo.companyName'}
+								size={'large'}
+								required
+							/>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:IČO')}
+								placeholder={t('loc:Zadajte ičo')}
+								name={'companyInfo.businessID'}
+								size={'large'}
+								required
+							/>
+						</Row>
+						<Row justify={'space-between'}>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:IČ DPH')}
+								placeholder={t('loc:Zadajte IČ DPH')}
+								name={'companyInfo.vatID'}
+								size={'large'}
+								required
+							/>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:DIČ')}
+								placeholder={t('loc:Zadajte DIČ')}
+								name={'companyInfo.taxID'}
+								size={'large'}
+								required
+							/>
+						</Row>
 					</Col>
 				</Row>
 				<Row>
@@ -364,60 +286,46 @@ const UserAccountForm: FC<Props> = (props) => {
 						</h3>
 
 						<Divider className={'mb-3 mt-3'} />
-						{showContactPersonSwitch && (
+						<Row justify={'space-between'}>
 							<Field
-								className={'mb-4'}
-								component={SwitchField}
-								label={t('loc:Nastaviť kontaktnú osobu')}
-								name={'useContactPerson'}
-								size={'middle'}
-								disabled={disabledForm}
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Meno')}
+								placeholder={t('loc:Zadajte meno')}
+								name={'companyContactPerson.firstName'}
+								size={'large'}
 							/>
-						)}
-						{get(formValues, 'useContactPerson', false) && (
-							<>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Meno')}
-										placeholder={t('loc:Zadajte meno')}
-										name={'companyContactPerson.firstName'}
-										size={'large'}
-									/>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Priezvisko')}
-										placeholder={t('loc:Zadajte priezvisko')}
-										name={'companyContactPerson.lastName'}
-										size={'large'}
-									/>
-								</Row>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Email')}
-										placeholder={t('loc:Zadajte email')}
-										name={'companyContactPerson.email'}
-										size={'large'}
-										disabled={disabledForm}
-										required
-									/>
-									<PhoneWithPrefixField
-										label={'Telefón'}
-										placeholder={t('loc:Zadajte telefón')}
-										size={'large'}
-										prefixName={'companyContactPerson.phonePrefixCountryCode'}
-										phoneName={'companyContactPerson.phone'}
-										disabled={disabledForm}
-										style={{ width: 'calc(50% - 8px' }}
-										required
-									/>
-								</Row>
-							</>
-						)}
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Priezvisko')}
+								placeholder={t('loc:Zadajte priezvisko')}
+								name={'companyContactPerson.lastName'}
+								size={'large'}
+							/>
+						</Row>
+						<Row justify={'space-between'}>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Email')}
+								placeholder={t('loc:Zadajte email')}
+								name={'companyContactPerson.email'}
+								size={'large'}
+								disabled={disabledForm}
+								required
+							/>
+							<PhoneWithPrefixField
+								label={'Telefón'}
+								placeholder={t('loc:Zadajte telefón')}
+								size={'large'}
+								prefixName={'companyContactPerson.phonePrefixCountryCode'}
+								phoneName={'companyContactPerson.phone'}
+								disabled={disabledForm}
+								style={{ width: 'calc(50% - 8px' }}
+								required
+							/>
+						</Row>
 					</Col>
 				</Row>
 				<Row>
@@ -531,7 +439,7 @@ const UserAccountForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<IUserAccountForm, ComponentProps>({
+const form = reduxForm<ISalonForm, ComponentProps>({
 	form: FORM.SALON,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

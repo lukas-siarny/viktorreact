@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row } from 'antd'
@@ -27,7 +27,7 @@ import { Paths } from '../../types/api'
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import Permissions, { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 
 // TODO - check how to get nested interface
@@ -199,6 +199,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions: PERMISSION[] = salonID > 0 ? [...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE] : permissions
+
+	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -387,23 +389,27 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
+	const breadcrumbDetailItem = get(salon, 'data.salon.name')
+		? {
+				name: t('loc:Detail salónu'),
+				titleName: get(salon, 'data.salon.name')
+		  }
+		: {
+				name: t('loc:Vytvoriť salón'),
+				link: t('paths:salons/create')
+		  }
+
 	// View
 	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Zoznam salónov'),
-				link: t('paths:salons')
-			},
-			get(salon, 'data.salon.name')
-				? {
-						name: t('loc:Detail salónu'),
-						titleName: get(salon, 'data.salon.name')
-				  }
-				: {
-						name: t('loc:Vytvoriť salón'),
-						link: t('paths:salons/create')
-				  }
-		]
+		items: isAdmin
+			? [
+					{
+						name: t('loc:Zoznam salónov'),
+						link: t('paths:salons')
+					},
+					breadcrumbDetailItem
+			  ]
+			: [breadcrumbDetailItem]
 	}
 
 	const deleteSalon = async () => {
@@ -467,7 +473,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
 			<div className='content-body small mt-2'>
 				<Permissions

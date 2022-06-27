@@ -2,6 +2,7 @@ import React, { ReactNode, FC } from 'react'
 import { Layout, Row, Select, Button } from 'antd'
 import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { get } from 'lodash'
 
 // components
 import { Header } from 'antd/lib/layout/layout'
@@ -18,6 +19,7 @@ import { history } from '../utils/history'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
+import { ReactComponent as BackIcon } from '../assets/icons/back-icon.svg'
 
 const { Content } = Layout
 
@@ -29,7 +31,8 @@ const MainLayout: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 	const { children } = props
-	const salonID = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data?.id)
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
 
 	return (
@@ -56,19 +59,27 @@ const MainLayout: FC<Props> = (props) => {
 												/>
 											</div>
 										) : (
-											// TODO: Display salon name
-											<strong>{salonID}</strong>
+											<strong>{get(selectedSalon, 'name') || salonID}</strong>
 										)}
 									</Row>
 									<Row className='w-1/7 items-center'>
-										<Button onClick={() => history.push(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
-											{t('loc:Pridať salón')}
-										</Button>
+										{hasPermission ? (
+											<Button
+												onClick={() => history.push(t('paths:salons/create'))}
+												type='primary'
+												htmlType='button'
+												className={'noti-btn'}
+												icon={<PlusIcon />}
+											>
+												{t('loc:Pridať salón')}
+											</Button>
+										) : (
+											<Button onClick={() => history.push(t('paths:salons'))} type='primary' htmlType='button' className={'noti-btn'} icon={<BackIcon />}>
+												{t('loc:Späť na zoznam salónov')}
+											</Button>
+										)}
 									</Row>
 								</Row>
-								{/* <span>
-						Current salon: <strong>{salonID}</strong>
-					</span> */}
 							</Header>
 						)
 					}

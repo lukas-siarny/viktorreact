@@ -1,7 +1,6 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
 
 // authorized pages
 import HomePage from '../pages/HomePage/HomePage'
@@ -15,13 +14,8 @@ import CreatePasswordRoute from './CreatePasswordRoute'
 import MainLayout from '../layouts/MainLayout'
 import PublicLayout from '../layouts/PublicLayout'
 
-// redux
-import { refreshToken } from '../reducers/users/userActions'
-import { getCountries } from '../reducers/enumerations/enumerationActions'
-
 // utils
-import { REFRESH_TOKEN_INTERVAL, PAGE } from '../utils/enums'
-import { setIntervalImmediately } from '../utils/helper'
+import { PAGE } from '../utils/enums'
 
 // User
 import LoginPage from '../pages/LoginPage/LoginPage'
@@ -35,24 +29,10 @@ import UsersPage from '../pages/UsersPage/UsersPage'
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
-// services
-import ServicesPage from '../pages/ServicesPage/ServicesPage'
-import ServicePage from '../pages/ServicesPage/ServicePage'
-
 // Salons
 import SalonSubRoutes from './SalonSubRoutes'
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
 import SalonPage from '../pages/SalonsPage/SalonPage'
-
-// Customers
-import CustomersPage from '../pages/CustomersPage/CustomersPage'
-import CustomerPage from '../pages/CustomersPage/CustomerPage'
-import CreateCustomerPage from '../pages/CustomersPage/CreateCustomerPage'
-
-// Employees
-import EmployeesPage from '../pages/EmployeesPage/EmployeesPage'
-import EmployeePage from '../pages/EmployeesPage/EmployeePage'
-import CreateEmployeePage from '../pages/EmployeesPage/CreateEmployeePage'
 
 import AppInit from '../components/AppInit'
 

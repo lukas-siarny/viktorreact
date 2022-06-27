@@ -1,14 +1,18 @@
-import React, { FC, useMemo, useCallback, useEffect } from 'react'
-import { Switch, useRouteMatch, Route } from 'react-router-dom'
+import React, { FC, useCallback, useEffect } from 'react'
+import { Switch, useRouteMatch } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { includes } from 'lodash'
 
 import AuthRoute from './AuthRoute'
 
 // utils
-import { PAGE } from '../utils/enums'
+import { PAGE, PERMISSION } from '../utils/enums'
+import { checkPermissions } from '../utils/Permissions'
+import { history } from '../utils/history'
 
 // redux
+import { RootState } from '../reducers'
 import { selectSalon } from '../reducers/selectedSalon/selectedSalonActions'
 
 // types
@@ -35,22 +39,42 @@ import EmployeesPage from '../pages/EmployeesPage/EmployeesPage'
 import EmployeePage from '../pages/EmployeesPage/EmployeePage'
 import CreateEmployeePage from '../pages/EmployeesPage/CreateEmployeePage'
 
+const redirectoToForbiddenPage = () => {
+	history.push('/403')
+}
+
 const SalonSubRoutes: FC = () => {
+	const { path, url, params } = useRouteMatch()
+
+	const salonID = Number((params as any).salonID)
+
+	if (!salonID || Number.isNaN(salonID)) {
+		redirectoToForbiddenPage()
+	}
+
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { path, url, params } = useRouteMatch()
-	console.log('🚀 ~ file: SalonSubRoutes.tsx ~ line 43 ~ params', params)
-	console.log('🚀 ~ file: SalonSubRoutes.tsx ~ line 43 ~ url', url)
-	console.log('🚀 ~ file: SalonSubRoutes.tsx ~ line 43 ~ path', path)
-	const { salonID } = params as any
+
+	const currentUser = useSelector((state: RootState) => state.user.authUser)
 
 	const getPath = useCallback((pathSuffix: string) => `${path}${pathSuffix}`, [path])
 
 	useEffect(() => {
-		dispatch(selectSalon(salonID))
-	}, [salonID, dispatch])
-
-	console.log('🚀 ~ file: SalonSubRoutes.tsx ~ line 39 ~ salonID', salonID)
+		if (currentUser.data) {
+			// Only SUPER_ADMIN, ADMIN or PARTNER with assigned salon
+			if (
+				checkPermissions(currentUser.data.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]) ||
+				includes(
+					currentUser.data.salons.map((salon) => salon.id),
+					salonID
+				)
+			) {
+				dispatch(selectSalon(salonID))
+			} else {
+				redirectoToForbiddenPage()
+			}
+		}
+	}, [salonID, dispatch, currentUser])
 
 	return (
 		<Switch>

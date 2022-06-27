@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { GENDER, MSG_TYPE, LANGUAGE } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION } from '../utils/enums'
 import { Paths } from './api'
 
 export interface IErrorMessage {
@@ -218,4 +218,17 @@ export interface IUserAvatar {
 export interface SalonSubPageProps {
 	salonID: number
 	parentPath?: string
+}
+
+interface IDataPagination {
+	pagination: IResponsePagination
+}
+
+export interface ISearchablePayload<T extends IDataPagination> {
+	options: ISelectOptionItem[] | undefined
+	data: T | null
+}
+
+export interface IPermissions {
+	uniqPermissions?: PERMISSION[]
 }

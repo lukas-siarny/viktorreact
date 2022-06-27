@@ -31,6 +31,11 @@ export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
 export const DEFAULT_LANGUAGE = LANGUAGE.SK
 
+export const DEFAULT_CURRENCY = {
+	code: 'EUR',
+	symbol: '€'
+}
+
 export enum NOTIFICATION_TYPE {
 	MODAL = 'MODAL',
 	NOTIFICATION = 'NOTIFICATION'
@@ -181,7 +186,8 @@ export const BACK_DATA_QUERY = 'backData'
 
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
-	COUNTRIES = 'countries'
+	COUNTRIES = 'countries',
+	CURRENCIES = 'currencies'
 }
 
 export const GOOGLE_MAPS_API_KEY = 'AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw'

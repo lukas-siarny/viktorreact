@@ -5,7 +5,7 @@ import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, IPermissions } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
@@ -14,8 +14,10 @@ import { Paths } from '../../types/api'
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
 import { history } from '../../utils/history'
 import { getReq, postReq } from '../../utils/request'
-import { PERMISSION } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
+
+// actions
+import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
 
 export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers
 
@@ -32,10 +34,6 @@ interface IGetUser {
 interface IGetUsers {
 	type: USERS
 	payload: IUsersPayload
-}
-
-interface IPermissions {
-	uniqPermissions?: PERMISSION[]
 }
 
 export interface IGetUsersQueryParams {
@@ -62,6 +60,7 @@ export interface IUsersPayload {
 export const processAuthorizationResult =
 	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>
 	async (dispatch) => {
+		let salons: Paths.GetApiB2BAdminUsersUserId.Responses.$200['user']['salons'] = []
 		try {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
 			setAccessToken(result.accessToken)
@@ -77,6 +76,8 @@ export const processAuthorizationResult =
 				}
 			}
 
+			salons = result.user.salons
+
 			dispatch({
 				type: AUTH_USER.AUTH_USER_LOAD_DONE,
 				payload
@@ -88,11 +89,15 @@ export const processAuthorizationResult =
 			history.push(i18next.t('paths:login'))
 			// eslint-disable-next-line no-console
 			console.log(e)
+		} finally {
+			dispatch(setSelectionOptions(salons))
 		}
 	}
 
 export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch) => {
 	let payload = {} as IAuthUserPayload
+
+	let salons: Paths.GetApiB2BAdminUsersUserId.Responses.$200['user']['salons'] = []
 
 	try {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
@@ -113,11 +118,15 @@ export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => asyn
 			}
 		}
 
+		salons = data.user.salons
+
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_DONE, payload })
 	} catch (err) {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
 		// eslint-disable-next-line no-console
 		console.error(err)
+	} finally {
+		dispatch(setSelectionOptions(salons))
 	}
 
 	return payload

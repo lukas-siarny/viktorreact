@@ -99,27 +99,6 @@ const Routes: FC = (props) => {
 					layout={MainLayout}
 					page={PAGE.ACTIVATION}
 				/>
-				{/* <Route
-				path={t('paths:salons')}
-				render={({ match: { url } }) => {
-					console.log('🚀 ~ file: Routes.tsx ~ line 102 ~ url', url)
-					return (
-						<MainLayout>
-							<AuthRoute {...props} exact path={`${url}${t('paths:index')}`} component={SalonsPage} page={PAGE.SALONS} />
-							<AuthRoute path={t('paths:salons/create')} component={SalonPage} translatePathKey={t('paths:salons/create')} page={PAGE.SALONS} />
-						</MainLayout>
-					)
-				}}
-			/> */}
-				{/* <AuthRoute {...props} path={t('paths:salons')} component={SalonSubRoutes} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} /> */}
-				{/* <AuthRoute
-					{...props}
-					path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })}
-					component={SalonSubRoutes}
-					translatePathKey={t('paths:salons/{{salonID}}', { salonID: ':salonID' })}
-					layout={MainLayout}
-				/> */}
-				<Route {...props} path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })} component={SalonSubRoutes} />
 				<AuthRoute
 					{...props}
 					exact
@@ -129,6 +108,7 @@ const Routes: FC = (props) => {
 					layout={MainLayout}
 					page={PAGE.SALONS}
 				/>
+				<Route {...props} path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })} component={SalonSubRoutes} />
 
 				<AuthRoute {...props} exact path={t('paths:salons')} component={SalonsPage} translatePathKey={t('paths:salons')} layout={MainLayout} page={PAGE.SALONS} />
 				<AuthRoute
@@ -140,87 +120,6 @@ const Routes: FC = (props) => {
 					layout={MainLayout}
 					page={PAGE.CATEGORIES}
 				/>
-				{/* <AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/customers/create', { salonID: ':salonID' })}
-				component={CreateCustomerPage}
-				translatePathKey={t('paths:salons/{{salonID}}/customers/create', { salonID: ':salonID' })}
-				layout={MainLayout}
-				page={PAGE.CUSTOMERS}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/customers/{{customerID}}', { salonID: ':salonID', customerID: ':customerID' })}
-				component={CustomerPage}
-				translatePathKey={t('paths:salons/{{salonID}}/customers/{{customerID}}', { salonID: ':salonID', customerID: ':customerID' })}
-				layout={MainLayout}
-				page={PAGE.CUSTOMERS}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/customers', { salonID: ':salonID' })}
-				component={CustomersPage}
-				translatePathKey={t('paths:salons/{{salonID}}/customers', { salonID: ':salonID' })}
-				layout={MainLayout}
-				page={PAGE.CUSTOMERS}
-			/> */}
-				{/* <AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/services', { salonID: ':salonID' })}
-				component={ServicesPage}
-				translatePathKey={t('paths:salons/{{salonID}}/services', { salonID: ':salonID' })}
-				layout={MainLayout}
-				page={PAGE.SERVICES}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/services/create', { salonID: ':salonID' })}
-				component={ServicePage}
-				translatePathKey={t('paths:salons/{{salonID}}/services/create', { salonID: ':salonID' })}
-				layout={MainLayout}
-				page={PAGE.SERVICES}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/services/{{serviceID}}', { salonID: ':salonID', serviceID: ':serviceID' })}
-				component={ServicePage}
-				translatePathKey={t('paths:salons/{{salonID}}/services/{{serviceID}}', { salonID: ':salonID', serviceID: ':serviceID' })}
-				layout={MainLayout}
-				page={PAGE.SERVICES}
-			/> */}
-				{/* <AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/employees', { salonID: ':salonID' })}
-				component={EmployeesPage}
-				translatePathKey={t('paths:salons/{{salonID}}/employees', { salonID: ':salonID' })}
-				layout={MainLayout}
-				page={PAGE.EMPLOYEES}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/employees/create', { salonID: ':salonID' })}
-				component={CreateEmployeePage}
-				translatePathKey={t('paths:salons/{{salonID}}/employees/create', { salonID: ':salonID' })}
-				layout={MainLayout}
-				page={PAGE.EMPLOYEES}
-			/>
-			<AuthRoute
-				{...props}
-				exact
-				path={t('paths:salons/{{salonID}}/employees/{{employeeID}}', { salonID: ':salonID', employeeID: ':employeeID' })}
-				component={EmployeePage}
-				translatePathKey={t('paths:salons/{{salonID}}/employees/{{employeeID}}', { salonID: ':salonID', employeeID: ':employeeID' })}
-				layout={MainLayout}
-				page={PAGE.EMPLOYEES}
-			/> */}
 				{/* NOTE: add all private routes before this declaration */}
 				<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />
 				<AuthRoute

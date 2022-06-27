@@ -96,9 +96,14 @@ type Props = {
 	except?: PERMISSION[]
 }
 
+const isAdmin = (authUserPermissions: PERMISSION[] = []): boolean => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN])
+
 const Permissions: FC<Props> = (props) => {
 	const { render, allowed, except, children } = props
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+	// const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+	// const hasPermissions = selectedSalon
+	// 	? isAdmin(authUserPermissions) || checkPermissions(selectedSalon.uniqPermissions, allowed, except)
 	const hasPermissions = checkPermissions(authUserPermissions, allowed, except)
 	const [visibleModal, setVisibleModal] = useState(false)
 	const [t] = useTranslation()

@@ -18,14 +18,14 @@ type Props = SalonSubPageProps & {
 
 const ServicePage = (props: Props) => {
 	const { serviceID } = props.computedMatch.params
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const { t } = useTranslation()
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
 				name: t('loc:Zoznam služieb'),
-				link: t('paths:salons/{{salonID}}/services', { salonID })
+				link: parentPath + t('paths:services')
 			},
 			{
 				name: serviceID ? t('loc:Detail služby') : t('loc:Vytvoriť službu')
@@ -36,7 +36,7 @@ const ServicePage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons/{{salonID}}/services', { salonID })} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:services')} />
 			</Row>
 			<div className='content-body small mt-2'>
 				{serviceID ? <ServiceEditPage serviceID={serviceID} salonID={salonID} /> : undefined}

@@ -149,7 +149,7 @@ const checkAndParseServices = (ser: any[]) => {
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const { employeeID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -214,7 +214,7 @@ const EmployeePage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/employees/{employeeID}', { employeeID })
-			history.push(t('paths:employees'))
+			history.push(parentPath + t('paths:employees'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -227,7 +227,7 @@ const EmployeePage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zamestnancov'),
-				link: t('paths:employees')
+				link: parentPath + t('paths:employees')
 			},
 			{
 				name: t('loc:Detail zamestnanca'),
@@ -277,7 +277,7 @@ const EmployeePage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
 			<div className='content-body small mt-2'>
 				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />

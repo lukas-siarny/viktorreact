@@ -6,7 +6,7 @@ import { IResetStore } from '../generalTypes'
 import rootReducer, { ThunkResult } from '../index'
 import { SELECTED_SALON, SALON_OPTIONS } from './selectedSalonTypes'
 import { Paths } from '../../types/api'
-import { ISelectOptionItem, IPermissions } from '../../types/interfaces'
+import { ISelectOptionItem, IPermissions, ICurrency } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -30,7 +30,7 @@ export interface ISalonOptions {
 
 type IPayloadData = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon'] &
 	IPermissions & {
-		currency: Pick<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0], 'code' | 'symbol'>
+		currency: ICurrency
 	}
 
 export interface ISelectedSalonPayload {
@@ -53,36 +53,43 @@ export const selectSalon =
 			dispatch({ type: SELECTED_SALON.SELECTED_SALON_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}', { salonID })
 
-			let salonCurrency = DEFAULT_CURRENCY
+			let salonCurrency: ICurrency = {} as ICurrency
 
 			// obtain salon's currency
-			if (data.salon.address) {
-				// pick country code from salon address
-				const { countryCode } = data.salon.address
+			try {
+				if (data.salon.address) {
+					// pick country code from salon address
+					const { countryCode } = data.salon.address
 
-				const countries = store.getState().enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES]
-				// find country by code from enumeration values
-				const country = find(countries.data, (item) => item.code === countryCode)
+					const countries = store.getState().enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES]
+					// find country by code from enumeration values
+					const country = find(countries.data, (item) => item.code === countryCode)
 
-				const currencies = store.getState().enumerationsStore?.[ENUMERATIONS_KEYS.CURRENCIES]
-				// find currency by currency code from country
-				const currency = find(currencies.data, (item) => country.currencyCode === item.code)
+					const currencies = store.getState().enumerationsStore?.[ENUMERATIONS_KEYS.CURRENCIES]
+					// find currency by currency code from country
+					const currency = find(currencies.data, (item) => country.currencyCode === item.code)
 
-				salonCurrency = {
-					code: currency.code,
-					symbol: currency.symbol
+					salonCurrency = {
+						code: currency.code,
+						symbol: currency.symbol
+					}
 				}
+			} catch (error) {
+				salonCurrency = DEFAULT_CURRENCY
 			}
+
+			let permissions: PERMISSION[] = []
 
 			const currentUser = store.getState().user.authUser.data
 
-			let permissions = currentUser.uniqPermissions
-
-			// SUPER_ADMIN and ADMIN doesn't requires salon's permissions
-			if (!checkPermissions(permissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN])) {
-				const salon = find(currentUser.salons, (item) => item.id === salonID)
-				if (salon) {
-					permissions = uniq(map(salon.role.permissions, 'name'))
+			if (currentUser && currentUser.uniqPermissions) {
+				permissions = currentUser.uniqPermissions
+				// SUPER_ADMIN and ADMIN doesn't requires salon's permissions
+				if (!checkPermissions(permissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN])) {
+					const salon = find(currentUser.salons, (item) => item.id === salonID)
+					if (salon) {
+						permissions = uniq(map(salon.role.permissions, 'name'))
+					}
 				}
 			}
 

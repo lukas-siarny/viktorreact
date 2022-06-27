@@ -46,7 +46,7 @@ const AppInit: FC = (props) => {
 			if (checkPermissions(currentUser.data.uniqPermissions, [PERMISSION.PARTNER])) {
 				// select first salon for PARTNER
 				if (!selectedSalon) {
-					const salonID = get(currentUser, 'data.salons[0].id')
+					const salonID = get(currentUser.data, 'salons[0].id')
 					dispatch(selectSalon(salonID))
 				}
 			}

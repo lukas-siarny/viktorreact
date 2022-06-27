@@ -33,7 +33,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
@@ -158,7 +158,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 										if (!hasPermission) {
 											openForbiddenModal()
 										} else {
-											history.push(t('paths:salons/{{salonID}}/customers/create', { salonID }))
+											history.push(parentPath + t('paths:customers/create'))
 										}
 									}}
 								/>
@@ -174,7 +174,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(t('paths:salons/{{salonID}}/customers/{{customerID}}', { salonID, customerID: record.id }))
+									history.push(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id }))
 								}
 							})}
 							pagination={{

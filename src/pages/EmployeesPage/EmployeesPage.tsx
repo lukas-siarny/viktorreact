@@ -38,7 +38,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
@@ -181,7 +181,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								<EmployeesFilter
 									createEmployee={() => {
 										if (hasPermission) {
-											history.push(t('paths:employees/create'))
+											history.push(parentPath + t('paths:employees/create'))
 										} else {
 											openForbiddenModal()
 										}
@@ -201,7 +201,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(t('paths:employees/{{employeeID}}', { employeeID: record.id }))
+									history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))
 								}
 							})}
 							pagination={{

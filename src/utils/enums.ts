@@ -4,7 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICountryLabel } from '../types/interfaces'
+import { ICountryLabel, ICurrency } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -31,7 +31,7 @@ export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
 export const DEFAULT_LANGUAGE = LANGUAGE.SK
 
-export const DEFAULT_CURRENCY = {
+export const DEFAULT_CURRENCY: ICurrency = {
 	code: 'EUR',
 	symbol: '€'
 }

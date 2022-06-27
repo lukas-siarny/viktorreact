@@ -35,7 +35,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 const CustomerPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const { customerID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -64,7 +64,7 @@ const CustomerPage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: t('paths:salons/{{salonID}}/customers', { salonID })
+				link: parentPath + t('paths:customers')
 			},
 			{
 				name: t('loc:Detail zákazníka'),
@@ -112,7 +112,7 @@ const CustomerPage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/customers/{customerID}', { customerID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(t('paths:salons/{{salonID}}/customers', { salonID }))
+			history.push(parentPath + t('paths:customers'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -124,7 +124,7 @@ const CustomerPage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons/{{salonID}}/customers', { salonID })} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
 			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={updateCustomer} />

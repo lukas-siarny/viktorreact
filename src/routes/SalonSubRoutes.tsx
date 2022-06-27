@@ -85,6 +85,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:customers/create'))}
 				component={CreateCustomerPage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:customers/create'))}
 				salonID={salonID}
 				layout={MainLayout}
@@ -94,6 +95,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:customers/{{customerID}}', { customerID: ':customerID' }))}
 				component={CustomerPage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:customers/{{customerID}}', { customerID: ':customerID' }))}
 				salonID={salonID}
 				layout={MainLayout}
@@ -103,6 +105,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:customers'))}
 				component={CustomersPage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:customers'))}
 				salonID={salonID}
 				layout={MainLayout}
@@ -113,6 +116,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:services'))}
 				component={ServicesPage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:services'))}
 				salonID={salonID}
 				layout={MainLayout}
@@ -122,6 +126,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:services/create'))}
 				component={ServicePage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:services/create'))}
 				salonID={salonID}
 				layout={MainLayout}
@@ -131,6 +136,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:services/{{serviceID}}', { serviceID: ':serviceID' }))}
 				component={ServicePage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:services/{{serviceID}}', { serviceID: ':serviceID' }))}
 				salonID={salonID}
 				layout={MainLayout}
@@ -141,6 +147,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:employees'))}
 				component={EmployeesPage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:employees'))}
 				salonID={salonID}
 				layout={MainLayout}
@@ -150,6 +157,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:employees/create'))}
 				component={CreateEmployeePage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:employees/create'))}
 				salonID={salonID}
 				layout={MainLayout}
@@ -159,6 +167,7 @@ const SalonSubRoutes: FC = () => {
 				exact
 				path={getPath(t('paths:employees/{{employeeID}}', { employeeID: ':employeeID' }))}
 				component={EmployeePage}
+				parentPath={url}
 				translatePathKey={getPath(t('paths:employees/{{employeeID}}', { employeeID: ':employeeID' }))}
 				salonID={salonID}
 				layout={MainLayout}

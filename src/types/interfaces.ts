@@ -256,3 +256,8 @@ export interface ISearchablePayload<T extends IDataPagination> {
 export interface IPermissions {
 	uniqPermissions?: PERMISSION[]
 }
+
+export interface ICurrency {
+	code: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['code']
+	symbol: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['symbol']
+}

@@ -48,6 +48,7 @@ const MainLayout: FC<Props> = (props) => {
 											<div className={'ant-form-item w-2/3'}>
 												<Select
 													value={salonID}
+													defaultValue={salonID}
 													onChange={(id) => dispatch(selectSalon(id))}
 													options={salonOptions}
 													className={'noti-select-input'}

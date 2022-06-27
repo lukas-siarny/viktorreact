@@ -39,7 +39,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const services = useSelector((state: RootState) => state.service.services)
-	const { salonID } = props
+	const { salonID, parentPath } = props
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -160,7 +160,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 								<ServicesFilter
 									createService={() => {
 										if (hasPermission) {
-											history.push(t('paths:salons/{{salonID}}/services/create', { salonID }))
+											history.push(parentPath + t('paths:services/create'))
 										} else {
 											openForbiddenModal()
 										}
@@ -180,7 +180,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(t('paths:salons/{{salonID}}/services/{{serviceID}}', { salonID, serviceID: record.serviceID }))
+									history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
 								}
 							})}
 							pagination={{

@@ -1,19 +1,17 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Form, Row } from 'antd'
+import { Button, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, FILTER_ENTITY } from '../../../utils/enums'
+import { FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
-import searchWrapper from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
 
 // components
 import Filters from '../../../components/Filters'
@@ -36,16 +34,8 @@ const fixLength100 = validationString(100)
 const EmployeesFilter = (props: Props) => {
 	const { handleSubmit, createEmployee } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
-
-	const onSearchSalons = useCallback(
-		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SALON)
-		},
-		[dispatch]
-	)
 
 	const searchInput = (
 		<Field

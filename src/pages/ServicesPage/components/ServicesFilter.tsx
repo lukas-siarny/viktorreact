@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 // utils
 import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
-import { searchEmployeeWrapper, searchSalonWrapper } from '../../../utils/filters'
+import { searchEmployeeWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -40,30 +40,12 @@ type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
-// TODO remove after BE is finished
-const CATEGORIES = [
-	{ label: 'Kategória 1.2', value: 5, key: 5 },
-	{ label: 'Kategória 1.1', value: 4, key: 4 }
-]
-
-// TODO remove after BE is finished
-// const EMPLOYEES_OPTIONS = [
-// 	{ label: 'Zamestnanec 1 Salón 1', value: 1, key: 1 },
-// 	{ label: 'Zamestnanec 1 Salón 2', value: 2, key: 2 }
-// ]
-
 const ServicesFilter = (props: Props) => {
 	const { handleSubmit, total, createService } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SERVICES_FILTER)(state))
-
-	const searchSalon = useCallback(
-		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { page, search })
-		},
-		[dispatch]
-	)
+	const categories = useSelector((state: RootState) => state.categories.categories)
 
 	const searchEmployee = useCallback(
 		async (search: string, page: number) => {
@@ -84,7 +66,7 @@ const ServicesFilter = (props: Props) => {
 			className={'h-10 p-0 m-0'}
 			component={InputField}
 			size={'large'}
-			placeholder={t('loc:Hľadať podľa názvu')}
+			placeholder={t('loc:Hľadať podľa názov, salón')}
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search
@@ -103,18 +85,18 @@ const ServicesFilter = (props: Props) => {
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={customContent}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={6}>
+					<Col span={8}>
 						<Field
 							className='m-0'
 							component={SelectField}
 							allowClear
 							placeholder={t('loc:Kategória')}
 							name='categoryID'
-							options={CATEGORIES}
+							options={categories.enumerationsOptions}
 							disabled={isFilterDisabled}
 						/>
 					</Col>
-					<Col span={6}>
+					<Col span={8}>
 						<Field
 							className='m-0'
 							component={SelectField}
@@ -127,21 +109,6 @@ const ServicesFilter = (props: Props) => {
 							disabled={isFilterDisabled}
 							allowInfinityScroll
 							filterOption={false}
-						/>
-					</Col>
-					<Col span={6}>
-						<Field
-							className='m-0'
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Salón')}
-							name='salonID'
-							showSearch
-							onSearch={searchSalon}
-							filterOption={false}
-							allowInfinityScroll
-							onDidMountSearch
-							disabled={isFilterDisabled}
 						/>
 					</Col>
 				</Row>

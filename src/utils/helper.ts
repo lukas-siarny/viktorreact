@@ -686,3 +686,19 @@ export const showServiceCategory = (category: serviceCategory): string | undefin
 	}
 	return category?.name
 }
+
+/**
+ * Recursively flatten a nested array of any depth
+ * and
+ * optionally map output
+ */
+export const flattenTree = (array: any[], callback?: (item: any, level: number) => any, nestingKey = 'children', levelOfDepth = 0) => {
+	let output: any[] = []
+
+	array.forEach((item: any) => {
+		output.push(callback ? callback(item, levelOfDepth) : item)
+		output = output.concat(flattenTree(item[nestingKey] || [], callback, nestingKey, levelOfDepth + 1))
+	})
+
+	return output
+}

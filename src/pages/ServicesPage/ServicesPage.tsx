@@ -23,6 +23,7 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 // reducers
 import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, IUserAvatar } from '../../types/interfaces'
@@ -40,18 +41,21 @@ const ServicesPage = () => {
 	const dispatch = useDispatch()
 	const services = useSelector((state: RootState) => state.service.services)
 
+	useEffect(() => {
+		dispatch(getCategories(false))
+	}, [dispatch])
+
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		categoryID: NumberParam,
 		employeeID: NumberParam,
-		salonID: NumberParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'name:ASC')
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID, salonID: query.salonID }))
+		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID?.toString(), employeeID: query.employeeID }))
 		dispatch(
 			getServices({
 				page: query.page,
@@ -59,11 +63,10 @@ const ServicesPage = () => {
 				order: query.order,
 				search: query.search,
 				categoryID: query.categoryID,
-				employeeID: query.employeeID,
-				salonID: query.salonID
+				employeeID: query.employeeID
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, query.salonID])
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {

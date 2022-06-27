@@ -26,6 +26,7 @@ export interface IGetSalonsQueryParams {
 	search?: string | undefined | null
 	categoryFirstLevelIDs?: (string | null)[] | null | undefined
 	statuses?: (string | null)[] | SALON_STATUSES[] | null
+	countryCode?: string | undefined | null
 }
 
 export interface IGetSalon {

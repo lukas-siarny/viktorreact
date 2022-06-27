@@ -9,7 +9,7 @@ import cx from 'classnames'
 import i18next from 'i18next'
 
 // components
-import EmployeeForm, { parseSalonID } from './components/EmployeeForm'
+import EmployeeForm from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
@@ -108,6 +108,44 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
 }
 
+const checkAndParseServices = (ser: any[]) => {
+	return ser.map((service) => {
+		let updatedService = {
+			id: service?.id,
+			name: service?.name,
+			variableDuration: false,
+			variablePrice: false,
+			salonData: {
+				...service.salonData,
+				// decode and set price
+				priceFrom: decodePrice(service?.salonData?.priceFrom),
+				priceTo: decodePrice(service?.salonData?.priceTo)
+			},
+			employeeData: {
+				...service.employeeData,
+				// decode and set price
+				priceFrom: decodePrice(service?.employeeData?.priceFrom),
+				priceTo: decodePrice(service?.employeeData?.priceTo)
+			},
+			category: service?.category
+		}
+		// get data from employeeData
+		if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
+			updatedService = {
+				...updatedService,
+				variableDuration: true
+			}
+		}
+		if (service?.employeeData?.priceFrom && service?.employeeData?.priceTo) {
+			updatedService = {
+				...updatedService,
+				variablePrice: true
+			}
+		}
+		return updatedService
+	})
+}
+
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -129,44 +167,6 @@ const EmployeePage = (props: Props) => {
 		dispatch(getEmployee(employeeID))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
-
-	const checkAndParseServices = (ser: any[]) => {
-		return ser.map((service) => {
-			let updatedService = {
-				id: service?.id,
-				name: service?.name,
-				variableDuration: false,
-				variablePrice: false,
-				salonData: {
-					...service.salonData,
-					// decode and set price
-					priceFrom: decodePrice(service?.salonData?.priceFrom),
-					priceTo: decodePrice(service?.salonData?.priceTo)
-				},
-				employeeData: {
-					...service.employeeData,
-					// decode and set price
-					priceFrom: decodePrice(service?.employeeData?.priceFrom),
-					priceTo: decodePrice(service?.employeeData?.priceTo)
-				},
-				category: service?.category
-			}
-			// get data from employeeData
-			if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
-				updatedService = {
-					...updatedService,
-					variableDuration: true
-				}
-			}
-			if (service?.employeeData?.priceFrom && service?.employeeData?.priceTo) {
-				updatedService = {
-					...updatedService,
-					variablePrice: true
-				}
-			}
-			return updatedService
-		})
-	}
 
 	useEffect(() => {
 		if (employee.data?.employee) {
@@ -244,7 +244,7 @@ const EmployeePage = (props: Props) => {
 				{
 					inviteEmail: formData?.email,
 					employeeID,
-					salonID: parseSalonID(form?.values?.salonID),
+					salonID,
 					// TODO add roleID
 					roleID: 0
 				}
@@ -280,7 +280,7 @@ const EmployeePage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={form?.values?.salonID} onSubmit={updateEmployee} />
+				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 				<div className={'content-footer'}>
 					<Row className={rowClass}>
 						{showDeleteBtn ? (

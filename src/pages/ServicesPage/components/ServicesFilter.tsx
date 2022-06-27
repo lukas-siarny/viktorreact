@@ -6,9 +6,9 @@ import { debounce } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, FILTER_ENTITY } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
-import { searchEmployeeWrapper } from '../../../utils/filters'
+import searchWrapper from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -54,7 +54,7 @@ const ServicesFilter = (props: Props) => {
 
 	const searchEmployee = useCallback(
 		async (search: string, page: number) => {
-			return searchEmployeeWrapper(dispatch, { page, search })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.EMPLOYEE)
 		},
 		[dispatch]
 	)

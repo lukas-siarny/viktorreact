@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, FILTER_ENTITY } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
-import { searchSalonWrapper } from '../../../utils/filters'
+import searchWrapper from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -42,7 +42,7 @@ const EmployeesFilter = (props: Props) => {
 
 	const onSearchSalons = useCallback(
 		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SALON)
 		},
 		[dispatch]
 	)

@@ -5,9 +5,9 @@ import { Col, Divider, Form, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, GENDER } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, GENDER, FILTER_ENTITY } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
-import { searchSalonWrapper } from '../../../utils/filters'
+import searchWrapper from '../../../utils/filters'
 
 // types
 import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -42,7 +42,7 @@ const CustomerForm: FC<Props> = (props) => {
 
 	const searchSalon = useCallback(
 		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SALON)
 		},
 		[dispatch]
 	)

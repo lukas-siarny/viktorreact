@@ -31,6 +31,11 @@
 		display: flex
 		justify-content: space-between
 	&.ant-select-item-option
+		&.ant-select-item-option-active
+			color: $textColor-notino-white
+			background: $backgroundColor-notino-black
+			& span.ant-select-item-option-state svg path
+				stroke: $backgroundColor-notino-white
 		& .ant-select-item-option-selected
 			color: $textColor-white
 			font-weight: $fontWeight-normal
@@ -39,12 +44,12 @@
 		& span.ant-select-item-option-state
 			height: 24px
 			& svg path
-				stroke: $backgroundColor-notino-white
+				stroke: $backgroundColor-notino-black
 
 .ant-select-item-option-selected:not(.ant-select-item-option-disabled)
-		color: $textColor-white
+		color: $textColor-notino-black
 		font-weight: 400
-		background-color: $backgroundColor-notino-black
+		background-color: $backgroundColor-notino-grayLight
 
 .ant-select-multiple
 	span.ant-select-selection-item-remove svg path
@@ -53,3 +58,18 @@
 		justify-content: center
 		align-items: center
 		display: flex
+
+.language-picker-icon
+	margin-right: 5px
+
+.language-picker-img
+	width: 24px
+	margin-right: 5px
+
+.language-picker-select
+	.ant-row
+		align-items: center
+	span.ant-select-selection-item
+		display: flex
+		align-items: center
+

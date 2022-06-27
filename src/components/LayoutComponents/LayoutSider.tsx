@@ -95,7 +95,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											{t('loc:Používatelia')}
 										</Menu.Item>
 									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_BROWSING]}>
 										<Menu.Item
 											eventKey={PAGE.CATEGORIES}
 											key={PAGE.CATEGORIES}

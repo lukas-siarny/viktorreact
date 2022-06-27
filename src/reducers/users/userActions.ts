@@ -5,7 +5,7 @@ import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem, IPermissions } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchablePayload, IPermissions } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
@@ -36,11 +36,7 @@ interface IGetUsers {
 	payload: IUsersPayload
 }
 
-export interface IGetUsersQueryParams {
-	page: number
-	limit?: any | undefined
-	order?: string | undefined
-	search?: string | undefined | null
+export interface IGetUsersQueryParams extends IQueryParams {
 	roleID?: number | undefined | null
 }
 
@@ -52,10 +48,7 @@ export interface IUserPayload {
 	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
 }
 
-export interface IUsersPayload {
-	data: Paths.GetApiB2BAdminUsers.Responses.$200 | null
-	usersOptions: ISelectOptionItem[]
-}
+export interface IUsersPayload extends ISearchablePayload<Paths.GetApiB2BAdminUsers.Responses.$200> {}
 
 export const processAuthorizationResult =
 	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>
@@ -195,7 +188,7 @@ export const getUsers =
 
 			payload = {
 				data,
-				usersOptions
+				options: usersOptions
 			}
 
 			dispatch({ type: USERS.USERS_LOAD_DONE, payload })

@@ -9,7 +9,6 @@ import { ThunkResult } from '../index'
 
 // utils
 import { getReq } from '../../utils/request'
-import { IEnumerationOptions } from '../enumerations/enumerationActions'
 import { ISelectOptionItem } from '../../types/interfaces'
 
 export type ICategoriesActions = IResetStore | IGetCategories
@@ -21,7 +20,7 @@ interface IGetCategories {
 
 export interface ICategoriesPayload {
 	data: Paths.GetApiB2BAdminEnumsCategories.Responses.$200['categories'] | null
-	enumerationsOptions: IEnumerationOptions[]
+	enumerationsOptions: ISelectOptionItem[]
 }
 
 export const getCategories = (): ThunkResult<Promise<ICategoriesPayload>> => async (dispatch) => {

@@ -493,15 +493,19 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type AccountState = "UNPAIRED" | "PENDING" | "PAIRED";
             export type Limit = 25 | 50 | 100;
             export type Order = string;
             export type Page = number;
             export type SalonID = number;
             export type Search = string | null;
+            export type ServiceID = number;
         }
         export interface QueryParameters {
             search?: Parameters.Search;
             salonID?: Parameters.SalonID;
+            serviceID?: Parameters.ServiceID;
+            accountState?: Parameters.AccountState;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -1116,6 +1120,7 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type CategoryFirstLevelIDs = number[];
+            export type CountryCode = string;
             export type Limit = 25 | 50 | 100;
             export type Order = string;
             export type Page = number;
@@ -1126,6 +1131,7 @@ declare namespace Paths {
             search?: Parameters.Search;
             categoryFirstLevelIDs?: Parameters.CategoryFirstLevelIDs;
             statuses?: Parameters.Statuses;
+            countryCode?: Parameters.CountryCode;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -1811,15 +1817,19 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type AccountState = "UNPAIRED" | "PENDING" | "PAIRED";
             export type Limit = 25 | 50 | 100;
             export type Order = string;
             export type Page = number;
             export type SalonID = number;
             export type Search = string | null;
+            export type ServiceID = number;
         }
         export interface QueryParameters {
             search?: Parameters.Search;
             salonID?: Parameters.SalonID;
+            serviceID?: Parameters.ServiceID;
+            accountState?: Parameters.AccountState;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;

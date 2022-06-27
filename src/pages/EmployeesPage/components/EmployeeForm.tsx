@@ -1,13 +1,15 @@
 import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
-import { change, Field, FieldArray, InjectedFormProps, reduxForm, isDirty } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // utils
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { isEmpty } from 'lodash'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
 import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
+import searchWrapper from '../../../utils/filters'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -16,18 +18,19 @@ import { IEmployeeForm } from '../../../types/interfaces'
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+import InputNumberField from '../../../atoms/InputNumberField'
+import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import DeleteButton from '../../../components/DeleteButton'
 
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+
+// reducers
 import { getServices } from '../../../reducers/services/serviceActions'
-import DeleteButton from '../../../components/DeleteButton'
 import { RootState } from '../../../reducers'
-import { searchSalonWrapper, searchServiceWrapper } from '../../../utils/filters'
 
 // assets
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
@@ -36,7 +39,7 @@ import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 const { Panel } = Collapse
 
 type ComponentProps = {
-	salonID: number | null | any
+	salonID: number
 	addService: MouseEventHandler<HTMLElement>
 }
 
@@ -93,8 +96,6 @@ const renderListFields = (props: any) => {
 
 	return (
 		<>
-			<h3>{t('loc:Zoznam priradených služieb')}</h3>
-			<Divider className={'mb-3 mt-3'} />
 			<Collapse className={'collapse-list'} bordered={false}>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
@@ -196,45 +197,24 @@ const renderListFields = (props: any) => {
 	)
 }
 
-export const parseSalonID = (salonID: any) => {
-	if (salonID?.value) {
-		return salonID?.value
-	}
-	return salonID
-}
-
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { handleSubmit, salonID, addService } = props
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE].values)
 	const services = useSelector((state: RootState) => state.service.services)
-	const isFormDirty = useSelector(isDirty(FORM.EMPLOYEE))
-
-	const parsedSalonID = parseSalonID(salonID)
 
 	useEffect(() => {
-		dispatch(getServices({ page: 1, salonID: parsedSalonID }))
-		if (isFormDirty) {
-			// clear services if salon is changed
-			dispatch(change(FORM.EMPLOYEE, 'services', null))
-		}
+		dispatch(getServices({ page: 1, salonID }))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
 
-	const searchSalon = useCallback(
-		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
-		},
-		[dispatch]
-	)
-
 	const searchService = useCallback(
 		async (search: string, page: number) => {
-			return searchServiceWrapper(dispatch, { page, search, salonID: parsedSalonID })
+			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.SERVICE)
 		},
-		[dispatch, parsedSalonID]
+		[dispatch, salonID]
 	)
 
 	return (
@@ -264,21 +244,8 @@ const EmployeeForm: FC<Props> = (props) => {
 					</div>
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
-					<Field
-						label={t('loc:Salón')}
-						size={'large'}
-						component={SelectField}
-						allowClear
-						placeholder={t('loc:Vyberte salón')}
-						name={'salonID'}
-						onSearch={searchSalon}
-						filterOption={true}
-						showSearch
-						confirmModalExtraTitle={<p className={'m-0'}>{t('loc: Potvrdením zmeny salónu sa vymažú všetky priradené služby!')}</p>}
-						allowInfinityScroll
-						confirmSelection={!!formValues?.services}
-						required
-					/>
+					<h3>{t('loc:Zoznam priradených služieb')}</h3>
+					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex w-full justify-between'}>
 						<Field
 							label={t('loc:Služby')}
@@ -291,13 +258,12 @@ const EmployeeForm: FC<Props> = (props) => {
 							onSearch={searchService}
 							filterOption={true}
 							mode={'multiple'}
-							options={services?.servicesOptions}
+							options={services?.options}
 							showSearch
 							allowInfinityScroll
-							disabled={!formValues?.salonID}
 							formName={FORM.EMPLOYEE}
 						/>
-						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={!formValues?.salonID}>
+						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={isEmpty(formValues?.service)}>
 							{t('loc:Pridať službu')}
 						</Button>
 					</div>

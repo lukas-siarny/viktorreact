@@ -1,21 +1,23 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { get, map } from 'lodash'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 
 // components
 import ServiceForm from './components/ServiceForm'
+import { addEmployee, parseEmployeeIds } from './ServiceEditPage'
 
 // types
 import { IServiceForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
+import { RootState } from '../../reducers'
 
 // utils
 import { postReq } from '../../utils/request'
-import { NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { withPermissions } from '../../utils/Permissions'
 import { encodePrice } from '../../utils/helper'
@@ -24,8 +26,11 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.PAR
 
 const ServiceCreatePage = (props: SalonSubPageProps) => {
 	const { t } = useTranslation()
-	const dispatch = useDispatch()
 	const { salonID } = props
+	const dispatch = useDispatch()
+
+	const employees = useSelector((state: RootState) => state.employees.employees)
+	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -40,9 +45,8 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 				durationTo: values.variableDuration ? values.durationTo : undefined,
 				priceFrom: encodePrice(values.priceFrom),
 				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
-				salonID: values.salonID,
-				// TODO add employee
-				// employeeIDs
+				salonID,
+				employeeIDs: parseEmployeeIds(values.employees),
 				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
 				imageIDs: map(values?.gallery, (image) => image.id)
 			}
@@ -57,7 +61,7 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 		}
 	}
 
-	return <ServiceForm onSubmit={handleSubmit} />
+	return <ServiceForm addEmployee={() => addEmployee(employees, form, dispatch)} onSubmit={handleSubmit} salonID={salonID} />
 }
 
 export default compose(withPermissions(permissions))(ServiceCreatePage)

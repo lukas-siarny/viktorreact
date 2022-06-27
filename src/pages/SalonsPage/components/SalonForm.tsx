@@ -20,9 +20,9 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, ENUMERATIONS_KEYS, FILTER_ENTITY } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-import { searchUsersWrapper } from '../../../utils/filters'
+import searchWrapper from '../../../utils/filters'
 
 // types
 import { IUserAccountForm } from '../../../types/interfaces'
@@ -91,7 +91,7 @@ const UserAccountForm: FC<Props> = (props) => {
 	const onSearchUsers = useCallback(
 		async (search: string, page: number) => {
 			// roleID = 3 only for PARTNER users
-			return searchUsersWrapper(dispatch, { page, search, roleID: 3 })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.USER)
 		},
 		[dispatch]
 	)

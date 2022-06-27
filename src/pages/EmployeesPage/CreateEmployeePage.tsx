@@ -56,7 +56,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				phonePrefixCountryCode: formData?.phonePrefixCountryCode,
 				phone: formData?.phone,
 				services: parseServicesForCreateAndUpdate(formData?.services),
-				salonID: formData?.salonID,
+				salonID,
 				imageID: formData?.imageID
 			} as any)
 			if (data?.employee?.id) {
@@ -76,7 +76,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={form?.values?.salonID} onSubmit={createEmployee} />
+				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
 				<div className={'content-footer'}>
 					<Row className={'justify-center'}>
 						<Button
@@ -85,7 +85,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 							size={'middle'}
 							className={'noti-btn m-regular w-1/3'}
 							htmlType={'submit'}
-							onClick={(e) => {
+							onClick={() => {
 								dispatch(submit(FORM.EMPLOYEE))
 							}}
 							disabled={submitting || isFormPristine}

@@ -8,6 +8,7 @@ import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { IQueryParams, ISearchablePayload } from '../../types/interfaces'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
 
@@ -21,28 +22,15 @@ interface IGetEmployee {
 	payload: IEmployeePayload
 }
 
-export interface IGetEmployeesQueryParams {
-	page: number
-	limit?: any | undefined
-	order?: string | undefined
-	search?: string | undefined | null
+export interface IGetEmployeesQueryParams extends IQueryParams {
 	salonID?: number | undefined | null
-}
-
-export interface EmployeesOptionItem {
-	label: string | undefined | number
-	value: number
-	key: string
 }
 
 export interface IEmployeePayload {
 	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
 }
 
-export interface IEmployeesPayload {
-	data: Paths.GetApiB2BAdminEmployees.Responses.$200 | null
-	employeesOptions: EmployeesOptionItem[] | undefined
-}
+export interface IEmployeesPayload extends ISearchablePayload<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
 
 export const getEmployees =
 	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IEmployeesPayload>> =>
@@ -62,7 +50,7 @@ export const getEmployees =
 
 			payload = {
 				data,
-				employeesOptions
+				options: employeesOptions
 			}
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_DONE, payload })
 		} catch (err) {

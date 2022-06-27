@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
@@ -43,6 +43,8 @@ const UserPage: FC<Props> = (props) => {
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
 	const isMyAccountPage: boolean = authUser.data?.id === get(userAccountDetail, 'data.id')
+
+	const isLoading = userAccountDetail.isLoading || isRemoving
 
 	useEffect(() => {
 		if (userID) {
@@ -133,45 +135,47 @@ const UserPage: FC<Props> = (props) => {
 			<Row className={hideClass}>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
-				<div className={'content-footer'}>
-					<Row className={'justify-between'}>
-						<DeleteButton
-							permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_DELETE]}
-							className={'w-1/3'}
-							onConfirm={deleteUser}
-							entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
-							type={'default'}
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
-						<Permissions
-							allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular w-1/3'}
-									htmlType={'submit'}
-									onClick={(e) => {
-										if (hasPermission) {
-											dispatch(submit(FORM.USER_ACCOUNT))
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									disabled={submitting || isFormPristine}
-									loading={submitting}
-								>
-									{t('loc:Uložiť')}
-								</Button>
-							)}
-						/>
-					</Row>
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
+					<div className={'content-footer'}>
+						<Row className={'justify-between'}>
+							<DeleteButton
+								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_DELETE]}
+								className={'w-1/3'}
+								onConfirm={deleteUser}
+								entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
+								type={'default'}
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							/>
+							<Permissions
+								allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={'noti-btn m-regular w-1/3'}
+										htmlType={'submit'}
+										onClick={(e) => {
+											if (hasPermission) {
+												dispatch(submit(FORM.USER_ACCOUNT))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={submitting || isFormPristine}
+										loading={submitting}
+									>
+										{t('loc:Uložiť')}
+									</Button>
+								)}
+							/>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

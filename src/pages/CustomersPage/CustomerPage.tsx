@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { get } from 'lodash'
 import { compose } from 'redux'
 import { initialize, submit, isPristine } from 'redux-form'
@@ -38,6 +38,8 @@ const CustomerPage = (props: Props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const customer = useSelector((state: RootState) => state.customers.customer)
+
+	const isLoading = customer?.isLoading || isRemoving
 
 	useEffect(() => {
 		dispatch(getCustomer(customerID))
@@ -123,45 +125,47 @@ const CustomerPage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<CustomerForm onSubmit={updateCustomer} />
-				<div className={'content-footer'}>
-					<Row className={'justify-between'}>
-						<DeleteButton
-							permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}
-							className={'w-1/3'}
-							onConfirm={deleteCustomer}
-							entityName={t('loc:zákazníka')}
-							type={'default'}
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
-						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular mb-2 w-1/3'}
-									htmlType={'submit'}
-									onClick={(e) => {
-										if (hasPermission) {
-											dispatch(submit(FORM.CUSTOMER))
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									disabled={submitting || isFormPristine}
-									loading={submitting}
-								>
-									{t('loc:Uložiť')}
-								</Button>
-							)}
-						/>
-					</Row>
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<CustomerForm onSubmit={updateCustomer} />
+					<div className={'content-footer'}>
+						<Row className={'justify-between'}>
+							<DeleteButton
+								permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}
+								className={'w-1/3'}
+								onConfirm={deleteCustomer}
+								entityName={t('loc:zákazníka')}
+								type={'default'}
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							/>
+							<Permissions
+								allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={'noti-btn m-regular mb-2 w-1/3'}
+										htmlType={'submit'}
+										onClick={(e) => {
+											if (hasPermission) {
+												dispatch(submit(FORM.CUSTOMER))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={submitting || isFormPristine}
+										loading={submitting}
+									>
+										{t('loc:Uložiť')}
+									</Button>
+								)}
+							/>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

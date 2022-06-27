@@ -81,7 +81,7 @@ const ServiceForm = (props: Props) => {
 	const variablePrice = form?.values?.variablePrice
 
 	return (
-		<Spin tip={STRINGS(t).loading} spinning={isLoading}>
+		<Spin spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 				<CategoryFields />
 				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />

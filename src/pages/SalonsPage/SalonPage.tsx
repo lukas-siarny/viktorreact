@@ -454,20 +454,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
-					render={(hasPermission) => (
-						<SalonForm
-							isAdmin={hasPermission}
-							onSubmit={handleSubmit}
-							openNoteModal={() => setVisible(true)}
-							changeSalonVisibility={changeVisibility}
-							publishSalon={publishSalon}
-							switchDisabled={submitting}
-							salonID={salonID}
-							disabledForm={deletedSalon}
-						/>
-					)}
+				<SalonForm
+					onSubmit={handleSubmit}
+					openNoteModal={() => setVisible(true)}
+					changeSalonVisibility={changeVisibility}
+					publishSalon={publishSalon}
+					switchDisabled={submitting}
+					salonID={salonID}
+					disabledForm={deletedSalon}
 				/>
 				{salonExists && (
 					<OpenHoursNoteModal

@@ -15,7 +15,6 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
-import SelectField from '../../../atoms/SelectField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // utils
@@ -43,12 +42,10 @@ import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.sv
 import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
-import { ReactComponent as PermissionsIcon } from '../../../assets/icons/unlock-icon.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 
 type ComponentProps = {
 	openNoteModal: Function
-	isAdmin: boolean
 	changeSalonVisibility: (visible: boolean) => void
 	publishSalon: (published: boolean) => void
 	switchDisabled: boolean
@@ -58,29 +55,10 @@ type ComponentProps = {
 
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 
-// validate user select only if auth user have SUPER ADMIN or ADMIN permissions
-const validateUsersSelect = (value: string, formValues: any, props: any) => {
-	if (!value && props?.isAdmin) {
-		return i18next.t('loc:Toto pole je povinné')
-	}
-	return undefined
-}
-
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
-	// NOTE: switches (showCompanyInfoSwitch, showContactPersonSwitch) are hidden, if related objects are not empty
-	const { handleSubmit, change, openNoteModal, isAdmin, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
+	const { handleSubmit, change, openNoteModal, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-
-	const onSearchUsers = useCallback(
-		async (search: string, page: number) => {
-			// roleID = 3 only for PARTNER users
-			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.USER)
-		},
-		[dispatch]
-	)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -405,35 +383,6 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 					</Col>
 				</Row>
-
-				{/* show this block only if auth user have SUPER ADMIN or ADMIN permissions */}
-				{isAdmin ? (
-					<Row>
-						<Col span={24}>
-							<h3 className={'mb-0 flex items-center'}>
-								<PermissionsIcon width={24} height={24} className={'text-notino-black mr-2'} />
-								{t('loc:Oprávnenie')}
-							</h3>
-							<Divider className={'mb-3 mt-3'} />
-							<Field
-								component={SelectField}
-								label={t('loc:Používateľ')}
-								placeholder={t('loc:Vyber používateľa')}
-								name={'userID'}
-								size={'large'}
-								validate={validateUsersSelect}
-								onSearch={onSearchUsers}
-								optionLabelProp={'label'}
-								filterOption={true}
-								labelInValue
-								showSearch
-								allowInfinityScroll
-								disabled={disabledForm}
-								required
-							/>
-						</Col>
-					</Row>
-				) : undefined}
 			</Space>
 		</Form>
 	)

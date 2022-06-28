@@ -39,7 +39,7 @@ type Props = {
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
-	return oldServices.map((service: any) => {
+	return oldServices?.map((service: any) => {
 		return {
 			id: service?.id,
 			employeeData: {
@@ -126,8 +126,15 @@ const EmployeePage = (props: Props) => {
 
 	const isLoading = employee.isLoading || services.isLoading || isRemoving
 
+	const fetchEmployeeData = async () => {
+		const { data } = await dispatch(getEmployee(employeeID))
+		if (!data?.employee?.id) {
+			history.push('/404')
+		}
+	}
+
 	useEffect(() => {
-		dispatch(getEmployee(employeeID))
+		fetchEmployeeData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
 

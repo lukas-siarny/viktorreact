@@ -41,8 +41,15 @@ const CustomerPage = (props: Props) => {
 
 	const isLoading = customer?.isLoading || isRemoving
 
+	const fetchCustomerData = async () => {
+		const { data } = await dispatch(getCustomer(customerID))
+		if (!data?.customer?.id) {
+			history.push('/404')
+		}
+	}
+
 	useEffect(() => {
-		dispatch(getCustomer(customerID))
+		fetchCustomerData()
 	}, [dispatch, customerID])
 
 	useEffect(() => {

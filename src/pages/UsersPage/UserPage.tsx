@@ -46,10 +46,15 @@ const UserPage: FC<Props> = (props) => {
 
 	const isLoading = userAccountDetail.isLoading || isRemoving
 
-	useEffect(() => {
-		if (userID) {
-			dispatch(getUserAccountDetails(userID))
+	const fetchUserData = async () => {
+		const { data } = await dispatch(getUserAccountDetails(userID))
+		if (!data?.user?.id) {
+			history.push('/404')
 		}
+	}
+
+	useEffect(() => {
+		fetchUserData()
 	}, [dispatch, userID])
 
 	// init forms

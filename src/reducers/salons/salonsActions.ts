@@ -75,17 +75,23 @@ export const getSalons =
 	}
 
 export const getSalon =
-	(salonID: number): ThunkResult<Promise<void>> =>
+	(salonID: number): ThunkResult<Promise<ISalonPayload>> =>
 	async (dispatch) => {
+		let payload = {} as ISalonPayload
 		try {
 			dispatch({ type: SALON.SALON_LOAD_START })
-			const data = await getReq('/api/b2b/admin/salons/{salonID}', { salonID } as any)
-			dispatch({ type: SALON.SALON_LOAD_DONE, payload: data })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}', { salonID } as any)
+			payload = {
+				data
+			}
+			dispatch({ type: SALON.SALON_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: SALON.SALON_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}
 
 export const emptySalon = (): ThunkResult<Promise<void>> => async (dispatch) => {

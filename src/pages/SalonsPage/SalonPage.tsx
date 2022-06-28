@@ -243,10 +243,17 @@ const SalonPage: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
+	const fetchSalonData = async () => {
+		const { data } = await dispatch(getSalon(salonID))
+		if (!data?.salon?.id) {
+			history.push('/404')
+		}
+	}
+
 	useEffect(() => {
 		if (salonID > 0) {
 			// updating existing salon
-			dispatch(getSalon(salonID))
+			fetchSalonData()
 		} else {
 			// creating new salon clear salon store
 			dispatch(emptySalon())

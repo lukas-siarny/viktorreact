@@ -29,7 +29,7 @@ type Props = SalonSubPageProps & {
 	salonID: number
 }
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.PARTNER]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN]
 
 export const parseEmployeeIds = (employees: any[]) => {
 	return employees.map((employee: any) => employee?.id)

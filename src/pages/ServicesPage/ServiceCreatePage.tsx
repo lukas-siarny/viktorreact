@@ -22,7 +22,7 @@ import { history } from '../../utils/history'
 import { withPermissions } from '../../utils/Permissions'
 import { encodePrice } from '../../utils/helper'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.PARTNER_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]
 
 const ServiceCreatePage = (props: SalonSubPageProps) => {
 	const { t } = useTranslation()

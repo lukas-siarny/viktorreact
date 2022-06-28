@@ -66,7 +66,7 @@ const validateUsersSelect = (value: string, formValues: any, props: any) => {
 	return undefined
 }
 
-const UserAccountForm: FC<Props> = (props) => {
+const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	// NOTE: switches (showCompanyInfoSwitch, showContactPersonSwitch) are hidden, if related objects are not empty
@@ -446,6 +446,6 @@ const form = reduxForm<ISalonForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateSalonForm
-})(UserAccountForm)
+})(SalonForm)
 
 export default form

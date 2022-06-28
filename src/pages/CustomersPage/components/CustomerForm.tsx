@@ -54,6 +54,7 @@ const CustomerForm: FC<Props> = (props) => {
 						size={'large'}
 						prefixName={'phonePrefixCountryCode'}
 						phoneName={'phone'}
+						formName={FORM.CUSTOMER}
 						required
 					/>
 					<Row justify={'space-between'}>

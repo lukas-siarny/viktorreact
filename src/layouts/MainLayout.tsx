@@ -43,12 +43,12 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.PARTNER]}
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
-							<Header className='shadow-md bg-notino-white'>
+							<Header className='shadow-md bg-notino-white sticky top-0 z-10'>
 								<Row className={'justify-between'}>
-									<Row className='w-1/3 items-baseline'>
+									<Row className='w-1/2 items-baseline'>
 										<strong className='pr-4'>{t('loc:Zvolený salón')}:</strong>
 										{hasPermission ? (
-											<div className={'ant-form-item w-2/3'}>
+											<div className={'ant-form-item w-1/2'}>
 												<Select
 													value={salonID}
 													defaultValue={salonID}

@@ -5,9 +5,8 @@ import { Col, Divider, Form, Row } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, GENDER, FILTER_ENTITY } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, GENDER } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
-import searchWrapper from '../../../utils/filters'
 
 // types
 import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -31,7 +30,6 @@ type Props = InjectedFormProps<ICustomerForm, ComponentProps> & ComponentProps
 
 const CustomerForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const { handleSubmit } = props
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
@@ -39,13 +37,6 @@ const CustomerForm: FC<Props> = (props) => {
 		{ label: `${t('loc: Muž')}`, value: GENDER.MALE, key: GENDER.MALE },
 		{ label: `${t('loc:Žena')}`, value: GENDER.FEMALE, key: GENDER.FEMALE }
 	]
-
-	const searchSalon = useCallback(
-		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SALON)
-		},
-		[dispatch]
-	)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -89,21 +80,6 @@ const CustomerForm: FC<Props> = (props) => {
 						size={'large'}
 						loading={countries?.isLoading}
 						allowClear
-					/>
-					<Field
-						className='m-0'
-						label={t('loc:Salón')}
-						size={'large'}
-						component={SelectField}
-						allowClear
-						placeholder={t('loc:Vyberte salón')}
-						name={'salonID'}
-						showSearch
-						onSearch={searchSalon}
-						filterOption={false}
-						allowInfinityScroll
-						onDidMountSearch
-						required
 					/>
 				</Row>
 			</Col>

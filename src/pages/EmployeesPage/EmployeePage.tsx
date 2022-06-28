@@ -20,7 +20,7 @@ import { IBreadcrumbs, IComputedMatch, IEmployeeForm, IInviteEmployeeForm, ILoad
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION } from '../../utils/enums'
+import { FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { decodePrice, encodePrice } from '../../utils/helper'
 
@@ -285,7 +285,7 @@ const EmployeePage = (props: Props) => {
 					<Row className={rowClass}>
 						{showDeleteBtn ? (
 							<DeleteButton
-								permissions={permissions}
+								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
 								className={'w-1/3'}
 								onConfirm={deleteEmployee}
 								entityName={t('loc:zamestnanca')}
@@ -293,11 +293,12 @@ const EmployeePage = (props: Props) => {
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 							/>
 						) : undefined}
-						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<div className={`flex justify-between ${wrapperWidthClass}`}>
-									{isProfileInActive ? (
+
+						<div className={`flex justify-between ${wrapperWidthClass}`}>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
+								render={(hasPermission, { openForbiddenModal }) =>
+									isProfileInActive && (
 										<Button
 											type={'primary'}
 											block
@@ -318,7 +319,12 @@ const EmployeePage = (props: Props) => {
 										>
 											{t('loc:Pozvať do tímu')}
 										</Button>
-									) : undefined}
+									)
+								}
+							/>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_UPDATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
 										block
@@ -338,9 +344,9 @@ const EmployeePage = (props: Props) => {
 									>
 										{t('loc:Uložiť')}
 									</Button>
-								</div>
-							)}
-						/>
+								)}
+							/>
+						</div>
 						<Modal
 							className='rounded-fields'
 							title={t('loc:Pozvať do tímu')}

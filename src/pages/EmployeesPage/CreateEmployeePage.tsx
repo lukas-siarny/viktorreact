@@ -7,7 +7,7 @@ import { Button, Row } from 'antd'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, FORM } from '../../utils/enums'
+import { PERMISSION, SALON_PERMISSION, FORM } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 
@@ -22,7 +22,7 @@ import { IBreadcrumbs, IEmployeeForm, SalonSubPageProps } from '../../types/inte
 // reducers
 import { RootState } from '../../reducers'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]
+const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]
 
 const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()

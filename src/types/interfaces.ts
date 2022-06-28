@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
 
 export interface IErrorMessage {
@@ -285,8 +285,10 @@ export interface ISearchablePayload<T extends IDataPagination> {
 	data: T | null
 }
 
+export type _Permissions = (PERMISSION | SALON_PERMISSION)[]
+
 export interface IPermissions {
-	uniqPermissions?: PERMISSION[]
+	uniqPermissions?: _Permissions
 }
 
 export interface ICurrency {

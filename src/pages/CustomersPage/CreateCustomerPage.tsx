@@ -15,7 +15,7 @@ import { IBreadcrumbs, ICustomerForm, SalonSubPageProps } from '../../types/inte
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { ENUMERATIONS_KEYS, FORM, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { getPrefixCountryCode } from '../../utils/helper'
@@ -23,7 +23,7 @@ import { getPrefixCountryCode } from '../../utils/helper'
 // reducers
 import { RootState } from '../../reducers'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]
+const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]
 
 const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -66,7 +66,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				firstName: formData.firstName,
 				gender: formData.gender,
 				lastName: formData.lastName,
-				salonID: formData.salonID,
+				salonID,
 				street: formData.street,
 				streetNumber: formData.streetNumber,
 				zipCode: formData.zipCode,

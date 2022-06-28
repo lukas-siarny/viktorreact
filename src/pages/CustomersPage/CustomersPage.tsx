@@ -14,7 +14,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -149,7 +149,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
+							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<CustomersFilter
 									onSubmit={handleSubmit}

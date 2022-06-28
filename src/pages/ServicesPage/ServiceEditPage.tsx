@@ -18,7 +18,7 @@ import { IServiceForm, SalonSubPageProps, ILoadingAndFailure } from '../../types
 
 // utils
 import { patchReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { decodePrice, encodePrice } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { RootState } from '../../reducers'
@@ -29,7 +29,7 @@ type Props = SalonSubPageProps & {
 	salonID: number
 }
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseEmployeeIds = (employees: any[]) => {
 	return employees.map((employee: any) => employee?.id)
@@ -139,7 +139,7 @@ const ServiceEditPage = (props: Props) => {
 	}
 	return (
 		<Permissions
-			allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_UPDATE]}
+			allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<ServiceForm
 					addEmployee={() => addEmployee(employees, form, dispatch)}

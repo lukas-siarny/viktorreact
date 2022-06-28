@@ -24,7 +24,7 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
@@ -268,7 +268,7 @@ const ServiceForm = (props: Props) => {
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								onConfirm={onConfirmDelete}
 								entityName={t('loc:službu')}
-								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_DELETE]}
+								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_DELETE]}
 							/>
 						) : null}
 					</Col>

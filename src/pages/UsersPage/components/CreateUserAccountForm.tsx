@@ -29,7 +29,7 @@ type Props = InjectedFormProps<ICreateUserForm, ComponentProps> & ComponentProps
 const CreateUserAccountForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit } = props
-	const roles = useSelector((state: RootState) => state.roles.roles)
+	const roles = useSelector((state: RootState) => state.roles.systemRoles)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>

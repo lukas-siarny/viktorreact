@@ -28,7 +28,7 @@ const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PER
 const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -38,7 +38,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: t('paths:customers')
+				link: parentPath + t('paths:customers')
 			},
 			{
 				name: t('loc:Vytvorenie zákazníka')
@@ -75,7 +75,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 			})
 
 			const customerID = get(data, 'cusomer.id', 0)
-			history.push(customerID > 0 ? t('paths:customers/{{customerID}}', { customerID }) : t('paths:customers'))
+			history.push(parentPath + (customerID > 0 ? t('paths:customers/{{customerID}}', { customerID }) : t('paths:customers')))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -87,7 +87,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
 			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={createCustomer} />

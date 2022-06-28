@@ -38,7 +38,14 @@ const CreateUserAccountForm: FC<Props> = (props) => {
 					<h3 className={'mb-0 mt-3'}>{t('loc:Vytvoriť používateľa')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
-					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
+					<PhoneWithPrefixField
+						label={'Telefón'}
+						placeholder={t('loc:Zadajte telefón')}
+						size={'large'}
+						prefixName={'phonePrefixCountryCode'}
+						phoneName={'phone'}
+						formName={FORM.ADMIN_CREATE_USER}
+					/>
 					<Field
 						component={SelectField}
 						options={roles?.data}

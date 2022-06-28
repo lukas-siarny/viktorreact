@@ -178,6 +178,7 @@ const SalonForm: FC<Props> = (props) => {
 							prefixName={'phonePrefixCountryCode'}
 							phoneName={'phone'}
 							disabled={disabledForm}
+							formName={FORM.SALON}
 							required
 						/>
 						<Field
@@ -301,6 +302,7 @@ const SalonForm: FC<Props> = (props) => {
 								phoneName={'companyContactPerson.phone'}
 								disabled={disabledForm}
 								style={{ width: 'calc(50% - 8px' }}
+								formName={FORM.SALON}
 								required
 							/>
 						</Row>

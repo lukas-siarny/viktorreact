@@ -250,7 +250,14 @@ const EmployeeForm: FC<Props> = (props) => {
 						</div>
 					</div>
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
-					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
+					<PhoneWithPrefixField
+						label={'Telefón'}
+						placeholder={t('loc:Zadajte telefón')}
+						size={'large'}
+						prefixName={'phonePrefixCountryCode'}
+						phoneName={'phone'}
+						formName={FORM.EMPLOYEE}
+					/>
 					<h3>{t('loc:Zoznam priradených služieb')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex w-full justify-between'}>

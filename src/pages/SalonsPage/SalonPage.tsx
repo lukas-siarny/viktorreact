@@ -18,9 +18,8 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERM
 
 // reducers
 import { RootState } from '../../reducers'
-import { emptySalon, getSalon, ISalonPayload } from '../../reducers/salons/salonsActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
-import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
 import { IBreadcrumbs, SalonSubPageProps, ILoadingAndFailure, ISalonForm, OpeningHours } from '../../types/interfaces'
@@ -186,13 +185,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-	const salon = useSelector((state: RootState) => state.salons.salon)
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
-	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)
+	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null)
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions: PERMISSION[] = salonID > 0 ? [...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE] : permissions
@@ -217,7 +216,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		} else {
 			// set to init values
 			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: OpeningHours = initOpeningHours(salon.data?.salon?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
+			const openingHours: OpeningHours = initOpeningHours(salon.data?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
 			if (openOverWeekendFormValue && openingHours) {
 				const updatedOpeningHours = unionBy(
 					[
@@ -235,19 +234,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
-	useEffect(() => {
-		if (salonID > 0) {
-			// updating existing salon
-			dispatch(getSalon(salonID))
-		} else {
-			// creating new salon clear salon store
-			dispatch(emptySalon())
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salonID])
-
 	const updateOnlyOpeningHours = useRef(false)
-	const fetchData = async (salonData: ISalonPayload & ILoadingAndFailure) => {
+	const fetchData = async (salonData: ISelectedSalonPayload & ILoadingAndFailure) => {
 		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		const defaultContactPerson = {
 			phonePrefixCountryCode
@@ -257,38 +245,38 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			if (salon?.isLoading) return
 			dispatch(
 				change(FORM.SALON, 'openingHoursNote', {
-					note: salonData.data?.salon?.openingHoursNote?.note,
-					noteFrom: salonData.data?.salon?.openingHoursNote?.validFrom,
-					noteTo: salonData.data?.salon?.openingHoursNote?.validTo
+					note: salonData.data?.openingHoursNote?.note,
+					noteFrom: salonData.data?.openingHoursNote?.validFrom,
+					noteTo: salonData.data?.openingHoursNote?.validTo
 				})
 			)
 			updateOnlyOpeningHours.current = false
 		} else if (!isEmpty(salonData.data)) {
 			// init data for existing salon
-			const openOverWeekend: boolean = checkWeekend(salonData.data?.salon?.openingHours)
-			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.salon?.openingHours)
-			const openingHours: OpeningHours = initOpeningHours(salonData.data?.salon?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+			const openOverWeekend: boolean = checkWeekend(salonData.data?.openingHours)
+			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.openingHours)
+			const openingHours: OpeningHours = initOpeningHours(salonData.data?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 
 			dispatch(
 				initialize(FORM.SALON, {
-					...salonData.data?.salon,
+					...salonData.data,
 					openOverWeekend,
 					sameOpenHoursOverWeek,
 					openingHours,
-					note: salonData.data?.salon?.openingHoursNote?.note,
-					noteFrom: salonData.data?.salon?.openingHoursNote?.validFrom,
-					noteTo: salonData.data?.salon?.openingHoursNote?.validTo,
-					latitude: salonData.data?.salon?.address?.latitude,
-					longitude: salonData.data?.salon?.address?.longitude,
-					city: salonData.data?.salon?.address?.city,
-					street: salonData.data?.salon?.address?.street,
-					zipCode: salonData.data?.salon?.address?.zipCode,
-					country: salonData.data?.salon?.address?.countryCode,
-					streetNumber: salonData.data?.salon?.address?.streetNumber,
-					companyContactPerson: salonData.data?.salon.companyContactPerson || defaultContactPerson,
-					companyInfo: salonData.data?.salon.companyInfo,
-					gallery: map(salonData.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
-					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null
+					note: salonData.data?.openingHoursNote?.note,
+					noteFrom: salonData.data?.openingHoursNote?.validFrom,
+					noteTo: salonData.data?.openingHoursNote?.validTo,
+					latitude: salonData.data?.address?.latitude,
+					longitude: salonData.data?.address?.longitude,
+					city: salonData.data?.address?.city,
+					street: salonData.data?.address?.street,
+					zipCode: salonData.data?.address?.zipCode,
+					country: salonData.data?.address?.countryCode,
+					streetNumber: salonData.data?.address?.streetNumber,
+					companyContactPerson: salonData.data?.companyContactPerson || defaultContactPerson,
+					companyInfo: salonData.data?.companyInfo,
+					gallery: map(salonData.data?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
+					logo: salonData.data?.logo?.id ? [{ url: salonData.data?.logo?.original, uid: salonData.data?.logo?.id }] : null
 				})
 			)
 		} else if (!salon?.isLoading) {
@@ -297,7 +285,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				initialize(FORM.SALON, {
 					openOverWeekend: false,
 					sameOpenHoursOverWeek: true,
-					openingHours: initOpeningHours(salonData.data?.salon?.openingHours, true, false),
+					openingHours: initOpeningHours(salonData.data?.openingHours, true, false),
 					payByCard: false,
 					phonePrefixCountryCode,
 					isInvoiceAddressSame: true,
@@ -346,7 +334,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			if (salonID > 0) {
 				// update existing salon
 				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData)
-				dispatch(getSalon(salonID))
+				dispatch(selectSalon(salonID))
 			} else {
 				// create new salon
 				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData)
@@ -414,7 +402,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		setSubmitting(true)
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/publish', { salonID }, { publish: published })
-			dispatch(getSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -431,7 +419,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		setSubmitting(true)
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
-			dispatch(getSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -443,7 +431,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const onOpenHoursNoteModalClose = () => {
 		updateOnlyOpeningHours.current = true
 		setVisible(false)
-		dispatch(getSalon(salonID))
+		dispatch(selectSalon(salonID))
 	}
 
 	const salonExists = salonID > 0
@@ -464,12 +452,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					disabledForm={deletedSalon}
 				/>
 				{salonExists && (
-					<OpenHoursNoteModal
-						visible={visible}
-						salonID={salon?.data?.salon?.id || 0}
-						openingHoursNote={salon?.data?.salon?.openingHoursNote}
-						onClose={onOpenHoursNoteModalClose}
-					/>
+					<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
 				)}
 
 				<div className={'content-footer'}>

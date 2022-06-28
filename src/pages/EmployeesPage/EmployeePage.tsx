@@ -39,7 +39,7 @@ type Props = SalonSubPageProps & {
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
-	return oldServices.map((service: any) => {
+	return oldServices?.map((service: any) => {
 		return {
 			id: service?.id,
 			employeeData: {

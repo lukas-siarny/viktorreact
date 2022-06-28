@@ -40,15 +40,7 @@ const fixLength100 = validationString(100)
 const CustomersFilter = (props: Props) => {
 	const { handleSubmit, createCustomer, total } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.CUSTOMERS_FILTER)(state))
-
-	const searchSalon = useCallback(
-		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
-		},
-		[dispatch]
-	)
 
 	// disable filter fields if the number of services is less than 2
 	const isFilterDisabled = useMemo(() => {
@@ -79,25 +71,7 @@ const CustomersFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={addCustomerBtn}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={6}>
-						<Field
-							className='m-0'
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Salón')}
-							name='salonID'
-							showSearch
-							onSearch={searchSalon}
-							filterOption={false}
-							allowInfinityScroll
-							onDidMountSearch
-							disabled={isFilterDisabled}
-						/>
-					</Col>
-				</Row>
-			</Filters>
+			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={addCustomerBtn} />
 		</Form>
 	)
 }

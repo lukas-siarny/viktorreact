@@ -39,16 +39,15 @@ const CustomersPage = () => {
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
-		salonID: NumberParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'lastName:ASC')
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search, salonID: query.salonID }))
-		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID: query.salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])
+		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
+		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search }))
+	}, [dispatch, query.page, query.limit, query.search, query.order])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -85,18 +84,16 @@ const CustomersPage = () => {
 	const columns: Columns = [
 		{
 			title: t('loc:Meno'),
-			dataIndex: 'firstName',
-			key: 'firstName',
-			ellipsis: true,
-			sorter: false
-		},
-		{
-			title: t('loc:Priezvisko'),
-			dataIndex: 'lastName',
+			dataIndex: 'lastlName',
 			key: 'lastName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'lastName')
+			sortOrder: setOrder(query.order, 'lastName'),
+			render: (value, record) => (
+				<>
+					{record?.firstName} {record?.lastName}
+				</>
+			)
 		},
 		{
 			title: t('loc:Email'),
@@ -117,16 +114,6 @@ const CustomersPage = () => {
 						{prefixOptions[record?.phonePrefixCountryCode]} {value}
 					</>
 				)
-			}
-		},
-		{
-			title: t('loc:Salón'),
-			dataIndex: 'salonName',
-			key: 'salonName',
-			ellipsis: true,
-			sorter: false,
-			render: (value, record) => {
-				return <>{record?.salon?.name}</>
 			}
 		}
 	]

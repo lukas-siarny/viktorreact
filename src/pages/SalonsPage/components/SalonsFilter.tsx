@@ -40,7 +40,7 @@ const SalonsFilter = (props: Props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
 	const categories = useSelector((state: RootState) => state.categories.categories)
-	const countries = useSelector((state: RootState) => state.enumerationsStore.countries)
+	const countries = useSelector((state: RootState) => state.enumerationsStore.countries_filter_options)
 
 	const statusOptions = [
 		{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED },

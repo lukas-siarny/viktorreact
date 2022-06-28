@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { ACCOUNT_STATE, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
-import { searchSalonWrapper } from '../../../utils/filters'
+import { searchServiceWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -40,9 +40,15 @@ const EmployeesFilter = (props: Props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
 
-	const onSearchSalons = useCallback(
+	const accountStateOptions = [
+		{ label: t('loc:Nespárované'), value: ACCOUNT_STATE.UNPAIRED, key: ACCOUNT_STATE.UNPAIRED },
+		{ label: t('loc:Čakajúce'), value: ACCOUNT_STATE.PENDING, key: ACCOUNT_STATE.PENDING },
+		{ label: t('loc:Spárované'), value: ACCOUNT_STATE.PAIRED, key: ACCOUNT_STATE.PAIRED }
+	]
+
+	const onSearchServices = useCallback(
 		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
+			return searchServiceWrapper(dispatch, { search, page })
 		},
 		[dispatch]
 	)
@@ -73,11 +79,23 @@ const EmployeesFilter = (props: Props) => {
 					<Col span={8}>
 						<Field
 							component={SelectField}
-							name={'salonID'}
-							placeholder={t('loc:Salón')}
+							name={'accountState'}
+							placeholder={t('loc:Stav konta')}
 							allowClear
 							size={'middle'}
-							onSearch={onSearchSalons}
+							filterOptions
+							onDidMountSearch
+							options={accountStateOptions}
+						/>
+					</Col>
+					<Col span={8}>
+						<Field
+							component={SelectField}
+							name={'serviceID'}
+							placeholder={t('loc:Služba')}
+							allowClear
+							size={'middle'}
+							onSearch={onSearchServices}
 							optionLabelProp={'label'}
 							filterOption={true}
 							showSearch

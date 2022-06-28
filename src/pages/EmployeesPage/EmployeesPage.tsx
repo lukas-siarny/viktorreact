@@ -48,13 +48,14 @@ const EmployeesPage = () => {
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:desc'),
-		salonID: withDefault(NumberParam, undefined)
+		accountState: StringParam,
+		serviceID: NumberParam
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, salonID: query.salonID }))
-		dispatch(getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID: query.salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])
+		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
+		dispatch(getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, accountState: query.accountState, serviceID: query.serviceID }))
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -122,16 +123,6 @@ const EmployeesPage = () => {
 					{prefixOptions[record?.phonePrefixCountryCode]} {value}
 				</>
 			)
-		},
-		{
-			title: t('loc:Salón'),
-			dataIndex: 'salon',
-			key: 'salon',
-			ellipsis: {
-				showTitle: false
-			},
-			width: '15%',
-			render: (value) => value?.name
 		},
 		{
 			title: t('loc:Služby'),

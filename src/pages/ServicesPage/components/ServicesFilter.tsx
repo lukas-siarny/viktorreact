@@ -66,7 +66,7 @@ const ServicesFilter = (props: Props) => {
 			className={'h-10 p-0 m-0'}
 			component={InputField}
 			size={'large'}
-			placeholder={t('loc:Hľadať podľa názov, salón')}
+			placeholder={t('loc:Hľadať podľa názvu')}
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search

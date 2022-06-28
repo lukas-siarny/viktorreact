@@ -58,7 +58,9 @@ const SalonsPage = () => {
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SALONS_FILTER, { search: query.search, statuses: query.statuses, categoryFirstLevelIDs: query.categoryFirstLevelIDs }))
+		dispatch(
+			initialize(FORM.SALONS_FILTER, { search: query.search, statuses: query.statuses, categoryFirstLevelIDs: query.categoryFirstLevelIDs, countryCode: query.countryCode })
+		)
 		dispatch(
 			getSalons({
 				page: query.page,
@@ -160,8 +162,10 @@ const SalonsPage = () => {
 			dataIndex: 'fillingProgressSalon',
 			key: 'fillingProgressSalon',
 			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'fillingProgressSalon'),
+			sorter: false,
+			// NOTE: sort by fillingProgressSalon when BE is done
+			/* sorter: true,
+			sortOrder: setOrder(query.order, 'fillingProgressSalon'), */
 			render: (value, record) => {
 				const progressVariables = [Number(value), Number(record.fillingProgressServices), Number(record.fillingProgressCompany)]
 				// 1% 34%, 67%, 100%

@@ -100,12 +100,6 @@ const ServicesPage = () => {
 			sortOrder: setOrder(query.order, 'name')
 		},
 		{
-			title: t('loc:Salón'),
-			dataIndex: 'salon',
-			key: 'salon',
-			ellipsis: true
-		},
-		{
 			title: t('loc:Zamestnanec'),
 			dataIndex: 'employees',
 			key: 'employees',

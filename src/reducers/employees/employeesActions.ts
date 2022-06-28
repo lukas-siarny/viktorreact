@@ -27,6 +27,8 @@ export interface IGetEmployeesQueryParams {
 	order?: string | undefined
 	search?: string | undefined | null
 	salonID?: number | undefined | null
+	serviceID?: number | undefined | null
+	accountState?: string | undefined | null
 }
 
 export interface EmployeesOptionItem {

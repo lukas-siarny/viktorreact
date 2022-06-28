@@ -114,10 +114,11 @@ const ServiceForm = (props: Props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
-	const isLoading = serviceLoading || categoriesLoading || isRemoving
+	const isLoading = serviceLoading || categoriesLoading || isRemoving || salon.isLoading
 	const submitting = false
 
 	const variableDuration = formValues?.variableDuration
@@ -167,7 +168,7 @@ const ServiceForm = (props: Props) => {
 					<Col span={variableDuration ? 8 : 16}>
 						<Field
 							component={InputNumberField}
-							label={variableDuration ? t('loc:Trvanie od') : t('loc:Trvanie')}
+							label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
 							placeholder={t('loc:min')}
 							name='durationFrom'
 							precision={0}
@@ -183,7 +184,7 @@ const ServiceForm = (props: Props) => {
 						<Col span={8}>
 							<Field
 								component={InputNumberField}
-								label={t('loc:Trvanie do')}
+								label={t('loc:Trvanie do (minúty)')}
 								placeholder={t('loc:min')}
 								name='durationTo'
 								precision={0}
@@ -204,9 +205,12 @@ const ServiceForm = (props: Props) => {
 					<Col span={variablePrice ? 8 : 16}>
 						<Field
 							component={InputNumberField}
-							label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
-							// TODO add currency
-							// placeholder={t('loc:min')}
+							label={
+								variablePrice
+									? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
+									: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
+							}
+							placeholder={salon.data?.currency.symbol}
 							name='priceFrom'
 							precision={2}
 							step={1}
@@ -220,9 +224,8 @@ const ServiceForm = (props: Props) => {
 						<Col span={8}>
 							<Field
 								component={InputNumberField}
-								label={t('loc:Cena do')}
-								// TODO add currency
-								// placeholder={t('loc:min')}
+								label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
+								placeholder={salon.data?.currency.symbol}
 								name='priceTo'
 								precision={2}
 								step={1}

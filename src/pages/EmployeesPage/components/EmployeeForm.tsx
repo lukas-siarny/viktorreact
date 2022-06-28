@@ -50,7 +50,7 @@ const numberMin0 = validationNumberMin(0)
 const renderListFields = (props: any) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
-	const { fields } = props
+	const { fields, salon } = props
 
 	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
 		<div className={'flex items-center mr-3'}>
@@ -119,11 +119,14 @@ const renderListFields = (props: any) => {
 							key={index}
 							extra={genExtra(index, fieldData)}
 						>
-							<Row gutter={8}>
-								<Col span={variableDuration ? 12 : 24}>
+							<Row gutter={8} align='middle'>
+								<Col span={8}>
+									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
+								</Col>
+								<Col span={variableDuration ? 8 : 16}>
 									<Field
 										component={InputNumberField}
-										label={variableDuration ? t('loc:Trvanie od') : t('loc:Trvanie')}
+										label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
 										placeholder={t('loc:min')}
 										name={`${field}.employeeData.durationFrom`}
 										precision={0}
@@ -136,10 +139,10 @@ const renderListFields = (props: any) => {
 								</Col>
 
 								{variableDuration && (
-									<Col span={12}>
+									<Col span={8}>
 										<Field
 											component={InputNumberField}
-											label={t('loc:Trvanie do')}
+											label={t('loc:Trvanie do (minúty)')}
 											placeholder={t('loc:min')}
 											name={`${field}.employeeData.durationTo`}
 											precision={0}
@@ -152,15 +155,20 @@ const renderListFields = (props: any) => {
 									</Col>
 								)}
 							</Row>
-							<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
 							<Divider />
-							<Row gutter={8}>
-								<Col span={variablePrice ? 12 : 24}>
+							<Row gutter={8} align='middle'>
+								<Col span={8}>
+									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={`${field}.variablePrice`} size={'middle'} />
+								</Col>
+								<Col span={variablePrice ? 8 : 16}>
 									<Field
 										component={InputNumberField}
-										label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
-										// TODO add currency
-										// placeholder={t('loc:min')}
+										label={
+											variablePrice
+												? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
+												: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
+										}
+										placeholder={salon.data?.currency.symbol}
 										name={`${field}.employeeData.priceFrom`}
 										precision={2}
 										step={1}
@@ -171,12 +179,11 @@ const renderListFields = (props: any) => {
 									/>
 								</Col>
 								{variablePrice && (
-									<Col span={12}>
+									<Col span={8}>
 										<Field
 											component={InputNumberField}
-											label={t('loc:Cena do')}
-											// TODO add currency
-											// placeholder={t('loc:min')}
+											label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
+											placeholder={salon.data?.currency.symbol}
 											name={`${field}.employeeData.priceTo`}
 											precision={2}
 											step={1}
@@ -188,7 +195,6 @@ const renderListFields = (props: any) => {
 									</Col>
 								)}
 							</Row>
-							<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={`${field}.variablePrice`} size={'middle'} />
 						</Panel>
 					)
 				})}
@@ -204,6 +210,7 @@ const EmployeeForm: FC<Props> = (props) => {
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE].values)
 	const services = useSelector((state: RootState) => state.service.services)
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	useEffect(() => {
 		dispatch(getServices({ page: 1, salonID }))
@@ -267,7 +274,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							{t('loc:Pridať službu')}
 						</Button>
 					</div>
-					<FieldArray component={renderListFields} name={'services'} />
+					<FieldArray component={renderListFields} name={'services'} salon={salon} />
 				</Row>
 			</Col>
 		</Form>

@@ -28,7 +28,7 @@ const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PER
 
 const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 
@@ -43,7 +43,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 		items: [
 			{
 				name: t('loc:Zoznam zamestnancov'),
-				link: t('paths:employees')
+				link: parentPath + t('paths:employees')
 			},
 			{
 				name: t('loc:Vytvoriť zamestnanca')
@@ -71,7 +71,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				imageID: formData?.imageID
 			} as any)
 			if (data?.employee?.id) {
-				history.push(t('paths:employees/{{employeeID}}', { employeeID: data?.employee?.id }))
+				history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: data?.employee?.id }))
 			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -84,7 +84,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
 			<Spin spinning={isLoading}>
 				<div className='content-body small mt-2'>

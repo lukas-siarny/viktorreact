@@ -26,7 +26,7 @@ const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PER
 
 const ServiceCreatePage = (props: SalonSubPageProps) => {
 	const { t } = useTranslation()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const dispatch = useDispatch()
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -54,7 +54,7 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 			const { data } = await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 
 			const serviceID = get(data, 'service.id', 0)
-			history.push(serviceID > 0 ? t('paths:services/{{serviceID}}', { serviceID }) : t('paths:services'))
+			history.push(parentPath + (serviceID > 0 ? t('paths:services/{{serviceID}}', { serviceID }) : t('paths:services')))
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

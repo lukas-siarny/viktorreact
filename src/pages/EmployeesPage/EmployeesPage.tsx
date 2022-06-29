@@ -30,6 +30,7 @@ import { IBreadcrumbs } from '../../types/interfaces'
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
+import TooltipEllipsis from '../../components/TooltipEllipsis'
 
 type Columns = ColumnsType<any>
 
@@ -143,8 +144,16 @@ const EmployeesPage = () => {
 			sortOrder: setOrder(query.order, 'status'),
 			render: (value, record) => (
 				<div className={'flex justify-center'}>
-					{value === false && !record?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
-					{value === false && record?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
+					{value === false && !record?.inviteEmail ? (
+						<TooltipEllipsis title={t('loc:Nespárované')}>
+							<QuestionIcon width={20} height={20} />
+						</TooltipEllipsis>
+					) : undefined}
+					{value === false && record?.inviteEmail ? (
+						<TooltipEllipsis title={t('loc:Čakajúce')}>
+							<CloudOfflineIcon width={20} height={20} />
+						</TooltipEllipsis>
+					) : undefined}
 				</div>
 			)
 		}

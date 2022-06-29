@@ -91,7 +91,8 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			return {
 				key: item.code,
 				label: countryLabel || item.code,
-				value: item.code
+				value: item.code,
+				flag: item.flag
 			}
 		})
 

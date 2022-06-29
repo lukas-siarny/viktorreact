@@ -47,7 +47,8 @@ const SalonsFilter = (props: Props) => {
 		{ label: t('loc:Publikované'), value: SALON_STATUSES.PUBLISHED, key: SALON_STATUSES.PUBLISHED },
 		{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE, key: SALON_STATUSES.VISIBLE },
 		{ label: t('loc:Nevymazané'), value: SALON_STATUSES.NOT_DELETED, key: SALON_STATUSES.NOT_DELETED },
-		{ label: t('loc:Nepublikované'), value: SALON_STATUSES.NOT_PUBLISHED, key: SALON_STATUSES.NOT_PUBLISHED }
+		{ label: t('loc:Nepublikované'), value: SALON_STATUSES.NOT_PUBLISHED, key: SALON_STATUSES.NOT_PUBLISHED },
+		{ label: t('loc:Nie sú viditeľné'), value: SALON_STATUSES.NOT_VISIBLE, key: SALON_STATUSES.NOT_VISIBLE }
 	]
 
 	const searchInput = (
@@ -68,6 +69,16 @@ const SalonsFilter = (props: Props) => {
 			{t('loc:Pridať salón')}
 		</Button>
 	)
+
+	const countryCodeOptionRender = (itemData: any) => {
+		const { value, label, flag } = itemData
+		return (
+			<div className='flex items-center'>
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+				{label}
+			</div>
+		)
+	}
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
@@ -104,6 +115,7 @@ const SalonsFilter = (props: Props) => {
 					<Col span={6}>
 						<Field
 							component={SelectField}
+							optionRender={countryCodeOptionRender}
 							name={'countryCode'}
 							placeholder={t('loc:Krajina')}
 							allowClear

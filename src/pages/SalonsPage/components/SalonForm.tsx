@@ -1,12 +1,11 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row, Space } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { get } from 'lodash'
 
 // components
-import i18next from 'i18next'
 import OpeningHours from './OpeningHours'
 import AddressFields from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -19,9 +18,8 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, ENUMERATIONS_KEYS, FILTER_ENTITY } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, SALON_PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-import searchWrapper from '../../../utils/filters'
 
 // types
 import { ISalonForm } from '../../../types/interfaces'
@@ -94,7 +92,7 @@ const SalonForm: FC<Props> = (props) => {
 										)}
 									/>
 									<Permissions
-										allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
 										render={(hasPermission, { openForbiddenModal }) => (
 											<Field
 												className={'mt-2 mb-2 w-12/25'}

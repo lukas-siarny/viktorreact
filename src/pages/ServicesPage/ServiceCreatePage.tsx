@@ -17,12 +17,12 @@ import { RootState } from '../../reducers'
 
 // utils
 import { postReq } from '../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { withPermissions } from '../../utils/Permissions'
 import { encodePrice } from '../../utils/helper'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]
+const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]
 
 const ServiceCreatePage = (props: SalonSubPageProps) => {
 	const { t } = useTranslation()

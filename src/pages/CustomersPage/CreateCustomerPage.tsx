@@ -15,7 +15,7 @@ import { IBreadcrumbs, ICustomerForm, SalonSubPageProps } from '../../types/inte
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { ENUMERATIONS_KEYS, FORM, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { getPrefixCountryCode } from '../../utils/helper'
@@ -23,12 +23,12 @@ import { getPrefixCountryCode } from '../../utils/helper'
 // reducers
 import { RootState } from '../../reducers'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]
+const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]
 
 const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, parentPath } = props
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -38,7 +38,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: t('paths:customers')
+				link: parentPath + t('paths:customers')
 			},
 			{
 				name: t('loc:Vytvorenie zákazníka')
@@ -66,7 +66,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				firstName: formData.firstName,
 				gender: formData.gender,
 				lastName: formData.lastName,
-				salonID: formData.salonID,
+				salonID,
 				street: formData.street,
 				streetNumber: formData.streetNumber,
 				zipCode: formData.zipCode,
@@ -75,7 +75,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 			})
 
 			const customerID = get(data, 'cusomer.id', 0)
-			history.push(customerID > 0 ? t('paths:customers/{{customerID}}', { customerID }) : t('paths:customers'))
+			history.push(parentPath + (customerID > 0 ? t('paths:customers/{{customerID}}', { customerID }) : t('paths:customers')))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -87,7 +87,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
 			<div className='content-body small mt-2'>
 				<CustomerForm onSubmit={createCustomer} />

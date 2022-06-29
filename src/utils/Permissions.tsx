@@ -3,16 +3,18 @@
 import React, { Component, FC, useState } from 'react'
 import { connect, useSelector } from 'react-redux'
 import { bindActionCreators, compose } from 'redux'
-import { get, indexOf, some } from 'lodash'
+import { get, indexOf, some, isEmpty, partition } from 'lodash'
 import { Button, Modal, notification, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 import * as UserActions from '../reducers/users/userActions'
 import { history } from './history'
 import { RootState } from '../reducers'
-import { PERMISSION } from './enums'
+import { PERMISSION, ADMIN_PERMISSIONS } from './enums'
+import { isEnumValue } from './helper'
+import { _Permissions } from '../types/interfaces'
 
-export const checkPermissions = (authUserPermissions: PERMISSION[] = [], allowed: PERMISSION[] = [], except: PERMISSION[] = []) => {
+export const checkPermissions = (authUserPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []) => {
 	if (except.length > 0 && some(except, (elem: any) => indexOf(authUserPermissions, elem) > -1)) {
 		return false
 	}
@@ -26,7 +28,7 @@ export const checkPermissions = (authUserPermissions: PERMISSION[] = [], allowed
 }
 
 export const withPermissions =
-	(allowed: PERMISSION[] = [], except: PERMISSION[] = []) =>
+	(allowed: _Permissions = [], except: _Permissions = []) =>
 	(WrappedComponent: any) => {
 		class WithPermissionsClass extends Component<any> {
 			_mounted = false
@@ -92,19 +94,36 @@ export const withPermissions =
 
 type Props = {
 	render?: (hasPermission: boolean, object: any) => React.ReactNode
-	allowed?: PERMISSION[]
-	except?: PERMISSION[]
+	allowed?: _Permissions
+	except?: _Permissions
 }
 
-const isAdmin = (authUserPermissions: PERMISSION[] = []): boolean => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN])
+const isAdmin = (authUserPermissions: _Permissions = []): boolean => checkPermissions(authUserPermissions, ADMIN_PERMISSIONS)
+
+const permitted = (userPermissions: _Permissions = [], salonsPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []): boolean => {
+	// split into SYSTEM (index 0) and SALON (index 1) permissions
+	const allowedPermissions = partition(allowed, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
+	const exceptedPermissions = partition(except, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
+
+	const hasSystemPermissions = checkPermissions(userPermissions, allowedPermissions[0], exceptedPermissions[0])
+
+	if (isEmpty(allowedPermissions[1]) && isEmpty(exceptedPermissions[1])) {
+		return hasSystemPermissions
+	}
+
+	const hasSalonPermissions = checkPermissions(salonsPermissions, allowedPermissions[1], exceptedPermissions[1])
+
+	// For system permissions SUPER_ADMIN and ADMIN are salons permissions ignored
+	return (hasSalonPermissions || isAdmin(userPermissions)) && hasSystemPermissions
+}
 
 const Permissions: FC<Props> = (props) => {
 	const { render, allowed, except, children } = props
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
-	// const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
-	// const hasPermissions = selectedSalon
-	// 	? isAdmin(authUserPermissions) || checkPermissions(selectedSalon.uniqPermissions, allowed, except)
-	const hasPermissions = checkPermissions(authUserPermissions, allowed, except)
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
+
+	const hasPermissions = permitted(authUserPermissions, selectedSalon?.uniqPermissions, allowed, except)
+
 	const [visibleModal, setVisibleModal] = useState(false)
 	const [t] = useTranslation()
 
@@ -119,7 +138,7 @@ const Permissions: FC<Props> = (props) => {
 					description: t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
 				})
 			},
-			checkPermissions: (allowedPermissions: PERMISSION[]) => checkPermissions(authUserPermissions, allowedPermissions)
+			checkPermissions: (allowedPermissions: _Permissions) => checkPermissions(authUserPermissions, allowedPermissions)
 		})
 		const modal: any = (
 			<>

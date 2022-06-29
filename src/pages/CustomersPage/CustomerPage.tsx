@@ -20,7 +20,7 @@ import { RootState } from '../../reducers'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 
@@ -35,7 +35,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 const CustomerPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { salonID, parentPath } = props
+	const { parentPath } = props
 	const { customerID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -131,7 +131,7 @@ const CustomerPage = (props: Props) => {
 				<div className={'content-footer'}>
 					<Row className={'justify-between'}>
 						<DeleteButton
-							permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_DELETE]}
+							permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_DELETE]}
 							className={'w-1/3'}
 							onConfirm={deleteCustomer}
 							entityName={t('loc:zákazníka')}
@@ -139,7 +139,7 @@ const CustomerPage = (props: Props) => {
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_UPDATE]}
+							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_UPDATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<Button
 									type={'primary'}

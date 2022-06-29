@@ -4,14 +4,15 @@ import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
 import { ReactComponent as BinIcon } from '../assets/icons/bin-icon.svg'
-import { PERMISSION, STRINGS } from '../utils/enums'
+import { _Permissions } from '../types/interfaces'
+import { STRINGS } from '../utils/enums'
 import Permissions from '../utils/Permissions'
 
 type Props = ButtonProps &
 	Partial<PopconfirmProps> & {
 		// NOTE: onlyIcon optional prop - for rendering only delete icon button without background and text -> for tables, lists...
 		onlyIcon?: boolean
-		permissions?: PERMISSION[]
+		permissions?: _Permissions
 		entityName?: string
 		withoutIcon?: boolean
 		ghost?: boolean

@@ -677,3 +677,6 @@ export const showServiceCategory = (category: serviceCategory): string | undefin
 	}
 	return category?.name
 }
+
+export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
+	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)

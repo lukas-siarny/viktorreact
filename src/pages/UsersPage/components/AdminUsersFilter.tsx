@@ -38,7 +38,7 @@ const AdminUsersFilter = (props: Props) => {
 	const [t] = useTranslation()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
-	const roles = useSelector((state: RootState) => state.roles.roles)
+	const roles = useSelector((state: RootState) => state.roles.systemRoles)
 
 	const searchInput = (
 		<Field

@@ -15,7 +15,7 @@ import EmployeesFilter, { IEmployeesFilter } from './components/EmployeesFilter'
 import PopoverList from '../../components/PopoverList'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -176,7 +176,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
+							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<EmployeesFilter
 									createEmployee={() => {

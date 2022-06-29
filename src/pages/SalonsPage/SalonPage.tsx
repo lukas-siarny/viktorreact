@@ -14,7 +14,7 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -194,7 +194,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null)
 
 	// check permissions for submit in case of create or update salon
-	const submitPermissions: PERMISSION[] = salonID > 0 ? [...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE] : permissions
+	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
@@ -459,7 +459,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
 						{salonExists && (
 							<DeleteButton
-								permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_DELETE]}
+								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]}
 								className={'w-1/3'}
 								onConfirm={deleteSalon}
 								entityName={t('loc:salón')}

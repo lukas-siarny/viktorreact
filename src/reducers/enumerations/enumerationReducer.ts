@@ -20,6 +20,13 @@ export const initState = {
 		pagination: null,
 		isLoading: false,
 		isFailure: false
+	} as IEnumerationsPayload & ILoadingAndFailure,
+	[ENUMERATIONS_KEYS.CURRENCIES]: {
+		data: null,
+		enumerationsOptions: [],
+		pagination: null,
+		isLoading: false,
+		isFailure: false
 	} as IEnumerationsPayload & ILoadingAndFailure
 }
 

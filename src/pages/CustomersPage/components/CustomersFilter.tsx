@@ -1,21 +1,19 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
-import { Button, Col, Form, Row } from 'antd'
+import { Button, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
-import { searchSalonWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
 
 // components
 import Filters from '../../../components/Filters'
@@ -40,15 +38,7 @@ const fixLength100 = validationString(100)
 const CustomersFilter = (props: Props) => {
 	const { handleSubmit, createCustomer, total } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.CUSTOMERS_FILTER)(state))
-
-	const searchSalon = useCallback(
-		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
-		},
-		[dispatch]
-	)
 
 	// disable filter fields if the number of services is less than 2
 	const isFilterDisabled = useMemo(() => {
@@ -79,25 +69,7 @@ const CustomersFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={addCustomerBtn}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={6}>
-						<Field
-							className='m-0'
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Salón')}
-							name='salonID'
-							showSearch
-							onSearch={searchSalon}
-							filterOption={false}
-							allowInfinityScroll
-							onDidMountSearch
-							disabled={isFilterDisabled}
-						/>
-					</Col>
-				</Row>
-			</Filters>
+			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={addCustomerBtn} />
 		</Form>
 	)
 }

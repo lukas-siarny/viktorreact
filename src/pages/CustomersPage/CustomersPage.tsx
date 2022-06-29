@@ -14,7 +14,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -24,15 +24,16 @@ import { RootState } from '../../reducers'
 import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
-import { IBreadcrumbs, ISearchFilter } from '../../types/interfaces'
+import { IBreadcrumbs, ISearchFilter, SalonSubPageProps } from '../../types/interfaces'
 
 type Columns = ColumnsType<any>
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-const CustomersPage = () => {
+const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const { salonID, parentPath } = props
 	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
@@ -46,9 +47,9 @@ const CustomersPage = () => {
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search, salonID: query.salonID }))
-		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID: query.salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])
+		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
+		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID }))
+	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -148,7 +149,7 @@ const CustomersPage = () => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.CUSTOMER_CREATE]}
+							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<CustomersFilter
 									onSubmit={handleSubmit}
@@ -157,7 +158,7 @@ const CustomersPage = () => {
 										if (!hasPermission) {
 											openForbiddenModal()
 										} else {
-											history.push(t('paths:customers/create'))
+											history.push(parentPath + t('paths:customers/create'))
 										}
 									}}
 								/>
@@ -173,7 +174,7 @@ const CustomersPage = () => {
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(t('paths:customers/{{customerID}}', { customerID: record.id }))
+									history.push(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id }))
 								}
 							})}
 							pagination={{

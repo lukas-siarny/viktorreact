@@ -20,7 +20,7 @@ import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getRoles } from '../../reducers/roles/rolesActions'
+import { getSystemRoles } from '../../reducers/roles/rolesActions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { RootState } from '../../reducers'
 
@@ -50,7 +50,7 @@ const CreateUserPage = () => {
 	const fetchData = async () => {
 		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		dispatch(initialize(FORM.ADMIN_CREATE_USER, { phonePrefixCountryCode }))
-		dispatch(getRoles())
+		dispatch(getSystemRoles())
 	}
 
 	useEffect(() => {

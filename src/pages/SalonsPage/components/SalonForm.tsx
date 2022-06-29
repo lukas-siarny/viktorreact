@@ -1,12 +1,11 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row, Space } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { get } from 'lodash'
 
 // components
-import i18next from 'i18next'
 import OpeningHours from './OpeningHours'
 import AddressFields from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -15,17 +14,15 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
-import SelectField from '../../../atoms/SelectField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, SALON_PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
-import { searchUsersWrapper } from '../../../utils/filters'
 
 // types
-import { IUserAccountForm } from '../../../types/interfaces'
+import { ISalonForm } from '../../../types/interfaces'
 
 // validate
 import validateSalonForm from './validateSalonForm'
@@ -43,58 +40,23 @@ import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.sv
 import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
-import { ReactComponent as PermissionsIcon } from '../../../assets/icons/unlock-icon.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 
 type ComponentProps = {
 	openNoteModal: Function
-	isAdmin: boolean
 	changeSalonVisibility: (visible: boolean) => void
 	publishSalon: (published: boolean) => void
 	switchDisabled: boolean
 	disabledForm: boolean
-	showContactPersonSwitch?: boolean
-	showCompanyInfoSwitch?: boolean
 	salonID?: number
 }
 
-type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 
-// validate user select only if auth user have SUPER ADMIN or ADMIN permissions
-const validateUsersSelect = (value: string, formValues: any, props: any) => {
-	if (!value && props?.isAdmin) {
-		return i18next.t('loc:Toto pole je povinné')
-	}
-	return undefined
-}
-
-const UserAccountForm: FC<Props> = (props) => {
+const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
-	// NOTE: switches (showCompanyInfoSwitch, showContactPersonSwitch) are hidden, if related objects are not empty
-	const {
-		handleSubmit,
-		change,
-		openNoteModal,
-		isAdmin,
-		changeSalonVisibility,
-		publishSalon,
-		switchDisabled,
-		salonID,
-		disabledForm,
-		showCompanyInfoSwitch = true,
-		showContactPersonSwitch = true
-	} = props
+	const { handleSubmit, change, openNoteModal, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-
-	const onSearchUsers = useCallback(
-		async (search: string, page: number) => {
-			// roleID = 3 only for PARTNER users
-			return searchUsersWrapper(dispatch, { page, search, roleID: 3 })
-		},
-		[dispatch]
-	)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -130,7 +92,7 @@ const UserAccountForm: FC<Props> = (props) => {
 										)}
 									/>
 									<Permissions
-										allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE]}
+										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
 										render={(hasPermission, { openForbiddenModal }) => (
 											<Field
 												className={'mt-2 mb-2 w-12/25'}
@@ -214,6 +176,7 @@ const UserAccountForm: FC<Props> = (props) => {
 							prefixName={'phonePrefixCountryCode'}
 							phoneName={'phone'}
 							disabled={disabledForm}
+							formName={FORM.SALON}
 							required
 						/>
 						<Field
@@ -250,110 +213,46 @@ const UserAccountForm: FC<Props> = (props) => {
 							{t('loc:Firemné údaje')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						{showCompanyInfoSwitch && (
-							<Field component={SwitchField} label={t('loc:Nastaviť firemné údaje')} name={'useCompanyInfo'} size={'middle'} disabled={disabledForm} />
-						)}
-						{get(formValues, 'useCompanyInfo', false) && (
-							<>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Názov')}
-										placeholder={t('loc:Zadajte názov')}
-										name={'companyInfo.companyName'}
-										size={'large'}
-										required
-									/>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:IČO')}
-										placeholder={t('loc:Zadajte ičo')}
-										name={'companyInfo.businessID'}
-										size={'large'}
-										required
-									/>
-								</Row>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:IČ DPH')}
-										placeholder={t('loc:Zadajte IČ DPH')}
-										name={'companyInfo.vatID'}
-										size={'large'}
-										required
-									/>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:DIČ')}
-										placeholder={t('loc:Zadajte DIČ')}
-										name={'companyInfo.taxID'}
-										size={'large'}
-										required
-									/>
-								</Row>
-							</>
-						)}
-						<Field component={SwitchField} label={t('loc:Fakturačná adresa je rovnaká')} name={'isInvoiceAddressSame'} size={'middle'} disabled={disabledForm} />
-						{!get(formValues, 'isInvoiceAddressSame', false) && (
-							<>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-4/5'}
-										component={InputField}
-										label={t('loc:Ulica')}
-										placeholder={t('loc:Zadajte ulicu')}
-										name={'companyInvoiceAddress.street'}
-										size={'large'}
-										required
-									/>
-									<Field
-										className={'w-1/6'}
-										component={InputField}
-										label={t('loc:Popisné číslo')}
-										placeholder={t('loc:Zadajte číslo')}
-										name={'streetNumber'}
-										size={'large'}
-										required
-									/>
-								</Row>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Mesto')}
-										placeholder={t('loc:Zadajte mesto')}
-										name={'companyInvoiceAddress.city'}
-										size={'large'}
-										required
-									/>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:PSČ')}
-										placeholder={t('loc:Zadajte smerovacie číslo')}
-										name={'companyInvoiceAddress.zipCode'}
-										size={'large'}
-										required
-									/>
-								</Row>
-								<Field
-									className={'w-full'}
-									component={SelectField}
-									label={t('loc:Štát')}
-									placeholder={t('loc:Vyber krajinu')}
-									options={countries?.enumerationsOptions || []}
-									name={'companyInvoiceAddress.countryCode'}
-									size={'large'}
-									loading={countries?.isLoading}
-									allowClear
-									required
-								/>
-							</>
-						)}
+						<Row justify={'space-between'}>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Názov')}
+								placeholder={t('loc:Zadajte názov')}
+								name={'companyInfo.companyName'}
+								size={'large'}
+								required
+							/>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:IČO')}
+								placeholder={t('loc:Zadajte ičo')}
+								name={'companyInfo.businessID'}
+								size={'large'}
+								required
+							/>
+						</Row>
+						<Row justify={'space-between'}>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:IČ DPH')}
+								placeholder={t('loc:Zadajte IČ DPH')}
+								name={'companyInfo.vatID'}
+								size={'large'}
+								required
+							/>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:DIČ')}
+								placeholder={t('loc:Zadajte DIČ')}
+								name={'companyInfo.taxID'}
+								size={'large'}
+								required
+							/>
+						</Row>
 					</Col>
 				</Row>
 				<Row>
@@ -364,60 +263,47 @@ const UserAccountForm: FC<Props> = (props) => {
 						</h3>
 
 						<Divider className={'mb-3 mt-3'} />
-						{showContactPersonSwitch && (
+						<Row justify={'space-between'}>
 							<Field
-								className={'mb-4'}
-								component={SwitchField}
-								label={t('loc:Nastaviť kontaktnú osobu')}
-								name={'useContactPerson'}
-								size={'middle'}
-								disabled={disabledForm}
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Meno')}
+								placeholder={t('loc:Zadajte meno')}
+								name={'companyContactPerson.firstName'}
+								size={'large'}
 							/>
-						)}
-						{get(formValues, 'useContactPerson', false) && (
-							<>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Meno')}
-										placeholder={t('loc:Zadajte meno')}
-										name={'companyContactPerson.firstName'}
-										size={'large'}
-									/>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Priezvisko')}
-										placeholder={t('loc:Zadajte priezvisko')}
-										name={'companyContactPerson.lastName'}
-										size={'large'}
-									/>
-								</Row>
-								<Row justify={'space-between'}>
-									<Field
-										className={'w-12/25'}
-										component={InputField}
-										label={t('loc:Email')}
-										placeholder={t('loc:Zadajte email')}
-										name={'companyContactPerson.email'}
-										size={'large'}
-										disabled={disabledForm}
-										required
-									/>
-									<PhoneWithPrefixField
-										label={'Telefón'}
-										placeholder={t('loc:Zadajte telefón')}
-										size={'large'}
-										prefixName={'companyContactPerson.phonePrefixCountryCode'}
-										phoneName={'companyContactPerson.phone'}
-										disabled={disabledForm}
-										style={{ width: 'calc(50% - 8px' }}
-										required
-									/>
-								</Row>
-							</>
-						)}
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Priezvisko')}
+								placeholder={t('loc:Zadajte priezvisko')}
+								name={'companyContactPerson.lastName'}
+								size={'large'}
+							/>
+						</Row>
+						<Row justify={'space-between'}>
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Email')}
+								placeholder={t('loc:Zadajte email')}
+								name={'companyContactPerson.email'}
+								size={'large'}
+								disabled={disabledForm}
+								required
+							/>
+							<PhoneWithPrefixField
+								label={'Telefón'}
+								placeholder={t('loc:Zadajte telefón')}
+								size={'large'}
+								prefixName={'companyContactPerson.phonePrefixCountryCode'}
+								phoneName={'companyContactPerson.phone'}
+								disabled={disabledForm}
+								style={{ width: 'calc(50% - 8px' }}
+								formName={FORM.SALON}
+								required
+							/>
+						</Row>
 					</Col>
 				</Row>
 				<Row>
@@ -497,47 +383,18 @@ const UserAccountForm: FC<Props> = (props) => {
 						/>
 					</Col>
 				</Row>
-
-				{/* show this block only if auth user have SUPER ADMIN or ADMIN permissions */}
-				{isAdmin ? (
-					<Row>
-						<Col span={24}>
-							<h3 className={'mb-0 flex items-center'}>
-								<PermissionsIcon width={24} height={24} className={'text-notino-black mr-2'} />
-								{t('loc:Oprávnenie')}
-							</h3>
-							<Divider className={'mb-3 mt-3'} />
-							<Field
-								component={SelectField}
-								label={t('loc:Používateľ')}
-								placeholder={t('loc:Vyber používateľa')}
-								name={'userID'}
-								size={'large'}
-								validate={validateUsersSelect}
-								onSearch={onSearchUsers}
-								optionLabelProp={'label'}
-								filterOption={true}
-								labelInValue
-								showSearch
-								allowInfinityScroll
-								disabled={disabledForm}
-								required
-							/>
-						</Col>
-					</Row>
-				) : undefined}
 			</Space>
 		</Form>
 	)
 }
 
-const form = reduxForm<IUserAccountForm, ComponentProps>({
+const form = reduxForm<ISalonForm, ComponentProps>({
 	form: FORM.SALON,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateSalonForm
-})(UserAccountForm)
+})(SalonForm)
 
 export default form

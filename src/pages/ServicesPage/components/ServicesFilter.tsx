@@ -6,9 +6,9 @@ import { debounce } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, FILTER_ENTITY } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
-import { searchEmployeeWrapper, searchSalonWrapper } from '../../../utils/filters'
+import searchWrapper from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -46,28 +46,15 @@ const CATEGORIES = [
 	{ label: 'Kategória 1.1', value: 4, key: 4 }
 ]
 
-// TODO remove after BE is finished
-// const EMPLOYEES_OPTIONS = [
-// 	{ label: 'Zamestnanec 1 Salón 1', value: 1, key: 1 },
-// 	{ label: 'Zamestnanec 1 Salón 2', value: 2, key: 2 }
-// ]
-
 const ServicesFilter = (props: Props) => {
 	const { handleSubmit, total, createService } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SERVICES_FILTER)(state))
 
-	const searchSalon = useCallback(
-		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { page, search })
-		},
-		[dispatch]
-	)
-
 	const searchEmployee = useCallback(
 		async (search: string, page: number) => {
-			return searchEmployeeWrapper(dispatch, { page, search })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.EMPLOYEE)
 		},
 		[dispatch]
 	)
@@ -127,21 +114,6 @@ const ServicesFilter = (props: Props) => {
 							disabled={isFilterDisabled}
 							allowInfinityScroll
 							filterOption={false}
-						/>
-					</Col>
-					<Col span={6}>
-						<Field
-							className='m-0'
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Salón')}
-							name='salonID'
-							showSearch
-							onSearch={searchSalon}
-							filterOption={false}
-							allowInfinityScroll
-							onDidMountSearch
-							disabled={isFilterDisabled}
 						/>
 					</Col>
 				</Row>

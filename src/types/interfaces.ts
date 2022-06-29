@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { GENDER, MSG_TYPE, LANGUAGE } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
 
 export interface IErrorMessage {
@@ -69,6 +69,38 @@ interface GalleryItem {
 	id: number
 }
 
+export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+
+export interface ISalonForm {
+	id: number | null
+	name: string
+	aboutUsFirst?: string
+	aboutUsSecond?: string
+	openingHours: OpeningHours
+	sameOpenHoursOverWeek: boolean
+	openOverWeekend: boolean
+	country: string
+	zipCode: string
+	city: string
+	street: string
+	streetNumber: string
+	latitude: number
+	longitude: number
+	phonePrefixCountryCode: string
+	phone: string
+	email: string
+	socialLinkFB?: string
+	socialLinkInstagram?: string
+	socialLinkWebPage?: string
+	payByCard: boolean
+	otherPaymentMethods: string
+	gallery: any[]
+	logo: any
+	pricelistIDs?: number[]
+	companyContactPerson: any
+	companyInfo: any
+}
+
 export interface IServiceForm {
 	name: string
 	description: string
@@ -83,6 +115,7 @@ export interface IServiceForm {
 	categoryRoot: number
 	categoryFirstLevel: number
 	categorySecondLevel: number
+	employees: any
 }
 
 export interface IRegistrationForm {
@@ -213,4 +246,52 @@ export interface IUserAvatar {
 	alt?: string
 	text?: string
 	key?: string | number
+
+}
+
+export interface IPrice {
+	exponent: number
+	significand: number
+}
+
+
+export interface IQueryParams {
+	page: number
+	limit?: any | undefined
+	order?: string | undefined
+	search?: string | undefined | null
+}
+
+interface IDataPagination {
+	pagination: IResponsePagination
+}
+
+export interface ISearchablePayload<T extends IDataPagination> {
+	options: ISelectOptionItem[] | undefined
+	data: T | null
+}
+
+export interface SalonSubPageProps {
+	salonID: number
+	parentPath?: string
+}
+
+interface IDataPagination {
+	pagination: IResponsePagination
+}
+
+export interface ISearchablePayload<T extends IDataPagination> {
+	options: ISelectOptionItem[] | undefined
+	data: T | null
+}
+
+export type _Permissions = (PERMISSION | SALON_PERMISSION)[]
+
+export interface IPermissions {
+	uniqPermissions?: _Permissions
+}
+
+export interface ICurrency {
+	code: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['code']
+	symbol: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['symbol']
 }

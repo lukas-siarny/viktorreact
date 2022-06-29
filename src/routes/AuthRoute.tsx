@@ -26,6 +26,8 @@ type Props = RouteProps & {
 	}
 	/** e.g. tabKey or other extra props for page */
 	extra?: Dictionary<any>
+	salonID?: number
+	parentPath?: string
 }
 
 const onIdle = () => {

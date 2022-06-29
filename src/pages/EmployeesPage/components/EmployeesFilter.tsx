@@ -1,19 +1,17 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Form, Row } from 'antd'
+import { Button, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
-import { searchSalonWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
 
 // components
 import Filters from '../../../components/Filters'
@@ -36,16 +34,8 @@ const fixLength100 = validationString(100)
 const EmployeesFilter = (props: Props) => {
 	const { handleSubmit, createEmployee } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
-
-	const onSearchSalons = useCallback(
-		async (search: string, page: number) => {
-			return searchSalonWrapper(dispatch, { search, page })
-		},
-		[dispatch]
-	)
 
 	const searchInput = (
 		<Field
@@ -68,24 +58,7 @@ const EmployeesFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(form?.values)}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={8}>
-						<Field
-							component={SelectField}
-							name={'salonID'}
-							placeholder={t('loc:Salón')}
-							allowClear
-							size={'middle'}
-							onSearch={onSearchSalons}
-							optionLabelProp={'label'}
-							filterOption={true}
-							showSearch
-							allowInfinityScroll
-						/>
-					</Col>
-				</Row>
-			</Filters>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(form?.values)} />
 		</Form>
 	)
 }

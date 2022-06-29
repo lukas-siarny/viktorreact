@@ -10,8 +10,10 @@ import i18next from 'i18next'
 import ServiceForm from './components/ServiceForm'
 
 // reducers
+import { RootState } from '../../reducers'
 import { getService } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
+import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
 
 // types
 import { IServiceForm, SalonSubPageProps, ILoadingAndFailure } from '../../types/interfaces'
@@ -21,8 +23,7 @@ import { patchReq } from '../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { decodePrice, encodePrice } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { RootState } from '../../reducers'
-import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
+import { history } from '../../utils/history'
 
 type Props = SalonSubPageProps & {
 	serviceID: number
@@ -91,6 +92,9 @@ const ServiceEditPage = (props: Props) => {
 	const fetchData = async () => {
 		const { data } = await dispatch(getService(serviceID))
 		dispatch(getCategories())
+		if (!data?.service?.id) {
+			history.push('/404')
+		}
 		let initData: any
 		if (data) {
 			initData = {

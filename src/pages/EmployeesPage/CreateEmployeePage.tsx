@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { compose } from 'redux'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
+import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
-import { Button, Row } from 'antd'
 import { map } from 'lodash'
 
 // utils
@@ -36,6 +36,8 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const services = useSelector((state: RootState) => state.service.services)
+
+	const { isLoading } = services
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -84,27 +86,29 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
-				<div className={'content-footer'}>
-					<Row className={'justify-center'}>
-						<Button
-							type={'primary'}
-							block
-							size={'middle'}
-							className={'noti-btn m-regular w-1/3'}
-							htmlType={'submit'}
-							onClick={() => {
-								dispatch(submit(FORM.EMPLOYEE))
-							}}
-							disabled={submitting || isFormPristine}
-							loading={submitting}
-						>
-							{t('loc:Uložiť')}
-						</Button>
-					</Row>
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
+					<div className={'content-footer'}>
+						<Row className={'justify-center'}>
+							<Button
+								type={'primary'}
+								block
+								size={'middle'}
+								className={'noti-btn m-regular w-1/3'}
+								htmlType={'submit'}
+								onClick={(e) => {
+									dispatch(submit(FORM.EMPLOYEE))
+								}}
+								disabled={submitting || isFormPristine}
+								loading={submitting}
+							>
+								{t('loc:Uložiť')}
+							</Button>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

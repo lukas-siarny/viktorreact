@@ -56,13 +56,16 @@ const SalonsPage = () => {
 		statuses: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'createdAt:DESC')
+		order: withDefault(StringParam, 'createdAt:DESC'),
+		countryCode: StringParam
 	})
 
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SALONS_FILTER, { search: query.search, statuses: query.statuses, categoryFirstLevelIDs: query.categoryFirstLevelIDs }))
+		dispatch(
+			initialize(FORM.SALONS_FILTER, { search: query.search, statuses: query.statuses, categoryFirstLevelIDs: query.categoryFirstLevelIDs, countryCode: query.countryCode })
+		)
 		dispatch(
 			getSalons({
 				page: query.page,
@@ -70,10 +73,11 @@ const SalonsPage = () => {
 				order: query.order,
 				search: query.search,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-				statuses: query.statuses
+				statuses: query.statuses,
+				countryCode: query.countryCode
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelIDs, query.statuses])
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelIDs, query.statuses, query.countryCode])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -164,6 +168,9 @@ const SalonsPage = () => {
 			key: 'fillingProgressSalon',
 			ellipsis: true,
 			sorter: false,
+			// NOTE: sort by fillingProgressSalon when BE is done
+			/* sorter: true,
+			sortOrder: setOrder(query.order, 'fillingProgressSalon'), */
 			render: (value, record) => {
 				const progressVariables = [Number(value), Number(record.fillingProgressServices), Number(record.fillingProgressCompany)]
 				// 1% 34%, 67%, 100%

@@ -13,6 +13,7 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 import { getReq } from '../../utils/request'
 import { ENUMERATIONS_KEYS, getTranslatedCountriesLabels } from '../../utils/enums'
 import { Paths } from '../../types/api'
+import i18n from '../../utils/i18n'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 
@@ -45,9 +46,11 @@ export type EnumerationData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200[
 export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async (dispatch) => {
 	let countriesPhonePrefixPayload: IEnumerationsPayload = {} as IEnumerationsPayload
 	let countriesPayload: IEnumerationsPayload = {} as IEnumerationsPayload
+	let countriesFilterOptionsPayload: IEnumerationsPayload = {} as IEnumerationsPayload
 	try {
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX })
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES })
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS })
 
 		const response = await getReq('/api/b2b/admin/enums/countries', undefined, undefined, undefined, undefined, true)
 		const data: any[] = map(get(response, 'data.countries', []), (item, index) => ({
@@ -79,6 +82,20 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			}
 		})
 
+		const enumerationsCountriesFilterOptions: ISelectOptionItem[] = map(data, (item) => {
+			const countryLabel: string | null = countriesLabels?.[item.code?.toLowerCase()]
+			if (isEmpty(countryLabel)) {
+				// eslint-disable-next-line no-console
+				console.error(`Missing translation for country with code ${item.code}!`)
+			}
+			return {
+				key: item.code,
+				label: countryLabel || item.code,
+				value: item.code,
+				flag: item.flag
+			}
+		})
+
 		countriesPhonePrefixPayload = {
 			data,
 			enumerationsOptions: enumerationsPhonePrefixOptions,
@@ -90,11 +107,19 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			enumerationsOptions: enumerationsCountriesOptions,
 			pagination: get(response, 'data.pagination')
 		}
+		countriesFilterOptionsPayload = {
+			data,
+			enumerationsOptions: enumerationsCountriesFilterOptions,
+			pagination: get(response, 'data.pagination')
+		}
+
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX, payload: { ...countriesPhonePrefixPayload } })
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.COUNTRIES, payload: { ...countriesPayload } })
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS, payload: { ...countriesFilterOptionsPayload } })
 	} catch (e) {
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX })
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.COUNTRIES })
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS })
 	}
 	return { countriesPayload, countriesPhonePrefixPayload }
 }

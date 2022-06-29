@@ -24,6 +24,8 @@ interface IGetEmployee {
 
 export interface IGetEmployeesQueryParams extends IQueryParams {
 	salonID?: number | undefined | null
+	serviceID?: number | undefined | null
+	accountState?: string | undefined | null
 }
 
 export interface IEmployeePayload {

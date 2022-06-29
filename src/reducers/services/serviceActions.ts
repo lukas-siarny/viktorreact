@@ -9,7 +9,7 @@ import { IUserAvatar, IQueryParams, ISearchablePayload } from '../../types/inter
 
 // utils
 import { getReq } from '../../utils/request'
-import { decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
+import { decodePrice, getServiceRange, normalizeQueryParams, showServiceCategory } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
@@ -62,7 +62,7 @@ export const getServices =
 					})),
 					price: getServiceRange(decodePrice(item.priceFrom), decodePrice(item.priceTo)),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
-					category: item.category.name || '-',
+					category: (item.category.child ? showServiceCategory(item.category) : item.category.name) || '-',
 					salon: item.salon.name
 				}
 				return tableItem

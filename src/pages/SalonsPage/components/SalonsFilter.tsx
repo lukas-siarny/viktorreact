@@ -40,12 +40,15 @@ const SalonsFilter = (props: Props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
 	const categories = useSelector((state: RootState) => state.categories.categories)
+	const countries = useSelector((state: RootState) => state.enumerationsStore.countries_filter_options)
 
 	const statusOptions = [
 		{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED },
 		{ label: t('loc:Publikované'), value: SALON_STATUSES.PUBLISHED, key: SALON_STATUSES.PUBLISHED },
 		{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE, key: SALON_STATUSES.VISIBLE },
-		{ label: t('loc:Nevymazané'), value: SALON_STATUSES.NOT_DELETED, key: SALON_STATUSES.NOT_DELETED }
+		{ label: t('loc:Nevymazané'), value: SALON_STATUSES.NOT_DELETED, key: SALON_STATUSES.NOT_DELETED },
+		{ label: t('loc:Nepublikované'), value: SALON_STATUSES.NOT_PUBLISHED, key: SALON_STATUSES.NOT_PUBLISHED },
+		{ label: t('loc:Nie sú viditeľné'), value: SALON_STATUSES.NOT_VISIBLE, key: SALON_STATUSES.NOT_VISIBLE }
 	]
 
 	const searchInput = (
@@ -67,11 +70,21 @@ const SalonsFilter = (props: Props) => {
 		</Button>
 	)
 
+	const countryCodeOptionRender = (itemData: any) => {
+		const { value, label, flag } = itemData
+		return (
+			<div className='flex items-center'>
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+				{label}
+			</div>
+		)
+	}
+
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(form?.values)}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={8}>
+					<Col span={6}>
 						<Field
 							component={SelectField}
 							name={'statuses'}
@@ -84,7 +97,7 @@ const SalonsFilter = (props: Props) => {
 							options={statusOptions}
 						/>
 					</Col>
-					<Col span={8}>
+					<Col span={6}>
 						<Field
 							component={SelectField}
 							name={'categoryFirstLevelIDs'}
@@ -97,6 +110,21 @@ const SalonsFilter = (props: Props) => {
 							options={categories?.enumerationsOptions}
 							loading={categories?.isLoading}
 							disabled={categories?.isLoading}
+						/>
+					</Col>
+					<Col span={6}>
+						<Field
+							component={SelectField}
+							optionRender={countryCodeOptionRender}
+							name={'countryCode'}
+							placeholder={t('loc:Krajina')}
+							allowClear
+							size={'middle'}
+							filterOptions
+							onDidMountSearch
+							options={countries?.enumerationsOptions}
+							loading={countries?.isLoading}
+							disabled={countries?.isLoading}
 						/>
 					</Col>
 				</Row>

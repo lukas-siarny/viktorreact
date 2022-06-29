@@ -30,6 +30,7 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
+import TooltipEllipsis from '../../components/TooltipEllipsis'
 
 type Columns = ColumnsType<any>
 
@@ -48,13 +49,17 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:desc'),
+		accountState: StringParam,
+		serviceID: NumberParam,
 		salonID: NumberParam
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search }))
-		dispatch(getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
+		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
+		dispatch(
+			getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, accountState: query.accountState, serviceID: query.serviceID, salonID })
+		)
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -124,16 +129,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			)
 		},
 		{
-			title: t('loc:Salón'),
-			dataIndex: 'salon',
-			key: 'salon',
-			ellipsis: {
-				showTitle: false
-			},
-			width: '15%',
-			render: (value) => value?.name
-		},
-		{
 			title: t('loc:Služby'),
 			dataIndex: 'services',
 			key: 'services',
@@ -152,8 +147,16 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			sortOrder: setOrder(query.order, 'status'),
 			render: (value, record) => (
 				<div className={'flex justify-center'}>
-					{value === false && !record?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
-					{value === false && record?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
+					{value === false && !record?.inviteEmail ? (
+						<TooltipEllipsis title={t('loc:Nespárované')}>
+							<QuestionIcon width={20} height={20} />
+						</TooltipEllipsis>
+					) : undefined}
+					{value === false && record?.inviteEmail ? (
+						<TooltipEllipsis title={t('loc:Čakajúce')}>
+							<CloudOfflineIcon width={20} height={20} />
+						</TooltipEllipsis>
+					) : undefined}
 				</div>
 			)
 		}

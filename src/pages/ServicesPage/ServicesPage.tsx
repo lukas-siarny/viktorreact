@@ -23,6 +23,7 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 // reducers
 import { RootState } from '../../reducers'
 import { getServices } from '../../reducers/services/serviceActions'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
@@ -41,18 +42,21 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const { salonID, parentPath } = props
 
+	useEffect(() => {
+		dispatch(getCategories(false))
+	}, [dispatch])
+
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		categoryID: NumberParam,
 		employeeID: NumberParam,
-		salonID: NumberParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'name:ASC')
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID }))
+		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID?.toString(), employeeID: query.employeeID }))
 		dispatch(
 			getServices({
 				page: query.page,
@@ -96,12 +100,6 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			ellipsis: true,
 			sorter: true,
 			sortOrder: setOrder(query.order, 'name')
-		},
-		{
-			title: t('loc:Salón'),
-			dataIndex: 'salon',
-			key: 'salon',
-			ellipsis: true
 		},
 		{
 			title: t('loc:Zamestnanec'),

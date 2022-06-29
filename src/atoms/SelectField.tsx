@@ -117,7 +117,14 @@ const renderMenuItemSelectedIcon = (
 
 const getOptions = (optionRender: any, options: any) =>
 	map(options, (option) => (
-		<Option key={option.key} value={option.value} disabled={option.disabled} label={option.label} extra={option.extra}>
+		<Option
+			key={option.key}
+			value={option.value}
+			disabled={option.disabled}
+			label={option.label}
+			extra={option.extra}
+			style={option.level ? { paddingLeft: 16 * option.level } : undefined}
+		>
 			{optionRender ? optionRender(option) : option.label}
 		</Option>
 	))

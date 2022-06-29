@@ -40,17 +40,12 @@ type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
-// TODO remove after BE is finished
-const CATEGORIES = [
-	{ label: 'Kategória 1.2', value: 5, key: 5 },
-	{ label: 'Kategória 1.1', value: 4, key: 4 }
-]
-
 const ServicesFilter = (props: Props) => {
 	const { handleSubmit, total, createService } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SERVICES_FILTER)(state))
+	const categories = useSelector((state: RootState) => state.categories.categories)
 
 	const searchEmployee = useCallback(
 		async (search: string, page: number) => {
@@ -90,18 +85,18 @@ const ServicesFilter = (props: Props) => {
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={customContent}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={6}>
+					<Col span={8}>
 						<Field
 							className='m-0'
 							component={SelectField}
 							allowClear
 							placeholder={t('loc:Kategória')}
 							name='categoryID'
-							options={CATEGORIES}
+							options={categories.enumerationsOptions}
 							disabled={isFilterDisabled}
 						/>
 					</Col>
-					<Col span={6}>
+					<Col span={8}>
 						<Field
 							className='m-0'
 							component={SelectField}

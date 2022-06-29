@@ -21,6 +21,7 @@ export interface ISelectOptionItem {
 	disabled?: boolean
 	hardSelected?: boolean
 	extra?: any
+	level?: number
 }
 
 /**

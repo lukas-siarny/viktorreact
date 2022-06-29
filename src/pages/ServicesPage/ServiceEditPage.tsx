@@ -33,7 +33,7 @@ type Props = SalonSubPageProps & {
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseEmployeeIds = (employees: any[]) => {
-	return employees.map((employee: any) => employee?.id)
+	return employees?.map((employee: any) => employee?.id)
 }
 
 export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {

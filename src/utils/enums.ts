@@ -201,6 +201,7 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
+	COUNTRIES_FILTER_OPTIONS = 'countries_filter_options',
 	CURRENCIES = 'currencies'
 }
 
@@ -277,7 +278,9 @@ export enum SALON_STATUSES {
 	VISIBLE = 'VISIBLE',
 	DELETED = 'DELETED',
 	NOT_DELETED = 'NOT_DELETED',
-	ALL = 'ALL'
+	ALL = 'ALL',
+	NOT_PUBLISHED = 'NOT_PUBLISHED',
+	NOT_VISIBLE = 'NOT_VISIBLE'
 }
 
 export enum PAGE_VIEW {
@@ -368,7 +371,12 @@ export enum VALIDATION_MAX_LENGTH {
 export const getTranslatedCountriesLabels = (): ICountryLabel => {
 	return {
 		[LANGUAGE.SK]: `${i18next.t('loc:Slovenská republika')}`,
-		[LANGUAGE.CZ]: `${i18next.t('loc:Česká republika')}`
+		[LANGUAGE.CZ]: `${i18next.t('loc:Česká republika')}`,
+		[LANGUAGE.EN]: `${i18next.t('loc:Česká republika')}`,
+		[LANGUAGE.HU]: `${i18next.t('loc:Maďarsko')}`,
+		[LANGUAGE.RO]: `${i18next.t('loc:Rumunsko')}`,
+		[LANGUAGE.BG]: `${i18next.t('loc:Bulharsko')}`,
+		[LANGUAGE.IT]: `${i18next.t('loc:Taliansko')}`
 	} as ICountryLabel
 }
 
@@ -395,3 +403,9 @@ export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const GENDERS = Object.keys(GENDER) as GENDER[]
 export const DAYS = Object.keys(DAY) as DAY[]
+
+export enum ACCOUNT_STATE {
+	UNPAIRED = 'UNPAIRED',
+	PENDING = 'PENDING',
+	PAIRED = 'PAIRED'
+}

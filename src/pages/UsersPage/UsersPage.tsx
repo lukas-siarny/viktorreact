@@ -125,7 +125,9 @@ const UsersPage = () => {
 		{
 			title: t('loc:Rola'),
 			dataIndex: 'roles',
-			key: 'roles',
+			key: 'roleName',
+			sorter: true,
+			sortOrder: setOrder(query.order, 'roleName'),
 			ellipsis: {
 				showTitle: false
 			},

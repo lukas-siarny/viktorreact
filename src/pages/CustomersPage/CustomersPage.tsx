@@ -40,7 +40,6 @@ const CustomersPage = (props: SalonSubPageProps) => {
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
-		salonID: NumberParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'lastName:ASC')
@@ -86,18 +85,16 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const columns: Columns = [
 		{
 			title: t('loc:Meno'),
-			dataIndex: 'firstName',
-			key: 'firstName',
-			ellipsis: true,
-			sorter: false
-		},
-		{
-			title: t('loc:Priezvisko'),
-			dataIndex: 'lastName',
+			dataIndex: 'lastlName',
 			key: 'lastName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'lastName')
+			sortOrder: setOrder(query.order, 'lastName'),
+			render: (value, record) => (
+				<>
+					{record?.firstName} {record?.lastName}
+				</>
+			)
 		},
 		{
 			title: t('loc:Email'),
@@ -119,16 +116,6 @@ const CustomersPage = (props: SalonSubPageProps) => {
 					</>
 				)
 			}
-		},
-		{
-			title: t('loc:Salón'),
-			dataIndex: 'salonName',
-			key: 'salonName',
-			ellipsis: true,
-			sorter: false,
-			render: (value, record) => {
-				return <>{record?.salon?.name}</>
-			}
 		}
 	]
 
@@ -143,7 +130,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:index')} />
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>

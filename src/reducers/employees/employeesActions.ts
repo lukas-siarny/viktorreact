@@ -75,15 +75,21 @@ export const getEmployees =
 	}
 
 export const getEmployee =
-	(employeeID: number): ThunkResult<Promise<void>> =>
+	(employeeID: number): ThunkResult<Promise<IEmployeePayload>> =>
 	async (dispatch) => {
+		let payload = {} as IEmployeePayload
 		try {
 			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_START })
-			const data = await getReq('/api/b2b/admin/employees/{employeeID}', { employeeID } as any)
-			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_DONE, payload: data })
+			const { data } = await getReq('/api/b2b/admin/employees/{employeeID}', { employeeID } as any)
+			payload = {
+				data
+			}
+			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}

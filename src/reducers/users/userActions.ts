@@ -156,17 +156,25 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 }
 
 export const getUserAccountDetails =
-	(userID: number): ThunkResult<Promise<void>> =>
+	(userID: number): ThunkResult<Promise<IUserPayload>> =>
 	async (dispatch) => {
+		let payload = {} as IUserPayload
 		try {
 			dispatch({ type: USER.USER_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/users/{userID}', { userID })
-			dispatch({ type: USER.USER_LOAD_DONE, payload: { data: data.user } })
+
+			payload = {
+				data
+			}
+
+			dispatch({ type: USER.USER_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: USER.USER_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}
 
 export const getUsers =

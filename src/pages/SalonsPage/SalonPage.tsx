@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { change, initialize, isPristine, submit } from 'redux-form'
 import { get, isEmpty, isEqual, map, unionBy } from 'lodash'
 import { compose } from 'redux'
@@ -202,6 +202,8 @@ const SalonPage: FC<Props> = (props) => {
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)
 
+	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving
+
 	// check permissions for submit in case of create or update salon
 	const submitPermissions: PERMISSION[] = salonID > 0 ? [...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE] : permissions
 
@@ -241,10 +243,17 @@ const SalonPage: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
+	const fetchSalonData = async () => {
+		const { data } = await dispatch(getSalon(salonID))
+		if (!data?.salon?.id) {
+			history.push('/404')
+		}
+	}
+
 	useEffect(() => {
 		if (salonID > 0) {
 			// updating existing salon
-			dispatch(getSalon(salonID))
+			fetchSalonData()
 		} else {
 			// creating new salon clear salon store
 			dispatch(emptySalon())
@@ -474,73 +483,75 @@ const SalonPage: FC<Props> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
-					render={(hasPermission) => (
-						<SalonForm
-							isAdmin={hasPermission}
-							onSubmit={handleSubmit}
-							openNoteModal={() => setVisible(true)}
-							changeSalonVisibility={changeVisibility}
-							publishSalon={publishSalon}
-							switchDisabled={submitting}
-							salonID={salonID}
-							disabledForm={deletedSalon}
-							showCompanyInfoSwitch={companyInfoIsEmpty}
-							showContactPersonSwitch={contactPersonIsEmpty}
-						/>
-					)}
-				/>
-				{salonExists && (
-					<OpenHoursNoteModal
-						visible={visible}
-						salonID={salon?.data?.salon?.id || 0}
-						openingHoursNote={salon?.data?.salon?.openingHoursNote}
-						onClose={onOpenHoursNoteModalClose}
-					/>
-				)}
-
-				<div className={'content-footer'}>
-					<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
-						{salonExists && (
-							<DeleteButton
-								permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_DELETE]}
-								className={'w-1/3'}
-								onConfirm={deleteSalon}
-								entityName={t('loc:salón')}
-								type={'default'}
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								disabled={deletedSalon}
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<Permissions
+						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+						render={(hasPermission) => (
+							<SalonForm
+								isAdmin={hasPermission}
+								onSubmit={handleSubmit}
+								openNoteModal={() => setVisible(true)}
+								changeSalonVisibility={changeVisibility}
+								publishSalon={publishSalon}
+								switchDisabled={submitting}
+								salonID={salonID}
+								disabledForm={deletedSalon}
+								showCompanyInfoSwitch={companyInfoIsEmpty}
+								showContactPersonSwitch={contactPersonIsEmpty}
 							/>
 						)}
-						<Permissions
-							allowed={submitPermissions}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular w-1/3'}
-									htmlType={'submit'}
-									onClick={(e) => {
-										if (hasPermission) {
-											dispatch(submit(FORM.SALON))
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									disabled={submitting || deletedSalon || isFormPristine}
-									loading={submitting}
-								>
-									{t('loc:Uložiť')}
-								</Button>
-							)}
+					/>
+					{salonExists && (
+						<OpenHoursNoteModal
+							visible={visible}
+							salonID={salon?.data?.salon?.id || 0}
+							openingHoursNote={salon?.data?.salon?.openingHoursNote}
+							onClose={onOpenHoursNoteModalClose}
 						/>
-					</Row>
+					)}
+
+					<div className={'content-footer'}>
+						<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
+							{salonExists && (
+								<DeleteButton
+									permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_DELETE]}
+									className={'w-1/3'}
+									onConfirm={deleteSalon}
+									entityName={t('loc:salón')}
+									type={'default'}
+									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+									disabled={deletedSalon}
+								/>
+							)}
+							<Permissions
+								allowed={submitPermissions}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={'noti-btn m-regular w-1/3'}
+										htmlType={'submit'}
+										onClick={(e) => {
+											if (hasPermission) {
+												dispatch(submit(FORM.SALON))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={submitting || deletedSalon || isFormPristine}
+										loading={submitting}
+									>
+										{t('loc:Uložiť')}
+									</Button>
+								)}
+							/>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

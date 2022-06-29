@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
@@ -31,6 +31,8 @@ const CreateCustomerPage = () => {
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const countriesPhonePrefix = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
+
+	const { isLoading } = countriesPhonePrefix
 
 	// View
 	const breadcrumbs: IBreadcrumbs = {
@@ -88,27 +90,29 @@ const CreateCustomerPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<CustomerForm onSubmit={createCustomer} />
-				<div className={'content-footer'}>
-					<Row justify='center'>
-						<Button
-							type={'primary'}
-							block
-							size={'middle'}
-							className={'noti-btn m-regular mb-2 w-1/3'}
-							htmlType={'submit'}
-							onClick={() => {
-								dispatch(submit(FORM.CUSTOMER))
-							}}
-							disabled={submitting || isFormPristine}
-							loading={submitting}
-						>
-							{t('loc:Uložiť')}
-						</Button>
-					</Row>
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<CustomerForm onSubmit={createCustomer} />
+					<div className={'content-footer'}>
+						<Row justify='center'>
+							<Button
+								type={'primary'}
+								block
+								size={'middle'}
+								className={'noti-btn m-regular mb-2 w-1/3'}
+								htmlType={'submit'}
+								onClick={() => {
+									dispatch(submit(FORM.CUSTOMER))
+								}}
+								disabled={submitting || isFormPristine}
+								loading={submitting}
+							>
+								{t('loc:Uložiť')}
+							</Button>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

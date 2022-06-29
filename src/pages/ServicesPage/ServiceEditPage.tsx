@@ -35,6 +35,9 @@ const ServiceEditPage = (props: Props) => {
 
 	const fetchData = async () => {
 		const { data } = await dispatch(getService(serviceID))
+		if (!data?.service?.id) {
+			history.push('/404')
+		}
 		const { data: categories } = await dispatch(getCategories())
 		let initData: any
 		const category = getDefaultFormCategories(data?.service?.category?.id, categories)

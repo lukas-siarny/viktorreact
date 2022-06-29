@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
-import { Button, Modal, notification, Row } from 'antd'
+import { Button, Modal, notification, Row, Spin } from 'antd'
 import { get, forEach } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
@@ -39,7 +39,7 @@ type Props = {
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
-	return oldServices.map((service: any) => {
+	return oldServices?.map((service: any) => {
 		return {
 			id: service?.id,
 			employeeData: {
@@ -124,8 +124,17 @@ const EmployeePage = (props: Props) => {
 
 	const showDeleteBtn = !!employee?.data?.employee?.id
 
+	const isLoading = employee.isLoading || services.isLoading || isRemoving
+
+	const fetchEmployeeData = async () => {
+		const { data } = await dispatch(getEmployee(employeeID))
+		if (!data?.employee?.id) {
+			history.push('/404')
+		}
+	}
+
 	useEffect(() => {
-		dispatch(getEmployee(employeeID))
+		fetchEmployeeData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
 
@@ -278,83 +287,85 @@ const EmployeePage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={form?.values?.salonID} onSubmit={updateEmployee} />
-				<div className={'content-footer'}>
-					<Row className={rowClass}>
-						{showDeleteBtn ? (
-							<DeleteButton
-								permissions={permissions}
-								className={'w-1/3'}
-								onConfirm={deleteEmployee}
-								entityName={t('loc:zamestnanca')}
-								type={'default'}
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-							/>
-						) : undefined}
-						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<div className={`flex justify-between ${wrapperWidthClass}`}>
-									{isProfileInActive ? (
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={form?.values?.salonID} onSubmit={updateEmployee} />
+					<div className={'content-footer'}>
+						<Row className={rowClass}>
+							{showDeleteBtn ? (
+								<DeleteButton
+									permissions={permissions}
+									className={'w-1/3'}
+									onConfirm={deleteEmployee}
+									entityName={t('loc:zamestnanca')}
+									type={'default'}
+									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								/>
+							) : undefined}
+							<Permissions
+								allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<div className={`flex justify-between ${wrapperWidthClass}`}>
+										{isProfileInActive ? (
+											<Button
+												type={'primary'}
+												block
+												size={'middle'}
+												className={'noti-btn m-regular w-12/25'}
+												htmlType={'submit'}
+												onClick={(e) => {
+													if (hasPermission) {
+														setVisible(true)
+														dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail }))
+													} else {
+														e.preventDefault()
+														openForbiddenModal()
+													}
+												}}
+												disabled={isInviteFromSubmitting}
+												loading={isInviteFromSubmitting}
+											>
+												{t('loc:Pozvať do tímu')}
+											</Button>
+										) : undefined}
 										<Button
 											type={'primary'}
 											block
 											size={'middle'}
-											className={'noti-btn m-regular w-12/25'}
+											className={`noti-btn m-regular ${buttonWidthClass}`}
 											htmlType={'submit'}
 											onClick={(e) => {
 												if (hasPermission) {
-													setVisible(true)
-													dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail }))
+													dispatch(submit(FORM.EMPLOYEE))
 												} else {
 													e.preventDefault()
 													openForbiddenModal()
 												}
 											}}
-											disabled={isInviteFromSubmitting}
-											loading={isInviteFromSubmitting}
+											disabled={submitting || isFormPristine}
+											loading={submitting}
 										>
-											{t('loc:Pozvať do tímu')}
+											{t('loc:Uložiť')}
 										</Button>
-									) : undefined}
-									<Button
-										type={'primary'}
-										block
-										size={'middle'}
-										className={`noti-btn m-regular ${buttonWidthClass}`}
-										htmlType={'submit'}
-										onClick={(e) => {
-											if (hasPermission) {
-												dispatch(submit(FORM.EMPLOYEE))
-											} else {
-												e.preventDefault()
-												openForbiddenModal()
-											}
-										}}
-										disabled={submitting || isFormPristine}
-										loading={submitting}
-									>
-										{t('loc:Uložiť')}
-									</Button>
-								</div>
-							)}
-						/>
-						<Modal
-							className='rounded-fields'
-							title={t('loc:Pozvať do tímu')}
-							centered
-							visible={visible}
-							footer={null}
-							onCancel={() => setVisible(false)}
-							closeIcon={<CloseIcon />}
-							width={394}
-						>
-							<InviteForm onSubmit={inviteEmployee} />
-						</Modal>
-					</Row>
+									</div>
+								)}
+							/>
+							<Modal
+								className='rounded-fields'
+								title={t('loc:Pozvať do tímu')}
+								centered
+								visible={visible}
+								footer={null}
+								onCancel={() => setVisible(false)}
+								closeIcon={<CloseIcon />}
+								width={394}
+							>
+								<InviteForm onSubmit={inviteEmployee} />
+							</Modal>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

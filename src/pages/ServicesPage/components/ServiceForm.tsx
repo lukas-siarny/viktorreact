@@ -24,7 +24,7 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'

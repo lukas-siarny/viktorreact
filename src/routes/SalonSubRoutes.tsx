@@ -15,9 +15,6 @@ import { history } from '../utils/history'
 import { RootState } from '../reducers'
 import { selectSalon } from '../reducers/selectedSalon/selectedSalonActions'
 
-// types
-import { IBreadcrumbs, IComputedMatch, ILoadingAndFailure } from '../types/interfaces'
-
 // layouts
 import MainLayout from '../layouts/MainLayout'
 
@@ -26,7 +23,6 @@ import ServicesPage from '../pages/ServicesPage/ServicesPage'
 import ServicePage from '../pages/ServicesPage/ServicePage'
 
 // Salons
-import SalonsPage from '../pages/SalonsPage/SalonsPage'
 import SalonPage from '../pages/SalonsPage/SalonPage'
 
 // Customers

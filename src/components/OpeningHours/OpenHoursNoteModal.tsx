@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { Modal } from 'antd'
 import { reset, initialize } from 'redux-form'
 import { useDispatch } from 'react-redux'
-import { useTranslation } from 'react-i18next'
 
 // components
 import OpenHoursNoteForm from './OpenHoursNoteForm'
@@ -19,9 +18,6 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 // interfaces
 import { IOpenHoursNoteForm } from '../../types/interfaces'
 
-// redux
-import { RootState } from '../../reducers'
-
 type Props = {
 	visible?: boolean
 	onClose?: () => void
@@ -32,7 +28,6 @@ type Props = {
 
 const OpenHoursNoteModal = (props: Props) => {
 	const { visible, onClose = () => {}, title, salonID, openingHoursNote } = props
-	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	useEffect(() => {

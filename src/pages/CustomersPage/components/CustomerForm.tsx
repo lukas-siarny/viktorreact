@@ -1,8 +1,8 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, GENDER } from '../../../utils/enums'

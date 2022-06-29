@@ -53,6 +53,7 @@ const CustomerPage = (props: Props) => {
 
 	useEffect(() => {
 		fetchCustomerData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, customerID])
 
 	useEffect(() => {

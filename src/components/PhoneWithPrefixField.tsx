@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Col, Row } from 'antd'
 import { change, Field } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +12,6 @@ import { RootState } from '../reducers'
 
 // utils
 import { validationPhone } from '../utils/helper'
-import i18n from '../utils/i18n'
 import { ENUMERATIONS_KEYS, FORM, LANGUAGE } from '../utils/enums'
 
 // assets
@@ -27,6 +26,7 @@ import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg'
 type Props = {
 	formName?: FORM
 	placeholder?: string
+	fallbackDefaultValue?: string
 	label?: string
 	size?: string
 	prefixName?: string
@@ -83,24 +83,30 @@ const fallbackOptions = [
 ] as any
 
 const PhoneWithPrefixField = (props: Props) => {
-	const { placeholder, label, size, prefixName = 'phonePrefixCountryCode', phoneName = 'phone', disabled, required = false, className, style, formName } = props
+	const {
+		placeholder,
+		label,
+		size,
+		prefixName = 'phonePrefixCountryCode',
+		phoneName = 'phone',
+		disabled,
+		required = false,
+		className,
+		style,
+		formName,
+		fallbackDefaultValue
+	} = props
 	const prefixOptions = useSelector((state: RootState) => state?.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const dispatch = useDispatch()
-	const [fallbackDefaultValue, setFallbackDefaultValue] = useState<string>('')
 
 	let options = prefixOptions?.enumerationsOptions
 	if (!options || options.length === 0) options = fallbackOptions
 
 	useEffect(() => {
-		i18n.on('languageChanged', (language) => {
-			setFallbackDefaultValue(language)
-		})
-	}, [])
-
-	useEffect(() => {
-		if (formName) {
+		if (formName && prefixName && fallbackDefaultValue) {
 			dispatch(change(formName, prefixName, fallbackDefaultValue))
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [formName, prefixName, fallbackDefaultValue])
 
 	return (

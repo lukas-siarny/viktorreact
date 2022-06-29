@@ -97,7 +97,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 								size={'middle'}
 								className={'noti-btn m-regular w-1/3'}
 								htmlType={'submit'}
-								onClick={(e) => {
+								onClick={() => {
 									dispatch(submit(FORM.EMPLOYEE))
 								}}
 								disabled={submitting || isFormPristine}

@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { compose } from 'redux'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { isPristine, submit } from 'redux-form'
+import { initialize, isPristine, submit } from 'redux-form'
 import { Button, Row } from 'antd'
+import { map } from 'lodash'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, FORM } from '../../utils/enums'
+import { PERMISSION, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 
@@ -21,6 +22,7 @@ import { IBreadcrumbs, IEmployeeForm, SalonSubPageProps } from '../../types/inte
 
 // reducers
 import { RootState } from '../../reducers'
+import { getPrefixCountryCode } from '../../utils/helper'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]
 
@@ -30,6 +32,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const dispatch = useDispatch()
 	const [submitting, setSubmitting] = useState<boolean>(false)
 
+	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const services = useSelector((state: RootState) => state.service.services)
@@ -45,6 +48,12 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 			}
 		]
 	}
+
+	useEffect(() => {
+		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
+		dispatch(initialize(FORM.EMPLOYEE, { phonePrefixCountryCode }))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [salonID])
 
 	const createEmployee = async (formData: IEmployeeForm) => {
 		try {

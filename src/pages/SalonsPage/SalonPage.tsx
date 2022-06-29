@@ -1,9 +1,9 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { change, initialize, isPristine, submit } from 'redux-form'
-import { get, isEmpty, isEqual, map, unionBy } from 'lodash'
+import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 
 // components
@@ -14,28 +14,23 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
-import { emptySalon, getSalon, ISalonPayload } from '../../reducers/salons/salonsActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
+import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
-import { IBreadcrumbs, IComputedMatch, ILoadingAndFailure } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps, ILoadingAndFailure, ISalonForm, OpeningHours } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import Permissions, { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 
-type Props = {
-	computedMatch: IComputedMatch<{ salonID: number }>
-}
-
-// TODO - check how to get nested interface
-type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 type TimeRanges = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours'][0]['timeRanges']
@@ -178,32 +173,32 @@ const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWee
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-const SalonPage: FC<Props> = (props) => {
+const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { computedMatch } = props
-	const { salonID } = computedMatch.params
+	const { salonID } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
-	// NOTE: Determine, if switches are used in edit mode (on init). Once is related data filled, can't be deleted
-	const [contactPersonIsEmpty, setContactPersonIsEmpty] = useState<boolean>(true)
-	const [companyInfoIsEmpty, setCompanyInfoIsEmpty] = useState<boolean>(true)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-	const salon = useSelector((state: RootState) => state.salons.salon)
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
-	const deletedSalon = !!(salon?.data?.salon?.deletedAt && salon?.data?.salon?.deletedAt !== null)
+	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null)
+
+	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving
 
 	// check permissions for submit in case of create or update salon
-	const submitPermissions: PERMISSION[] = salonID > 0 ? [...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_UPDATE] : permissions
+	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
+
+	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -223,7 +218,7 @@ const SalonPage: FC<Props> = (props) => {
 		} else {
 			// set to init values
 			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: OpeningHours = initOpeningHours(salon.data?.salon?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
+			const openingHours: OpeningHours = initOpeningHours(salon.data?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
 			if (openOverWeekendFormValue && openingHours) {
 				const updatedOpeningHours = unionBy(
 					[
@@ -241,19 +236,8 @@ const SalonPage: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
-	useEffect(() => {
-		if (salonID > 0) {
-			// updating existing salon
-			dispatch(getSalon(salonID))
-		} else {
-			// creating new salon clear salon store
-			dispatch(emptySalon())
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salonID])
-
 	const updateOnlyOpeningHours = useRef(false)
-	const fetchData = async (salonData: ISalonPayload & ILoadingAndFailure) => {
+	const fetchData = async (salonData: ISelectedSalonPayload & ILoadingAndFailure) => {
 		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		const defaultContactPerson = {
 			phonePrefixCountryCode
@@ -263,51 +247,38 @@ const SalonPage: FC<Props> = (props) => {
 			if (salon?.isLoading) return
 			dispatch(
 				change(FORM.SALON, 'openingHoursNote', {
-					note: salonData.data?.salon?.openingHoursNote?.note,
-					noteFrom: salonData.data?.salon?.openingHoursNote?.validFrom,
-					noteTo: salonData.data?.salon?.openingHoursNote?.validTo
+					note: salonData.data?.openingHoursNote?.note,
+					noteFrom: salonData.data?.openingHoursNote?.validFrom,
+					noteTo: salonData.data?.openingHoursNote?.validTo
 				})
 			)
 			updateOnlyOpeningHours.current = false
 		} else if (!isEmpty(salonData.data)) {
 			// init data for existing salon
-			const openOverWeekend: boolean = checkWeekend(salonData.data?.salon?.openingHours)
-			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.salon?.openingHours)
-			const openingHours: OpeningHours = initOpeningHours(salonData.data?.salon?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
-
-			const { longitude, latitude, ...addressBase } = get(salonData, 'data.salon.address', {})
-			const invoiceAddress = salonData.data?.salon.companyInvoiceAddress as any
-
-			const isFilledContactPerson = !isEmpty(salonData.data?.salon.companyContactPerson)
-			const isFilledCompanyInfo = !isEmpty(salonData.data?.salon.companyInfo)
-
-			setContactPersonIsEmpty(!isFilledContactPerson)
-			setCompanyInfoIsEmpty(!isFilledCompanyInfo)
+			const openOverWeekend: boolean = checkWeekend(salonData.data?.openingHours)
+			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.openingHours)
+			const openingHours: OpeningHours = initOpeningHours(salonData.data?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 
 			dispatch(
 				initialize(FORM.SALON, {
-					...salonData.data?.salon,
+					...salonData.data,
 					openOverWeekend,
 					sameOpenHoursOverWeek,
 					openingHours,
-					note: salonData.data?.salon?.openingHoursNote?.note,
-					noteFrom: salonData.data?.salon?.openingHoursNote?.validFrom,
-					noteTo: salonData.data?.salon?.openingHoursNote?.validTo,
-					latitude: salonData.data?.salon?.address?.latitude,
-					longitude: salonData.data?.salon?.address?.longitude,
-					city: salonData.data?.salon?.address?.city,
-					street: salonData.data?.salon?.address?.street,
-					zipCode: salonData.data?.salon?.address?.zipCode,
-					country: salonData.data?.salon?.address?.countryCode,
-					streetNumber: salonData.data?.salon?.address?.streetNumber,
-					useContactPerson: isFilledContactPerson,
-					companyContactPerson: salonData.data?.salon.companyContactPerson || defaultContactPerson,
-					isInvoiceAddressSame: isEqual(invoiceAddress, addressBase),
-					companyInvoiceAddress: salonData.data?.salon.companyInvoiceAddress,
-					useCompanyInfo: isFilledCompanyInfo,
-					companyInfo: salonData.data?.salon.companyInfo,
-					gallery: map(salonData.data?.salon?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
-					logo: salonData.data?.salon?.logo?.id ? [{ url: salonData.data?.salon?.logo?.original, uid: salonData.data?.salon?.logo?.id }] : null
+					note: salonData.data?.openingHoursNote?.note,
+					noteFrom: salonData.data?.openingHoursNote?.validFrom,
+					noteTo: salonData.data?.openingHoursNote?.validTo,
+					latitude: salonData.data?.address?.latitude,
+					longitude: salonData.data?.address?.longitude,
+					city: salonData.data?.address?.city,
+					street: salonData.data?.address?.street,
+					zipCode: salonData.data?.address?.zipCode,
+					country: salonData.data?.address?.countryCode,
+					streetNumber: salonData.data?.address?.streetNumber,
+					companyContactPerson: salonData.data?.companyContactPerson || defaultContactPerson,
+					companyInfo: salonData.data?.companyInfo,
+					gallery: map(salonData.data?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
+					logo: salonData.data?.logo?.id ? [{ url: salonData.data?.logo?.original, uid: salonData.data?.logo?.id }] : null
 				})
 			)
 		} else if (!salon?.isLoading) {
@@ -316,7 +287,7 @@ const SalonPage: FC<Props> = (props) => {
 				initialize(FORM.SALON, {
 					openOverWeekend: false,
 					sameOpenHoursOverWeek: true,
-					openingHours: initOpeningHours(salonData.data?.salon?.openingHours, true, false),
+					openingHours: initOpeningHours(salonData.data?.openingHours, true, false),
 					payByCard: false,
 					phonePrefixCountryCode,
 					isInvoiceAddressSame: true,
@@ -332,18 +303,18 @@ const SalonPage: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salon])
 
-	const handleSubmit = async (data: any) => {
+	const handleSubmit = async (data: ISalonForm) => {
 		try {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 			const salonData: SalonPatch = {
-				imageIDs: map(data.gallery, (image) => image?.id ?? image?.uid),
+				imageIDs: data.gallery.map((image) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 				logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
 				name: data.name,
-				openingHours,
+				openingHours: openingHours || [],
 				aboutUsFirst: data.aboutUsFirst,
 				aboutUsSecond: data.aboutUsSecond,
-				...data.address,
+				// ...data.address,
 				city: data.city,
 				countryCode: data.country,
 				latitude: data.latitude,
@@ -358,29 +329,23 @@ const SalonPage: FC<Props> = (props) => {
 				socialLinkWebPage: data.socialLinkWebPage,
 				payByCard: data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
-				companyContactPerson: data.useContactPerson ? data.companyContactPerson : undefined,
-				companyInfo: data.useCompanyInfo ? data.companyInfo : undefined,
-				companyInvoiceAddress: data.isInvoiceAddressSame
-					? {
-							city: data.city,
-							countryCode: data.country,
-							street: data.street,
-							streetNumber: data.streetNumber,
-							zipCode: data.zipCode
-					  }
-					: data.companyInvoiceAddress,
-				userID: data?.user?.id || data?.userID?.value || authUser?.data?.id
+				companyContactPerson: data.companyContactPerson,
+				companyInfo: data.companyInfo
 			}
 
 			if (salonID > 0) {
 				// update existing salon
-				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: data?.id }, salonData)
-				dispatch(getSalon(salonID))
+				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData)
+				dispatch(selectSalon(salonID))
 			} else {
 				// create new salon
 				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData)
 				if (result?.data?.salon?.id) {
-					history.push(t('paths:salons/{{salonID}}', { salonID: result?.data?.salon?.id }))
+					// load new salon for current user
+					await dispatch(getCurrentUser())
+					// select new salon
+					await dispatch(selectSalon(result.data.salon.id))
+					history.push(t('paths:salons/{{salonID}}', { salonID: result.data.salon.id }))
 				}
 			}
 		} catch (error: any) {
@@ -392,23 +357,27 @@ const SalonPage: FC<Props> = (props) => {
 		}
 	}
 
+	const breadcrumbDetailItem = get(salon, 'data.salon.name')
+		? {
+				name: t('loc:Detail salónu'),
+				titleName: get(salon, 'data.salon.name')
+		  }
+		: {
+				name: t('loc:Vytvoriť salón'),
+				link: t('paths:salons/create')
+		  }
+
 	// View
 	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Zoznam salónov'),
-				link: t('paths:salons')
-			},
-			get(salon, 'data.salon.name')
-				? {
-						name: t('loc:Detail salónu'),
-						titleName: get(salon, 'data.salon.name')
-				  }
-				: {
-						name: t('loc:Vytvoriť salón'),
-						link: t('paths:salons/create')
-				  }
-		]
+		items: isAdmin
+			? [
+					{
+						name: t('loc:Zoznam salónov'),
+						link: t('paths:salons')
+					},
+					breadcrumbDetailItem
+			  ]
+			: [breadcrumbDetailItem]
 	}
 
 	const deleteSalon = async () => {
@@ -435,7 +404,7 @@ const SalonPage: FC<Props> = (props) => {
 		setSubmitting(true)
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/publish', { salonID }, { publish: published })
-			dispatch(getSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -452,7 +421,7 @@ const SalonPage: FC<Props> = (props) => {
 		setSubmitting(true)
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
-			dispatch(getSalon(salonID))
+			dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -464,7 +433,7 @@ const SalonPage: FC<Props> = (props) => {
 	const onOpenHoursNoteModalClose = () => {
 		updateOnlyOpeningHours.current = true
 		setVisible(false)
-		dispatch(getSalon(salonID))
+		dispatch(selectSalon(salonID))
 	}
 
 	const salonExists = salonID > 0
@@ -472,75 +441,64 @@ const SalonPage: FC<Props> = (props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:salons')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
-					render={(hasPermission) => (
-						<SalonForm
-							isAdmin={hasPermission}
-							onSubmit={handleSubmit}
-							openNoteModal={() => setVisible(true)}
-							changeSalonVisibility={changeVisibility}
-							publishSalon={publishSalon}
-							switchDisabled={submitting}
-							salonID={salonID}
-							disabledForm={deletedSalon}
-							showCompanyInfoSwitch={companyInfoIsEmpty}
-							showContactPersonSwitch={contactPersonIsEmpty}
-						/>
-					)}
-				/>
-				{salonExists && (
-					<OpenHoursNoteModal
-						visible={visible}
-						salonID={salon?.data?.salon?.id || 0}
-						openingHoursNote={salon?.data?.salon?.openingHoursNote}
-						onClose={onOpenHoursNoteModalClose}
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<SalonForm
+						onSubmit={handleSubmit}
+						openNoteModal={() => setVisible(true)}
+						changeSalonVisibility={changeVisibility}
+						publishSalon={publishSalon}
+						switchDisabled={submitting}
+						salonID={salonID}
+						disabledForm={deletedSalon}
 					/>
-				)}
+					{salonExists && (
+						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
+					)}
 
-				<div className={'content-footer'}>
-					<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
-						{salonExists && (
-							<DeleteButton
-								permissions={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SALON_DELETE]}
-								className={'w-1/3'}
-								onConfirm={deleteSalon}
-								entityName={t('loc:salón')}
-								type={'default'}
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								disabled={deletedSalon}
-							/>
-						)}
-						<Permissions
-							allowed={submitPermissions}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular w-1/3'}
-									htmlType={'submit'}
-									onClick={(e) => {
-										if (hasPermission) {
-											dispatch(submit(FORM.SALON))
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									disabled={submitting || deletedSalon || isFormPristine}
-									loading={submitting}
-								>
-									{t('loc:Uložiť')}
-								</Button>
+					<div className={'content-footer'}>
+						<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
+							{salonExists && (
+								<DeleteButton
+									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]}
+									className={'w-1/3'}
+									onConfirm={deleteSalon}
+									entityName={t('loc:salón')}
+									type={'default'}
+									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+									disabled={deletedSalon}
+								/>
 							)}
-						/>
-					</Row>
+							<Permissions
+								allowed={submitPermissions}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={'noti-btn m-regular w-1/3'}
+										htmlType={'submit'}
+										onClick={(e) => {
+											if (hasPermission) {
+												dispatch(submit(FORM.SALON))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={submitting || deletedSalon || isFormPristine}
+										loading={submitting}
+									>
+										{t('loc:Uložiť')}
+									</Button>
+								)}
+							/>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

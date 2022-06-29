@@ -601,6 +601,7 @@ export const isValidDateRange = (from: string, to: string) => {
 }
 
 export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))
+
 export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))
 
 export const convertCountriesToLocalizations = (countries: RootState['enumerationsStore']['countries'], defaultLanguageName?: string) => {
@@ -653,16 +654,6 @@ export const getSelectOptionsFromData = (data: SelectDataItem[] | null) => {
 	})
 }
 
-export const getDefaultFormCategories = (id: number | undefined, categories: any, parentCategories: any = []): any => {
-	if (!id) return []
-	for (let index = 0; index < categories.length; index += 1) {
-		const currentCategories = [...parentCategories, categories[index]]
-		if (categories[index].id === id) return currentCategories // if id is found return current category and all parents
-		if (categories[index].children) return getDefaultFormCategories(id, categories[index].children, currentCategories)
-	}
-	return parentCategories
-}
-
 export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any) => {
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
@@ -702,3 +693,6 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 
 	return output
 }
+
+export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
+	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)

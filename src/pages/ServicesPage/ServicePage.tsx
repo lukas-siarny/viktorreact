@@ -8,23 +8,24 @@ import ServiceEditPage from './ServiceEditPage'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
-import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, SalonSubPageProps } from '../../types/interfaces'
 
-type Props = {
+type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
-		serviceID: string
+		serviceID: number
 	}>
 }
 
 const ServicePage = (props: Props) => {
-	const serviceID = parseInt(props.computedMatch.params.serviceID, 10)
+	const { serviceID } = props.computedMatch.params
+	const { salonID, parentPath } = props
 	const { t } = useTranslation()
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
 				name: t('loc:Zoznam služieb'),
-				link: t('paths:services')
+				link: parentPath + t('paths:services')
 			},
 			{
 				name: serviceID ? t('loc:Detail služby') : t('loc:Vytvoriť službu')
@@ -35,11 +36,11 @@ const ServicePage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:services')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:services')} />
 			</Row>
 			<div className='content-body small mt-2'>
-				{serviceID ? <ServiceEditPage serviceID={serviceID} /> : undefined}
-				{!serviceID ? <ServiceCreatePage /> : undefined}
+				{serviceID ? <ServiceEditPage serviceID={serviceID} salonID={salonID} /> : undefined}
+				{!serviceID ? <ServiceCreatePage salonID={salonID} /> : undefined}
 			</div>
 		</>
 	)

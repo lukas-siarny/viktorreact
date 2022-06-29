@@ -7,16 +7,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { ACCOUNT_STATE, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { ACCOUNT_STATE, FIELD_MODE, FILTER_ENTITY, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
-import { searchServiceWrapper } from '../../../utils/filters'
+import searchWrapper from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
 
 // components
 import Filters from '../../../components/Filters'
+import SelectField from '../../../atoms/SelectField'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -48,7 +48,7 @@ const EmployeesFilter = (props: Props) => {
 
 	const onSearchServices = useCallback(
 		async (search: string, page: number) => {
-			return searchServiceWrapper(dispatch, { search, page })
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.SERVICE)
 		},
 		[dispatch]
 	)

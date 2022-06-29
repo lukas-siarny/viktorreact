@@ -2,25 +2,25 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
-import { Button, Modal, notification, Row } from 'antd'
+import { Button, Modal, notification, Row, Spin } from 'antd'
 import { get, forEach } from 'lodash'
 import { change, initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import cx from 'classnames'
 import i18next from 'i18next'
 
 // components
-import EmployeeForm, { parseSalonID } from './components/EmployeeForm'
+import EmployeeForm from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION } from '../../utils/enums'
+import { FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { decodePrice, encodePrice } from '../../utils/helper'
 
@@ -32,14 +32,14 @@ import { IServicesPayload } from '../../reducers/services/serviceActions'
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
-type Props = {
+type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: number }>
 }
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
-	return oldServices.map((service: any) => {
+	return oldServices?.map((service: any) => {
 		return {
 			id: service?.id,
 			employeeData: {
@@ -108,9 +108,48 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
 }
 
+const checkAndParseServices = (ser: any[]) => {
+	return ser.map((service) => {
+		let updatedService = {
+			id: service?.id,
+			name: service?.name,
+			variableDuration: false,
+			variablePrice: false,
+			salonData: {
+				...service.salonData,
+				// decode and set price
+				priceFrom: decodePrice(service?.salonData?.priceFrom),
+				priceTo: decodePrice(service?.salonData?.priceTo)
+			},
+			employeeData: {
+				...service.employeeData,
+				// decode and set price
+				priceFrom: decodePrice(service?.employeeData?.priceFrom),
+				priceTo: decodePrice(service?.employeeData?.priceTo)
+			},
+			category: service?.category
+		}
+		// get data from employeeData
+		if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
+			updatedService = {
+				...updatedService,
+				variableDuration: true
+			}
+		}
+		if (service?.employeeData?.priceFrom && service?.employeeData?.priceTo) {
+			updatedService = {
+				...updatedService,
+				variablePrice: true
+			}
+		}
+		return updatedService
+	})
+}
+
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const { salonID, parentPath } = props
 	const { employeeID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
@@ -124,48 +163,19 @@ const EmployeePage = (props: Props) => {
 
 	const showDeleteBtn = !!employee?.data?.employee?.id
 
+	const isLoading = employee.isLoading || services.isLoading || isRemoving
+
+	const fetchEmployeeData = async () => {
+		const { data } = await dispatch(getEmployee(employeeID))
+		if (!data?.employee?.id) {
+			history.push('/404')
+		}
+	}
+
 	useEffect(() => {
-		dispatch(getEmployee(employeeID))
+		fetchEmployeeData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
-
-	const checkAndParseServices = (ser: any[]) => {
-		return ser.map((service) => {
-			let updatedService = {
-				id: service?.id,
-				name: service?.name,
-				variableDuration: false,
-				variablePrice: false,
-				salonData: {
-					...service.salonData,
-					// decode and set price
-					priceFrom: decodePrice(service?.salonData?.priceFrom),
-					priceTo: decodePrice(service?.salonData?.priceTo)
-				},
-				employeeData: {
-					...service.employeeData,
-					// decode and set price
-					priceFrom: decodePrice(service?.employeeData?.priceFrom),
-					priceTo: decodePrice(service?.employeeData?.priceTo)
-				},
-				category: service?.category
-			}
-			// get data from employeeData
-			if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
-				updatedService = {
-					...updatedService,
-					variableDuration: true
-				}
-			}
-			if (service?.employeeData?.priceFrom && service?.employeeData?.priceTo) {
-				updatedService = {
-					...updatedService,
-					variablePrice: true
-				}
-			}
-			return updatedService
-		})
-	}
 
 	useEffect(() => {
 		if (employee.data?.employee) {
@@ -213,7 +223,7 @@ const EmployeePage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/employees/{employeeID}', { employeeID })
-			history.push(t('paths:employees'))
+			history.push(parentPath + t('paths:employees'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -226,7 +236,7 @@ const EmployeePage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zamestnancov'),
-				link: t('paths:employees')
+				link: parentPath + t('paths:employees')
 			},
 			{
 				name: t('loc:Detail zamestnanca'),
@@ -243,7 +253,7 @@ const EmployeePage = (props: Props) => {
 				{
 					inviteEmail: formData?.email,
 					employeeID,
-					salonID: parseSalonID(form?.values?.salonID),
+					salonID,
 					// TODO add roleID
 					roleID: 0
 				}
@@ -276,85 +286,92 @@ const EmployeePage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:employees')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={form?.values?.salonID} onSubmit={updateEmployee} />
-				<div className={'content-footer'}>
-					<Row className={rowClass}>
-						{showDeleteBtn ? (
-							<DeleteButton
-								permissions={permissions}
-								className={'w-1/3'}
-								onConfirm={deleteEmployee}
-								entityName={t('loc:zamestnanca')}
-								type={'default'}
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-							/>
-						) : undefined}
-						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_UPDATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<div className={`flex justify-between ${wrapperWidthClass}`}>
-									{isProfileInActive ? (
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
+					<div className={'content-footer'}>
+						<Row className={rowClass}>
+							{showDeleteBtn ? (
+								<DeleteButton
+									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
+									className={'w-1/3'}
+									onConfirm={deleteEmployee}
+									entityName={t('loc:zamestnanca')}
+									type={'default'}
+									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								/>
+							) : undefined}
+							<div className={`flex justify-between ${wrapperWidthClass}`}>
+								<Permissions
+									allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
+									render={(hasPermission, { openForbiddenModal }) =>
+										isProfileInActive && (
+											<Button
+												type={'primary'}
+												block
+												size={'middle'}
+												className={'noti-btn m-regular w-12/25'}
+												htmlType={'submit'}
+												onClick={(e) => {
+													if (hasPermission) {
+														setVisible(true)
+														dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail }))
+													} else {
+														e.preventDefault()
+														openForbiddenModal()
+													}
+												}}
+												disabled={isInviteFromSubmitting}
+												loading={isInviteFromSubmitting}
+											>
+												{t('loc:Pozvať do tímu')}
+											</Button>
+										)
+									}
+								/>
+								<Permissions
+									allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_UPDATE]}
+									render={(hasPermission, { openForbiddenModal }) => (
 										<Button
 											type={'primary'}
 											block
 											size={'middle'}
-											className={'noti-btn m-regular w-12/25'}
+											className={`noti-btn m-regular ${buttonWidthClass}`}
 											htmlType={'submit'}
 											onClick={(e) => {
 												if (hasPermission) {
-													setVisible(true)
-													dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail }))
+													dispatch(submit(FORM.EMPLOYEE))
 												} else {
 													e.preventDefault()
 													openForbiddenModal()
 												}
 											}}
-											disabled={isInviteFromSubmitting}
-											loading={isInviteFromSubmitting}
+											disabled={submitting || isFormPristine}
+											loading={submitting}
 										>
-											{t('loc:Pozvať do tímu')}
+											{t('loc:Uložiť')}
 										</Button>
-									) : undefined}
-									<Button
-										type={'primary'}
-										block
-										size={'middle'}
-										className={`noti-btn m-regular ${buttonWidthClass}`}
-										htmlType={'submit'}
-										onClick={(e) => {
-											if (hasPermission) {
-												dispatch(submit(FORM.EMPLOYEE))
-											} else {
-												e.preventDefault()
-												openForbiddenModal()
-											}
-										}}
-										disabled={submitting || isFormPristine}
-										loading={submitting}
-									>
-										{t('loc:Uložiť')}
-									</Button>
-								</div>
-							)}
-						/>
-						<Modal
-							className='rounded-fields'
-							title={t('loc:Pozvať do tímu')}
-							centered
-							visible={visible}
-							footer={null}
-							onCancel={() => setVisible(false)}
-							closeIcon={<CloseIcon />}
-							width={394}
-						>
-							<InviteForm onSubmit={inviteEmployee} />
-						</Modal>
-					</Row>
+									)}
+								/>
+							</div>
+							<Modal
+								className='rounded-fields'
+								title={t('loc:Pozvať do tímu')}
+								centered
+								visible={visible}
+								footer={null}
+								onCancel={() => setVisible(false)}
+								closeIcon={<CloseIcon />}
+								width={394}
+							>
+								<InviteForm onSubmit={inviteEmployee} />
+							</Modal>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

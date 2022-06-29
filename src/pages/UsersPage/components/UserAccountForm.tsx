@@ -53,7 +53,14 @@ const UserAccountForm: FC<Props> = (props) => {
 						</div>
 					</div>
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled />
-					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
+					<PhoneWithPrefixField
+						label={'Telefón'}
+						placeholder={t('loc:Zadajte telefón')}
+						size={'large'}
+						prefixName={'phonePrefixCountryCode'}
+						phoneName={'phone'}
+						formName={FORM.USER_ACCOUNT}
+					/>
 				</Row>
 			</Col>
 		</Form>

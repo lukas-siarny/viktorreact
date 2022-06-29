@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Progress, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
@@ -15,7 +15,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 
 // utils
-import Permissions, { withPermissions } from '../../utils/Permissions'
+import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
@@ -24,6 +24,7 @@ import { history } from '../../utils/history'
 import { getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
+import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
@@ -42,9 +43,11 @@ const SalonsPage = () => {
 	const dispatch = useDispatch()
 
 	const salons = useSelector((state: RootState) => state.salons.salons)
+	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 
 	useEffect(() => {
 		dispatch(getCategories())
+		dispatch(selectSalon())
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
@@ -56,6 +59,8 @@ const SalonsPage = () => {
 		order: withDefault(StringParam, 'createdAt:DESC'),
 		countryCode: StringParam
 	})
+
+	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
 		dispatch(
@@ -185,13 +190,15 @@ const SalonsPage = () => {
 	]
 
 	// View
-	const breadcrumbs: IBreadcrumbs = {
-		items: [
-			{
-				name: t('loc:Zoznam salónov')
-			}
-		]
-	}
+	const breadcrumbs: IBreadcrumbs | undefined = isAdmin
+		? {
+				items: [
+					{
+						name: t('loc:Zoznam salónov')
+					}
+				]
+		  }
+		: undefined
 
 	return (
 		<>

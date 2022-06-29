@@ -20,7 +20,7 @@ import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getRoles } from '../../reducers/roles/rolesActions'
+import { getSystemRoles } from '../../reducers/roles/rolesActions'
 import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 
@@ -54,7 +54,7 @@ const UsersPage = () => {
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
-		dispatch(getRoles())
+		dispatch(getSystemRoles())
 
 		phonePrefixes.forEach((option) => {
 			prefixes[option.key] = option.label

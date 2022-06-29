@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row } from 'antd'
@@ -15,7 +15,7 @@ import EmployeesFilter, { IEmployeesFilter } from './components/EmployeesFilter'
 import PopoverList from '../../components/PopoverList'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -25,7 +25,7 @@ import { getEmployees } from '../../reducers/employees/employeesActions'
 import { RootState } from '../../reducers'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
@@ -36,10 +36,10 @@ type Columns = ColumnsType<any>
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-const EmployeesPage = () => {
+const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const { salonID, parentPath } = props
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
@@ -50,13 +50,16 @@ const EmployeesPage = () => {
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:desc'),
 		accountState: StringParam,
-		serviceID: NumberParam
+		serviceID: NumberParam,
+		salonID: NumberParam
 	})
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
-		dispatch(getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, accountState: query.accountState, serviceID: query.serviceID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID])
+		dispatch(
+			getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, accountState: query.accountState, serviceID: query.serviceID, salonID })
+		)
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -170,18 +173,18 @@ const EmployeesPage = () => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:home')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:index')} />
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
 						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.EMPLOYEE_CREATE]}
+							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<EmployeesFilter
 									createEmployee={() => {
 										if (hasPermission) {
-											history.push(t('paths:employees/create'))
+											history.push(parentPath + t('paths:employees/create'))
 										} else {
 											openForbiddenModal()
 										}
@@ -201,7 +204,7 @@ const EmployeesPage = () => {
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(t('paths:employees/{{employeeID}}', { employeeID: record.id }))
+									history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))
 								}
 							})}
 							pagination={{

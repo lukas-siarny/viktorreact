@@ -4,7 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICountryLabel } from '../types/interfaces'
+import { ICountryLabel, ICurrency } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -27,9 +27,14 @@ export enum LANGUAGE {
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
-export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hurs
+export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
 export const DEFAULT_LANGUAGE = LANGUAGE.SK
+
+export const DEFAULT_CURRENCY: ICurrency = {
+	code: 'EUR',
+	symbol: '€'
+}
 
 export enum NOTIFICATION_TYPE {
 	MODAL = 'MODAL',
@@ -46,6 +51,13 @@ export enum MSG_TYPE {
 export enum FIELD_MODE {
 	INPUT = 'INPUT',
 	FILTER = 'FILTER'
+}
+
+export enum FILTER_ENTITY {
+	EMPLOYEE = 'EMPLOYEE',
+	SALON = 'SALON',
+	SERVICE = 'SERVICE',
+	USER = 'USER'
 }
 
 export enum TABS_TYPE {
@@ -97,17 +109,22 @@ export enum FORM {
 	INVITE_EMPLOYEE = 'INVITE_EMPLOYEE'
 }
 
+// System permissions
 export enum PERMISSION {
 	NOTINO_SUPER_ADMIN = 'NOTINO_SUPER_ADMIN',
 	NOTINO_ADMIN = 'NOTINO_ADMIN',
-	PARTNER_ADMIN = 'PARTNER_ADMIN',
 	PARTNER = 'PARTNER',
 	USER_CREATE = 'USER_CREATE',
 	USER_BROWSING = 'USER_BROWSING',
 	USER_EDIT = 'USER_EDIT',
 	USER_DELETE = 'USER_DELETE',
 	ENUM_BROWSING = 'ENUM_BROWSING',
-	ENUM_EDIT = 'ENUM_EDIT',
+	ENUM_EDIT = 'ENUM_EDIT'
+}
+
+// Salon's permissions
+export enum SALON_PERMISSION {
+	PARTNER_ADMIN = 'PARTNER_ADMIN',
 	SALON_UPDATE = 'SALON_UPDATE',
 	SALON_DELETE = 'SALON_DELETE',
 	SALON_BILLING_UPDATE = 'SALON_BILLING_UPDATE',
@@ -121,6 +138,8 @@ export enum PERMISSION {
 	EMPLOYEE_UPDATE = 'EMPLOYEE_UPDATE',
 	EMPLOYEE_DELETE = 'EMPLOYEE_DELETE'
 }
+
+export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
 export enum RESOLUTIONS {
 	SM = 'SM',
@@ -182,7 +201,8 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	COUNTRIES_FILTER_OPTIONS = 'countries_filter_options'
+	COUNTRIES_FILTER_OPTIONS = 'countries_filter_options',
+	CURRENCIES = 'currencies'
 }
 
 export const GOOGLE_MAPS_API_KEY = 'AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw'

@@ -2,6 +2,7 @@
 import { persistReducer } from 'redux-persist'
 import { combineReducers } from 'redux'
 import storageSession from 'redux-persist/es/storage/session'
+import storageLocal from 'redux-persist/lib/storage'
 import { reducer as formReducer } from 'redux-form'
 import { ThunkAction } from 'redux-thunk'
 
@@ -14,6 +15,7 @@ import serviceReducer from './services/serviceReducer'
 import salonsReducer from './salons/salonsReducer'
 import customerReducer from './customers/customerReducer'
 import employeesReducer from './employees/employeesReducer'
+import selectedSalonReducer from './selectedSalon/selectedSalonReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -24,7 +26,8 @@ export const REDUCER_KEYS = {
 	SERVICE: 'SERVICE',
 	SALONS: 'SALONS',
 	CUSTOMERS: 'CUSTOMERS',
-	EMPLOYEES: 'EMPLOYEES'
+	EMPLOYEES: 'EMPLOYEES',
+	SELECTED_SALON: 'SELECTED_SALON'
 }
 
 const rootReducer = combineReducers({
@@ -90,6 +93,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		employeesReducer
+	),
+	selectedSalon: persistReducer(
+		{
+			key: REDUCER_KEYS.SELECTED_SALON,
+			storage: storageLocal
+		},
+		selectedSalonReducer
 	)
 })
 

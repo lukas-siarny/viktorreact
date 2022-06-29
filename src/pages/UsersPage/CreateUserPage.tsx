@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { initialize, submit, isPristine } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
@@ -20,7 +20,7 @@ import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getRoles } from '../../reducers/roles/rolesActions'
+import { getSystemRoles } from '../../reducers/roles/rolesActions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { RootState } from '../../reducers'
 
@@ -32,6 +32,8 @@ const CreateUserPage = () => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const isFormPristine = useSelector(isPristine(FORM.ADMIN_CREATE_USER))
 	const [submitting, setSubmitting] = useState<boolean>(false)
+
+	const { isLoading } = phonePrefixes
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -48,7 +50,7 @@ const CreateUserPage = () => {
 	const fetchData = async () => {
 		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		dispatch(initialize(FORM.ADMIN_CREATE_USER, { phonePrefixCountryCode }))
-		dispatch(getRoles())
+		dispatch(getSystemRoles())
 	}
 
 	useEffect(() => {
@@ -82,27 +84,29 @@ const CreateUserPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<CreateUserAccountForm onSubmit={createUser} />
-				<div className={'content-footer'}>
-					<Row justify='center'>
-						<Button
-							type={'primary'}
-							block
-							size={'middle'}
-							className={'noti-btn m-regular mb-2 w-1/3'}
-							htmlType={'submit'}
-							onClick={() => {
-								dispatch(submit(FORM.ADMIN_CREATE_USER))
-							}}
-							disabled={submitting || isFormPristine}
-							loading={submitting}
-						>
-							{t('loc:Uložiť')}
-						</Button>
-					</Row>
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<CreateUserAccountForm onSubmit={createUser} />
+					<div className={'content-footer'}>
+						<Row justify='center'>
+							<Button
+								type={'primary'}
+								block
+								size={'middle'}
+								className={'noti-btn m-regular mb-2 w-1/3'}
+								htmlType={'submit'}
+								onClick={() => {
+									dispatch(submit(FORM.ADMIN_CREATE_USER))
+								}}
+								disabled={submitting || isFormPristine}
+								loading={submitting}
+							>
+								{t('loc:Uložiť')}
+							</Button>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

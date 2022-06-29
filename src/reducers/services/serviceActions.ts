@@ -1,12 +1,11 @@
 /* eslint-disable import/no-cycle */
-import { map } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
 import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IUserAvatar } from '../../types/interfaces'
+import { IUserAvatar, IQueryParams, ISearchablePayload } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -19,6 +18,8 @@ interface IGetServices {
 	payload: IServicesPayload
 }
 
+type IService = Paths.GetApiB2BAdminServices.Responses.$200['services']['0']
+
 interface ServicesTableData {
 	key: number
 	serviceID: number
@@ -30,26 +31,14 @@ interface ServicesTableData {
 	salon: string | undefined
 }
 
-export interface IGetServicesQueryParams {
-	page: number
-	limit?: any | undefined
-	order?: string | undefined
-	search?: string | undefined | null
+export interface IGetServicesQueryParams extends IQueryParams {
 	categoryID?: number | undefined | null
 	employeeID?: number | undefined | null
 	salonID?: number | undefined | null
 }
 
-export interface ServiceOptionItem {
-	label: string | undefined | number
-	value: number
-	key: string
-}
-
-export interface IServicesPayload {
-	data: Paths.GetApiB2BAdminServices.Responses.$200 | null
+export interface IServicesPayload extends ISearchablePayload<Paths.GetApiB2BAdminServices.Responses.$200> {
 	tableData: ServicesTableData[] | undefined
-	servicesOptions: ServiceOptionItem[] | undefined
 }
 
 export const getServices =
@@ -60,7 +49,7 @@ export const getServices =
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
 
 			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) })
-			const tableData: ServicesTableData[] = map(data.services, (item) => {
+			const tableData: ServicesTableData[] = data.services.map((item) => {
 				const tableItem = {
 					key: item.id,
 					serviceID: item.id,
@@ -78,13 +67,13 @@ export const getServices =
 				}
 				return tableItem
 			})
-			const servicesOptions = map(data.services, (service) => {
+			const servicesOptions = data.services.map((service: IService) => {
 				return { label: service.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
 			})
 			payload = {
 				data,
 				tableData,
-				servicesOptions
+				options: servicesOptions
 			}
 
 			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })

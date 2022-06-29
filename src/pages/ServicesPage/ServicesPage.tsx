@@ -15,7 +15,7 @@ import ServicesFilter from './components/ServicesFilter'
 import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, normalizeQueryParams, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -26,7 +26,7 @@ import { getServices } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IBreadcrumbs, IUserAvatar } from '../../types/interfaces'
+import { IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -36,10 +36,11 @@ interface IAdminUsersFilter {
 	search: string
 }
 
-const ServicesPage = () => {
+const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const services = useSelector((state: RootState) => state.service.services)
+	const { salonID, parentPath } = props
 
 	useEffect(() => {
 		dispatch(getCategories(false))
@@ -63,10 +64,11 @@ const ServicesPage = () => {
 				order: query.order,
 				search: query.search,
 				categoryID: query.categoryID,
-				employeeID: query.employeeID
+				employeeID: query.employeeID,
+				salonID
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID])
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, salonID])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -103,7 +105,7 @@ const ServicesPage = () => {
 			title: t('loc:Zamestnanec'),
 			dataIndex: 'employees',
 			key: 'employees',
-			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} /> : null)
+			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} /> : null)
 		},
 		{
 			title: t('loc:Trvanie (min)'),
@@ -151,12 +153,12 @@ const ServicesPage = () => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Permissions
-							allowed={[...permissions, PERMISSION.PARTNER_ADMIN, PERMISSION.SERVICE_CREATE]}
+							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<ServicesFilter
 									createService={() => {
 										if (hasPermission) {
-											history.push(t('paths:services/create'))
+											history.push(parentPath + t('paths:services/create'))
 										} else {
 											openForbiddenModal()
 										}
@@ -176,7 +178,7 @@ const ServicesPage = () => {
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
+									history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
 								}
 							})}
 							pagination={{

@@ -1,21 +1,19 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
-import { Button, Col, Form, Row } from 'antd'
+import { Button, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { FIELD_MODE, FORM } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
-import { searchSalonWrapper } from '../../../utils/filters'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
 
 // components
 import Filters from '../../../components/Filters'

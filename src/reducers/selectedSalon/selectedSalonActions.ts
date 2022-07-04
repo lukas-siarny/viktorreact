@@ -37,8 +37,12 @@ export interface ISelectedSalonPayload {
 	data: IPayloadData | null
 }
 
+interface ISalonSelectedOptionItem extends ISelectOptionItem {
+	logo?: string
+}
+
 export interface ISalonSelectionOptionsPayload {
-	data: ISelectOptionItem[] | null
+	data: ISalonSelectedOptionItem[] | null
 }
 
 export const selectSalon =
@@ -114,7 +118,9 @@ export const setSelectionOptions =
 		const options = salons.map((salon) => ({
 			key: salon.id,
 			label: get(salon, 'name', salon.id),
-			value: salon.id
+			value: salon.id,
+			// todo: BE needs to send logo
+			logo: get(salon, 'logo.resizedImages.small')
 		}))
 
 		const payload: ISalonSelectionOptionsPayload = {

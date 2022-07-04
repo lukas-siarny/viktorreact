@@ -1,8 +1,9 @@
 import React, { ReactNode, FC } from 'react'
-import { Layout, Row, Select, Button } from 'antd'
+import { Layout, Row, Button, Dropdown, Menu } from 'antd'
 import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
-import { get } from 'lodash'
+import cx from 'classnames'
 
 // components
 import { Header } from 'antd/lib/layout/layout'
@@ -19,7 +20,10 @@ import { history } from '../utils/history'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
-import { ReactComponent as BackIcon } from '../assets/icons/back-icon.svg'
+import { ReactComponent as BackIcon } from '../assets/icons/rollback.svg'
+import AvatarComponents from '../components/AvatarComponents'
+import { ReactComponent as ChevronIcon } from '../assets/icons/chevron-down.svg'
+import { ReactComponent as AddPurple } from '../assets/icons/add-icon-purple.svg'
 
 const { Content } = Layout
 
@@ -32,8 +36,67 @@ const MainLayout: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { children } = props
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
-	const salonID = selectedSalon?.id
+	const { salonID } = useParams() as any
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
+
+	const SALONS_MENU = (
+		<Menu className='p-2 shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header'>
+			{salonOptions.map((item) => (
+				<Menu.Item
+					key={item.key}
+					className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
+					onClick={() => dispatch(selectSalon(item.value as number))}
+				>
+					<AvatarComponents src={item.logo} size={24} className={'mr-2-5'} />
+					{item.label}
+				</Menu.Item>
+			))}
+			<Menu.Divider className={'m-0'} />
+			<Menu.Item key='add-salon' className={'mt-2 p-2 font-medium button-add'} icon={<AddPurple />} onClick={() => history.push(t('paths:salons/create'))}>
+				{t('loc:Pridať salón')}
+			</Menu.Item>
+		</Menu>
+	)
+
+	const getSelectedSalonLabel = (hasPermision = true) => {
+		const content = (
+			<Row className='m-2 flex items-center gap-2 min-w-0 ' justify='space-between' wrap={false}>
+				<Row wrap={false} className={'min-w-0 flex items-center gap-2-5'}>
+					<AvatarComponents size={24} src={selectedSalon?.logo?.resizedImages.thumbnail} />
+					{selectedSalon?.name && <span className='truncate leading-4 text-sm min-w-0 inline-block'>{selectedSalon.name}</span>}
+				</Row>
+
+				{hasPermision && <ChevronIcon className='items-center icon-dropdown' />}
+			</Row>
+		)
+
+		const labelClassname = 'bg-notino-grayLighter rounded-lg min-w-0 header-salon-label max-w-xs'
+
+		if (hasPermision) {
+			if (salonOptions.length === 0) {
+				return (
+					<Button onClick={() => history.push(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
+						{t('loc:Pridať salón')}
+					</Button>
+				)
+			}
+
+			return (
+				<Dropdown overlay={SALONS_MENU} placement='bottomRight' trigger={['click']} overlayStyle={{ minWidth: 226 }}>
+					<div role={'button'} className={cx(labelClassname, 'cursor-pointer')} tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
+						{content}
+					</div>
+				</Dropdown>
+			)
+		}
+
+		return (
+			<>
+				<span className='pr-4 text-xs selected-salon-text'>{t('loc:zvolený salón')}:</span>
+				<div className={cx(labelClassname)}>{content}</div>
+			</>
+		)
+	}
 
 	return (
 		<Layout className='min-h-screen noti-main-layout' hasSider>
@@ -43,41 +106,21 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.PARTNER]}
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
-							<Header className='shadow-md bg-notino-white sticky top-0 z-10'>
-								<Row className={'justify-between'}>
-									<Row className='w-1/2 items-baseline'>
-										<strong className='pr-4'>{t('loc:Zvolený salón')}:</strong>
-										{hasPermission ? (
-											<div className={'ant-form-item w-1/2'}>
-												<Select
-													value={salonID}
-													defaultValue={salonID}
-													onChange={(id) => dispatch(selectSalon(id))}
-													options={salonOptions}
-													className={'noti-select-input'}
-													dropdownClassName={'noti-select-dropdown'}
-												/>
-											</div>
-										) : (
-											<strong>{get(selectedSalon, 'name') || salonID}</strong>
-										)}
-									</Row>
-									<Row className='w-1/7 items-center'>
-										{hasPermission ? (
-											<Button
-												onClick={() => history.push(t('paths:salons/create'))}
-												type='primary'
-												htmlType='button'
-												className={'noti-btn'}
-												icon={<PlusIcon />}
-											>
-												{t('loc:Pridať salón')}
-											</Button>
-										) : (
-											<Button onClick={() => history.push(t('paths:salons'))} type='primary' htmlType='button' className={'noti-btn'} icon={<BackIcon />}>
-												{t('loc:Späť na zoznam salónov')}
-											</Button>
-										)}
+							<Header className='shadow-md bg-notino-white sticky top-0 z-10 px-4 flex items-center w-full'>
+								<Row className={`${hasPermission ? 'justify-end' : 'justify-between'} min-w-0 w-full`} wrap={false}>
+									{!hasPermission && (
+										<Button
+											onClick={() => history.push(t('paths:index'))}
+											icon={<BackIcon className={'text-notino-black'} />}
+											className={'noti-btn h-8 text-notino-black self-center'}
+											type={'default'}
+											size={'small'}
+										>
+											{t('loc:Vrátiť sa do administrácie')}
+										</Button>
+									)}
+									<Row className='w-1/7 items-center min-w-0' wrap={false}>
+										{getSelectedSalonLabel(hasPermission)}
 									</Row>
 								</Row>
 							</Header>

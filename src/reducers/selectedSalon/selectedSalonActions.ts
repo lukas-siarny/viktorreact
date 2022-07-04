@@ -119,8 +119,7 @@ export const setSelectionOptions =
 			key: salon.id,
 			label: get(salon, 'name', salon.id),
 			value: salon.id,
-			// todo: BE needs to send logo
-			logo: get(salon, 'logo.resizedImages.small')
+			logo: get(salon, 'logo.resizedImages.thumbnail')
 		}))
 
 		const payload: ISalonSelectionOptionsPayload = {

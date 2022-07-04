@@ -1,7 +1,6 @@
 import React, { ReactNode, FC } from 'react'
 import { Layout, Row, Button, Dropdown, Menu } from 'antd'
 import { useSelector, useDispatch } from 'react-redux'
-import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
@@ -24,6 +23,7 @@ import { ReactComponent as BackIcon } from '../assets/icons/rollback.svg'
 import AvatarComponents from '../components/AvatarComponents'
 import { ReactComponent as ChevronIcon } from '../assets/icons/chevron-down.svg'
 import { ReactComponent as AddPurple } from '../assets/icons/add-icon-purple.svg'
+import SalonDefaultAvatar from '../assets/icons/salon-default-avatar.png'
 
 const { Content } = Layout
 
@@ -36,7 +36,7 @@ const MainLayout: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { children } = props
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
-	const { salonID } = useParams() as any
+	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
 
 	const SALONS_MENU = (
@@ -44,10 +44,10 @@ const MainLayout: FC<Props> = (props) => {
 			{salonOptions.map((item) => (
 				<Menu.Item
 					key={item.key}
-					className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value, 'fallback-image': !item.logo }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
+					className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
 					onClick={() => dispatch(selectSalon(item.value as number))}
 				>
-					<AvatarComponents src={item.logo} size={24} className={'mr-2-5'} />
+					<AvatarComponents src={item.logo || SalonDefaultAvatar} size={24} className={'mr-2-5'} />
 					{item.label}
 				</Menu.Item>
 			))}
@@ -58,11 +58,11 @@ const MainLayout: FC<Props> = (props) => {
 		</Menu>
 	)
 
-	const getSelectedSalonLabel = (hasPermision = true) => {
+	const getSelectedSalonLabel = (hasPermision: boolean) => {
 		const content = (
 			<Row className={cx('m-2 flex items-center gap-2 min-w-0')} justify='space-between' wrap={false}>
 				<Row wrap={false} className={'min-w-0 flex items-center gap-2-5'}>
-					<AvatarComponents size={24} src={selectedSalon?.logo?.resizedImages.thumbnail} />
+					<AvatarComponents size={24} src={selectedSalon?.logo?.resizedImages.thumbnail || SalonDefaultAvatar} />
 					{selectedSalon?.name && <span className='truncate leading-4 min-w-0 inline-block'>{selectedSalon.name}</span>}
 				</Row>
 
@@ -70,7 +70,7 @@ const MainLayout: FC<Props> = (props) => {
 			</Row>
 		)
 
-		const labelClassname = cx('bg-notino-grayLighter rounded-lg min-w-0 header-salon-label max-w-xs', { 'fallback-image': !selectedSalon?.logo?.resizedImages.thumbnail })
+		const labelClassname = 'bg-notino-grayLighter rounded-lg min-w-0 header-salon-label max-w-xs'
 
 		if (hasPermision) {
 			if (salonOptions.length === 0) {
@@ -107,7 +107,7 @@ const MainLayout: FC<Props> = (props) => {
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
 							<Header className='shadow-md bg-notino-white sticky top-0 z-10 px-4 flex items-center w-full'>
-								<Row className={`${hasPermission ? 'justify-end' : 'justify-between'} min-w-0 w-full`} wrap={false}>
+								<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
 									{!hasPermission && (
 										<Button
 											onClick={() => history.push(t('paths:index'))}

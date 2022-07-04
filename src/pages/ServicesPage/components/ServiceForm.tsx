@@ -74,7 +74,7 @@ export const renderListFields = (props: any) => {
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					return (
-						<div className={'employee-list-item flex items-center justify-between'}>
+						<div className={'employee-list-item flex items-center justify-between'} key={index}>
 							<div className={'title flex items-center'}>
 								<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
 								{fieldData?.name}

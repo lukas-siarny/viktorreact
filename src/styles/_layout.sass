@@ -185,10 +185,13 @@ $inner-padding: 16px
 	color: $textColor-notino-black
 	.ant-avatar
 		flex: 0 0 auto
-		background: $textColor-notino-black url("../assets/icons/salon-avatar-fallback-white.png") no-repeat center center
-		background-size: 18px 18px
 	.icon-dropdown
 		flex: 0 0 auto
+	&.fallback-image
+		.ant-avatar
+			flex: 0 0 auto
+			background: $textColor-notino-black url("../assets/icons/salon-avatar-fallback-white.png") no-repeat center center
+			background-size: 18px 18px
 
 .selected-salon-text
 	color: $textColor-notino-grayDark
@@ -223,10 +226,10 @@ $inner-padding: 16px
 
 				&.button-add
 					color: $textColor-notino-pink
-
-				.ant-avatar
-					background: $textColor-notino-black url("../assets/icons/salon-avatar-fallback-white.png") no-repeat center center
-					background-size: 18px 18px
+				&.fallback-image
+					.ant-avatar
+						background: $textColor-notino-black url("../assets/icons/salon-avatar-fallback-white.png") no-repeat center center
+						background-size: 18px 18px
 // Avatar
 .avatar
 	flex-shrink: 0

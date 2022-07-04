@@ -44,6 +44,7 @@ const numberMin0 = validationNumberMin(0)
 
 type ComponentProps = {
 	serviceID?: number
+	parentPath?: string
 	salonID: number
 	addEmployee: MouseEventHandler<HTMLElement>
 }
@@ -106,7 +107,7 @@ export const renderListFields = (props: any) => {
 }
 
 const ServiceForm = (props: Props) => {
-	const { salonID, serviceID, handleSubmit, pristine, addEmployee } = props
+	const { salonID, serviceID, handleSubmit, pristine, addEmployee, parentPath } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -132,8 +133,7 @@ const ServiceForm = (props: Props) => {
 			setIsRemoving(true)
 			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID: serviceID || -1 }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			setIsRemoving(false)
-			const url = t('paths:services')
-			history.push(url)
+			history.push(parentPath + t('paths:services'))
 		} catch (e) {
 			setIsRemoving(false)
 		}

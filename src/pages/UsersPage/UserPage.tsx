@@ -68,8 +68,7 @@ const UserPage: FC<Props> = (props) => {
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.USER_ACCOUNT, {
-				...userAccountDetail.data?.user,
-				...get(userAccountDetail, 'data.company'),
+				...get(userAccountDetail, 'data.user'),
 				avatar: userAccountDetail?.data?.user?.image ? [{ url: userAccountDetail?.data?.user?.image?.original, uid: userAccountDetail?.data?.user?.image?.id }] : null
 			})
 		)

@@ -141,6 +141,11 @@ export enum SALON_PERMISSION {
 
 export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
+export enum SALONS_VERSIONS {
+	ACTUAL = 'actual',
+	NEW = 'new'
+}
+
 export enum RESOLUTIONS {
 	SM = 'SM',
 	MD = 'MD',

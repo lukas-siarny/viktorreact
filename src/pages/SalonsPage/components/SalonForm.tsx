@@ -221,6 +221,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte názov')}
 								name={'companyInfo.companyName'}
 								size={'large'}
+								disabled={disabledForm}
 								required
 							/>
 							<Field
@@ -230,6 +231,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte ičo')}
 								name={'companyInfo.businessID'}
 								size={'large'}
+								disabled={disabledForm}
 								required
 							/>
 						</Row>
@@ -241,6 +243,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte IČ DPH')}
 								name={'companyInfo.vatID'}
 								size={'large'}
+								disabled={disabledForm}
 								required
 							/>
 							<Field
@@ -250,6 +253,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte DIČ')}
 								name={'companyInfo.taxID'}
 								size={'large'}
+								disabled={disabledForm}
 								required
 							/>
 						</Row>
@@ -271,6 +275,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte meno')}
 								name={'companyContactPerson.firstName'}
 								size={'large'}
+								disabled={disabledForm}
 							/>
 							<Field
 								className={'w-12/25'}
@@ -279,6 +284,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte priezvisko')}
 								name={'companyContactPerson.lastName'}
 								size={'large'}
+								disabled={disabledForm}
 							/>
 						</Row>
 						<Row justify={'space-between'}>

@@ -231,6 +231,7 @@ export interface IEmployeeForm {
 	phone?: string
 	services?: any
 	imageID?: number
+	roleID?: number
 }
 
 export interface ILanguagePickerForm {

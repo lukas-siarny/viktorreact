@@ -68,7 +68,8 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				phone: formData?.phone,
 				services: parseServicesForCreateAndUpdate(formData?.services),
 				salonID,
-				imageID: formData?.imageID
+				imageID: formData?.imageID,
+				roleID: formData?.roleID
 			} as any)
 			if (data?.employee?.id) {
 				history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: data?.employee?.id }))

@@ -31,7 +31,7 @@ export const getSystemRoles = (): ThunkResult<Promise<void>> => async (dispatch,
 		dispatch({ type: SYSTEM_ROLES.SYSTEM_ROLES_LOAD_START })
 
 		// get highest role of current user
-		const currentUserRole = getState().user.user.data?.user.roles[0]
+		const currentUserRole = getState().user.authUser.data?.roles[0]
 
 		const { data } = await getReq('/api/b2b/admin/roles/system-user', null)
 

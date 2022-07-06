@@ -204,6 +204,15 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							name={'address'}
 						/>
+						<Field
+							className={'w-full'}
+							component={InputField}
+							label={t('loc:Poznámka k polohe')}
+							placeholder={t('loc:Zadajte poznámku, napr. "2. poschodie vpravo"')}
+							name={'addressNote'}
+							size={'large'}
+							disabled={disabledForm}
+						/>
 					</Col>
 				</Row>
 				<Row>

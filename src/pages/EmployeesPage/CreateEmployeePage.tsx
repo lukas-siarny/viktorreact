@@ -23,6 +23,7 @@ import { IBreadcrumbs, IEmployeeForm, SalonSubPageProps } from '../../types/inte
 // reducers
 import { RootState } from '../../reducers'
 import { getPrefixCountryCode } from '../../utils/helper'
+import { getSalonRoles } from '../../reducers/roles/rolesActions'
 
 const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]
 
@@ -54,6 +55,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	useEffect(() => {
 		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		dispatch(initialize(FORM.EMPLOYEE, { phonePrefixCountryCode }))
+		dispatch(getSalonRoles())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
 

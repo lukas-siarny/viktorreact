@@ -28,7 +28,7 @@ import { decodePrice, encodePrice } from '../../utils/helper'
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
 import { IServicesPayload } from '../../reducers/services/serviceActions'
-import { getSystemRoles } from '../../reducers/roles/rolesActions'
+import { getSalonRoles } from '../../reducers/roles/rolesActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -175,7 +175,7 @@ const EmployeePage = (props: Props) => {
 
 	useEffect(() => {
 		fetchEmployeeData()
-		dispatch(getSystemRoles())
+		dispatch(getSalonRoles())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
 

@@ -211,7 +211,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE].values)
 	const services = useSelector((state: RootState) => state.service.services)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const roles = useSelector((state: RootState) => state.roles.systemRoles)
+	const roles = useSelector((state: RootState) => state.roles.salonRoles)
 
 	useEffect(() => {
 		dispatch(getServices({ page: 1, salonID }))
@@ -267,6 +267,7 @@ const EmployeeForm: FC<Props> = (props) => {
 						name={'roleID'}
 						size={'large'}
 						loading={roles?.isLoading}
+						required
 					/>
 					<h3>{t('loc:Zoznam priradených služieb')}</h3>
 					<Divider className={'mb-3 mt-3'} />

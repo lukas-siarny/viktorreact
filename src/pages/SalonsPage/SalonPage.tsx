@@ -357,10 +357,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const breadcrumbDetailItem = get(salon, 'data.salon.name')
+	const breadcrumbDetailItem = get(salon, 'data.name')
 		? {
 				name: t('loc:Detail salónu'),
-				titleName: get(salon, 'data.salon.name')
+				titleName: get(salon, 'data.name')
 		  }
 		: {
 				name: t('loc:Vytvoriť salón'),

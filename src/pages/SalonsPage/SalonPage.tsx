@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row, Spin, Tabs } from 'antd'
+import { Button, Modal, Row, Spin, Tabs } from 'antd'
 import { change, initialize, isPristine, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
@@ -23,7 +23,7 @@ import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
-import { IBreadcrumbs, ILoadingAndFailure, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IDeclinedNoteForm, ILoadingAndFailure, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -31,6 +31,9 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import OpenHoursNoteForm from '../../components/OpeningHours/OpenHoursNoteForm'
+import DeclinedNoteForm from './components/DeclinedNoteForm'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -184,6 +187,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
+	const [declinedModalVisible, setDeclinedModalVisible] = useState<boolean>(false)
 	const [tabKey, setTabKey] = useState<string>(SALONS_VERSIONS.NEW)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
@@ -200,7 +204,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const salonExists = salonID > 0
 	let showConfirmBtn = false
 	// TODO - fro development purpose
-	const versions = true
+	const versions = false
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
@@ -469,13 +473,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const declineConfirmationRequest = async () => {
+	const declineConfirmationRequest = async (formData: IDeclinedNoteForm) => {
 		if (isSendingConfRequest) {
 			return
 		}
 
 		setIsSendingConfRequest(true)
 		try {
+			console.log('formData: ', formData)
 			// TODO - add EP for confirmation
 			// await postReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
 			dispatch(selectSalon(salonID))
@@ -523,7 +528,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 									block
 									size={'middle'}
 									className={'ant-btn-dangerous noti-btn m-regular w-1/3'}
-									onClick={() => declineConfirmationRequest()}
+									onClick={() => setDeclinedModalVisible(true)}
 									disabled={submitting}
 									loading={submitting}
 								>
@@ -691,6 +696,18 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					{renderContentFooter()}
 				</div>
 			</Spin>
+			<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+				<Modal
+					key={`${declinedModalVisible}`}
+					title={'Dôvod zamietnutia'}
+					visible={declinedModalVisible}
+					onCancel={() => setDeclinedModalVisible(false)}
+					footer={null}
+					closeIcon={<CloseIcon />}
+				>
+					<DeclinedNoteForm onSubmit={declineConfirmationRequest} />
+				</Modal>
+			</Permissions>
 		</>
 	)
 }

@@ -193,6 +193,10 @@ export interface IStructuredAddress {
 	houseNumber: string | null
 }
 
+export interface IDeclinedNoteForm {
+	note: string
+}
+
 export interface IOpenHoursNoteForm {
 	hoursNote: {
 		note: string

@@ -45,7 +45,6 @@ import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-i
 type ComponentProps = {
 	openNoteModal: Function
 	changeSalonVisibility: (visible: boolean) => void
-	publishSalon: (published: boolean) => void
 	switchDisabled: boolean
 	disabledForm: boolean
 	salonID?: number
@@ -55,7 +54,7 @@ type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, openNoteModal, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
+	const { handleSubmit, change, openNoteModal, changeSalonVisibility, switchDisabled, salonID, disabledForm } = props
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	return (
@@ -69,50 +68,27 @@ const SalonForm: FC<Props> = (props) => {
 								{t('loc:Základné údaje')}
 							</h3>
 							{salonID ? (
-								<div className={'flex justify-between w-1/2'}>
-									<Permissions
-										allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
-										render={(hasPermission, { openForbiddenModal }) => (
-											<Field
-												className={'mt-2 mb-2 w-12/25'}
-												component={SwitchField}
-												label={t('loc:Viditeľný')}
-												name={'isVisible'}
-												size={'middle'}
-												required
-												customOnChange={(value: boolean) => {
-													if (!hasPermission) {
-														openForbiddenModal()
-													} else {
-														changeSalonVisibility(value)
-													}
-												}}
-												disabled={switchDisabled || disabledForm}
-											/>
-										)}
-									/>
-									<Permissions
-										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
-										render={(hasPermission, { openForbiddenModal }) => (
-											<Field
-												className={'mt-2 mb-2 w-12/25'}
-												component={SwitchField}
-												label={t('loc:Publikovaný')}
-												name={'isPublished'}
-												size={'middle'}
-												required
-												customOnChange={(value: boolean) => {
-													if (!hasPermission) {
-														openForbiddenModal()
-													} else {
-														publishSalon(value)
-													}
-												}}
-												disabled={switchDisabled || disabledForm}
-											/>
-										)}
-									/>
-								</div>
+								<Permissions
+									allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<Field
+											className={'mt-2 mb-2 w-12/25'}
+											component={SwitchField}
+											label={t('loc:Viditeľný')}
+											name={'isVisible'}
+											size={'middle'}
+											required
+											customOnChange={(value: boolean) => {
+												if (!hasPermission) {
+													openForbiddenModal()
+												} else {
+													changeSalonVisibility(value)
+												}
+											}}
+											disabled={switchDisabled || disabledForm}
+										/>
+									)}
+								/>
 							) : null}
 						</div>
 						<Divider className={'mb-3 mt-3'} />

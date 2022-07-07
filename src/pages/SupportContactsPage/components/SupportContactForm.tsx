@@ -30,16 +30,8 @@ import validateSalonForm from './validateSalonForm'
 import { RootState } from '../../../reducers'
 
 // assets
-import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-icon.svg'
-import { ReactComponent as FacebookIcon } from '../../../assets/icons/social-facebook-icon.svg'
-import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card-outlined-icon.svg'
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
-import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
-import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 
 type ComponentProps = {
 	openNoteModal: Function

@@ -205,13 +205,14 @@ const SalonForm: FC<Props> = (props) => {
 							name={'address'}
 						/>
 						<Field
-							className={'w-full'}
-							component={InputField}
-							label={t('loc:Poznámka k polohe')}
-							placeholder={t('loc:Zadajte poznámku, napr. "2. poschodie vpravo"')}
-							name={'addressNote'}
+							component={TextareaField}
+							label={t('loc:Poznámka k adrese')}
+							name={'description'}
 							size={'large'}
+							placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie z ľava"')}
 							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+							showLettersCount
 						/>
 					</Col>
 				</Row>

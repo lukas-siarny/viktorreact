@@ -28,13 +28,13 @@ export interface ISalonOptions {
 	payload: ISalonSelectionOptionsPayload
 }
 
-type IPayloadData = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon'] &
+export type ISalonPayloadData = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon'] &
 	IPermissions & {
 		currency: ICurrency
 	}
 
 export interface ISelectedSalonPayload {
-	data: IPayloadData | null
+	data: ISalonPayloadData | null
 }
 
 export interface ISalonSelectionOptionsPayload {

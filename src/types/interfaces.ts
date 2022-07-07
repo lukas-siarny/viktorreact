@@ -300,3 +300,8 @@ export interface ICurrency {
 	code: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['code']
 	symbol: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['symbol']
 }
+
+export interface INoteModal {
+	title: string
+
+}

@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Modal, Row, Spin, Tabs } from 'antd'
-import { change, initialize, isPristine, submit } from 'redux-form'
+import { change, initialize, isPristine, reset, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 
@@ -20,10 +20,10 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERM
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
-import { ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
-import { IBreadcrumbs, IDeclinedNoteForm, ILoadingAndFailure, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IDeclinedNoteForm, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -32,7 +32,6 @@ import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import OpenHoursNoteForm from '../../components/OpeningHours/OpenHoursNoteForm'
 import DeclinedNoteForm from './components/DeclinedNoteForm'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -188,7 +187,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
 	const [declinedModalVisible, setDeclinedModalVisible] = useState<boolean>(false)
-	const [tabKey, setTabKey] = useState<string>(SALONS_VERSIONS.NEW)
+	const [tabKey, setTabKey] = useState<string>(SALONS_VERSIONS.UNPUBLISHED)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -202,12 +201,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
 	const salonExists = salonID > 0
-	let showConfirmBtn = false
-	// TODO - fro development purpose
-	const versions = false
+	const showConfirmBtn = false
+	// TODO - for development purpose
+	const versions = !!salon.data?.publishedSalonData
+	const pendingPublication = salon.data?.pendingPublication
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
+	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
@@ -255,7 +256,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
 	const updateOnlyOpeningHours = useRef(false)
-	const fetchData = async (salonData: ISelectedSalonPayload & ILoadingAndFailure) => {
+	const fetchData = async (salonData: ISalonPayloadData | null) => {
 		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		const defaultContactPerson = {
 			phonePrefixCountryCode
@@ -265,42 +266,42 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			if (salon?.isLoading) return
 			dispatch(
 				change(FORM.SALON, 'openingHoursNote', {
-					note: salonData.data?.openingHoursNote?.note,
-					noteFrom: salonData.data?.openingHoursNote?.validFrom,
-					noteTo: salonData.data?.openingHoursNote?.validTo
+					note: salonData?.openingHoursNote?.note,
+					noteFrom: salonData?.openingHoursNote?.validFrom,
+					noteTo: salonData?.openingHoursNote?.validTo
 				})
 			)
 			updateOnlyOpeningHours.current = false
-		} else if (!isEmpty(salonData.data)) {
+		} else if (!isEmpty(salonData)) {
 			// init data for existing salon
-			const openOverWeekend: boolean = checkWeekend(salonData.data?.openingHours)
-			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.data?.openingHours)
-			const openingHours: OpeningHours = initOpeningHours(salonData.data?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+			const openOverWeekend: boolean = checkWeekend(salonData?.openingHours)
+			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData?.openingHours)
+			const openingHours: OpeningHours = initOpeningHours(salonData?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 
 			dispatch(
 				initialize(FORM.SALON, {
-					...salonData.data,
+					...salonData,
 					openOverWeekend,
 					sameOpenHoursOverWeek,
 					openingHours,
-					note: salonData.data?.openingHoursNote?.note,
-					noteFrom: salonData.data?.openingHoursNote?.validFrom,
-					noteTo: salonData.data?.openingHoursNote?.validTo,
-					latitude: salonData.data?.address?.latitude,
-					longitude: salonData.data?.address?.longitude,
-					city: salonData.data?.address?.city,
-					street: salonData.data?.address?.street,
-					zipCode: salonData.data?.address?.zipCode,
-					country: salonData.data?.address?.countryCode,
-					streetNumber: salonData.data?.address?.streetNumber,
-					companyContactPerson: salonData.data?.companyContactPerson || defaultContactPerson,
-					companyInfo: salonData.data?.companyInfo,
-					gallery: map(salonData.data?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
-					logo: salonData.data?.logo?.id
+					note: salonData?.openingHoursNote?.note,
+					noteFrom: salonData?.openingHoursNote?.validFrom,
+					noteTo: salonData?.openingHoursNote?.validTo,
+					latitude: salonData?.address?.latitude,
+					longitude: salonData?.address?.longitude,
+					city: salonData?.address?.city,
+					street: salonData?.address?.street,
+					zipCode: salonData?.address?.zipCode,
+					country: salonData?.address?.countryCode,
+					streetNumber: salonData?.address?.streetNumber,
+					companyContactPerson: salonData?.companyContactPerson || defaultContactPerson,
+					companyInfo: salonData?.companyInfo,
+					gallery: map(salonData?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
+					logo: salonData?.logo?.id
 						? [
 								{
-									url: salonData.data?.logo?.original,
-									uid: salonData.data?.logo?.id
+									url: salonData?.logo?.original,
+									uid: salonData?.logo?.id
 								}
 						  ]
 						: null
@@ -312,7 +313,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				initialize(FORM.SALON, {
 					openOverWeekend: false,
 					sameOpenHoursOverWeek: true,
-					openingHours: initOpeningHours(salonData.data?.openingHours, true, false),
+					openingHours: initOpeningHours(salonData?.openingHours, true, false),
 					payByCard: false,
 					phonePrefixCountryCode,
 					isInvoiceAddressSame: true,
@@ -324,7 +325,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	// init forms
 	useEffect(() => {
-		fetchData(salon)
+		fetchData(salon.data)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salon])
 
@@ -421,31 +422,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const publishSalon = async (published: boolean) => {
+	const changeVisibility = async () => {
 		if (submitting) {
 			return
 		}
 
 		setSubmitting(true)
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/publish', { salonID }, { publish: published })
-			dispatch(selectSalon(salonID))
-		} catch (error: any) {
-			// eslint-disable-next-line no-console
-			console.error(error.message)
-		} finally {
-			setSubmitting(false)
-		}
-	}
-
-	const changeVisibility = async (isVisible: boolean) => {
-		if (submitting) {
-			return
-		}
-
-		setSubmitting(true)
-		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
+			await patchReq('/api/b2b/admin/salons/{salonID}/unpublish', { salonID }, { reason: '' })
 			dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -462,8 +446,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		setIsSendingConfRequest(true)
 		try {
-			// TODO - add EP for confirmation
-			// await postReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
+			await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID }, {})
 			dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -473,39 +456,25 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const declineConfirmationRequest = async (formData: IDeclinedNoteForm) => {
+	const resolveConfirmationRequest = async (formData?: IDeclinedNoteForm) => {
 		if (isSendingConfRequest) {
 			return
 		}
 
 		setIsSendingConfRequest(true)
 		try {
-			console.log('formData: ', formData)
-			// TODO - add EP for confirmation
-			// await postReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
+			await patchReq('/api/b2b/admin/salons/{salonID}/resolve-publication', { salonID }, { approve: !formData?.note, reason: formData?.note || undefined })
 			dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
 		} finally {
-			setIsSendingConfRequest(false)
-		}
-	}
-
-	const acceptConfirmationRequest = async () => {
-		if (isSendingConfRequest) {
-			return
-		}
-
-		setIsSendingConfRequest(true)
-		try {
-			// TODO - add EP for confirmation
-			// await postReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
-			dispatch(selectSalon(salonID))
-		} catch (error: any) {
-			// eslint-disable-next-line no-console
-			console.error(error.message)
-		} finally {
+			// close modal with note
+			if (formData) {
+				// reset form
+				dispatch(reset(FORM.DECLINED_NOTE))
+				setDeclinedModalVisible(false)
+			}
 			setIsSendingConfRequest(false)
 		}
 	}
@@ -517,58 +486,60 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const renderContentFooter = () => {
+		// render footers for flow edit existing salon with published version
 		if (versions) {
-			if (tabKey === SALONS_VERSIONS.NEW) {
+			// render footers for unpublished version
+			if (tabKey === SALONS_VERSIONS.UNPUBLISHED) {
 				return (
 					<div className={'content-footer'}>
-						<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-							<Row className={'justify-between w-full'}>
+						<Row className={'flex justify-between w-full'}>
+							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+								{pendingPublication && (
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={'ant-btn-dangerous noti-btn m-regular w-1/3'}
+										onClick={() => setDeclinedModalVisible(true)}
+										disabled={submitting}
+										loading={submitting}
+									>
+										{t('loc:Zamietnuť')}
+									</Button>
+								)}
+							</Permissions>
+							<Row className={cx({ 'flex justify-between w-1/2': pendingPublication, 'w-1/3': !pendingPublication })}>
+								<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+									{pendingPublication && (
+										<Button
+											type={'primary'}
+											block
+											size={'middle'}
+											className={'noti-btn m-regular w-12/25'}
+											onClick={() => resolveConfirmationRequest()}
+											disabled={submitting}
+											loading={submitting}
+										>
+											{t('loc:Potvrdiť')}
+										</Button>
+									)}
+								</Permissions>
 								<Button
 									type={'primary'}
 									block
 									size={'middle'}
-									className={'ant-btn-dangerous noti-btn m-regular w-1/3'}
-									onClick={() => setDeclinedModalVisible(true)}
-									disabled={submitting}
+									className={'noti-btn m-regular w-12/25'}
+									onClick={() => sendConfirmationRequest()}
+									disabled={submitting || deletedSalon}
 									loading={submitting}
 								>
-									{t('loc:Zamietnuť')}
+									{t('loc:Požiadať o schválenie')}
 								</Button>
 								<Button
 									type={'primary'}
 									block
 									size={'middle'}
-									className={'noti-btn m-regular w-1/3'}
-									onClick={() => acceptConfirmationRequest()}
-									disabled={submitting}
-									loading={submitting}
-								>
-									{t('loc:Potvrdiť')}
-								</Button>
-							</Row>
-						</Permissions>
-					</div>
-				)
-			}
-			if (tabKey === SALONS_VERSIONS.ACTUAL) {
-				return (
-					<div className={'content-footer'}>
-						<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-							<Row className={'justify-between w-full'}>
-								<DeleteButton
-									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]}
-									className={'w-1/3'}
-									onConfirm={deleteSalon}
-									entityName={t('loc:salón')}
-									type={'default'}
-									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-									disabled={deletedSalon}
-								/>
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular w-1/3'}
+									className={cx('noti-btn m-regular w-12/25')}
 									htmlType={'submit'}
 									onClick={() => dispatch(submit(FORM.SALON))}
 									disabled={submitting || deletedSalon || isFormPristine}
@@ -577,18 +548,60 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 									{t('loc:Uložiť')}
 								</Button>
 							</Row>
-						</Permissions>
+						</Row>
+					</div>
+				)
+			}
+			// render footers for published version
+			if (tabKey === SALONS_VERSIONS.PUBLISHED) {
+				return (
+					<div className={'content-footer'}>
+						<Row className={'flex justify-between w-full'}>
+							<DeleteButton
+								permissions={deletePermissions}
+								className={'w-1/3'}
+								onConfirm={deleteSalon}
+								entityName={t('loc:salón')}
+								type={'default'}
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								disabled={deletedSalon}
+							/>
+							<Permissions
+								allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={'noti-btn m-regular w-1/3'}
+										onClick={(e) => {
+											if (hasPermission) {
+												setDeclinedModalVisible(true)
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={submitting || deletedSalon}
+										loading={submitting}
+									>
+										{t('loc:Schovať salón')}
+									</Button>
+								)}
+							/>
+						</Row>
 					</div>
 				)
 			}
 			return undefined
 		}
+		// render footer for create new salon and salon without published version
 		return (
 			<div className={'content-footer'}>
-				<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
+				<Row className={cx('flex w-full', { 'justify-between': salonExists, 'justify-center': !salonExists })}>
 					{salonExists && (
 						<DeleteButton
-							permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]}
+							permissions={deletePermissions}
 							className={'w-1/3'}
 							onConfirm={deleteSalon}
 							entityName={t('loc:salón')}
@@ -597,98 +610,93 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 							disabled={deletedSalon}
 						/>
 					)}
-					{/* use render function in permissions wrapper due to salon permissions */}
-					<div className={cx({ 'w-1/2 flex justify-between': showConfirmBtn, 'w-1/3': !showConfirmBtn })}>
-						<Permissions
-							allowed={[PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN]}
-							render={(hasPermission) => {
-								showConfirmBtn = hasPermission
-								return hasPermission ? (
-									<Button
-										type={'primary'}
-										block
-										size={'middle'}
-										className={'noti-btn m-regular w-12/25'}
-										onClick={() => sendConfirmationRequest()}
-										disabled={submitting || deletedSalon || isFormPristine}
-										loading={submitting}
-									>
-										{t('loc:Požiadať o schválenie')}
-									</Button>
-								) : undefined
-							}}
-						/>
-						<Permissions
-							allowed={submitPermissions}
-							render={(hasPermission, { openForbiddenModal }) => (
+					<Permissions
+						allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+						render={(hasPermission, { openForbiddenModal }) =>
+							salonExists && (
 								<Button
 									type={'primary'}
 									block
 									size={'middle'}
-									className={cx('noti-btn m-regular', {
-										'w-12/25': showConfirmBtn,
-										'w-full': !showConfirmBtn
-									})}
-									htmlType={'submit'}
+									className={'noti-btn m-regular w-12/25'}
 									onClick={(e) => {
 										if (hasPermission) {
-											dispatch(submit(FORM.SALON))
+											sendConfirmationRequest()
 										} else {
 											e.preventDefault()
 											openForbiddenModal()
 										}
 									}}
-									disabled={submitting || deletedSalon || isFormPristine}
+									disabled={submitting || deletedSalon}
 									loading={submitting}
 								>
-									{t('loc:Uložiť')}
+									{t('loc:Požiadať o schválenie')}
 								</Button>
-							)}
-						/>
-					</div>
+							)
+						}
+					/>
+					<Permissions
+						allowed={submitPermissions}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Button
+								type={'primary'}
+								block
+								size={'middle'}
+								className={cx('noti-btn m-regular', {
+									'w-12/25': showConfirmBtn,
+									'w-1/3': !showConfirmBtn
+								})}
+								htmlType={'submit'}
+								onClick={(e) => {
+									if (hasPermission) {
+										dispatch(submit(FORM.SALON))
+									} else {
+										e.preventDefault()
+										openForbiddenModal()
+									}
+								}}
+								disabled={submitting || deletedSalon || isFormPristine}
+								loading={submitting}
+							>
+								{t('loc:Uložiť')}
+							</Button>
+						)}
+					/>
 				</Row>
 			</div>
 		)
+	}
+
+	const onTabsChanged = (value: string) => {
+		setTabKey(value)
+		if (value === SALONS_VERSIONS.PUBLISHED) {
+			if (salon.data?.publishedSalonData) {
+				fetchData({ ...salon.data, ...salon.data.publishedSalonData } as any)
+			}
+		}
+		if (value === SALONS_VERSIONS.UNPUBLISHED) {
+			fetchData(salon?.data)
+		}
 	}
 
 	return (
 		<>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
-				{versions ? (
-					<Tabs
-						id={'tab-menu'}
-						className='tp-tabs'
-						defaultActiveKey={SALONS_VERSIONS.NEW}
-						onChange={(value: string) => {
-							setTabKey(value)
-							if (value === SALONS_VERSIONS.ACTUAL) {
-								fetchData(salon)
-							}
-							if (value === SALONS_VERSIONS.NEW) {
-								// TODO - add new version salon data
-								fetchData({ ...salon, data: { ...salon.data, name: 'CHANGE 1' } as any })
-							}
-						}}
-					>
-						<Tabs.TabPane key={SALONS_VERSIONS.NEW} tab={t('loc:Nová verzia')} />
-						<Tabs.TabPane key={SALONS_VERSIONS.ACTUAL} tab={<span>{t('loc:Aktuálna verzia')}</span>} />
-					</Tabs>
-				) : undefined}
 			</Row>
 			<Spin spinning={isLoading}>
+				{versions ? (
+					<Tabs id={'tab-menu'} className='tp-tabs' defaultActiveKey={SALONS_VERSIONS.UNPUBLISHED} onChange={onTabsChanged}>
+						<Tabs.TabPane key={SALONS_VERSIONS.UNPUBLISHED} tab={t('loc:Nepublikovaná verzia')} />
+						<Tabs.TabPane key={SALONS_VERSIONS.PUBLISHED} tab={<span>{t('loc:Publikovaná verzia')}</span>} />
+					</Tabs>
+				) : undefined}
 				<div className='content-body small mt-2'>
 					<SalonForm
 						onSubmit={handleSubmit}
 						openNoteModal={() => setVisible(true)}
-						changeSalonVisibility={changeVisibility}
-						publishSalon={publishSalon}
-						switchDisabled={submitting}
 						salonID={salonID}
-						disabledForm={
-							deletedSalon ||
-							(tabKey === SALONS_VERSIONS.ACTUAL && !checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]))
-						}
+						disabledForm={deletedSalon || tabKey === SALONS_VERSIONS.PUBLISHED}
 					/>
 					{salonExists && (
 						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
@@ -705,7 +713,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					footer={null}
 					closeIcon={<CloseIcon />}
 				>
-					<DeclinedNoteForm onSubmit={declineConfirmationRequest} />
+					<DeclinedNoteForm onSubmit={resolveConfirmationRequest} />
 				</Modal>
 			</Permissions>
 		</>

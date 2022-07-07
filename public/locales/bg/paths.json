@@ -18,6 +18,9 @@
   "services/create": "/services/create",
   "services/{{serviceID}}": "/services/{{serviceID}}",
   "signup": "/signup",
+  "support-contacts": "/support-contacts",
+  "support-contacts/create": "/support-contacts/create",
+  "support-contacts/{{supportContactID}}": "/support-contacts/{{supportContactID}}",
   "users": "/users",
   "users/create": "/users/create",
   "users/{{userID}}": "/users/{{userID}}"

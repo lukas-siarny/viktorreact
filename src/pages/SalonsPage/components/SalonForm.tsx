@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { get } from 'lodash'
 
 // components
-import OpeningHours from './OpeningHours'
+import OpeningHours from '../../../components/OpeningHours/OpeningHours'
 import AddressFields from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 

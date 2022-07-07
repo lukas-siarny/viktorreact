@@ -34,6 +34,10 @@ import SalonSubRoutes from './SalonSubRoutes'
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
 import SalonPage from '../pages/SalonsPage/SalonPage'
 
+// Support contacts
+import SupportContactsPage from '../pages/SupportContactsPage/SupportContactsPage'
+import SupportContactPage from '../pages/SupportContactsPage/SupportContactPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403
@@ -99,6 +103,33 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:categories')}
 					layout={MainLayout}
 					page={PAGE.CATEGORIES}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:support-contacts')}
+					component={SupportContactsPage}
+					translatePathKey={t('paths:support-contacts')}
+					layout={MainLayout}
+					page={PAGE.SUPPORT_CONTACTS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:support-contacts/create')}
+					component={SupportContactPage}
+					translatePathKey={t('paths:support-contacts/create')}
+					layout={MainLayout}
+					page={PAGE.SUPPORT_CONTACT}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:support-contacts/{{supportContactID}}', { supportContactID: ':supportContactID' })}
+					translatePathKey={t('paths:support-contacts/{{supportContactID}}', { supportContactID: ':supportContactID' })}
+					component={SupportContactPage}
+					layout={MainLayout}
+					page={PAGE.SUPPORT_CONTACT}
 				/>
 				{/* NOTE: add all private routes before this declaration */}
 				<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />

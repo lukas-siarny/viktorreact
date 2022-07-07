@@ -4,7 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICountryLabel, ICurrency } from '../types/interfaces'
+import { ICountryLabel, ICurrency, OpeningHours } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -106,7 +106,9 @@ export enum FORM {
 	SERVICES_FILTER = 'SERVICES_FILTER',
 	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE',
 	EMPLOYEE = 'EMPLOYEE',
-	INVITE_EMPLOYEE = 'INVITE_EMPLOYEE'
+	INVITE_EMPLOYEE = 'INVITE_EMPLOYEE',
+	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
+	SUPPORT_CONTACT = 'SUPPORT_CONTACT'
 }
 
 // System permissions
@@ -177,7 +179,9 @@ export enum PAGE {
 	HOME = 'HOME',
 	MY_ACCOUNT = 'MY_ACCOUNT',
 	ACTIVATION = 'ACTIVATION',
-	EMPLOYEES = 'EMPLOYEES'
+	EMPLOYEES = 'EMPLOYEES',
+	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
+	SUPPORT_CONTACT = 'SUPPORT_CONTACT'
 }
 
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'

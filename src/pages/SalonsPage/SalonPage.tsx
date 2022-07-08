@@ -275,6 +275,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					zipCode: salonData.data?.address?.zipCode,
 					country: salonData.data?.address?.countryCode,
 					streetNumber: salonData.data?.address?.streetNumber,
+					description: salonData.data?.address?.description,
 					companyContactPerson: salonData.data?.companyContactPerson || defaultContactPerson,
 					companyInfo: salonData.data?.companyInfo,
 					gallery: map(salonData.data?.images, (image: any) => ({ url: image?.original, uid: image?.id })),
@@ -330,7 +331,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				payByCard: data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
-				companyInfo: data.companyInfo
+				companyInfo: data.companyInfo,
+				description: data.description
 			}
 
 			if (salonID > 0) {
@@ -396,23 +398,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const publishSalon = async (published: boolean) => {
-		if (submitting) {
-			return
-		}
-
-		setSubmitting(true)
-		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/publish', { salonID }, { publish: published })
-			dispatch(selectSalon(salonID))
-		} catch (error: any) {
-			// eslint-disable-next-line no-console
-			console.error(error.message)
-		} finally {
-			setSubmitting(false)
-		}
-	}
-
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const changeVisibility = async (isVisible: boolean) => {
 		if (submitting) {
 			return
@@ -420,7 +406,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		setSubmitting(true)
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/visible', { salonID }, { visible: isVisible })
+			await patchReq('/api/b2b/admin/salons/{salonID}/unpublish', { salonID }, { reason: '' })
 			dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -449,7 +435,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						onSubmit={handleSubmit}
 						openNoteModal={() => setVisible(true)}
 						changeSalonVisibility={changeVisibility}
-						publishSalon={publishSalon}
 						switchDisabled={submitting}
 						salonID={salonID}
 						disabledForm={deletedSalon}

@@ -52,7 +52,6 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
-	const [visible, setVisible] = useState<boolean>(false)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -103,64 +102,69 @@ const SupportContactPage: FC<Props> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
-	const updateOnlyOpeningHours = useRef(false)
-	// TODO: remove any when BE is done
-	const fetchData = async (supportContactData: any /* supportContactData: ISupportContactPayload & ILoadingAndFailure */) => {
-		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-		const defaultContactPerson = {
-			phonePrefixCountryCode
+	useEffect(() => {
+		if (supportContactID) {
+			dispatch(getSupportContact(supportContactID))
 		}
-
-		if (!isEmpty(supportContactData.data)) {
-			// init data for existing supportContact
-			const openOverWeekend: boolean = checkWeekend(supportContactData.data?.openingHours)
-			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(supportContactData.data?.openingHours)
-			const openingHours: OpeningHours = initOpeningHours(supportContactData.data?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(
-				orderDaysInWeek
-			) as OpeningHours
-
-			dispatch(
-				initialize(FORM.SUPPORT_CONTACT, {
-					...supportContactData.data,
-					openOverWeekend,
-					sameOpenHoursOverWeek,
-					openingHours,
-					city: supportContactData.data?.address?.city,
-					street: supportContactData.data?.address?.street,
-					zipCode: supportContactData.data?.address?.zipCode,
-					country: supportContactData.data?.address?.countryCode,
-					streetNumber: supportContactData.data?.address?.streetNumber,
-					email: supportContactData.data?.emails
-				})
-			)
-		} else if (!supportContact?.isLoading) {
-			// init data for new "creating process" supportContact
-			dispatch(
-				initialize(FORM.SUPPORT_CONTACT, {
-					openOverWeekend: false,
-					sameOpenHoursOverWeek: true,
-					openingHours: initOpeningHours(supportContactData.data?.openingHours, true, false),
-					payByCard: false,
-					phonePrefixCountryCode,
-					isInvoiceAddressSame: true,
-					companyContactPerson: defaultContactPerson,
-					email: [null],
-					phone: [
-						{
-							phonePrefixCountryCode: (i18n.language || DEFAULT_LANGUAGE).toUpperCase(),
-							phone: null
-						}
-					]
-				})
-			)
-		}
-	}
+	}, [supportContactID, dispatch])
 
 	// init forms
 	useEffect(() => {
-		fetchData(supportContact)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [supportContact])
+		// TODO: remove any when BE is done
+		const initForm = async (supportContactData?: any /* supportContactData: ISupportContactPayload & ILoadingAndFailure */) => {
+			const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
+			const defaultContactPerson = {
+				phonePrefixCountryCode
+			}
+
+			if (supportContactData && !isEmpty(supportContactData)) {
+				// init data for existing supportContact
+				const openOverWeekend: boolean = checkWeekend(supportContactData.data?.supportContact?.openingHours)
+				const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(supportContactData.data?.supportContact?.openingHours)
+				const openingHours: OpeningHours = initOpeningHours(supportContactData.data?.supportContact?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(
+					orderDaysInWeek
+				) as OpeningHours
+
+				dispatch(
+					initialize(FORM.SUPPORT_CONTACT, {
+						...supportContactData.data?.supportContact,
+						openOverWeekend,
+						sameOpenHoursOverWeek,
+						openingHours,
+						city: supportContactData.data?.supportContact?.address?.city,
+						street: supportContactData.data?.supportContact?.address?.street,
+						zipCode: supportContactData.data?.supportContact?.address?.zipCode,
+						country: supportContactData.data?.supportContact?.address?.countryCode,
+						streetNumber: supportContactData.data?.supportContact?.address?.streetNumber,
+						emails: supportContactData.data?.supportContact?.emails?.map((email: string) => ({ email })),
+						phones: supportContactData.data?.supportContact?.phones
+					})
+				)
+			} else if (!supportContact?.isLoading) {
+				// init data for new "creating process" supportContact
+				dispatch(
+					initialize(FORM.SUPPORT_CONTACT, {
+						openOverWeekend: false,
+						sameOpenHoursOverWeek: true,
+						openingHours: initOpeningHours(supportContactData.data?.supportContact?.openingHours, true, false),
+						payByCard: false,
+						phonePrefixCountryCode,
+						isInvoiceAddressSame: true,
+						companyContactPerson: defaultContactPerson,
+						emails: [{ email: '' }],
+						phones: [
+							{
+								phonePrefixCountryCode,
+								phone: ''
+							}
+						]
+					})
+				)
+			}
+		}
+
+		initForm(supportContact)
+	}, [supportContact, dispatch, phonePrefixes.data])
 
 	const handleSubmit = async (data: ISupportContactForm) => {
 		try {
@@ -172,9 +176,8 @@ const SupportContactPage: FC<Props> = (props) => {
 				countryCode: data.country,
 				street: data.street,
 				zipCode: data.zipCode,
-				phonePrefixCountryCode: data.phonePrefixCountryCode,
-				phone: data.phone,
-				email: data.email
+				phones: data.phones?.filter((phone) => !phone || !phone.phone),
+				emails: data.emails?.reduce((acc, email) => (email?.email ? [...acc, email.email] : acc), [] as string[])
 			}
 
 			if (supportContactID > 0) {
@@ -241,12 +244,6 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 	}
 
-	const onOpenHoursNoteModalClose = () => {
-		updateOnlyOpeningHours.current = true
-		setVisible(false)
-		dispatch(supportContact(supportContactID))
-	}
-
 	const supportContactExists = supportContactID > 0
 
 	return (
@@ -256,16 +253,7 @@ const SupportContactPage: FC<Props> = (props) => {
 			</Row>
 			<Spin spinning={isLoading}>
 				<div className='content-body small mt-2'>
-					<SupportContactForm onSubmit={handleSubmit} openNoteModal={() => setVisible(true)} supportContactID={supportContactID} disabledForm={deletedSupportContact} />
-					{supportContactExists && (
-						<OpenHoursNoteModal
-							visible={visible}
-							salonID={supportContact?.data?.id || 0}
-							openingHoursNote={supportContact?.data?.openingHoursNote}
-							onClose={onOpenHoursNoteModalClose}
-						/>
-					)}
-
+					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={deletedSupportContact} />
 					<div className={'content-footer'}>
 						<Row className={`${supportContactExists ? 'justify-between' : 'justify-center'} w-full`}>
 							{supportContactExists && (

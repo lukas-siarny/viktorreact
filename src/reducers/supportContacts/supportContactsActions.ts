@@ -180,11 +180,11 @@ const mockupDataDetail = {
 		emails: ['lukas.siarny@goodrequest.com', 'lukas.siarny@gmail.com'],
 		phones: [
 			{
-				phonePrefixCountryCode: 'sk',
+				phonePrefixCountryCode: 'SK',
 				phone: '902110244'
 			},
 			{
-				phonePrefixCountryCode: 'sk',
+				phonePrefixCountryCode: 'SK',
 				phone: '902111222'
 			}
 		],

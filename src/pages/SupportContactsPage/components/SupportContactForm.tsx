@@ -1,13 +1,10 @@
 import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Form, Row, Space } from 'antd'
+import { Col, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
-import { get } from 'lodash'
 
 // components
-import AddressFields from '../../../components/AddressFields'
-import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import OpeningHours from '../../../components/OpeningHours/OpeningHours'
 
 // atoms
@@ -18,13 +15,12 @@ import TextareaField from '../../../atoms/TextareaField'
 // utils
 import { showErrorNotification } from '../../../utils/helper'
 import { ENUMERATIONS_KEYS, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import Permissions from '../../../utils/Permissions'
 
 // types
 import { ISupportContactForm } from '../../../types/interfaces'
 
 // validate
-import validateSalonForm from './validateSalonForm'
+import validateSupportContactForm from './validateSupportContactForm'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -37,7 +33,6 @@ import PhoneArrayField from '../../../atoms/PhoneArrayField'
 import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {
-	openNoteModal: Function
 	disabledForm: boolean
 	supportContactID?: number
 }
@@ -72,10 +67,10 @@ const SupportContactForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 						<FieldArray
 							component={InputsArrayField}
-							name={'email'}
-							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Email'), requied: true }}
+							name={'emails'}
+							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Emailové adresy'), requied: true }}
 						/>
-						<FieldArray component={PhoneArrayField} name={'phone'} props={{ disabled: disabledForm, requied: true }} />
+						<FieldArray component={PhoneArrayField} name={'phones'} props={{ disabled: disabledForm, requied: true }} />
 						<Field
 							component={SelectField}
 							optionRender={countryOptionRender}
@@ -85,11 +80,18 @@ const SupportContactForm: FC<Props> = (props) => {
 							name={'countryCode'}
 							size={'large'}
 							loading={countries?.isLoading}
-							allowClear
 							required
 						/>
 						<Row justify={'space-between'}>
-							<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+							<Field
+								className={'w-4/5'}
+								component={InputField}
+								label={t('loc:Ulica')}
+								placeholder={t('loc:Zadajte ulicu')}
+								name={'street'}
+								size={'large'}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+							/>
 							<Field
 								className={'w-1/6'}
 								component={InputField}
@@ -97,10 +99,19 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte číslo')}
 								name={'streetNumber'}
 								size={'large'}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
 							/>
 						</Row>
 						<Row justify={'space-between'}>
-							<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} />
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:Mesto')}
+								placeholder={t('loc:Zadajte mesto')}
+								name={'city'}
+								size={'large'}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+							/>
 							<Field
 								className={'w-12/25'}
 								component={InputField}
@@ -108,6 +119,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte smerovacie číslo')}
 								name={'zipCode'}
 								size={'large'}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
 							/>
 						</Row>
 						<Field
@@ -150,7 +162,7 @@ const form = reduxForm<ISupportContactForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
-	validate: validateSalonForm
+	validate: validateSupportContactForm
 })(SupportContactForm)
 
 export default form

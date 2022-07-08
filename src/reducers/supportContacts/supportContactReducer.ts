@@ -52,7 +52,7 @@ export default (state = initState, action: ISupportContactsActions) => {
 		case SUPPORT_CONTACT.SUPPORT_CONTACT_START:
 			return {
 				...state,
-				ssupportContact: {
+				supportContact: {
 					...state.supportContact,
 					isLoading: true
 				}

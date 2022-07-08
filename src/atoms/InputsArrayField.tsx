@@ -6,20 +6,20 @@ import { Button, Form } from 'antd'
 // components
 import DeleteButton from '../components/DeleteButton'
 
+// atoms
+import InputField from './InputField'
+
 // helpers
+import { STRINGS } from '../utils/enums'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon-16.svg'
-import InputField from './InputField'
-import { validationRequired } from '../utils/helper'
-import { STRINGS } from '../utils/enums'
 
 const { Item } = Form
 
 type Props = WrappedFieldArrayProps & {
 	entityName: string
 	requied?: boolean
-	requiedAtLeastOne?: boolean
 	disabled?: boolean
 	label: string
 	style?: React.CSSProperties
@@ -28,18 +28,8 @@ type Props = WrappedFieldArrayProps & {
 }
 
 const InputsArrayField = (props: Props) => {
-	const { fields, disabled, requied, requiedAtLeastOne, entityName, label, style, maxCount = 5 } = props
+	const { fields, disabled, requied, entityName, label, style, maxCount = 5 } = props
 	const [t] = useTranslation()
-
-	const getRequiedValidation = (index: number) => {
-		if (requied) {
-			return validationRequired
-		}
-		if (requiedAtLeastOne && index === 0) {
-			return validationRequired
-		}
-		return undefined
-	}
 
 	const buttonAdd = (
 		<Button onClick={() => fields.push('')} icon={<PlusIcon className={'text-notino-black'} />} className={'noti-btn mt-2'} type={'default'} size={'small'} disabled={disabled}>
@@ -48,7 +38,7 @@ const InputsArrayField = (props: Props) => {
 	)
 
 	return (
-		<Item label={label} required={requied || requiedAtLeastOne} style={style}>
+		<Item label={label} required={requied} style={style}>
 			<div className={'flex flex-col gap-4 w-full'}>
 				{fields.map((field: any, index: any) => {
 					return (
@@ -60,7 +50,6 @@ const InputsArrayField = (props: Props) => {
 								size={'large'}
 								placeholder={STRINGS(t).enter(entityName)}
 								disabled={disabled}
-								validate={getRequiedValidation(index)}
 							/>
 
 							<DeleteButton

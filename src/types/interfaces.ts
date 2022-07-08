@@ -131,11 +131,8 @@ export interface ISupportContactForm {
 	city: string
 	street: string
 	streetNumber: string
-	latitude: number
-	longitude: number
-	phonePrefixCountryCode: string
-	phone: string
-	email: string
+	phones: { phonePrefixCountryCode: string, phone: string }[]
+	emails: { email: string }[]
 }
 
 export interface IRegistrationForm {

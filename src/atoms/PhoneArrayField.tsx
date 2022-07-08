@@ -1,19 +1,28 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, WrappedFieldArrayProps } from 'redux-form'
+import { WrappedFieldArrayProps } from 'redux-form'
 import { Button, Form } from 'antd'
+import { useSelector } from 'react-redux'
+import { map } from 'lodash'
 
 // components
 import DeleteButton from '../components/DeleteButton'
+import PhoneWithPrefixField from '../components/PhoneWithPrefixField'
+
+// atoms
+import InputField from './InputField'
 
 // helpers
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon-16.svg'
-import InputField from './InputField'
-import { validationRequired } from '../utils/helper'
-import { FORM, STRINGS } from '../utils/enums'
-import PhoneWithPrefixField from '../components/PhoneWithPrefixField'
+
+// utils
+import { ENUMERATIONS_KEYS } from '../utils/enums'
+import { getPrefixCountryCode, validationRequired } from '../utils/helper'
+
+// reducers
+import { RootState } from '../reducers'
 
 const { Item } = Form
 
@@ -30,15 +39,7 @@ const PhoneArrayField = (props: Props) => {
 	const { fields, disabled, requied, requiedAtLeastOne, style, maxCount = 5 } = props
 	const [t] = useTranslation()
 
-	const getRequiedValidation = (index: number) => {
-		if (requied) {
-			return validationRequired
-		}
-		if (requiedAtLeastOne && index === 0) {
-			return validationRequired
-		}
-		return undefined
-	}
+	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
 	const buttonAdd = (
 		<Button onClick={() => fields.push('')} icon={<PlusIcon className={'text-notino-black'} />} className={'noti-btn mt-2'} type={'default'} size={'small'} disabled={disabled}>
@@ -46,8 +47,10 @@ const PhoneArrayField = (props: Props) => {
 		</Button>
 	)
 
+	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
+
 	return (
-		<Item label={t('loc:Telefón')} required={requied || requiedAtLeastOne} style={style}>
+		<Item label={t('loc:Telefónne čísla')} required={requied || requiedAtLeastOne} style={style}>
 			<div className={'flex flex-col gap-4 w-full'}>
 				{fields.map((field: any, index: any) => {
 					return (
@@ -58,8 +61,8 @@ const PhoneArrayField = (props: Props) => {
 								phoneName={`${field}.phone`}
 								size={'large'}
 								disabled={disabled}
-								formName={FORM.SUPPORT_CONTACT}
 								className={'m-0 w-full noti-phone-prefix-array'}
+								fallbackDefaultValue={phonePrefixCountryCode}
 								required
 							/>
 

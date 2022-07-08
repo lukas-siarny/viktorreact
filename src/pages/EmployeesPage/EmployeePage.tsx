@@ -254,8 +254,7 @@ const EmployeePage = (props: Props) => {
 					inviteEmail: formData?.email,
 					employeeID,
 					salonID,
-					// TODO add roleID
-					roleID: 0
+					roleID: 3
 				}
 			)
 			dispatch(getEmployee(employeeID))

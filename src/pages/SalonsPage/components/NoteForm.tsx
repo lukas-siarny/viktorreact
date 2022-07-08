@@ -4,30 +4,32 @@ import { Form, Button, Col, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 // validations
-import validateDeclinedNoteForm from './validateDeclinedNoteForm'
+import validateNoteForm from './validateNoteForm'
 
 // utils
-import { FORM, STRINGS } from '../../../utils/enums'
+import { FORM } from '../../../utils/enums'
 
 // validate
 import TextareaField from '../../../atoms/TextareaField'
 
 // types
-import { IDeclinedNoteForm } from '../../../types/interfaces'
+import { INoteForm } from '../../../types/interfaces'
 
-type ComponentProps = {}
+type ComponentProps = {
+	fieldPlaceholderText?: string
+}
 
-type Props = InjectedFormProps<IDeclinedNoteForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<INoteForm, ComponentProps> & ComponentProps
 
-const DeclinedNoteForm: FC<Props> = (props) => {
+const NoteForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting } = props
+	const { handleSubmit, submitting, fieldPlaceholderText } = props
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<Row>
 				<Col span={24}>
-					<Field component={TextareaField} name={'note'} placeholder={t('loc:Sem napíšte dôvod zamietnutia')} label={'Poznámka'} />
+					<Field component={TextareaField} name={'note'} placeholder={fieldPlaceholderText} label={'Poznámka'} />
 				</Col>
 			</Row>
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
@@ -37,12 +39,12 @@ const DeclinedNoteForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<IDeclinedNoteForm, ComponentProps>({
-	form: FORM.DECLINED_NOTE,
+const form = reduxForm<INoteForm, ComponentProps>({
+	form: FORM.NOTE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateDeclinedNoteForm
-})(DeclinedNoteForm)
+	validate: validateNoteForm
+})(NoteForm)
 
 export default form

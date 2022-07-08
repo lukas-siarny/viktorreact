@@ -193,7 +193,7 @@ export interface IStructuredAddress {
 	houseNumber: string | null
 }
 
-export interface IDeclinedNoteForm {
+export interface INoteForm {
 	note: string
 }
 
@@ -303,5 +303,7 @@ export interface ICurrency {
 
 export interface INoteModal {
 	title: string
-
+	fieldPlaceholderText: string
+	visible: boolean
+	onSubmit?: (formData: any) => void
 }

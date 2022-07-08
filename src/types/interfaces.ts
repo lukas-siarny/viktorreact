@@ -42,6 +42,7 @@ export interface ILoginForm {
 
 export interface IInviteEmployeeForm {
 	email: string
+	role: number
 }
 
 export interface ICreateUserForm {

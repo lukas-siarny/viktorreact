@@ -259,16 +259,16 @@ const EmployeeForm: FC<Props> = (props) => {
 						phoneName={'phone'}
 						formName={FORM.EMPLOYEE}
 					/>
-					<Field
+					{/* <Field
 						component={SelectField}
 						options={roles?.data}
 						label={t('loc:Rola')}
 						placeholder={t('loc:Vyberte rolu')}
-						name={'roleID'}
+						name={'role'}
 						size={'large'}
 						loading={roles?.isLoading}
 						required
-					/>
+					/> */}
 					<h3>{t('loc:Zoznam priradených služieb')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex w-full justify-between'}>

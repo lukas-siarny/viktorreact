@@ -186,7 +186,8 @@ const EmployeePage = (props: Props) => {
 					...employee.data?.employee,
 					avatar: employee.data?.employee?.image ? [{ url: employee.data?.employee?.image?.resizedImages?.thumbnail, uid: employee.data?.employee?.image?.id }] : [],
 					services: checkAndParseServices(employee.data?.employee?.services),
-					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id }
+					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id },
+					role: employee.data?.employee?.role?.id
 				})
 			)
 		}
@@ -256,8 +257,7 @@ const EmployeePage = (props: Props) => {
 					inviteEmail: formData?.email,
 					employeeID,
 					salonID,
-					// TODO add roleID
-					roleID: 0
+					roleID: formData?.role
 				}
 			)
 			dispatch(getEmployee(employeeID))
@@ -319,7 +319,7 @@ const EmployeePage = (props: Props) => {
 												onClick={(e) => {
 													if (hasPermission) {
 														setVisible(true)
-														dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail }))
+														dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail, role: form?.values?.role }))
 													} else {
 														e.preventDefault()
 														openForbiddenModal()

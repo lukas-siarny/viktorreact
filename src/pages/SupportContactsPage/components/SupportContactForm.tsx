@@ -17,7 +17,7 @@ import TextareaField from '../../../atoms/TextareaField'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
-import { FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
 // types
@@ -32,6 +32,9 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
+import InputsArrayField from '../../../atoms/InputsArrayField'
+import PhoneArrayField from '../../../atoms/PhoneArrayField'
+import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {
 	openNoteModal: Function
@@ -43,8 +46,19 @@ type Props = InjectedFormProps<ISupportContactForm, ComponentProps> & ComponentP
 
 const SupportContactForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, openNoteModal, supportContactID, disabledForm } = props
-	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
+	const { handleSubmit, disabledForm } = props
+
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
+
+	const countryOptionRender = (itemData: any) => {
+		const { value, label, flag } = itemData
+		return (
+			<div className='flex items-center'>
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+				{label}
+			</div>
+		)
+	}
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -56,40 +70,55 @@ const SupportContactForm: FC<Props> = (props) => {
 							{t('loc:Kontaktné údaje')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<PhoneWithPrefixField
-							label={'Telefón'}
-							placeholder={t('loc:Zadajte telefón')}
-							size={'large'}
-							prefixName={'phonePrefixCountryCode'}
-							phoneName={'phone'}
-							disabled={disabledForm}
-							formName={FORM.SALON}
-							required
-						/>
-						<Field
-							className={'w-full'}
-							component={InputField}
-							label={t('loc:Email')}
-							placeholder={t('loc:Zadajte email')}
+						<FieldArray
+							component={InputsArrayField}
 							name={'email'}
+							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Email'), requied: true }}
+						/>
+						<FieldArray component={PhoneArrayField} name={'phone'} props={{ disabled: disabledForm, requied: true }} />
+						<Field
+							component={SelectField}
+							optionRender={countryOptionRender}
+							label={t('loc:Štát')}
+							placeholder={t('loc:Vyber krajinu')}
+							options={countries?.enumerationsOptions || []}
+							name={'countryCode'}
 							size={'large'}
-							disabled={disabledForm}
+							loading={countries?.isLoading}
+							allowClear
 							required
 						/>
+						<Row justify={'space-between'}>
+							<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+							<Field
+								className={'w-1/6'}
+								component={InputField}
+								label={t('loc:Popisné číslo')}
+								placeholder={t('loc:Zadajte číslo')}
+								name={'streetNumber'}
+								size={'large'}
+							/>
+						</Row>
+						<Row justify={'space-between'}>
+							<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} />
+							<Field
+								className={'w-12/25'}
+								component={InputField}
+								label={t('loc:PSČ')}
+								placeholder={t('loc:Zadajte smerovacie číslo')}
+								name={'zipCode'}
+								size={'large'}
+							/>
+						</Row>
 						<Field
-							component={AddressFields}
-							inputValues={{
-								latitude: get(formValues, 'latitude'),
-								longitude: get(formValues, 'longitude'),
-								city: get(formValues, 'city'),
-								street: get(formValues, 'street'),
-								streetNumber: get(formValues, 'streetNumber'),
-								zipCode: get(formValues, 'zipCode'),
-								country: get(formValues, 'country')
-							}}
-							changeFormFieldValue={change}
+							component={TextareaField}
+							label={t('loc:Poznámka')}
+							name={'note'}
+							size={'large'}
+							placeholder={t('loc:Zadajte doplňujúcu informáciu, napr "3. poschodie v ľavo"')}
 							disabled={disabledForm}
-							name={'address'}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+							showLettersCount
 						/>
 					</Col>
 				</Row>
@@ -108,11 +137,6 @@ const SupportContactForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
-						{supportContactID && (
-							<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4 mb-6 mt-3`} onClick={() => openNoteModal()} disabled={disabledForm}>
-								{t('loc:Pridať poznámku')}
-							</Button>
-						)}
 					</Col>
 				</Row>
 			</Space>

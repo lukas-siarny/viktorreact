@@ -31,12 +31,22 @@ type Props = InjectedFormProps<ICustomerForm, ComponentProps> & ComponentProps
 const CustomerForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit } = props
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
 
 	const genders: ISelectOptionItem[] = [
 		{ label: `${t('loc: Muž')}`, value: GENDER.MALE, key: GENDER.MALE },
 		{ label: `${t('loc:Žena')}`, value: GENDER.FEMALE, key: GENDER.FEMALE }
 	]
+
+	const countryOptionRender = (itemData: any) => {
+		const { value, label, flag } = itemData
+		return (
+			<div className='flex items-center'>
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+				{label}
+			</div>
+		)
+	}
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -74,6 +84,7 @@ const CustomerForm: FC<Props> = (props) => {
 					</Row>
 					<Field
 						component={SelectField}
+						optionRender={countryOptionRender}
 						label={t('loc:Štát')}
 						placeholder={t('loc:Vyber krajinu')}
 						options={countries?.enumerationsOptions || []}

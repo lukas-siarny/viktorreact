@@ -100,6 +100,7 @@ export interface ISalonForm {
 	pricelistIDs?: number[]
 	companyContactPerson: any
 	companyInfo: any
+	description: string
 }
 
 export interface IServiceForm {

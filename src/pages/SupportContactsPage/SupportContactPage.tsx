@@ -14,7 +14,7 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DAY, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -31,6 +31,7 @@ import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import i18n from '../../utils/i18n'
 
 // TODO: type
 type SupportContactPatch = any
@@ -110,17 +111,7 @@ const SupportContactPage: FC<Props> = (props) => {
 			phonePrefixCountryCode
 		}
 
-		if (updateOnlyOpeningHours.current) {
-			if (supportContact?.isLoading) return
-			dispatch(
-				change(FORM.SUPPORT_CONTACT, 'openingHoursNote', {
-					note: supportContactData.data?.openingHoursNote?.note,
-					noteFrom: supportContactData.data?.openingHoursNote?.validFrom,
-					noteTo: supportContactData.data?.openingHoursNote?.validTo
-				})
-			)
-			updateOnlyOpeningHours.current = false
-		} else if (!isEmpty(supportContactData.data)) {
+		if (!isEmpty(supportContactData.data)) {
 			// init data for existing supportContact
 			const openOverWeekend: boolean = checkWeekend(supportContactData.data?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(supportContactData.data?.openingHours)
@@ -134,16 +125,12 @@ const SupportContactPage: FC<Props> = (props) => {
 					openOverWeekend,
 					sameOpenHoursOverWeek,
 					openingHours,
-					note: supportContactData.data?.openingHoursNote?.note,
-					noteFrom: supportContactData.data?.openingHoursNote?.validFrom,
-					noteTo: supportContactData.data?.openingHoursNote?.validTo,
-					latitude: supportContactData.data?.address?.latitude,
-					longitude: supportContactData.data?.address?.longitude,
 					city: supportContactData.data?.address?.city,
 					street: supportContactData.data?.address?.street,
 					zipCode: supportContactData.data?.address?.zipCode,
 					country: supportContactData.data?.address?.countryCode,
-					streetNumber: supportContactData.data?.address?.streetNumber
+					streetNumber: supportContactData.data?.address?.streetNumber,
+					email: supportContactData.data?.emails
 				})
 			)
 		} else if (!supportContact?.isLoading) {
@@ -156,7 +143,14 @@ const SupportContactPage: FC<Props> = (props) => {
 					payByCard: false,
 					phonePrefixCountryCode,
 					isInvoiceAddressSame: true,
-					companyContactPerson: defaultContactPerson
+					companyContactPerson: defaultContactPerson,
+					email: [null],
+					phone: [
+						{
+							phonePrefixCountryCode: (i18n.language || DEFAULT_LANGUAGE).toUpperCase(),
+							phone: null
+						}
+					]
 				})
 			)
 		}
@@ -176,8 +170,6 @@ const SupportContactPage: FC<Props> = (props) => {
 				openingHours: openingHours || [],
 				city: data.city,
 				countryCode: data.country,
-				latitude: data.latitude,
-				longitude: data.longitude,
 				street: data.street,
 				zipCode: data.zipCode,
 				phonePrefixCountryCode: data.phonePrefixCountryCode,

@@ -178,7 +178,16 @@ const mockupDataDetail = {
 	supportContact: {
 		id: 1,
 		emails: ['lukas.siarny@goodrequest.com', 'lukas.siarny@gmail.com'],
-		phones: ['+421 902 110 244'],
+		phones: [
+			{
+				phonePrefixCountryCode: 'sk',
+				phone: '902110244'
+			},
+			{
+				phonePrefixCountryCode: 'sk',
+				phone: '902111222'
+			}
+		],
 		note: 'Poznamka',
 		address: {
 			countryCode: 'SK',

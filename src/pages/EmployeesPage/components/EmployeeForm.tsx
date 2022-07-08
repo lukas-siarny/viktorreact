@@ -7,9 +7,10 @@ import cx from 'classnames'
 
 // utils
 import { isEmpty } from 'lodash'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY, SALON_PERMISSION, PERMISSION } from '../../../utils/enums'
 import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
 import searchWrapper from '../../../utils/filters'
+import Permissions from '../../../utils/Permissions'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -41,6 +42,7 @@ const { Panel } = Collapse
 type ComponentProps = {
 	salonID: number
 	addService: MouseEventHandler<HTMLElement>
+	onEditRoleClick?: () => void
 }
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
@@ -206,7 +208,7 @@ const renderListFields = (props: any) => {
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, salonID, addService } = props
+	const { handleSubmit, salonID, addService, onEditRoleClick } = props
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE].values)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -259,16 +261,53 @@ const EmployeeForm: FC<Props> = (props) => {
 						phoneName={'phone'}
 						formName={FORM.EMPLOYEE}
 					/>
-					{/* <Field
-						component={SelectField}
-						options={roles?.data}
-						label={t('loc:Rola')}
-						placeholder={t('loc:Vyberte rolu')}
-						name={'role'}
-						size={'large'}
-						loading={roles?.isLoading}
-						required
-					/> */}
+					{formValues?.hasActiveAccount && (
+						<>
+							<h3>{t('loc:Oprávnenie')}</h3>
+							<Divider className={'mb-3 mt-3'} />
+							<div className={'flex w-full justify-between'}>
+								<Field
+									component={InputField}
+									options={roles?.data}
+									label={t('loc:Rola')}
+									placeholder={t('loc:Vyberte rolu')}
+									name={'role.name'}
+									size={'large'}
+									loading={roles?.isLoading}
+									className={'w-4/5'}
+									readOnly
+									required
+								/>
+								<Permissions
+									allowed={[
+										PERMISSION.NOTINO_SUPER_ADMIN,
+										PERMISSION.NOTINO_ADMIN,
+										PERMISSION.PARTNER,
+										SALON_PERMISSION.PARTNER_ADMIN,
+										SALON_PERMISSION.USER_ROLE_EDIT
+									]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<Button
+											type={'primary'}
+											block
+											size={'middle'}
+											className={'noti-btn m-regular w-2/12 mt-4'}
+											onClick={(e) => {
+												if (hasPermission && onEditRoleClick) {
+													onEditRoleClick()
+												} else {
+													e.preventDefault()
+													openForbiddenModal()
+												}
+											}}
+										>
+											{t('loc:Upraviť rolu')}
+										</Button>
+									)}
+								/>
+							</div>
+						</>
+					)}
 					<h3>{t('loc:Zoznam priradených služieb')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex w-full justify-between'}>

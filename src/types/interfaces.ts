@@ -42,7 +42,11 @@ export interface ILoginForm {
 
 export interface IInviteEmployeeForm {
 	email: string
-	role: number
+	roleID: number
+}
+
+export interface IEditEmployeeRoleForm {
+	roleID: number
 }
 
 export interface ICreateUserForm {
@@ -232,7 +236,7 @@ export interface IEmployeeForm {
 	phone?: string
 	services?: any
 	imageID?: number
-	roleID: number
+	role: number
 }
 
 export interface ILanguagePickerForm {

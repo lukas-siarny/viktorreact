@@ -12,10 +12,10 @@ import hu_HU from 'antd/lib/locale-provider/hu_HU'
 import ro_RO from 'antd/lib/locale-provider/ro_RO'
 import bg_BG from 'antd/lib/locale-provider/bg_BG'
 import it_IT from 'antd/lib/locale-provider/it_IT'
-import { useSelector } from 'react-redux'
+// import { useSelector } from 'react-redux'
 // eslint-disable-next-line import/no-cycle
-import { RootState } from '../reducers'
-import { LANGUAGE, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../utils/enums'
+// import { RootState } from '../reducers'
+import { LANGUAGE, DEFAULT_LANGUAGE /* , ENUMERATIONS_KEYS */ } from '../utils/enums'
 
 // hooks
 import useMedia from '../hooks/useMedia'
@@ -75,12 +75,18 @@ type Props = {
 	asMenuItem?: boolean
 }
 
+/*
+	NOT-1084: change of the language picker options:
+	- picker options were generated from roll-out countires data from BE
+	- but supported language mutations are not the same as roll-out countries
+	- locales are hardcoded on FE, so now we use harcoded options as well
+*/
 const LanguagePicker: FC<Props> = (props) => {
 	const { className, asMenuItem } = props
 	const isSmallDevice = useMedia(['(max-width: 744px)'], [true], false)
 
-	const countries = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
-	const options = countries?.enumerationsOptions || Object.values(LANGUAGE).map((value) => ({ label: value, value, icon: LOCALES[value].icon }))
+	// const countries = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
+	const options = /* countries?.enumerationsOptions || */ Object.values(LANGUAGE).map((value) => ({ label: value, value, icon: LOCALES[value].icon }))
 
 	const handleLanguageChange = (value: any) => {
 		// reload page after change language
@@ -116,11 +122,10 @@ const LanguagePicker: FC<Props> = (props) => {
 	}
 
 	const getLanguageFlag = (countryCode: LANGUAGE) => {
-		if (countries?.enumerationsOptions) {
+		/* if (countries?.enumerationsOptions) {
 			const [country] = countries.enumerationsOptions.filter((enumOption: any) => enumOption?.value === countryCode)
 			return <img className={'language-picker-img'} src={country?.flag} alt={'flag'} />
-		}
-		// fallback for flag
+		} */
 		return <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} />
 	}
 

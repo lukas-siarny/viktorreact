@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 // atoms
-import InputField from '../../../atoms/InputField'
+import SelectField from '../../../atoms/SelectField'
 
 // interfaces
 import { IInviteEmployeeForm } from '../../../types/interfaces'
@@ -14,11 +14,10 @@ import { IInviteEmployeeForm } from '../../../types/interfaces'
 import { FORM } from '../../../utils/enums'
 
 // validate
-import validateInviteFrom from './validateInviteFrom'
+import validateEditRoleFrom from './validateEditRoleFrom'
 
 // reducers
 import { RootState } from '../../../reducers'
-import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {}
 
@@ -55,7 +54,7 @@ const form = reduxForm<IInviteEmployeeForm, ComponentProps>({
 	touchOnChange: false,
 	touchOnBlur: true,
 	destroyOnUnmount: true,
-	validate: validateInviteFrom
+	validate: validateEditRoleFrom
 })(EditRoleForm)
 
 export default form

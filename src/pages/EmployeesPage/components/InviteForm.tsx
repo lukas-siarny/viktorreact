@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../../../atoms/InputField'
+import SelectField from '../../../atoms/SelectField'
 
 // interfaces
 import { IInviteEmployeeForm } from '../../../types/interfaces'
@@ -18,7 +19,6 @@ import validateInviteFrom from './validateInviteFrom'
 
 // reducers
 import { RootState } from '../../../reducers'
-import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {}
 

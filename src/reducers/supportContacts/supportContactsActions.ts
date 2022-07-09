@@ -1,13 +1,15 @@
 /* eslint-disable import/no-cycle */
-import { IResetStore } from '../generalTypes'
+import { isEmpty } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
+import { IResetStore } from '../generalTypes'
 
 // utils
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { SUPPORT_CONTACTS, SUPPORT_CONTACT } from './supportContactsTypes'
+import { getTranslatedCountriesLabels } from '../../utils/enums'
 
 // assets
 import SK_Flag from '../../assets/flags/SK.svg'
@@ -29,7 +31,7 @@ export interface IGetSupportContact {
 	payload: ISupportContactPayload
 }
 
-interface ISupportContactsTableData {
+export interface ISupportContactsTableData {
 	key: number
 	supportContactID: number
 	country: {
@@ -42,10 +44,18 @@ interface ISupportContactsTableData {
 	zipCode: string
 }
 
+export interface ISupportContactOption {
+	key: string | number
+	label: string
+	value: string | number
+	flag?: string
+}
+
 // TODO: inteface
 export interface ISupportContactsPayload {
 	data: {} | null
 	tableData?: ISupportContactsTableData[]
+	options: ISupportContactOption[]
 }
 
 // TODO: interface
@@ -90,14 +100,14 @@ const mockupData = {
 			phones: ['+421 902 110 244'],
 			note: 'Poznamka',
 			address: {
-				countryCode: 'SK',
+				countryCode: 'CZ',
 				zipCode: '05201',
 				city: 'Spišská Nová Ves',
 				street: 'Brezová',
 				streetNumber: '22'
 			},
 			country: {
-				code: 'SK',
+				code: 'CZ',
 				name: 'Slovenská Republika',
 				nameLocalizations: [
 					{
@@ -119,14 +129,14 @@ const mockupData = {
 			phones: ['+421 902 110 244'],
 			note: 'Poznamka',
 			address: {
-				countryCode: 'SK',
+				countryCode: 'RO',
 				zipCode: '05201',
 				city: 'Spišská Nová Ves',
 				street: 'Brezová',
 				streetNumber: '22'
 			},
 			country: {
-				code: 'SK',
+				code: 'RO',
 				name: 'Slovenská Republika',
 				nameLocalizations: [
 					{
@@ -148,14 +158,14 @@ const mockupData = {
 			phones: ['+421 902 110 244'],
 			note: 'Poznamka',
 			address: {
-				countryCode: 'SK',
+				countryCode: 'HU',
 				zipCode: '05201',
 				city: 'Spišská Nová Ves',
 				street: 'Brezová',
 				streetNumber: '22'
 			},
 			country: {
-				code: 'SK',
+				code: 'HU',
 				name: 'Slovenská Republika',
 				nameLocalizations: [
 					{
@@ -188,7 +198,7 @@ const mockupDataDetail = {
 				phone: '902111222'
 			}
 		],
-		note: 'Poznamka',
+		note: 'Lorem Ipsum is simply dummy text of the printing',
 		address: {
 			countryCode: 'SK',
 			zipCode: '05201',
@@ -217,17 +227,94 @@ const mockupDataDetail = {
 				day: 'MONDAY',
 				timeRanges: [
 					{
-						timeTo: '15:00',
+						timeTo: '13:00',
 						timeFrom: '07:00'
+					},
+					{
+						timeTo: '17:00',
+						timeFrom: '14:30'
+					},
+					{
+						timeTo: '18:00',
+						timeFrom: '22:30'
 					}
 				]
+			},
+			{
+				day: 'TUESDAY',
+				timeRanges: [
+					{
+						timeTo: '13:00',
+						timeFrom: '07:00'
+					},
+					{
+						timeTo: '17:00',
+						timeFrom: '14:30'
+					}
+				]
+			},
+			{
+				day: 'WEDNESDAY',
+				timeRanges: [
+					{
+						timeTo: '13:00',
+						timeFrom: '07:00'
+					},
+					{
+						timeTo: '17:00',
+						timeFrom: '14:30'
+					}
+				]
+			},
+			{
+				day: 'THURSDAY',
+				timeRanges: [
+					{
+						timeTo: '13:00',
+						timeFrom: '07:00'
+					},
+					{
+						timeTo: '17:00',
+						timeFrom: '14:30'
+					}
+				]
+			},
+			{
+				day: 'FRIDAY',
+				timeRanges: [
+					{
+						timeTo: '13:00',
+						timeFrom: '07:00'
+					},
+					{
+						timeTo: '17:00',
+						timeFrom: '14:30'
+					}
+				]
+			},
+			{
+				day: 'SATURDAY',
+				timeRanges: [
+					{
+						timeTo: '13:00',
+						timeFrom: '07:00'
+					},
+					{
+						timeTo: '17:00',
+						timeFrom: '14:30'
+					}
+				]
+			},
+			{
+				day: 'SUNDAY',
+				timeRanges: []
 			}
 		]
 	}
 }
 
 export const getSupportContacts =
-	(queryParams: IGetSupportContactsQueryParams): ThunkResult<Promise<ISupportContactsPayload>> =>
+	(queryParams?: IGetSupportContactsQueryParams): ThunkResult<Promise<ISupportContactsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISupportContactsPayload
 		try {
@@ -252,9 +339,27 @@ export const getSupportContacts =
 				return tableItem
 			})
 
+			const countriesLabels = getTranslatedCountriesLabels()
+			// prepare countries list with translated label
+			const options: ISupportContactOption[] = data.supportContacts.map((item) => {
+				const countryCode = item.country.code
+				const countryLabel: string | null = countriesLabels?.[countryCode.toLocaleLowerCase()]
+				if (isEmpty(countryLabel)) {
+					// eslint-disable-next-line no-console
+					console.error(`Missing translation for country with code ${countryCode}!`)
+				}
+				return {
+					key: countryCode,
+					label: countryLabel || countryCode,
+					value: countryCode,
+					flag: item.country.flag
+				}
+			})
+
 			payload = {
 				data,
-				tableData
+				tableData,
+				options
 			}
 
 			dispatch({ type: SUPPORT_CONTACTS.SUPPORT_CONTACTS_DONE, payload })

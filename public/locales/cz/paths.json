@@ -1,6 +1,7 @@
 {
   "activation": "/activation",
   "categories": "/categories",
+  "contact": "/contact",
   "customers": "/customers",
   "customers/create": "/customers/create",
   "customers/{{customerID}}": "/customers/{{customerID}}",

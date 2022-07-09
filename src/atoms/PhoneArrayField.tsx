@@ -9,17 +9,12 @@ import { map } from 'lodash'
 import DeleteButton from '../components/DeleteButton'
 import PhoneWithPrefixField from '../components/PhoneWithPrefixField'
 
-// atoms
-import InputField from './InputField'
-
-// helpers
-
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon-16.svg'
 
 // utils
 import { ENUMERATIONS_KEYS } from '../utils/enums'
-import { getPrefixCountryCode, validationRequired } from '../utils/helper'
+import { getPrefixCountryCode } from '../utils/helper'
 
 // reducers
 import { RootState } from '../reducers'

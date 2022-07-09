@@ -9,6 +9,7 @@ export const initState = {
 	supportContacts: {
 		data: null,
 		tableData: undefined,
+		options: [],
 		isLoading: false,
 		isFailure: false
 	} as ISupportContactsPayload & ILoadingAndFailure,
@@ -45,7 +46,8 @@ export default (state = initState, action: ISupportContactsActions) => {
 				supportContacts: {
 					...initState.supportContacts,
 					data: action.payload.data,
-					tableData: action.payload.tableData
+					tableData: action.payload.tableData,
+					options: action.payload.options
 				}
 			}
 		// Salon roles

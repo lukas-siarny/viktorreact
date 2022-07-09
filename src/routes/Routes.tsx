@@ -37,6 +37,7 @@ import SalonPage from '../pages/SalonsPage/SalonPage'
 // Support contacts
 import SupportContactsPage from '../pages/SupportContactsPage/SupportContactsPage'
 import SupportContactPage from '../pages/SupportContactsPage/SupportContactPage'
+import ContactPage from '../pages/Contact/ContactPage'
 
 import AppInit from '../components/AppInit'
 
@@ -52,6 +53,7 @@ const Routes: FC = (props) => {
 			<Switch>
 				<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} />
 				<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} />
+				<PublicRoute {...props} exact path={t('paths:contact')} component={ContactPage} layout={PublicLayout} />
 				<CreatePasswordRoute exact path={t('paths:reset-password')} translatePathKey={t('paths:reset-password')} component={CreatePasswordPage} layout={PublicLayout} />
 				<AuthRoute
 					{...props}

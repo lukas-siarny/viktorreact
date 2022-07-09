@@ -344,6 +344,7 @@ export enum UPLOAD_ERROR_TYPE {
 	INVALID_TYPE = 'INVALID_TYPE'
 }
 
+// NOTE: do not change days order!
 export enum DAY {
 	MONDAY = 'MONDAY',
 	TUESDAY = 'TUESDAY',

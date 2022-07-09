@@ -971,3 +971,83 @@ span.ant-tag
 .noti-phone-prefix-array
 	.ant-form-item
 		margin: 0
+
+.noti-support-contact-wrapper
+	max-width: 640px
+	padding: 0 56px
+	.contact-row
+		.contact-col
+			flex: 50%
+	@media (max-width: 1280px)
+		max-width: 496px
+		padding: 0 40px
+
+.noti-support-contact-list
+	list-style: none
+	padding-left: 0
+	li
+		display: flex
+		align-items: flex-start
+		gap: 8px
+		line-height: 175%
+		&::before
+			content: ''
+			display: block
+			width: 16px
+			height: 16px
+			margin-top: 4px
+			flex: 0 0 auto
+		&.phone-list-item
+			&::before
+				background: url("../assets/icons/phone-icon-16.svg") no-repeat center center
+		&.email-list-item
+			&::before
+				background: url("../assets/icons/message-icon-16-thin.svg") no-repeat center center
+		&.address-list-item
+			&::before
+				background: url("../assets/icons/home-icon-16.svg") no-repeat center center
+		&.note-list-item
+			margin-top: 14px
+			&::before
+				background: url("../assets/icons/pencil-icon-16.svg") no-repeat center center
+
+.noti-opening-hours-table
+	display: flex
+	flex-direction: column
+	width: fit-content
+	margin-bottom: 16px
+	.day-row
+		height: 28px
+		display: inline-flex
+		align-items: center
+		gap: 16px
+		&:not(:last-of-type)
+			border-bottom: 1px solid $borderColor-notino-grayLight
+		.day-name
+			width: 120px
+		.day-interval
+			width: 85px
+	@media (max-width: 1280px)
+		.day-row
+			.day-name
+				width: 100px
+
+.noti-support-collapse
+	background: transparent
+	max-width: 528px
+	.ant-collapse-item
+		border-bottom: 1px solid $borderColor-notino-grayLight
+		.ant-collapse-header
+			padding: 0
+			position: relative
+			div:first-of-type
+				position: absolute
+				right: 0
+				top: 50%
+				transform: translateY(-50%)
+	.ant-collapse-content
+		.ant-collapse-content-box
+			padding: 0
+
+	@media (max-width: 1280px)
+		max-width: 416px

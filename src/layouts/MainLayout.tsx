@@ -110,7 +110,10 @@ const MainLayout: FC<Props> = (props) => {
 								<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
 									{!hasPermission && (
 										<Button
-											onClick={() => history.push(t('paths:index'))}
+											onClick={() => {
+												dispatch(selectSalon())
+												history.push(t('paths:index'))
+											}}
 											icon={<BackIcon className={'text-notino-black'} />}
 											className={'noti-btn h-8 text-notino-black self-center'}
 											type={'default'}

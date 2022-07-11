@@ -357,6 +357,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				longitude: data.longitude,
 				street: data.street,
 				zipCode: data.zipCode,
+				description: data.description,
 				phonePrefixCountryCode: data.phonePrefixCountryCode,
 				phone: data.phone,
 				email: data.email,
@@ -366,8 +367,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				payByCard: data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
-				companyInfo: data.companyInfo,
-				description: data.description
+				companyInfo: data.companyInfo
 			}
 
 			if (salonID > 0) {

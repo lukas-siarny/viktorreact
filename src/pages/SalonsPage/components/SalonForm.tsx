@@ -128,6 +128,19 @@ const SalonForm: FC<Props> = (props) => {
 		/>
 	)
 
+	const addressDescriptionFormFiled = (filedName: string, disabled: boolean) => (
+		<Field
+			component={TextareaField}
+			label={t('loc:Poznámka k adrese')}
+			name={filedName}
+			size={'large'}
+			placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie v ľavo"')}
+			disabled={disabled}
+			maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+			showLettersCount
+		/>
+	)
+
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={36}>
@@ -205,15 +218,11 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							name={'address'}
 						/>
-						<Field
-							component={TextareaField}
-							label={t('loc:Poznámka k adrese')}
-							name={'description'}
-							size={'large'}
-							placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie v ľavo"')}
-							disabled={disabledForm}
-							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
-							showLettersCount
+						<Compare
+							oldValue={formValues?.publishedSalonData?.address?.description}
+							newValue={formValues?.description}
+							oldFormField={addressDescriptionFormFiled('publishedSalonData.address.description', true)}
+							newFormField={addressDescriptionFormFiled('description', disabledForm)}
 						/>
 						{!compareAddress(formValues?.publishedSalonData?.address, formValues?.address) && formValues?.publishedSalonData?.address && (
 							<Compare

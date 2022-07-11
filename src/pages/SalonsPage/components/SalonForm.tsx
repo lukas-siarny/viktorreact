@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
@@ -322,9 +322,27 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
 						{salonID && (
-							<Button type={'primary'} size={'middle'} className={`noti-btn w-1/4 mb-6 mt-3`} onClick={() => openNoteModal()} disabled={disabledForm}>
-								{t('loc:Pridať poznámku')}
-							</Button>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<Button
+										type={'primary'}
+										size={'middle'}
+										className={`noti-btn w-1/4 mb-6 mt-3`}
+										onClick={(e) => {
+											if (hasPermission) {
+												openNoteModal()
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={disabledForm}
+									>
+										{t('loc:Pridať poznámku')}
+									</Button>
+								)}
+							/>
 						)}
 					</Col>
 				</Row>

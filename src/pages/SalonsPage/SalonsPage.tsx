@@ -1,24 +1,26 @@
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Progress, Row } from 'antd'
+import { Col, Modal, Progress, Row, Spin } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
-import { initialize } from 'redux-form'
+import { initialize, reset } from 'redux-form'
 import cx from 'classnames'
 
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
+import SalonsImportForm from './components/SalonsImportForm'
 
 // utils
 import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
+import { postReq } from '../../utils/request'
 
 // reducers
 import { getSalons } from '../../reducers/salons/salonsActions'
@@ -27,10 +29,12 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import UploadSuccess from './components/UploadSuccess'
 
 type Columns = ColumnsType<any>
 
@@ -44,6 +48,11 @@ const SalonsPage = () => {
 
 	const salons = useSelector((state: RootState) => state.salons.salons)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
+
+	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
+	const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error' | undefined>(undefined)
+
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -99,6 +108,30 @@ const SalonsPage = () => {
 			page: 1
 		}
 		setQuery(newQuery)
+	}
+
+	const salonImportsSubmit = async (values: IDataUploadForm) => {
+		setUploadStatus('uploading')
+
+		const formData = new FormData()
+		formData.append('file', values?.file)
+
+		try {
+			await postReq('/api/b2b/admin/imports/salons' as any, undefined, formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			})
+			setUploadStatus('success')
+			// change(FORM.SALON_IMPORTS_FORM, 'file', '')
+		} catch {
+			setUploadStatus('error')
+		}
+	}
+
+	const resetUploadForm = () => {
+		setUploadStatus(undefined)
+		reset(FORM.SALON_IMPORTS_FORM)
 	}
 
 	const columns: Columns = [
@@ -220,6 +253,7 @@ const SalonsPage = () => {
 										}
 									}}
 									onSubmit={handleSubmit}
+									openSalonImportsModal={() => setSalonImportsModalVisible(true)}
 								/>
 							)}
 						/>
@@ -254,6 +288,29 @@ const SalonsPage = () => {
 					</div>
 				</Col>
 			</Row>
+			<Modal
+				className='rounded-fields'
+				title={t('loc:Importovať salóny')}
+				centered
+				visible={salonImportsModalVisible}
+				footer={null}
+				onCancel={() => {
+					resetUploadForm()
+					setSalonImportsModalVisible(false)
+				}}
+				closeIcon={<CloseIcon />}
+				width={394}
+				maskClosable={false}
+				keyboard={false}
+			>
+				<Spin spinning={uploadStatus === 'uploading'}>
+					{uploadStatus === 'success' ? (
+						<UploadSuccess onUploadAgain={resetUploadForm} />
+					) : (
+						<SalonsImportForm onSubmit={salonImportsSubmit} disabledForm={!formValues?.file} />
+					)}
+				</Spin>
+			</Modal>
 		</>
 	)
 }

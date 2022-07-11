@@ -13,6 +13,7 @@ import { RootState } from '../../../reducers'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
+import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // utils
 import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../../utils/enums'
@@ -24,6 +25,7 @@ import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {
 	createSalon: Function
+	openSalonImportsModal: () => void
 }
 
 export interface ISalonsFilter {
@@ -35,7 +37,7 @@ type Props = InjectedFormProps<ISalonsFilter, ComponentProps> & ComponentProps
 const fixLength100 = validationString(100)
 
 const SalonsFilter = (props: Props) => {
-	const { handleSubmit, createSalon } = props
+	const { handleSubmit, createSalon, openSalonImportsModal } = props
 	const [t] = useTranslation()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
@@ -65,9 +67,14 @@ const SalonsFilter = (props: Props) => {
 	)
 
 	const customContent = (
-		<Button onClick={() => createSalon()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
-			{t('loc:Pridať salón')}
-		</Button>
+		<div className={'flex items-center gap-2'}>
+			<Button onClick={() => openSalonImportsModal()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<UploadIcon />}>
+				{t('loc:Importovať salóny')}
+			</Button>
+			<Button onClick={() => createSalon()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
+				{t('loc:Pridať salón')}
+			</Button>
+		</div>
 	)
 
 	const countryCodeOptionRender = (itemData: any) => {

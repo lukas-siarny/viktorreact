@@ -18,11 +18,11 @@ context('User', () => {
 
 	it('Update my account info', () => {
 		cy.visit('/my-account')
-		// cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, true)
-		// cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, true)
-		// cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.phone, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.phone, true)
 		cy.get('form').submit()
-		// cy.checkSuccessToastMessage()
+		cy.checkSuccessToastMessage()
 	})
 
 	/* it('Create partner as ADMIN', () => {

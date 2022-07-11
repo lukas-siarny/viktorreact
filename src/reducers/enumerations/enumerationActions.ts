@@ -13,7 +13,6 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 import { getReq } from '../../utils/request'
 import { ENUMERATIONS_KEYS, getTranslatedCountriesLabels } from '../../utils/enums'
 import { Paths } from '../../types/api'
-import i18n from '../../utils/i18n'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 

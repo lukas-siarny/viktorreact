@@ -43,12 +43,10 @@ const SalonsFilter = (props: Props) => {
 	const countries = useSelector((state: RootState) => state.enumerationsStore.countries_filter_options)
 
 	const statusOptions = [
-		{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED },
 		{ label: t('loc:Publikované'), value: SALON_STATUSES.PUBLISHED, key: SALON_STATUSES.PUBLISHED },
-		{ label: t('loc:Viditeľné'), value: SALON_STATUSES.VISIBLE, key: SALON_STATUSES.VISIBLE },
-		{ label: t('loc:Nevymazané'), value: SALON_STATUSES.NOT_DELETED, key: SALON_STATUSES.NOT_DELETED },
 		{ label: t('loc:Nepublikované'), value: SALON_STATUSES.NOT_PUBLISHED, key: SALON_STATUSES.NOT_PUBLISHED },
-		{ label: t('loc:Nie sú viditeľné'), value: SALON_STATUSES.NOT_VISIBLE, key: SALON_STATUSES.NOT_VISIBLE }
+		{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED },
+		{ label: t('loc:Nevymazané'), value: SALON_STATUSES.NOT_DELETED, key: SALON_STATUSES.NOT_DELETED }
 	]
 
 	const searchInput = (

@@ -142,23 +142,18 @@ const SalonForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 
 						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
-						{!isEqual(formValues?.aboutUsFirst, formValues?.publishedSalonData?.aboutUsFirst) && formValues?.publishedSalonData?.aboutUsFirst ? (
-							<Compare
-								oldValue={aboutUsFirstFormField('publishedSalonData.aboutUsFirst', true, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
-								newValue={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
-							/>
-						) : (
-							aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel)
-						)}
-						{!isEqual(formValues?.aboutUsSecond, formValues?.publishedSalonData?.aboutUsSecond) && formValues?.publishedSalonData?.aboutUsSecond ? (
-							<Compare
-								oldValue={aboutUsFirstFormField('publishedSalonData.aboutUsSecond', true, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
-								newValue={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
-							/>
-						) : (
-							aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel)
-						)}
-
+						<Compare
+							oldValue={formValues?.publishedSalonData?.aboutUsFirst}
+							newValue={formValues?.aboutUsFirst}
+							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsFirst', true, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
+							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
+						/>
+						<Compare
+							oldValue={formValues?.publishedSalonData?.aboutUsSecond}
+							newValue={formValues?.aboutUsSecond}
+							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsSecond', true, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
+							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
+						/>
 						<Field
 							component={ImgUploadField}
 							name={'logo'}
@@ -169,11 +164,11 @@ const SalonForm: FC<Props> = (props) => {
 							category={UPLOAD_IMG_CATEGORIES.SALON}
 							disabled={disabledForm}
 						/>
-						{!isEqual(formValues?.gallery, formValues?.publishedSalonData?.gallery) && formValues?.publishedSalonData?.gallery ? (
-							<Compare oldValue={imagesFormField('publishedSalonData.gallery', true)} newValue={imagesFormField('gallery', disabledForm)} />
-						) : (
-							imagesFormField('gallery', disabledForm)
-						)}
+						<Compare
+							equal={isEqual(formValues?.gallery, formValues?.publishedSalonData?.gallery)}
+							oldFormField={imagesFormField('publishedSalonData.gallery', true)}
+							newFormField={imagesFormField('gallery', disabledForm)}
+						/>
 					</Col>
 				</Row>
 				<Row>
@@ -183,19 +178,18 @@ const SalonForm: FC<Props> = (props) => {
 							{t('loc:Kontaktné údaje')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						{!isEqual(formValues?.phone, formValues?.publishedSalonData?.phone) && formValues?.publishedSalonData?.phone ? (
-							<Compare
-								oldValue={phoneFormField('publishedSalonData.phone', 'publishedSalonData.phonePrefixCountryCode', true)}
-								newValue={phoneFormField('phone', 'phonePrefixCountryCode', disabledForm)}
-							/>
-						) : (
-							phoneFormField('phone', 'phonePrefixCountryCode', disabledForm)
-						)}
-						{!isEqual(formValues?.email, formValues?.publishedSalonData?.email) && formValues?.publishedSalonData?.email ? (
-							<Compare oldValue={emailFormField('publishedSalonData.email', true)} newValue={emailFormField('email', disabledForm)} />
-						) : (
-							emailFormField('email', disabledForm)
-						)}
+						<Compare
+							oldValue={formValues?.publishedSalonData?.phone}
+							newValue={formValues?.phone}
+							oldFormField={phoneFormField('publishedSalonData.phone', 'publishedSalonData.phonePrefixCountryCode', true)}
+							newFormField={phoneFormField('phone', 'phonePrefixCountryCode', disabledForm)}
+						/>
+						<Compare
+							oldValue={formValues?.publishedSalonData?.email}
+							newValue={formValues?.email}
+							oldFormField={emailFormField('publishedSalonData.email', true)}
+							newFormField={emailFormField('email', disabledForm)}
+						/>
 						<Field
 							component={AddressFields}
 							inputValues={{

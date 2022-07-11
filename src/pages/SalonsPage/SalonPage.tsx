@@ -5,9 +5,9 @@ import { Button, Modal, Row, Spin } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
+import cx from 'classnames'
 
 // components
-import cx from 'classnames'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonForm from './components/SalonForm'
@@ -292,6 +292,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				zipCode: salonData?.address?.zipCode,
 				country: salonData?.address?.countryCode,
 				streetNumber: salonData?.address?.streetNumber,
+				description: salonData?.address?.description,
 				companyContactPerson: salonData?.companyContactPerson || defaultContactPerson,
 				companyInfo: salonData?.companyInfo,
 				gallery: map(salonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
@@ -365,7 +366,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				payByCard: data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
-				companyInfo: data.companyInfo
+				companyInfo: data.companyInfo,
+				description: data.description
 			}
 
 			if (salonID > 0) {

@@ -42,6 +42,11 @@ export interface ILoginForm {
 
 export interface IInviteEmployeeForm {
 	email: string
+	roleID: number
+}
+
+export interface IEditEmployeeRoleForm {
+	roleID: number
 }
 
 export interface ICreateUserForm {
@@ -100,6 +105,7 @@ export interface ISalonForm {
 	pricelistIDs?: number[]
 	companyContactPerson: any
 	companyInfo: any
+	description: string
 }
 
 export interface IServiceForm {
@@ -235,6 +241,7 @@ export interface IEmployeeForm {
 	phone?: string
 	services?: any
 	imageID?: number
+	role: number
 }
 
 export interface ILanguagePickerForm {

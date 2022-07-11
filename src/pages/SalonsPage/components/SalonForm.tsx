@@ -205,6 +205,16 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							name={'address'}
 						/>
+						<Field
+							component={TextareaField}
+							label={t('loc:Poznámka k adrese')}
+							name={'description'}
+							size={'large'}
+							placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie v ľavo"')}
+							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+							showLettersCount
+						/>
 						{!compareAddress(formValues?.publishedSalonData?.address, formValues?.address) && formValues?.publishedSalonData?.address && (
 							<Compare
 								oldValue={

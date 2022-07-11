@@ -44,6 +44,7 @@ const numberMin0 = validationNumberMin(0)
 
 type ComponentProps = {
 	serviceID?: number
+	parentPath?: string
 	salonID: number
 	addEmployee: MouseEventHandler<HTMLElement>
 }
@@ -74,7 +75,7 @@ export const renderListFields = (props: any) => {
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					return (
-						<div className={'employee-list-item flex items-center justify-between'}>
+						<div className={'employee-list-item flex items-center justify-between'} key={index}>
 							<div className={'title flex items-center'}>
 								<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
 								{fieldData?.name}
@@ -106,7 +107,7 @@ export const renderListFields = (props: any) => {
 }
 
 const ServiceForm = (props: Props) => {
-	const { salonID, serviceID, handleSubmit, pristine, addEmployee } = props
+	const { salonID, serviceID, handleSubmit, pristine, addEmployee, parentPath } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -132,8 +133,7 @@ const ServiceForm = (props: Props) => {
 			setIsRemoving(true)
 			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID: serviceID || -1 }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			setIsRemoving(false)
-			const url = t('paths:services')
-			history.push(url)
+			history.push(parentPath + t('paths:services'))
 		} catch (e) {
 			setIsRemoving(false)
 		}

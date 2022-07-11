@@ -83,7 +83,7 @@ const parseEmployees = (employees: any[]) => {
 }
 
 const ServiceEditPage = (props: Props) => {
-	const { serviceID, salonID } = props
+	const { serviceID, salonID, parentPath } = props
 	const dispatch = useDispatch()
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -146,6 +146,7 @@ const ServiceEditPage = (props: Props) => {
 			allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<ServiceForm
+					parentPath={parentPath}
 					addEmployee={() => addEmployee(employees, form, dispatch)}
 					onSubmit={(formData: IServiceForm) => {
 						if (hasPermission) {

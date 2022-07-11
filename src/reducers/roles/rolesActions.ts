@@ -26,13 +26,19 @@ export interface IRolesPayload {
 	data: Paths.GetApiB2BAdminRolesSystemUser.Responses.$200 | null
 }
 
-export const getSystemRoles = (): ThunkResult<Promise<void>> => async (dispatch) => {
+export const getSystemRoles = (): ThunkResult<Promise<void>> => async (dispatch, getState) => {
 	try {
 		dispatch({ type: SYSTEM_ROLES.SYSTEM_ROLES_LOAD_START })
 
+		const currentUserRole = getState().user.authUser.data?.roles[0]
+
 		const { data } = await getReq('/api/b2b/admin/roles/system-user', null)
+
 		const parsedData: ILabelInValueOption[] = []
-		data.roles.forEach((role) => {
+		const highestUserRoleIndex = data.roles.findIndex((role) => role?.id === currentUserRole?.id)
+		const currentUserAllowedRolesOptions = data.roles.slice(highestUserRoleIndex)
+
+		currentUserAllowedRolesOptions.forEach((role) => {
 			parsedData.push({
 				label: role?.name || '',
 				value: role?.id,

@@ -39,6 +39,12 @@ const UserPage: FC<Props> = (props) => {
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
+	const isMyAccountPath = computedMatch.path === t('paths:my-account')
+	let submitPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]
+
+	if (isMyAccountPath) {
+		submitPermissions = [...submitPermissions, PERMISSION.PARTNER]
+	}
 
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
@@ -62,9 +68,8 @@ const UserPage: FC<Props> = (props) => {
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.USER_ACCOUNT, {
-				...userAccountDetail.data,
-				...get(userAccountDetail, 'data.company'),
-				avatar: userAccountDetail?.data?.image ? [{ url: userAccountDetail?.data?.image?.original, uid: userAccountDetail?.data?.image?.id }] : null
+				...get(userAccountDetail, 'data.user'),
+				avatar: userAccountDetail?.data?.user?.image ? [{ url: userAccountDetail?.data?.user?.image?.original, uid: userAccountDetail?.data?.user?.image?.id }] : null
 			})
 		)
 	}, [userAccountDetail, dispatch])
@@ -100,9 +105,9 @@ const UserPage: FC<Props> = (props) => {
 			{
 				name: t('loc:Detail používateľa'),
 				titleName:
-					get(userAccountDetail, 'data.firstName') && get(userAccountDetail, 'data.lastName')
-						? `${get(userAccountDetail, 'data.firstName')} ${get(userAccountDetail, 'data.lastName')}`
-						: get(userAccountDetail, 'data.email')
+					get(userAccountDetail, 'data.user.firstName') && get(userAccountDetail, 'data.user.lastName')
+						? `${get(userAccountDetail, 'data.user.firstName')} ${get(userAccountDetail, 'data.user.lastName')}`
+						: get(userAccountDetail, 'data.user.email')
 			}
 		]
 	}
@@ -138,9 +143,11 @@ const UserPage: FC<Props> = (props) => {
 
 	return (
 		<>
-			<Row className={hideClass}>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
-			</Row>
+			{!isMyAccountPath && (
+				<Row className={hideClass}>
+					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
+				</Row>
+			)}
 			<Spin spinning={isLoading}>
 				<div className='content-body small mt-2'>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
@@ -155,7 +162,7 @@ const UserPage: FC<Props> = (props) => {
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 							/>
 							<Permissions
-								allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]}
+								allowed={submitPermissions}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}

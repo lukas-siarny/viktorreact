@@ -152,9 +152,6 @@ $inner-padding: 16px
 		background: $backgroundColor-gray-50
 		padding: 10px 24px 10px 24px
 		z-index: $z-index-five
-.noti-dropdown-header
-	top: $header-height !important
-	box-shadow: $boxShadow-lg
 // Dropdown pre MENU
 .noti-layout-popup
 	.ant-menu.ant-menu-sub
@@ -183,6 +180,47 @@ $inner-padding: 16px
 	.ant-menu-title-content
 		color: $textColor-gray-600
 
+// header
+.header-salon-label
+	color: $textColor-notino-black
+	.ant-avatar
+		flex: 0 0 auto
+	.icon-dropdown
+		flex: 0 0 auto
+
+.selected-salon-text
+	color: $textColor-notino-grayDark
+	white-space: nowrap
+	overflow: hidden
+	text-overflow: ellipsis
+	min-width: 0
+
+.ant-dropdown
+	.ant-dropdown-menu
+		&.noti-dropdown-header
+			.ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title
+				color: $textColor-notino-black
+
+				.ant-dropdown-menu-title-content
+					white-space: nowrap
+					text-overflow: ellipsis
+					overflow: hidden
+					min-width: 0
+
+				&.ant-menu-item-selected
+					color: $textColor-notino-white
+					background-color: $backgroundColor-notino-black
+					svg
+						filter: invert(1)
+
+				&:active
+					color: $textColor-notino-white
+
+				&:hover:not(.ant-menu-item-selected)
+					background-color: $backgroundColor-notino-grayLighter
+
+				&.button-add
+					color: $textColor-notino-pink
 // Avatar
 .avatar
 	flex-shrink: 0
@@ -205,3 +243,4 @@ span.language-picker-icon.anticon
 	.ant-dropdown-menu-submenu-title
 		display: flex
 		align-items: center
+

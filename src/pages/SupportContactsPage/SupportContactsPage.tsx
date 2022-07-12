@@ -104,7 +104,7 @@ const SupportContactsPage = () => {
 	const breadcrumbs: IBreadcrumbs | undefined = {
 		items: [
 			{
-				name: t('loc:Zoznam kontaktných informácií')
+				name: t('loc:Zoznam podporných centier')
 			}
 		]
 	}
@@ -121,7 +121,7 @@ const SupportContactsPage = () => {
 							allowed={permissions}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<SupportContactsFilter
-									createSalon={() => {
+									createSupportContact={() => {
 										if (hasPermission) {
 											history.push(t('paths:support-contacts/create'))
 										} else {

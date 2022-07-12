@@ -103,9 +103,7 @@ const SupportContactPage: FC<Props> = (props) => {
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
 	useEffect(() => {
-		if (supportContactID) {
-			dispatch(getSupportContact(supportContactID))
-		}
+		dispatch(getSupportContact(supportContactID))
 	}, [supportContactID, dispatch])
 
 	// init forms
@@ -146,7 +144,7 @@ const SupportContactPage: FC<Props> = (props) => {
 					initialize(FORM.SUPPORT_CONTACT, {
 						openOverWeekend: false,
 						sameOpenHoursOverWeek: true,
-						openingHours: initOpeningHours(supportContactData.data?.supportContact?.openingHours, true, false),
+						openingHours: initOpeningHours(supportContactData?.data?.supportContact?.openingHours, true, false),
 						payByCard: false,
 						phonePrefixCountryCode,
 						isInvoiceAddressSame: true,
@@ -164,7 +162,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 
 		initForm(supportContact)
-	}, [supportContact, dispatch, phonePrefixes.data])
+	}, [supportContact, dispatch, phonePrefixes.data, supportContactID])
 
 	const handleSubmit = async (data: ISupportContactForm) => {
 		try {
@@ -209,18 +207,18 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const breadcrumbDetailItem = get(supportContact, 'data.supportContact.id')
 		? {
-				name: t('loc:Detail kontaktu'),
+				name: t('loc:Detail centra'),
 				titleName: get(supportContact, 'data.supportContact.country.name') || ''
 		  }
 		: {
-				name: t('loc:Vytvoriť kontakt'),
+				name: t('loc:Vytvoriť centrum'),
 				link: t('paths:support-contacts/create')
 		  }
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam kontaktných informácií'),
+				name: t('loc:Zoznam podporných centier'),
 				link: t('paths:support-contacts')
 			},
 			breadcrumbDetailItem

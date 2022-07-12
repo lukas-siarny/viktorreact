@@ -376,6 +376,12 @@ export const getSupportContact =
 	(supportContactID: number): ThunkResult<Promise<ISupportContactPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISupportContactPayload
+
+		if (!supportContactID) {
+			dispatch({ type: SUPPORT_CONTACT.SUPPORT_CONTACT_DONE, payload })
+			return payload
+		}
+
 		try {
 			dispatch({ type: SUPPORT_CONTACT.SUPPORT_CONTACT_START })
 			// TODO: remove any when BE is done

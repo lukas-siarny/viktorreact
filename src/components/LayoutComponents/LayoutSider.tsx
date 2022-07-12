@@ -18,6 +18,7 @@ import { ReactComponent as LogOutIcon } from '../../assets/icons/logout-icon.svg
 import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
 import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
+import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -113,11 +114,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											key={PAGE.SUPPORT_CONTACTS}
 											onClick={() => history.push(t('paths:support-contacts'))}
 											// TODO: change icon
-											icon={<SalonIcon />}
+											icon={<HelpIcon />}
 											// fix style issue due wrapped item into <Permission> component
 											className={cx({ 'ant-menu-item-selected': page === PAGE.SUPPORT_CONTACTS })}
 										>
-											{t('loc:Kontaktné informácie')}
+											{t('loc:Podpora')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>

@@ -67,7 +67,7 @@ const SupportContactsFilter = (props: Props) => {
 					</Col>
 					<Col>
 						<Button onClick={() => createSupportContact()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
-							{t('loc:Pridať kontakt')}
+							{t('loc:Pridať centrum')}
 						</Button>
 					</Col>
 				</Row>

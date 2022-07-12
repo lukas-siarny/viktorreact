@@ -435,7 +435,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		setVisible(false)
 		dispatch(selectSalon(salonID))
 	}
-
 	const salonExists = salonID > 0
 
 	return (
@@ -447,17 +446,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				<div className='content-body small mt-2'>
 					<SalonForm
 						onSubmit={handleSubmit}
-						openNoteModal={() => setVisible(true)}
+						openNoteModal={() => {
+							setVisible(true)
+						}}
 						changeSalonVisibility={changeVisibility}
 						publishSalon={publishSalon}
 						switchDisabled={submitting}
 						salonID={salonID}
 						disabledForm={deletedSalon}
 					/>
-					{salonExists && (
-						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
-					)}
-
 					<div className={'content-footer'}>
 						<Row className={`${salonExists ? 'justify-between' : 'justify-center'} w-full`}>
 							{salonExists && (
@@ -498,6 +495,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						</Row>
 					</div>
 				</div>
+				{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
 			</Spin>
 		</>
 	)

@@ -58,8 +58,8 @@ context('Auth', () => {
 		}).as('authLogin')
 		cy.visit('/login')
 		// TODO - load credentials from process env Cypress.env('auth_email') Cypress.env('auth_password')
-		cy.setInputValue(FORM.LOGIN, 'email', credentials.email)
-		cy.setInputValue(FORM.LOGIN, 'password', credentials.password)
+		// cy.setInputValue(FORM.LOGIN, 'email', credentials.email)
+		// cy.setInputValue(FORM.LOGIN, 'password', credentials.password)
 		cy.get('form').submit()
 		cy.wait('@authLogin').then((interception: any) => {
 			// check status code of login request

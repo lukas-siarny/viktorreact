@@ -437,7 +437,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}
 	const salonExists = salonID > 0
 
-	console.log(salonID, salonExists)
 	return (
 		<>
 			<Row>
@@ -448,7 +447,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					<SalonForm
 						onSubmit={handleSubmit}
 						openNoteModal={() => {
-							console.log('openNoteModal', visible)
 							setVisible(true)
 						}}
 						changeSalonVisibility={changeVisibility}

@@ -60,10 +60,7 @@ export const processAuthorizationResult =
 			setRefreshToken(result.refreshToken)
 			// parse permissions from role
 			const rolePermissions = flatten(map(get(result, 'user.roles'), (role) => get(role, 'permissions')))
-			// TODO - check implementation of first salon load
-			const salonsPermissions = flatten(map(get(result, 'user.salons[0]'), (role) => get(role, 'permissions')))
-			const uniqPermissions = uniq(map([...rolePermissions, ...salonsPermissions], 'name'))
-			console.log('uniqPermissions: ', uniqPermissions)
+			const uniqPermissions = uniq(map([...rolePermissions], 'name'))
 
 			const payload = {
 				data: {

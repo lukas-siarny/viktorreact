@@ -123,7 +123,6 @@ const SalonsPage = () => {
 				}
 			})
 			setUploadStatus('success')
-			// change(FORM.SALON_IMPORTS_FORM, 'file', '')
 		} catch {
 			setUploadStatus('error')
 		}

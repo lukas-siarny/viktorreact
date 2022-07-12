@@ -142,7 +142,6 @@ const SalonForm: FC<Props> = (props) => {
 			showLettersCount
 		/>
 	)
-
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={36}>

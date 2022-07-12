@@ -14,17 +14,16 @@ type Props = {
 const Compare = (props: Props) => {
 	const { newValue, oldValue, newFormField, oldFormField, equal } = props
 	const isSame = equal ?? oldValue === newValue
-
 	return (
 		<div className={'mb-2'}>
 			<div className={'flex items-center'}>
-				{!isSame && (
+				{!isSame && oldValue && (
 					<Typography.Text ellipsis className={cx('rounded bg-gray-50 p-2 w-full h-full text-gray-900')}>
 						{oldFormField}
 					</Typography.Text>
 				)}
-				{!isSame && <StepArrow className={'text-notino-black w-24'} />}
-				<Typography.Text ellipsis className={cx('rounded w-full', { 'bg-emerald-100 p-2': !isSame })}>
+				{!isSame && oldValue && <StepArrow className={'text-notino-black w-24'} />}
+				<Typography.Text ellipsis className={cx('rounded w-full', { 'bg-emerald-100 p-2': !isSame && oldValue })}>
 					{newFormField}
 				</Typography.Text>
 			</div>

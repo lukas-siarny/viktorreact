@@ -69,7 +69,7 @@ const SalonsFilter = (props: Props) => {
 	const customContent = (
 		<div className={'flex items-center gap-2'}>
 			<Button onClick={() => openSalonImportsModal()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<UploadIcon />}>
-				{t('loc:Import dat')}
+				{t('loc:Import dát')}
 			</Button>
 			<Button onClick={() => createSalon()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
 				{t('loc:Pridať salón')}

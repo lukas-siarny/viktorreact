@@ -44,6 +44,20 @@ const SupportContactForm: FC<Props> = (props) => {
 	const { handleSubmit, disabledForm } = props
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
+	// TODO: remove any when BE is done
+	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts) as any
+
+	const countriesOptions = countries?.enumerationsOptions?.map((country) => {
+		const alreadyExists = supportContacts?.data?.supportContacts?.find(
+			// TODO: remove any when BE is done
+			(supportCountry: any) => supportCountry.country.code.toLowerCase() === (country.value as string).toLowerCase()
+		)
+
+		return {
+			...country,
+			disabled: !!alreadyExists
+		}
+	})
 
 	const countryOptionRender = (itemData: any) => {
 		const { value, label, flag } = itemData
@@ -74,13 +88,14 @@ const SupportContactForm: FC<Props> = (props) => {
 						<Field
 							component={SelectField}
 							optionRender={countryOptionRender}
-							label={t('loc:Štát')}
+							label={t('loc:Krajina')}
 							placeholder={t('loc:Vyber krajinu')}
-							options={countries?.enumerationsOptions || []}
+							options={countriesOptions || []}
 							name={'countryCode'}
 							size={'large'}
-							loading={countries?.isLoading}
+							loading={countries?.isLoading || supportContacts?.isLoading}
 							required
+							disabled={disabledForm}
 						/>
 						<Row justify={'space-between'}>
 							<Field
@@ -91,6 +106,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								name={'street'}
 								size={'large'}
 								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+								disabled={disabledForm}
 							/>
 							<Field
 								className={'w-1/6'}
@@ -100,6 +116,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								name={'streetNumber'}
 								size={'large'}
 								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
+								disabled={disabledForm}
 							/>
 						</Row>
 						<Row justify={'space-between'}>
@@ -111,6 +128,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								name={'city'}
 								size={'large'}
 								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+								disabled={disabledForm}
 							/>
 							<Field
 								className={'w-12/25'}
@@ -120,6 +138,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								name={'zipCode'}
 								size={'large'}
 								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
+								disabled={disabledForm}
 							/>
 						</Row>
 						<Field

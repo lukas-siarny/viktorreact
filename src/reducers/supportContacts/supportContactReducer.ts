@@ -3,7 +3,7 @@ import { RESET_STORE } from '../generalTypes'
 import { ISupportContactsPayload, ISupportContactPayload, ISupportContactsActions } from './supportContactsActions'
 // eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SUPPORT_CONTACTS, SUPPORT_CONTACT } from './supportContactsTypes'
+import { SUPPORT_CONTACTS, SUPPORT_CONTACT, SET_SUPPORT_CONTACT_OPTIONS } from './supportContactsTypes'
 
 export const initState = {
 	supportContacts: {
@@ -23,7 +23,6 @@ export const initState = {
 // eslint-disable-next-line default-param-last
 export default (state = initState, action: ISupportContactsActions) => {
 	switch (action.type) {
-		// System roles
 		case SUPPORT_CONTACTS.SUPPORT_CONTACTS_START:
 			return {
 				...state,
@@ -50,7 +49,6 @@ export default (state = initState, action: ISupportContactsActions) => {
 					options: action.payload.options
 				}
 			}
-		// Salon roles
 		case SUPPORT_CONTACT.SUPPORT_CONTACT_START:
 			return {
 				...state,
@@ -75,6 +73,15 @@ export default (state = initState, action: ISupportContactsActions) => {
 					data: action.payload.data
 				}
 			}
+		case SET_SUPPORT_CONTACT_OPTIONS: {
+			return {
+				...state,
+				supportContacts: {
+					...state.supportContacts,
+					options: action.payload.options
+				}
+			}
+		}
 		case RESET_STORE:
 			return initState
 		default:

@@ -1,12 +1,13 @@
 import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row, Spin } from 'antd'
+import { Alert, Button, Row, Spin } from 'antd'
 import { change, initialize, isPristine, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 
 // components
+import { Link } from 'react-router-dom'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SupportContactForm from './components/SupportContactForm'
@@ -19,7 +20,7 @@ import { DAY, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIF
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
-import { getSupportContact, ISupportContactPayload } from '../../reducers/supportContacts/supportContactsActions'
+import { getSupportContact, getSupportContacts, ISupportContactPayload } from '../../reducers/supportContacts/supportContactsActions'
 
 // types
 import { IBreadcrumbs, ILoadingAndFailure, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
@@ -57,6 +58,9 @@ const SupportContactPage: FC<Props> = (props) => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	// TODO: remove any when BE is done
 	const supportContact = useSelector((state: RootState) => state.supportContacts.supportContact) as any
+	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts) as any
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
+
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SUPPORT_CONTACT]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SUPPORT_CONTACT))
 
@@ -115,7 +119,7 @@ const SupportContactPage: FC<Props> = (props) => {
 				phonePrefixCountryCode
 			}
 
-			if (supportContactData && !isEmpty(supportContactData)) {
+			if (supportContactData && !isEmpty(supportContactData) && supportContactID) {
 				// init data for existing supportContact
 				const openOverWeekend: boolean = checkWeekend(supportContactData.data?.supportContact?.openingHours)
 				const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(supportContactData.data?.supportContact?.openingHours)
@@ -164,6 +168,10 @@ const SupportContactPage: FC<Props> = (props) => {
 		initForm(supportContact)
 	}, [supportContact, dispatch, phonePrefixes.data, supportContactID])
 
+	useEffect(() => {
+		dispatch(getSupportContacts())
+	}, [dispatch])
+
 	const handleSubmit = async (data: ISupportContactForm) => {
 		try {
 			setSubmitting(true)
@@ -207,11 +215,11 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const breadcrumbDetailItem = get(supportContact, 'data.supportContact.id')
 		? {
-				name: t('loc:Detail centra'),
+				name: t('loc:Detail podpory'),
 				titleName: get(supportContact, 'data.supportContact.country.name') || ''
 		  }
 		: {
-				name: t('loc:Vytvoriť centrum'),
+				name: t('loc:Vytvoriť podporu'),
 				link: t('paths:support-contacts/create')
 		  }
 
@@ -244,6 +252,8 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const supportContactExists = supportContactID > 0
 
+	const hasEveryCountrSupportContact = supportContacts?.data?.supportContacts?.length === countries.data?.length
+
 	return (
 		<>
 			<Row>
@@ -251,7 +261,26 @@ const SupportContactPage: FC<Props> = (props) => {
 			</Row>
 			<Spin spinning={isLoading}>
 				<div className='content-body small mt-2'>
-					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={deletedSupportContact} />
+					{!supportContactExists && hasEveryCountrSupportContact && (
+						<Alert
+							message={
+								<>
+									{t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu a pre všetky už existujú.')}{' '}
+									<Link to={t('paths:support-contacts') as any} className={'underline'}>
+										{t('loc:Stále však môžete editovať existujúce')}
+									</Link>
+								</>
+							}
+							showIcon
+							type={'warning'}
+							className={'mb-4'}
+						/>
+					)}
+					<SupportContactForm
+						onSubmit={handleSubmit}
+						supportContactID={supportContactID}
+						disabledForm={(!supportContactExists && hasEveryCountrSupportContact) || deletedSupportContact}
+					/>
 					<div className={'content-footer'}>
 						<Row className={`${supportContactExists ? 'justify-between' : 'justify-center'} w-full`}>
 							{supportContactExists && (
@@ -282,7 +311,7 @@ const SupportContactPage: FC<Props> = (props) => {
 												openForbiddenModal()
 											}
 										}}
-										disabled={submitting || deletedSupportContact || isFormPristine}
+										disabled={(!supportContactExists && hasEveryCountrSupportContact) || submitting || deletedSupportContact || isFormPristine}
 										loading={submitting}
 									>
 										{t('loc:Uložiť')}

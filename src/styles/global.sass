@@ -972,15 +972,30 @@ span.ant-tag
 	.ant-form-item
 		margin: 0
 
+.noti-login-page
+	@media (max-width: 744px)
+		max-width: 296px
+
+.noti-support-contact-page
+	@media (max-width: 744px)
+		max-width: 440px
+
 .noti-support-contact-wrapper
 	max-width: 640px
 	padding: 0 56px
 	.contact-row
 		.contact-col
 			flex: 50%
+	.ant-spin-nested-loading > div > .ant-spin
+		max-height: 100%
 	@media (max-width: 1280px)
 		max-width: 496px
 		padding: 0 40px
+	@media (max-width: 744px)
+		max-width: 100%
+		padding: 0 16px
+		.ant-select
+			max-width: 100% !important
 
 .noti-support-contact-list
 	list-style: none
@@ -1017,7 +1032,7 @@ span.ant-tag
 	width: fit-content
 	margin-bottom: 16px
 	.day-row
-		height: 28px
+		min-height: 28px
 		display: inline-flex
 		align-items: center
 		gap: 16px
@@ -1025,12 +1040,30 @@ span.ant-tag
 			border-bottom: 1px solid $borderColor-notino-grayLight
 		.day-name
 			width: 120px
-		.day-interval
-			width: 85px
+		.day-intervals
+			display: flex
+			gap: 16px
+			.day-interval
+				width: 85px
 	@media (max-width: 1280px)
 		.day-row
 			.day-name
 				width: 100px
+	@media (max-width: 450px)
+		.day-row
+			gap: 0
+			.day-name
+				width: 100px
+		/*.day-row
+			padding: 8px 0
+			gap: 0
+			align-items: flex-start
+			.day-name
+				width: 200px
+			.day-intervals
+				gap: 0
+				flex-direction: column
+
 
 .noti-support-collapse
 	background: transparent
@@ -1051,3 +1084,6 @@ span.ant-tag
 
 	@media (max-width: 1280px)
 		max-width: 416px
+		width: 100%
+	@media (max-width: 744px)
+		max-width: 100%

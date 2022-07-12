@@ -51,10 +51,25 @@ const Routes: FC = (props) => {
 	return (
 		<AppInit>
 			<Switch>
-				<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} />
-				<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} />
-				<PublicRoute {...props} exact path={t('paths:contact')} component={ContactPage} layout={PublicLayout} />
-				<CreatePasswordRoute exact path={t('paths:reset-password')} translatePathKey={t('paths:reset-password')} component={CreatePasswordPage} layout={PublicLayout} />
+				<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} className={'noti-login-page'} />
+				<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} className={'noti-login-page'} />
+				<PublicRoute
+					{...props}
+					exact
+					path={t('paths:contact')}
+					component={ContactPage}
+					layout={PublicLayout}
+					redirectLoggedInUser={false}
+					className={'noti-support-contact-page'}
+				/>
+				<CreatePasswordRoute
+					exact
+					path={t('paths:reset-password')}
+					translatePathKey={t('paths:reset-password')}
+					component={CreatePasswordPage}
+					layout={PublicLayout}
+					className={'noti-login-page'}
+				/>
 				<AuthRoute
 					{...props}
 					exact

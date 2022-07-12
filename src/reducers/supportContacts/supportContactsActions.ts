@@ -1,6 +1,5 @@
-/* eslint-disable import/no-cycle */
 import { isEmpty } from 'lodash'
-
+/* eslint-disable import/no-cycle */
 // types
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
@@ -8,14 +7,17 @@ import { IResetStore } from '../generalTypes'
 // utils
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
-import { SUPPORT_CONTACTS, SUPPORT_CONTACT } from './supportContactsTypes'
-import { getTranslatedCountriesLabels } from '../../utils/enums'
+import { SUPPORT_CONTACTS, SUPPORT_CONTACT, SET_SUPPORT_CONTACT_OPTIONS } from './supportContactsTypes'
+import { LANGUAGE, DEFAULT_LANGUAGE } from '../../utils/enums'
 
 // assets
 import SK_Flag from '../../assets/flags/SK.svg'
-import EN_Flag from '../../assets/flags/GB.svg'
+import CZ_Flag from '../../assets/flags/CZ.svg'
+import RO_Flag from '../../assets/flags/RO.svg'
+import HU_Flag from '../../assets/flags/HU.svg'
+import i18n from '../../utils/i18n'
 
-export type ISupportContactsActions = IResetStore | IGetSupportContacts | IGetSupportContact
+export type ISupportContactsActions = IResetStore | IGetSupportContacts | IGetSupportContact | IGetSupportContactsOptions
 
 interface IGetSupportContacts {
 	type: SUPPORT_CONTACTS
@@ -31,12 +33,21 @@ export interface IGetSupportContact {
 	payload: ISupportContactPayload
 }
 
+export interface IGetSupportContactsOptions {
+	type: typeof SET_SUPPORT_CONTACT_OPTIONS
+	payload: ISupportContactOptionsPayload
+}
+
 export interface ISupportContactsTableData {
 	key: number
 	supportContactID: number
 	country: {
-		name: string
+		nameLocalizations: {
+			language: string
+			value: string
+		}[]
 		flag: string
+		code: string
 	}
 	city: string
 	street: string
@@ -61,6 +72,10 @@ export interface ISupportContactsPayload {
 // TODO: interface
 export interface ISupportContactPayload {
 	data: {} | null
+}
+
+export interface ISupportContactOptionsPayload {
+	options: ISupportContactOption[]
 }
 
 const mockupData = {
@@ -88,6 +103,14 @@ const mockupData = {
 					{
 						language: 'cz',
 						value: 'Slovenská Řěpublika'
+					},
+					{
+						language: 'hu',
+						value: 'Szlovák Köztársaság'
+					},
+					{
+						language: 'ro',
+						value: 'Republica Slovaca'
 					}
 				],
 				flag: SK_Flag as unknown as string,
@@ -108,19 +131,27 @@ const mockupData = {
 			},
 			country: {
 				code: 'CZ',
-				name: 'Slovenská Republika',
+				name: 'Česká Republika',
 				nameLocalizations: [
 					{
 						language: 'sk',
-						value: 'Slovenská Republika'
+						value: 'Česká Republika'
 					},
 					{
 						language: 'cz',
-						value: 'Slovenská Řěpublika'
+						value: 'Česká Řěpublika'
+					},
+					{
+						language: 'hu',
+						value: 'Cseh Köztársaság'
+					},
+					{
+						language: 'ro',
+						value: 'Republica Cehă'
 					}
 				],
-				flag: SK_Flag as unknown as string,
-				phonePrefix: '+421'
+				flag: CZ_Flag as unknown as string,
+				phonePrefix: '+420'
 			}
 		},
 		{
@@ -137,18 +168,26 @@ const mockupData = {
 			},
 			country: {
 				code: 'RO',
-				name: 'Slovenská Republika',
+				name: 'Rumunsko',
 				nameLocalizations: [
 					{
 						language: 'sk',
-						value: 'Slovenská Republika'
+						value: 'Rumunsko'
 					},
 					{
 						language: 'cz',
-						value: 'Slovenská Řěpublika'
+						value: 'Řumunsko'
+					},
+					{
+						language: 'hu',
+						value: 'Románia'
+					},
+					{
+						language: 'ro',
+						value: 'România'
 					}
 				],
-				flag: EN_Flag as unknown as string,
+				flag: RO_Flag as unknown as string,
 				phonePrefix: '+421'
 			}
 		},
@@ -166,18 +205,26 @@ const mockupData = {
 			},
 			country: {
 				code: 'HU',
-				name: 'Slovenská Republika',
+				name: 'Maďarsko',
 				nameLocalizations: [
 					{
 						language: 'sk',
-						value: 'Slovenská Republika'
+						value: 'Maďarsko'
 					},
 					{
 						language: 'cz',
-						value: 'Slovenská Řěpublika'
+						value: 'Maďarsko'
+					},
+					{
+						language: 'hu',
+						value: 'Magyarország'
+					},
+					{
+						language: 'ro',
+						value: 'Ungaria'
 					}
 				],
-				flag: EN_Flag as unknown as string,
+				flag: HU_Flag as unknown as string,
 				phonePrefix: '+421'
 			}
 		}
@@ -217,6 +264,14 @@ const mockupDataDetail = {
 				{
 					language: 'cz',
 					value: 'Slovenská Řěpublika'
+				},
+				{
+					language: 'hu',
+					value: 'Szlovák Köztársaság'
+				},
+				{
+					language: 'ro',
+					value: 'Republica Slovaca'
 				}
 			],
 			flag: SK_Flag as unknown as string,
@@ -313,6 +368,33 @@ const mockupDataDetail = {
 	}
 }
 
+// TODO: remove any when BE is done
+export const getSupportContactsOptions =
+	(currentLng = DEFAULT_LANGUAGE, data: any): ThunkResult<Promise<ISupportContactOptionsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ISupportContactOptionsPayload
+
+		const options: ISupportContactOption[] = data?.supportContacts?.map((item: any) => {
+			const countryCode = item.country.code
+			const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === currentLng)
+
+			return {
+				key: countryCode,
+				label: countryTranslation?.value || countryCode,
+				value: countryCode,
+				flag: item.country.flag
+			}
+		})
+
+		payload = {
+			options
+		}
+
+		dispatch({ type: SET_SUPPORT_CONTACT_OPTIONS, payload })
+
+		return payload
+	}
+
 export const getSupportContacts =
 	(queryParams?: IGetSupportContactsQueryParams): ThunkResult<Promise<ISupportContactsPayload>> =>
 	async (dispatch) => {
@@ -328,8 +410,9 @@ export const getSupportContacts =
 					supportContactID: item.id,
 					// TODO: selecet name based on current language
 					country: {
-						name: item.country?.name || '-',
-						flag: item.country?.flag
+						nameLocalizations: item.country?.nameLocalizations,
+						flag: item.country?.flag,
+						code: item.country?.code
 					},
 					city: item.address?.city || '-',
 					street: item.address?.street || '-',
@@ -339,22 +422,7 @@ export const getSupportContacts =
 				return tableItem
 			})
 
-			const countriesLabels = getTranslatedCountriesLabels()
-			// prepare countries list with translated label
-			const options: ISupportContactOption[] = data.supportContacts.map((item) => {
-				const countryCode = item.country.code
-				const countryLabel: string | null = countriesLabels?.[countryCode.toLocaleLowerCase()]
-				if (isEmpty(countryLabel)) {
-					// eslint-disable-next-line no-console
-					console.error(`Missing translation for country with code ${countryCode}!`)
-				}
-				return {
-					key: countryCode,
-					label: countryLabel || countryCode,
-					value: countryCode,
-					flag: item.country.flag
-				}
-			})
+			const { options } = await dispatch(getSupportContactsOptions((i18n.language as LANGUAGE) || DEFAULT_LANGUAGE, data))
 
 			payload = {
 				data,

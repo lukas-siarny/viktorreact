@@ -702,3 +702,9 @@ export const getCountryPrefix = (countriesData: EnumerationData | null, countryC
 	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode.toLocaleLowerCase())
 	return country?.phonePrefix
 }
+
+// TODO: remove any when BE is
+export const getSupportContactCountryName = (nameLocalizations: { value: string; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
+	const countryTranslation = nameLocalizations?.find((translation: any) => translation.language === currentLng)
+	return countryTranslation?.value
+}

@@ -1,22 +1,23 @@
 import React, { FC, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Row, Select, Collapse } from 'antd'
-
-// components
+import { Row, Select, Collapse, Spin } from 'antd'
 
 // interfaces
 import { isEmpty } from 'lodash'
 
-// utils
-import { getSupportContact, getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
+// reducers
+import { getSupportContact, getSupportContacts, getSupportContactsOptions } from '../../reducers/supportContacts/supportContactsActions'
 import { RootState } from '../../reducers'
+
+// utils
+import { getCountryPrefix, getSupportContactCountryName, translateDayName } from '../../utils/helper'
+import { DAYS, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
+import i18n from '../../utils/i18n'
 
 // assets
 import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../assets/icons/clock-icon.svg'
-import { getCountryPrefix, translateDayName } from '../../utils/helper'
-import { DAYS, ENUMERATIONS_KEYS } from '../../utils/enums'
 
 type Props = {}
 
@@ -31,41 +32,57 @@ const ContactPage: FC<Props> = () => {
 		dispatch(getSupportContact(value))
 	}
 
-	const supportContactsOptions = useSelector((state: RootState) => state.supportContacts.supportContacts.options)
+	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	// TODO: remove any when BE is done
-	const { isLoading, data } = useSelector((state: RootState) => state.supportContacts.supportContact) as any
-	const selectedContact = data?.supportContact
+	const supportContact = useSelector((state: RootState) => state.supportContacts.supportContact) as any
+	const selectedContact = supportContact?.data?.supportContact
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 
+	const currentLng = i18n.language
+
 	useEffect(() => {
-		dispatch(getSupportContacts())
-		dispatch(getSupportContact(1))
+		;(async () => {
+			// TODO: remove any when BE is done
+			const supportContactsData = (await dispatch(getSupportContacts())) as any
+			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support: any) => support.country.code.toLowerCase() === i18n.language?.toLocaleLowerCase())
+
+			if (currentLngCountry?.id) {
+				dispatch(getSupportContact(currentLngCountry?.id))
+			}
+		})()
 	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(getSupportContactsOptions(currentLng as LANGUAGE, supportContacts?.data))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentLng, dispatch, supportContacts?.data])
 
 	return (
 		<div className='w-full noti-support-contact-wrapper'>
-			<h3 className={'text-center'}>{t('loc:Pomoc a podpora')}</h3>
-			<div className={'ant-form-item'}>
-				<label htmlFor={'noti-country-select'} className={'block'}>
-					{t('loc:Zvoľte si krajinu')}
-				</label>
-				<Select
-					id={'noti-country-select'}
-					onChange={handleCountryChange}
-					value={selectedContact?.country.code}
-					className={'noti-select-input max-w-sm'}
-					size={'large'}
-					dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
-				>
-					{supportContactsOptions?.map((option: any) => (
-						<Option value={option.value} key={option.key}>
-							<div className='flex items-center'>
-								<img className='noti-flag w-6 mr-1 rounded' src={option.flag} alt={option.value} />
-								{option.label}
-							</div>
-						</Option>
-					))}
-				</Select>
+			<Spin spinning={supportContacts?.isLoading}>
+				<h3 className={'text-center'}>{t('loc:Pomoc a podpora')}</h3>
+				<div className={'ant-form-item'}>
+					<label htmlFor={'noti-country-select'} className={'block'}>
+						{t('loc:Zvoľte si krajinu')}
+					</label>
+					<Select
+						id={'noti-country-select'}
+						onChange={handleCountryChange}
+						value={selectedContact?.country.code}
+						className={'noti-select-input max-w-sm'}
+						size={'large'}
+						dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
+					>
+						{supportContacts?.options?.map((option: any) => (
+							<Option value={option.value} key={option.key}>
+								<div className='flex items-center'>
+									<img className='noti-flag w-6 mr-1 rounded' src={option.flag} alt={option.value} />
+									{option.label}
+								</div>
+							</Option>
+						))}
+					</Select>
+				</div>
 				<Collapse className={'noti-support-collapse mt-8'} bordered={false} defaultActiveKey={1} accordion>
 					<Panel
 						header={
@@ -106,8 +123,7 @@ const ContactPage: FC<Props> = () => {
 										)}
 										{selectedContact?.address?.zipCode} {selectedContact?.address?.city}
 										<br />
-										{/* country translations */}
-										{selectedContact?.country?.name}
+										{getSupportContactCountryName(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) || selectedContact?.country.code}
 									</li>
 									{selectedContact?.note && <li className={'note-list-item'}>{selectedContact?.note}</li>}
 								</ul>
@@ -130,19 +146,23 @@ const ContactPage: FC<Props> = () => {
 								return (
 									<div className={'day-row'}>
 										<span className={'day-name'}>{translateDayName(day)}</span>
-										{!dayFromData || isEmpty(dayFromData.timeRanges) ? (
-											<span className={'day-interval'}>{t('loc:Zatvorené')}</span>
-										) : (
-											// TODO: remove any when BE is done
-											dayFromData.timeRanges.map((timeRange: any) => <span className={'day-interval'}>{`${timeRange.timeFrom}-${timeRange.timeTo}`}</span>)
-										)}
+										<div className={'day-intervals'}>
+											{!dayFromData || isEmpty(dayFromData.timeRanges) ? (
+												<span className={'day-interval'}>{t('loc:Zatvorené')}</span>
+											) : (
+												// TODO: remove any when BE is done
+												dayFromData.timeRanges.map((timeRange: any) => (
+													<span className={'day-interval'}>{`${timeRange.timeFrom}-${timeRange.timeTo}`}</span>
+												))
+											)}
+										</div>
 									</div>
 								)
 							})}
 						</div>
 					</Panel>
 				</Collapse>
-			</div>
+			</Spin>
 		</div>
 	)
 }

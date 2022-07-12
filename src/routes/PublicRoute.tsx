@@ -9,13 +9,18 @@ type Props = RouteProps & {
 	layout: any
 	translatePathKey?: string
 	component: any
+	redirectLoggedInUser?: boolean
+	className?: string
 }
 
 const PublicRoute: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	if (isLoggedIn()) {
+	const { redirectLoggedInUser = true } = props
+
+	if (isLoggedIn() && redirectLoggedInUser) {
 		return <Redirect to={t('paths:index')} />
 	}
+
 	return <BaseRoute {...props} />
 }
 

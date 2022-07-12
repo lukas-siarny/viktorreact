@@ -57,6 +57,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
 			</Menu.Item>
+			<Menu.Item key='support' onClick={() => history.push(t('paths:contact'))} icon={<HelpIcon />}>
+				{t('loc:Podpora')}
+			</Menu.Item>
 			<LanguagePicker asMenuItem />
 			<Menu.Item key='logOut' onClick={() => dispatch(logOutUser())} icon={<LogOutIcon />}>
 				{t('loc:Odhlásiť')}

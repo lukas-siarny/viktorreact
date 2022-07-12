@@ -1,8 +1,9 @@
 import React from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Form, Row } from 'antd'
+import { Button, Col, Form, Row, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
+import cx from 'classnames'
 
 // components
 import { useSelector } from 'react-redux'
@@ -35,6 +36,10 @@ const SupportContactsFilter = (props: Props) => {
 	const [t] = useTranslation()
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore.countries_filter_options)
+	// TODO: remove any when BE is done
+	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts) as any
+
+	const hasEveryCountrSupportContact = supportContacts?.data?.supportContacts?.length === countries?.data?.length
 
 	const countryCodeOptionRender = (itemData: any) => {
 		const { value, label, flag } = itemData
@@ -45,6 +50,18 @@ const SupportContactsFilter = (props: Props) => {
 			</div>
 		)
 	}
+
+	const buttonAdd = (
+		<Button
+			onClick={() => createSupportContact()}
+			type='primary'
+			htmlType='button'
+			className={cx('noti-btn w-full', { 'pointer-events-none': hasEveryCountrSupportContact, 'opacity-50': hasEveryCountrSupportContact })}
+			icon={<PlusIcon />}
+		>
+			{t('loc:Pridať podporu')}
+		</Button>
+	)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
@@ -66,9 +83,13 @@ const SupportContactsFilter = (props: Props) => {
 						/>
 					</Col>
 					<Col>
-						<Button onClick={() => createSupportContact()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
-							{t('loc:Pridať centrum')}
-						</Button>
+						{hasEveryCountrSupportContact ? (
+							<Tooltip title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu a pre všetky už existujú.')}>
+								<div>{buttonAdd}</div>
+							</Tooltip>
+						) : (
+							buttonAdd
+						)}
 					</Col>
 				</Row>
 			</Filters>

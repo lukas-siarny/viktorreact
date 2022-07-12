@@ -14,7 +14,7 @@ import SupportContactsFilter, { ISupportContactsFilter } from './components/Supp
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, LANGUAGE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { history } from '../../utils/history'
 
 // reducers
@@ -25,6 +25,8 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // assets
 import { getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
+import { getSupportContactCountryName } from '../../utils/helper'
+import i18n from '../../utils/i18n'
 
 type Columns = ColumnsType<any>
 
@@ -60,12 +62,15 @@ const SupportContactsPage = () => {
 			key: 'country',
 			sorter: false,
 			width: '30%',
-			render: (value) => (
-				<div className={'flex items-center gap-2'}>
-					{value.flag && <img src={value.flag} alt={value.name} width={24} />}
-					<span className={'truncate inline-block'}>{value.name}</span>
-				</div>
-			)
+			render: (value) => {
+				const name = getSupportContactCountryName(value.nameLocalizations, i18n.language as LANGUAGE) || value.code
+				return (
+					<div className={'flex items-center gap-2'}>
+						{value.flag && <img src={value.flag} alt={name} width={24} />}
+						<span className={'truncate inline-block'}>{name}</span>
+					</div>
+				)
+			}
 		},
 		{
 			title: t('loc:Mesto'),

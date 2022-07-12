@@ -73,19 +73,22 @@ const { SubMenu } = Menu
 type Props = {
 	className?: string
 	asMenuItem?: boolean
+	reloadPageAfterChange?: boolean
 }
 
 const LanguagePicker: FC<Props> = (props) => {
-	const { className, asMenuItem } = props
+	const { className, asMenuItem, reloadPageAfterChange = true } = props
 	const isSmallDevice = useMedia(['(max-width: 744px)'], [true], false)
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const options = countries?.enumerationsOptions || Object.values(LANGUAGE).map((value) => ({ label: value, value, icon: LOCALES[value].icon }))
 
 	const handleLanguageChange = (value: any) => {
-		// reload page after change language
-		// eslint-disable-next-line no-restricted-globals
-		location.reload()
+		if (reloadPageAfterChange) {
+			// reload page after change language
+			// eslint-disable-next-line no-restricted-globals
+			location.reload()
+		}
 		i18next.changeLanguage(value)
 	}
 

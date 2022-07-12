@@ -106,6 +106,10 @@ export interface ISalonForm {
 	companyContactPerson: any
 	companyInfo: any
 	description: string
+	categoryIDs: [
+		number,
+	...number[]
+	]
 }
 
 export interface IServiceForm {

@@ -22,6 +22,7 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERM
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
@@ -303,7 +304,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								uid: salonData?.logo?.id
 							}
 					  ]
-					: null
+					: null,
+				categoryIDs: map(salonData?.categories, (categorie) => ({ label: categorie.name, value: categorie.id }))
 			}
 
 			if (salonData?.publishedSalonData) {
@@ -336,6 +338,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	// init forms
 	useEffect(() => {
 		fetchData(salon.data)
+		dispatch(getCategories())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salon])
 
@@ -367,7 +370,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				payByCard: data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
-				companyInfo: data.companyInfo
+				companyInfo: data.companyInfo,
+				categoryIDs: data.categoryIDs
 			}
 
 			if (salonID > 0) {

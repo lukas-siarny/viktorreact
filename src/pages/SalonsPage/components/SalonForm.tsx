@@ -42,6 +42,7 @@ import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
+import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {
 	openNoteModal: Function
@@ -66,6 +67,7 @@ const compareAddress = (oldAddress: SalonAddress, newAddress: SalonAddress): boo
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, change, openNoteModal, salonID, disabledForm } = props
+	const categories = useSelector((state: RootState) => state.categories.categories)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const aboutUsFirstPlaceholder = t('loc:Zadajte základné informácie o salóne')
@@ -168,6 +170,17 @@ const SalonForm: FC<Props> = (props) => {
 							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
 						/>
 						<Field
+							component={SelectField}
+							options={categories.enumerationsOptions}
+							label={t('loc:Odvetvie')}
+							placeholder={t('loc:Vyberte odvetvie')}
+							name={'categoryIDs'}
+							size={'large'}
+							loading={categories.isLoading}
+							mode={'multiple'}
+							required
+						/>
+						<Field
 							component={ImgUploadField}
 							name={'logo'}
 							label={t('loc:Logo')}
@@ -226,7 +239,8 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						{!compareAddress(formValues?.publishedSalonData?.address, formValues?.address) && formValues?.publishedSalonData?.address && (
 							<Compare
-								oldValue={
+								equal={compareAddress(formValues?.publishedSalonData?.address, formValues?.address)}
+								oldFormField={
 									<Col xl={6} md={9}>
 										<div>
 											{t('loc:Mesto')}
@@ -248,7 +262,7 @@ const SalonForm: FC<Props> = (props) => {
 										</div>
 									</Col>
 								}
-								newValue={
+								newFormField={
 									<Col xl={6} md={9}>
 										<div>
 											{t('loc:Mesto')}

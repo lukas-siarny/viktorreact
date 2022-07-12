@@ -16,7 +16,7 @@ import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 import SalonsImportForm from './components/SalonsImportForm'
 
 // utils
-import Permissions, { withPermissions, checkPermissions } from '../../utils/Permissions'
+import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
@@ -241,22 +241,7 @@ const SalonsPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Permissions
-							allowed={permissions}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<SalonsFilter
-									createSalon={() => {
-										if (hasPermission) {
-											history.push(t('paths:salons/create'))
-										} else {
-											openForbiddenModal()
-										}
-									}}
-									onSubmit={handleSubmit}
-									openSalonImportsModal={() => setSalonImportsModalVisible(true)}
-								/>
-							)}
-						/>
+						<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}

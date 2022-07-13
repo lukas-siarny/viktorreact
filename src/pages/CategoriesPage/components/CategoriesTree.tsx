@@ -16,14 +16,12 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, LANGUAGE } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
 import { convertCountriesToLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
-
-const DEFAULT_NAME_LANGUAGE = LANGUAGE.EN
 
 type TreeCategories = {
 	title?: ReactElement
@@ -57,7 +55,7 @@ const CategoriesTree = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_NAME_LANGUAGE), [countries])
+	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_LANGUAGE), [countries])
 
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
@@ -84,7 +82,7 @@ const CategoriesTree = () => {
 				name,
 				parentId,
 				orderIndex: index,
-				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
+				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_LANGUAGE),
 				level,
 				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
 				deletedAt,

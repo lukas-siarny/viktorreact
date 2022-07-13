@@ -3,6 +3,7 @@ import { Select, Menu, Row } from 'antd'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Icon from '@ant-design/icons'
 import i18next from 'i18next'
+import cx from 'classnames'
 
 // utils
 import sk_SK from 'antd/lib/locale-provider/sk_SK'
@@ -77,9 +78,9 @@ type Props = {
 
 /*
 	NOT-1084: change of the language picker options:
-	- picker options were generated from roll-out countires data from BE
+	- picker options were fetched from roll-out countires BE endpoint
 	- but supported language mutations are not the same as roll-out countries
-	- locales are hardcoded on FE, so now we use harcoded options as well
+	- we use harcoded options now, since locales are hardcoded on FE as well
 */
 const LanguagePicker: FC<Props> = (props) => {
 	const { className, asMenuItem } = props
@@ -144,7 +145,7 @@ const LanguagePicker: FC<Props> = (props) => {
 					<Select defaultValue={i18next.resolvedLanguage} onChange={handleLanguageChange} className={'noti-select-input'} dropdownClassName={'noti-select-dropdown'}>
 						{options?.map((option: any, index: number) => (
 							<Option value={option.value} key={index}>
-								<Row className={'justify-center items-center'}>
+								<Row className={cx('items-center', { 'justify-center': isSmallDevice })}>
 									{getLanguageFlag(option.value)}
 									{!isSmallDevice && option.label.toUpperCase()}
 								</Row>

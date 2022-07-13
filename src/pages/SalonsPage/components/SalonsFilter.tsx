@@ -71,13 +71,23 @@ const SalonsFilter = (props: Props) => {
 		<div className={'flex items-center gap-2'}>
 			<Permissions
 				allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
-				render={(hasPermission) =>
-					hasPermission && (
-						<Button onClick={() => openSalonImportsModal()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<UploadIcon />}>
-							{t('loc:Import dát')}
-						</Button>
-					)
-				}
+				render={(hasPermission, { openForbiddenModal }) => (
+					<Button
+						onClick={() => {
+							if (hasPermission) {
+								openSalonImportsModal()
+							} else {
+								openForbiddenModal()
+							}
+						}}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn w-full'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Import dát')}
+					</Button>
+				)}
 			/>
 			<Permissions
 				allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}

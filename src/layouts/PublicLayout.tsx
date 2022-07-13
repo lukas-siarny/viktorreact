@@ -33,7 +33,7 @@ const PublicLayout = (props: Props) => {
 
 							<div className='flex-auto relative'>
 								{props.children}
-								<LanguagePicker className='bottom-0 right-0 absolute mb-0' />
+								<LanguagePicker className='-bottom-1 right-0 absolute mb-0' />
 							</div>
 						</div>
 					</div>

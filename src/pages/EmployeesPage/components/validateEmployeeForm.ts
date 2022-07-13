@@ -44,18 +44,6 @@ export default (values: any) => {
 	if (values?.services) {
 		const servicesErrors: { [key: number]: any } = {}
 
-		/*
-			const serivcesErros = {
-				0: {
-					variableFrom: '',
-					variableTo: '',
-					emploeyyData: {
-
-					}
-				}
-			}
-		*/
-
 		values?.services?.forEach((service: any, index: number) => {
 			const employeeData: any = {}
 

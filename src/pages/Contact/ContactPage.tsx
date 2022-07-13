@@ -16,8 +16,8 @@ import { DAYS, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import i18n from '../../utils/i18n'
 
 // assets
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-2-icon.svg'
-import { ReactComponent as TimerIcon } from '../../assets/icons/clock-icon.svg'
+import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
+import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
 
 type Props = {}
 
@@ -62,7 +62,7 @@ const ContactPage: FC<Props> = () => {
 			<Spin spinning={supportContacts?.isLoading}>
 				<h3 className={'text-center'}>{t('loc:Pomoc a podpora')}</h3>
 				<div className={'ant-form-item'}>
-					<label htmlFor={'noti-country-select'} className={'block'}>
+					<label htmlFor={'noti-country-select'} className={'block font-bold'}>
 						{t('loc:Zvoľte si krajinu')}
 					</label>
 					<Select

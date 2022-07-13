@@ -30,7 +30,7 @@ const PublicLayout = (props: Props) => {
 		switch (size) {
 			case RESOLUTIONS.SM:
 				return (
-					<div className={cx(className, 'public-layout grid place-items-center h-screen w-screen bg-notino-grayLighter w-full mr-auto ml-auto')}>
+					<div className={cx(className, 'public-layout grid place-items-center h-screen w-screen bg-notino-grayLighter w-full mx-auto')}>
 						<div className='bg-notino-grayLighter flex flex-col items-center overflow-hidden w-full'>
 							<SmLogo className='mb-6' />
 

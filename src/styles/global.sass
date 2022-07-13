@@ -978,8 +978,10 @@ span.ant-tag
 
 .noti-support-contact-page
 	@media (max-width: 744px)
+		padding: 16px
 		max-width: 440px
-
+		> div
+			overflow: visible !important
 .noti-support-contact-wrapper
 	max-width: 640px
 	padding: 0 56px
@@ -993,7 +995,7 @@ span.ant-tag
 		padding: 0 40px
 	@media (max-width: 744px)
 		max-width: 100%
-		padding: 0 16px
+		padding: 0 0 64px 0
 		.ant-select
 			max-width: 100% !important
 
@@ -1040,6 +1042,7 @@ span.ant-tag
 			border-bottom: 1px solid $borderColor-notino-grayLight
 		.day-name
 			width: 120px
+			flex: 0 0 auto
 		.day-intervals
 			display: flex
 			gap: 16px
@@ -1049,20 +1052,19 @@ span.ant-tag
 		.day-row
 			.day-name
 				width: 100px
+	@media (max-width: 744px)
+		margin-bottom: 0
 	@media (max-width: 450px)
+		width: 100%
 		.day-row
-			gap: 0
-			.day-name
-				width: 100px
-		/*.day-row
-			padding: 8px 0
-			gap: 0
+			flex-direction: column
 			align-items: flex-start
+			gap: 0
+			padding: 4px 0
 			.day-name
-				width: 200px
+				font-weight: bold
 			.day-intervals
-				gap: 0
-				flex-direction: column
+				gap: 8px
 
 
 .noti-support-collapse

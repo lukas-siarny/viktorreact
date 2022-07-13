@@ -266,7 +266,7 @@ const CategoriesTree = () => {
 				// prepare body for request
 				body = {
 					...body,
-					parentID: droppedData.node.props.data.parentId,
+					parentID: droppedData.node.props.data.parentId || undefined,
 					orderIndex,
 					imageID: get(droppedData, 'dragNode.image.id')
 				}
@@ -285,14 +285,14 @@ const CategoriesTree = () => {
 		const cat: any | null = categories?.data
 		try {
 			let body: any = {
-				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,
+				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
 			}
 			if (formData.parentId >= 0) {
 				body = {
 					...body,
-					parentID: formData.parentId
+					parentID: formData.parentId || undefined
 				}
 			}
 			if (formData.id && formData.id >= 0) {
@@ -301,7 +301,6 @@ const CategoriesTree = () => {
 				await postReq('/api/b2b/admin/enums/categories/', null, body)
 			}
 			dispatch(getCategories())
-			setShowForm(false)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

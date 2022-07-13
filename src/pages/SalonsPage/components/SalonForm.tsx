@@ -227,7 +227,7 @@ const SalonForm: FC<Props> = (props) => {
 								className={'w-12/25'}
 								component={InputField}
 								label={t('loc:IČO')}
-								placeholder={t('loc:Zadajte ičo')}
+								placeholder={t('loc:Zadajte IČO')}
 								name={'companyInfo.businessID'}
 								size={'large'}
 								required

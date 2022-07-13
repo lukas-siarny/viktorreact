@@ -1,11 +1,11 @@
-import React, { FC, useMemo } from 'react'
+import React, { FC, useMemo, useState } from 'react'
 import { WrappedFieldProps } from 'redux-form'
 import i18next from 'i18next'
 import { get, isEmpty, isEqual } from 'lodash'
 import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
 import { Form, Upload, UploadProps } from 'antd'
-import { UploadFile } from 'antd/lib/upload/interface'
+import { RcFile, UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 
@@ -28,6 +28,8 @@ type Props = WrappedFieldProps &
 	UploadProps & {
 		pathToFolder: string
 		staticMode?: boolean
+		// handleUploadOutside - len zobrazi nahrate subory z pocitaca, o upload je potrebne sa postarat mimo komponentu
+		handleUploadOutside?: boolean
 		// /** Max file size in Bytes */
 		maxFileSize: number
 	}
@@ -62,19 +64,21 @@ const FileUploadField: FC<Props> = (props) => {
 		staticMode,
 		accept,
 		maxFileSize,
+		handleUploadOutside = true,
 		disabled
 	} = props
 
 	const [t] = useTranslation()
 	const signedUrl = get(input, 'value.url') ? `${get(input, 'value.url')}?t=${getAccessToken()}` : undefined
-	const fileList = input.value
-		? [
-				{
-					...input.value,
-					url: signedUrl
-				}
-		  ]
-		: []
+
+	const [loadedFile, setLoadedFile] = useState<string | RcFile | Blob>()
+
+	const getFileList = () => {
+		if (handleUploadOutside) {
+			return loadedFile ? [loadedFile] : []
+		}
+		return input.value ? [{ ...input.value, url: signedUrl }] : []
+	}
 
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
@@ -92,6 +96,10 @@ const FileUploadField: FC<Props> = (props) => {
 		if (info.file.status === 'uploading' || info.file.status === 'success') {
 			input.onChange(info.file)
 		}
+		if (info.file.status === 'removed') {
+			input.onChange(null)
+			setLoadedFile(undefined)
+		}
 		if (isEmpty(info.fileList)) {
 			input.onChange(null)
 		}
@@ -100,9 +108,9 @@ const FileUploadField: FC<Props> = (props) => {
 	const showUploadList = useMemo(
 		() => ({
 			showRemoveIcon: !staticMode,
-			showPreviewIcon: true
+			showPreviewIcon: !handleUploadOutside
 		}),
-		[staticMode]
+		[staticMode, handleUploadOutside]
 	)
 
 	const uploader = (
@@ -112,10 +120,17 @@ const FileUploadField: FC<Props> = (props) => {
 				Authorization: `Bearer ${getAccessToken()}`
 			}}
 			action={action}
+			customRequest={
+				handleUploadOutside
+					? (options) => {
+							setLoadedFile(options.file)
+							input.onChange(options.file)
+					  }
+					: undefined
+			}
 			accept={accept}
 			disabled={disabled}
 			data={{ pathToFolder }}
-			fileList={fileList}
 			onChange={onChange}
 			beforeUpload={(file) => {
 				if (file.size >= maxFileSize) {
@@ -126,12 +141,13 @@ const FileUploadField: FC<Props> = (props) => {
 				return true
 			}}
 			showUploadList={showUploadList}
+			fileList={getFileList()}
 			listType='picture-card'
 		>
 			{!staticMode && (
 				<div>
 					<UploadIcon className={`text-xl ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
-					<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
+					<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{handleUploadOutside ? t('loc:Vybrať') : t('loc:Nahrať')}</div>
 				</div>
 			)}
 		</Upload>

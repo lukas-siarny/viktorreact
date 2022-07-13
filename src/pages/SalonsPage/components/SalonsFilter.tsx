@@ -13,17 +13,20 @@ import { RootState } from '../../../reducers'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
+import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../../utils/enums'
+import { FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
+import Permissions from '../../../utils/Permissions'
+import { history } from '../../../utils/history'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {
-	createSalon: Function
+	openSalonImportsModal: () => void
 }
 
 export interface ISalonsFilter {
@@ -35,7 +38,7 @@ type Props = InjectedFormProps<ISalonsFilter, ComponentProps> & ComponentProps
 const fixLength100 = validationString(100)
 
 const SalonsFilter = (props: Props) => {
-	const { handleSubmit, createSalon } = props
+	const { handleSubmit, openSalonImportsModal } = props
 	const [t] = useTranslation()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
@@ -63,9 +66,48 @@ const SalonsFilter = (props: Props) => {
 	)
 
 	const customContent = (
-		<Button onClick={() => createSalon()} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
-			{t('loc:Pridať salón')}
-		</Button>
+		<div className={'flex items-center gap-2'}>
+			<Permissions
+				allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+				render={(hasPermission, { openForbiddenModal }) => (
+					<Button
+						onClick={() => {
+							if (hasPermission) {
+								openSalonImportsModal()
+							} else {
+								openForbiddenModal()
+							}
+						}}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn w-full'}
+						icon={<UploadIcon />}
+					>
+						{t('loc:Import dát')}
+					</Button>
+				)}
+			/>
+			<Permissions
+				allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}
+				render={(hasPermission, { openForbiddenModal }) => (
+					<Button
+						onClick={() => {
+							if (hasPermission) {
+								history.push(t('paths:salons/create'))
+							} else {
+								openForbiddenModal()
+							}
+						}}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn w-full'}
+						icon={<PlusIcon />}
+					>
+						{t('loc:Pridať salón')}
+					</Button>
+				)}
+			/>
+		</div>
 	)
 
 	const countryCodeOptionRender = (itemData: any) => {

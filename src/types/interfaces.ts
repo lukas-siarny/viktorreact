@@ -318,3 +318,7 @@ export interface INoteModal {
 	visible: boolean
 	onSubmit?: (formData: any) => void
 }
+
+export interface IDataUploadForm {
+	file: string | Blob
+}

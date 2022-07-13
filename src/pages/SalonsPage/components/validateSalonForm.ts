@@ -44,6 +44,10 @@ export default (values: any) => {
 		errors.email = i18next.t('loc:Toto pole je povinné')
 	}
 
+	if (!values?.categoryIDs) {
+		errors.categoryIDs = i18next.t('loc:Toto pole je povinné')
+	}
+
 	if (values?.email) {
 		if (values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
 			errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {

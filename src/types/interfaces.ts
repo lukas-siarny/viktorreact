@@ -1,4 +1,3 @@
-import { RcFile } from 'antd/lib/upload/interface'
 /* eslint-disable import/no-cycle */
 import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
@@ -107,6 +106,10 @@ export interface ISalonForm {
 	companyContactPerson: any
 	companyInfo: any
 	description: string
+	categoryIDs: [
+		number,
+	...number[]
+	]
 }
 
 export interface IServiceForm {
@@ -198,6 +201,10 @@ export interface IStructuredAddress {
 	city: string | null
 	country: string | null
 	houseNumber: string | null
+}
+
+export interface INoteForm {
+	note: string
 }
 
 export interface IOpenHoursNoteForm {
@@ -303,6 +310,13 @@ export interface IPermissions {
 export interface ICurrency {
 	code: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['code']
 	symbol: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['symbol']
+}
+
+export interface INoteModal {
+	title: string
+	fieldPlaceholderText: string
+	visible: boolean
+	onSubmit?: (formData: any) => void
 }
 
 export interface IDataUploadForm {

@@ -158,11 +158,25 @@ const SalonsPage = () => {
 			sorter: false,
 			width: '8%',
 			render: (value) =>
-				value ? (
+				value && (
 					<div className={'flex justify-start'}>
 						<CircleCheckIcon width={20} height={20} />
 					</div>
-				) : null
+				)
+		},
+		{
+			title: t('loc:Na schválenie'),
+			dataIndex: 'pendingPublication',
+			key: 'pendingPublication',
+			ellipsis: true,
+			sorter: false,
+			width: '9%',
+			render: (value, record) =>
+				value && (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
+					</div>
+				)
 		},
 		{
 			title: t('loc:Publikovaný'),
@@ -172,25 +186,11 @@ const SalonsPage = () => {
 			sorter: false,
 			width: '8%',
 			render: (value, record) =>
-				value ? (
+				value && (
 					<div className={'flex justify-start'}>
 						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
 					</div>
-				) : null
-		},
-		{
-			title: t('loc:Viditeľný'),
-			dataIndex: 'isVisible',
-			key: 'isVisible',
-			ellipsis: true,
-			sorter: false,
-			width: '8%',
-			render: (value, record) =>
-				value ? (
-					<div className={'flex justify-start'}>
-						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
-					</div>
-				) : null
+				)
 		},
 		{
 			title: t('loc:Vyplnenia profilu'),

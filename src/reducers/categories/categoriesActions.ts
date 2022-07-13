@@ -39,13 +39,13 @@ export const getCategories =
 				enumerationsOptions = map(data?.categories, (item) => ({
 					key: `Cat_${get(item, 'id')}`,
 					label: get(item, 'name') as string,
-					value: `${get(item, 'id')}`
+					value: get(item, 'id')
 				}))
 			} else {
 				enumerationsOptions = flattenTree(data?.categories, (item, level) => ({
 					key: `Cat_${get(item, 'id')}`,
 					label: get(item, 'name') as string,
-					value: `${get(item, 'id')}`,
+					value: get(item, 'id'),
 					level
 				}))
 			}

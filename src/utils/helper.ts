@@ -578,12 +578,24 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 	const values = map(fileList, (file) => {
 		const fileData = filesData[get(file, 'uid')]
 
-		return {
+		let img = {
 			...file,
-			id: get(file, 'id') || fileData?.id,
-			url: get(file, 'url') || fileData?.path,
-			signedUrl: fileData?.signedUrl
+			url: get(file, 'url') || fileData?.path
 		}
+
+		if (get(file, 'id') || fileData?.id) {
+			img = {
+				...img,
+				id: get(file, 'id') || fileData?.id
+			}
+		}
+		if (fileData?.signedUrl) {
+			img = {
+				...img,
+				signedUrl: fileData?.signedUrl
+			}
+		}
+		return img
 	})
 	return values
 }

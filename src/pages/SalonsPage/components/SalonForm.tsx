@@ -321,7 +321,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
-						{salonID && (
+						{!!salonID && (
 							<Permissions
 								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
 								render={(hasPermission, { openForbiddenModal }) => (

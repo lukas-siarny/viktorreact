@@ -87,6 +87,7 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:salons/create')}
 					layout={MainLayout}
 					page={PAGE.SALONS}
+					salonID={0}
 				/>
 				<Route {...props} path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })} component={SalonSubRoutes} />
 

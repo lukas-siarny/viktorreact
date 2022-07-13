@@ -55,13 +55,7 @@ type SalonAddress = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['a
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 
 const compareAddress = (oldAddress: SalonAddress, newAddress: SalonAddress): boolean => {
-	return (
-		oldAddress?.street === newAddress?.street &&
-		oldAddress?.streetNumber === newAddress?.streetNumber &&
-		oldAddress?.city === newAddress?.city &&
-		oldAddress?.zipCode === newAddress?.zipCode &&
-		oldAddress?.countryCode === newAddress?.countryCode
-	)
+	return JSON.stringify(oldAddress) === JSON.stringify(newAddress)
 }
 
 const SalonForm: FC<Props> = (props) => {

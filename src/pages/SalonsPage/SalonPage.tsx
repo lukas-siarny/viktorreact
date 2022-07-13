@@ -598,7 +598,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 									block
 									size={'middle'}
 									className={'noti-btn m-regular ml-2 w-1/3'}
-									onClick={() => sendConfirmationRequest()}
+									onClick={sendConfirmationRequest}
 									disabled={submitting || deletedSalon}
 									loading={submitting}
 								>

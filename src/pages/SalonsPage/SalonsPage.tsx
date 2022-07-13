@@ -14,6 +14,7 @@ import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 import SalonsImportForm from './components/SalonsImportForm'
+import UploadSuccess from './components/UploadSuccess'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
@@ -34,13 +35,10 @@ import { IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import UploadSuccess from './components/UploadSuccess'
 
 type Columns = ColumnsType<any>
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
-
-const PROGRESS_PERCENTAGE = 33
 
 const SalonsPage = () => {
 	const [t] = useTranslation()
@@ -203,12 +201,7 @@ const SalonsPage = () => {
 			// NOTE: sort by fillingProgressSalon when BE is done
 			/* sorter: true,
 			sortOrder: setOrder(query.order, 'fillingProgressSalon'), */
-			render: (value, record) => {
-				const progressVariables = [Number(value), Number(record.fillingProgressServices), Number(record.fillingProgressCompany)]
-				// 1% 34%, 67%, 100%
-				const result = progressVariables.reduce((a, b) => a + b, 0) * PROGRESS_PERCENTAGE + 1
-				return <Progress className='w-4/5' percent={result} showInfo={false} strokeColor={'#000'} />
-			}
+			render: (value) => <Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
 		},
 		{
 			title: t('loc:Vytvorené'),

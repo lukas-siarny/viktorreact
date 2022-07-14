@@ -63,12 +63,14 @@ pipelines:
           script:
             # push source maps to sentry service
             - HOST=uatServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+            # remove source maps from bundle build
+            - find build/static/js/ -name "*.map" -type f -delete
+          artifacts:
+            - build/**
       - step:
           name: Build and push docker image
           image: amazon/aws-cli
           script:
-            # remove source maps from bundle build
-            - find build/static/js/ -name "*.map" -type f -delete
             - export AWS_ECR_NAME=809210427750.dkr.ecr.eu-central-1.amazonaws.com
             - docker build -t $AWS_ECR_NAME/notino-b2b-web:uat -f docker/uat/Dockerfile.web .
             - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR_NAME

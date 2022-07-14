@@ -82,9 +82,9 @@ const TextareaField = (props: Props) => {
 
 	const lettersCount = useMemo(() => {
 		return (
-			<Row className={'justify-between w-full pr-2'}>
+			<Row className={'justify-between w-full pr-2 items-end'}>
 				<span>{label}</span>
-				<i className='xs-regular'>{`${input.value.length}/${maxLength}`}</i>
+				<i className='xs-regular mb-1'>{`${input.value.length}/${maxLength}`}</i>
 			</Row>
 		)
 	}, [maxLength, input, label])

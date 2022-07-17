@@ -42,6 +42,11 @@ export interface ILoginForm {
 
 export interface IInviteEmployeeForm {
 	email: string
+	roleID: number
+}
+
+export interface IEditEmployeeRoleForm {
+	roleID: number
 }
 
 export interface ICreateUserForm {
@@ -101,6 +106,10 @@ export interface ISalonForm {
 	companyContactPerson: any
 	companyInfo: any
 	description: string
+	categoryIDs: [
+		number,
+	...number[]
+	]
 }
 
 export interface IServiceForm {
@@ -126,7 +135,7 @@ export interface ISupportContactForm {
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
-	country: string
+	countryCode: string
 	zipCode: string
 	city: string
 	street: string
@@ -209,6 +218,10 @@ export interface IStructuredAddress {
 	houseNumber: string | null
 }
 
+export interface INoteForm {
+	note: string
+}
+
 export interface IOpenHoursNoteForm {
 	hoursNote: {
 		note: string
@@ -247,6 +260,7 @@ export interface IEmployeeForm {
 	phone?: string
 	services?: any
 	imageID?: number
+	role: number
 }
 
 export interface ILanguagePickerForm {
@@ -311,4 +325,15 @@ export interface IPermissions {
 export interface ICurrency {
 	code: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['code']
 	symbol: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['symbol']
+}
+
+export interface INoteModal {
+	title: string
+	fieldPlaceholderText: string
+	visible: boolean
+	onSubmit?: (formData: any) => void
+}
+
+export interface IDataUploadForm {
+	file: string | Blob
 }

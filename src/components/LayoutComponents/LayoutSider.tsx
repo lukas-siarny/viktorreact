@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import cx from 'classnames'
 
 // assets
@@ -49,6 +49,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
+	const location = useLocation()
 
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
@@ -57,7 +58,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
 			</Menu.Item>
-			<Menu.Item key='support' onClick={() => history.push(t('paths:contact'))} icon={<HelpIcon />}>
+			<Menu.Item key='support' onClick={() => history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })} icon={<HelpIcon />}>
 				{t('loc:Podpora')}
 			</Menu.Item>
 			<LanguagePicker asMenuItem />
@@ -116,7 +117,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											eventKey={PAGE.SUPPORT_CONTACTS}
 											key={PAGE.SUPPORT_CONTACTS}
 											onClick={() => history.push(t('paths:support-contacts'))}
-											// TODO: change icon
 											icon={<HelpIcon />}
 											// fix style issue due wrapped item into <Permission> component
 											className={cx({ 'ant-menu-item-selected': page === PAGE.SUPPORT_CONTACTS })}

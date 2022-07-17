@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 // atoms
-import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
 // interfaces
@@ -15,7 +14,7 @@ import { IInviteEmployeeForm } from '../../../types/interfaces'
 import { FORM } from '../../../utils/enums'
 
 // validate
-import validateInviteFrom from './validateInviteFrom'
+import validateEditRoleFrom from './validateEditRoleFrom'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -24,7 +23,7 @@ type ComponentProps = {}
 
 type Props = InjectedFormProps<IInviteEmployeeForm, ComponentProps> & ComponentProps
 
-const InviteForm: FC<Props> = (props) => {
+const EditRoleForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, submitting } = props
 
@@ -32,7 +31,6 @@ const InviteForm: FC<Props> = (props) => {
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
-			<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
 			<Field
 				component={SelectField}
 				options={roles?.data}
@@ -43,21 +41,20 @@ const InviteForm: FC<Props> = (props) => {
 				loading={roles?.isLoading}
 				required
 			/>
-			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required focused />
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
-				{t('loc:Odoslať email')}
+				{t('loc:Upraviť rolu')}
 			</Button>
 		</Form>
 	)
 }
 
 const form = reduxForm<IInviteEmployeeForm, ComponentProps>({
-	form: FORM.INVITE_EMPLOYEE,
+	form: FORM.EDIT_EMPLOYEE_ROLE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: false,
 	touchOnBlur: true,
 	destroyOnUnmount: true,
-	validate: validateInviteFrom
-})(InviteForm)
+	validate: validateEditRoleFrom
+})(EditRoleForm)
 
 export default form

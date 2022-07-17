@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash'
 /* eslint-disable import/no-cycle */
 // types
 import { ThunkResult } from '../index'
@@ -16,6 +15,7 @@ import CZ_Flag from '../../assets/flags/CZ.svg'
 import RO_Flag from '../../assets/flags/RO.svg'
 import HU_Flag from '../../assets/flags/HU.svg'
 import i18n from '../../utils/i18n'
+import { Paths } from '../../types/api'
 
 export type ISupportContactsActions = IResetStore | IGetSupportContacts | IGetSupportContact | IGetSupportContactsOptions
 
@@ -44,9 +44,9 @@ export interface ISupportContactsTableData {
 	country: {
 		nameLocalizations: {
 			language: string
-			value: string
+			value: string | null
 		}[]
-		flag: string
+		flag?: string
 		code: string
 	}
 	city: string
@@ -62,329 +62,37 @@ export interface ISupportContactOption {
 	flag?: string
 }
 
-// TODO: inteface
 export interface ISupportContactsPayload {
-	data: {} | null
+	data: Paths.GetApiB2BAdminEnumsSupportContacts.Responses.$200 | null
 	tableData?: ISupportContactsTableData[]
 	options: ISupportContactOption[]
 }
 
-// TODO: interface
 export interface ISupportContactPayload {
-	data: {} | null
+	data: Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200 | null
 }
 
 export interface ISupportContactOptionsPayload {
 	options: ISupportContactOption[]
 }
 
-const mockupData = {
-	supportContacts: [
-		{
-			id: 1,
-			emails: ['lukas.siarny@goodrequest.com', 'lukas.siarny@gmail.com'],
-			phones: ['+421 902 110 244'],
-			note: 'Poznamka',
-			address: {
-				countryCode: 'SK',
-				zipCode: '05201',
-				city: 'Spišská Nová Ves',
-				street: 'Brezová',
-				streetNumber: '22'
-			},
-			country: {
-				code: 'SK',
-				name: 'Slovenská Republika',
-				nameLocalizations: [
-					{
-						language: 'sk',
-						value: 'Slovenská Republika'
-					},
-					{
-						language: 'cz',
-						value: 'Slovenská Řěpublika'
-					},
-					{
-						language: 'hu',
-						value: 'Szlovák Köztársaság'
-					},
-					{
-						language: 'ro',
-						value: 'Republica Slovaca'
-					}
-				],
-				flag: SK_Flag as unknown as string,
-				phonePrefix: '+421'
-			}
-		},
-		{
-			id: 2,
-			emails: ['lukas.siarny@goodrequest.com', 'lukas.siarny@gmail.com'],
-			phones: ['+421 902 110 244'],
-			note: 'Poznamka',
-			address: {
-				countryCode: 'CZ',
-				zipCode: '05201',
-				city: 'Spišská Nová Ves',
-				street: 'Brezová',
-				streetNumber: '22'
-			},
-			country: {
-				code: 'CZ',
-				name: 'Česká Republika',
-				nameLocalizations: [
-					{
-						language: 'sk',
-						value: 'Česká Republika'
-					},
-					{
-						language: 'cz',
-						value: 'Česká Řěpublika'
-					},
-					{
-						language: 'hu',
-						value: 'Cseh Köztársaság'
-					},
-					{
-						language: 'ro',
-						value: 'Republica Cehă'
-					}
-				],
-				flag: CZ_Flag as unknown as string,
-				phonePrefix: '+420'
-			}
-		},
-		{
-			id: 3,
-			emails: ['lukas.siarny@goodrequest.com', 'lukas.siarny@gmail.com'],
-			phones: ['+421 902 110 244'],
-			note: 'Poznamka',
-			address: {
-				countryCode: 'RO',
-				zipCode: '05201',
-				city: 'Spišská Nová Ves',
-				street: 'Brezová',
-				streetNumber: '22'
-			},
-			country: {
-				code: 'RO',
-				name: 'Rumunsko',
-				nameLocalizations: [
-					{
-						language: 'sk',
-						value: 'Rumunsko'
-					},
-					{
-						language: 'cz',
-						value: 'Řumunsko'
-					},
-					{
-						language: 'hu',
-						value: 'Románia'
-					},
-					{
-						language: 'ro',
-						value: 'România'
-					}
-				],
-				flag: RO_Flag as unknown as string,
-				phonePrefix: '+421'
-			}
-		},
-		{
-			id: 4,
-			emails: ['lukas.siarny@goodrequest.com', 'lukas.siarny@gmail.com'],
-			phones: ['+421 902 110 244'],
-			note: 'Poznamka',
-			address: {
-				countryCode: 'HU',
-				zipCode: '05201',
-				city: 'Spišská Nová Ves',
-				street: 'Brezová',
-				streetNumber: '22'
-			},
-			country: {
-				code: 'HU',
-				name: 'Maďarsko',
-				nameLocalizations: [
-					{
-						language: 'sk',
-						value: 'Maďarsko'
-					},
-					{
-						language: 'cz',
-						value: 'Maďarsko'
-					},
-					{
-						language: 'hu',
-						value: 'Magyarország'
-					},
-					{
-						language: 'ro',
-						value: 'Ungaria'
-					}
-				],
-				flag: HU_Flag as unknown as string,
-				phonePrefix: '+421'
-			}
-		}
-	]
-}
-
-const mockupDataDetail = {
-	supportContact: {
-		id: 1,
-		emails: ['lukas.siarny@goodrequest.com', 'lukas.siarny@gmail.com'],
-		phones: [
-			{
-				phonePrefixCountryCode: 'SK',
-				phone: '902110244'
-			},
-			{
-				phonePrefixCountryCode: 'SK',
-				phone: '902111222'
-			}
-		],
-		note: 'Lorem Ipsum is simply dummy text of the printing',
-		address: {
-			countryCode: 'SK',
-			zipCode: '05201',
-			city: 'Spišská Nová Ves',
-			street: 'Brezová',
-			streetNumber: '22'
-		},
-		country: {
-			code: 'SK',
-			name: 'Slovenská Republika',
-			nameLocalizations: [
-				{
-					language: 'sk',
-					value: 'Slovenská Republika'
-				},
-				{
-					language: 'cz',
-					value: 'Slovenská Řěpublika'
-				},
-				{
-					language: 'hu',
-					value: 'Szlovák Köztársaság'
-				},
-				{
-					language: 'ro',
-					value: 'Republica Slovaca'
-				}
-			],
-			flag: SK_Flag as unknown as string,
-			phonePrefix: '+421'
-		},
-		openingHours: [
-			{
-				day: 'MONDAY',
-				timeRanges: [
-					{
-						timeTo: '13:00',
-						timeFrom: '07:00'
-					},
-					{
-						timeTo: '17:00',
-						timeFrom: '14:30'
-					},
-					{
-						timeTo: '18:00',
-						timeFrom: '22:30'
-					}
-				]
-			},
-			{
-				day: 'TUESDAY',
-				timeRanges: [
-					{
-						timeTo: '13:00',
-						timeFrom: '07:00'
-					},
-					{
-						timeTo: '17:00',
-						timeFrom: '14:30'
-					}
-				]
-			},
-			{
-				day: 'WEDNESDAY',
-				timeRanges: [
-					{
-						timeTo: '13:00',
-						timeFrom: '07:00'
-					},
-					{
-						timeTo: '17:00',
-						timeFrom: '14:30'
-					}
-				]
-			},
-			{
-				day: 'THURSDAY',
-				timeRanges: [
-					{
-						timeTo: '13:00',
-						timeFrom: '07:00'
-					},
-					{
-						timeTo: '17:00',
-						timeFrom: '14:30'
-					}
-				]
-			},
-			{
-				day: 'FRIDAY',
-				timeRanges: [
-					{
-						timeTo: '13:00',
-						timeFrom: '07:00'
-					},
-					{
-						timeTo: '17:00',
-						timeFrom: '14:30'
-					}
-				]
-			},
-			{
-				day: 'SATURDAY',
-				timeRanges: [
-					{
-						timeTo: '13:00',
-						timeFrom: '07:00'
-					},
-					{
-						timeTo: '17:00',
-						timeFrom: '14:30'
-					}
-				]
-			},
-			{
-				day: 'SUNDAY',
-				timeRanges: []
-			}
-		]
-	}
-}
-
-// TODO: remove any when BE is done
 export const getSupportContactsOptions =
-	(currentLng = DEFAULT_LANGUAGE, data: any): ThunkResult<Promise<ISupportContactOptionsPayload>> =>
+	(currentLng = DEFAULT_LANGUAGE, data: Paths.GetApiB2BAdminEnumsSupportContacts.Responses.$200 | null): ThunkResult<Promise<ISupportContactOptionsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISupportContactOptionsPayload
 
-		const options: ISupportContactOption[] = data?.supportContacts?.map((item: any) => {
-			const countryCode = item.country.code
-			const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === currentLng)
+		const options: ISupportContactOption[] =
+			data?.supportContacts?.map((item: any) => {
+				const countryCode = item.country.code
+				const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === currentLng)
 
-			return {
-				key: countryCode,
-				label: countryTranslation?.value || countryCode,
-				value: countryCode,
-				flag: item.country.flag
-			}
-		})
+				return {
+					key: item.id,
+					label: countryTranslation?.value || countryCode,
+					value: countryCode,
+					flag: item.country.flag
+				}
+			}) || []
 
 		payload = {
 			options
@@ -401,14 +109,11 @@ export const getSupportContacts =
 		let payload = {} as ISupportContactsPayload
 		try {
 			dispatch({ type: SUPPORT_CONTACTS.SUPPORT_CONTACTS_START })
-			// TODO: remove any when BE is done
-			/* const { data } = await getReq('/api/b2b/admin/enums/support-contacts' as any, { ...normalizeQueryParams(queryParams) } as any) */
-			const data = mockupData
+			const { data } = await getReq('/api/b2b/admin/enums/support-contacts/', { ...normalizeQueryParams(queryParams) })
 			const tableData: ISupportContactsTableData[] = data.supportContacts.map((item) => {
 				const tableItem = {
 					key: item.id,
 					supportContactID: item.id,
-					// TODO: selecet name based on current language
 					country: {
 						nameLocalizations: item.country?.nameLocalizations,
 						flag: item.country?.flag,
@@ -452,9 +157,7 @@ export const getSupportContact =
 
 		try {
 			dispatch({ type: SUPPORT_CONTACT.SUPPORT_CONTACT_START })
-			// TODO: remove any when BE is done
-			// const { data } = await getReq('/api/b2b/admin/enums/support-contacts/{supportContactID}' as any, { supportContactID } as any)
-			const data = mockupDataDetail
+			const { data } = await getReq('/api/b2b/admin/enums/support-contacts/{supportContactID}', { supportContactID })
 
 			payload = {
 				data

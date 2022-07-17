@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Row, Spin } from 'antd'
@@ -11,11 +11,14 @@ import { Link } from 'react-router-dom'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SupportContactForm from './components/SupportContactForm'
-import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 import { scrollToTopFn } from '../../components/ScrollToTop'
+import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
 
 // enums
-import { DAY, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+
+// types
+import { Paths } from '../../types/api'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -24,18 +27,14 @@ import { getSupportContact, getSupportContacts, ISupportContactPayload } from '.
 
 // types
 import { IBreadcrumbs, ILoadingAndFailure, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
-import { Paths } from '../../types/api'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
-import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
-import i18n from '../../utils/i18n'
 
-// TODO: type
-type SupportContactPatch = any
+type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
@@ -56,9 +55,8 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-	// TODO: remove any when BE is done
-	const supportContact = useSelector((state: RootState) => state.supportContacts.supportContact) as any
-	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts) as any
+	const supportContact = useSelector((state: RootState) => state.supportContacts.supportContact)
+	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SUPPORT_CONTACT]?.values)
@@ -66,9 +64,10 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
-	const deletedSupportContact = !!(supportContact?.data?.deletedAt && supportContact?.data?.deletedAt !== null)
 
 	const isLoading = supportContact.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving
+
+	const supportContactExists = supportContactID > 0
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -88,7 +87,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		} else {
 			// set to init values
 			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: OpeningHours = initOpeningHours(supportContact.data?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
+			const openingHours: OpeningHours = initOpeningHours(supportContact.data?.supportContact.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
 			if (openOverWeekendFormValue && openingHours) {
 				const updatedOpeningHours = unionBy(
 					[
@@ -112,8 +111,7 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	// init forms
 	useEffect(() => {
-		// TODO: remove any when BE is done
-		const initForm = async (supportContactData?: any /* supportContactData: ISupportContactPayload & ILoadingAndFailure */) => {
+		const initForm = async (supportContactData?: ISupportContactPayload & ILoadingAndFailure) => {
 			const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 			const defaultContactPerson = {
 				phonePrefixCountryCode
@@ -136,9 +134,9 @@ const SupportContactPage: FC<Props> = (props) => {
 						city: supportContactData.data?.supportContact?.address?.city,
 						street: supportContactData.data?.supportContact?.address?.street,
 						zipCode: supportContactData.data?.supportContact?.address?.zipCode,
-						country: supportContactData.data?.supportContact?.address?.countryCode,
+						countryCode: supportContactData.data?.supportContact?.address?.countryCode,
 						streetNumber: supportContactData.data?.supportContact?.address?.streetNumber,
-						emails: supportContactData.data?.supportContact?.emails?.map((email: string) => ({ email })),
+						emails: supportContactData.data?.supportContact?.emails?.map((email) => ({ email })),
 						phones: supportContactData.data?.supportContact?.phones
 					})
 				)
@@ -176,28 +174,33 @@ const SupportContactPage: FC<Props> = (props) => {
 		try {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
-			const supportContactData: SupportContactPatch = {
+			const phones = data.phones?.filter((phone) => phone?.phone)
+			const emails = data.emails?.reduce((acc, email) => (email?.email ? [...acc, email.email] : acc), [] as string[])
+
+			const supportContactData = {
 				openingHours: openingHours || [],
-				city: data.city,
-				countryCode: data.country,
-				street: data.street,
-				zipCode: data.zipCode,
-				phones: data.phones?.filter((phone) => !phone || !phone.phone),
-				emails: data.emails?.reduce((acc, email) => (email?.email ? [...acc, email.email] : acc), [] as string[])
+				address: {
+					city: data.city,
+					countryCode: data.countryCode,
+					street: data.street,
+					streetNumber: data.streetNumber,
+					zipCode: data.zipCode
+				},
+				countryCode: data.countryCode,
+				note: data.note,
+				phones,
+				emails
 			}
 
-			if (supportContactID > 0) {
+			if (supportContactExists) {
 				// update existing supportContact
-				// TODO: remove any when BE is done
-				await patchReq('/api/b2b/admin/support-contacts/{supportContactID}' as any, { supportContactID }, supportContactData)
+				await patchReq('/api/b2b/admin/enums/support-contacts/{supportContactID}', { supportContactID }, supportContactData as SupportContactPatch)
 				dispatch(getSupportContact(supportContactID))
 			} else {
 				// create new supportContact
-				// TODO: remove any when BE is done
-				const result = await postReq('/api/b2b/admin/support-contacts/' as any, undefined, supportContactData)
+				const result = await postReq('/api/b2b/admin/enums/support-contacts/', undefined, supportContactData as SupportContactPatch)
 				if (result?.data?.supportContact?.id) {
 					// load new supportContact for current user
-					// TODO: load current user ?
 					await dispatch(getCurrentUser())
 					// select new supportContact
 					await dispatch(getSupportContact(result.data.supportContact.id))
@@ -239,8 +242,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 		try {
 			setIsRemoving(true)
-			// TODO: remove any when BE is done
-			await deleteReq('/api/b2b/admin/support-contacts/{supportContactID}' as any, { supportContactID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await deleteReq('/api/b2b/admin/enums/support-contacts/{supportContactID}', { supportContactID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			history.push(t('paths:support-contacts'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -249,8 +251,6 @@ const SupportContactPage: FC<Props> = (props) => {
 			setIsRemoving(false)
 		}
 	}
-
-	const supportContactExists = supportContactID > 0
 
 	const hasEveryCountrSupportContact = supportContacts?.data?.supportContacts?.length === countries.data?.length
 
@@ -276,11 +276,7 @@ const SupportContactPage: FC<Props> = (props) => {
 							className={'mb-4'}
 						/>
 					)}
-					<SupportContactForm
-						onSubmit={handleSubmit}
-						supportContactID={supportContactID}
-						disabledForm={(!supportContactExists && hasEveryCountrSupportContact) || deletedSupportContact}
-					/>
+					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />
 					<div className={'content-footer'}>
 						<Row className={`${supportContactExists ? 'justify-between' : 'justify-center'} w-full`}>
 							{supportContactExists && (
@@ -291,7 +287,6 @@ const SupportContactPage: FC<Props> = (props) => {
 									entityName={t('loc:kontakt')}
 									type={'default'}
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-									disabled={deletedSupportContact}
 								/>
 							)}
 							<Permissions
@@ -311,7 +306,7 @@ const SupportContactPage: FC<Props> = (props) => {
 												openForbiddenModal()
 											}
 										}}
-										disabled={(!supportContactExists && hasEveryCountrSupportContact) || submitting || deletedSupportContact || isFormPristine}
+										disabled={(!supportContactExists && hasEveryCountrSupportContact) || submitting || isFormPristine}
 										loading={submitting}
 									>
 										{t('loc:Uložiť')}

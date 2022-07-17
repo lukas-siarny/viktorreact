@@ -579,12 +579,24 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 	const values = map(fileList, (file) => {
 		const fileData = filesData[get(file, 'uid')]
 
-		return {
+		let img = {
 			...file,
-			id: get(file, 'id') || fileData?.id,
-			url: get(file, 'url') || fileData?.path,
-			signedUrl: fileData?.signedUrl
+			url: get(file, 'url') || fileData?.path
 		}
+
+		if (get(file, 'id') || fileData?.id) {
+			img = {
+				...img,
+				id: get(file, 'id') || fileData?.id
+			}
+		}
+		if (fileData?.signedUrl) {
+			img = {
+				...img,
+				signedUrl: fileData?.signedUrl
+			}
+		}
+		return img
 	})
 	return values
 }
@@ -698,13 +710,12 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 
-export const getCountryPrefix = (countriesData: EnumerationData | null, countryCode: string) => {
-	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode.toLocaleLowerCase())
+export const getCountryPrefix = (countriesData: EnumerationData | null, countryCode?: string) => {
+	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode?.toLocaleLowerCase())
 	return country?.phonePrefix
 }
 
-// TODO: remove any when BE is
-export const getSupportContactCountryName = (nameLocalizations: { value: string; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
-	const countryTranslation = nameLocalizations?.find((translation: any) => translation.language === currentLng)
+export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
+	const countryTranslation = nameLocalizations?.find((translation) => translation.language === currentLng)
 	return countryTranslation?.value
 }

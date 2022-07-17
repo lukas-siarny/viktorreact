@@ -35,6 +35,7 @@ type Props = {
 	disabled?: boolean
 	className?: string
 	style?: React.CSSProperties
+	focused?: boolean
 }
 
 const fallbackOptions = [

@@ -15,7 +15,7 @@ import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -28,9 +28,11 @@ import { decodePrice, encodePrice } from '../../utils/helper'
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
 import { IServicesPayload } from '../../reducers/services/serviceActions'
+import { getSalonRoles } from '../../reducers/roles/rolesActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import EditRoleForm from './components/EditRoleForm'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: number }>
@@ -161,7 +163,7 @@ const EmployeePage = (props: Props) => {
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
 
-	const showDeleteBtn = !!employee?.data?.employee?.id
+	const emploeyeeExists = !!employee?.data?.employee?.id
 
 	const isLoading = employee.isLoading || services.isLoading || isRemoving
 
@@ -174,6 +176,7 @@ const EmployeePage = (props: Props) => {
 
 	useEffect(() => {
 		fetchEmployeeData()
+		dispatch(getSalonRoles())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
 
@@ -184,7 +187,8 @@ const EmployeePage = (props: Props) => {
 					...employee.data?.employee,
 					avatar: employee.data?.employee?.image ? [{ url: employee.data?.employee?.image?.resizedImages?.thumbnail, uid: employee.data?.employee?.image?.id }] : [],
 					services: checkAndParseServices(employee.data?.employee?.services),
-					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id }
+					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id },
+					roleID: employee.data?.employee?.role?.id
 				})
 			)
 		}
@@ -254,8 +258,7 @@ const EmployeePage = (props: Props) => {
 					inviteEmail: formData?.email,
 					employeeID,
 					salonID,
-					// TODO add roleID
-					roleID: 0
+					roleID: formData?.roleID
 				}
 			)
 			dispatch(getEmployee(employeeID))
@@ -267,9 +270,29 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
+	const editEmployeeRole = async (data: IEditEmployeeRoleForm) => {
+		try {
+			setSubmitting(true)
+			await patchReq(
+				'/api/b2b/admin/employees/{employeeID}/role',
+				{ employeeID },
+				{
+					roleID: data?.roleID
+				}
+			)
+			dispatch(getEmployee(employeeID))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setSubmitting(false)
+			setVisible(false)
+		}
+	}
+
 	const rowClass = cx({
-		'justify-between': showDeleteBtn,
-		'justify-center': !showDeleteBtn
+		'justify-between': emploeyeeExists,
+		'justify-center': !emploeyeeExists
 	})
 
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
@@ -290,10 +313,18 @@ const EmployeePage = (props: Props) => {
 			</Row>
 			<Spin spinning={isLoading}>
 				<div className='content-body small mt-2'>
-					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
+					<EmployeeForm
+						addService={() => addService(services, form, dispatch)}
+						salonID={salonID}
+						onSubmit={updateEmployee}
+						onEditRoleClick={() => {
+							setVisible(true)
+							dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))
+						}}
+					/>
 					<div className={'content-footer'}>
 						<Row className={rowClass}>
-							{showDeleteBtn ? (
+							{emploeyeeExists ? (
 								<DeleteButton
 									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
 									className={'w-1/3'}
@@ -304,10 +335,10 @@ const EmployeePage = (props: Props) => {
 								/>
 							) : undefined}
 							<div className={`flex justify-between ${wrapperWidthClass}`}>
-								<Permissions
-									allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
-									render={(hasPermission, { openForbiddenModal }) =>
-										isProfileInActive && (
+								{isProfileInActive && (
+									<Permissions
+										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
+										render={(hasPermission, { openForbiddenModal }) => (
 											<Button
 												type={'primary'}
 												block
@@ -317,7 +348,7 @@ const EmployeePage = (props: Props) => {
 												onClick={(e) => {
 													if (hasPermission) {
 														setVisible(true)
-														dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail }))
+														dispatch(initialize(FORM.INVITE_EMPLOYEE, { email: form?.values?.inviteEmail, roleID: form?.values?.roleID }))
 													} else {
 														e.preventDefault()
 														openForbiddenModal()
@@ -326,11 +357,11 @@ const EmployeePage = (props: Props) => {
 												disabled={isInviteFromSubmitting}
 												loading={isInviteFromSubmitting}
 											>
-												{t('loc:Pozvať do tímu')}
+												{t(isProfileInActive ? 'loc:Pozvať do tímu' : 'loc:Upraviť rolu')}
 											</Button>
-										)
-									}
-								/>
+										)}
+									/>
+								)}
 								<Permissions
 									allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_UPDATE]}
 									render={(hasPermission, { openForbiddenModal }) => (
@@ -356,9 +387,10 @@ const EmployeePage = (props: Props) => {
 									)}
 								/>
 							</div>
+
 							<Modal
 								className='rounded-fields'
-								title={t('loc:Pozvať do tímu')}
+								title={t(isProfileInActive ? 'loc:Pozvať do tímu' : 'Upraviť rolu')}
 								centered
 								visible={visible}
 								footer={null}
@@ -366,7 +398,7 @@ const EmployeePage = (props: Props) => {
 								closeIcon={<CloseIcon />}
 								width={394}
 							>
-								<InviteForm onSubmit={inviteEmployee} />
+								{isProfileInActive ? <InviteForm onSubmit={inviteEmployee} /> : <EditRoleForm onSubmit={editEmployeeRole} />}
 							</Modal>
 						</Row>
 					</div>

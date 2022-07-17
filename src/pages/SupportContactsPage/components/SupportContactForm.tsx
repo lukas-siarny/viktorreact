@@ -44,18 +44,15 @@ const SupportContactForm: FC<Props> = (props) => {
 	const { handleSubmit, disabledForm } = props
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
-	// TODO: remove any when BE is done
-	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts) as any
+	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
+	const formValues = useSelector((state: RootState) => state.form[FORM.SUPPORT_CONTACT]?.values)
 
 	const countriesOptions = countries?.enumerationsOptions?.map((country) => {
-		const alreadyExists = supportContacts?.data?.supportContacts?.find(
-			// TODO: remove any when BE is done
-			(supportCountry: any) => supportCountry.country.code.toLowerCase() === (country.value as string).toLowerCase()
-		)
+		const alreadyExists = supportContacts?.data?.supportContacts?.find((supportCountry) => supportCountry.country.code === (country.value as string))
 
 		return {
 			...country,
-			disabled: !!alreadyExists
+			disabled: country?.value !== formValues?.countryCode && !!alreadyExists
 		}
 	})
 
@@ -146,7 +143,7 @@ const SupportContactForm: FC<Props> = (props) => {
 							label={t('loc:Poznámka')}
 							name={'note'}
 							size={'large'}
-							placeholder={t('loc:Zadajte doplňujúcu informáciu, napr "3. poschodie v ľavo"')}
+							placeholder={t('loc:Zadajte doplňujúcu informáciu, napr "3. poschodie vľavo"')}
 							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
 							showLettersCount

@@ -60,5 +60,9 @@ export default (values: ISupportContactForm) => {
 		})
 	}
 
+	if (!values?.countryCode) {
+		errors.countryCode = i18next.t('loc:Toto pole je povinné')
+	}
+
 	return errors
 }

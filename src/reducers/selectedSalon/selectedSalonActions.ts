@@ -28,13 +28,13 @@ export interface ISalonOptions {
 	payload: ISalonSelectionOptionsPayload
 }
 
-type IPayloadData = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon'] &
+export type ISalonPayloadData = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon'] &
 	IPermissions & {
 		currency: ICurrency
 	}
 
 export interface ISelectedSalonPayload {
-	data: IPayloadData | null
+	data: ISalonPayloadData | null
 }
 
 interface ISalonSelectedOptionItem extends ISelectOptionItem {
@@ -117,7 +117,7 @@ export const setSelectionOptions =
 	(dispatch) => {
 		const options = salons.map((salon) => ({
 			key: salon.id,
-			label: get(salon, 'name', salon.id),
+			label: get(salon, 'name', salon.id.toString()),
 			value: salon.id,
 			logo: get(salon, 'logo.resizedImages.thumbnail')
 		}))

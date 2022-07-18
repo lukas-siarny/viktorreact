@@ -16,7 +16,7 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, STRINGS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -437,6 +437,24 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
+	const deleteOpenHoursNote = async () => {
+		if (isRemoving) {
+			return
+		}
+
+		setIsRemoving(true)
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/open-hours-note', { salonID }, { openingHoursNote: null }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			dispatch(reset(FORM.OPEN_HOURS_NOTE))
+			await dispatch(selectSalon(salonID))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setIsRemoving(false)
+		}
+	}
+
 	const unPublishSalon = async (formData: INoteForm) => {
 		if (submitting) {
 			return
@@ -704,7 +722,48 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			</Row>
 			<Spin spinning={isLoading}>
 				<div className='content-body mt-2'>
-					<SalonForm onSubmit={handleSubmit} openNoteModal={() => setVisible(true)} salonID={salonID} disabledForm={deletedSalon} />
+					<SalonForm
+						onSubmit={handleSubmit}
+						disabledForm={deletedSalon}
+						noteModalControlButtons={
+							salonExists && (
+								<Row className={'flex justify-start w-1/2 mt-4'}>
+									{salon?.data?.openingHoursNote ? (
+										<>
+											<Button
+												type={'primary'}
+												block
+												size={'middle'}
+												className={'noti-btn m-regular w-1/3'}
+												onClick={() => setVisible(true)}
+												disabled={deletedSalon}
+											>
+												{STRINGS(t).edit(t('loc:poznámku'))}
+											</Button>
+											<DeleteButton
+												className={'ml-2 w-1/3'}
+												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+												onConfirm={deleteOpenHoursNote}
+												entityName={t('loc:poznámku')}
+												disabled={deletedSalon}
+											/>
+										</>
+									) : (
+										<Button
+											type={'primary'}
+											block
+											size={'middle'}
+											className={'noti-btn m-regular w-1/3'}
+											onClick={() => setVisible(true)}
+											disabled={deletedSalon}
+										>
+											{STRINGS(t).addRecord(t('loc:poznámku'))}
+										</Button>
+									)}
+								</Row>
+							)
+						}
+					/>
 					{salonExists && (
 						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
 					)}

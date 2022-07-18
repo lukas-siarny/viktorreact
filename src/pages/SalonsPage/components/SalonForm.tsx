@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { get, isEqual } from 'lodash'
 
 // components
-import OpeningHours from './OpeningHours'
+import OpeningHours from '../../../components/OpeningHours/OpeningHours'
 import AddressFields from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import Compare from '../../../components/Compare'

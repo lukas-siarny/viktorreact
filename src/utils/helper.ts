@@ -56,6 +56,7 @@ import { phoneRegEx } from './regex'
 import { Paths } from '../types/api'
 import { RootState } from '../reducers'
 import { LOCALES } from '../components/LanguagePicker'
+import { EnumerationData, ICountriesPayload } from '../reducers/enumerations/enumerationActions'
 
 type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
 
@@ -708,3 +709,13 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
+
+export const getCountryPrefix = (countriesData: EnumerationData | null, countryCode?: string) => {
+	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode?.toLocaleLowerCase())
+	return country?.phonePrefix
+}
+
+export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
+	const countryTranslation = nameLocalizations?.find((translation) => translation.language === currentLng)
+	return countryTranslation?.value
+}

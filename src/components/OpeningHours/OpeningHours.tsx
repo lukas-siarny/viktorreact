@@ -5,17 +5,17 @@ import { Button } from 'antd'
 import { isEmpty } from 'lodash'
 
 // components
-import DeleteButton from '../../../components/DeleteButton'
+import DeleteButton from '../DeleteButton'
 
 // atoms
-import SwitchField from '../../../atoms/SwitchField'
-import TimeRangeField from '../../../atoms/TimeRangeField'
+import SwitchField from '../../atoms/SwitchField'
+import TimeRangeField from '../../atoms/TimeRangeField'
 
 // helpers
-import { translateDayName, validationRequired } from '../../../utils/helper'
+import { translateDayName, validationRequired } from '../../utils/helper'
 
 // assets
-import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon-16.svg'
+import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon-16.svg'
 
 const TimeRangesComponent = (props: any) => {
 	const { fields, disabled } = props

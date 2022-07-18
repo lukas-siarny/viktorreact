@@ -35,14 +35,20 @@ const PhoneArrayField = (props: Props) => {
 	const [t] = useTranslation()
 
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
+	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
 	const buttonAdd = (
-		<Button onClick={() => fields.push('')} icon={<PlusIcon className={'text-notino-black'} />} className={'noti-btn mt-2'} type={'default'} size={'small'} disabled={disabled}>
+		<Button
+			onClick={() => fields.push({ phonePrefixCountryCode })}
+			icon={<PlusIcon className={'text-notino-black'} />}
+			className={'noti-btn mt-2'}
+			type={'default'}
+			size={'small'}
+			disabled={disabled}
+		>
 			{t('loc:Pridať telefón')}
 		</Button>
 	)
-
-	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
 	return (
 		<Item label={t('loc:Telefónne čísla')} required={requied || requiedAtLeastOne} style={style}>

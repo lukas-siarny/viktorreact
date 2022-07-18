@@ -163,6 +163,8 @@ const EmployeePage = (props: Props) => {
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
 
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
+
 	const emploeyeeExists = !!employee?.data?.employee?.id
 
 	const isLoading = employee.isLoading || services.isLoading || isRemoving
@@ -194,6 +196,10 @@ const EmployeePage = (props: Props) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employee.data])
+
+	useEffect(() => {
+		dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))
+	}, [dispatch, form?.values?.roleID])
 
 	const updateEmployee = async (data: IEmployeeForm) => {
 		try {
@@ -244,7 +250,9 @@ const EmployeePage = (props: Props) => {
 			},
 			{
 				name: t('loc:Detail zamestnanca'),
-				titleName: `${get(employee.data?.employee, 'firstName')} ${get(employee.data?.employee, 'lastName')}`
+				titleName:
+					get(employee.data?.employee, 'firstName') ||
+					(get(employee.data?.employee, 'lastName') && `${get(employee.data?.employee, 'firstName')} ${get(employee.data?.employee, 'lastName')}`.trim())
 			}
 		]
 	}
@@ -312,16 +320,13 @@ const EmployeePage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
 			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
-					<EmployeeForm
-						addService={() => addService(services, form, dispatch)}
-						salonID={salonID}
-						onSubmit={updateEmployee}
-						onEditRoleClick={() => {
-							setVisible(true)
-							dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))
-						}}
-					/>
+				{formValues?.hasActiveAccount && (
+					<div className='content-body small mt-2 mb-8'>
+						<EditRoleForm onSubmit={editEmployeeRole} />
+					</div>
+				)}
+				<div className='content-body small mt-2 mb-8'>
+					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 					<div className={'content-footer'}>
 						<Row className={rowClass}>
 							{emploeyeeExists ? (
@@ -390,7 +395,7 @@ const EmployeePage = (props: Props) => {
 
 							<Modal
 								className='rounded-fields'
-								title={t(isProfileInActive ? 'loc:Pozvať do tímu' : 'Upraviť rolu')}
+								title={t('loc:Pozvať do tímu')}
 								centered
 								visible={visible}
 								footer={null}
@@ -398,7 +403,7 @@ const EmployeePage = (props: Props) => {
 								closeIcon={<CloseIcon />}
 								width={394}
 							>
-								{isProfileInActive ? <InviteForm onSubmit={inviteEmployee} /> : <EditRoleForm onSubmit={editEmployeeRole} />}
+								{<InviteForm onSubmit={inviteEmployee} />}
 							</Modal>
 						</Row>
 					</div>

@@ -130,7 +130,7 @@ const SalonForm: FC<Props> = (props) => {
 			label={t('loc:Poznámka k adrese')}
 			name={filedName}
 			size={'large'}
-			placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie v ľavo"')}
+			placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie vľavo"')}
 			disabled={disabled}
 			maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
 			showLettersCount

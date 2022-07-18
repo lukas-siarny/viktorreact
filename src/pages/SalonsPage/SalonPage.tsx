@@ -727,21 +727,21 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						disabledForm={deletedSalon}
 						noteModalControlButtons={
 							salonExists && (
-								<Row className={'flex justify-start w-1/2 mt-4'}>
+								<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
 									{salon?.data?.openingHoursNote ? (
 										<>
 											<Button
 												type={'primary'}
 												block
 												size={'middle'}
-												className={'noti-btn m-regular w-1/3'}
+												className={'noti-btn m-regular w-12/25 xl:w-1/3'}
 												onClick={() => setVisible(true)}
 												disabled={deletedSalon}
 											>
 												{STRINGS(t).edit(t('loc:poznámku'))}
 											</Button>
 											<DeleteButton
-												className={'ml-2 w-1/3'}
+												className={'ml-2 w-12/25 xl:w-1/3'}
 												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 												onConfirm={deleteOpenHoursNote}
 												entityName={t('loc:poznámku')}

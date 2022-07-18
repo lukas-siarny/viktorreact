@@ -76,17 +76,11 @@ const SupportContactForm: FC<Props> = (props) => {
 							{t('loc:Kontaktné údaje')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<FieldArray
-							component={InputsArrayField}
-							name={'emails'}
-							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Emailové adresy'), requied: true }}
-						/>
-						<FieldArray component={PhoneArrayField} name={'phones'} props={{ disabled: disabledForm, requied: true }} />
 						<Field
 							component={SelectField}
 							optionRender={countryOptionRender}
 							label={t('loc:Krajina')}
-							placeholder={t('loc:Vyber krajinu')}
+							placeholder={t('loc:Vyberte krajinu')}
 							options={countriesOptions || []}
 							name={'countryCode'}
 							size={'large'}
@@ -94,6 +88,12 @@ const SupportContactForm: FC<Props> = (props) => {
 							required
 							disabled={disabledForm}
 						/>
+						<FieldArray
+							component={InputsArrayField}
+							name={'emails'}
+							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Emailové adresy'), requied: true }}
+						/>
+						<FieldArray component={PhoneArrayField} name={'phones'} props={{ disabled: disabledForm, requied: true }} />
 						<Row justify={'space-between'}>
 							<Field
 								className={'w-4/5'}

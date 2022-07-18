@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import React, { useEffect, useMemo, useState } from 'react'
 import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Modal, Progress, Row, Spin } from 'antd'
+import { Col, Modal, Progress, Row, Spin, Tag } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, reset } from 'redux-form'
@@ -35,6 +35,9 @@ import { IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as CheckIcon12 } from '../../assets/icons/check-12.svg'
+import { ReactComponent as ClockIcon12 } from '../../assets/icons/clock-12.svg'
+import { ReactComponent as ThrashIcon12 } from '../../assets/icons/thrash-12.svg'
 
 type Columns = ColumnsType<any>
 
@@ -151,40 +154,29 @@ const SalonsPage = () => {
 			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
 		},
 		{
-			title: t('loc:Vymazaný'),
-			dataIndex: 'deletedAt',
-			key: 'deletedAt',
-			ellipsis: true,
-			sorter: false,
-			width: '8%',
-			render: (value) =>
-				value && (
-					<div className={'flex justify-start'}>
-						<CircleCheckIcon width={20} height={20} />
-					</div>
-				)
-		},
-		{
-			title: t('loc:Na schválenie'),
-			dataIndex: 'pendingPublication',
-			key: 'pendingPublication',
-			ellipsis: true,
-			sorter: false,
-			width: '9%',
-			render: (value, record) =>
-				value && (
-					<div className={'flex justify-start'}>
-						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
-					</div>
-				)
-		},
-		{
 			title: t('loc:Publikovaný'),
 			dataIndex: 'isPublished',
 			key: 'isPublished',
 			ellipsis: true,
 			sorter: false,
 			width: '8%',
+			render: (value) => {
+				// NOT_PUBLISHED, PUBLISHED, NOT_PUBLISHED_PENDING, PUBLISHED_PENDING, NOT_PUBLISHED_DECLINED, PUBLISHED_DECLINED
+
+				return (
+					<Tag icon={<CheckIcon12 />} className={cx('noti-tag', { success: value })}>
+						{value ? t('loc:Publikovaný') : t('loc:Nepulikovaný')}
+					</Tag>
+				)
+			}
+		},
+		{
+			title: t('loc:Na schválenie'),
+			dataIndex: 'isPending',
+			key: 'isPending',
+			ellipsis: true,
+			sorter: false,
+			width: '8%',
 			render: (value, record) =>
 				value && (
 					<div className={'flex justify-start'}>
@@ -193,7 +185,21 @@ const SalonsPage = () => {
 				)
 		},
 		{
-			title: t('loc:Vyplnenia profilu'),
+			title: t('loc:Vymazaný'),
+			dataIndex: 'isPending',
+			key: 'isPending',
+			ellipsis: true,
+			sorter: false,
+			width: '8%',
+			render: (value, record) =>
+				value && (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
+					</div>
+				)
+		},
+		{
+			title: t('loc:Vyplnenie profilu'),
 			dataIndex: 'fillingProgressSalon',
 			key: 'fillingProgressSalon',
 			ellipsis: true,
@@ -211,7 +217,22 @@ const SalonsPage = () => {
 			sorter: true,
 			sortOrder: setOrder(query.order, 'createdAt'),
 			render: (value) => formatDateByLocale(value)
-		}
+		} /* ,
+		{
+			title: t('loc:Status'),
+			key: 'status',
+			ellipsis: true,
+			sorter: false,
+			render: (_, records) => {
+				// NOT_PUBLISHED, PUBLISHED, NOT_PUBLISHED_PENDING, PUBLISHED_PENDING, NOT_PUBLISHED_DECLINED, PUBLISHED_DECLINED
+
+				return (
+					<Tag icon={<CheckIcon12 />} className={'noti-tag success'}>
+						{t('loc:Publikovaný')}
+					</Tag>
+				)
+			}
+		} */
 	]
 
 	// View

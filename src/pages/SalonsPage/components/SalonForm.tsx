@@ -184,6 +184,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<Compare
+							oldValue={formValues?.publishedSalonData?.gallery}
 							equal={isEqual(formValues?.gallery, formValues?.publishedSalonData?.gallery)}
 							oldFormField={imagesFormField('publishedSalonData.gallery', true)}
 							newFormField={imagesFormField('gallery', disabledForm)}
@@ -232,6 +233,7 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						{!compareAddress(formValues?.publishedSalonData?.address, formValues?.address) && formValues?.publishedSalonData?.address && (
 							<Compare
+								oldValue={formValues?.publishedSalonData?.address}
 								equal={compareAddress(formValues?.publishedSalonData?.address, formValues?.address)}
 								oldFormField={
 									<Col xl={6} md={9}>

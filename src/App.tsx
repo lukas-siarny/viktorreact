@@ -36,6 +36,7 @@ const App = () => {
 	useEffect(() => {
 		i18n.on('languageChanged', (language) => {
 			const locale = LOCALES[language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]
+			document.documentElement.setAttribute('lang', language)
 			setAntdLocale(locale.antD)
 			dayjs.locale(locale.ISO_639)
 		})

@@ -38,6 +38,16 @@ const CustomerForm: FC<Props> = (props) => {
 		{ label: `${t('loc:Žena')}`, value: GENDER.FEMALE, key: GENDER.FEMALE }
 	]
 
+	const countryOptionRender = (itemData: any) => {
+		const { value, label, flag } = itemData
+		return (
+			<div className='flex items-center'>
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+				{label}
+			</div>
+		)
+	}
+
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
@@ -74,6 +84,7 @@ const CustomerForm: FC<Props> = (props) => {
 					</Row>
 					<Field
 						component={SelectField}
+						optionRender={countryOptionRender}
 						label={t('loc:Štát')}
 						placeholder={t('loc:Vyber krajinu')}
 						options={countries?.enumerationsOptions || []}

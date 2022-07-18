@@ -287,6 +287,11 @@ export enum SALON_STATUSES {
 	NOT_VISIBLE = 'NOT_VISIBLE'
 }
 
+export enum SALON_CREATE_TYPES {
+	BASIC = 'BASIC',
+	NON_BASIC = 'NON_BASIC'
+}
+
 export enum PAGE_VIEW {
 	TABLE = 'TABLE',
 	TREE = 'TREE'

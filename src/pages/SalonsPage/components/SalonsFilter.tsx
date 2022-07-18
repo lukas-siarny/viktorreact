@@ -16,7 +16,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../../utils/enums'
+import { FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_STATUSES } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
@@ -50,6 +50,11 @@ const SalonsFilter = (props: Props) => {
 		{ label: t('loc:Nepublikované'), value: SALON_STATUSES.NOT_PUBLISHED, key: SALON_STATUSES.NOT_PUBLISHED },
 		{ label: t('loc:Vymazané'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED },
 		{ label: t('loc:Nevymazané'), value: SALON_STATUSES.NOT_DELETED, key: SALON_STATUSES.NOT_DELETED }
+	]
+
+	const createTypesOptions = [
+		{ label: t('loc:Importovaný'), value: SALON_CREATE_TYPES.BASIC, key: SALON_CREATE_TYPES.BASIC },
+		{ label: t('loc:Štandartný'), value: SALON_CREATE_TYPES.NON_BASIC, key: SALON_CREATE_TYPES.NON_BASIC }
 	]
 
 	const searchInput = (
@@ -165,6 +170,18 @@ const SalonsFilter = (props: Props) => {
 							options={countries?.enumerationsOptions}
 							loading={countries?.isLoading}
 							disabled={countries?.isLoading}
+						/>
+					</Col>
+					<Col span={6}>
+						<Field
+							component={SelectField}
+							name={'createType'}
+							placeholder={t('loc:Typ vytvorenia')}
+							allowClear
+							size={'middle'}
+							filterOptions
+							onDidMountSearch
+							options={createTypesOptions}
 						/>
 					</Col>
 				</Row>

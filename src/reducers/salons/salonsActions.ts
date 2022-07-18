@@ -21,9 +21,10 @@ interface IGetSalons {
 }
 
 export interface IGetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: (string | null)[] | null | undefined
+	categoryFirstLevelIDs?: (string | null)[] | null
 	statuses?: (string | null)[] | SALON_STATUSES[] | null
-	countryCode?: string | undefined | null
+	countryCode?: string | null
+	createType?: string | null
 }
 
 export interface IGetSalon {

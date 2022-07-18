@@ -18,7 +18,7 @@ import UploadSuccess from './components/UploadSuccess'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
@@ -64,14 +64,21 @@ const SalonsPage = () => {
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:DESC'),
-		countryCode: StringParam
+		countryCode: StringParam,
+		createType: StringParam
 	})
 
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
 		dispatch(
-			initialize(FORM.SALONS_FILTER, { search: query.search, statuses: query.statuses, categoryFirstLevelIDs: query.categoryFirstLevelIDs, countryCode: query.countryCode })
+			initialize(FORM.SALONS_FILTER, {
+				search: query.search,
+				statuses: query.statuses,
+				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+				countryCode: query.countryCode,
+				createType: query.createType
+			})
 		)
 		dispatch(
 			getSalons({
@@ -81,10 +88,11 @@ const SalonsPage = () => {
 				search: query.search,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
 				statuses: query.statuses,
-				countryCode: query.countryCode
+				countryCode: query.countryCode,
+				createType: query.createType
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelIDs, query.statuses, query.countryCode])
+	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelIDs, query.statuses, query.countryCode, query.createType])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -138,7 +146,7 @@ const SalonsPage = () => {
 			key: 'name',
 			ellipsis: true,
 			sorter: true,
-			width: '22%',
+			width: '30%',
 			sortOrder: setOrder(query.order, 'name')
 		},
 		{
@@ -151,44 +159,16 @@ const SalonsPage = () => {
 			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
 		},
 		{
-			title: t('loc:Vymazaný'),
-			dataIndex: 'deletedAt',
-			key: 'deletedAt',
+			title: t('loc:Importovaný'),
+			dataIndex: 'createType',
+			key: 'createType',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '10%',
 			render: (value) =>
-				value && (
+				value === SALON_CREATE_TYPES.BASIC && (
 					<div className={'flex justify-start'}>
 						<CircleCheckIcon width={20} height={20} />
-					</div>
-				)
-		},
-		{
-			title: t('loc:Na schválenie'),
-			dataIndex: 'pendingPublication',
-			key: 'pendingPublication',
-			ellipsis: true,
-			sorter: false,
-			width: '9%',
-			render: (value, record) =>
-				value && (
-					<div className={'flex justify-start'}>
-						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
-					</div>
-				)
-		},
-		{
-			title: t('loc:Publikovaný'),
-			dataIndex: 'isPublished',
-			key: 'isPublished',
-			ellipsis: true,
-			sorter: false,
-			width: '8%',
-			render: (value, record) =>
-				value && (
-					<div className={'flex justify-start'}>
-						<CircleCheckIcon width={20} height={20} className={cx({ 'opacity-40': !!record.deletedAt })} />
 					</div>
 				)
 		},

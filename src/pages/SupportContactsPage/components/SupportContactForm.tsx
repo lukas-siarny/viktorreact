@@ -11,6 +11,9 @@ import OpeningHours from '../../../components/OpeningHours/OpeningHours'
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
+import InputsArrayField from '../../../atoms/InputsArrayField'
+import PhoneArrayField from '../../../atoms/PhoneArrayField'
+import SelectField from '../../../atoms/SelectField'
 
 // utils
 import { showErrorNotification } from '../../../utils/helper'
@@ -28,9 +31,6 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
-import InputsArrayField from '../../../atoms/InputsArrayField'
-import PhoneArrayField from '../../../atoms/PhoneArrayField'
-import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {
 	disabledForm: boolean

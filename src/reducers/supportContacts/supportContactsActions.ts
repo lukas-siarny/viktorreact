@@ -8,8 +8,6 @@ import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { SUPPORT_CONTACTS, SUPPORT_CONTACT, SET_SUPPORT_CONTACT_OPTIONS } from './supportContactsTypes'
 import { LANGUAGE, DEFAULT_LANGUAGE } from '../../utils/enums'
-
-// assets
 import i18n from '../../utils/i18n'
 
 // types

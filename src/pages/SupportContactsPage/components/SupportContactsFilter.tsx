@@ -1,12 +1,12 @@
 import React from 'react'
 import { InjectedFormProps, reduxForm } from 'redux-form'
+import { useSelector } from 'react-redux'
 import { Button, Col, Form, Row, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 import cx from 'classnames'
 
 // components
-import { useSelector } from 'react-redux'
 import Filters from '../../../components/Filters'
 
 // reducers

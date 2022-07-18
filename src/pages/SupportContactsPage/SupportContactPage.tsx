@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Row, Spin } from 'antd'
 import { change, initialize, isPristine, submit } from 'redux-form'
@@ -7,7 +8,6 @@ import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 
 // components
-import { Link } from 'react-router-dom'
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SupportContactForm from './components/SupportContactForm'
@@ -19,14 +19,12 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERM
 
 // types
 import { Paths } from '../../types/api'
+import { IBreadcrumbs, ILoadingAndFailure, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 import { getSupportContact, getSupportContacts, ISupportContactPayload } from '../../reducers/supportContacts/supportContactsActions'
-
-// types
-import { IBreadcrumbs, ILoadingAndFailure, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'

@@ -36,7 +36,7 @@ const PublicLayout = (props: Props) => {
 
 							<div className='flex-auto relative w-full'>
 								{props.children}
-								<LanguagePicker className='bottom-0 right-0 absolute mb-0' />
+								<LanguagePicker className='bottom-0 right-0 absolute mb-0' reloadPageAfterChange={false} />
 							</div>
 						</div>
 					</div>
@@ -67,7 +67,7 @@ const PublicLayout = (props: Props) => {
 							</div>
 							<div className='bg-notino-grayLighter flex flex-col items-center relative'>
 								<MdLogo className='mt-8 mb-6' />
-								<LanguagePicker className='bottom-5 right-5 absolute mb-0' />
+								<LanguagePicker className='bottom-5 right-5 absolute mb-0' reloadPageAfterChange={false} />
 								{props.children}
 							</div>
 						</div>

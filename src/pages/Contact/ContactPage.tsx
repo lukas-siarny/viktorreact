@@ -3,8 +3,6 @@ import { useLocation } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Row, Select, Collapse, Spin } from 'antd'
-
-// interfaces
 import { isEmpty } from 'lodash'
 
 // reducers
@@ -143,10 +141,10 @@ const ContactPage: FC<Props> = () => {
 						key={2}
 					>
 						<div className={'noti-opening-hours-table'}>
-							{DAYS.map((day) => {
+							{DAYS.map((day, i) => {
 								const dayFromData = selectedContact?.openingHours?.find((hours) => hours.day === day)
 								return (
-									<div className={'day-row'} key={dayFromData?.day}>
+									<div className={'day-row'} key={i}>
 										<span className={'day-name'}>{translateDayName(day)}</span>
 										<div className={'day-intervals'}>
 											{!dayFromData || isEmpty(dayFromData.timeRanges) ? (

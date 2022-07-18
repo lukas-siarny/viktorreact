@@ -16,6 +16,8 @@ import SupportContactsFilter, { ISupportContactsFilter } from './components/Supp
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, LANGUAGE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { history } from '../../utils/history'
+import i18n from '../../utils/i18n'
+import { getSupportContactCountryName } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -25,8 +27,6 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // assets
 import { getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
-import { getSupportContactCountryName } from '../../utils/helper'
-import i18n from '../../utils/i18n'
 
 type Columns = ColumnsType<any>
 

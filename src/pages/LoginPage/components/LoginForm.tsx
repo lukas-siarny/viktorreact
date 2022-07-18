@@ -52,6 +52,13 @@ const LoginForm: FC<Props> = (props) => {
 						</Button>
 					</Link>
 				</span>
+				<span className={'flex items-center md:justify-center font-medium pb-6'}>
+					<Link to={`${t('paths:contact')}`} className='inline-block'>
+						<Button className='p-0 font-medium' type={'link'} htmlType={'button'}>
+							{t('loc:Potrejete pomôcť?')}
+						</Button>
+					</Link>
+				</span>
 			</div>
 		</Form>
 	)

@@ -21,13 +21,6 @@ export const initState = {
 		isLoading: false,
 		isFailure: false
 	} as IEnumerationsPayload & ILoadingAndFailure,
-	[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS]: {
-		data: null,
-		enumerationsOptions: [],
-		pagination: null,
-		isLoading: false,
-		isFailure: false
-	} as IEnumerationsPayload & ILoadingAndFailure,
 	[ENUMERATIONS_KEYS.CURRENCIES]: {
 		data: null,
 		enumerationsOptions: [],

@@ -4,7 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICountryLabel, ICurrency } from '../types/interfaces'
+import { ICountryLabel, ICurrency, OpeningHours } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -107,6 +107,8 @@ export enum FORM {
 	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE',
 	EMPLOYEE = 'EMPLOYEE',
 	INVITE_EMPLOYEE = 'INVITE_EMPLOYEE',
+	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
+	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	NOTE = 'NOTE',
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
 	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM'
@@ -181,7 +183,9 @@ export enum PAGE {
 	HOME = 'HOME',
 	MY_ACCOUNT = 'MY_ACCOUNT',
 	ACTIVATION = 'ACTIVATION',
-	EMPLOYEES = 'EMPLOYEES'
+	EMPLOYEES = 'EMPLOYEES',
+	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
+	SUPPORT_CONTACT = 'SUPPORT_CONTACT'
 }
 
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
@@ -205,7 +209,6 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	COUNTRIES_FILTER_OPTIONS = 'countries_filter_options',
 	CURRENCIES = 'currencies'
 }
 
@@ -344,6 +347,7 @@ export enum UPLOAD_ERROR_TYPE {
 	INVALID_TYPE = 'INVALID_TYPE'
 }
 
+// NOTE: do not change days order!
 export enum DAY {
 	MONDAY = 'MONDAY',
 	TUESDAY = 'TUESDAY',
@@ -368,20 +372,9 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_100 = 100,
 	LENGTH_60 = 60,
 	LENGTH_50 = 50,
+	LENGTH_30 = 60,
 	LENGTH_20 = 20,
 	LENGTH_10 = 10
-}
-
-export const getTranslatedCountriesLabels = (): ICountryLabel => {
-	return {
-		[LANGUAGE.SK]: `${i18next.t('loc:Slovenská republika')}`,
-		[LANGUAGE.CZ]: `${i18next.t('loc:Česká republika')}`,
-		[LANGUAGE.EN]: `${i18next.t('loc:Česká republika')}`,
-		[LANGUAGE.HU]: `${i18next.t('loc:Maďarsko')}`,
-		[LANGUAGE.RO]: `${i18next.t('loc:Rumunsko')}`,
-		[LANGUAGE.BG]: `${i18next.t('loc:Bulharsko')}`,
-		[LANGUAGE.IT]: `${i18next.t('loc:Taliansko')}`
-	} as ICountryLabel
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'

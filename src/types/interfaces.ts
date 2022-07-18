@@ -129,6 +129,21 @@ export interface IServiceForm {
 	employees: any
 }
 
+export interface ISupportContactForm {
+	id: number | null
+	note: string
+	openingHours: OpeningHours
+	sameOpenHoursOverWeek: boolean
+	openOverWeekend: boolean
+	countryCode: string
+	zipCode: string
+	city: string
+	street: string
+	streetNumber: string
+	phones: { phonePrefixCountryCode: string, phone: string }[]
+	emails: { email: string }[]
+}
+
 export interface IRegistrationForm {
 	email: string
 	password: string

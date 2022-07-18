@@ -31,7 +31,7 @@ type Props = InjectedFormProps<ICustomerForm, ComponentProps> & ComponentProps
 const CustomerForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit } = props
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const genders: ISelectOptionItem[] = [
 		{ label: `${t('loc: Muž')}`, value: GENDER.MALE, key: GENDER.MALE },

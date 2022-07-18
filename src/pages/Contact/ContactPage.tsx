@@ -48,13 +48,13 @@ const ContactPage: FC<Props> = () => {
 	useEffect(() => {
 		;(async () => {
 			const supportContactsData = await dispatch(getSupportContacts())
-			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country.code.toLowerCase() === i18n.language?.toLocaleLowerCase())
+			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country.code.toLowerCase() === i18n.language?.toLowerCase())
 
-			if (currentLngCountry?.id) {
+			if (currentLngCountry?.id && !selectedContact) {
 				dispatch(getSupportContact(currentLngCountry?.id))
 			}
 		})()
-	}, [dispatch])
+	}, [dispatch, selectedContact])
 
 	useEffect(() => {
 		dispatch(getSupportContactsOptions(currentLng as LANGUAGE, supportContacts?.data))

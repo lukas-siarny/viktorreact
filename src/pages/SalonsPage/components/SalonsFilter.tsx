@@ -16,7 +16,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
 
 // utils
-import { FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_STATUSES } from '../../../utils/enums'
 import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
@@ -43,7 +43,7 @@ const SalonsFilter = (props: Props) => {
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
 	const categories = useSelector((state: RootState) => state.categories.categories)
-	const countries = useSelector((state: RootState) => state.enumerationsStore.countries_filter_options)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const statusOptions = [
 		{ label: t('loc:Publikované'), value: SALON_STATUSES.PUBLISHED, key: SALON_STATUSES.PUBLISHED },

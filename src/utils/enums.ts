@@ -209,7 +209,6 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	COUNTRIES_FILTER_OPTIONS = 'countries_filter_options',
 	CURRENCIES = 'currencies'
 }
 
@@ -376,18 +375,6 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_30 = 60,
 	LENGTH_20 = 20,
 	LENGTH_10 = 10
-}
-
-export const getTranslatedCountriesLabels = (): ICountryLabel => {
-	return {
-		[LANGUAGE.SK]: `${i18next.t('loc:Slovenská republika')}`,
-		[LANGUAGE.CZ]: `${i18next.t('loc:Česká republika')}`,
-		[LANGUAGE.EN]: `${i18next.t('loc:Česká republika')}`,
-		[LANGUAGE.HU]: `${i18next.t('loc:Maďarsko')}`,
-		[LANGUAGE.RO]: `${i18next.t('loc:Rumunsko')}`,
-		[LANGUAGE.BG]: `${i18next.t('loc:Bulharsko')}`,
-		[LANGUAGE.IT]: `${i18next.t('loc:Taliansko')}`
-	} as ICountryLabel
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'

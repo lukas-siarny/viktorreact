@@ -57,7 +57,7 @@ const SupportContactPage: FC<Props> = (props) => {
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const supportContact = useSelector((state: RootState) => state.supportContacts.supportContact)
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SUPPORT_CONTACT]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SUPPORT_CONTACT))

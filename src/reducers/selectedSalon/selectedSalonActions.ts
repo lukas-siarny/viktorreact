@@ -67,7 +67,7 @@ export const selectSalon =
 
 					const countries = store.getState().enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES]
 					// find country by code from enumeration values
-					const country = find(countries.data, (item) => item.code === countryCode)
+					const country = find(countries.data, (item) => item.code?.toLowerCase() === countryCode?.toLowerCase())
 
 					const currencies = store.getState().enumerationsStore?.[ENUMERATIONS_KEYS.CURRENCIES]
 					// find currency by currency code from country

@@ -43,7 +43,7 @@ const SupportContactForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, disabledForm } = props
 
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES_FILTER_OPTIONS])
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const formValues = useSelector((state: RootState) => state.form[FORM.SUPPORT_CONTACT]?.values)
 

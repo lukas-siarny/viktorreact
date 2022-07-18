@@ -16,7 +16,7 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 
 // atoms
 // import SelectField from '../../../atoms/SelectField'
@@ -36,7 +36,7 @@ const SupportContactsFilter = (props: Props) => {
 	const { handleSubmit, createSupportContact } = props
 	const [t] = useTranslation()
 
-	const countries = useSelector((state: RootState) => state.enumerationsStore.countries_filter_options)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 
 	const hasEveryCountrSupportContact = supportContacts?.data?.supportContacts?.length === countries?.data?.length

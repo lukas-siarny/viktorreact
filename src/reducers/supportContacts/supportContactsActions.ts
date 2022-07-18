@@ -10,11 +10,9 @@ import { SUPPORT_CONTACTS, SUPPORT_CONTACT, SET_SUPPORT_CONTACT_OPTIONS } from '
 import { LANGUAGE, DEFAULT_LANGUAGE } from '../../utils/enums'
 
 // assets
-import SK_Flag from '../../assets/flags/SK.svg'
-import CZ_Flag from '../../assets/flags/CZ.svg'
-import RO_Flag from '../../assets/flags/RO.svg'
-import HU_Flag from '../../assets/flags/HU.svg'
 import i18n from '../../utils/i18n'
+
+// types
 import { Paths } from '../../types/api'
 
 export type ISupportContactsActions = IResetStore | IGetSupportContacts | IGetSupportContact | IGetSupportContactsOptions

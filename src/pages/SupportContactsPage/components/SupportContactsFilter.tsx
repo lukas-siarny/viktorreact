@@ -1,10 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { InjectedFormProps, reduxForm } from 'redux-form'
 import { useSelector } from 'react-redux'
-import { Button, Col, Form, Row, Tooltip } from 'antd'
+import { Button, Col, Form, Modal, Result, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import cx from 'classnames'
 
 // components
 import Filters from '../../../components/Filters'
@@ -38,8 +37,9 @@ const SupportContactsFilter = (props: Props) => {
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
+	const [visibleModal, setVisibleModal] = useState(false)
 
-	const hasEveryCountrSupportContact = supportContacts?.data?.supportContacts?.length === countries?.data?.length
+	const hasEveryCountrySupportContact = supportContacts?.data?.supportContacts?.length === countries?.data?.length
 
 	/* const countryCodeOptionRender = (itemData: any) => {
 		const { value, label, flag } = itemData
@@ -50,18 +50,6 @@ const SupportContactsFilter = (props: Props) => {
 			</div>
 		)
 	} */
-
-	const buttonAdd = (
-		<Button
-			onClick={() => createSupportContact()}
-			type='primary'
-			htmlType='button'
-			className={cx('noti-btn w-full mb-2', { 'pointer-events-none': hasEveryCountrSupportContact, 'opacity-50': hasEveryCountrSupportContact })}
-			icon={<PlusIcon />}
-		>
-			{t('loc:Pridať podporu')}
-		</Button>
-	)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
@@ -83,16 +71,31 @@ const SupportContactsFilter = (props: Props) => {
 						/>
 					</Col> */}
 					<Col>
-						{hasEveryCountrSupportContact ? (
-							<Tooltip title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu a pre všetky už existujú.')}>
-								<div>{buttonAdd}</div>
-							</Tooltip>
-						) : (
-							buttonAdd
-						)}
+						<Button
+							onClick={() => (hasEveryCountrySupportContact ? setVisibleModal(true) : createSupportContact())}
+							type='primary'
+							htmlType='button'
+							className={'noti-btn w-full mb-2'}
+							icon={<PlusIcon />}
+						>
+							{t('loc:Pridať podporu')}
+						</Button>
 					</Col>
 				</Row>
 			</Filters>
+			{visibleModal && (
+				<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
+					<Result
+						status='warning'
+						title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}
+						extra={
+							<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
+								{t('loc:Zatvoriť')}
+							</Button>
+						}
+					/>
+				</Modal>
+			)}
 		</Form>
 	)
 }

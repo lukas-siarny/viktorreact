@@ -263,10 +263,11 @@ const SupportContactPage: FC<Props> = (props) => {
 						<Alert
 							message={
 								<>
-									{t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu a pre všetky už existujú.')}{' '}
+									{t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}{' '}
 									<Link to={t('paths:support-contacts') as any} className={'underline'}>
 										{t('loc:Stále však môžete editovať existujúce')}
 									</Link>
+									{'.'}
 								</>
 							}
 							showIcon

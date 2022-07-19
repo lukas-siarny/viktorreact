@@ -177,7 +177,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 			if (salonData?.publishedSalonData) {
 				initialData = {
-					...initData,
+					...initialData,
 					publishedSalonData: {
 						...salonData.publishedSalonData,
 						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id }))

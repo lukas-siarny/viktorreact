@@ -4,6 +4,7 @@ import { Select, Menu, Row } from 'antd'
 import Icon from '@ant-design/icons'
 import i18next from 'i18next'
 import cx from 'classnames'
+import { useDispatch } from 'react-redux'
 
 // utils
 import sk_SK from 'antd/lib/locale-provider/sk_SK'
@@ -20,6 +21,10 @@ import { LANGUAGE, DEFAULT_LANGUAGE /* , ENUMERATIONS_KEYS */ } from '../utils/e
 
 // hooks
 import useMedia from '../hooks/useMedia'
+
+// redux
+// eslint-disable-next-line import/no-cycle
+import { getCountries } from '../reducers/enumerations/enumerationActions'
 
 // assets
 import { ReactComponent as SK_Flag } from '../assets/flags/SK.svg'
@@ -86,6 +91,7 @@ type Props = {
 const LanguagePicker: FC<Props> = (props) => {
 	const { className, asMenuItem, reloadPageAfterChange = true } = props
 	const isSmallDevice = useMedia(['(max-width: 744px)'], [true], false)
+	const dispatch = useDispatch()
 
 	// const countries = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const options = /* countries?.enumerationsOptions || */ Object.values(LANGUAGE).map((value) => ({ label: value, value, icon: LOCALES[value].icon }))
@@ -95,6 +101,9 @@ const LanguagePicker: FC<Props> = (props) => {
 			// reload page after change language
 			// eslint-disable-next-line no-restricted-globals
 			location.reload()
+		} else {
+			// refetch countries
+			dispatch(getCountries())
 		}
 		i18next.changeLanguage(value)
 	}

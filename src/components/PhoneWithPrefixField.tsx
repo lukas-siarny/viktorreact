@@ -36,6 +36,7 @@ type Props = {
 	className?: string
 	style?: React.CSSProperties
 	focused?: boolean
+	getPopupContainer?: Function
 }
 
 const fallbackOptions = [
@@ -95,7 +96,8 @@ const PhoneWithPrefixField = (props: Props) => {
 		className,
 		style,
 		formName,
-		fallbackDefaultValue
+		fallbackDefaultValue,
+		getPopupContainer
 	} = props
 	const prefixOptions = useSelector((state: RootState) => state?.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const dispatch = useDispatch()
@@ -123,6 +125,7 @@ const PhoneWithPrefixField = (props: Props) => {
 					defaultValue={fallbackDefaultValue}
 					required={required}
 					disabled={disabled}
+					getPopupContainer={getPopupContainer}
 					className='phone-prefix'
 				/>
 			</Col>

@@ -1104,18 +1104,29 @@ span.ant-tag
 .noti-tag.ant-tag
 	border: none
 	border-radius: 999px
-	display: inline-flex
+	display: flex
 	align-items: center
 	gap: 4px
 	padding: 8px
+	max-width: fit-content
 	background: $backgroundColor-notino-grayLight
+	min-width: 0
+	height: 28px
+	svg
+		flex: 0 0 auto
 	span
 		color: $textColor-notino-black
 		font-size: 10px
 		line-height: 12px
+		min-width: 0
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
 	&.success
 		background: #9EFAB8
 	&.warning
 		background: #F8E295
-	&.error
+	&.danger
 		background: #FFB0BB
+	&.info
+		background: #DBEAFE

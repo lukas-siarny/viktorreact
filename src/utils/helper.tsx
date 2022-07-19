@@ -30,7 +30,7 @@ import {
 	trimEnd,
 	repeat
 } from 'lodash'
-import { notification } from 'antd'
+import { notification, Tag } from 'antd'
 import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
@@ -48,7 +48,8 @@ import {
 	MONDAY_TO_FRIDAY,
 	DAY,
 	LANGUAGE,
-	EN_DATE_WITH_TIME_FORMAT
+	EN_DATE_WITH_TIME_FORMAT,
+	SALON_STATES
 } from './enums'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -57,6 +58,12 @@ import { Paths } from '../types/api'
 import { RootState } from '../reducers'
 import { LOCALES } from '../components/LanguagePicker'
 import { EnumerationData, ICountriesPayload } from '../reducers/enumerations/enumerationActions'
+
+import { ReactComponent as CheckIcon12 } from  '../assets/icons/check-12.svg'
+import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
+import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
+import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
+import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 
 type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
 
@@ -718,4 +725,69 @@ export const getCountryPrefix = (countriesData: EnumerationData | null, countryC
 export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
 	const countryTranslation = nameLocalizations?.find((translation) => translation.language === currentLng)
 	return countryTranslation?.value
+}
+
+// salon status tags
+export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
+	if(!salonStatus) {
+		return null
+	}
+
+	switch (salonStatus) {
+		case SALON_STATES.PUBLISHED:
+		case SALON_STATES.PUBLISHED_PENDING:
+		case SALON_STATES.PUBLISHED_DECLINED:
+			return (
+				<Tag icon={<CheckIcon12 />} className={'noti-tag success'}>
+					{i18next.t('loc:Publikovaný')}
+				</Tag>
+			)
+		default:
+			return (
+				<Tag icon={<CloseIcon12 />} className={'noti-tag'}>
+					{i18next.t('loc:Nepublikovaný')}
+				</Tag>
+			)
+	}
+}
+
+export const getSalonTagDeleted = (deleted?: boolean) => {
+	if(deleted) {
+		return (
+			<Tag icon={<TrashIcon12 />} className={'noti-tag danger'}>
+				{i18next.t('loc:Nevymazaný')}
+			</Tag>
+		)
+	}
+
+	return (
+		<Tag icon={<TrashCrossedIcon12 />} className={'noti-tag info'}>
+			{i18next.t('loc:Nevymazaný')}
+		</Tag>
+	)
+}
+
+export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
+	if(!salonStatus) {
+		return null
+	}
+
+	switch (salonStatus) {
+		case SALON_STATES.NOT_PUBLISHED_PENDING:
+		case SALON_STATES.PUBLISHED_PENDING:
+			return (
+				<Tag icon={<ClockIcon12 />} className={'noti-tag warning'}>
+					{i18next.t('loc:Na schválenie')}
+				</Tag>
+			)
+		case SALON_STATES.NOT_PUBLISHED_DECLINED:
+		case SALON_STATES.PUBLISHED_DECLINED:
+			return (
+				<Tag icon={<CloseIcon12 />} className={'noti-tag danger'}>
+					{i18next.t('loc:Zamietnuté')}
+				</Tag>
+			)
+		default:
+			return null
+	}
 }

@@ -152,6 +152,21 @@ $inner-padding: 16px
 		background: $backgroundColor-gray-50
 		padding: 10px 24px 10px 24px
 		z-index: $z-index-five
+	// sticky hlavicka v contente
+	.content-header
+		display: flex
+		z-index: $z-index-content-header
+		position: sticky
+		top: 64px
+		min-height: 60px
+		margin: -24px -24px 16px -24px
+		// box-shadow: $boxShadow-lg
+		background-color: $backgroundColor-white
+		padding: 10px 24px
+		width: calc(100% + 48px)
+		&.warning
+			background: #FEF3C7
+
 // Dropdown pre MENU
 .noti-layout-popup
 	.ant-menu.ant-menu-sub
@@ -243,4 +258,3 @@ span.language-picker-icon.anticon
 	.ant-dropdown-menu-submenu-title
 		display: flex
 		align-items: center
-

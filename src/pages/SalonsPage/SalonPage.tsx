@@ -16,7 +16,7 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -32,11 +32,14 @@ import { Paths } from '../../types/api'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode } from '../../utils/helper'
+import { getPrefixCountryCode, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished } from '../../utils/helper'
 import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
+import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
+import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -68,8 +71,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
 	const salonExists = salonID > 0
-	// TODO - for development purpose
-	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
+	const hasSalonPublishedVersion = !salon.data?.publishedSalonData
 	const pendingPublication = salon.data?.pendingPublication
 
 	// check permissions for submit in case of create or update salon
@@ -374,6 +376,53 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		dispatch(selectSalon(salonID))
 	}
 
+	const renderContentHeader = () => (
+		<div className={cx('content-header', { warning: hasSalonPublishedVersion && pendingPublication })}>
+			<Row align={'middle'} justify={'space-between'} className={'w-full'}>
+				<Row className={'py-2'}>
+					{getSalonTagPublished(salon?.data?.state as SALON_STATES)}
+					{getSalonTagChanges(salon?.data?.state as SALON_STATES)}
+					{getSalonTagDeleted(false)}
+				</Row>
+				{hasSalonPublishedVersion && pendingPublication && (
+					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+						<Row className={'gap-2'}>
+							<Button
+								type={'primary'}
+								icon={<CloseCricleIcon />}
+								size={'middle'}
+								className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
+								onClick={() =>
+									setModalConfig({
+										title: t('loc:Dôvod zamietnutia'),
+										fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
+										visible: true,
+										onSubmit: resolveConfirmationRequest
+									})
+								}
+								disabled={submitting}
+								loading={submitting}
+							>
+								{t('loc:Zamietnuť')}
+							</Button>
+							<Button
+								type={'primary'}
+								icon={<CheckIcon />}
+								size={'middle'}
+								className={'noti-btn m-regular w-44 xl:w-56'}
+								onClick={() => resolveConfirmationRequest()}
+								disabled={submitting}
+								loading={submitting}
+							>
+								{t('loc:Potvrdiť')}
+							</Button>
+						</Row>
+					</Permissions>)
+				}
+			</Row>
+		</div>
+	)
+
 	const renderContentFooter = () => {
 		// render footers for flow edit existing salon with published version
 		if (hasSalonPublishedVersion) {
@@ -394,9 +443,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
-										type={'primary'}
-										block
+										type={'dashed'}
 										size={'middle'}
+										icon={<EyeoffIcon />}
 										className={'noti-btn m-regular ml-2 w-1/3'}
 										onClick={(e) => {
 											if (hasPermission) {
@@ -418,48 +467,11 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 									</Button>
 								)}
 							/>
-							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-								{pendingPublication && (
-									<Button
-										type={'primary'}
-										block
-										size={'middle'}
-										className={'ant-btn-dangerous noti-btn m-regular ml-2 w-1/4'}
-										onClick={() =>
-											setModalConfig({
-												title: t('loc:Dôvod zamietnutia'),
-												fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
-												visible: true,
-												onSubmit: resolveConfirmationRequest
-											})
-										}
-										disabled={submitting}
-										loading={submitting}
-									>
-										{t('loc:Zamietnuť')}
-									</Button>
-								)}
-							</Permissions>
 						</Row>
 						<Row className={cx('flex justify-end w-1/2')}>
-							<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-								{pendingPublication && (
-									<Button
-										type={'primary'}
-										block
-										size={'middle'}
-										className={'noti-btn m-regular ml-2 w-1/3'}
-										onClick={() => resolveConfirmationRequest()}
-										disabled={submitting}
-										loading={submitting}
-									>
-										{t('loc:Potvrdiť')}
-									</Button>
-								)}
-							</Permissions>
 							{!pendingPublication && (
 								<Button
-									type={'primary'}
+									type={'dashed'}
 									block
 									size={'middle'}
 									className={'noti-btn m-regular ml-2 w-1/3'}
@@ -509,7 +521,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								salonExists &&
 								!pendingPublication && (
 									<Button
-										type={'primary'}
+										type={'dashed'}
 										block
 										size={'middle'}
 										className={'noti-btn m-regular w-12/25'}
@@ -569,6 +581,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			</Row>
 			<Spin spinning={isLoading}>
 				<div className='content-body mt-2'>
+					{renderContentHeader()}
 					<SalonForm onSubmit={handleSubmit} openNoteModal={() => setVisible(true)} salonID={salonID} disabledForm={deletedSalon} />
 					{salonExists && (
 						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />

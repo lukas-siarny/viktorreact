@@ -10,7 +10,7 @@ import { IQueryParams, ISearchablePayload } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_STATUSES } from '../../utils/enums'
+import { SALON_PENDING_PUBLICATION, SALON_STATUSES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
@@ -21,9 +21,13 @@ interface IGetSalons {
 }
 
 export interface IGetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: (string | null)[] | null | undefined
-	statuses?: (string | null)[] | SALON_STATUSES[] | null
-	countryCode?: string | undefined | null
+	categoryFirstLevelIDs?: (string | null)[] | null
+	statuses_all?: boolean | null
+	statuses_published?: (string | null)[] | SALON_STATUSES[] | null
+	statuses_deleted?: (string | null)[] | SALON_STATUSES[] | null
+	countryCode?: string | null
+	createType?: string | null
+	pendingPublication?: (string | null)[] | null
 }
 
 export interface IGetSalon {
@@ -42,8 +46,17 @@ export const getSalons =
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 		try {
+			const editedQueryParams = {
+				...queryParams,
+				statuses: [...(queryParams.statuses_all ? [SALON_STATUSES.ALL] : []), ...(queryParams.statuses_published || []), ...(queryParams.statuses_deleted || [])],
+				pendingPublication: !queryParams?.statuses_all && !!queryParams.pendingPublication?.find((value) => value === SALON_PENDING_PUBLICATION.PENDING)
+			}
+			delete editedQueryParams.statuses_all
+			delete editedQueryParams.statuses_published
+			delete editedQueryParams.statuses_deleted
+
 			dispatch({ type: SALONS.SALONS_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/salons/', { ...normalizeQueryParams(queryParams) } as any)
+			const { data } = await getReq('/api/b2b/admin/salons/', { ...normalizeQueryParams(editedQueryParams) } as any)
 			const salonsOptions = map(data.salons, (salon) => {
 				return { label: salon.name || `${salon.id}`, value: salon.id, key: `${salon.id}-key` }
 			})

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Form, Row, Space } from 'antd'
+import { Button, Col, Divider, Form, Row, Space, Tag } from 'antd'
 import { useSelector } from 'react-redux'
 import { get, isEqual } from 'lodash'
 
@@ -16,10 +16,11 @@ import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+import SelectField from '../../../atoms/SelectField'
 
 // utils
-import { showErrorNotification } from '../../../utils/helper'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification } from '../../../utils/helper'
+import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
 import { ISalonForm } from '../../../types/interfaces'
@@ -42,7 +43,6 @@ import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
-import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {
 	openNoteModal: Function
@@ -98,6 +98,19 @@ const SalonForm: FC<Props> = (props) => {
 		/>
 	)
 
+	const logoFormField = (filedName: string, disabled: boolean) => (
+		<Field
+			component={ImgUploadField}
+			name={filedName}
+			label={t('loc:Logo')}
+			signUrl={URL_UPLOAD_IMAGES}
+			multiple={false}
+			maxCount={1}
+			category={UPLOAD_IMG_CATEGORIES.SALON}
+			disabled={disabled}
+		/>
+	)
+
 	const phoneFormField = (phoneFiledName: string, phonePrefixFiledName: string, disabled: boolean) => (
 		<PhoneWithPrefixField
 			label={'Telefón'}
@@ -107,6 +120,7 @@ const SalonForm: FC<Props> = (props) => {
 			phoneName={phoneFiledName}
 			disabled={disabled}
 			formName={FORM.SALON}
+			getPopupContainer={() => document.querySelector('.content-body')}
 			required
 		/>
 	)
@@ -124,6 +138,10 @@ const SalonForm: FC<Props> = (props) => {
 		/>
 	)
 
+	const nameFormField = (filedName: string, disabled: boolean) => (
+		<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={filedName} size={'large'} disabled={disabled} required />
+	)
+
 	const addressDescriptionFormFiled = (filedName: string, disabled: boolean) => (
 		<Field
 			component={TextareaField}
@@ -136,6 +154,7 @@ const SalonForm: FC<Props> = (props) => {
 			showLettersCount
 		/>
 	)
+
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={36}>
@@ -148,8 +167,12 @@ const SalonForm: FC<Props> = (props) => {
 							</h3>
 						</div>
 						<Divider className={'mb-3 mt-3'} />
-
-						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
+						<Compare
+							oldValue={formValues?.publishedSalonData?.name}
+							newValue={formValues?.name}
+							oldFormField={nameFormField('publishedSalonData.name', true)}
+							newFormField={nameFormField('name', disabledForm)}
+						/>
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsFirst}
 							newValue={formValues?.aboutUsFirst}
@@ -173,21 +196,19 @@ const SalonForm: FC<Props> = (props) => {
 							mode={'multiple'}
 							required
 						/>
-						<Field
-							component={ImgUploadField}
-							name={'logo'}
-							label={t('loc:Logo')}
-							signUrl={URL_UPLOAD_IMAGES}
-							multiple={false}
-							maxCount={1}
-							category={UPLOAD_IMG_CATEGORIES.SALON}
-							disabled={disabledForm}
+						<Compare
+							oldValue={formValues?.publishedSalonData?.logo}
+							equal={isEqual(formValues?.logo, formValues?.publishedSalonData?.logo)}
+							oldFormField={logoFormField('publishedSalonData.logo', true)}
+							newFormField={logoFormField('logo', disabledForm)}
+							ellipsis
 						/>
 						<Compare
 							oldValue={formValues?.publishedSalonData?.gallery}
 							equal={isEqual(formValues?.gallery, formValues?.publishedSalonData?.gallery)}
 							oldFormField={imagesFormField('publishedSalonData.gallery', true)}
 							newFormField={imagesFormField('gallery', disabledForm)}
+							ellipsis
 						/>
 					</Col>
 				</Row>

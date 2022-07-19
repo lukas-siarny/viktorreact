@@ -144,7 +144,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			const openOverWeekend: boolean = checkWeekend(salonData?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData?.openingHours)
 			const openingHours: OpeningHours = initOpeningHours(salonData?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
-			let initData: any = {
+			let initialData: any = {
 				...salonData,
 				openOverWeekend,
 				sameOpenHoursOverWeek,
@@ -175,7 +175,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			}
 
 			if (salonData?.publishedSalonData) {
-				initData = {
+				initialData = {
 					...initData,
 					publishedSalonData: {
 						...salonData.publishedSalonData,
@@ -184,7 +184,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				}
 			}
 
-			dispatch(initialize(FORM.SALON, initData))
+			dispatch(initialize(FORM.SALON, initialData))
 		} else if (!salon?.isLoading) {
 			// init data for new "creating process" salon
 			dispatch(

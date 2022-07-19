@@ -626,7 +626,7 @@ export const checkFiltersSize = (formValues: any) => size(filter(formValues, (va
 
 export const convertCountriesToLocalizations = (countries: RootState['enumerationsStore']['countries'], defaultLanguageName?: string) => {
 	const fieldValues = map(countries.data, (country) => ({
-		language: LOCALES[country.code.toLowerCase() as LANGUAGE].ISO_639
+		language: lowerCase(country.code)
 	}))
 
 	if (!defaultLanguageName) return fieldValues

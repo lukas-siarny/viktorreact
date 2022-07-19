@@ -71,7 +71,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
 	const salonExists = salonID > 0
-	const hasSalonPublishedVersion = !salon.data?.publishedSalonData
+	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
 	const pendingPublication = salon.data?.pendingPublication
 
 	// check permissions for submit in case of create or update salon
@@ -376,13 +376,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		dispatch(selectSalon(salonID))
 	}
 
-	const renderContentHeader = () => (
+	const renderContentHeader = () => salonExists && (
 		<div className={cx('content-header', { warning: hasSalonPublishedVersion && pendingPublication })}>
 			<Row align={'middle'} justify={'space-between'} className={'w-full'}>
 				<Row className={'py-2'}>
 					{getSalonTagPublished(salon?.data?.state as SALON_STATES)}
 					{getSalonTagChanges(salon?.data?.state as SALON_STATES)}
-					{getSalonTagDeleted(false)}
+					{getSalonTagDeleted(deletedSalon)}
 				</Row>
 				{hasSalonPublishedVersion && pendingPublication && (
 					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>

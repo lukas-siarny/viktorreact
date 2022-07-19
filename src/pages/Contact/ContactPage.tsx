@@ -57,7 +57,7 @@ const ContactPage: FC<Props> = () => {
 			}
 			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country.code.toLowerCase() === i18n.language?.toLowerCase())
 
-			if (currentLngCountry?.id && !selectedContact) {
+			if (currentLngCountry?.id) {
 				dispatch(getSupportContact(currentLngCountry?.id))
 				setView('default')
 				return

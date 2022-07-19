@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import React from 'react'
 import {
 	first,
 	floor,
@@ -57,9 +58,9 @@ import { phoneRegEx } from './regex'
 import { Paths } from '../types/api'
 import { RootState } from '../reducers'
 import { LOCALES } from '../components/LanguagePicker'
-import { EnumerationData, ICountriesPayload } from '../reducers/enumerations/enumerationActions'
+import { EnumerationData } from '../reducers/enumerations/enumerationActions'
 
-import { ReactComponent as CheckIcon12 } from  '../assets/icons/check-12.svg'
+import { ReactComponent as CheckIcon12 } from '../assets/icons/check-12.svg'
 import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
 import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
@@ -729,7 +730,7 @@ export const getSupportContactCountryName = (nameLocalizations?: { value: string
 
 // salon status tags
 export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
-	if(!salonStatus) {
+	if (!salonStatus) {
 		return null
 	}
 
@@ -751,13 +752,17 @@ export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
 	}
 }
 
-export const getSalonTagDeleted = (deleted?: boolean) => {
-	if(deleted) {
+export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false) => {
+	if (deleted) {
 		return (
 			<Tag icon={<TrashIcon12 />} className={'noti-tag danger'}>
 				{i18next.t('loc:Nevymazaný')}
 			</Tag>
 		)
+	}
+
+	if (returnOnlyDeleted) {
+		return null
 	}
 
 	return (
@@ -768,7 +773,7 @@ export const getSalonTagDeleted = (deleted?: boolean) => {
 }
 
 export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
-	if(!salonStatus) {
+	if (!salonStatus) {
 		return null
 	}
 

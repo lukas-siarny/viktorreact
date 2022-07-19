@@ -22,8 +22,8 @@ import { ReactComponent as TrashCrossedIcon12 } from '../../../assets/icons/tras
 import { ReactComponent as CloseIcon12 } from '../../../assets/icons/close-12.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_PENDING_PUBLICATION, SALON_STATUSES } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
+import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
+import { validationString } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
 
@@ -63,7 +63,12 @@ const statusOptionRender = (itemData: any) => {
 	)
 }
 
-export const checkSalonFiltersSize = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search' && key !== 'statuses_all'))
+export const checkSalonFiltersSize = (formValues: any) => size(filter(formValues, (value, key) => {
+	if(typeof value === 'boolean') {
+		return value
+	}
+	(!isNil(value) || !isEmpty(value)) && key !== 'search' && key !== 'statuses_all'
+} ))
 
 const SalonsFilter = (props: Props) => {
 	const { handleSubmit, openSalonImportsModal } = props
@@ -83,21 +88,24 @@ const SalonsFilter = (props: Props) => {
 
 	const publishedOptions = useMemo(
 		() => [
-			{ label: t('loc:Publikovaný'), value: SALON_STATUSES.PUBLISHED, key: SALON_STATUSES.PUBLISHED, icon: <CheckIcon12 />, className: 'success' },
-			{ label: t('loc:Nepublikovaný'), value: SALON_STATUSES.NOT_PUBLISHED, key: SALON_STATUSES.NOT_PUBLISHED, icon: <CloseIcon12 /> }
+			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, icon: <CheckIcon12 />, className: 'success' },
+			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, icon: <CloseIcon12 /> }
 		],
 		[t]
 	)
 
-	const pendingOptions = useMemo(
-		() => [{ label: t('loc:Na schválenie'), value: SALON_PENDING_PUBLICATION.PENDING, key: SALON_PENDING_PUBLICATION.PENDING, icon: <ClockIcon12 />, className: 'warning' }],
+	const changesOptions = useMemo(
+		() => [
+			{ label: t('loc:Na schválenie'), value: SALON_FILTER_STATES.PENDING_PUBLICATION, key: SALON_FILTER_STATES.PENDING_PUBLICATION, icon: <ClockIcon12 />, className: 'warning' },
+			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, icon: <CloseIcon12 />, className: 'danger' }
+		],
 		[t]
 	)
 
 	const deletedOptions = useMemo(
 		() => [
-			{ label: t('loc:Vymazaný'), value: SALON_STATUSES.DELETED, key: SALON_STATUSES.DELETED, icon: <TrashIcon12 />, className: 'danger' },
-			{ label: t('loc:Nevymazaný'), value: SALON_STATUSES.NOT_DELETED, key: SALON_STATUSES.NOT_DELETED, icon: <TrashCrossedIcon12 />, className: 'info' }
+			{ label: t('loc:Vymazaný'), value: SALON_FILTER_STATES.DELETED, key: SALON_FILTER_STATES.DELETED, icon: <TrashIcon12 />, className: 'danger' },
+			{ label: t('loc:Nevymazaný'), value: SALON_FILTER_STATES.NOT_DELETED, key: SALON_FILTER_STATES.NOT_DELETED, icon: <TrashCrossedIcon12 />, className: 'info' }
 		],
 		[t]
 	)
@@ -197,14 +205,14 @@ const SalonsFilter = (props: Props) => {
 							<Col span={8}>
 								<Field
 									component={SelectField}
-									name={'pendingPublication'}
+									name={'statuses_changes'}
 									placeholder={t('loc:Zmeny')}
 									className={'statuses-filter-select'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
-									options={pendingOptions}
+									options={changesOptions}
 									optionRender={statusOptionRender}
 								/>
 							</Col>

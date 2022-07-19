@@ -60,10 +60,6 @@ export default (values: any) => {
 		}
 	}
 
-	if (!(values?.gallery?.length > 0)) {
-		errors.gallery = i18next.t('loc:Nahrajte aspoň jeden obrázok')
-	}
-
 	if (values?.email && values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
 		errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_20

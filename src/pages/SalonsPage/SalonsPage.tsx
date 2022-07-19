@@ -65,10 +65,10 @@ const SalonsPage = () => {
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		categoryFirstLevelIDs: ArrayParam,
-		statuses_all: withDefault(BooleanParam, true),
+		statuses_all: withDefault(BooleanParam, false),
 		statuses_published: ArrayParam,
 		statuses_deleted: ArrayParam,
-		pendingPublication: ArrayParam,
+		statuses_changes: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:DESC'),
@@ -85,7 +85,7 @@ const SalonsPage = () => {
 				statuses_all: query.statuses_all,
 				statuses_published: query.statuses_published,
 				statuses_deleted: query.statuses_deleted,
-				pendingPublication: query.pendingPublication,
+				statuses_changes: query.statuses_changes,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
 				countryCode: query.countryCode,
 				createType: query.createType
@@ -98,9 +98,9 @@ const SalonsPage = () => {
 				order: query.order,
 				search: query.search,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-				pendingPublication: query.pendingPublication,
 				statuses_all: query.statuses_all,
 				statuses_published: query.statuses_published,
+				statuses_changes: query.statuses_changes,
 				statuses_deleted: query.statuses_deleted,
 				countryCode: query.countryCode,
 				createType: query.createType
@@ -114,9 +114,9 @@ const SalonsPage = () => {
 		query.order,
 		query.categoryFirstLevelIDs,
 		query.statuses_all,
-		query.pendingPublication,
 		query.statuses_published,
 		query.statuses_deleted,
+		query.statuses_changes,
 		query.countryCode,
 		query.createType
 	])

@@ -63,6 +63,8 @@ const SalonForm: FC<Props> = (props) => {
 	const { handleSubmit, change, openNoteModal, salonID, disabledForm } = props
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null)
 
 	const aboutUsFirstPlaceholder = t('loc:Zadajte základné informácie o salóne')
 	const aboutUsFirstLabel = t('loc:O nás')
@@ -91,7 +93,6 @@ const SalonForm: FC<Props> = (props) => {
 			label={t('loc:Fotogaléria')}
 			signUrl={URL_UPLOAD_IMAGES}
 			multiple
-			required
 			maxCount={10}
 			category={UPLOAD_IMG_CATEGORIES.SALON}
 			disabled={disabled}
@@ -160,12 +161,17 @@ const SalonForm: FC<Props> = (props) => {
 			<Space className={'w-full'} direction='vertical' size={36}>
 				<Row>
 					<Col span={24}>
-						<div className={'flex justify-between w-full items-center'}>
+						<Row justify={'space-between'}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<InfoIcon className={'text-notino-black mr-2'} />
 								{t('loc:Základné údaje')}
 							</h3>
-						</div>
+							<Row className={'py-2'} wrap={false}>
+								{getSalonTagPublished(salon?.data?.state as SALON_STATES)}
+								{getSalonTagChanges(salon?.data?.state as SALON_STATES)}
+								{getSalonTagDeleted(deletedSalon, true)}
+							</Row>
+						</Row>
 						<Divider className={'mb-3 mt-3'} />
 						<Compare
 							oldValue={formValues?.publishedSalonData?.name}

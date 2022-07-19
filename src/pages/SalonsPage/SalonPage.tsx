@@ -22,7 +22,6 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERM
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
-import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
@@ -32,7 +31,7 @@ import { Paths } from '../../types/api'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished } from '../../utils/helper'
+import { getPrefixCountryCode } from '../../utils/helper'
 import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
 
 // assets
@@ -213,7 +212,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 			const salonData: SalonPatch = {
-				imageIDs: data.gallery.map((image) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
+				imageIDs: (data.gallery || []).map((image) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 				logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
 				name: data.name,
 				openingHours: openingHours || [],
@@ -376,29 +375,29 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		dispatch(selectSalon(salonID))
 	}
 
-	const renderContentHeader = () => salonExists && (
-		<div className={cx('content-header', { warning: hasSalonPublishedVersion && pendingPublication })}>
-			<Row align={'middle'} justify={'space-between'} className={'w-full'}>
-				<Row className={'py-2'}>
-					{getSalonTagPublished(salon?.data?.state as SALON_STATES)}
-					{getSalonTagChanges(salon?.data?.state as SALON_STATES)}
-					{getSalonTagDeleted(deletedSalon)}
-				</Row>
-				{hasSalonPublishedVersion && pendingPublication && (
-					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-						<Row className={'gap-2'}>
+	const renderContentHeader = () =>
+		hasSalonPublishedVersion &&
+		pendingPublication &&
+		salonExists && (
+			<div className={'content-header warning'}>
+				<Permissions
+					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+					render={(hasPermission, { openForbiddenModal }) => (
+						<Row justify={'space-between'} className={'w-full'}>
 							<Button
 								type={'primary'}
 								icon={<CloseCricleIcon />}
 								size={'middle'}
 								className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
 								onClick={() =>
-									setModalConfig({
-										title: t('loc:Dôvod zamietnutia'),
-										fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
-										visible: true,
-										onSubmit: resolveConfirmationRequest
-									})
+									hasPermission
+										? setModalConfig({
+												title: t('loc:Dôvod zamietnutia'),
+												fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
+												visible: true,
+												onSubmit: resolveConfirmationRequest
+										  })
+										: openForbiddenModal()
 								}
 								disabled={submitting}
 								loading={submitting}
@@ -410,18 +409,17 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								icon={<CheckIcon />}
 								size={'middle'}
 								className={'noti-btn m-regular w-44 xl:w-56'}
-								onClick={() => resolveConfirmationRequest()}
+								onClick={() => (hasPermission ? resolveConfirmationRequest() : openForbiddenModal())}
 								disabled={submitting}
 								loading={submitting}
 							>
 								{t('loc:Potvrdiť')}
 							</Button>
 						</Row>
-					</Permissions>)
-				}
-			</Row>
-		</div>
-	)
+					)}
+				/>
+			</div>
+		)
 
 	const renderContentFooter = () => {
 		// render footers for flow edit existing salon with published version

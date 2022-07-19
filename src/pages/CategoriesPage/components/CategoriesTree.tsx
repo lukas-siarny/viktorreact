@@ -16,14 +16,12 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, LANGUAGE, ENUMERATIONS_KEYS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
 import { convertCountriesToLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
-
-const DEFAULT_NAME_LANGUAGE = LANGUAGE.EN
 
 type TreeCategories = {
 	title?: ReactElement
@@ -57,7 +55,7 @@ const CategoriesTree = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_NAME_LANGUAGE), [countries])
+	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_LANGUAGE), [countries])
 
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
@@ -84,7 +82,7 @@ const CategoriesTree = () => {
 				name,
 				parentId,
 				orderIndex: index,
-				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
+				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_LANGUAGE),
 				level,
 				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
 				deletedAt,
@@ -266,7 +264,7 @@ const CategoriesTree = () => {
 				// prepare body for request
 				body = {
 					...body,
-					parentID: droppedData.node.props.data.parentId,
+					parentID: droppedData.node.props.data.parentId || undefined,
 					orderIndex,
 					imageID: get(droppedData, 'dragNode.image.id')
 				}
@@ -285,14 +283,14 @@ const CategoriesTree = () => {
 		const cat: any | null = categories?.data
 		try {
 			let body: any = {
-				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,
+				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
 			}
 			if (formData.parentId >= 0) {
 				body = {
 					...body,
-					parentID: formData.parentId
+					parentID: formData.parentId || undefined
 				}
 			}
 			if (formData.id && formData.id >= 0) {
@@ -301,7 +299,6 @@ const CategoriesTree = () => {
 				await postReq('/api/b2b/admin/enums/categories/', null, body)
 			}
 			dispatch(getCategories())
-			setShowForm(false)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

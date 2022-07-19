@@ -29,6 +29,9 @@ import UsersPage from '../pages/UsersPage/UsersPage'
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
+// Cosmetics
+import CosmeticsPage from '../pages/CosmeticsPage/CosmeticsPage'
+
 // Salons
 import SalonSubRoutes from './SalonSubRoutes'
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
@@ -122,6 +125,15 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:categories')}
 					layout={MainLayout}
 					page={PAGE.CATEGORIES}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:cosmetics')}
+					component={CosmeticsPage}
+					translatePathKey={t('paths:cosmetics')}
+					layout={MainLayout}
+					page={PAGE.COSMETICS}
 				/>
 				<AuthRoute
 					{...props}

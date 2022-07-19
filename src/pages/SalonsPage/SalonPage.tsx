@@ -122,7 +122,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
 	const updateOnlyOpeningHours = useRef(false)
-	const fetchData = async (salonData: ISalonPayloadData | null) => {
+
+	const initData = async (salonData: ISalonPayloadData | null) => {
 		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		const defaultContactPerson = {
 			phonePrefixCountryCode
@@ -138,7 +139,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				})
 			)
 			updateOnlyOpeningHours.current = false
-		} else if (!isEmpty(salonData)) {
+		} else if (!isEmpty(salonData) && salonID > 0) {
 			// init data for existing salon
 			const openOverWeekend: boolean = checkWeekend(salonData?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData?.openingHours)
@@ -190,10 +191,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				initialize(FORM.SALON, {
 					openOverWeekend: false,
 					sameOpenHoursOverWeek: true,
-					openingHours: initOpeningHours(salonData?.openingHours, true, false),
+					openingHours: initOpeningHours(undefined, true, false),
 					payByCard: false,
 					phonePrefixCountryCode,
-					isInvoiceAddressSame: true,
 					companyContactPerson: defaultContactPerson
 				})
 			)
@@ -202,8 +202,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	// init forms
 	useEffect(() => {
-		fetchData(salon.data)
-		dispatch(getCategories())
+		initData(salon.data)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salon])
 
@@ -263,15 +262,16 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const breadcrumbDetailItem = get(salon, 'data.salon.name')
-		? {
-				name: t('loc:Detail salónu'),
-				titleName: get(salon, 'data.salon.name')
-		  }
-		: {
-				name: t('loc:Vytvoriť salón'),
-				link: t('paths:salons/create')
-		  }
+	const breadcrumbDetailItem =
+		salonID > 0
+			? {
+					name: t('loc:Detail salónu'),
+					titleName: get(salon, 'data.name')
+			  }
+			: {
+					name: t('loc:Vytvoriť salón'),
+					link: t('paths:salons/create')
+			  }
 
 	// View
 	const breadcrumbs: IBreadcrumbs = {

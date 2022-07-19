@@ -75,11 +75,9 @@ const OpenHoursNoteModal = (props: Props) => {
 	}
 
 	return (
-		<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}>
-			<Modal key={`${visible}`} title={title} visible={visible} onCancel={hideModal} footer={null} closeIcon={<CloseIcon />}>
-				<OpenHoursNoteForm onSubmit={handleSubmit} />
-			</Modal>
-		</Permissions>
+		<Modal key={`${visible}`} title={title} visible={visible} onCancel={hideModal} footer={null} closeIcon={<CloseIcon />}>
+			<OpenHoursNoteForm onSubmit={handleSubmit} />
+		</Modal>
 	)
 }
 

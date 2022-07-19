@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
@@ -303,7 +303,7 @@ const SalonForm: FC<Props> = (props) => {
 								className={'w-12/25'}
 								component={InputField}
 								label={t('loc:IČO')}
-								placeholder={t('loc:Zadajte ičo')}
+								placeholder={t('loc:Zadajte IČO')}
 								name={'companyInfo.businessID'}
 								size={'large'}
 								disabled={disabledForm}
@@ -402,7 +402,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
-						{salonID && (
+						{!!salonID && (
 							<Button type={'primary'} size={'middle'} className={'noti-btn w-1/4 mb-6 mt-3'} onClick={() => openNoteModal()} disabled={disabledForm}>
 								{t('loc:Pridať poznámku')}
 							</Button>

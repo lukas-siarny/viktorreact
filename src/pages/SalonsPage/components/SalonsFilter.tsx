@@ -63,12 +63,15 @@ const statusOptionRender = (itemData: any) => {
 	)
 }
 
-export const checkSalonFiltersSize = (formValues: any) => size(filter(formValues, (value, key) => {
-	if(typeof value === 'boolean') {
-		return value
-	}
-	(!isNil(value) || !isEmpty(value)) && key !== 'search' && key !== 'statuses_all'
-} ))
+export const checkSalonFiltersSize = (formValues: any) =>
+	size(
+		filter(formValues, (value, key) => {
+			if (typeof value === 'boolean') {
+				return value
+			}
+			return (!isNil(value) || !isEmpty(value)) && key !== 'search' && key !== 'statuses_all'
+		})
+	)
 
 const SalonsFilter = (props: Props) => {
 	const { handleSubmit, openSalonImportsModal } = props
@@ -96,7 +99,13 @@ const SalonsFilter = (props: Props) => {
 
 	const changesOptions = useMemo(
 		() => [
-			{ label: t('loc:Na schválenie'), value: SALON_FILTER_STATES.PENDING_PUBLICATION, key: SALON_FILTER_STATES.PENDING_PUBLICATION, icon: <ClockIcon12 />, className: 'warning' },
+			{
+				label: t('loc:Na schválenie'),
+				value: SALON_FILTER_STATES.PENDING_PUBLICATION,
+				key: SALON_FILTER_STATES.PENDING_PUBLICATION,
+				icon: <ClockIcon12 />,
+				className: 'warning'
+			},
 			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, icon: <CloseIcon12 />, className: 'danger' }
 		],
 		[t]

@@ -113,7 +113,7 @@ const PhoneWithPrefixField = (props: Props) => {
 	}, [formName, prefixName, fallbackDefaultValue])
 
 	return (
-		<Row gutter={8} wrap={false} className={className} style={style}>
+		<Row wrap={false} className={className} style={style}>
 			<Col>
 				<Field
 					label={label}

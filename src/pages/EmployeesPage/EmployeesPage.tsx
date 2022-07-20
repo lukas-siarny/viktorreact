@@ -195,6 +195,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 							rowClassName={'clickable-row'}
 							loading={employees?.isLoading}
 							twoToneRows
+							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
 									history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))

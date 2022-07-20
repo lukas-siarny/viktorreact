@@ -175,6 +175,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 							dataSource={services?.tableData}
 							rowClassName={'clickable-row'}
 							loading={services?.isLoading}
+							scroll={{ x: 800 }}
 							twoToneRows
 							onRow={(record) => ({
 								onClick: () => {

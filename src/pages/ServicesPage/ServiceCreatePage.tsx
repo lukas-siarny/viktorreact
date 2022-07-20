@@ -12,7 +12,6 @@ import { addEmployee, parseEmployeeIds } from './ServiceEditPage'
 import { IServiceForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
-import { getCategories } from '../../reducers/categories/categoriesActions'
 import { RootState } from '../../reducers'
 
 // utils
@@ -31,10 +30,6 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
-
-	useEffect(() => {
-		dispatch(getCategories())
-	}, [dispatch])
 
 	const handleSubmit = async (values: IServiceForm) => {
 		try {

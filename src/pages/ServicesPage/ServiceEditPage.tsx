@@ -12,7 +12,6 @@ import ServiceForm from './components/ServiceForm'
 // reducers
 import { RootState } from '../../reducers'
 import { getService } from '../../reducers/services/serviceActions'
-import { getCategories } from '../../reducers/categories/categoriesActions'
 import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
 
 // types
@@ -91,7 +90,6 @@ const ServiceEditPage = (props: Props) => {
 
 	const fetchData = async () => {
 		const { data } = await dispatch(getService(serviceID))
-		dispatch(getCategories())
 		if (!data?.service?.id) {
 			history.push('/404')
 		}

@@ -8,7 +8,7 @@
   "employees": "/employees",
   "employees/create": "/employees/create",
   "employees/{{employeeID}}": "/employees/{{employeeID}}",
-  "index": "/index",
+  "index": "/",
   "login": "/login",
   "my-account": "/my-account",
   "reset-password": "/reset-password",

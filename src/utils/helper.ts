@@ -716,6 +716,7 @@ export const getCountryPrefix = (countriesData: EnumerationData | null, countryC
 }
 
 export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
+	// TODO: don't use hard-coded condition
 	const langToCompare = currentLng === 'cz' ? 'cs' : currentLng
 	const countryTranslation = nameLocalizations?.find((translation) => translation.language === langToCompare)
 	return countryTranslation?.value

@@ -36,25 +36,25 @@ export default (values: ISupportContactForm) => {
 		errors.phones = phoneErrors
 	}
 
-	if (values?.street && values?.street?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+	if (values?.street && values?.street?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
 		errors.street = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_255
 		})
 	}
 
-	if (values?.streetNumber && values?.streetNumber?.length > VALIDATION_MAX_LENGTH.LENGTH_10) {
+	if (values?.streetNumber && values?.streetNumber?.length > VALIDATION_MAX_LENGTH.LENGTH_30) {
 		errors.streetNumber = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_30
 		})
 	}
 
-	if (values?.city && values?.city?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+	if (values?.city && values?.city?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
 		errors.city = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_255
 		})
 	}
 
-	if (values?.zipCode && values?.zipCode?.length > VALIDATION_MAX_LENGTH.LENGTH_10) {
+	if (values?.zipCode && values?.zipCode?.length > VALIDATION_MAX_LENGTH.LENGTH_30) {
 		errors.zipCode = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_30
 		})

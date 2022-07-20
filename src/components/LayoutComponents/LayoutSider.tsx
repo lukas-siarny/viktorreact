@@ -29,6 +29,7 @@ import Permissions from '../../utils/Permissions'
 // redux
 import { logOutUser } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
+import { getSupportContact } from '../../reducers/supportContacts/supportContactsActions'
 
 // components
 import LanguagePicker from '../LanguagePicker'
@@ -59,7 +60,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
 			</Menu.Item>
-			<Menu.Item key='support' onClick={() => history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })} icon={<HelpIcon />}>
+			<Menu.Item
+				key='support'
+				onClick={() => {
+					dispatch(getSupportContact())
+					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
+				}}
+				icon={<HelpIcon />}
+			>
 				{t('loc:Podpora')}
 			</Menu.Item>
 			<LanguagePicker asMenuItem />

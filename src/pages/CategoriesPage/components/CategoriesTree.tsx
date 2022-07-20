@@ -260,7 +260,7 @@ const CategoriesTree = () => {
 					imageID: get(droppedData, 'dragNode.image.id')
 				}
 			}
-			// check and update categories on be
+			// check and update categories on BE
 			await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: dragKey }, body)
 			dispatch(getCategories())
 			setShowForm(false)
@@ -273,7 +273,7 @@ const CategoriesTree = () => {
 	const handleSubmit = async (formData: ICategoryForm) => {
 		const cat: any | null = categories?.data
 		try {
-			const body: any = {
+			let body: any = {
 				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
@@ -282,9 +282,18 @@ const CategoriesTree = () => {
 			if (formData.id && formData.id >= 0) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
 			} else {
+				if (formData.parentId >= 0) {
+					body = {
+						...body,
+						parentID: formData.parentId || undefined
+					}
+				}
+
 				await postReq('/api/b2b/admin/enums/categories/', null, body)
 			}
 			dispatch(getCategories())
+			// clear 'dirty' state from Form
+			dispatch(initialize(FORM.CATEGORY, formData))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

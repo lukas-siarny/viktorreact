@@ -134,7 +134,16 @@ const CosmeticsPage = () => {
 			title: t('loc:Logo'),
 			dataIndex: 'image',
 			key: 'image',
-			render: (value, record) => <Image src={record?.image.resizedImages.thumbnail as string} loading="lazy" fallback={record?.image.original} alt={record?.name} preview={false} className='cosmetics-logo'/>
+			render: (value, record) => (
+				<Image
+					src={record?.image.resizedImages.thumbnail as string}
+					loading='lazy'
+					fallback={record?.image.original}
+					alt={record?.name}
+					preview={false}
+					className='cosmetics-logo'
+				/>
+			)
 		},
 		{
 			title: t('loc:Názov'),

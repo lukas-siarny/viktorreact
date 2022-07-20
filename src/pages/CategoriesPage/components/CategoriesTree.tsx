@@ -221,15 +221,7 @@ const CategoriesTree = () => {
 			}
 
 			// check condition if user dropped node to gap between nodes
-			if (!droppedData.dropToGap) {
-				// dropped node outside of gap between nodes
-				if (dropKey >= 0) {
-					body = {
-						...body,
-						parentID: dropKey
-					}
-				}
-			} else {
+			if (droppedData.dropToGap) {
 				// check if drop subcategory to root level
 				if (droppedData.dragNode.level > 0 && droppedData.node.level === 0) {
 					notification.warning({
@@ -264,7 +256,6 @@ const CategoriesTree = () => {
 				// prepare body for request
 				body = {
 					...body,
-					parentID: droppedData.node.props.data.parentId || undefined,
 					orderIndex,
 					imageID: get(droppedData, 'dragNode.image.id')
 				}
@@ -287,12 +278,7 @@ const CategoriesTree = () => {
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
 			}
-			if (formData.parentId >= 0) {
-				body = {
-					...body,
-					parentID: formData.parentId || undefined
-				}
-			}
+
 			if (formData.id && formData.id >= 0) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
 			} else {

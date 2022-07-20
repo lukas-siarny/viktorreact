@@ -62,7 +62,7 @@ const MainLayout: FC<Props> = (props) => {
 		const content = (
 			<Row className={cx('m-2 flex items-center gap-2 min-w-0')} justify='space-between' wrap={false}>
 				<Row wrap={false} className={'min-w-0 flex items-center gap-2-5'}>
-					<AvatarComponents size={24} src={selectedSalon?.logo?.resizedImages.thumbnail} fallBackSrc={SalonDefaultAvatar}/>
+					<AvatarComponents size={24} src={selectedSalon?.logo?.resizedImages.thumbnail} fallBackSrc={SalonDefaultAvatar} />
 					{selectedSalon?.name && <span className='truncate leading-4 min-w-0 inline-block'>{selectedSalon.name}</span>}
 				</Row>
 

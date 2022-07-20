@@ -95,10 +95,10 @@ const UsersPage = () => {
 			sortOrder: setOrder(query.order, 'fullName'),
 			width: '20%',
 			render: (_value, record) => {
-				if(!record?.firstName && !record?.lastName) {
+				if (!record?.firstName && !record?.lastName) {
 					return '-'
 				}
-				return 	(
+				return (
 					<>
 						{record?.firstName} {record?.lastName}
 					</>

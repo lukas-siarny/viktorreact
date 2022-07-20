@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Form, Row, Space, Tag } from 'antd'
+import { Button, Col, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
 import { get, isEqual } from 'lodash'
 
@@ -70,16 +70,7 @@ const SalonForm: FC<Props> = (props) => {
 	const aboutUsSecondLabel = t('loc:Doplňujúci popis')
 	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string, maxLength: number) => {
 		return (
-			<Field
-				component={TextareaField}
-				label={label}
-				name={filedName}
-				size={'large'}
-				placeholder={placeholder}
-				disabled={disabled}
-				maxLength={maxLength}
-				showLettersCount
-			/>
+			<Field component={TextareaField} label={label} name={filedName} size={'large'} placeholder={placeholder} disabled={disabled} maxLength={maxLength} showLettersCount />
 		)
 	}
 
@@ -180,13 +171,25 @@ const SalonForm: FC<Props> = (props) => {
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsFirst}
 							newValue={formValues?.aboutUsFirst}
-							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsFirst', true, aboutUsFirstPlaceholder, aboutUsFirstLabel, VALIDATION_MAX_LENGTH.LENGTH_1000)}
+							oldFormField={aboutUsFirstFormField(
+								'publishedSalonData.aboutUsFirst',
+								true,
+								aboutUsFirstPlaceholder,
+								aboutUsFirstLabel,
+								VALIDATION_MAX_LENGTH.LENGTH_1000
+							)}
 							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel, VALIDATION_MAX_LENGTH.LENGTH_1000)}
 						/>
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsSecond}
 							newValue={formValues?.aboutUsSecond}
-							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsSecond', true, aboutUsSecondPlaceholder, aboutUsSecondLabel, VALIDATION_MAX_LENGTH.LENGTH_500)}
+							oldFormField={aboutUsFirstFormField(
+								'publishedSalonData.aboutUsSecond',
+								true,
+								aboutUsSecondPlaceholder,
+								aboutUsSecondLabel,
+								VALIDATION_MAX_LENGTH.LENGTH_500
+							)}
 							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel, VALIDATION_MAX_LENGTH.LENGTH_500)}
 						/>
 						<Field

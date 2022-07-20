@@ -207,7 +207,7 @@ const CategoriesTree = () => {
 		}
 		try {
 			// key of dropped node
-			const dropKey: number = droppedData.node.key
+			// const dropKey: number = droppedData.node.key
 			// key of dragged node
 			const dragKey: number = droppedData.dragNode.key
 			// drag node actual index/position in array children nodes

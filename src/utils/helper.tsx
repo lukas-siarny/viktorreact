@@ -56,8 +56,6 @@ import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
-import { RootState } from '../reducers'
-import { LOCALES } from '../components/LanguagePicker'
 import { EnumerationData } from '../reducers/enumerations/enumerationActions'
 
 import { ReactComponent as CheckIcon12 } from '../assets/icons/check-12.svg'
@@ -127,9 +125,9 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
  * Returns formatted date by location
  */
 export const formatDateByLocale = (date: string | Date | undefined | Dayjs) => {
-	const locale = (LOCALES[i18next.language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]).ISO_639
+	const locale = i18next.language || DEFAULT_LANGUAGE
 
-	if (locale === LOCALES[LANGUAGE.SK].ISO_639 || locale === LOCALES[LANGUAGE.CZ].ISO_639) {
+	if (locale === LANGUAGE.SK || locale === LANGUAGE.CZ) {
 		return dayjs(date).format(DEFAULT_DATE_WITH_TIME_FORMAT)
 	}
 	return dayjs(date).format(EN_DATE_WITH_TIME_FORMAT)
@@ -625,20 +623,6 @@ export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(fo
 
 export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))
 
-export const convertCountriesToLocalizations = (countries: RootState['enumerationsStore']['countries'], defaultLanguageName?: string) => {
-	const fieldValues = map(countries.data, (country) => ({
-		language: LOCALES[country.code.toLowerCase() as LANGUAGE].ISO_639
-	}))
-
-	if (!defaultLanguageName) return fieldValues
-
-	const defaultLanguage = { language: defaultLanguageName }
-	const otherLanguages = filter(fieldValues, (field) => field.language !== defaultLanguageName)
-
-	// default language must be first
-	return [defaultLanguage, ...otherLanguages]
-}
-
 type NameLocalizationsItem = {
 	language: string
 }
@@ -724,8 +708,7 @@ export const getCountryPrefix = (countriesData: EnumerationData | null, countryC
 }
 
 export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
-	const langToCompare = LOCALES[currentLng].ISO_639
-	const countryTranslation = nameLocalizations?.find((translation) => translation.language === langToCompare)
+	const countryTranslation = nameLocalizations?.find((translation) => translation.language === currentLng)
 	return countryTranslation?.value
 }
 

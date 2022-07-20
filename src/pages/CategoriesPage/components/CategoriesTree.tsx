@@ -16,12 +16,13 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
-import { convertCountriesToLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
+import { normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
+import { LOCALES } from '../../../components/LanguagePicker'
 
 type TreeCategories = {
 	title?: ReactElement
@@ -51,11 +52,10 @@ const CategoriesTree = () => {
 	const [lastOpenedNode, setLastOpenedNode] = useState<any>()
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_LANGUAGE), [countries])
+	const emptyNameLocalizations = useMemo(() => Object.keys(LOCALES), [])
 
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {

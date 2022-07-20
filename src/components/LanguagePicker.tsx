@@ -17,6 +17,7 @@ import it_IT from 'antd/lib/locale-provider/it_IT'
 // import { useSelector } from 'react-redux'
 // eslint-disable-next-line import/no-cycle
 // import { RootState } from '../reducers'
+import { get } from 'lodash'
 import { LANGUAGE, DEFAULT_LANGUAGE /* , ENUMERATIONS_KEYS */ } from '../utils/enums'
 
 // hooks
@@ -44,7 +45,8 @@ export const LOCALES = {
 	[LANGUAGE.CZ]: {
 		ISO_639: 'cs',
 		antD: cs_CZ,
-		icon: CZ_Flag
+		icon: CZ_Flag,
+		displayAs: 'cz'
 	},
 	[LANGUAGE.EN]: {
 		ISO_639: 'en',
@@ -93,8 +95,7 @@ const LanguagePicker: FC<Props> = (props) => {
 	const isSmallDevice = useMedia(['(max-width: 744px)'], [true], false)
 	const dispatch = useDispatch()
 
-	// const countries = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
-	const options = /* countries?.enumerationsOptions || */ Object.values(LANGUAGE).map((value) => ({ label: value, value, icon: LOCALES[value].icon }))
+	const options = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: LOCALES[value].icon }))
 
 	const handleLanguageChange = (value: any) => {
 		if (reloadPageAfterChange) {
@@ -137,21 +138,20 @@ const LanguagePicker: FC<Props> = (props) => {
 			break
 	}
 
-	const getLanguageFlag = (countryCode: LANGUAGE) => {
-		/* if (countries?.enumerationsOptions) {
-			const [country] = countries.enumerationsOptions.filter((enumOption: any) => enumOption?.value === countryCode)
-			return <img className={'language-picker-img'} src={country?.flag} alt={'flag'} />
-		} */
-		return <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} />
-	}
+	const getLanguageFlag = (countryCode: LANGUAGE) => <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} />
 
 	return (
 		<>
 			{asMenuItem ? (
-				<SubMenu className={'language-picker'} key='currentLanguage' title={currentLanguage.toUpperCase()} icon={getLanguageFlag(currentLanguage)}>
+				<SubMenu
+					className={'language-picker'}
+					key='currentLanguage'
+					title={get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase()}
+					icon={getLanguageFlag(currentLanguage)}
+				>
 					{options?.map((option: any, index: number) => (
 						<Menu.Item onClick={() => handleLanguageChange(option.value)} key={index} icon={getLanguageFlag(option.value)}>
-							{option.label.toUpperCase()}
+							{option.label}
 						</Menu.Item>
 					))}
 				</SubMenu>
@@ -162,7 +162,7 @@ const LanguagePicker: FC<Props> = (props) => {
 							<Option value={option.value} key={index}>
 								<Row className={cx('items-center', { 'justify-center': isSmallDevice })}>
 									{getLanguageFlag(option.value)}
-									{!isSmallDevice && option.label.toUpperCase()}
+									{!isSmallDevice && option.label}
 								</Row>
 							</Option>
 						))}

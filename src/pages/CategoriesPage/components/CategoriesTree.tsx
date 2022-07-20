@@ -273,7 +273,7 @@ const CategoriesTree = () => {
 	const handleSubmit = async (formData: ICategoryForm) => {
 		const cat: any | null = categories?.data
 		try {
-			let body: any = {
+			const body: any = {
 				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')

@@ -2,6 +2,7 @@
   "activation": "/activation",
   "categories": "/categories",
   "contact": "/contact",
+  "cosmetics": "/cosmetics",
   "customers": "/customers",
   "customers/create": "/customers/create",
   "customers/{{customerID}}": "/customers/{{customerID}}",

@@ -19,6 +19,7 @@ import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
 import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
+import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -100,7 +101,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											{t('loc:Používatelia')}
 										</Menu.Item>
 									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_BROWSING]}>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
 										<Menu.Item
 											eventKey={PAGE.CATEGORIES}
 											key={PAGE.CATEGORIES}
@@ -110,6 +111,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
 										>
 											{t('loc:Kategórie')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
+										<Menu.Item
+											eventKey={PAGE.COSMETICS}
+											key={PAGE.COSMETICS}
+											onClick={() => history.push(t('paths:cosmetics'))}
+											icon={<CosmeticIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.COSMETICS })}
+										>
+											{t('loc:Kozmetika')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>

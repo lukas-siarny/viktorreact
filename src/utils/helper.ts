@@ -720,3 +720,14 @@ export const getSupportContactCountryName = (nameLocalizations?: { value: string
 	const countryTranslation = nameLocalizations?.find((translation) => translation.language === langToCompare)
 	return countryTranslation?.value
 }
+
+/**
+ * Remove accent and transform to lower case
+ * Usefull for searching on FE
+ * @link https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+ */
+export const transformToLowerCaseWithoutAccent = (source: string): string =>
+	source
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')

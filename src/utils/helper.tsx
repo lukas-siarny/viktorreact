@@ -756,7 +756,7 @@ export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false)
 	if (deleted) {
 		return (
 			<Tag icon={<TrashIcon12 />} className={'noti-tag danger'}>
-				{i18next.t('loc:Nevymazaný')}
+				{i18next.t('loc:Vymazaný')}
 			</Tag>
 		)
 	}

@@ -234,7 +234,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
 				companyInfo: data.companyInfo,
-				categoryIDs: data.categoryIDs
+				categoryIDs: data.categoryIDs.map((category) => get(category, 'value', category)) as [number, ...number[]]
 			}
 
 			if (salonID > 0) {

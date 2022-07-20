@@ -10,7 +10,8 @@ import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16
 
 // utils
 import { validationString } from '../utils/helper'
-import { LOCALIZATIONS } from '../utils/enums'
+import { LOCALIZATIONS, LANGUAGE } from '../utils/enums'
+import { LOCALES } from './LanguagePicker'
 
 // atoms
 import InputField from '../atoms/InputField'
@@ -45,6 +46,7 @@ const Localizations = (param: any) => {
 
 	param.fields.forEach((field: any, index: any, fields: any) => {
 		const value = fields.get(index)
+		const displayAs = get(LOCALES[value.language as LANGUAGE], 'displayAs', value.language).toUpperCase()
 
 		if (index === param.ignoreFieldIndex) {
 			return
@@ -54,7 +56,7 @@ const Localizations = (param: any) => {
 			<div className={'flex items-start'} key={`${field}.value`}>
 				{param.horizontal && (
 					<label htmlFor={`${field}.value`} className={cx('noti-input-label mt-1', { required: param.required })} style={horizontalLabelStyle}>
-						{get(value, 'language')}
+						{displayAs}
 					</label>
 				)}
 
@@ -65,7 +67,7 @@ const Localizations = (param: any) => {
 					component={param.fieldComponent || InputField}
 					disabled={param.disabled}
 					size={'small'}
-					placeholder={`${get(param, 'placeholder')} (${get(value, 'language')})`}
+					placeholder={`${get(param, 'placeholder')} (${displayAs})`}
 					validate={param?.customValidate || [fixLength255]}
 					autoSize={param.fieldAutoSize}
 					focusRow={param.fieldFocusRow}

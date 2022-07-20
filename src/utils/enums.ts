@@ -17,7 +17,7 @@ export enum NAMESPACE {
 
 export enum LANGUAGE {
 	SK = 'sk',
-	CZ = 'cz',
+	CZ = 'cs',
 	EN = 'en',
 	HU = 'hu',
 	RO = 'ro',

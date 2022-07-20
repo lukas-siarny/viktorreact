@@ -529,7 +529,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const renderContentHeader = () =>
-		hasSalonPublishedVersion &&
 		pendingPublication &&
 		salonExists && (
 			<div className={'content-header warning'}>

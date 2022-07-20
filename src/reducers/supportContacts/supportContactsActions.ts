@@ -9,6 +9,7 @@ import { normalizeQueryParams } from '../../utils/helper'
 import { SUPPORT_CONTACTS, SUPPORT_CONTACT, SET_SUPPORT_CONTACT_OPTIONS } from './supportContactsTypes'
 import { LANGUAGE, DEFAULT_LANGUAGE } from '../../utils/enums'
 import i18n from '../../utils/i18n'
+import { LOCALES } from '../../components/LanguagePicker'
 
 // types
 import { Paths } from '../../types/api'
@@ -77,7 +78,7 @@ export const getSupportContactsOptions =
 	async (dispatch) => {
 		let payload = {} as ISupportContactOptionsPayload
 
-		const langToCompare = currentLng === 'cz' ? 'cs' : currentLng
+		const langToCompare = LOCALES[currentLng].ISO_639
 
 		const options: ISupportContactOption[] =
 			data?.supportContacts?.map((item: any) => {

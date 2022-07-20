@@ -94,11 +94,16 @@ const UsersPage = () => {
 			sorter: true,
 			sortOrder: setOrder(query.order, 'fullName'),
 			width: '20%',
-			render: (value, record) => (
-				<>
-					{record?.firstName} {record?.lastName}
-				</>
-			)
+			render: (_value, record) => {
+				if(!record?.firstName && !record?.lastName) {
+					return '-'
+				}
+				return 	(
+					<>
+						{record?.firstName} {record?.lastName}
+					</>
+				)
+			}
 		},
 		{
 			title: t('loc:Email'),
@@ -179,6 +184,7 @@ const UsersPage = () => {
 							rowClassName={'clickable-row'}
 							loading={users?.isLoading}
 							twoToneRows
+							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
 									history.push(t('paths:users/{{userID}}', { userID: record.id }))

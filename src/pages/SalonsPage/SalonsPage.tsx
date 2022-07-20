@@ -199,7 +199,7 @@ const SalonsPage = () => {
 			key: 'isPublished',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '10%',
 			render: (_value, record) => getSalonTagPublished(record.state)
 		},
 		{
@@ -207,7 +207,7 @@ const SalonsPage = () => {
 			key: 'changes',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '10%',
 			render: (_value, record) => getSalonTagChanges(record.state)
 		},
 		{
@@ -216,7 +216,7 @@ const SalonsPage = () => {
 			key: 'deletedAt',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '10%',
 			render: (deleted) => getSalonTagDeleted(deleted, true)
 		},
 		{
@@ -285,6 +285,7 @@ const SalonsPage = () => {
 							onChange={onChangeTable}
 							columns={columns}
 							dataSource={salons?.data?.salons}
+							scroll={{ x: 1000 }}
 							rowClassName={'clickable-row'}
 							loading={salons?.isLoading}
 							twoToneRows

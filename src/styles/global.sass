@@ -921,6 +921,7 @@ a
 
 .phone-prefix
 	width: 110px
+	margin-right: 8px
 
 .collapse-list.ant-collapse
 	background-color: $backgroundColor-notino-white
@@ -1101,6 +1102,36 @@ span.ant-tag
 	align-items: flex-start
 	background: $backgroundColor-notino-grayLight
 
+.noti-tag.ant-tag
+	border: none
+	border-radius: 999px
+	display: flex
+	align-items: center
+	gap: 4px
+	padding: 8px
+	max-width: fit-content
+	background: $backgroundColor-notino-grayLight
+	min-width: 0
+	height: 28px
+	svg
+		flex: 0 0 auto
+	span
+		color: $textColor-notino-black
+		font-size: 10px
+		line-height: 12px
+		min-width: 0
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+	// TODO: add colors to config file and use variables instead
+	&.success
+		background: $backgroundColor-green-200
+	&.warning
+		background: $backgroundColor-yellow-200
+	&.danger
+		background: $backgroundColor-red-200
+	&.info
+		background: $backgroundColor-blue-100
 
 .cosmetics-logo
 	display: block

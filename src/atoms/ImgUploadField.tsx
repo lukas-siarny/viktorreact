@@ -99,7 +99,7 @@ const ImgUploadField: FC<Props> = (props) => {
 	const uploader = (
 		<Upload
 			id={formFieldID(form, input.name)}
-			className={'-mb-2'}
+			className={'-mb-2 overflow-x-auto'}
 			accept={accept}
 			action={handleAction}
 			disabled={disabled}

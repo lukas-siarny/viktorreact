@@ -129,6 +129,9 @@ const LanguagePicker: FC<Props> = (props) => {
 		case LANGUAGE.RO:
 			currentLanguage = LANGUAGE.RO
 			break
+		case LANGUAGE.IT:
+			currentLanguage = LANGUAGE.IT
+			break
 		default:
 			currentLanguage = DEFAULT_LANGUAGE
 			break

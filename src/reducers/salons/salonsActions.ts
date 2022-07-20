@@ -10,7 +10,7 @@ import { IQueryParams, ISearchablePayload } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_STATUSES } from '../../utils/enums'
+import { SALON_FILTER_STATES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
@@ -22,7 +22,10 @@ interface IGetSalons {
 
 export interface IGetSalonsQueryParams extends IQueryParams {
 	categoryFirstLevelIDs?: (string | null)[] | null
-	statuses?: (string | null)[] | SALON_STATUSES[] | null
+	statuses_all?: boolean | null
+	statuses_published?: (string | null)[] | SALON_FILTER_STATES[] | null
+	statuses_deleted?: (string | null)[] | SALON_FILTER_STATES[] | null
+	statuses_changes?: (string | null)[] | SALON_FILTER_STATES[] | null
 	countryCode?: string | null
 	createType?: string | null
 }
@@ -43,8 +46,22 @@ export const getSalons =
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
 		try {
+			const editedQueryParams = {
+				...queryParams,
+				statuses: [
+					...(queryParams.statuses_all ? [SALON_FILTER_STATES.ALL] : []),
+					...(queryParams.statuses_published || []),
+					...(queryParams.statuses_changes || []),
+					...(queryParams.statuses_deleted || [])
+				]
+			}
+			delete editedQueryParams.statuses_all
+			delete editedQueryParams.statuses_published
+			delete editedQueryParams.statuses_deleted
+			delete editedQueryParams.statuses_changes
+
 			dispatch({ type: SALONS.SALONS_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/salons/', { ...normalizeQueryParams(queryParams) } as any)
+			const { data } = await getReq('/api/b2b/admin/salons/', { ...normalizeQueryParams(editedQueryParams) } as any)
 			const salonsOptions = map(data.salons, (salon) => {
 				return { label: salon.name || `${salon.id}`, value: salon.id, key: `${salon.id}-key` }
 			})

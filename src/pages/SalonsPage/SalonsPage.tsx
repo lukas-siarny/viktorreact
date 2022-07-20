@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import React, { useEffect, useMemo, useState } from 'react'
-import { ArrayParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Modal, Progress, Row, Spin } from 'antd'
+import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { Col, Modal, Progress, Row, Spin, Tag } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, reset } from 'redux-form'
@@ -18,8 +18,8 @@ import UploadSuccess from './components/UploadSuccess'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
-import { formatDateByLocale, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_STATES } from '../../utils/enums'
+import { formatDateByLocale, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
 
@@ -35,6 +35,11 @@ import { IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as CheckIcon12 } from '../../assets/icons/check-12.svg'
+import { ReactComponent as ClockIcon12 } from '../../assets/icons/clock-12.svg'
+import { ReactComponent as TrashIcon12 } from '../../assets/icons/trash-12.svg'
+import { ReactComponent as TrashCrossedIcon12 } from '../../assets/icons/trash-crossed-12.svg'
+import { ReactComponent as CloseIcon12 } from '../../assets/icons/close-12.svg'
 
 type Columns = ColumnsType<any>
 
@@ -60,7 +65,10 @@ const SalonsPage = () => {
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
 		categoryFirstLevelIDs: ArrayParam,
-		statuses: ArrayParam,
+		statuses_all: withDefault(BooleanParam, false),
+		statuses_published: ArrayParam,
+		statuses_deleted: ArrayParam,
+		statuses_changes: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:DESC'),
@@ -74,7 +82,10 @@ const SalonsPage = () => {
 		dispatch(
 			initialize(FORM.SALONS_FILTER, {
 				search: query.search,
-				statuses: query.statuses,
+				statuses_all: query.statuses_all,
+				statuses_published: query.statuses_published,
+				statuses_deleted: query.statuses_deleted,
+				statuses_changes: query.statuses_changes,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
 				countryCode: query.countryCode,
 				createType: query.createType
@@ -87,12 +98,28 @@ const SalonsPage = () => {
 				order: query.order,
 				search: query.search,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-				statuses: query.statuses,
+				statuses_all: query.statuses_all,
+				statuses_published: query.statuses_published,
+				statuses_changes: query.statuses_changes,
+				statuses_deleted: query.statuses_deleted,
 				countryCode: query.countryCode,
 				createType: query.createType
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryFirstLevelIDs, query.statuses, query.countryCode, query.createType])
+	}, [
+		dispatch,
+		query.page,
+		query.limit,
+		query.search,
+		query.order,
+		query.categoryFirstLevelIDs,
+		query.statuses_all,
+		query.statuses_published,
+		query.statuses_deleted,
+		query.statuses_changes,
+		query.countryCode,
+		query.createType
+	])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -146,7 +173,7 @@ const SalonsPage = () => {
 			key: 'name',
 			ellipsis: true,
 			sorter: true,
-			width: '30%',
+			width: '15%',
 			sortOrder: setOrder(query.order, 'name')
 		},
 		{
@@ -159,12 +186,46 @@ const SalonsPage = () => {
 			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
 		},
 		{
+			title: t('loc:Odvetvie'),
+			dataIndex: 'categories',
+			key: 'categories',
+			ellipsis: true,
+			sorter: false,
+			width: '10%',
+			render: (value) => (value?.length > 0 ? value[0].name : '-')
+		},
+		{
+			title: t('loc:Publikovaný'),
+			key: 'isPublished',
+			ellipsis: true,
+			sorter: false,
+			width: '8%',
+			render: (_value, record) => getSalonTagPublished(record.state)
+		},
+		{
+			title: t('loc:Zmeny'),
+			key: 'changes',
+			ellipsis: true,
+			sorter: false,
+			width: '8%',
+			render: (_value, record) => getSalonTagChanges(record.state)
+		},
+		{
+			title: t('loc:Vymazaný'),
+			dataIndex: 'deletedAt',
+			key: 'deletedAt',
+			ellipsis: true,
+			sorter: false,
+			width: '8%',
+			render: (deleted) => getSalonTagDeleted(deleted, true)
+		},
+		{
 			title: t('loc:Importovaný'),
 			dataIndex: 'createType',
 			key: 'createType',
 			ellipsis: true,
 			sorter: false,
-			width: '10%',
+			width: '6%',
 			render: (value) =>
 				value === SALON_CREATE_TYPES.BASIC && (
 					<div className={'flex justify-start'}>
@@ -173,7 +234,7 @@ const SalonsPage = () => {
 				)
 		},
 		{
-			title: t('loc:Vyplnenia profilu'),
+			title: t('loc:Vyplnenie profilu'),
 			dataIndex: 'fillingProgressSalon',
 			key: 'fillingProgressSalon',
 			ellipsis: true,
@@ -181,7 +242,12 @@ const SalonsPage = () => {
 			// NOTE: sort by fillingProgressSalon when BE is done
 			/* sorter: true,
 			sortOrder: setOrder(query.order, 'fillingProgressSalon'), */
-			render: (value) => <Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
+			render: (value) => (
+				<Row className={'gap-2'} wrap={false}>
+					<span className={'w-9'}>{value ? `${value}%` : ''}</span>
+					<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
+				</Row>
+			)
 		},
 		{
 			title: t('loc:Vytvorené'),

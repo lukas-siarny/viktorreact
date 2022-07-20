@@ -75,7 +75,8 @@
 		background-color: $backgroundColor-notino-black
 		&:disabled
 			opacity: .4
-		&:not(:disabled):hover
+		&:not(:disabled):hover,
+		&:not(:disabled):focus-visible
 			background-color: $backgroundColor-notino-black
 			color: $textColor-notino-white
 			z-index: $z-index-box-shadow
@@ -92,6 +93,24 @@
 		&.ant-btn-lg
 			svg
 				top: calc(50% - 14px)
+	// dashed
+	&.ant-btn-dashed
+		background: $backgroundColor-notino-white
+		border: 1px solid $borderColor-black
+		svg
+			position: absolute
+			top: 50%
+			transform: translateY(-50%)
+			left: 16px
+		svg:first-child + span
+			// padding-left: 0
+		&:disabled
+			color: $textColor-gray-900
+			border-color: $borderColor-gray-400
+		&:not(:disabled):hover,
+		&:not(:disabled):focus-visible
+			background-color: $backgroundColor-notino-white
+			box-shadow: $btn-shadow-hover-default
 	// Ghost
 	&.ant-btn-background-ghost
 		background-color: transparent
@@ -131,7 +150,8 @@
 		background-color: $backgroundColor-red-100
 		&.ant-btn-icon-only
 			background-color: transparent
-		&:hover
+		&:hover,
+		&:focus-visible
 			background-color: $backgroundColor-red-200
 			color: $textColor-red-600
 	// disabled state pre delete button ktory je v pop confirme

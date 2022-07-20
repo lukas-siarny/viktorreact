@@ -15,9 +15,6 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 
-// enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES } from '../../utils/enums'
-
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
@@ -29,6 +26,7 @@ import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSub
 import { Paths } from '../../types/api'
 
 // utils
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES } from '../../utils/enums'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
@@ -44,6 +42,8 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+
+const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
 
 const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
@@ -70,7 +70,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
 	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
-	const pendingPublication = salon.data?.pendingPublication
+	const pendingPublication = salon.data && pendingStates.includes(salon.data.state)
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions

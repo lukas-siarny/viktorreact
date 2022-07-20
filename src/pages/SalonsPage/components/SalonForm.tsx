@@ -63,14 +63,12 @@ const SalonForm: FC<Props> = (props) => {
 	const { handleSubmit, change, openNoteModal, salonID, disabledForm } = props
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
-	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null)
 
 	const aboutUsFirstPlaceholder = t('loc:Zadajte základné informácie o salóne')
 	const aboutUsFirstLabel = t('loc:O nás')
 	const aboutUsSecondPlaceholder = t('loc:Zadajte doplňujúce informácie o salóne')
 	const aboutUsSecondLabel = t('loc:Doplňujúci popis')
-	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string) => {
+	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string, maxLength: number) => {
 		return (
 			<Field
 				component={TextareaField}
@@ -79,7 +77,7 @@ const SalonForm: FC<Props> = (props) => {
 				size={'large'}
 				placeholder={placeholder}
 				disabled={disabled}
-				maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+				maxLength={maxLength}
 				showLettersCount
 			/>
 		)
@@ -167,9 +165,9 @@ const SalonForm: FC<Props> = (props) => {
 								{t('loc:Základné údaje')}
 							</h3>
 							<Row className={'py-2'} wrap={false}>
-								{getSalonTagPublished(salon?.data?.state as SALON_STATES)}
-								{getSalonTagChanges(salon?.data?.state as SALON_STATES)}
-								{getSalonTagDeleted(deletedSalon, true)}
+								{getSalonTagPublished(formValues?.state as SALON_STATES)}
+								{getSalonTagChanges(formValues?.state as SALON_STATES)}
+								{getSalonTagDeleted(!!formValues?.deletedAt, true)}
 							</Row>
 						</Row>
 						<Divider className={'mb-3 mt-3'} />
@@ -182,14 +180,14 @@ const SalonForm: FC<Props> = (props) => {
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsFirst}
 							newValue={formValues?.aboutUsFirst}
-							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsFirst', true, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
-							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
+							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsFirst', true, aboutUsFirstPlaceholder, aboutUsFirstLabel, VALIDATION_MAX_LENGTH.LENGTH_1000)}
+							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel, VALIDATION_MAX_LENGTH.LENGTH_1000)}
 						/>
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsSecond}
 							newValue={formValues?.aboutUsSecond}
-							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsSecond', true, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
-							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
+							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsSecond', true, aboutUsSecondPlaceholder, aboutUsSecondLabel, VALIDATION_MAX_LENGTH.LENGTH_500)}
+							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel, VALIDATION_MAX_LENGTH.LENGTH_500)}
 						/>
 						<Field
 							component={SelectField}

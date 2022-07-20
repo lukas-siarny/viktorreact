@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Row } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
 // components
 import ServiceCreatePage from './ServiceCreatePage'
@@ -9,6 +10,9 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
 import { IBreadcrumbs, IComputedMatch, SalonSubPageProps } from '../../types/interfaces'
+
+// reducers
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
@@ -20,6 +24,11 @@ const ServicePage = (props: Props) => {
 	const { serviceID } = props.computedMatch.params
 	const { salonID, parentPath } = props
 	const { t } = useTranslation()
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(getCategories())
+	}, [dispatch])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [

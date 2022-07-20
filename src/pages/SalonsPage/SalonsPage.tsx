@@ -217,7 +217,7 @@ const SalonsPage = () => {
 			ellipsis: true,
 			sorter: false,
 			width: '8%',
-			render: (deleted) => getSalonTagDeleted(deleted)
+			render: (deleted) => getSalonTagDeleted(deleted, true)
 		},
 		{
 			title: t('loc:Importovaný'),

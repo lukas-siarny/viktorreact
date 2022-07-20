@@ -15,6 +15,9 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 
+// enums
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES } from '../../utils/enums'
+
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
@@ -26,7 +29,6 @@ import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSub
 import { Paths } from '../../types/api'
 
 // utils
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES } from '../../utils/enums'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
@@ -183,7 +185,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					...initialData,
 					publishedSalonData: {
 						...salonData.publishedSalonData,
-						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id }))
+						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
+						logo: salonData.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null
 					}
 				}
 			}

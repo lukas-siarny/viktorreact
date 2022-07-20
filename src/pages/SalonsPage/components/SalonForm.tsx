@@ -74,6 +74,8 @@ const SalonForm: FC<Props> = (props) => {
 		)
 	}
 
+	console.log(formValues)
+
 	const imagesFormField = (filedName: string, disabled: boolean) => (
 		<Field
 			className={'m-0'}

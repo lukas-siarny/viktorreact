@@ -112,7 +112,7 @@ const MainLayout: FC<Props> = (props) => {
 										<Button
 											onClick={() => {
 												dispatch(selectSalon())
-												history.push(t('paths:index'))
+												history.push(t('paths:salons'))
 											}}
 											icon={<BackIcon className={'text-notino-black'} />}
 											className={'noti-btn h-8 text-notino-black self-center'}

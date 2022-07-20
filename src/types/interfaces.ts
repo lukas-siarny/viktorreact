@@ -263,6 +263,11 @@ export interface IEmployeeForm {
 	role: number
 }
 
+export interface ICosmeticForm {
+	name: string
+	image: any
+}
+
 export interface ILanguagePickerForm {
 	language: LANGUAGE
 }
@@ -337,3 +342,5 @@ export interface INoteModal {
 export interface IDataUploadForm {
 	file: string | Blob
 }
+
+export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0]

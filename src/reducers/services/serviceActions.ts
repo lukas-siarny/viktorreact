@@ -56,6 +56,7 @@ export const getServices =
 					name: item.name || '-',
 					employees: item.employees.map((employee) => ({
 						src: employee.image?.resizedImages?.thumbnail,
+						fallBackSrc: employee.image?.original,
 						alt: `${employee.firstName} ${employee.lastName}`,
 						text: `${employee.firstName} ${employee.lastName}`,
 						key: employee.id

@@ -63,8 +63,6 @@ const SalonForm: FC<Props> = (props) => {
 	const { handleSubmit, change, openNoteModal, salonID, disabledForm } = props
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
-	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null)
 
 	const aboutUsFirstPlaceholder = t('loc:Zadajte základné informácie o salóne')
 	const aboutUsFirstLabel = t('loc:O nás')
@@ -167,9 +165,9 @@ const SalonForm: FC<Props> = (props) => {
 								{t('loc:Základné údaje')}
 							</h3>
 							<Row className={'py-2'} wrap={false}>
-								{getSalonTagPublished(salon?.data?.state as SALON_STATES)}
-								{getSalonTagChanges(salon?.data?.state as SALON_STATES)}
-								{getSalonTagDeleted(deletedSalon, true)}
+								{getSalonTagPublished(formValues?.state as SALON_STATES)}
+								{getSalonTagChanges(formValues?.state as SALON_STATES)}
+								{getSalonTagDeleted(!!formValues?.deletedAt, true)}
 							</Row>
 						</Row>
 						<Divider className={'mb-3 mt-3'} />

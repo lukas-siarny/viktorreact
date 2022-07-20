@@ -68,7 +68,7 @@ const SalonForm: FC<Props> = (props) => {
 	const aboutUsFirstLabel = t('loc:O nás')
 	const aboutUsSecondPlaceholder = t('loc:Zadajte doplňujúce informácie o salóne')
 	const aboutUsSecondLabel = t('loc:Doplňujúci popis')
-	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string) => {
+	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string, maxLength: number) => {
 		return (
 			<Field
 				component={TextareaField}
@@ -77,7 +77,7 @@ const SalonForm: FC<Props> = (props) => {
 				size={'large'}
 				placeholder={placeholder}
 				disabled={disabled}
-				maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+				maxLength={maxLength}
 				showLettersCount
 			/>
 		)
@@ -180,14 +180,14 @@ const SalonForm: FC<Props> = (props) => {
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsFirst}
 							newValue={formValues?.aboutUsFirst}
-							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsFirst', true, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
-							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
+							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsFirst', true, aboutUsFirstPlaceholder, aboutUsFirstLabel, VALIDATION_MAX_LENGTH.LENGTH_1000)}
+							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel, VALIDATION_MAX_LENGTH.LENGTH_1000)}
 						/>
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsSecond}
 							newValue={formValues?.aboutUsSecond}
-							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsSecond', true, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
-							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
+							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsSecond', true, aboutUsSecondPlaceholder, aboutUsSecondLabel, VALIDATION_MAX_LENGTH.LENGTH_500)}
+							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel, VALIDATION_MAX_LENGTH.LENGTH_500)}
 						/>
 						<Field
 							component={SelectField}

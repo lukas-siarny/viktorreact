@@ -407,7 +407,7 @@ const SalonForm: FC<Props> = (props) => {
 								prefixName={'companyContactPerson.phonePrefixCountryCode'}
 								phoneName={'companyContactPerson.phone'}
 								disabled={disabledForm}
-								style={{ width: 'calc(50% - 8px' }}
+								className='w-12/25'
 								formName={FORM.SALON}
 								required
 							/>

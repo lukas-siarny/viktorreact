@@ -63,7 +63,7 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			flag: item.flag
 		}))
 
-		const currentLng = i18n.language
+		const currentLng = i18n.language === 'cz' ? 'cs' : i18n.language
 
 		const enumerationsCountriesOptions: ISelectOptionItem[] = map(data, (item) => {
 			const countryTranslation = item.nameLocalizations.find((translation: any) => translation.language === currentLng)

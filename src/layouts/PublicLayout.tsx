@@ -30,13 +30,13 @@ const PublicLayout = (props: Props) => {
 		switch (size) {
 			case RESOLUTIONS.SM:
 				return (
-					<div className={cx(className, 'public-layout grid place-items-center h-screen w-screen bg-notino-grayLighter w-full mx-auto')}>
+					<div className={cx(className, 'public-layout grid place-items-center h-screen w-screen bg-notino-grayLighter mx-auto')}>
 						<div className='bg-notino-grayLighter flex flex-col items-center overflow-hidden w-full'>
 							<SmLogo className='mb-6' />
 
 							<div className='flex-auto relative w-full'>
 								{props.children}
-								<LanguagePicker className='-bottom-1 right-0 absolute mb-0' />
+								<LanguagePicker className='-bottom-1 right-0 absolute mb-0' reloadPageAfterChange={false} />
 							</div>
 						</div>
 					</div>

@@ -77,10 +77,12 @@ export const getSupportContactsOptions =
 	async (dispatch) => {
 		let payload = {} as ISupportContactOptionsPayload
 
+		const langToCompare = currentLng === 'cz' ? 'cs' : currentLng
+
 		const options: ISupportContactOption[] =
 			data?.supportContacts?.map((item: any) => {
 				const countryCode = item.country.code
-				const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === currentLng)
+				const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === langToCompare)
 
 				return {
 					key: item.id,
@@ -142,7 +144,7 @@ export const getSupportContacts =
 	}
 
 export const getSupportContact =
-	(supportContactID: number): ThunkResult<Promise<ISupportContactPayload>> =>
+	(supportContactID?: number): ThunkResult<Promise<ISupportContactPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISupportContactPayload
 

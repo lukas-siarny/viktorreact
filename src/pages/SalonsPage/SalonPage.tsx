@@ -186,9 +186,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					publishedSalonData: {
 						...salonData.publishedSalonData,
 						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
-						logo: salonData.publishedSalonData?.logo
-							? [{ ...salonData.publishedSalonData.logo, url: salonData.publishedSalonData.logo.resizedImages?.thumbnail, uid: salonData.publishedSalonData.logo.id }]
-							: []
+						logo: salonData.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null
 					}
 				}
 			}

@@ -16,7 +16,7 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -70,7 +70,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
 	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
-	const pendingPublication = salon.data?.pendingPublication
+	const pendingPublication = salon.data?.state === SALON_STATES.NOT_PUBLISHED_PENDING || salon.data?.state === SALON_STATES.PUBLISHED_PENDING
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
@@ -183,7 +183,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					...initialData,
 					publishedSalonData: {
 						...salonData.publishedSalonData,
-						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id }))
+						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
+						logo: salonData.publishedSalonData?.logo
+							? [{ ...salonData.publishedSalonData.logo, url: salonData.publishedSalonData.logo.resizedImages?.thumbnail, uid: salonData.publishedSalonData.logo.id }]
+							: []
 					}
 				}
 			}

@@ -49,6 +49,11 @@ const ContactPage: FC<Props> = () => {
 
 	useEffect(() => {
 		;(async () => {
+			if (selectedContact) {
+				setView('default')
+				return
+			}
+
 			const supportContactsData = await dispatch(getSupportContacts())
 
 			if (isEmpty(supportContactsData.data?.supportContacts)) {
@@ -66,7 +71,7 @@ const ContactPage: FC<Props> = () => {
 			dispatch(getSupportContact())
 			setView('not_found')
 		})()
-	}, [dispatch])
+	}, [dispatch, selectedContact])
 
 	useEffect(() => {
 		dispatch(getSupportContactsOptions(currentLng as LANGUAGE, supportContacts?.data))

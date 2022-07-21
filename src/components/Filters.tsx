@@ -37,7 +37,7 @@ const Filters = (props: Props) => {
 							<Row gutter={ROW_GUTTER_X_DEFAULT} justify={'end'} align={'middle'}>
 								{children && (
 									<Col>
-										<Badge count={activeFilters} style={{ top: '8px', right: '10px', background: black }}>
+										<Badge count={activeFilters} style={{ top: '8px', right: '10px', background: '#DC0069' }}>
 											<Button
 												onClick={onClick}
 												htmlType='button'

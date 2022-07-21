@@ -19,7 +19,7 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 import SelectField from '../../../atoms/SelectField'
 
 // utils
-import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification } from '../../../utils/helper'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
@@ -146,7 +146,7 @@ const SalonForm: FC<Props> = (props) => {
 	)
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Space className={'w-full'} direction='vertical' size={36}>
 				<Row>
 					<Col span={24}>

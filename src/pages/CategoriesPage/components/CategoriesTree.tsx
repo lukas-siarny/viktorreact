@@ -55,7 +55,19 @@ const CategoriesTree = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const emptyNameLocalizations = useMemo(() => Object.keys(LOCALES), [])
+	// default language must be first
+	const emptyNameLocalizations = useMemo(
+		() =>
+			Object.keys(LOCALES)
+				.sort((a: string, b: string) => {
+					if (a === DEFAULT_LANGUAGE) {
+						return -1
+					}
+					return b === DEFAULT_LANGUAGE ? 1 : 0
+				})
+				.map((language) => ({ language })),
+		[]
+	)
 
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {

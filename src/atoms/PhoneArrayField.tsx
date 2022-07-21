@@ -62,7 +62,7 @@ const PhoneArrayField = (props: Props) => {
 								phoneName={`${field}.phone`}
 								size={'large'}
 								disabled={disabled}
-								className={'m-0 w-full noti-phone-prefix-array'}
+								className={'m-0 w-full gap-2 noti-phone-prefix-array'}
 								fallbackDefaultValue={phonePrefixCountryCode}
 								required
 							/>

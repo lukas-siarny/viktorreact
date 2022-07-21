@@ -54,7 +54,6 @@ const ContactPage: FC<Props> = () => {
 				setView('default')
 				return
 			}
-
 			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country.code.toLowerCase() === i18n.language?.toLowerCase())
 
 			if (currentLngCountry?.id) {

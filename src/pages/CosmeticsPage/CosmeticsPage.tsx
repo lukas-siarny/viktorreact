@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin, Button, Divider } from 'antd'
+import { Col, Row, Spin, Button, Divider, Image } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
@@ -134,7 +134,16 @@ const CosmeticsPage = () => {
 			title: t('loc:Logo'),
 			dataIndex: 'image',
 			key: 'image',
-			render: (value, record) => <img className='cosmetics-logo' src={record?.image.resizedImages.thumbnail} alt={record?.name} />
+			render: (value, record) => (
+				<Image
+					src={record?.image.resizedImages.thumbnail as string}
+					loading='lazy'
+					fallback={record?.image.original}
+					alt={record?.name}
+					preview={false}
+					className='cosmetics-logo'
+				/>
+			)
 		},
 		{
 			title: t('loc:Názov'),

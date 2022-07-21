@@ -43,13 +43,14 @@
 	// Normal state
 	.ant-input.noti-input
 		border: 1px solid $borderColor-notino-grayLight
-		&:hover
-			border: 1px solid $borderColor-notino-grayDark
-		&:focus
-			border: 1px solid $borderColor-notino-black
-			box-shadow: $field-shadow-focus-default
-		&::placeholder
-			color: $borderColor-notino-gray
+		&:not(:disabled)
+			&:hover
+				border: 1px solid $borderColor-notino-grayDark
+			&:focus
+				border: 1px solid $borderColor-notino-black
+				box-shadow: $field-shadow-focus-default
+			&::placeholder
+				color: $borderColor-notino-gray
 
 // password field
 .ant-form-item
@@ -60,13 +61,14 @@
 	// Normal state
 	.ant-input-password.noti-input-password
 		border: 1px solid $borderColor-notino-grayLight
-		&:hover
-			border: 1px solid $borderColor-notino-grayDark
-		&.ant-input-affix-wrapper-focused
-			border: 1px solid $borderColor-notino-black
-			box-shadow: $field-shadow-focus-default
-		.ant-input::placeholder
-			color: $borderColor-notino-gray
+		&:not(:disabled)
+			&:hover
+				border: 1px solid $borderColor-notino-grayDark
+			&.ant-input-affix-wrapper-focused
+				border: 1px solid $borderColor-notino-black
+				box-shadow: $field-shadow-focus-default
+			.ant-input::placeholder
+				color: $borderColor-notino-gray
 
 .ant-form-item
 	&.ant-form-item-has-error

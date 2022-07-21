@@ -77,12 +77,10 @@ export const getSupportContactsOptions =
 	async (dispatch) => {
 		let payload = {} as ISupportContactOptionsPayload
 
-		const langToCompare = currentLng === 'cz' ? 'cs' : currentLng
-
 		const options: ISupportContactOption[] =
 			data?.supportContacts?.map((item: any) => {
 				const countryCode = item.country.code
-				const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === langToCompare)
+				const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === currentLng)
 
 				return {
 					key: item.id,

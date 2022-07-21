@@ -4,7 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICountryLabel, ICurrency, OpeningHours } from '../types/interfaces'
+import { ICurrency } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -17,7 +17,7 @@ export enum NAMESPACE {
 
 export enum LANGUAGE {
 	SK = 'sk',
-	CZ = 'cz',
+	CZ = 'cs',
 	EN = 'en',
 	HU = 'hu',
 	RO = 'ro',

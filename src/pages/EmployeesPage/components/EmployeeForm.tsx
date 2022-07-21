@@ -260,10 +260,10 @@ const EmployeeForm: FC<Props> = (props) => {
 					/>
 					<h3>{t('loc:Zoznam priradených služieb')}</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<div className={'flex w-full justify-between'}>
+					<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 						<Field
 							label={t('loc:Služby')}
-							className={'w-4/5'}
+							className={'flex-1'}
 							size={'large'}
 							component={SelectField}
 							allowClear
@@ -277,7 +277,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							allowInfinityScroll
 							formName={FORM.EMPLOYEE}
 						/>
-						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={isEmpty(formValues?.service)}>
+						<Button type={'primary'} size={'middle'} className={'self-start noti-btn m-regular md:mt-5'} onClick={addService} disabled={isEmpty(formValues?.service)}>
 							{t('loc:Pridať službu')}
 						</Button>
 					</div>

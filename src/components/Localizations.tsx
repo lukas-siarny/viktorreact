@@ -46,7 +46,7 @@ const Localizations = (param: any) => {
 
 	param.fields.forEach((field: any, index: any, fields: any) => {
 		const value = fields.get(index)
-		const displayAs = get(LOCALES[value.language as LANGUAGE], 'displayAs', value.language).toUpperCase()
+		const displayAs = get(LOCALES[value.language as LANGUAGE], 'displayAs', value.language)?.toUpperCase()
 
 		if (index === param.ignoreFieldIndex) {
 			return

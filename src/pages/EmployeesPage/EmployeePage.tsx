@@ -305,15 +305,6 @@ const EmployeePage = (props: Props) => {
 
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
 
-	const buttonWidthClass = cx({
-		'w-12/25': isProfileInActive
-	})
-
-	const wrapperWidthClass = cx({
-		'w-1/2': isProfileInActive,
-		'w-1/3': !isProfileInActive
-	})
-
 	return (
 		<>
 			<Row>
@@ -327,19 +318,19 @@ const EmployeePage = (props: Props) => {
 				)}
 				<div className='content-body small mt-2 mb-8'>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
-					<div className={'content-footer'}>
+					<div className={'content-footer pt-0'}>
 						<Row className={rowClass}>
 							{emploeyeeExists ? (
 								<DeleteButton
 									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
-									className={'w-1/3'}
+									className={'mt-2-5 w-52 xl:w-60'}
 									onConfirm={deleteEmployee}
 									entityName={t('loc:zamestnanca')}
 									type={'default'}
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								/>
 							) : undefined}
-							<div className={`flex justify-between ${wrapperWidthClass}`}>
+							<div className={`flex flex-wrap`}>
 								{isProfileInActive && (
 									<Permissions
 										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
@@ -348,7 +339,7 @@ const EmployeePage = (props: Props) => {
 												type={'primary'}
 												block
 												size={'middle'}
-												className={'noti-btn m-regular w-12/25'}
+												className={'noti-btn m-regular mt-2-5 w-40 mr-2'}
 												htmlType={'submit'}
 												onClick={(e) => {
 													if (hasPermission) {
@@ -362,7 +353,7 @@ const EmployeePage = (props: Props) => {
 												disabled={isInviteFromSubmitting}
 												loading={isInviteFromSubmitting}
 											>
-												{t(isProfileInActive ? 'loc:Pozvať do tímu' : 'loc:Upraviť rolu')}
+												{t('loc:Pozvať do tímu')}
 											</Button>
 										)}
 									/>
@@ -374,7 +365,7 @@ const EmployeePage = (props: Props) => {
 											type={'primary'}
 											block
 											size={'middle'}
-											className={`noti-btn m-regular ${buttonWidthClass}`}
+											className={`noti-btn m-regular w-40 mt-2-5`}
 											htmlType={'submit'}
 											onClick={(e) => {
 												if (hasPermission) {

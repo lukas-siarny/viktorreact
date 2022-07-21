@@ -319,24 +319,20 @@ const CategoriesTree = () => {
 
 	return (
 		<>
-			<Row className={'flex justify-between'}>
-				<Col span={6}>
-					<h3>{t('loc:Kategórie')}</h3>
-				</Col>
-				<Col span={6}>
-					<Button
-						onClick={() => {
-							dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations, level: 0 }))
-							setShowForm(true)
-						}}
-						type='primary'
-						htmlType='button'
-						className={'noti-btn w-full'}
-						icon={<PlusIcon />}
-					>
-						{t('loc:Pridať kategóriu')}
-					</Button>
-				</Col>
+			<Row className={'gap-2'} justify={'space-between'}>
+				<h3>{t('loc:Kategórie')}</h3>
+				<Button
+					onClick={() => {
+						dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations, level: 0 }))
+						setShowForm(true)
+					}}
+					type='primary'
+					htmlType='button'
+					className={'noti-btn'}
+					icon={<PlusIcon />}
+				>
+					{t('loc:Pridať kategóriu')}
+				</Button>
 			</Row>
 			<div className={'w-full flex'}>
 				<div className={formClass}>

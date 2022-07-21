@@ -9,7 +9,6 @@ import { RESOLUTIONS } from '../utils/enums'
 
 // components
 import LanguagePicker from '../components/LanguagePicker'
-import BackButton from '../components/BackButton'
 
 // hooks
 import useMedia from '../hooks/useMedia'

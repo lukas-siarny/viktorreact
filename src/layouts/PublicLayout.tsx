@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 // utils
 import { Button } from 'antd'
 import { RESOLUTIONS } from '../utils/enums'
+import { history } from '../utils/history'
 
 // components
 import LanguagePicker from '../components/LanguagePicker'
@@ -18,8 +19,6 @@ import { ReactComponent as MdLogo } from '../assets/images/md-device-logo.svg'
 import { ReactComponent as SmLogo } from '../assets/images/sm-device-logo.svg'
 import FullLogo from '../assets/images/public-logo-full.png'
 import ThinLogo from '../assets/images/public-logo-thin.png'
-import { history } from '../utils/history'
-
 import { ReactComponent as BackButtonIcon } from '../assets/icons/back-icon.svg'
 
 interface Props {

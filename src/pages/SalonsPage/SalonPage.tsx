@@ -539,46 +539,41 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const renderContentHeader = () =>
 		pendingPublication &&
 		salonExists && (
-			<div className={'content-header warning'}>
-				<Permissions
-					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
-					render={(hasPermission, { openForbiddenModal }) => (
-						<Row justify={'space-between'} className={'w-full'}>
-							<Button
-								type={'primary'}
-								icon={<CloseCricleIcon />}
-								size={'middle'}
-								className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
-								onClick={() =>
-									hasPermission
-										? setModalConfig({
-												title: t('loc:Dôvod zamietnutia'),
-												fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
-												visible: true,
-												onSubmit: resolveConfirmationRequest
-										  })
-										: openForbiddenModal()
-								}
-								disabled={submitting}
-								loading={submitting}
-							>
-								{t('loc:Zamietnuť')}
-							</Button>
-							<Button
-								type={'primary'}
-								icon={<CheckIcon />}
-								size={'middle'}
-								className={'noti-btn m-regular w-44 xl:w-56'}
-								onClick={() => (hasPermission ? resolveConfirmationRequest() : openForbiddenModal())}
-								disabled={submitting}
-								loading={submitting}
-							>
-								{t('loc:Potvrdiť')}
-							</Button>
-						</Row>
-					)}
-				/>
-			</div>
+			<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+				<div className={'content-header warning'}>
+					<Row justify={'space-between'} className={'w-full'}>
+						<Button
+							type={'primary'}
+							icon={<CloseCricleIcon />}
+							size={'middle'}
+							className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
+							onClick={() =>
+								setModalConfig({
+									title: t('loc:Dôvod zamietnutia'),
+									fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
+									visible: true,
+									onSubmit: resolveConfirmationRequest
+								})
+							}
+							disabled={submitting}
+							loading={submitting}
+						>
+							{t('loc:Zamietnuť')}
+						</Button>
+						<Button
+							type={'primary'}
+							icon={<CheckIcon />}
+							size={'middle'}
+							className={'noti-btn m-regular w-44 xl:w-56'}
+							onClick={() => resolveConfirmationRequest()}
+							disabled={submitting}
+							loading={submitting}
+						>
+							{t('loc:Potvrdiť')}
+						</Button>
+					</Row>
+				</div>
+			</Permissions>
 		)
 
 	return (

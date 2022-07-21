@@ -1,8 +1,7 @@
-/* eslint-disable import/no-cycle */
 import { get, map } from 'lodash'
-
+import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
+/* eslint-disable import/no-cycle */
 import { IResetStore } from '../generalTypes'
-
 import { ThunkResult } from '../index'
 
 // types
@@ -11,9 +10,9 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { ENUMERATIONS_KEYS } from '../../utils/enums'
 import { Paths } from '../../types/api'
 import i18n from '../../utils/i18n'
+import { LOCALES } from '../../components/LanguagePicker'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 
@@ -63,7 +62,7 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			flag: item.flag
 		}))
 
-		const currentLng = i18n.language === 'cz' ? 'cs' : i18n.language
+		const currentLng = i18n.language || DEFAULT_LANGUAGE
 
 		const enumerationsCountriesOptions: ISelectOptionItem[] = map(data, (item) => {
 			const countryTranslation = item.nameLocalizations.find((translation: any) => translation.language === currentLng)

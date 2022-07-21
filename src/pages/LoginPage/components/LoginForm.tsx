@@ -35,7 +35,7 @@ const LoginForm: FC<Props> = (props) => {
 				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
 				<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} required />
 			</Space>
-			<Row justify={'end'} className=''>
+			<Row justify={'end'}>
 				<Button className={'noti-btn text-notino-black font-medium pr-0'} onClick={showForgottenPasswordModal} type={'link'} htmlType={'button'}>
 					{t('loc:Zabudnuté heslo')}
 				</Button>
@@ -55,7 +55,7 @@ const LoginForm: FC<Props> = (props) => {
 				<span className={'flex items-center md:justify-center font-medium pb-6'}>
 					<Link to={`${t('paths:contact')}`} className='inline-block'>
 						<Button className='p-0 font-medium' type={'link'} htmlType={'button'}>
-							{t('loc:Potrejete pomôcť?')}
+							{t('loc:Potrebujete pomôcť?')}
 						</Button>
 					</Link>
 				</span>

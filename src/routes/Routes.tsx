@@ -64,6 +64,7 @@ const Routes: FC = (props) => {
 					layout={PublicLayout}
 					redirectLoggedInUser={false}
 					className={'noti-support-contact-page'}
+					showBackButton
 				/>
 				<CreatePasswordRoute
 					exact

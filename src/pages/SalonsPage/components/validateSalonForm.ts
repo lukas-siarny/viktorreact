@@ -1,6 +1,7 @@
 import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
+import { isEmpty } from 'lodash'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 export default (values: any) => {
@@ -46,7 +47,7 @@ export default (values: any) => {
 		errors.email = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!values?.categoryIDs) {
+	if (!values?.categoryIDs || isEmpty(values?.categoryIDs)) {
 		errors.categoryIDs = i18next.t('loc:Toto pole je povinné')
 	}
 

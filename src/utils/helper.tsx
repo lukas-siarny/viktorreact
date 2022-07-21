@@ -612,7 +612,7 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 }
 
 export const getServiceRange = (from: number | undefined | null, to?: number | undefined | null, unit = '') => {
-	if (!to) return `${from || ''}${unit}+`
+	if (!to) return `${from || ''}${unit}`
 	if (from === to) return `${from}${unit}`
 	return `${from || ''} - ${to || ''}${unit}`
 }

@@ -60,7 +60,7 @@ const CategoryFields = () => {
 					className='m-1'
 					component={SelectField}
 					allowClear
-					placeholder={t('loc:Kategória')}
+					placeholder={t('loc:Podkategória')}
 					name='categoryFirstLevel'
 					options={categoryFirstLevelOptions}
 					onChange={() => {
@@ -74,7 +74,7 @@ const CategoryFields = () => {
 					className='m-1'
 					component={SelectField}
 					allowClear
-					placeholder={t('loc:Kategória')}
+					placeholder={t('loc:Podkategória')}
 					name='categorySecondLevel'
 					options={categorySecondLevelOptions}
 					size={'large'}

@@ -9,12 +9,19 @@ $inner-padding: 16px
 .public-layout
 	overflow: auto
 	background: $backgroundColor-notino-grayLight
+	min-height: 100vh
+	height: 100%
+
+	.layout-wrapper
+		max-width: 1280px
+		width: 100%
+		position: relative
+		padding: 64px 0
 
 	.layout-content
 		border-radius: 4px
 		box-shadow: $boxShadow-xl
-		max-width: 1280px
-		min-width: 744px
+		min-height: 760px
 
 	.cover
 		object-fit: cover
@@ -32,7 +39,22 @@ $inner-padding: 16px
 		text-align: center
 		top: 50%
 		transform: translate(-50%, -50%)
+	.btn-back
+		a
+			svg
+				color: $textColor-notino-pink !important
+			span
+				color: $textColor-notino-pink !important
 
+	@media (max-width: 1280px)
+		.layout-wrapper
+			max-width: 744px
+
+	@media (max-width: 744px)
+		.layout-wrapper
+			max-width: 440px
+			padding: 24px 0
+			min-height: 500px
 
 	@media (max-width: 640px)
 		h3, .heading-3
@@ -41,6 +63,20 @@ $inner-padding: 16px
 
 		.ant-form-item-label, .ant-form-vertical .ant-form-item-label
 			margin-bottom: 0
+
+.noti-login-page
+	@media (max-width: 744px)
+		.layout-wrapper
+			padding: 24px 16px
+			max-width: 328px
+
+.noti-support-contact-page
+	height: 100% !important
+	min-height: 100vh
+	@media (max-width: 744px)
+		padding: 16px
+		.layout-wrappwer
+			min-height: 500px
 
 // Main layout
 .ant-layout.noti-main-layout

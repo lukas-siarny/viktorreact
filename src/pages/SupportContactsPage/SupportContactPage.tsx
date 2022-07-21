@@ -242,6 +242,8 @@ const SupportContactPage: FC<Props> = (props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/enums/support-contacts/{supportContactID}', { supportContactID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			// clear redux
+			dispatch(getSupportContact())
 			history.push(t('paths:support-contacts'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -284,7 +286,7 @@ const SupportContactPage: FC<Props> = (props) => {
 									permissions={permissions}
 									className={'mt-2-5 w-52 xl:w-60'}
 									onConfirm={deleteSupportContact}
-									entityName={t('loc:kontakt')}
+									entityName={t('loc:podporu')}
 									type={'default'}
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								/>

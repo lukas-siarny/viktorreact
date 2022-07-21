@@ -49,15 +49,15 @@ const ContactPage: FC<Props> = () => {
 
 	useEffect(() => {
 		;(async () => {
-			if (selectedContact) {
-				setView('default')
-				return
-			}
-
 			const supportContactsData = await dispatch(getSupportContacts())
 
 			if (isEmpty(supportContactsData.data?.supportContacts)) {
 				setView('empty')
+				return
+			}
+
+			if (selectedContact) {
+				setView('default')
 				return
 			}
 			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country.code.toLowerCase() === i18n.language?.toLowerCase())

@@ -139,7 +139,7 @@ const CategoryForm: FC<Props> = (props) => {
 								<Field
 									className='mb-0'
 									component={InputField}
-									label={t('loc:Názov kategórie (en)')}
+									label={t('loc:Názov kategórie (EN)')}
 									placeholder={t('loc:Zadajte názov')}
 									key='nameLocalizations[0].value'
 									name='nameLocalizations[0].value'

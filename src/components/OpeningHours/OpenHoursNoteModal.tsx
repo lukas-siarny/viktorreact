@@ -8,8 +8,7 @@ import OpenHoursNoteForm from './OpenHoursNoteForm'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { NOTIFICATION_TYPE, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
-import Permissions from '../../utils/Permissions'
+import { NOTIFICATION_TYPE, FORM } from '../../utils/enums'
 import { Paths } from '../../types/api'
 
 // assets

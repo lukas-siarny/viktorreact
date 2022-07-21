@@ -1,13 +1,12 @@
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import React, { useEffect, useMemo, useState } from 'react'
 import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Modal, Progress, Row, Spin, Tag } from 'antd'
+import { Col, Modal, Progress, Row, Spin } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, reset } from 'redux-form'
-import cx from 'classnames'
 
 // components
 import CustomTable from '../../components/CustomTable'
@@ -18,7 +17,7 @@ import UploadSuccess from './components/UploadSuccess'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_STATES } from '../../utils/enums'
+import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
 import { formatDateByLocale, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
@@ -35,11 +34,6 @@ import { IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import { ReactComponent as CheckIcon12 } from '../../assets/icons/check-12.svg'
-import { ReactComponent as ClockIcon12 } from '../../assets/icons/clock-12.svg'
-import { ReactComponent as TrashIcon12 } from '../../assets/icons/trash-12.svg'
-import { ReactComponent as TrashCrossedIcon12 } from '../../assets/icons/trash-crossed-12.svg'
-import { ReactComponent as CloseIcon12 } from '../../assets/icons/close-12.svg'
 
 type Columns = ColumnsType<any>
 
@@ -199,7 +193,7 @@ const SalonsPage = () => {
 			key: 'isPublished',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '10%',
 			render: (_value, record) => getSalonTagPublished(record.state)
 		},
 		{
@@ -207,7 +201,7 @@ const SalonsPage = () => {
 			key: 'changes',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '10%',
 			render: (_value, record) => getSalonTagChanges(record.state)
 		},
 		{
@@ -216,7 +210,7 @@ const SalonsPage = () => {
 			key: 'deletedAt',
 			ellipsis: true,
 			sorter: false,
-			width: '8%',
+			width: '10%',
 			render: (deleted) => getSalonTagDeleted(deleted, true)
 		},
 		{
@@ -285,6 +279,7 @@ const SalonsPage = () => {
 							onChange={onChangeTable}
 							columns={columns}
 							dataSource={salons?.data?.salons}
+							scroll={{ x: 1000 }}
 							rowClassName={'clickable-row'}
 							loading={salons?.isLoading}
 							twoToneRows

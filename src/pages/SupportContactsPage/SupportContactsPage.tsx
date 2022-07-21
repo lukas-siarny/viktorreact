@@ -144,6 +144,7 @@ const SupportContactsPage = () => {
 							rowClassName={'clickable-row'}
 							loading={supportContacts?.isLoading}
 							twoToneRows
+							scroll={{ x: 800 }}
 							onRow={(record) => {
 								return {
 									onClick: () => {

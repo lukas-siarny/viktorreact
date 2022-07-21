@@ -1,7 +1,8 @@
 import React, { CSSProperties, FC, useMemo, useRef, useState } from 'react'
-import { WrappedFieldProps } from 'redux-form'
+import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get } from 'lodash'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import { Form, Upload, UploadProps, Modal } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
@@ -15,7 +16,7 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
 import { uploadFile, postReq } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
+import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
 
 const { Item } = Form
 
@@ -55,8 +56,10 @@ const ImgUploadField: FC<Props> = (props) => {
 	} = props
 
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const imagesUrls = useRef<ImgUploadParam>({})
 	const [previewUrl, setPreviewUrl] = useState('')
+
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
 			showNotifications([{ type: MSG_TYPE.ERROR, message: info.file.error.message }], NOTIFICATION_TYPE.NOTIFICATION)
@@ -64,12 +67,19 @@ const ImgUploadField: FC<Props> = (props) => {
 			const values = info.fileList
 			values.pop()
 			input.onChange(values)
+			// uploading process finished
+			dispatch(change(form, IMAGE_UPLOADING_PROP, false))
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = getImagesFormValues(info.fileList, imagesUrls.current)
 			input.onChange(values)
+			// uploading process finished
+			dispatch(change(form, IMAGE_UPLOADING_PROP, false))
 		}
 		if (info.file.status === 'uploading') {
+			// uploading process started
+			dispatch(change(form, IMAGE_UPLOADING_PROP, true))
+
 			input.onChange(info.fileList)
 		}
 		if (isEmpty(info.fileList)) {

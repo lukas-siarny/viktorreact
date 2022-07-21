@@ -151,11 +151,11 @@ const UserPage: FC<Props> = (props) => {
 			<Spin spinning={isLoading}>
 				<div className='content-body small mt-2'>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
-					<div className={'content-footer'}>
-						<Row className={'justify-between'}>
+					<div className={'content-footer pt-0'}>
+						<Row className={'justify-between gap-2'}>
 							<DeleteButton
 								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_DELETE]}
-								className={'w-1/3'}
+								className={'mt-2-5 w-52 xl:w-60'}
 								onConfirm={deleteUser}
 								entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
 								type={'default'}
@@ -168,7 +168,7 @@ const UserPage: FC<Props> = (props) => {
 										type={'primary'}
 										block
 										size={'middle'}
-										className={'noti-btn m-regular w-1/3'}
+										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
 										htmlType={'submit'}
 										onClick={(e) => {
 											if (hasPermission) {

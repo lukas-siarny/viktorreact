@@ -99,6 +99,7 @@ const CosmeticsPage = () => {
 	}
 
 	const handleSubmit = async (formData: ICosmeticForm) => {
+		console.log('🚀 ~ file: CosmeticsPage.tsx ~ line 102 ~ handleSubmit ~ formData', formData)
 		const body = {
 			name: formData.name,
 			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
@@ -136,9 +137,9 @@ const CosmeticsPage = () => {
 			key: 'image',
 			render: (value, record) => (
 				<Image
-					src={record?.image.resizedImages.thumbnail as string}
+					src={record?.image?.resizedImages.thumbnail as string}
 					loading='lazy'
-					fallback={record?.image.original}
+					fallback={record?.image?.original}
 					alt={record?.name}
 					preview={false}
 					className='cosmetics-logo'

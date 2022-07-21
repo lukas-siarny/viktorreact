@@ -6,7 +6,7 @@ import { Col, Divider, Form, Row, Button } from 'antd'
 // utils
 import { isEmpty } from 'lodash'
 import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -47,17 +47,17 @@ const CosmeticForm: FC<Props> = (props) => {
 			}
 
 			// each cosmetic name is unique brand and can be created only once
-			if (usedBrands.includes(value)) {
+			if (cosmeticID === 0 && usedBrands.includes(value)) {
 				return t('loc:Kozmetika so zadaným názvom už existuje')
 			}
 
 			return undefined
 		},
-		[usedBrands, t]
+		[usedBrands, t, cosmeticID]
 	)
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Col className={'flex'}>
 				<Row className={'mx-8 xl:mx-9 w-full h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 relative pr-7'}>
@@ -89,17 +89,17 @@ const CosmeticForm: FC<Props> = (props) => {
 							maxCount={1}
 						/>
 					</Row>
-					<div className={'flex w-full justify-around space-between mt-10'}>
+					<div className={'flex w-full justify-around space-between mt-10 gap-2 flex-wrap'}>
 						{cosmeticID > 0 && (
 							<DeleteButton
 								onConfirm={onDelete}
 								entityName={''}
 								type={'default'}
-								className='w-12/25 xl:w-1/4'
+								className='w-40'
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 							/>
 						)}
-						<Button className={'noti-btn w-12/25 xl:w-1/4'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+						<Button className={'noti-btn w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
 							{cosmeticID > 0 ? t('loc:Uložiť') : t('loc: Vytvoriť')}
 						</Button>
 					</div>

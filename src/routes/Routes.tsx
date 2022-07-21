@@ -29,10 +29,18 @@ import UsersPage from '../pages/UsersPage/UsersPage'
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
+// Cosmetics
+import CosmeticsPage from '../pages/CosmeticsPage/CosmeticsPage'
+
 // Salons
 import SalonSubRoutes from './SalonSubRoutes'
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
 import SalonPage from '../pages/SalonsPage/SalonPage'
+
+// Support contacts
+import SupportContactsPage from '../pages/SupportContactsPage/SupportContactsPage'
+import SupportContactPage from '../pages/SupportContactsPage/SupportContactPage'
+import ContactPage from '../pages/Contact/ContactPage'
 
 import AppInit from '../components/AppInit'
 
@@ -46,9 +54,26 @@ const Routes: FC = (props) => {
 	return (
 		<AppInit>
 			<Switch>
-				<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} />
-				<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} />
-				<CreatePasswordRoute exact path={t('paths:reset-password')} translatePathKey={t('paths:reset-password')} component={CreatePasswordPage} layout={PublicLayout} />
+				<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} className={'noti-login-page'} />
+				<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} className={'noti-login-page'} />
+				<PublicRoute
+					{...props}
+					exact
+					path={t('paths:contact')}
+					component={ContactPage}
+					layout={PublicLayout}
+					redirectLoggedInUser={false}
+					className={'noti-support-contact-page'}
+					showBackButton
+				/>
+				<CreatePasswordRoute
+					exact
+					path={t('paths:reset-password')}
+					translatePathKey={t('paths:reset-password')}
+					component={CreatePasswordPage}
+					layout={PublicLayout}
+					className={'noti-login-page'}
+				/>
 				<AuthRoute
 					{...props}
 					exact
@@ -87,6 +112,8 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:salons/create')}
 					layout={MainLayout}
 					page={PAGE.SALONS}
+					// override selected salon ID - 0 indicates CREATE form
+					salonID={0}
 				/>
 				<Route {...props} path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })} component={SalonSubRoutes} />
 
@@ -99,6 +126,42 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:categories')}
 					layout={MainLayout}
 					page={PAGE.CATEGORIES}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:cosmetics')}
+					component={CosmeticsPage}
+					translatePathKey={t('paths:cosmetics')}
+					layout={MainLayout}
+					page={PAGE.COSMETICS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:support-contacts')}
+					component={SupportContactsPage}
+					translatePathKey={t('paths:support-contacts')}
+					layout={MainLayout}
+					page={PAGE.SUPPORT_CONTACTS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:support-contacts/create')}
+					component={SupportContactPage}
+					translatePathKey={t('paths:support-contacts/create')}
+					layout={MainLayout}
+					page={PAGE.SUPPORT_CONTACT}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:support-contacts/{{supportContactID}}', { supportContactID: ':supportContactID' })}
+					translatePathKey={t('paths:support-contacts/{{supportContactID}}', { supportContactID: ':supportContactID' })}
+					component={SupportContactPage}
+					layout={MainLayout}
+					page={PAGE.SUPPORT_CONTACT}
 				/>
 				{/* NOTE: add all private routes before this declaration */}
 				<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />

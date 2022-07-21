@@ -95,7 +95,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 								type={'primary'}
 								block
 								size={'middle'}
-								className={'noti-btn m-regular w-1/3'}
+								className={'noti-btn m-regular w-52 xl:w-60'}
 								htmlType={'submit'}
 								onClick={() => {
 									dispatch(submit(FORM.EMPLOYEE))

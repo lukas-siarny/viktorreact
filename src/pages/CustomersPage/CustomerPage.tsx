@@ -139,11 +139,11 @@ const CustomerPage = (props: Props) => {
 			<Spin spinning={isLoading}>
 				<div className='content-body small mt-2'>
 					<CustomerForm onSubmit={updateCustomer} />
-					<div className={'content-footer'}>
-						<Row className={'justify-between'}>
+					<div className={'content-footer pt-0'}>
+						<Row className={'justify-between gap-2'}>
 							<DeleteButton
 								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_DELETE]}
-								className={'w-1/3'}
+								className={'mt-2-5 w-52 xl:w-60'}
 								onConfirm={deleteCustomer}
 								entityName={t('loc:zákazníka')}
 								type={'default'}
@@ -156,7 +156,7 @@ const CustomerPage = (props: Props) => {
 										type={'primary'}
 										block
 										size={'middle'}
-										className={'noti-btn m-regular mb-2 w-1/3'}
+										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
 										htmlType={'submit'}
 										onClick={(e) => {
 											if (hasPermission) {

@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import React from 'react'
 import {
 	first,
 	floor,
@@ -30,11 +31,12 @@ import {
 	trimEnd,
 	repeat
 } from 'lodash'
-import { notification } from 'antd'
+import { notification, Tag } from 'antd'
 import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
+import { SubmissionError, submit } from 'redux-form'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -42,20 +44,29 @@ import {
 	FORM,
 	INVALID_DATE_FORMAT,
 	MSG_TYPE,
+	NOTIFICATION_TYPE,
 	DEFAULT_LANGUAGE,
 	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER,
 	MONDAY_TO_FRIDAY,
 	DAY,
 	LANGUAGE,
-	EN_DATE_WITH_TIME_FORMAT
+	EN_DATE_WITH_TIME_FORMAT,
+	SALON_STATES,
+	IMAGE_UPLOADING_PROP
 } from './enums'
+import showNotifications from './tsxHelpers'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
-import { RootState } from '../reducers'
-import { LOCALES } from '../components/LanguagePicker'
+import { EnumerationData } from '../reducers/enumerations/enumerationActions'
+
+import { ReactComponent as CheckIcon12 } from '../assets/icons/check-12.svg'
+import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
+import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
+import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
+import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 
 type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
 
@@ -118,9 +129,9 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
  * Returns formatted date by location
  */
 export const formatDateByLocale = (date: string | Date | undefined | Dayjs) => {
-	const locale = (LOCALES[i18next.language as LANGUAGE] || LOCALES[DEFAULT_LANGUAGE]).ISO_639
+	const locale = i18next.language || DEFAULT_LANGUAGE
 
-	if (locale === LOCALES[LANGUAGE.SK].ISO_639 || locale === LOCALES[LANGUAGE.CZ].ISO_639) {
+	if (locale === LANGUAGE.SK || locale === LANGUAGE.CZ) {
 		return dayjs(date).format(DEFAULT_DATE_WITH_TIME_FORMAT)
 	}
 	return dayjs(date).format(EN_DATE_WITH_TIME_FORMAT)
@@ -578,18 +589,30 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 	const values = map(fileList, (file) => {
 		const fileData = filesData[get(file, 'uid')]
 
-		return {
+		let img = {
 			...file,
-			id: get(file, 'id') || fileData?.id,
-			url: get(file, 'url') || fileData?.path,
-			signedUrl: fileData?.signedUrl
+			url: get(file, 'url') || fileData?.path
 		}
+
+		if (get(file, 'id') || fileData?.id) {
+			img = {
+				...img,
+				id: get(file, 'id') || fileData?.id
+			}
+		}
+		if (fileData?.signedUrl) {
+			img = {
+				...img,
+				signedUrl: fileData?.signedUrl
+			}
+		}
+		return img
 	})
 	return values
 }
 
 export const getServiceRange = (from: number | undefined | null, to?: number | undefined | null, unit = '') => {
-	if (!to) return `${from || ''}${unit}+`
+	if (!to) return `${from || ''}${unit}`
 	if (from === to) return `${from}${unit}`
 	return `${from || ''} - ${to || ''}${unit}`
 }
@@ -603,20 +626,6 @@ export const isValidDateRange = (from: string, to: string) => {
 export const checkFiltersSizeWithoutSearch = (formValues: any) => size(filter(formValues, (value, key) => (!isNil(value) || !isEmpty(value)) && key !== 'search'))
 
 export const checkFiltersSize = (formValues: any) => size(filter(formValues, (value) => !isNil(value) || !isEmpty(value)))
-
-export const convertCountriesToLocalizations = (countries: RootState['enumerationsStore']['countries'], defaultLanguageName?: string) => {
-	const fieldValues = map(countries.data, (country) => ({
-		language: lowerCase(country.code)
-	}))
-
-	if (!defaultLanguageName) return fieldValues
-
-	const defaultLanguage = { language: defaultLanguageName }
-	const otherLanguages = filter(fieldValues, (field) => field.language !== defaultLanguageName)
-
-	// default language must be first
-	return [defaultLanguage, ...otherLanguages]
-}
 
 type NameLocalizationsItem = {
 	language: string
@@ -657,7 +666,16 @@ export const getSelectOptionsFromData = (data: SelectDataItem[] | null) => {
 export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any) => {
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
-		const isErrors: boolean = Object.keys(errors).length > 1
+		const errorKeys = Object.keys(errors)
+		console.log('🚀 ~ file: helper.tsx ~ line 667 ~ showErrorNotification ~ errorKeys', errorKeys)
+
+		// Error invoked during image uploading has custom notification
+		if (errorKeys.length === 1 && errorKeys[0] === IMAGE_UPLOADING_PROP) {
+			return undefined
+		}
+
+		const isErrors: boolean = errorKeys.length > 1
+		console.log('🚀 ~ file: helper.tsx ~ line 675 ~ showErrorNotification ~ isErrors', isErrors)
 		return notification.error({
 			message: i18next.t('loc:Chybne vyplnený formulár'),
 			description: i18next.t(
@@ -696,3 +714,106 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
+
+export const getCountryPrefix = (countriesData: EnumerationData | null, countryCode?: string) => {
+	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode?.toLocaleLowerCase())
+	return country?.phonePrefix
+}
+
+export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
+	const countryTranslation = nameLocalizations?.find((translation) => translation.language === currentLng)
+	return countryTranslation?.value
+}
+
+// salon status tags
+export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
+	if (!salonStatus) {
+		return null
+	}
+
+	switch (salonStatus) {
+		case SALON_STATES.PUBLISHED:
+		case SALON_STATES.PUBLISHED_PENDING:
+		case SALON_STATES.PUBLISHED_DECLINED:
+			return (
+				<Tag icon={<CheckIcon12 />} className={'noti-tag success'}>
+					{i18next.t('loc:Publikovaný')}
+				</Tag>
+			)
+		default:
+			return (
+				<Tag icon={<CloseIcon12 />} className={'noti-tag'}>
+					{i18next.t('loc:Nepublikovaný')}
+				</Tag>
+			)
+	}
+}
+
+export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false) => {
+	if (deleted) {
+		return (
+			<Tag icon={<TrashIcon12 />} className={'noti-tag danger'}>
+				{i18next.t('loc:Vymazaný')}
+			</Tag>
+		)
+	}
+
+	if (returnOnlyDeleted) {
+		return null
+	}
+
+	return (
+		<Tag icon={<TrashCrossedIcon12 />} className={'noti-tag info'}>
+			{i18next.t('loc:Nevymazaný')}
+		</Tag>
+	)
+}
+
+export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
+	if (!salonStatus) {
+		return null
+	}
+
+	switch (salonStatus) {
+		case SALON_STATES.NOT_PUBLISHED_PENDING:
+		case SALON_STATES.PUBLISHED_PENDING:
+			return (
+				<Tag icon={<ClockIcon12 />} className={'noti-tag warning'}>
+					{i18next.t('loc:Na schválenie')}
+				</Tag>
+			)
+		case SALON_STATES.NOT_PUBLISHED_DECLINED:
+		case SALON_STATES.PUBLISHED_DECLINED:
+			return (
+				<Tag icon={<CloseIcon12 />} className={'noti-tag danger'}>
+					{i18next.t('loc:Zamietnuté')}
+				</Tag>
+			)
+		default:
+			return null
+	}
+}
+/**
+ * Remove accent and transform to lower case
+ * Usefull for searching on FE
+ * @link https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
+ */
+export const transformToLowerCaseWithoutAccent = (source: string): string =>
+	source
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '')
+
+export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
+	const { form } = props
+
+	if (values && values[IMAGE_UPLOADING_PROP]) {
+		const error = i18next.t('loc:Prebieha nahrávanie')
+		showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
+		throw new SubmissionError({
+			[IMAGE_UPLOADING_PROP]: error
+		})
+	} else {
+		dispatch(submit(form))
+	}
+}

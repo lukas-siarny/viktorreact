@@ -45,6 +45,7 @@ const CreateUserAccountForm: FC<Props> = (props) => {
 						prefixName={'phonePrefixCountryCode'}
 						phoneName={'phone'}
 						formName={FORM.ADMIN_CREATE_USER}
+						required
 					/>
 					<Field
 						component={SelectField}

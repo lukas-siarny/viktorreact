@@ -1,28 +1,30 @@
 import React, { FC } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
-import { get } from 'lodash'
+import { get, isEqual } from 'lodash'
 
 // components
-import OpeningHours from './OpeningHours'
+import OpeningHours from '../../../components/OpeningHours/OpeningHours'
 import AddressFields from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import Compare from '../../../components/Compare'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+import SelectField from '../../../atoms/SelectField'
 
 // utils
-import { showErrorNotification } from '../../../utils/helper'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, PERMISSION, VALIDATION_MAX_LENGTH, SALON_PERMISSION } from '../../../utils/enums'
-import Permissions from '../../../utils/Permissions'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
 import { ISalonForm } from '../../../types/interfaces'
+import { Paths } from '../../../types/api'
 
 // validate
 import validateSalonForm from './validateSalonForm'
@@ -44,121 +46,176 @@ import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-i
 
 type ComponentProps = {
 	openNoteModal: Function
-	changeSalonVisibility: (visible: boolean) => void
-	publishSalon: (published: boolean) => void
-	switchDisabled: boolean
 	disabledForm: boolean
 	salonID?: number
 }
 
+type SalonAddress = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['address']
+
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
+
+const compareAddress = (oldAddress: SalonAddress, newAddress: SalonAddress): boolean => {
+	return JSON.stringify(oldAddress) === JSON.stringify(newAddress)
+}
 
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, openNoteModal, changeSalonVisibility, publishSalon, switchDisabled, salonID, disabledForm } = props
+	const { handleSubmit, change, openNoteModal, salonID, disabledForm } = props
+	const categories = useSelector((state: RootState) => state.categories.categories)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
+	const aboutUsFirstPlaceholder = t('loc:Zadajte základné informácie o salóne')
+	const aboutUsFirstLabel = t('loc:O nás')
+	const aboutUsSecondPlaceholder = t('loc:Zadajte doplňujúce informácie o salóne')
+	const aboutUsSecondLabel = t('loc:Doplňujúci popis')
+	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string, maxLength: number) => {
+		return (
+			<Field component={TextareaField} label={label} name={filedName} size={'large'} placeholder={placeholder} disabled={disabled} maxLength={maxLength} showLettersCount />
+		)
+	}
+
+	const imagesFormField = (filedName: string, disabled: boolean) => (
+		<Field
+			className={'m-0'}
+			component={ImgUploadField}
+			name={filedName}
+			label={t('loc:Fotogaléria')}
+			signUrl={URL_UPLOAD_IMAGES}
+			multiple
+			maxCount={10}
+			category={UPLOAD_IMG_CATEGORIES.SALON}
+			disabled={disabled}
+		/>
+	)
+
+	const logoFormField = (filedName: string, disabled: boolean) => (
+		<Field
+			component={ImgUploadField}
+			name={filedName}
+			label={t('loc:Logo')}
+			signUrl={URL_UPLOAD_IMAGES}
+			multiple={false}
+			maxCount={1}
+			category={UPLOAD_IMG_CATEGORIES.SALON}
+			disabled={disabled}
+		/>
+	)
+
+	const phoneFormField = (phoneFiledName: string, phonePrefixFiledName: string, disabled: boolean) => (
+		<PhoneWithPrefixField
+			label={'Telefón'}
+			placeholder={t('loc:Zadajte telefón')}
+			size={'large'}
+			prefixName={phonePrefixFiledName}
+			phoneName={phoneFiledName}
+			disabled={disabled}
+			formName={FORM.SALON}
+			getPopupContainer={() => document.querySelector('.content-body')}
+			required
+		/>
+	)
+
+	const emailFormField = (filedName: string, disabled: boolean) => (
+		<Field
+			className={'w-full'}
+			component={InputField}
+			label={t('loc:Email')}
+			placeholder={t('loc:Zadajte email')}
+			name={filedName}
+			size={'large'}
+			disabled={disabled}
+			required
+		/>
+	)
+
+	const nameFormField = (filedName: string, disabled: boolean) => (
+		<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={filedName} size={'large'} disabled={disabled} required />
+	)
+
+	const addressDescriptionFormFiled = (filedName: string, disabled: boolean) => (
+		<Field
+			component={TextareaField}
+			label={t('loc:Poznámka k adrese')}
+			name={filedName}
+			size={'large'}
+			placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie vľavo"')}
+			disabled={disabled}
+			maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+			showLettersCount
+		/>
+	)
+
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Space className={'w-full'} direction='vertical' size={36}>
 				<Row>
 					<Col span={24}>
-						<div className={'flex justify-between w-full items-center'}>
+						<Row justify={'space-between'}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<InfoIcon className={'text-notino-black mr-2'} />
 								{t('loc:Základné údaje')}
 							</h3>
-							{salonID ? (
-								<div className={'flex justify-between w-1/2'}>
-									<Permissions
-										allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
-										render={(hasPermission, { openForbiddenModal }) => (
-											<Field
-												className={'mt-2 mb-2 w-12/25'}
-												component={SwitchField}
-												label={t('loc:Viditeľný')}
-												name={'isVisible'}
-												size={'middle'}
-												required
-												customOnChange={(value: boolean) => {
-													if (!hasPermission) {
-														openForbiddenModal()
-													} else {
-														changeSalonVisibility(value)
-													}
-												}}
-												disabled={switchDisabled || disabledForm}
-											/>
-										)}
-									/>
-									<Permissions
-										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
-										render={(hasPermission, { openForbiddenModal }) => (
-											<Field
-												className={'mt-2 mb-2 w-12/25'}
-												component={SwitchField}
-												label={t('loc:Publikovaný')}
-												name={'isPublished'}
-												size={'middle'}
-												required
-												customOnChange={(value: boolean) => {
-													if (!hasPermission) {
-														openForbiddenModal()
-													} else {
-														publishSalon(value)
-													}
-												}}
-												disabled={switchDisabled || disabledForm}
-											/>
-										)}
-									/>
-								</div>
-							) : null}
-						</div>
+							<Row className={'py-2'} wrap={false}>
+								{getSalonTagPublished(formValues?.state as SALON_STATES)}
+								{getSalonTagChanges(formValues?.state as SALON_STATES)}
+								{getSalonTagDeleted(!!formValues?.deletedAt, true)}
+							</Row>
+						</Row>
 						<Divider className={'mb-3 mt-3'} />
-
-						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
+						<Compare
+							oldValue={formValues?.publishedSalonData?.name}
+							newValue={formValues?.name}
+							oldFormField={nameFormField('publishedSalonData.name', true)}
+							newFormField={nameFormField('name', disabledForm)}
+						/>
+						<Compare
+							oldValue={formValues?.publishedSalonData?.aboutUsFirst}
+							newValue={formValues?.aboutUsFirst}
+							oldFormField={aboutUsFirstFormField(
+								'publishedSalonData.aboutUsFirst',
+								true,
+								aboutUsFirstPlaceholder,
+								aboutUsFirstLabel,
+								VALIDATION_MAX_LENGTH.LENGTH_1000
+							)}
+							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel, VALIDATION_MAX_LENGTH.LENGTH_1000)}
+						/>
+						<Compare
+							oldValue={formValues?.publishedSalonData?.aboutUsSecond}
+							newValue={formValues?.aboutUsSecond}
+							oldFormField={aboutUsFirstFormField(
+								'publishedSalonData.aboutUsSecond',
+								true,
+								aboutUsSecondPlaceholder,
+								aboutUsSecondLabel,
+								VALIDATION_MAX_LENGTH.LENGTH_500
+							)}
+							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel, VALIDATION_MAX_LENGTH.LENGTH_500)}
+						/>
 						<Field
-							component={TextareaField}
-							label={t('loc:O nás')}
-							name={'aboutUsFirst'}
+							component={SelectField}
+							options={categories.enumerationsOptions}
+							label={t('loc:Odvetvie')}
+							placeholder={t('loc:Vyberte odvetvie')}
+							name={'categoryIDs'}
 							size={'large'}
-							placeholder={t('loc:Zadajte základné informácie o salóne')}
-							disabled={disabledForm}
-							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
-							showLettersCount
-						/>
-						<Field
-							component={TextareaField}
-							label={t('loc:Doplňujúci popis')}
-							name={'aboutUsSecond'}
-							size={'large'}
-							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
-							disabled={disabledForm}
-							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
-							showLettersCount
-						/>
-						<Field
-							component={ImgUploadField}
-							name={'logo'}
-							label={t('loc:Logo')}
-							signUrl={URL_UPLOAD_IMAGES}
-							multiple={false}
-							maxCount={1}
-							category={UPLOAD_IMG_CATEGORIES.SALON}
-							disabled={disabledForm}
-						/>
-						<Field
-							className={'m-0'}
-							component={ImgUploadField}
-							name={'gallery'}
-							label={t('loc:Fotogaléria')}
-							signUrl={URL_UPLOAD_IMAGES}
-							multiple
+							loading={categories.isLoading}
+							mode={'multiple'}
 							required
-							maxCount={10}
-							category={UPLOAD_IMG_CATEGORIES.SALON}
-							disabled={disabledForm}
+						/>
+						<Compare
+							oldValue={formValues?.publishedSalonData?.logo}
+							equal={isEqual(formValues?.logo, formValues?.publishedSalonData?.logo)}
+							oldFormField={logoFormField('publishedSalonData.logo', true)}
+							newFormField={logoFormField('logo', disabledForm)}
+							ellipsis
+						/>
+						<Compare
+							oldValue={formValues?.publishedSalonData?.gallery}
+							equal={isEqual(formValues?.gallery, formValues?.publishedSalonData?.gallery)}
+							oldFormField={imagesFormField('publishedSalonData.gallery', true)}
+							newFormField={imagesFormField('gallery', disabledForm)}
+							ellipsis
 						/>
 					</Col>
 				</Row>
@@ -169,25 +226,17 @@ const SalonForm: FC<Props> = (props) => {
 							{t('loc:Kontaktné údaje')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<PhoneWithPrefixField
-							label={'Telefón'}
-							placeholder={t('loc:Zadajte telefón')}
-							size={'large'}
-							prefixName={'phonePrefixCountryCode'}
-							phoneName={'phone'}
-							disabled={disabledForm}
-							formName={FORM.SALON}
-							required
+						<Compare
+							oldValue={formValues?.publishedSalonData?.phone}
+							newValue={formValues?.phone}
+							oldFormField={phoneFormField('publishedSalonData.phone', 'publishedSalonData.phonePrefixCountryCode', true)}
+							newFormField={phoneFormField('phone', 'phonePrefixCountryCode', disabledForm)}
 						/>
-						<Field
-							className={'w-full'}
-							component={InputField}
-							label={t('loc:Email')}
-							placeholder={t('loc:Zadajte email')}
-							name={'email'}
-							size={'large'}
-							disabled={disabledForm}
-							required
+						<Compare
+							oldValue={formValues?.publishedSalonData?.email}
+							newValue={formValues?.email}
+							oldFormField={emailFormField('publishedSalonData.email', true)}
+							newFormField={emailFormField('email', disabledForm)}
 						/>
 						<Field
 							component={AddressFields}
@@ -204,6 +253,60 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							name={'address'}
 						/>
+						<Compare
+							oldValue={formValues?.publishedSalonData?.address?.description}
+							newValue={formValues?.description}
+							oldFormField={addressDescriptionFormFiled('publishedSalonData.address.description', true)}
+							newFormField={addressDescriptionFormFiled('description', disabledForm)}
+						/>
+						{!compareAddress(formValues?.publishedSalonData?.address, formValues?.address) && formValues?.publishedSalonData?.address && (
+							<Compare
+								oldValue={formValues?.publishedSalonData?.address}
+								equal={compareAddress(formValues?.publishedSalonData?.address, formValues?.address)}
+								oldFormField={
+									<Col xl={6} md={9}>
+										<div>
+											{t('loc:Mesto')}
+											<h4>{get(formValues, 'publishedSalonData.address.city')}</h4>
+										</div>
+										<div>
+											{t('loc:Ulica')}
+											<h4>{`${get(formValues, 'publishedSalonData.address.street') ?? ''} ${
+												get(formValues, 'publishedSalonData.address.streetNumber') ?? ''
+											}`}</h4>
+										</div>
+										<div>
+											{t('loc:PSČ')}
+											<h4>{get(formValues, 'publishedSalonData.address.zipCode')}</h4>
+										</div>
+										<div>
+											{t('loc:Krajina')}
+											<h4>{get(formValues, 'publishedSalonData.address.countryCode')}</h4>
+										</div>
+									</Col>
+								}
+								newFormField={
+									<Col xl={6} md={9}>
+										<div>
+											{t('loc:Mesto')}
+											<h4>{get(formValues, 'city')}</h4>
+										</div>
+										<div>
+											{t('loc:Ulica')}
+											<h4>{`${get(formValues, 'street') ?? ''} ${get(formValues, 'streetNumber') ?? ''}`}</h4>
+										</div>
+										<div>
+											{t('loc:PSČ')}
+											<h4>{get(formValues, 'zipCode')}</h4>
+										</div>
+										<div>
+											{t('loc:Krajina')}
+											<h4>{get(formValues, 'country')}</h4>
+										</div>
+									</Col>
+								}
+							/>
+						)}
 					</Col>
 				</Row>
 				<Row>
@@ -221,15 +324,17 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte názov')}
 								name={'companyInfo.companyName'}
 								size={'large'}
+								disabled={disabledForm}
 								required
 							/>
 							<Field
 								className={'w-12/25'}
 								component={InputField}
 								label={t('loc:IČO')}
-								placeholder={t('loc:Zadajte ičo')}
+								placeholder={t('loc:Zadajte IČO')}
 								name={'companyInfo.businessID'}
 								size={'large'}
+								disabled={disabledForm}
 								required
 							/>
 						</Row>
@@ -241,6 +346,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte IČ DPH')}
 								name={'companyInfo.vatID'}
 								size={'large'}
+								disabled={disabledForm}
 								required
 							/>
 							<Field
@@ -250,6 +356,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte DIČ')}
 								name={'companyInfo.taxID'}
 								size={'large'}
+								disabled={disabledForm}
 								required
 							/>
 						</Row>
@@ -271,6 +378,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte meno')}
 								name={'companyContactPerson.firstName'}
 								size={'large'}
+								disabled={disabledForm}
 							/>
 							<Field
 								className={'w-12/25'}
@@ -279,6 +387,7 @@ const SalonForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte priezvisko')}
 								name={'companyContactPerson.lastName'}
 								size={'large'}
+								disabled={disabledForm}
 							/>
 						</Row>
 						<Row justify={'space-between'}>
@@ -299,7 +408,7 @@ const SalonForm: FC<Props> = (props) => {
 								prefixName={'companyContactPerson.phonePrefixCountryCode'}
 								phoneName={'companyContactPerson.phone'}
 								disabled={disabledForm}
-								style={{ width: 'calc(50% - 8px' }}
+								className='w-12/25'
 								formName={FORM.SALON}
 								required
 							/>
@@ -321,28 +430,10 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
-						{salonID && (
-							<Permissions
-								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
-								render={(hasPermission, { openForbiddenModal }) => (
-									<Button
-										type={'primary'}
-										size={'middle'}
-										className={`noti-btn w-1/4 mb-6 mt-3`}
-										onClick={(e) => {
-											if (hasPermission) {
-												openNoteModal()
-											} else {
-												e.preventDefault()
-												openForbiddenModal()
-											}
-										}}
-										disabled={disabledForm}
-									>
-										{t('loc:Pridať poznámku')}
-									</Button>
-								)}
-							/>
+						{!!salonID && (
+							<Button type={'primary'} size={'middle'} className={'noti-btn w-1/4 mb-6 mt-3'} onClick={() => openNoteModal()} disabled={disabledForm}>
+								{t('loc:Pridať poznámku')}
+							</Button>
 						)}
 					</Col>
 				</Row>

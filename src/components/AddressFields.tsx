@@ -140,7 +140,7 @@ const AddressFields = (props: Props) => {
 			{googleMapUrl && (
 				<>
 					<Row>
-						<Col span={24}>
+						<Col span={24} className={'mb-4'}>
 							<LocationSearchInputField
 								googleMapURL={googleMapUrl}
 								loadingElement={locationSearchElements.loadingElement}
@@ -149,10 +149,11 @@ const AddressFields = (props: Props) => {
 								onPlaceSelected={selectLocation}
 								type='search'
 								placeholder={t('loc:Vyhľadajte miesto na mape')}
+								className={'mb-0'}
 								error={error && touched}
 								disabled={disabled}
 							/>
-							<div className={cx('text-danger h-6', { hidden: !(error && touched) })}>{error}</div>
+							<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 						</Col>
 					</Row>
 					<Row gutter={ROW_GUTTER_X_M} justify={'space-around'} className={'mb-6'}>

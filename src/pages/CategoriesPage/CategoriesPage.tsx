@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
+import { compose } from 'redux'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
@@ -11,7 +12,8 @@ import CategoriesTree from './components/CategoriesTree'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ROW_GUTTER_X_DEFAULT, PERMISSION } from '../../utils/enums'
+import { withPermissions } from '../../utils/Permissions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
@@ -31,7 +33,7 @@ const CategoriesPage = () => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Správa kategórií')
+				name: t('loc:Zoznam kategórií')
 			}
 		]
 	}
@@ -54,4 +56,4 @@ const CategoriesPage = () => {
 	)
 }
 
-export default CategoriesPage
+export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(CategoriesPage)

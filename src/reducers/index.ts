@@ -16,6 +16,8 @@ import salonsReducer from './salons/salonsReducer'
 import customerReducer from './customers/customerReducer'
 import employeesReducer from './employees/employeesReducer'
 import selectedSalonReducer from './selectedSalon/selectedSalonReducer'
+import supportContactReducer from './supportContacts/supportContactReducer'
+import cosmeticsReducer from './cosmetics/cosmeticsReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -27,7 +29,9 @@ export const REDUCER_KEYS = {
 	SALONS: 'SALONS',
 	CUSTOMERS: 'CUSTOMERS',
 	EMPLOYEES: 'EMPLOYEES',
-	SELECTED_SALON: 'SELECTED_SALON'
+	SELECTED_SALON: 'SELECTED_SALON',
+	SUPPORT_CONTACTS: 'SUPPORT_CONTACTS',
+	COSMETICS: 'COSMETICS'
 }
 
 const rootReducer = combineReducers({
@@ -52,12 +56,26 @@ const rootReducer = combineReducers({
 		},
 		categoriesReducer
 	),
+	cosmetics: persistReducer(
+		{
+			key: REDUCER_KEYS.COSMETICS,
+			storage: storageSession
+		},
+		cosmeticsReducer
+	),
 	salons: persistReducer(
 		{
 			key: REDUCER_KEYS.SALONS,
 			storage: storageSession
 		},
 		salonsReducer
+	),
+	supportContacts: persistReducer(
+		{
+			key: REDUCER_KEYS.SUPPORT_CONTACTS,
+			storage: storageSession
+		},
+		supportContactReducer
 	),
 	form: persistReducer(
 		{

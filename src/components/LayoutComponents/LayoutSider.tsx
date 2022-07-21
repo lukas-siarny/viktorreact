@@ -2,7 +2,7 @@ import React, { useCallback } from 'react'
 import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import cx from 'classnames'
 
 // assets
@@ -18,6 +18,8 @@ import { ReactComponent as LogOutIcon } from '../../assets/icons/logout-icon.svg
 import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
 import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
+import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
+import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -27,6 +29,7 @@ import Permissions from '../../utils/Permissions'
 // redux
 import { logOutUser } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
+import { getSupportContact } from '../../reducers/supportContacts/supportContactsActions'
 
 // components
 import LanguagePicker from '../LanguagePicker'
@@ -48,6 +51,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
+	const location = useLocation()
 
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
@@ -55,6 +59,16 @@ const LayoutSider = (props: LayoutSiderProps) => {
 		<Menu className='noti-sider-menu'>
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
+			</Menu.Item>
+			<Menu.Item
+				key='support'
+				onClick={() => {
+					dispatch(getSupportContact())
+					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
+				}}
+				icon={<HelpIcon />}
+			>
+				{t('loc:Potrebujete pomôcť?')}
 			</Menu.Item>
 			<LanguagePicker asMenuItem />
 			<Menu.Item key='logOut' onClick={() => dispatch(logOutUser())} icon={<LogOutIcon />}>
@@ -95,7 +109,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											{t('loc:Používatelia')}
 										</Menu.Item>
 									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_BROWSING]}>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
 										<Menu.Item
 											eventKey={PAGE.CATEGORIES}
 											key={PAGE.CATEGORIES}
@@ -105,6 +119,30 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
 										>
 											{t('loc:Kategórie')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
+										<Menu.Item
+											eventKey={PAGE.COSMETICS}
+											key={PAGE.COSMETICS}
+											onClick={() => history.push(t('paths:cosmetics'))}
+											icon={<CosmeticIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.COSMETICS })}
+										>
+											{t('loc:Kozmetika')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+										<Menu.Item
+											eventKey={PAGE.SUPPORT_CONTACTS}
+											key={PAGE.SUPPORT_CONTACTS}
+											onClick={() => history.push(t('paths:support-contacts'))}
+											icon={<HelpIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.SUPPORT_CONTACTS })}
+										>
+											{t('loc:Podpora')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>

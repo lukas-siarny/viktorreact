@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useMemo } from 'react'
+import React, { useCallback, useRef, useState, useMemo, useEffect } from 'react'
 import { WrappedFieldProps } from 'redux-form'
 
 import { get, trimStart } from 'lodash'
@@ -14,6 +14,7 @@ type Props = WrappedFieldProps &
 	FormItemLabelProps & {
 		focusRow?: number
 		showLettersCount?: boolean
+		focused?: boolean
 	}
 
 const TextareaField = (props: Props) => {
@@ -34,12 +35,19 @@ const TextareaField = (props: Props) => {
 		readOnly,
 		className,
 		size,
-		showLettersCount
+		showLettersCount,
+		focused
 	} = props
 
 	const [autoSizeState, setSutoSizeState] = useState(undefined as { minRows?: number; maxRows?: number } | undefined)
 
 	const ref = useRef(null as TextAreaRef | null)
+
+	useEffect(() => {
+		if (ref.current && focused) {
+			ref.current.focus()
+		}
+	}, [focused])
 
 	const parseValue = (value: any) => trimStart(value) || null
 
@@ -55,6 +63,7 @@ const TextareaField = (props: Props) => {
 
 	const onFocus = useCallback(
 		(e) => {
+			e.target.selectionEnd = 1
 			if (input.onFocus) {
 				input.onFocus(e)
 			}
@@ -82,9 +91,9 @@ const TextareaField = (props: Props) => {
 
 	const lettersCount = useMemo(() => {
 		return (
-			<Row className={'justify-between w-full pr-2'}>
+			<Row className={'justify-between w-full pr-2 items-end'}>
 				<span>{label}</span>
-				<i className='xs-regular'>{`${input.value.length}/${maxLength}`}</i>
+				<i className='xs-regular mb-1'>{`${input.value.length}/${maxLength}`}</i>
 			</Row>
 		)
 	}, [maxLength, input, label])

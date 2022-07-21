@@ -42,6 +42,11 @@ export interface ILoginForm {
 
 export interface IInviteEmployeeForm {
 	email: string
+	roleID: number
+}
+
+export interface IEditEmployeeRoleForm {
+	roleID: number
 }
 
 export interface ICreateUserForm {
@@ -100,6 +105,11 @@ export interface ISalonForm {
 	pricelistIDs?: number[]
 	companyContactPerson: any
 	companyInfo: any
+	description: string
+	categoryIDs: [
+		number,
+	...number[]
+	]
 }
 
 export interface IServiceForm {
@@ -117,6 +127,21 @@ export interface IServiceForm {
 	categoryFirstLevel: number
 	categorySecondLevel: number
 	employees: any
+}
+
+export interface ISupportContactForm {
+	id: number | null
+	note: string
+	openingHours: OpeningHours
+	sameOpenHoursOverWeek: boolean
+	openOverWeekend: boolean
+	countryCode: string
+	zipCode: string
+	city: string
+	street: string
+	streetNumber: string
+	phones: { phonePrefixCountryCode: string, phone: string }[]
+	emails: { email: string }[]
 }
 
 export interface IRegistrationForm {
@@ -193,6 +218,10 @@ export interface IStructuredAddress {
 	houseNumber: string | null
 }
 
+export interface INoteForm {
+	note: string
+}
+
 export interface IOpenHoursNoteForm {
 	hoursNote: {
 		note: string
@@ -231,6 +260,12 @@ export interface IEmployeeForm {
 	phone?: string
 	services?: any
 	imageID?: number
+	role: number
+}
+
+export interface ICosmeticForm {
+	name: string
+	image: any
 }
 
 export interface ILanguagePickerForm {
@@ -296,3 +331,16 @@ export interface ICurrency {
 	code: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['code']
 	symbol: Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies'][0]['symbol']
 }
+
+export interface INoteModal {
+	title: string
+	fieldPlaceholderText: string
+	visible: boolean
+	onSubmit?: (formData: any) => void
+}
+
+export interface IDataUploadForm {
+	file: string | Blob
+}
+
+export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0]

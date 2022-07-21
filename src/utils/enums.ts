@@ -4,7 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICountryLabel, ICurrency } from '../types/interfaces'
+import { ICurrency } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -17,7 +17,7 @@ export enum NAMESPACE {
 
 export enum LANGUAGE {
 	SK = 'sk',
-	CZ = 'cz',
+	CZ = 'cs',
 	EN = 'en',
 	HU = 'hu',
 	RO = 'ro',
@@ -89,6 +89,8 @@ export enum FORM {
 	SALON = 'SALON',
 	LOGIN = 'LOGIN',
 	CATEGORY = 'CATEGORY',
+	COSMETIC = 'COSMETIC',
+	COSMETICS_FILTER = 'COSMETICS_FILTER',
 	SALONS_FILTER = 'SALONS_FILTER',
 	ACTIVATION = 'ACTIVATION',
 	FORGOT_PASSWORD = 'FORGOT_PASSWORD',
@@ -106,7 +108,12 @@ export enum FORM {
 	SERVICES_FILTER = 'SERVICES_FILTER',
 	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE',
 	EMPLOYEE = 'EMPLOYEE',
-	INVITE_EMPLOYEE = 'INVITE_EMPLOYEE'
+	INVITE_EMPLOYEE = 'INVITE_EMPLOYEE',
+	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
+	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
+	NOTE = 'NOTE',
+	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
+	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM'
 }
 
 // System permissions
@@ -118,7 +125,6 @@ export enum PERMISSION {
 	USER_BROWSING = 'USER_BROWSING',
 	USER_EDIT = 'USER_EDIT',
 	USER_DELETE = 'USER_DELETE',
-	ENUM_BROWSING = 'ENUM_BROWSING',
 	ENUM_EDIT = 'ENUM_EDIT'
 }
 
@@ -136,7 +142,8 @@ export enum SALON_PERMISSION {
 	CUSTOMER_DELETE = 'CUSTOMER_DELETE',
 	EMPLOYEE_CREATE = 'EMPLOYEE_CREATE',
 	EMPLOYEE_UPDATE = 'EMPLOYEE_UPDATE',
-	EMPLOYEE_DELETE = 'EMPLOYEE_DELETE'
+	EMPLOYEE_DELETE = 'EMPLOYEE_DELETE',
+	USER_ROLE_EDIT = 'USER_ROLE_EDIT'
 }
 
 export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
@@ -177,7 +184,10 @@ export enum PAGE {
 	HOME = 'HOME',
 	MY_ACCOUNT = 'MY_ACCOUNT',
 	ACTIVATION = 'ACTIVATION',
-	EMPLOYEES = 'EMPLOYEES'
+	EMPLOYEES = 'EMPLOYEES',
+	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
+	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
+	COSMETICS = 'COSMETICS'
 }
 
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
@@ -201,7 +211,6 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	COUNTRIES_FILTER_OPTIONS = 'countries_filter_options',
 	CURRENCIES = 'currencies'
 }
 
@@ -273,14 +282,28 @@ export const MAP = {
 	maxZoom: 20
 }
 
-export enum SALON_STATUSES {
+export enum SALON_FILTER_STATES {
 	PUBLISHED = 'PUBLISHED',
-	VISIBLE = 'VISIBLE',
+	NOT_PUBLISHED = 'NOT_PUBLISHED',
 	DELETED = 'DELETED',
 	NOT_DELETED = 'NOT_DELETED',
-	ALL = 'ALL',
+	PENDING_PUBLICATION = 'PENDING_PUBLICATION',
+	DECLINED = 'DECLINED',
+	ALL = 'ALL'
+}
+
+export enum SALON_STATES {
 	NOT_PUBLISHED = 'NOT_PUBLISHED',
-	NOT_VISIBLE = 'NOT_VISIBLE'
+	PUBLISHED = 'PUBLISHED',
+	NOT_PUBLISHED_PENDING = 'NOT_PUBLISHED_PENDING',
+	PUBLISHED_PENDING = 'PUBLISHED_PENDING',
+	NOT_PUBLISHED_DECLINED = 'NOT_PUBLISHED_DECLINED',
+	PUBLISHED_DECLINED = 'PUBLISHED_DECLINED'
+}
+
+export enum SALON_CREATE_TYPES {
+	BASIC = 'BASIC',
+	NON_BASIC = 'NON_BASIC'
 }
 
 export enum PAGE_VIEW {
@@ -340,6 +363,7 @@ export enum UPLOAD_ERROR_TYPE {
 	INVALID_TYPE = 'INVALID_TYPE'
 }
 
+// NOTE: do not change days order!
 export enum DAY {
 	MONDAY = 'MONDAY',
 	TUESDAY = 'TUESDAY',
@@ -364,20 +388,9 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_100 = 100,
 	LENGTH_60 = 60,
 	LENGTH_50 = 50,
+	LENGTH_30 = 30,
 	LENGTH_20 = 20,
 	LENGTH_10 = 10
-}
-
-export const getTranslatedCountriesLabels = (): ICountryLabel => {
-	return {
-		[LANGUAGE.SK]: `${i18next.t('loc:Slovenská republika')}`,
-		[LANGUAGE.CZ]: `${i18next.t('loc:Česká republika')}`,
-		[LANGUAGE.EN]: `${i18next.t('loc:Česká republika')}`,
-		[LANGUAGE.HU]: `${i18next.t('loc:Maďarsko')}`,
-		[LANGUAGE.RO]: `${i18next.t('loc:Rumunsko')}`,
-		[LANGUAGE.BG]: `${i18next.t('loc:Bulharsko')}`,
-		[LANGUAGE.IT]: `${i18next.t('loc:Taliansko')}`
-	} as ICountryLabel
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
@@ -396,7 +409,8 @@ export enum UPLOAD_IMG_CATEGORIES {
 	SALON_PRICELIST = 'SALON_PRICELIST',
 	EMPLOYEE = 'EMPLOYEE_IMAGE',
 	USER = 'USER_IMAGE',
-	CATEGORY = 'CATEGORY_IMAGE'
+	CATEGORY = 'CATEGORY_IMAGE',
+	COSMETIC = 'COSMETIC_IMAGE'
 }
 
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
@@ -409,3 +423,5 @@ export enum ACCOUNT_STATE {
 	PENDING = 'PENDING',
 	PAIRED = 'PAIRED'
 }
+
+export const IMAGE_UPLOADING_PROP = 'imageUploading'

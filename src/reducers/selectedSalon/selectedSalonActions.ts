@@ -25,17 +25,21 @@ export interface ISalonOptions {
 	payload: ISalonSelectionOptionsPayload
 }
 
-type IPayloadData = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon'] &
+export type ISalonPayloadData = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon'] &
 	IPermissions & {
 		currency: ICurrency
 	}
 
 export interface ISelectedSalonPayload {
-	data: IPayloadData | null
+	data: ISalonPayloadData | null
+}
+
+interface ISalonSelectedOptionItem extends ISelectOptionItem {
+	logo?: string
 }
 
 export interface ISalonSelectionOptionsPayload {
-	data: ISelectOptionItem[] | null
+	data: ISalonSelectedOptionItem[] | null
 }
 
 export const selectSalon =
@@ -62,7 +66,7 @@ export const selectSalon =
 
 					const countries = state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES]
 					// find country by code from enumeration values
-					const country = find(countries.data, (item) => item.code === countryCode)
+					const country = find(countries.data, (item) => item.code?.toLowerCase() === countryCode?.toLowerCase())
 
 					const currencies = state.enumerationsStore?.[ENUMERATIONS_KEYS.CURRENCIES]
 					// find currency by currency code from country
@@ -112,8 +116,9 @@ export const setSelectionOptions =
 	(dispatch) => {
 		const options = salons.map((salon) => ({
 			key: salon.id,
-			label: get(salon, 'name', salon.id),
-			value: salon.id
+			label: get(salon, 'name', salon.id.toString()),
+			value: salon.id,
+			logo: get(salon, 'logo.resizedImages.thumbnail')
 		}))
 
 		const payload: ISalonSelectionOptionsPayload = {

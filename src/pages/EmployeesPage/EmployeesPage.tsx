@@ -102,18 +102,15 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			sorter: true,
 			sortOrder: setOrder(query.order, 'lastName'),
 			width: '20%',
-			render: (value, record) => (
-				<>
-					{record?.firstName} {record?.lastName}
-				</>
-			)
+			render: (value, record) => <>{record?.firstName || record?.lastName ? `${record?.firstName} ${record?.lastName}`.trim() : '-'}</>
 		},
 		{
 			title: t('loc:Email'),
 			dataIndex: 'email',
 			key: 'email',
 			ellipsis: true,
-			width: '25%'
+			width: '25%',
+			render: (value) => value || '-'
 		},
 		{
 			title: t('loc:Telefón'),
@@ -122,11 +119,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			ellipsis: true,
 			sorter: false,
 			width: '15%',
-			render: (value, record) => (
-				<>
-					{prefixOptions[record?.phonePrefixCountryCode]} {value}
-				</>
-			)
+			render: (value, record) => <>{value && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${value}` : '-'}</>
 		},
 		{
 			title: t('loc:Služby'),
@@ -134,7 +127,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			key: 'services',
 			ellipsis: true,
 			render: (value) => {
-				return <PopoverList elements={value} />
+				return value && value.length ? <PopoverList elements={value} /> : '-'
 			}
 		},
 		{
@@ -202,6 +195,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 							rowClassName={'clickable-row'}
 							loading={employees?.isLoading}
 							twoToneRows
+							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
 									history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))

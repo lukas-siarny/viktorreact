@@ -4,6 +4,7 @@ import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Form, Row, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
+import cx from 'classnames'
 
 // atoms
 import SelectField from '../../../atoms/SelectField'
@@ -23,7 +24,7 @@ import AvatarComponents from '../../../components/AvatarComponents'
 import { RootState } from '../../../reducers'
 
 // utils
-import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { showErrorNotification, validationNumberMin, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
@@ -75,7 +76,7 @@ export const renderListFields = (props: any) => {
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					return (
-						<div className={'employee-list-item flex items-center justify-between'}>
+						<div className={'employee-list-item flex items-center justify-between'} key={index}>
 							<div className={'title flex items-center'}>
 								<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
 								{fieldData?.name}
@@ -148,7 +149,7 @@ const ServiceForm = (props: Props) => {
 
 	return (
 		<Spin spinning={isLoading}>
-			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
 				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
 				<Field
@@ -239,11 +240,11 @@ const ServiceForm = (props: Props) => {
 				</Row>
 				<h3>{t('loc:Zoznam priradených zamestnancov')}</h3>
 				<Divider className={'mb-3 mt-3'} />
-				<div className={'flex w-full justify-between'}>
+				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 					<Field
 						label={t('loc:Zamestnanci')}
-						className={'w-9/12'}
 						size={'large'}
+						className={'flex-1'}
 						component={SelectField}
 						allowClear
 						placeholder={t('loc:Vyberte zamestnancov')}
@@ -255,27 +256,27 @@ const ServiceForm = (props: Props) => {
 						showSearch
 						allowInfinityScroll
 					/>
-					<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-1/5 mt-4'} onClick={addEmployee} disabled={isEmpty(formValues?.employee)}>
+
+					<Button type={'primary'} size={'middle'} className={'self-start noti-btn m-regular md:mt-5'} onClick={addEmployee} disabled={isEmpty(formValues?.employee)}>
 						{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
 					</Button>
 				</div>
 				<FieldArray component={renderListFields} name={'employees'} />
-				<Row className={'content-footer'} id={'content-footer-container'}>
-					<Col span={8}>
+				<div className={'content-footer pt-0'} id={'content-footer-container'}>
+					<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
 						{serviceID ? (
 							<DeleteButton
-								className={'noti-btn w-full'}
+								className={'noti-btn mt-2-5 w-52 xl:w-60'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								onConfirm={onConfirmDelete}
 								entityName={t('loc:službu')}
 								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_DELETE]}
 							/>
 						) : null}
-					</Col>
-					<Col span={8} offset={8}>
+
 						<Button
 							type={'primary'}
-							className={'noti-btn w-full'}
+							className={'noti-btn mt-2-5 w-52 xl:w-60'}
 							htmlType={'submit'}
 							icon={serviceID ? <EditIcon /> : <CreateIcon />}
 							disabled={submitting || pristine}
@@ -283,8 +284,8 @@ const ServiceForm = (props: Props) => {
 						>
 							{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
 						</Button>
-					</Col>
-				</Row>
+					</Row>
+				</div>
 			</Form>
 		</Spin>
 	)

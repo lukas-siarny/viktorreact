@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
-import { Button, Col, Row, Tree, Divider, notification } from 'antd'
+import { Button, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { filter, forEach, get, map } from 'lodash'
 import { initialize } from 'redux-form'

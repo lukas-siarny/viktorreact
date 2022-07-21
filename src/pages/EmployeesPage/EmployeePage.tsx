@@ -298,11 +298,6 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
-	const rowClass = cx({
-		'justify-between': emploeyeeExists,
-		'justify-center': !emploeyeeExists
-	})
-
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
 
 	return (
@@ -319,7 +314,12 @@ const EmployeePage = (props: Props) => {
 				<div className='content-body small mt-2 mb-8'>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 					<div className={'content-footer pt-0'}>
-						<Row className={rowClass}>
+						<Row
+							className={cx({
+								'justify-between': emploeyeeExists,
+								'justify-center': !emploeyeeExists
+							})}
+						>
 							{emploeyeeExists ? (
 								<DeleteButton
 									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}

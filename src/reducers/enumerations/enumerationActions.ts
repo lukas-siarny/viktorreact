@@ -1,5 +1,5 @@
 import { get, map } from 'lodash'
-import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
+import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../../utils/enums'
 /* eslint-disable import/no-cycle */
 import { IResetStore } from '../generalTypes'
 import { ThunkResult } from '../index'
@@ -12,7 +12,6 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 import { getReq } from '../../utils/request'
 import { Paths } from '../../types/api'
 import i18n from '../../utils/i18n'
-import { LOCALES } from '../../components/LanguagePicker'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 

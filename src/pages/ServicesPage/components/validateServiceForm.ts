@@ -28,7 +28,7 @@ const validateServiceForm = (values?: any) => {
 	}
 
 	if (values?.description && values.description?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
+		errors.description = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_255
 		})
 	}

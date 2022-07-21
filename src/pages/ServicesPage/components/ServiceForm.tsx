@@ -25,7 +25,7 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { showErrorNotification, validationNumberMin, checkUploadingBeforeSubmit } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
@@ -150,8 +150,24 @@ const ServiceForm = (props: Props) => {
 	return (
 		<Spin spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
-				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
-				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
+				<Field
+					component={InputField}
+					label={t('loc:Názov')}
+					placeholder={t('loc:Zadajte názov')}
+					name={'name'}
+					size={'large'}
+					maxLength={VALIDATION_MAX_LENGTH.LENGTH_60}
+					required
+				/>
+				<Field
+					component={TextareaField}
+					label={t('loc:Popis')}
+					placeholder={t('loc:Zadajte popis')}
+					name={'description'}
+					size={'large'}
+					maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+					showLettersCount
+				/>
 				<Field
 					component={ImgUploadField}
 					name='gallery'

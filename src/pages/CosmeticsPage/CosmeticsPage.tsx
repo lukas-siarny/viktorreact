@@ -46,7 +46,7 @@ const CosmeticsPage = () => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Správa kozmetiky')
+				name: t('loc:Zoznam kozmetiky')
 			}
 		]
 	}

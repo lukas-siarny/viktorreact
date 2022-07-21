@@ -71,7 +71,7 @@ const CosmeticForm: FC<Props> = (props) => {
 						<Field
 							component={InputField}
 							label={t('loc:Názov')}
-							placeholder={STRINGS(t).enter('loc:názov')}
+							placeholder={STRINGS(t).enter(t('loc:názov'))}
 							name={'name'}
 							size={'large'}
 							required

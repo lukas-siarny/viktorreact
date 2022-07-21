@@ -119,7 +119,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			ellipsis: true,
 			sorter: false,
 			width: '15%',
-			render: (value, record) => <>{value && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${value}}` : '-'}</>
+			render: (value, record) => <>{value && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${value}` : '-'}</>
 		},
 		{
 			title: t('loc:Služby'),

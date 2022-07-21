@@ -11,6 +11,8 @@ type Props = RouteProps & {
 	component: any
 	redirectLoggedInUser?: boolean
 	className?: string
+	customProps?: Object
+	showBackButton?: boolean
 }
 
 const PublicRoute: FC<Props> = (props) => {

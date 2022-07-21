@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react'
-import { useLocation } from 'react-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Row, Select, Collapse, Spin, Result } from 'antd'
@@ -19,9 +18,6 @@ import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
 import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
 
-// components
-import BackButton from '../../components/BackButton'
-
 type Props = {}
 
 const { Option } = Select
@@ -30,8 +26,6 @@ const { Panel } = Collapse
 const ContactPage: FC<Props> = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
-
-	const location = useLocation() as any
 
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const supportContact = useSelector((state: RootState) => state.supportContacts.supportContact)
@@ -218,7 +212,6 @@ const ContactPage: FC<Props> = () => {
 	return (
 		<div className='w-full noti-support-contact-wrapper'>
 			<Spin spinning={supportContact?.isLoading || supportContacts?.isLoading}>
-				<BackButton path={location?.state?.from || t('paths:index')} showSeparator={false} className={'mb-2 btn-back'} />
 				<h3 className={'text-center'}>{t('loc:Pomoc a podpora')}</h3>
 				{renderContent()}
 			</Spin>

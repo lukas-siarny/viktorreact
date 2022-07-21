@@ -16,7 +16,7 @@ const UploadSuccess = (props: Props) => {
 
 	return (
 		<div className={'data-upload-success flex items-center gap-4 flex-col'}>
-			<Alert message={t('loc:Požiadavka na spracovanie dát bola úspešná.')} type={'success'} className={'noti-alert'} showIcon icon={<CheckIcon />} />
+			<Alert message={t('loc:Požiadavka na spracovanie dát bola úspešne vytvorená.')} type={'success'} className={'noti-alert'} showIcon icon={<CheckIcon />} />
 			<p className={'mb-0'}>{t('loc:Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.')}</p>
 			<p className={'mb-0'}>{t('loc:Úspešne nahraté položky sa následne zobrazia v zozname salónov.')}</p>
 			<Button onClick={onUploadAgain} type='primary' htmlType='button' className={'noti-btn'} icon={<UploadIcon />}>

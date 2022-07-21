@@ -33,7 +33,7 @@ const CategoriesPage = () => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Správa kategórií')
+				name: t('loc:Zoznam kategórií')
 			}
 		]
 	}

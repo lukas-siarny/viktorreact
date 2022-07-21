@@ -423,3 +423,5 @@ export enum ACCOUNT_STATE {
 	PENDING = 'PENDING',
 	PAIRED = 'PAIRED'
 }
+
+export const IMAGE_UPLOADING_PROP = 'imageUploading'

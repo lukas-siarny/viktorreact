@@ -36,6 +36,7 @@ import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
+import { SubmissionError, submit } from 'redux-form'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -43,6 +44,7 @@ import {
 	FORM,
 	INVALID_DATE_FORMAT,
 	MSG_TYPE,
+	NOTIFICATION_TYPE,
 	DEFAULT_LANGUAGE,
 	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER,
@@ -50,8 +52,10 @@ import {
 	DAY,
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT,
-	SALON_STATES
+	SALON_STATES,
+	IMAGE_UPLOADING_PROP
 } from './enums'
+import showNotifications from './tsxHelpers'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
@@ -662,7 +666,16 @@ export const getSelectOptionsFromData = (data: SelectDataItem[] | null) => {
 export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any) => {
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
-		const isErrors: boolean = Object.keys(errors).length > 1
+		const errorKeys = Object.keys(errors)
+		console.log('🚀 ~ file: helper.tsx ~ line 667 ~ showErrorNotification ~ errorKeys', errorKeys)
+
+		// Error invoked during image uploading has custom notification
+		if (errorKeys.length === 1 && errorKeys[0] === IMAGE_UPLOADING_PROP) {
+			return undefined
+		}
+
+		const isErrors: boolean = errorKeys.length > 1
+		console.log('🚀 ~ file: helper.tsx ~ line 675 ~ showErrorNotification ~ isErrors', isErrors)
 		return notification.error({
 			message: i18next.t('loc:Chybne vyplnený formulár'),
 			description: i18next.t(
@@ -790,3 +803,17 @@ export const transformToLowerCaseWithoutAccent = (source: string): string =>
 		.toLowerCase()
 		.normalize('NFD')
 		.replace(/\p{Diacritic}/gu, '')
+
+export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
+	const { form } = props
+
+	if (values && values[IMAGE_UPLOADING_PROP]) {
+		const error = i18next.t('loc:Prebieha nahrávanie')
+		showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
+		throw new SubmissionError({
+			[IMAGE_UPLOADING_PROP]: error
+		})
+	} else {
+		dispatch(submit(form))
+	}
+}

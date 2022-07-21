@@ -230,6 +230,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				latitude: data.latitude,
 				longitude: data.longitude,
 				street: data.street,
+				streetNumber: data.streetNumber,
 				zipCode: data.zipCode,
 				description: data.description,
 				phonePrefixCountryCode: data.phonePrefixCountryCode,

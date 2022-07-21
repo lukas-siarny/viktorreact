@@ -16,12 +16,13 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
-import { convertCountriesToLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
+import { normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
+import { LOCALES } from '../../../components/LanguagePicker'
 
 type TreeCategories = {
 	title?: ReactElement
@@ -51,11 +52,10 @@ const CategoriesTree = () => {
 	const [lastOpenedNode, setLastOpenedNode] = useState<any>()
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
-	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_LANGUAGE), [countries])
+	const emptyNameLocalizations = useMemo(() => Object.keys(LOCALES), [])
 
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
@@ -207,7 +207,7 @@ const CategoriesTree = () => {
 		}
 		try {
 			// key of dropped node
-			const dropKey: number = droppedData.node.key
+			// const dropKey: number = droppedData.node.key
 			// key of dragged node
 			const dragKey: number = droppedData.dragNode.key
 			// drag node actual index/position in array children nodes
@@ -260,7 +260,7 @@ const CategoriesTree = () => {
 					imageID: get(droppedData, 'dragNode.image.id')
 				}
 			}
-			// check and update categories on be
+			// check and update categories on BE
 			await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: dragKey }, body)
 			dispatch(getCategories())
 			setShowForm(false)
@@ -273,7 +273,7 @@ const CategoriesTree = () => {
 	const handleSubmit = async (formData: ICategoryForm) => {
 		const cat: any | null = categories?.data
 		try {
-			const body: any = {
+			let body: any = {
 				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
@@ -282,9 +282,18 @@ const CategoriesTree = () => {
 			if (formData.id && formData.id >= 0) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
 			} else {
+				if (formData.parentId >= 0) {
+					body = {
+						...body,
+						parentID: formData.parentId || undefined
+					}
+				}
+
 				await postReq('/api/b2b/admin/enums/categories/', null, body)
 			}
 			dispatch(getCategories())
+			// clear 'dirty' state from Form
+			dispatch(initialize(FORM.CATEGORY, formData))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

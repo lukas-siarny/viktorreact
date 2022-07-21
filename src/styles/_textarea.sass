@@ -9,10 +9,11 @@
 	// Normal state
 	.ant-input.noti-textarea
 		border: 1px solid $borderColor-notino-grayLight
-		&:hover
-			border: 1px solid $borderColor-notino-grayDark
-		&:focus
-			border: 1px solid $borderColor-notino-black
-			box-shadow: $field-shadow-focus-default
-		&::placeholder
-			color: $borderColor-notino-gray
+		&:not(:disabled)
+			&:hover
+				border: 1px solid $borderColor-notino-grayDark
+			&:focus
+				border: 1px solid $borderColor-notino-black
+				box-shadow: $field-shadow-focus-default
+			&::placeholder
+				color: $borderColor-notino-gray

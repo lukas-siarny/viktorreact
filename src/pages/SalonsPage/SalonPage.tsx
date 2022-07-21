@@ -22,6 +22,7 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERM
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
@@ -44,6 +45,8 @@ type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
+const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
+
 const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -64,12 +67,12 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
-	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null)
+	const salonExists = salonID > 0
+	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null) && salonExists
 
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
-	const salonExists = salonID > 0
 	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
-	const pendingPublication = salon.data?.pendingPublication
+	const pendingPublication = salon.data && pendingStates.includes(salon.data.state)
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
@@ -119,6 +122,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
+
+	useEffect(() => {
+		dispatch(getCategories())
+	}, [dispatch])
 
 	const updateOnlyOpeningHours = useRef(false)
 
@@ -178,7 +185,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					...initialData,
 					publishedSalonData: {
 						...salonData.publishedSalonData,
-						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id }))
+						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
+						logo: salonData.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null
 					}
 				}
 			}

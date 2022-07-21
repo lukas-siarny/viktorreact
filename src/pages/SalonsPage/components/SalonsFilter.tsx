@@ -248,7 +248,7 @@ const SalonsFilter = (props: Props) => {
 								component={SelectField}
 								name={'categoryFirstLevelIDs'}
 								mode={'multiple'}
-								placeholder={t('loc:Kategórie')}
+								placeholder={t('loc:Odvetvie')}
 								allowClear
 								size={'middle'}
 								filterOptions

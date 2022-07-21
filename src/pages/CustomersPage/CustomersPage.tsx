@@ -168,6 +168,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 							rowClassName={'clickable-row'}
 							loading={customers?.isLoading}
 							twoToneRows
+							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
 									history.push(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id }))

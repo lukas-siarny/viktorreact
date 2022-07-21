@@ -487,49 +487,49 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			case !salonExists:
 				return (
 					<Row className={'w-full'} justify={'center'}>
-						{submitButton('w-1/3')}
+						{submitButton('w-52 xl:w-60 mt-2-5')}
 					</Row>
 				)
 			// has published version
 			case hasSalonPublishedVersion && !pendingPublication:
 				return (
-					<Row className={'w-full gap-2'} wrap={false}>
-						<Row className={'w-1/2 gap-2'} wrap={false}>
-							{deleteButton('w-1/2 xl:w-1/3')}
-							{hideSalonButton('w-1/2 xl:w-1/3')}
+					<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
+						<Row className={'gap-2'}>
+							{deleteButton('w-48 lg:w-60 mt-2-5')}
+							{hideSalonButton('w-48 lg:w-60 mt-2-5')}
 						</Row>
-						<Row className={'w-1/2 gap-2'} justify={'end'} wrap={false}>
-							{requestApprovalButton('w-1/2 xl:w-1/3')}
-							{submitButton('w-1/2 xl:w-1/3')}
+						<Row className={'gap-2 md:justify-end'}>
+							{requestApprovalButton('w-48 lg:w-60 mt-2-5')}
+							{submitButton('w-48 lg:w-60 mt-2-5')}
 						</Row>
 					</Row>
 				)
 			case hasSalonPublishedVersion && pendingPublication:
 				return (
-					<Row className={'w-full gap-2'} wrap={false} justify={'space-between'}>
-						<Row className={'w-2/3 lg:w-1/2 xl:w-1/3 gap-2'} wrap={false}>
-							{deleteButton('w-1/2')}
-							{hideSalonButton('w-1/2')}
+					<Row className={'w-full gap-2'}>
+						<Row className={'gap-2 flex-1'}>
+							{deleteButton('w-48 lg:w-60 mt-2-5')}
+							{hideSalonButton('w-48 lg:w-60 mt-2-5')}
 						</Row>
-						{submitButton('w-1/3 lg:w-1/4')}
+						{submitButton('w-48 lg:w-60 mt-2-5')}
 					</Row>
 				)
 			// doesn't have published version
 			case !hasSalonPublishedVersion && !pendingPublication:
 				return (
-					<Row className={'w-full gap-2'} wrap={false} justify={'space-between'}>
-						{deleteButton('w-1/3 lg:w-1/4')}
-						<Row className={'w-2/3 lg:w-1/2 xl:w-1/3 gap-2'} wrap={false}>
-							{requestApprovalButton('w-1/2')}
-							{submitButton('w-1/2')}
+					<Row className={'w-full gap-2 flex-col sm:flex-nowrap sm:flex-row'}>
+						{deleteButton('w-48 lg:w-60 mt-2-5')}
+						<Row className={'gap-2 flex-1 sm:justify-end'}>
+							{requestApprovalButton('w-48 lg:w-60 mt-2-5')}
+							{submitButton('w-48 lg:w-60 mt-2-5')}
 						</Row>
 					</Row>
 				)
 			case !hasSalonPublishedVersion && pendingPublication:
 				return (
-					<Row className={'w-full gap-2'} justify={'space-between'} wrap={false}>
-						{deleteButton('w-1/2 lg:w-1/3 xl:w-1/4')}
-						{submitButton('w-1/2 lg:w-1/3 xl:w-1/4')}
+					<Row className={'w-full gap-2'} justify={'space-between'}>
+						{deleteButton('mt-2-5 w-52 xl:w-60')}
+						{submitButton('mt-2-5 w-52 xl:w-60')}
 					</Row>
 				)
 			default:
@@ -589,7 +589,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					{salonExists && (
 						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
 					)}
-					<div className={'content-footer'}>{renderContentFooter()}</div>
+					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
 				</div>
 			</Spin>
 			<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>

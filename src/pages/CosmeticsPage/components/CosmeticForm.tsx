@@ -89,17 +89,17 @@ const CosmeticForm: FC<Props> = (props) => {
 							maxCount={1}
 						/>
 					</Row>
-					<div className={'flex w-full justify-around space-between mt-10'}>
+					<div className={'flex w-full justify-around space-between mt-10 gap-2 flex-wrap'}>
 						{cosmeticID > 0 && (
 							<DeleteButton
 								onConfirm={onDelete}
 								entityName={''}
 								type={'default'}
-								className='w-12/25 xl:w-1/4'
+								className='w-40'
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 							/>
 						)}
-						<Button className={'noti-btn w-12/25 xl:w-1/4'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+						<Button className={'noti-btn w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
 							{cosmeticID > 0 ? t('loc:Uložiť') : t('loc: Vytvoriť')}
 						</Button>
 					</div>

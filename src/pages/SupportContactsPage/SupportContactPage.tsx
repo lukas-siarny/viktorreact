@@ -6,6 +6,7 @@ import { Alert, Button, Row, Spin } from 'antd'
 import { change, initialize, isPristine, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
+import cx from 'classnames'
 
 // components
 import DeleteButton from '../../components/DeleteButton'
@@ -278,12 +279,12 @@ const SupportContactPage: FC<Props> = (props) => {
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />
-					<div className={'content-footer'}>
-						<Row className={`${supportContactExists ? 'justify-between' : 'justify-center'} w-full`}>
+					<div className={'content-footer pt-0'}>
+						<Row className={cx({ 'justify-between': supportContactExists, 'justify-center': !supportContactExists }, 'w-full')}>
 							{supportContactExists && (
 								<DeleteButton
 									permissions={permissions}
-									className={'w-1/3'}
+									className={'mt-2-5 w-52 xl:w-60'}
 									onConfirm={deleteSupportContact}
 									entityName={t('loc:podporu')}
 									type={'default'}
@@ -297,7 +298,7 @@ const SupportContactPage: FC<Props> = (props) => {
 										type={'primary'}
 										block
 										size={'middle'}
-										className={'noti-btn m-regular w-1/3'}
+										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
 										htmlType={'submit'}
 										onClick={(e) => {
 											if (hasPermission) {

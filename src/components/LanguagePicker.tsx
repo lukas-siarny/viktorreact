@@ -40,38 +40,45 @@ export const LOCALES = {
 	[LANGUAGE.SK]: {
 		ISO_639: 'sk',
 		antD: sk_SK,
-		icon: SK_Flag
+		icon: SK_Flag,
+		countryCode: 'SK'
 	},
 	[LANGUAGE.CZ]: {
 		ISO_639: 'cs',
 		antD: cs_CZ,
 		icon: CZ_Flag,
-		displayAs: 'cz'
+		displayAs: 'cz',
+		countryCode: 'CZ'
 	},
 	[LANGUAGE.EN]: {
 		ISO_639: 'en',
 		antD: en_GB,
-		icon: EN_Flag
+		icon: EN_Flag,
+		countryCode: 'EN'
 	},
 	[LANGUAGE.HU]: {
 		ISO_639: 'hu',
 		antD: hu_HU,
-		icon: HU_Flag
+		icon: HU_Flag,
+		countryCode: 'HU'
 	},
 	[LANGUAGE.RO]: {
 		ISO_639: 'ro',
 		antD: ro_RO,
-		icon: RO_Flag
+		icon: RO_Flag,
+		countryCode: 'RO'
 	},
 	[LANGUAGE.BG]: {
 		ISO_639: 'bg',
 		antD: bg_BG,
-		icon: BG_Flag
+		icon: BG_Flag,
+		countryCode: 'BG'
 	},
 	[LANGUAGE.IT]: {
 		ISO_639: 'it',
 		antD: it_IT,
-		icon: IT_Flag
+		icon: IT_Flag,
+		countryCode: 'IT'
 	}
 }
 

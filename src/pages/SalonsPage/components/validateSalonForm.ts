@@ -141,10 +141,18 @@ export default (values: any) => {
 		})
 	}
 
+	if (!companyInfo?.vatID) {
+		companyErrors.vatID = i18next.t('loc:Toto pole je povinné')
+	}
+
 	if (companyInfo?.vatID && companyInfo?.vatID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
 		companyErrors.vatID = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_20
 		})
+	}
+
+	if (!companyInfo?.taxID) {
+		companyErrors.taxID = i18next.t('loc:Toto pole je povinné')
 	}
 
 	if (companyInfo?.taxID && companyInfo?.taxID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {

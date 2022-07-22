@@ -35,7 +35,7 @@ const EditRoleForm: FC<Props> = (props) => {
 			<div className={'mx-9'}>
 				<h3>{t('loc:Oprávnenie')}</h3>
 				<Divider className={'mb-3 mt-3'} />
-				<Row justify={'space-between'} className={'gap-4'}>
+				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 					<Field
 						component={SelectField}
 						options={roles?.data}
@@ -52,10 +52,9 @@ const EditRoleForm: FC<Props> = (props) => {
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Button
 								type={'primary'}
-								block
 								size={'middle'}
 								htmlType={'submit'}
-								className={'noti-btn m-regular w-2/12 mt-4'}
+								className={'self-start noti-btn m-regular md:mt-5'}
 								disabled={submitting || pristine}
 								onClick={(e) => {
 									if (hasPermission) {
@@ -70,7 +69,7 @@ const EditRoleForm: FC<Props> = (props) => {
 							</Button>
 						)}
 					/>
-				</Row>
+				</div>
 			</div>
 		</Form>
 	)

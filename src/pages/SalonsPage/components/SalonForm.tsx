@@ -77,6 +77,7 @@ const SalonForm: FC<Props> = (props) => {
 	const imagesFormField = (filedName: string, disabled: boolean) => (
 		<Field
 			className={'m-0'}
+			uploaderClassName={'overflow-x-auto'}
 			component={ImgUploadField}
 			name={filedName}
 			label={t('loc:Fotogaléria')}
@@ -201,6 +202,7 @@ const SalonForm: FC<Props> = (props) => {
 							size={'large'}
 							loading={categories.isLoading}
 							mode={'multiple'}
+							disabled={disabledForm}
 							required
 						/>
 						<Compare
@@ -431,7 +433,7 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
 						{!!salonID && (
-							<Button type={'primary'} size={'middle'} className={'noti-btn w-1/4 mb-6 mt-3'} onClick={() => openNoteModal()} disabled={disabledForm}>
+							<Button type={'primary'} size={'middle'} className={'noti-btn w-48 lg:w-60 mb-6 mt-3'} onClick={() => openNoteModal()} disabled={disabledForm}>
 								{t('loc:Pridať poznámku')}
 							</Button>
 						)}

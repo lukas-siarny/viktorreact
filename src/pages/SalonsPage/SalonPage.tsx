@@ -494,9 +494,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			case hasSalonPublishedVersion && !pendingPublication:
 				return (
 					<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
-						<Row className={'gap-2'}>
-							{deleteButton('w-48 lg:w-60 mt-2-5')}
+						<Row className={'gap-2 flex-row-reverse justify-end'}>
 							{hideSalonButton('w-48 lg:w-60 mt-2-5')}
+							{deleteButton('w-48 lg:w-60 mt-2-5')}
 						</Row>
 						<Row className={'gap-2 md:justify-end'}>
 							{requestApprovalButton('w-48 lg:w-60 mt-2-5')}

@@ -193,7 +193,6 @@ const CosmeticsPage = () => {
 										columns={columns}
 										dataSource={tableData}
 										rowClassName={'clickable-row'}
-										loading={cosmetics?.isLoading}
 										twoToneRows
 										pagination={false}
 										onRow={(record) => ({

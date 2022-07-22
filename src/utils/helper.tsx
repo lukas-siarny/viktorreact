@@ -304,7 +304,7 @@ export const validateArray = (key: string) => (values: any) => {
 	return !hasSome && i18next.t('loc:Názov musí byť vyplnení pre aspoň jeden jazyk')
 }
 
-export const validationPhone = (value: string) => !phoneRegEx.test(value) && i18next.t('loc:Telefónne číslo nie je platné')
+export const validationPhone = (value: string) => value && !phoneRegEx.test(value) && i18next.t('loc:Telefónne číslo nie je platné')
 
 export const normalizeDirectionKeys = (direction: 'ascend' | 'descend' | null | undefined) => (direction === 'descend' ? 'DESC' : 'ASC')
 export const normalizeASCDESCKeys = (direction: string) => (direction === 'DESC' ? 'descend' : 'ascend')

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
+import cx from 'classnames'
 
 // redux
 import { RootState } from '../../reducers'
@@ -33,10 +34,7 @@ const HomePage = () => {
 						</div>
 					</div>
 				) : (
-					<>
-						<h1 className='text-5xl font-bold'>Home page content</h1>
-						<h3>In progress...</h3>
-					</>
+					<div className={cx('homepage-wrapper', { 'has-header': true })} />
 				)
 			}
 		/>

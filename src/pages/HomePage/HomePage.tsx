@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import cx from 'classnames'
 
 // redux
 import { RootState } from '../../reducers'
@@ -34,7 +33,7 @@ const HomePage = () => {
 						</div>
 					</div>
 				) : (
-					<div className={cx('homepage-wrapper')} />
+					<div className={'homepage-wrapper'} />
 				)
 			}
 		/>

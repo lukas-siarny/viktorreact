@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { ArrayParam, BooleanParam, NumberParam, NumericArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Modal, Progress, Row, Spin } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
@@ -58,7 +58,7 @@ const SalonsPage = () => {
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
-		categoryFirstLevelIDs: ArrayParam,
+		categoryFirstLevelIDs: NumericArrayParam,
 		statuses_all: withDefault(BooleanParam, false),
 		statuses_published: ArrayParam,
 		statuses_deleted: ArrayParam,

@@ -10,13 +10,14 @@ import { RootState } from '../../reducers'
 
 // utils
 import { getCountryPrefix, getSupportContactCountryName, translateDayName } from '../../utils/helper'
-import { DAYS, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
+import { DAYS, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import i18n from '../../utils/i18n'
 
 // assets
 import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
 import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
+import { LOCALES } from '../../components/LanguagePicker'
 
 type Props = {}
 
@@ -54,10 +55,12 @@ const ContactPage: FC<Props> = () => {
 				setView('default')
 				return
 			}
-			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country.code.toLowerCase() === i18n.language?.toLowerCase())
+
+			const langToCompare = LOCALES[(i18n.language as LANGUAGE) || DEFAULT_LANGUAGE].countryCode?.toLowerCase()
+			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country?.code?.toLowerCase() === langToCompare)
 
 			if (currentLngCountry?.id) {
-				dispatch(getSupportContact(currentLngCountry?.id))
+				await dispatch(getSupportContact(currentLngCountry?.id))
 				setView('default')
 				return
 			}

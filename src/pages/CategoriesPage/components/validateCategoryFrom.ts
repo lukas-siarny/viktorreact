@@ -10,7 +10,7 @@ export default (values: any) => {
 		errors.nameLocalizations = [{ value: i18next.t('loc:Toto pole je povinné') }]
 	}
 
-	if (!values?.image) {
+	if (values?.level === 0 && !values?.image) {
 		errors.image = i18next.t('loc:Toto pole je povinné')
 	}
 

@@ -7,6 +7,7 @@ import { Form, Upload, UploadProps, Modal } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
+import cx from 'classnames'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
@@ -31,6 +32,7 @@ type Props = WrappedFieldProps &
 		// endpoint which returns signed url for image upload
 		signUrl: string
 		className?: CSSProperties
+		uploaderClassName?: string
 	}
 
 // export type ImgUploadParam = { [key: string]: { uid: string } }
@@ -52,7 +54,8 @@ const ImgUploadField: FC<Props> = (props) => {
 		multiple,
 		maxCount = 20,
 		category,
-		className = ''
+		className = '',
+		uploaderClassName = ''
 	} = props
 
 	const [t] = useTranslation()
@@ -109,7 +112,7 @@ const ImgUploadField: FC<Props> = (props) => {
 	const uploader = (
 		<Upload
 			id={formFieldID(form, input.name)}
-			className={'-mb-2 overflow-x-auto'}
+			className={cx(uploaderClassName, '-mb-2')}
 			accept={accept}
 			action={handleAction}
 			disabled={disabled}

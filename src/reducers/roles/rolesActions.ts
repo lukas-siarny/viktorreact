@@ -39,7 +39,7 @@ export const getSystemRoles =
 			const parsedData: ILabelInValueOption[] = []
 
 			if (filterByPermission) {
-				// return roles that current user have permission to assign them only
+				// return only roles that current user have permission to assign them
 				const highestUserRoleIndex = data.roles.findIndex((role) => role?.id === currentUserRole?.id)
 				const currentUserAllowedRolesOptions = data.roles.slice(highestUserRoleIndex)
 

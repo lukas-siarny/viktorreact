@@ -34,7 +34,7 @@ const HomePage = () => {
 						</div>
 					</div>
 				) : (
-					<div className={cx('homepage-wrapper', { 'has-header': true })} />
+					<div className={cx('homepage-wrapper')} />
 				)
 			}
 		/>

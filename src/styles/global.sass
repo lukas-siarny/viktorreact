@@ -1133,14 +1133,12 @@ span.ant-tag
 	background: linear-gradient(180deg, rgba(198, 151, 109, 0) 0%, rgba(159, 126, 96, 0.4) 89.21%), #FFFFFF
 	margin: -16px -40px
 	position: relative
+	padding: 16px 40px
+	overflow-y: auto
+	display: flex
+	flex-direction: column
 
-	&::after
-		content: ''
-		display: block
-		position: absolute
-		top: 50%
-		left: 50%
-		transform: translate(-50%, -50%)
+	.image
 		width: 100%
 		height: 100%
 		max-width: 1000px
@@ -1148,3 +1146,4 @@ span.ant-tag
 		min-width: 280px
 		background: url('../assets/images/homepage-min.png') no-repeat center center
 		background-size: contain
+		align-self: center

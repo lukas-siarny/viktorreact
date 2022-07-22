@@ -95,7 +95,7 @@ const ContactPage: FC<Props> = () => {
 						id={'noti-country-select'}
 						onChange={handleCountryChange}
 						value={selectedContact?.country.code}
-						className={'noti-select-input max-w-sm'}
+						className={'noti-select-input w-full'}
 						size={'large'}
 						dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
 						labelInValue

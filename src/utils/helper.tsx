@@ -53,7 +53,8 @@ import {
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT,
 	SALON_STATES,
-	IMAGE_UPLOADING_PROP
+	IMAGE_UPLOADING_PROP,
+	DEFAULT_PHONE_PREFIX
 } from './enums'
 import showNotifications from './tsxHelpers'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
@@ -390,7 +391,7 @@ export const scrollToFirstError = (errors: any, form: FORM | string) => {
 	}
 }
 
-export const getPrefixCountryCode = (options: string[], fallback: string = DEFAULT_LANGUAGE) => {
+export const getPrefixCountryCode = (options: string[], fallback: string = DEFAULT_PHONE_PREFIX) => {
 	const locale = split(lowerCase(i18next.language), '-')
 	const language = locale[1] || locale[0]
 	let prefix = fallback.toUpperCase()

@@ -31,6 +31,8 @@ export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
 export const DEFAULT_LANGUAGE = LANGUAGE.EN
 
+export const DEFAULT_PHONE_PREFIX = 'CZ'
+
 export const DEFAULT_CURRENCY: ICurrency = {
 	code: 'EUR',
 	symbol: '€'

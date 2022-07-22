@@ -667,7 +667,6 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
 		const errorKeys = Object.keys(errors)
-		console.log('🚀 ~ file: helper.tsx ~ line 667 ~ showErrorNotification ~ errorKeys', errorKeys)
 
 		// Error invoked during image uploading has custom notification
 		if (errorKeys.length === 1 && errorKeys[0] === IMAGE_UPLOADING_PROP) {
@@ -675,7 +674,6 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		}
 
 		const isErrors: boolean = errorKeys.length > 1
-		console.log('🚀 ~ file: helper.tsx ~ line 675 ~ showErrorNotification ~ isErrors', isErrors)
 		return notification.error({
 			message: i18next.t('loc:Chybne vyplnený formulár'),
 			description: i18next.t(

@@ -655,10 +655,16 @@ type SelectDataItem = {
 	name?: string | undefined
 }
 
-export const getSelectOptionsFromData = (data: SelectDataItem[] | null) => {
+export const getSelectOptionsFromData = (data: SelectDataItem[] | null, useOnly: number[] | string[] = []) => {
 	if (!data) return []
 
-	return map(data, (item) => {
+	let source = data
+
+	if (useOnly.length > 0) {
+		source = data.filter((item: SelectDataItem) => useOnly.includes(item.id as never))
+	}
+
+	return map(source, (item) => {
 		return { ...item, label: item.name, value: item.id, key: item.id, children: item.children }
 	})
 }

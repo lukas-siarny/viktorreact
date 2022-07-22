@@ -96,15 +96,12 @@ const ServiceEditPage = (props: Props) => {
 		let initData: any
 		if (data) {
 			initData = {
-				name: data?.service?.name,
-				description: data?.service?.description,
 				durationFrom: data?.service?.durationFrom,
 				durationTo: data?.service?.durationTo,
 				variableDuration: !!data?.service?.durationTo,
 				priceFrom: decodePrice(data?.service?.priceFrom),
 				priceTo: decodePrice(data?.service?.priceTo),
 				variablePrice: !!data?.service?.priceTo,
-				gallery: map(data?.service?.images, (image) => ({ id: image.id, url: image.original })),
 				categoryRoot: data?.service?.category?.id,
 				categoryFirstLevel: data?.service?.category?.child?.id,
 				categorySecondLevel: data?.service?.category?.child?.child?.id,

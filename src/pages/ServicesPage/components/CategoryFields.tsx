@@ -20,11 +20,19 @@ const CategoryFields = () => {
 	const dispatch = useDispatch()
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const categories = useSelector((state: RootState) => state.categories.categories)
+	const salonCategories = useSelector((state: RootState) => state.selectedSalon.selectedSalon?.data?.categories)
 
 	const categoryRoot = form?.values?.categoryRoot
 	const categoryFirstLevel = form?.values?.categoryFirstLevel
 
-	const categoryRootOptions = useMemo(() => getSelectOptionsFromData(categories.data), [categories.data])
+	const categoryRootOptions = useMemo(
+		() =>
+			getSelectOptionsFromData(
+				categories.data,
+				salonCategories?.map((category) => category.id)
+			),
+		[categories.data, salonCategories]
+	)
 
 	const categoryFirstLevelOptions = useMemo(() => {
 		const currentValueIndex = findIndex(categoryRootOptions, { value: categoryRoot })
@@ -60,8 +68,8 @@ const CategoryFields = () => {
 					className='m-1'
 					component={SelectField}
 					allowClear
-					label={t('loc:Typ služby')}
-					placeholder={t('loc:Vyberte typ služby')}
+					label={t('loc:Kategória služby')}
+					placeholder={t('loc:Vyberte kategóriu služby')}
 					name='categoryFirstLevel'
 					options={categoryFirstLevelOptions}
 					onChange={() => {

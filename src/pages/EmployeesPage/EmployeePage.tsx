@@ -63,12 +63,12 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Služba ${serviceData?.name} je už priradená!`)
+				description: i18next.t(`Služba ${serviceData?.category.name} je už priradená!`)
 			})
 		} else if (serviceData) {
 			let newServiceData = {
 				id: serviceData?.id,
-				name: serviceData?.name,
+				name: serviceData?.category.name,
 				salonData: {
 					durationFrom: serviceData?.durationFrom,
 					durationTo: serviceData?.durationTo,

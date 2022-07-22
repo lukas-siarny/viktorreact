@@ -127,7 +127,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			key: 'services',
 			ellipsis: true,
 			render: (value) => {
-				return value && value.length ? <PopoverList elements={value} /> : '-'
+				return value && value.length ? <PopoverList elements={value.map((service: any) => ({ name: service.category.name }))} /> : '-'
 			}
 		},
 		{

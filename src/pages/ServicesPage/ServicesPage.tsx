@@ -52,7 +52,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		employeeID: NumberParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'name:ASC')
+		order: withDefault(StringParam, 'createdAt:ASC')
 	})
 
 	useEffect(() => {
@@ -97,9 +97,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			title: t('loc:Názov'),
 			dataIndex: 'name',
 			key: 'name',
-			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'name')
+			ellipsis: true
 		},
 		{
 			title: t('loc:Zamestnanec'),
@@ -111,18 +109,26 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			title: t('loc:Trvanie (min)'),
 			dataIndex: 'duration',
 			key: 'duration',
-			ellipsis: true
+			ellipsis: true,
+			width: '10%'
 		},
 		{
 			title: t('loc:Cena (€)'),
 			dataIndex: 'price',
 			key: 'price',
+			ellipsis: true,
+			width: '10%'
+		},
+		{
+			title: t('loc:Odvetvie'),
+			dataIndex: 'categoryFirst',
+			key: 'categoryFirst',
 			ellipsis: true
 		},
 		{
 			title: t('loc:Kategória'),
-			dataIndex: 'category',
-			key: 'category',
+			dataIndex: 'categorySecond',
+			key: 'categorySecond',
 			ellipsis: true
 		},
 		{

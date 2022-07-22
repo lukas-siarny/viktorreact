@@ -173,12 +173,6 @@ const CategoryForm: FC<Props> = (props) => {
 							</Permissions>
 						) : undefined}
 
-						{values?.id && values?.deletedAt && !values?.isParentDeleted ? (
-							<Button className={'noti-btn'} size='middle' onClick={() => deleteCategory(values?.id, true)}>
-								{t('loc:Obnoviť')}
-							</Button>
-						) : undefined}
-
 						{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 
 						{!values?.deletedAt ? (

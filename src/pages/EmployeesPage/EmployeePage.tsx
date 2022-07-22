@@ -204,19 +204,23 @@ const EmployeePage = (props: Props) => {
 	const updateEmployee = async (data: IEmployeeForm) => {
 		try {
 			setSubmitting(true)
-			await patchReq(
-				'/api/b2b/admin/employees/{employeeID}',
-				{ employeeID },
-				{
-					firstName: data?.firstName,
-					lastName: data?.lastName,
-					email: data?.email,
+			let reqBody: any = {
+				firstName: data?.firstName,
+				lastName: data?.lastName,
+				email: data?.email,
+				services: parseServicesForCreateAndUpdate(data?.services),
+				imageID: data?.imageID
+			}
+
+			if (data?.phonePrefixCountryCode && data?.phone) {
+				reqBody = {
+					...reqBody,
 					phonePrefixCountryCode: data?.phonePrefixCountryCode,
-					phone: data?.phone,
-					services: parseServicesForCreateAndUpdate(data?.services),
-					imageID: data?.imageID
+					phone: data?.phone
 				}
-			)
+			}
+
+			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
 			dispatch(getEmployee(employeeID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

@@ -305,7 +305,7 @@ export const validateArray = (key: string) => (values: any) => {
 	return !hasSome && i18next.t('loc:Názov musí byť vyplnení pre aspoň jeden jazyk')
 }
 
-export const validationPhone = (value: string) => !phoneRegEx.test(value) && i18next.t('loc:Telefónne číslo nie je platné')
+export const validationPhone = (value: string) => value && !phoneRegEx.test(value) && i18next.t('loc:Telefónne číslo nie je platné')
 
 export const normalizeDirectionKeys = (direction: 'ascend' | 'descend' | null | undefined) => (direction === 'descend' ? 'DESC' : 'ASC')
 export const normalizeASCDESCKeys = (direction: string) => (direction === 'DESC' ? 'descend' : 'ascend')
@@ -656,10 +656,16 @@ type SelectDataItem = {
 	name?: string | undefined
 }
 
-export const getSelectOptionsFromData = (data: SelectDataItem[] | null) => {
+export const getSelectOptionsFromData = (data: SelectDataItem[] | null, useOnly: number[] | string[] = []) => {
 	if (!data) return []
 
-	return map(data, (item) => {
+	let source = data
+
+	if (useOnly.length > 0) {
+		source = data.filter((item: SelectDataItem) => useOnly.includes(item.id as never))
+	}
+
+	return map(source, (item) => {
 		return { ...item, label: item.name, value: item.id, key: item.id, children: item.children }
 	})
 }
@@ -668,7 +674,6 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
 		const errorKeys = Object.keys(errors)
-		console.log('🚀 ~ file: helper.tsx ~ line 667 ~ showErrorNotification ~ errorKeys', errorKeys)
 
 		// Error invoked during image uploading has custom notification
 		if (errorKeys.length === 1 && errorKeys[0] === IMAGE_UPLOADING_PROP) {
@@ -676,7 +681,6 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		}
 
 		const isErrors: boolean = errorKeys.length > 1
-		console.log('🚀 ~ file: helper.tsx ~ line 675 ~ showErrorNotification ~ isErrors', isErrors)
 		return notification.error({
 			message: i18next.t('loc:Chybne vyplnený formulár'),
 			description: i18next.t(

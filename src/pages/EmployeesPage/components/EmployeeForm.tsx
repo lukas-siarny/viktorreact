@@ -52,11 +52,11 @@ const renderListFields = (props: any) => {
 	const [t] = useTranslation()
 	const { fields, salon } = props
 
-	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
+	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => (
 		<div className={'flex items-center mr-3'}>
 			{icon}
 			{from}
-			{variable && to ? ` - ${to}` : undefined}
+			{variable && to ? ` - ${to}` : undefined} {extra}
 		</div>
 	)
 
@@ -77,8 +77,8 @@ const renderListFields = (props: any) => {
 	const genExtra = (index: number, field: any) => (
 		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
 			<div className={'flex'}>
-				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />)}
-				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />)}
+				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
+				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
 			</div>
 			<DeleteButton
 				onConfirm={() => {

@@ -327,7 +327,6 @@ const SalonForm: FC<Props> = (props) => {
 								name={'companyInfo.companyName'}
 								size={'large'}
 								disabled={disabledForm}
-								required
 							/>
 							<Field
 								className={'w-12/25'}
@@ -337,7 +336,6 @@ const SalonForm: FC<Props> = (props) => {
 								name={'companyInfo.businessID'}
 								size={'large'}
 								disabled={disabledForm}
-								required
 							/>
 						</Row>
 						<Row justify={'space-between'}>
@@ -349,7 +347,6 @@ const SalonForm: FC<Props> = (props) => {
 								name={'companyInfo.vatID'}
 								size={'large'}
 								disabled={disabledForm}
-								required
 							/>
 							<Field
 								className={'w-12/25'}
@@ -359,7 +356,6 @@ const SalonForm: FC<Props> = (props) => {
 								name={'companyInfo.taxID'}
 								size={'large'}
 								disabled={disabledForm}
-								required
 							/>
 						</Row>
 					</Col>

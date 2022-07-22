@@ -60,16 +60,24 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const createEmployee = async (formData: IEmployeeForm) => {
 		try {
 			setSubmitting(true)
-			const { data } = await postReq('/api/b2b/admin/employees/', {}, {
+			let reqBody: any = {
 				firstName: formData?.firstName,
 				lastName: formData?.lastName,
 				email: formData?.email,
-				phonePrefixCountryCode: formData?.phonePrefixCountryCode,
-				phone: formData?.phone,
 				services: parseServicesForCreateAndUpdate(formData?.services),
 				salonID,
 				imageID: formData?.imageID
-			} as any)
+			}
+
+			if (formData?.phonePrefixCountryCode && formData?.phone) {
+				reqBody = {
+					...reqBody,
+					phonePrefixCountryCode: formData?.phonePrefixCountryCode,
+					phone: formData?.phone
+				}
+			}
+
+			const { data } = await postReq('/api/b2b/admin/employees/', {}, reqBody)
 			if (data?.employee?.id) {
 				history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: data?.employee?.id }))
 			}

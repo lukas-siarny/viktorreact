@@ -107,13 +107,13 @@ const CategoriesTree = () => {
 	)
 
 	const deleteCategoryHandler = useCallback(
-		async (id: number, restore: boolean) => {
+		async (id: number) => {
 			if (isRemoving) {
 				return
 			}
 			try {
 				setIsRemoving(true)
-				await deleteReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: id, restore }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+				await deleteReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 				dispatch(getCategories())
 				setShowForm(false)
 				setIsRemoving(false)

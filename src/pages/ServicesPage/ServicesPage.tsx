@@ -56,7 +56,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID?.toString(), employeeID: query.employeeID }))
+		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID }))
 		dispatch(
 			getServices({
 				page: query.page,

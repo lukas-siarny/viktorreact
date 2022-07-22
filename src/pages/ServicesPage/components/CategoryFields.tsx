@@ -20,11 +20,19 @@ const CategoryFields = () => {
 	const dispatch = useDispatch()
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 	const categories = useSelector((state: RootState) => state.categories.categories)
+	const salonCategories = useSelector((state: RootState) => state.selectedSalon.selectedSalon?.data?.categories)
 
 	const categoryRoot = form?.values?.categoryRoot
 	const categoryFirstLevel = form?.values?.categoryFirstLevel
 
-	const categoryRootOptions = useMemo(() => getSelectOptionsFromData(categories.data), [categories.data])
+	const categoryRootOptions = useMemo(
+		() =>
+			getSelectOptionsFromData(
+				categories.data,
+				salonCategories?.map((category) => category.id)
+			),
+		[categories.data, salonCategories]
+	)
 
 	const categoryFirstLevelOptions = useMemo(() => {
 		const currentValueIndex = findIndex(categoryRootOptions, { value: categoryRoot })
@@ -42,10 +50,10 @@ const CategoryFields = () => {
 		<Space className='w-full mb-5' direction='vertical'>
 			<Field
 				className='m-1'
-				label={t('loc:Kategória')}
+				label={t('loc:Odvetvie')}
 				component={SelectField}
 				allowClear
-				placeholder={t('loc:Vyberte kategóriu')}
+				placeholder={t('loc:Vyberte odvetvie')}
 				name='categoryRoot'
 				options={categoryRootOptions}
 				onChange={() => {
@@ -60,13 +68,15 @@ const CategoryFields = () => {
 					className='m-1'
 					component={SelectField}
 					allowClear
-					placeholder={t('loc:Podkategória')}
+					label={t('loc:Kategória služby')}
+					placeholder={t('loc:Vyberte kategóriu služby')}
 					name='categoryFirstLevel'
 					options={categoryFirstLevelOptions}
 					onChange={() => {
 						dispatch(dispatch(change(FORM.SERVICE_FORM, 'categorySecondLevel', null)))
 					}}
 					size={'large'}
+					required
 				/>
 			)}
 			{categoryRoot && categoryFirstLevel && categorySecondLevelOptions.length > 0 && (
@@ -74,10 +84,12 @@ const CategoryFields = () => {
 					className='m-1'
 					component={SelectField}
 					allowClear
-					placeholder={t('loc:Podkategória')}
+					label={t('loc:Služba')}
+					placeholder={t('loc:Vyberte službu')}
 					name='categorySecondLevel'
 					options={categorySecondLevelOptions}
 					size={'large'}
+					required
 				/>
 			)}
 		</Space>

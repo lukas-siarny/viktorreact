@@ -9,11 +9,8 @@ import cx from 'classnames'
 // atoms
 import SelectField from '../../../atoms/SelectField'
 import validateServiceForm from './validateServiceForm'
-import InputField from '../../../atoms/InputField'
-import TextareaField from '../../../atoms/TextareaField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
-import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
@@ -24,8 +21,8 @@ import AvatarComponents from '../../../components/AvatarComponents'
 import { RootState } from '../../../reducers'
 
 // utils
-import { showErrorNotification, validationNumberMin, checkUploadingBeforeSubmit } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
@@ -149,34 +146,7 @@ const ServiceForm = (props: Props) => {
 
 	return (
 		<Spin spinning={isLoading}>
-			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
-				<Field
-					component={InputField}
-					label={t('loc:Názov')}
-					placeholder={t('loc:Zadajte názov')}
-					name={'name'}
-					size={'large'}
-					maxLength={VALIDATION_MAX_LENGTH.LENGTH_60}
-					required
-				/>
-				<Field
-					component={TextareaField}
-					label={t('loc:Popis')}
-					placeholder={t('loc:Zadajte popis')}
-					name={'description'}
-					size={'large'}
-					maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
-					showLettersCount
-				/>
-				<Field
-					component={ImgUploadField}
-					name='gallery'
-					label={t('loc:Referenčné obrázky')}
-					signUrl={URL_UPLOAD_IMAGES}
-					multiple
-					maxCount={10}
-					category={UPLOAD_IMG_CATEGORIES.SALON}
-				/>
+			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 				<CategoryFields />
 				<Row gutter={8} align='middle'>
 					<Col span={8}>

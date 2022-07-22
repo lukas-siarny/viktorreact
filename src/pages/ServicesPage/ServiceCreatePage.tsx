@@ -34,16 +34,13 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 	const handleSubmit = async (values: IServiceForm) => {
 		try {
 			const reqData = {
-				name: values.name,
-				description: values.description,
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
 				priceFrom: encodePrice(values.priceFrom),
 				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
 				salonID,
 				employeeIDs: parseEmployeeIds(values.employees),
-				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
-				imageIDs: map(values?.gallery, (image) => image.id)
+				categoryID: values.categorySecondLevel
 			}
 
 			const { data } = await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)

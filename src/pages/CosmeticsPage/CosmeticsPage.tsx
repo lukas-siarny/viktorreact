@@ -99,7 +99,6 @@ const CosmeticsPage = () => {
 	}
 
 	const handleSubmit = async (formData: ICosmeticForm) => {
-		console.log('🚀 ~ file: CosmeticsPage.tsx ~ line 102 ~ handleSubmit ~ formData', formData)
 		const body = {
 			name: formData.name,
 			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')

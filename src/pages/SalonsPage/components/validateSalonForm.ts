@@ -119,49 +119,36 @@ export default (values: any) => {
 	errors.companyContactPerson = contactPersonErrors
 
 	const companyInfo = values?.companyInfo
-	const companyErrors: any = {}
 
-	if (!companyInfo?.companyName) {
-		companyErrors.companyName = i18next.t('loc:Toto pole je povinné')
+	if (companyInfo) {
+		const companyErrors: any = {}
+
+		if (companyInfo?.companyName && companyInfo?.companyName?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
+			companyErrors.companyName = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_255
+			})
+		}
+
+		if (companyInfo?.businessID && companyInfo?.businessID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+			companyErrors.businessID = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_20
+			})
+		}
+
+		if (companyInfo?.vatID && companyInfo?.vatID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+			companyErrors.vatID = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_20
+			})
+		}
+
+		if (companyInfo?.taxID && companyInfo?.taxID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+			companyErrors.taxID = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_20
+			})
+		}
+
+		errors.companyInfo = companyErrors
 	}
-
-	if (companyInfo?.companyName && companyInfo?.companyName?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-		companyErrors.companyName = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_255
-		})
-	}
-
-	if (!companyInfo?.businessID) {
-		companyErrors.businessID = i18next.t('loc:Toto pole je povinné')
-	}
-
-	if (companyInfo?.businessID && companyInfo?.businessID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		companyErrors.businessID = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
-	}
-
-	if (!companyInfo?.vatID) {
-		companyErrors.vatID = i18next.t('loc:Toto pole je povinné')
-	}
-
-	if (companyInfo?.vatID && companyInfo?.vatID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		companyErrors.vatID = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
-	}
-
-	if (!companyInfo?.taxID) {
-		companyErrors.taxID = i18next.t('loc:Toto pole je povinné')
-	}
-
-	if (companyInfo?.taxID && companyInfo?.taxID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		companyErrors.taxID = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
-	}
-
-	errors.companyInfo = companyErrors
 
 	return errors
 }

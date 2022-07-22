@@ -33,10 +33,10 @@ const HomePage = () => {
 						</div>
 					</div>
 				) : (
-					<>
-						<h1 className='text-5xl font-bold'>Home page content</h1>
-						<h3>In progress...</h3>
-					</>
+					<div className={'homepage-wrapper'}>
+						<h3 className='mt-4'>In progress...</h3>
+						<div className={'image'} />
+					</div>
 				)
 			}
 		/>

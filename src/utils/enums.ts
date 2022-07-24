@@ -216,8 +216,8 @@ export enum ENUMERATIONS_KEYS {
 	CURRENCIES = 'currencies'
 }
 
-export const GOOGLE_MAPS_API_KEY = 'AIzaSyBsyFgbu6p5xxCuMMDpIlPUNVidzGjC3EE'
-export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=sk`
+export const GOOGLE_MAPS_API_KEY = 'AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw'
+export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw&libraries=places&language=sk'
 
 export enum ENUMERATIONS_PATHS {
 	COUNTRIES = 'countries'

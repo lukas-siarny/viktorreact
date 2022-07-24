@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Row, Select, Collapse, Spin, Result } from 'antd'
+import { Row, Select, Collapse, Spin, Result, Popover } from 'antd'
 import { isEmpty } from 'lodash'
 
 // reducers
@@ -34,6 +34,7 @@ const ContactPage: FC<Props> = () => {
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [view, setView] = useState<'empty' | 'default' | 'not_found'>()
+	const [visibleNote, setVisibleNote] = useState(false)
 
 	const currentLng = i18n.language
 
@@ -128,7 +129,7 @@ const ContactPage: FC<Props> = () => {
 					}
 					if (view === 'default') {
 						return (
-							<Collapse className={'noti-support-collapse mt-8'} bordered={false} defaultActiveKey={1} accordion>
+							<Collapse className={'noti-support-collapse mt-6'} bordered={false} defaultActiveKey={1} accordion>
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>
@@ -139,7 +140,7 @@ const ContactPage: FC<Props> = () => {
 									key={1}
 								>
 									<Row className={'contact-row'}>
-										<div className={'contact-col'}>
+										<div className={'contact-col pr-2'}>
 											<ul className={'noti-support-contact-list'}>
 												{selectedContact?.emails?.map((email, index) => (
 													<li key={index} className={'email-list-item'}>
@@ -169,7 +170,28 @@ const ContactPage: FC<Props> = () => {
 													{getSupportContactCountryName(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
 														selectedContact?.country.code}
 												</li>
-												{selectedContact?.note && <li className={'note-list-item'}>{selectedContact?.note}</li>}
+												{selectedContact?.note && (
+													<li className={'note-list-item'}>
+														<p className={'m-0 whitespace-pre-wrap'}>
+															{selectedContact?.note.length > 150 ? (
+																<>
+																	{`${selectedContact?.note.slice(0, 150)}…`}
+																	<Popover
+																		overlayClassName={'max-w-xs md:max-w-md'}
+																		content={<p className={'whitespace-pre-wrap m-0'}>{selectedContact?.note}</p>}
+																		trigger='click'
+																		arrowPointAtCenter
+																		overlayInnerStyle={{ borderRadius: 10 }}
+																	>
+																		<span className={'underline cursor-pointer'}>{t('loc:zobraziť viac')}</span>
+																	</Popover>
+																</>
+															) : (
+																selectedContact?.note
+															)}
+														</p>
+													</li>
+												)}
 											</ul>
 										</div>
 									</Row>

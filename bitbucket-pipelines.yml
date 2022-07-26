@@ -1,6 +1,7 @@
 image: node:16.14.0
+# be sure that clone enoughth commits
 clone:
-  depth: full
+  depth: 150
 options:
   docker: true
   max-time: 20

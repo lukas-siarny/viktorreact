@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Modal, Row, Spin } from 'antd'
+import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
-import { get, isEmpty, map, unionBy } from 'lodash'
+import { get, isEmpty, isEqual, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -14,6 +14,7 @@ import SalonForm from './components/SalonForm'
 import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
+import validateSalonForm from './components/validateSalonForm'
 
 // enums
 import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES } from '../../utils/enums'
@@ -25,7 +26,7 @@ import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/sel
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IIsPublishedVersionSameAsDraft, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -40,6 +41,40 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+
+const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPublishedVersionSameAsDraft => {
+	// compare all fields that needs to be approved
+	const addressPublished = formValues?.publishedSalonData?.address
+	const addressDraft = formValues?.address
+	delete addressPublished?.description
+	delete addressDraft?.description
+
+	const isNameEqual = (formValues?.name || null) === (formValues?.publishedSalonData?.name || null)
+	const isLogoEqual = isEqual(formValues?.logo || null, formValues?.publishedSalonData?.logo || null)
+	const isGalleryEqual = isEqual(formValues?.gallery || null, formValues?.publishedSalonData?.gallery || null)
+	const isAddressEqual = isEqual(addressDraft, addressPublished)
+	const isAddressNoteEqual = (formValues?.description || null) === (formValues?.publishedSalonData?.address?.description || null)
+	const isAboutUsFirstEqual = (formValues?.aboutUsFirst || null) === (formValues?.publishedSalonData?.aboutUsFirst || null)
+	const isAboutUsSecondEqual = (formValues?.aboutUsSecond || null) === (formValues?.publishedSalonData?.aboutUsSecond || null)
+	const isPhoneEqual =
+		(formValues?.phone || null) === (formValues?.publishedSalonData?.phone || null) &&
+		(formValues?.phonePrefixCountryCode || null) === (formValues?.publishedSalonData?.phonePrefixCountryCode || null)
+	const isEmailEqual = (formValues?.email || null) === (formValues?.publishedSalonData?.email || null)
+
+	return {
+		isEqual:
+			isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAddressNoteEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual,
+		isNameEqual,
+		isLogoEqual,
+		isGalleryEqual,
+		isAddressEqual,
+		isAddressNoteEqual,
+		isAboutUsFirstEqual,
+		isAboutUsSecondEqual,
+		isPhoneEqual,
+		isEmailEqual
+	}
+}
 
 type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
@@ -73,6 +108,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
 	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
 	const pendingPublication = salon.data && pendingStates.includes(salon.data.state)
+	const isPublishedVersionSameAsDraft = getIsPublishedVersionSameAsDraft(formValues as ISalonForm)
+	const declinedSalon = salon?.data?.state === SALON_STATES.PUBLISHED_DECLINED || salon?.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
@@ -168,6 +205,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				description: salonData?.address?.description,
 				companyContactPerson: salonData?.companyContactPerson || defaultContactPerson,
 				companyInfo: salonData?.companyInfo,
+				phonePrefixCountryCode: salonData?.phonePrefixCountryCode,
+				phone: salonData?.phone,
 				gallery: map(salonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
 				logo: salonData?.logo?.id
 					? [
@@ -218,7 +257,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 			const salonData: SalonPatch = {
-				imageIDs: (data.gallery || []).map((image) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
+				imageIDs: (data.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 				logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
 				name: data.name,
 				openingHours: openingHours || [],
@@ -239,7 +278,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				socialLinkFB: data.socialLinkFB,
 				socialLinkInstagram: data.socialLinkInstagram,
 				socialLinkWebPage: data.socialLinkWebPage,
-				payByCard: data.payByCard,
+				payByCard: !!data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
 				companyInfo: data.companyInfo,
@@ -340,8 +379,20 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		setIsSendingConfRequest(true)
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID }, {})
-			dispatch(selectSalon(salonID))
+			if (!isFormPristine) {
+				// v pripade ze boli vykonane zmeny vo formulari, tak ich ulozime a zaroven poziadame o schvalenie
+				dispatch(submit(FORM.SALON))
+				// teoreticky by submit akcia mala vraciat errory, ale vracia to undefined, takze musim znova rucne spustit validaciu aby som zistil, ci nejake errory su
+				const formErrors = validateSalonForm(formValues)
+				if (!formErrors || isEmpty(formErrors)) {
+					await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID }, {})
+					dispatch(selectSalon(salonID))
+				}
+			} else {
+				// ak neboli vykonane zmeny vo formulari, tak len poziadame o schvalenie
+				await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID }, {})
+				dispatch(selectSalon(salonID))
+			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -452,34 +503,45 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		/>
 	)
 
-	const requestApprovalButton = (className = '') => (
-		<Permissions
-			allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
-			render={(hasPermission, { openForbiddenModal }) =>
-				salonExists &&
-				!pendingPublication && (
-					<Button
-						type={'dashed'}
-						block
-						size={'middle'}
-						className={cx('noti-btn m-regular', className)}
-						onClick={(e) => {
-							if (hasPermission) {
-								sendConfirmationRequest()
-							} else {
-								e.preventDefault()
-								openForbiddenModal()
-							}
-						}}
-						disabled={submitting || deletedSalon}
-						loading={submitting}
-					>
-						{t('loc:Požiadať o schválenie')}
-					</Button>
-				)
-			}
-		/>
-	)
+	const requestApprovalButton = (className = '') => {
+		const approvalButtonDisabled = submitting || deletedSalon || isPublishedVersionSameAsDraft?.isEqual
+
+		// Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
+		return (
+			<Permissions
+				allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+				render={(hasPermission, { openForbiddenModal }) =>
+					salonExists &&
+					!pendingPublication && (
+						<Tooltip title={approvalButtonDisabled ? t('loc:Momentálne nie su vykonané žiadne zmeny, ktoré by bolo potrebné schvaľovať') : null}>
+							<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled })}>
+								<Button
+									type={'dashed'}
+									block
+									size={'middle'}
+									className={cx('noti-btn m-regular', className, {
+										'pointer-events-none': approvalButtonDisabled
+									})}
+									disabled={approvalButtonDisabled}
+									onClick={(e) => {
+										if (hasPermission) {
+											sendConfirmationRequest()
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+									loading={submitting}
+								>
+									{t('loc:Uložiť a požiadať o schválenie')}
+								</Button>
+							</span>
+						</Tooltip>
+					)
+				}
+			/>
+		)
+	}
 
 	const renderContentFooter = () => {
 		switch (true) {
@@ -495,12 +557,12 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				return (
 					<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
 						<Row className={'gap-2 flex-row-reverse justify-end'}>
-							{hideSalonButton('w-48 lg:w-60 mt-2-5')}
-							{deleteButton('w-48 lg:w-60 mt-2-5')}
+							{hideSalonButton('w-52 lg:w-60 mt-2-5')}
+							{deleteButton('w-52 lg:w-60 mt-2-5')}
 						</Row>
 						<Row className={'gap-2 md:justify-end'}>
-							{requestApprovalButton('w-48 lg:w-60 mt-2-5')}
-							{submitButton('w-48 lg:w-60 mt-2-5')}
+							{requestApprovalButton('w-52 lg:w-60 mt-2-5')}
+							{submitButton('w-52 lg:w-60 mt-2-5')}
 						</Row>
 					</Row>
 				)
@@ -577,6 +639,61 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			</Permissions>
 		)
 
+	const getInfoMessage = () => {
+		if (!salonID) {
+			return null
+		}
+
+		if (declinedSalon) {
+			return (
+				<Alert
+					message={
+						<>
+							<strong className={'block'}>{`${t('loc:Zmeny v salóne boli zamietnuté z dôvodu')}:`}</strong>
+							<p className={'whitespace-pre-wrap m-0'}>{`"${salon?.data?.publicationDeclineReason}"` || t('loc:Bez udania dôvodu.')}</p>
+						</>
+					}
+					showIcon
+					type={'error'}
+					className={'noti-alert mb-4'}
+				/>
+			)
+		}
+
+		if (deletedSalon) {
+			return null
+		}
+
+		if (!isPublishedVersionSameAsDraft?.isEqual && !pendingPublication) {
+			return (
+				<Alert
+					message={t('loc:V sálone sú vykonané zmeny, ktoré je pred publikovaním potrebné schváliť administrátorom.')}
+					showIcon
+					type={'warning'}
+					className={'noti-alert mb-4'}
+				/>
+			)
+		}
+		if (pendingPublication) {
+			return (
+				<Alert
+					message={
+						<p className={'mb-0'}>
+							{t('loc:Salón momentálne prechádza schvaľovacím procesom. Všetky údaje však môžete naďalej editovať.')}
+							<br />
+							{t('loc:Zmeny, ktoré podliehajú schvaľovaniu, budú publikované až po úspešnom schválení. Ostatné zmeny budú publikované ihneď.')}
+						</p>
+					}
+					showIcon
+					type={'warning'}
+					className={'noti-alert mb-4'}
+				/>
+			)
+		}
+
+		return null
+	}
+
 	return (
 		<>
 			<Row>
@@ -585,32 +702,38 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			<Spin spinning={isLoading}>
 				<div className='content-body mt-2'>
 					{renderContentHeader()}
-					<SalonForm onSubmit={handleSubmit} openNoteModal={() => setVisible(true)} salonID={salonID} disabledForm={deletedSalon} />
+					{getInfoMessage()}
+					<SalonForm
+						onSubmit={handleSubmit}
+						openNoteModal={() => setVisible(true)}
+						salonID={salonID}
+						disabledForm={deletedSalon}
+						deletedSalon={deletedSalon}
+						isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
+					/>
 					{salonExists && (
 						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
 					)}
 					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
 				</div>
 			</Spin>
-			<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-				<Modal
-					key={`${modalConfig.visible}`}
-					title={modalConfig.title}
-					visible={modalConfig.visible}
-					onCancel={() =>
-						setModalConfig({
-							title: '',
-							fieldPlaceholderText: '',
-							visible: false,
-							onSubmit: undefined
-						})
-					}
-					footer={null}
-					closeIcon={<CloseIcon />}
-				>
-					<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
-				</Modal>
-			</Permissions>
+			<Modal
+				key={`${modalConfig.visible}`}
+				title={modalConfig.title}
+				visible={modalConfig.visible}
+				onCancel={() =>
+					setModalConfig({
+						title: '',
+						fieldPlaceholderText: '',
+						visible: false,
+						onSubmit: undefined
+					})
+				}
+				footer={null}
+				closeIcon={<CloseIcon />}
+			>
+				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
+			</Modal>
 		</>
 	)
 }

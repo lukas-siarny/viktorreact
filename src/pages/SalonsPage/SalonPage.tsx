@@ -43,24 +43,31 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 
 const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalonPayload) => {
 	// compare all fields that needs to be approved
-	const isNameEqual = salonData?.data?.name === salonData?.data?.publishedSalonData?.name
-	const isLogoEqual = isEqual(salonData?.data?.logo, salonData?.data?.publishedSalonData?.logo)
-	const isGalleryEqual = isEqual(salonData?.data?.images, salonData?.data?.publishedSalonData?.images)
-	const isAddressEqual = isEqual(salonData?.data?.address, salonData?.data?.publishedSalonData?.address)
-	const isAboutUsFirstEqual = salonData?.data?.aboutUsFirst === salonData?.data?.publishedSalonData?.aboutUsFirst
-	const isAboutUsSecondEqual = salonData?.data?.aboutUsSecond === salonData?.data?.publishedSalonData?.aboutUsSecond
+	const isNameEqual = (salonData?.data?.name || null) === (salonData?.data?.publishedSalonData?.name || null)
+	const isLogoEqual = isEqual(salonData?.data?.logo || null, salonData?.data?.publishedSalonData?.logo || null)
+	const isGalleryEqual = isEqual(salonData?.data?.images || [], salonData?.data?.publishedSalonData?.images || [])
+	const isAddressEqual = isEqual(salonData?.data?.address || null, salonData?.data?.publishedSalonData?.address || null)
+	const isAboutUsFirstEqual = (salonData?.data?.aboutUsFirst || null) === (salonData?.data?.publishedSalonData?.aboutUsFirst || null)
+	const isAboutUsSecondEqual = (salonData?.data?.aboutUsSecond || null) === (salonData?.data?.publishedSalonData?.aboutUsSecond || null)
 	const isPhoneEqual =
-		salonData?.data?.phone === salonData?.data?.publishedSalonData?.phone &&
-		salonData?.data?.phonePrefixCountryCode === salonData?.data?.publishedSalonData?.phonePrefixCountryCode
-	const isEmailEqual = salonData?.data?.email === salonData?.data?.publishedSalonData?.email
+		(salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null) &&
+		(salonData?.data?.phonePrefixCountryCode || null) === (salonData?.data?.publishedSalonData?.phonePrefixCountryCode || null)
+	const isEmailEqual = (salonData?.data?.email || null) === (salonData?.data?.publishedSalonData?.email || null)
 
 	return isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual
 }
 
 const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPublishedVersionSameAsDraft => {
 	// compare all fields that needs to be approved
-	const addressPublished = formValues?.publishedSalonData?.address
-	delete addressPublished?.description
+	const addressPublished = {
+		countryCode: formValues?.publishedSalonData?.address?.countryCode || null,
+		zipCode: formValues?.publishedSalonData?.address?.zipCode || null,
+		city: formValues?.publishedSalonData?.address?.city || null,
+		street: formValues?.publishedSalonData?.address?.street || null,
+		streetNumber: formValues?.publishedSalonData?.address?.streetNumber || null,
+		latitude: formValues?.publishedSalonData?.address?.latitude ?? null,
+		longitude: formValues?.publishedSalonData?.address?.longitude ?? null
+	}
 	const addressDraft = {
 		countryCode: formValues?.country,
 		zipCode: formValues?.zipCode,
@@ -73,7 +80,7 @@ const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPublishedV
 
 	const isNameEqual = (formValues?.name || null) === (formValues?.publishedSalonData?.name || null)
 	const isLogoEqual = isEqual(formValues?.logo || null, formValues?.publishedSalonData?.logo || null)
-	const isGalleryEqual = isEqual(formValues?.gallery || null, formValues?.publishedSalonData?.gallery || null)
+	const isGalleryEqual = isEqual(formValues?.gallery || [], formValues?.publishedSalonData?.gallery || [])
 	const isAddressEqual = isEqual(addressDraft, addressPublished)
 	const isAddressNoteEqual = (formValues?.description || null) === (formValues?.publishedSalonData?.address?.description || null)
 	const isAboutUsFirstEqual = (formValues?.aboutUsFirst || null) === (formValues?.publishedSalonData?.aboutUsFirst || null)
@@ -221,8 +228,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				note: salonData?.openingHoursNote?.note || null,
 				noteFrom: salonData?.openingHoursNote?.validFrom || null,
 				noteTo: salonData?.openingHoursNote?.validTo || null,
-				latitude: salonData?.address?.latitude,
-				longitude: salonData?.address?.longitude,
+				latitude: salonData?.address?.latitude ?? null,
+				longitude: salonData?.address?.longitude ?? null,
 				city: salonData?.address?.city || null,
 				street: salonData?.address?.street || null,
 				zipCode: salonData?.address?.zipCode || null,
@@ -681,8 +688,26 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			return null
 		}
 
+		const declinedSalonAlert = declinedSalon ? (
+			<Alert
+				message={
+					<>
+						<strong className={'block'}>{`${t('loc:Zmeny v salóne boli zamietnuté z dôvodu')}:`}</strong>
+						<p className={'whitespace-pre-wrap m-0'}>
+							{salon?.data?.publicationDeclineReason ? `"${salon?.data?.publicationDeclineReason}"` : t('loc:Bez udania dôvodu.')}
+						</p>
+					</>
+				}
+				showIcon
+				type={'error'}
+				className={'noti-alert mb-4'}
+			/>
+		) : null
+
+		let alert = null
+
 		if (!isFormPristine && !pendingPublication) {
-			return (
+			alert = (
 				<Alert
 					message={t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')}
 					showIcon
@@ -693,7 +718,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		if (declinedSalon) {
-			return (
+			alert = (
 				<Alert
 					message={
 						<>
@@ -711,7 +736,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		if (!isPublishedVersionSameAsDraft?.isEqual && !pendingPublication) {
-			return (
+			alert = (
 				<Alert
 					message={t('loc:V sálone sú vykonané zmeny, ktoré je pred publikovaním potrebné schváliť administrátorom.')}
 					showIcon
@@ -721,7 +746,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			)
 		}
 		if (pendingPublication) {
-			return (
+			alert = (
 				<Alert
 					message={t('loc:Salón čaká na schválenie zmien. Údaje, ktoré podliehajú schvaľovaniu, po túto dobu nie je možné editovať.')}
 					showIcon
@@ -731,7 +756,12 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			)
 		}
 
-		return null
+		return (
+			<>
+				{declinedSalonAlert}
+				{alert}
+			</>
+		)
 	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t, declinedSalon, salon?.data?.publicationDeclineReason])
 
 	return (

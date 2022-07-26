@@ -70,6 +70,13 @@ const SalonForm: FC<Props> = (props) => {
 		)
 	}
 
+	const disableComparsion =
+		!salonID ||
+		deletedSalon ||
+		formValues?.state === SALON_STATES.NOT_PUBLISHED ||
+		formValues?.state === SALON_STATES.NOT_PUBLISHED_PENDING ||
+		formValues?.state === SALON_STATES.NOT_PUBLISHED_DECLINED
+
 	const imagesFormField = (filedName: string, disabled: boolean) => (
 		<Field
 			className={'m-0'}
@@ -166,7 +173,7 @@ const SalonForm: FC<Props> = (props) => {
 							equal={isPublishedVersionSameAsDraft?.isNameEqual}
 							oldFormField={nameFormField('publishedSalonData.name', true)}
 							newFormField={nameFormField('name', disabledForm || !!pendingPublication)}
-							disableComparsion={!salonID || deletedSalon}
+							disableComparsion={disableComparsion}
 						/>
 						<Compare
 							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
@@ -187,7 +194,7 @@ const SalonForm: FC<Props> = (props) => {
 								aboutUsFirstLabel,
 								VALIDATION_MAX_LENGTH.LENGTH_1000
 							)}
-							disableComparsion={!salonID || deletedSalon}
+							disableComparsion={disableComparsion}
 						/>
 						<Compare
 							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
@@ -208,7 +215,7 @@ const SalonForm: FC<Props> = (props) => {
 								aboutUsSecondLabel,
 								VALIDATION_MAX_LENGTH.LENGTH_500
 							)}
-							disableComparsion={!salonID || deletedSalon}
+							disableComparsion={disableComparsion}
 						/>
 						<Field
 							component={SelectField}
@@ -229,7 +236,7 @@ const SalonForm: FC<Props> = (props) => {
 							oldFormField={logoFormField('publishedSalonData.logo', true)}
 							newFormField={logoFormField('logo', disabledForm || !!pendingPublication)}
 							ellipsis
-							disableComparsion={!salonID || deletedSalon}
+							disableComparsion={disableComparsion}
 						/>
 						<Compare
 							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
@@ -238,7 +245,7 @@ const SalonForm: FC<Props> = (props) => {
 							oldFormField={imagesFormField('publishedSalonData.gallery', true)}
 							newFormField={imagesFormField('gallery', disabledForm || !!pendingPublication)}
 							ellipsis
-							disableComparsion={!salonID || deletedSalon}
+							disableComparsion={disableComparsion}
 						/>
 					</Col>
 				</Row>
@@ -256,7 +263,7 @@ const SalonForm: FC<Props> = (props) => {
 							equal={isPublishedVersionSameAsDraft?.isPhoneEqual}
 							oldFormField={phoneFormField('publishedSalonData.phone', 'publishedSalonData.phonePrefixCountryCode', true)}
 							newFormField={phoneFormField('phone', 'phonePrefixCountryCode', disabledForm || !!pendingPublication)}
-							disableComparsion={!salonID || deletedSalon}
+							disableComparsion={disableComparsion}
 						/>
 						<Compare
 							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
@@ -265,7 +272,7 @@ const SalonForm: FC<Props> = (props) => {
 							equal={isPublishedVersionSameAsDraft?.isEmailEqual}
 							oldFormField={emailFormField('publishedSalonData.email', true)}
 							newFormField={emailFormField('email', disabledForm || !!pendingPublication)}
-							disableComparsion={!salonID || deletedSalon}
+							disableComparsion={disableComparsion}
 						/>
 						<Field
 							component={AddressFields}
@@ -279,7 +286,7 @@ const SalonForm: FC<Props> = (props) => {
 								country: get(formValues, 'country')
 							}}
 							changeFormFieldValue={change}
-							disabled={disabledForm}
+							disabled={disabledForm || !!pendingPublication}
 							name={'address'}
 						/>
 						<Compare
@@ -289,14 +296,14 @@ const SalonForm: FC<Props> = (props) => {
 							equal={isPublishedVersionSameAsDraft?.isAddressNoteEqual}
 							oldFormField={addressDescriptionFormFiled('publishedSalonData.address.description', true)}
 							newFormField={addressDescriptionFormFiled('description', disabledForm || !!pendingPublication)}
-							disableComparsion={!salonID || deletedSalon}
+							disableComparsion={disableComparsion}
 						/>
 						{!isPublishedVersionSameAsDraft?.isAddressEqual && formValues?.publishedSalonData?.address && (
 							<Compare
 								// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
 								oldValue={formValues?.publishedSalonData?.address}
 								equal={isPublishedVersionSameAsDraft?.isAddressEqual}
-								disableComparsion={!salonID || deletedSalon}
+								disableComparsion={disableComparsion}
 								oldFormField={
 									<Col xl={6} md={9}>
 										<div>

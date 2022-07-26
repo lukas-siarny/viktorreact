@@ -255,7 +255,7 @@ export interface IEmployeeForm {
 	phonePrefixCountryCode?: string
 	phone?: string
 	services?: any
-	imageID?: number
+	avatar?: any
 	role: number
 }
 

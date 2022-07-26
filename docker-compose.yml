@@ -4,7 +4,7 @@ services:
   database_test:
     build:
       context: ./notino_backend/.
-      dockerfile: ./notino_backend/docker/local/postgres/Dockerfile
+      dockerfile: ./docker/local/postgres/Dockerfile
     ports:
       - "25432:5432"
     environment:
@@ -31,7 +31,7 @@ services:
   backend:
     build:
         context: ./notino_backend/.
-        dockerfile: ./notino_backend/docker/CI/Dockerfile.api
+        dockerfile: ./docker/CI/Dockerfile.api
     ports:
       - "3000:3000"
     environment:

@@ -49,11 +49,11 @@ services:
       - "localstack"
       - "redis"
       - "database_test"
-#   frontend:
-#     build:
-#         context: .
-#         dockerfile: ./notino_b2b_web/docker/CI/Dockerfile
-#     ports:
-#       - "80:80"
-#     depends_on:
-#       - "backend"
+  frontend:
+    build:
+        context: .
+        dockerfile: ./docker/CI/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - "backend"

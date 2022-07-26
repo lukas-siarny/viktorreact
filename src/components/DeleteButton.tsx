@@ -19,6 +19,7 @@ type Props = ButtonProps &
 		tableButton?: boolean
 		smallIcon?: boolean
 		noConfirm?: boolean
+		ignorePermissions?: boolean
 	}
 
 const DeleteButton = (props: Props) => {
@@ -45,7 +46,8 @@ const DeleteButton = (props: Props) => {
 		id,
 		noConfirm,
 		shape,
-		className
+		className,
+		ignorePermissions
 	} = props
 
 	const [t] = useTranslation()
@@ -111,7 +113,7 @@ const DeleteButton = (props: Props) => {
 			allowed={permissions}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<>
-					{hasPermission ? (
+					{hasPermission || ignorePermissions ? (
 						allowedButton
 					) : (
 						<Button

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
-import { map } from 'lodash'
+import { map, get } from 'lodash'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
@@ -66,7 +66,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				email: formData?.email,
 				services: parseServicesForCreateAndUpdate(formData?.services),
 				salonID,
-				imageID: formData?.imageID
+				imageID: get(formData, 'avatar[0].id') || get(formData, 'avatar[0].uid')
 			}
 
 			if (formData?.phonePrefixCountryCode && formData?.phone) {

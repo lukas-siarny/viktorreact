@@ -14,8 +14,8 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
+import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -24,29 +24,31 @@ import { RootState } from '../../reducers'
 import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
-import { IBreadcrumbs, ISearchFilter } from '../../types/interfaces'
+import { IBreadcrumbs, ISearchFilter, SalonSubPageProps } from '../../types/interfaces'
 
 type Columns = ColumnsType<any>
 
-const CustomersPage = () => {
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+
+const CustomersPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const { salonID, parentPath } = props
 	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
-		salonID: NumberParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'lastName:ASC')
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search, salonID: query.salonID }))
-		dispatch(getCustomers(query.page, query.limit, query.order, { search: query.search, salonID: query.salonID }))
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.salonID])
+		dispatch(initialize(FORM.CUSTOMERS_FILTER, { search: query.search }))
+		dispatch(getCustomers({ page: query.page, limit: query.limit, order: query.order, search: query.search, salonID }))
+	}, [dispatch, query.page, query.limit, query.search, query.order, salonID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
@@ -83,18 +85,16 @@ const CustomersPage = () => {
 	const columns: Columns = [
 		{
 			title: t('loc:Meno'),
-			dataIndex: 'firstName',
-			key: 'firstName',
-			ellipsis: true,
-			sorter: false
-		},
-		{
-			title: t('loc:Priezvisko'),
-			dataIndex: 'lastName',
+			dataIndex: 'lastlName',
 			key: 'lastName',
 			ellipsis: true,
 			sorter: true,
-			sortOrder: setOrder(query.order, 'lastName')
+			sortOrder: setOrder(query.order, 'lastName'),
+			render: (value, record) => (
+				<>
+					{record?.firstName} {record?.lastName}
+				</>
+			)
 		},
 		{
 			title: t('loc:Email'),
@@ -118,14 +118,13 @@ const CustomersPage = () => {
 			}
 		},
 		{
-			title: t('loc:Salón'),
-			dataIndex: 'salonName',
-			key: 'salonName',
+			title: t('loc:Vytvorené'),
+			dataIndex: 'createdAt',
+			key: 'createdAt',
 			ellipsis: true,
-			sorter: false,
-			render: (value, record) => {
-				return <>{record?.salon?.name}</>
-			}
+			sorter: true,
+			sortOrder: setOrder(query.order, 'createdAt'),
+			render: (value) => formatDateByLocale(value)
 		}
 	]
 
@@ -140,13 +139,13 @@ const CustomersPage = () => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:index')} />
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
 						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
+							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<CustomersFilter
 									onSubmit={handleSubmit}
@@ -155,49 +154,40 @@ const CustomersPage = () => {
 										if (!hasPermission) {
 											openForbiddenModal()
 										} else {
-											history.push(t('paths:customers/create'))
+											history.push(parentPath + t('paths:customers/create'))
 										}
 									}}
 								/>
 							)}
 						/>
-
-						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<CustomTable
-									className='table-fixed'
-									onChange={onChangeTable}
-									columns={columns}
-									dataSource={customers?.data?.customers}
-									rowClassName={'clickable-row'}
-									loading={customers?.isLoading}
-									twoToneRows
-									onRow={(record) => ({
-										onClick: () => {
-											if (!hasPermission) {
-												openForbiddenModal()
-											} else {
-												history.push(t('paths:customers/{{customerID}}', { customerID: record.id }))
-											}
-										}
-									})}
-									pagination={{
-										showTotal: (total, [from, to]) =>
-											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-												total,
-												from,
-												to
-											}),
-										defaultPageSize: PAGINATION.defaultPageSize,
-										pageSizeOptions: PAGINATION.pageSizeOptions,
-										showSizeChanger: true,
-										pageSize: customers?.data?.pagination?.limit,
-										total: customers?.data?.pagination?.totalCount,
-										current: customers?.data?.pagination?.page
-									}}
-								/>
-							)}
+						<CustomTable
+							className='table-fixed'
+							onChange={onChangeTable}
+							columns={columns}
+							dataSource={customers?.data?.customers}
+							rowClassName={'clickable-row'}
+							loading={customers?.isLoading}
+							twoToneRows
+							scroll={{ x: 800 }}
+							onRow={(record) => ({
+								onClick: () => {
+									history.push(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id }))
+								}
+							})}
+							pagination={{
+								showTotal: (total, [from, to]) =>
+									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+										total,
+										from,
+										to
+									}),
+								defaultPageSize: PAGINATION.defaultPageSize,
+								pageSizeOptions: PAGINATION.pageSizeOptions,
+								showSizeChanger: true,
+								pageSize: customers?.data?.pagination?.limit,
+								total: customers?.data?.pagination?.totalCount,
+								current: customers?.data?.pagination?.page
+							}}
 						/>
 					</div>
 				</Col>
@@ -206,4 +196,4 @@ const CustomersPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]))(CustomersPage)
+export default compose(withPermissions(permissions))(CustomersPage)

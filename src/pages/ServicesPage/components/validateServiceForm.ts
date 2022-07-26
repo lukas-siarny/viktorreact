@@ -1,8 +1,5 @@
 import i18next from 'i18next'
 
-// utils
-import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-
 const validateServiceForm = (values?: any) => {
 	const errors: any = {}
 
@@ -14,23 +11,8 @@ const validateServiceForm = (values?: any) => {
 		errors.categoryFirstLevel = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!values?.salonID) {
-		errors.salonID = i18next.t('loc:Toto pole je povinné')
-	}
-
-	if (!values?.name) {
-		errors.name = i18next.t('loc:Toto pole je povinné')
-	}
-	if (values?.name && values.name?.length > VALIDATION_MAX_LENGTH.LENGTH_60) {
-		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_60
-		})
-	}
-
-	if (values?.description && values.description?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_255
-		})
+	if (!values?.categorySecondLevel) {
+		errors.categorySecondLevel = i18next.t('loc:Toto pole je povinné')
 	}
 
 	if (!values?.durationFrom) {

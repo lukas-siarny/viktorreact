@@ -44,10 +44,10 @@ const CreatePasswordPage: FC<Props> = (props) => {
 	}
 
 	return (
-		<>
+		<div className={'pb-8'}>
 			<CreatePasswordForm onSubmit={handleSubmit} showForgottenPasswordModal={() => setModalVisible(true)} />
 			{modalVisible && <ForgottenPasswordModal visible={modalVisible} onClose={() => setModalVisible(false)} />}
-		</>
+		</div>
 	)
 }
 

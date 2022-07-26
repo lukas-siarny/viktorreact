@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import { map } from 'lodash'
 import { ThunkResult } from '../index'
 import { EMPLOYEE, EMPLOYEES } from './employeesTypes'
 
@@ -7,6 +8,7 @@ import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { IQueryParams, ISearchablePayload } from '../../types/interfaces'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
 
@@ -20,25 +22,37 @@ interface IGetEmployee {
 	payload: IEmployeePayload
 }
 
+export interface IGetEmployeesQueryParams extends IQueryParams {
+	salonID?: number | undefined | null
+	serviceID?: number | undefined | null
+	accountState?: string | undefined | null
+}
+
 export interface IEmployeePayload {
 	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
 }
 
-export interface IEmployeesPayload {
-	data: Paths.GetApiB2BAdminEmployees.Responses.$200 | null
-}
+export interface IEmployeesPayload extends ISearchablePayload<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
 
 export const getEmployees =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<IEmployeesPayload>> =>
+	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IEmployeesPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IEmployeesPayload
 		try {
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/employees/', { page: page || 1, limit, order, ...normalizeQueryParams(queryParams) })
+			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
+			const employeesOptions = map(data.employees, (employee) => {
+				return {
+					label: `${employee.firstName} ${employee.lastName}` || `${employee.id}`,
+					value: employee.id,
+					key: `${employee.id}-key`
+				}
+			})
 
 			payload = {
-				data
+				data,
+				options: employeesOptions
 			}
 			dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_DONE, payload })
 		} catch (err) {
@@ -51,15 +65,21 @@ export const getEmployees =
 	}
 
 export const getEmployee =
-	(employeeID: number): ThunkResult<Promise<void>> =>
+	(employeeID: number): ThunkResult<Promise<IEmployeePayload>> =>
 	async (dispatch) => {
+		let payload = {} as IEmployeePayload
 		try {
 			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_START })
-			const data = await getReq('/api/b2b/admin/employees/{employeeID}', { employeeID } as any)
-			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_DONE, payload: data })
+			const { data } = await getReq('/api/b2b/admin/employees/{employeeID}', { employeeID } as any)
+			payload = {
+				data
+			}
+			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}

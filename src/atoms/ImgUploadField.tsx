@@ -1,11 +1,13 @@
 import React, { CSSProperties, FC, useMemo, useRef, useState } from 'react'
-import { WrappedFieldProps } from 'redux-form'
+import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get } from 'lodash'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 import { Form, Upload, UploadProps, Modal } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
+import cx from 'classnames'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
@@ -15,7 +17,7 @@ import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
 import { uploadFile, postReq } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from '../utils/enums'
+import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
 
 const { Item } = Form
 
@@ -30,6 +32,7 @@ type Props = WrappedFieldProps &
 		// endpoint which returns signed url for image upload
 		signUrl: string
 		className?: CSSProperties
+		uploaderClassName?: string
 	}
 
 // export type ImgUploadParam = { [key: string]: { uid: string } }
@@ -51,21 +54,35 @@ const ImgUploadField: FC<Props> = (props) => {
 		multiple,
 		maxCount = 20,
 		category,
-		className = ''
+		className = '',
+		uploaderClassName = ''
 	} = props
 
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 	const imagesUrls = useRef<ImgUploadParam>({})
 	const [previewUrl, setPreviewUrl] = useState('')
+
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
 			showNotifications([{ type: MSG_TYPE.ERROR, message: info.file.error.message }], NOTIFICATION_TYPE.NOTIFICATION)
+			// remove current uploaded image due to error when uploading to aws
+			const values = info.fileList
+			values.pop()
+			input.onChange(values)
+			// uploading process finished
+			dispatch(change(form, IMAGE_UPLOADING_PROP, false))
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = getImagesFormValues(info.fileList, imagesUrls.current)
 			input.onChange(values)
+			// uploading process finished
+			dispatch(change(form, IMAGE_UPLOADING_PROP, false))
 		}
 		if (info.file.status === 'uploading') {
+			// uploading process started
+			dispatch(change(form, IMAGE_UPLOADING_PROP, true))
+
 			input.onChange(info.fileList)
 		}
 		if (isEmpty(info.fileList)) {
@@ -95,7 +112,7 @@ const ImgUploadField: FC<Props> = (props) => {
 	const uploader = (
 		<Upload
 			id={formFieldID(form, input.name)}
-			className={'-mb-2'}
+			className={cx(uploaderClassName, '-mb-2')}
 			accept={accept}
 			action={handleAction}
 			disabled={disabled}

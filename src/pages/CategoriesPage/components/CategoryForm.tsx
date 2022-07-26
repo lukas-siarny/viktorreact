@@ -4,9 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { Button, Col, Divider, Form, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
-// enums
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 
@@ -23,10 +20,12 @@ import PopConfirmComponent from '../../../components/PopConfirmComponent'
 import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
-import { validationString } from '../../../utils/helper'
+import { validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 
 // redux
 import { RootState } from '../../../reducers'
+import Permissions from '../../../utils/Permissions'
 
 type ComponentProps = {
 	deleteCategory: any
@@ -52,6 +51,8 @@ export interface ICategoryForm {
 const fixLength100 = validationString(100)
 
 type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]
 
 const CategoryForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
@@ -99,7 +100,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const localizationInputCss = values?.level === 0 ? 'w-2/3' : 'w-full'
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 relative pr-7'}>
@@ -138,7 +139,7 @@ const CategoryForm: FC<Props> = (props) => {
 								<Field
 									className='mb-0'
 									component={InputField}
-									label={t('loc:Názov kategórie (en)')}
+									label={t('loc:Názov kategórie (EN)')}
 									placeholder={t('loc:Zadajte názov')}
 									key='nameLocalizations[0].value'
 									name='nameLocalizations[0].value'
@@ -162,26 +163,24 @@ const CategoryForm: FC<Props> = (props) => {
 					</Row>
 					<div className={'flex justify-between flex-wrap gap-2'}>
 						{values?.id && !values?.deletedAt ? (
-							<DeleteButton
-								onConfirm={() => deleteCategory(values?.id, false)}
-								entityName={''}
-								type={'default'}
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-							/>
-						) : undefined}
-
-						{values?.id && values?.deletedAt && !values?.isParentDeleted ? (
-							<Button className={'noti-btn'} size='middle' onClick={() => deleteCategory(values?.id, true)}>
-								{t('loc:Obnoviť')}
-							</Button>
+							<Permissions allowed={permissions}>
+								<DeleteButton
+									onConfirm={() => deleteCategory(values?.id, false)}
+									entityName={''}
+									type={'default'}
+									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								/>
+							</Permissions>
 						) : undefined}
 
 						{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
 
 						{!values?.deletedAt ? (
-							<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-								{t('loc:Uložiť')}
-							</Button>
+							<Permissions allowed={permissions}>
+								<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+									{t('loc:Uložiť')}
+								</Button>
+							</Permissions>
 						) : undefined}
 					</div>
 				</Row>

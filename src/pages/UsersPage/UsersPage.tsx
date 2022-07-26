@@ -20,7 +20,7 @@ import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getRoles } from '../../reducers/roles/rolesActions'
+import { getSystemRoles } from '../../reducers/roles/rolesActions'
 import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 
@@ -28,6 +28,8 @@ import { RootState } from '../../reducers'
 import { IBreadcrumbs } from '../../types/interfaces'
 
 type Columns = ColumnsType<any>
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]
 
 const UsersPage = () => {
 	const [t] = useTranslation()
@@ -47,12 +49,12 @@ const UsersPage = () => {
 
 	useEffect(() => {
 		dispatch(initialize(FORM.ADMIN_USERS_FILTER, { search: query.search, roleID: query.roleID }))
-		dispatch(getUsers(query.page, query.limit, query.order, query.search, query.roleID))
+		dispatch(getUsers({ page: query.page, limit: query.limit, order: query.order, search: query.search, roleID: query.roleID }))
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.roleID])
 
 	useEffect(() => {
 		const prefixes: { [key: string]: string } = {}
-		dispatch(getRoles())
+		dispatch(getSystemRoles())
 
 		phonePrefixes.forEach((option) => {
 			prefixes[option.key] = option.label
@@ -92,11 +94,16 @@ const UsersPage = () => {
 			sorter: true,
 			sortOrder: setOrder(query.order, 'fullName'),
 			width: '20%',
-			render: (value, record) => (
-				<>
-					{record?.firstName} {record?.lastName}
-				</>
-			)
+			render: (_value, record) => {
+				if (!record?.firstName && !record?.lastName) {
+					return '-'
+				}
+				return (
+					<>
+						{record?.firstName} {record?.lastName}
+					</>
+				)
+			}
 		},
 		{
 			title: t('loc:Email'),
@@ -123,7 +130,9 @@ const UsersPage = () => {
 		{
 			title: t('loc:Rola'),
 			dataIndex: 'roles',
-			key: 'roles',
+			key: 'roleName',
+			sorter: true,
+			sortOrder: setOrder(query.order, 'roleName'),
 			ellipsis: {
 				showTitle: false
 			},
@@ -153,7 +162,7 @@ const UsersPage = () => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_CREATE]}
+							allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<AdminUsersFilter
 									createUser={() => {
@@ -167,44 +176,34 @@ const UsersPage = () => {
 								/>
 							)}
 						/>
-
-						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<CustomTable
-									className='table-fixed'
-									onChange={onChangeTable}
-									columns={columns}
-									dataSource={users?.data?.users}
-									rowClassName={'clickable-row'}
-									loading={users?.isLoading}
-									twoToneRows
-									onRow={(record) => ({
-										onClick: (e) => {
-											if (hasPermission) {
-												history.push(t('paths:users/{{userID}}', { userID: record.id }))
-											} else {
-												e.preventDefault()
-												openForbiddenModal()
-											}
-										}
-									})}
-									pagination={{
-										showTotal: (total, [from, to]) =>
-											t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-												total,
-												from,
-												to
-											}),
-										defaultPageSize: PAGINATION.defaultPageSize,
-										pageSizeOptions: PAGINATION.pageSizeOptions,
-										pageSize: users?.data?.pagination?.limit,
-										showSizeChanger: true,
-										total: users?.data?.pagination?.totalCount,
-										current: users?.data?.pagination?.page
-									}}
-								/>
-							)}
+						<CustomTable
+							className='table-fixed'
+							onChange={onChangeTable}
+							columns={columns}
+							dataSource={users?.data?.users}
+							rowClassName={'clickable-row'}
+							loading={users?.isLoading}
+							twoToneRows
+							scroll={{ x: 800 }}
+							onRow={(record) => ({
+								onClick: () => {
+									history.push(t('paths:users/{{userID}}', { userID: record.id }))
+								}
+							})}
+							pagination={{
+								showTotal: (total, [from, to]) =>
+									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
+										total,
+										from,
+										to
+									}),
+								defaultPageSize: PAGINATION.defaultPageSize,
+								pageSizeOptions: PAGINATION.pageSizeOptions,
+								pageSize: users?.data?.pagination?.limit,
+								showSizeChanger: true,
+								total: users?.data?.pagination?.totalCount,
+								current: users?.data?.pagination?.page
+							}}
 						/>
 					</div>
 				</Col>
@@ -213,4 +212,4 @@ const UsersPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]))(UsersPage)
+export default compose(withPermissions(permissions))(UsersPage)

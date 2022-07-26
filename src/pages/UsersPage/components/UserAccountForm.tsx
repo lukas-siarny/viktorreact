@@ -17,7 +17,7 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // utils
-import { showErrorNotification } from '../../../utils/helper'
+import { showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 
 type ComponentProps = {}
@@ -29,7 +29,7 @@ const UserAccountForm: FC<Props> = (props) => {
 	const { handleSubmit } = props
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
@@ -53,7 +53,14 @@ const UserAccountForm: FC<Props> = (props) => {
 						</div>
 					</div>
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled />
-					<PhoneWithPrefixField label={'Telefón'} placeholder={t('loc:Zadajte telefón')} size={'large'} prefixName={'phonePrefixCountryCode'} phoneName={'phone'} />
+					<PhoneWithPrefixField
+						label={'Telefón'}
+						placeholder={t('loc:Zadajte telefón')}
+						size={'large'}
+						prefixName={'phonePrefixCountryCode'}
+						phoneName={'phone'}
+						formName={FORM.USER_ACCOUNT}
+					/>
 				</Row>
 			</Col>
 		</Form>

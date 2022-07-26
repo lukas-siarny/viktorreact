@@ -1,17 +1,14 @@
-import React, { useMemo, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Modal } from 'antd'
 import { reset, initialize } from 'redux-form'
-import { useDispatch, useSelector } from 'react-redux'
-import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
 // components
 import OpenHoursNoteForm from './OpenHoursNoteForm'
 
 // utils
 import { patchReq } from '../../utils/request'
-import { NOTIFICATION_TYPE, FORM, PERMISSION, MSG_TYPE } from '../../utils/enums'
-import { checkPermissions } from '../../utils/Permissions'
-import showNotifications from '../../utils/tsxHelpers'
+import { NOTIFICATION_TYPE, FORM } from '../../utils/enums'
 import { Paths } from '../../types/api'
 
 // assets
@@ -19,9 +16,6 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // interfaces
 import { IOpenHoursNoteForm } from '../../types/interfaces'
-
-// redux
-import { RootState } from '../../reducers'
 
 type Props = {
 	visible?: boolean
@@ -33,23 +27,10 @@ type Props = {
 
 const OpenHoursNoteModal = (props: Props) => {
 	const { visible, onClose = () => {}, title, salonID, openingHoursNote } = props
-	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
-
-	const isModalVisible = useMemo(() => {
-		if (!visible) return false
-		const hasPermission = checkPermissions(authUserPermissions, [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT])
-		if (hasPermission) return true
-
-		showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Pre túto akciu nemáte dostatočné oprávnenia.') }], NOTIFICATION_TYPE.NOTIFICATION)
-		return false
-	}, [visible, t, authUserPermissions])
-
-	if (!isModalVisible && visible) onClose() // if OpenHoursNoteModal was opened but user does not have permission, "close" modal state in parent component
 
 	useEffect(() => {
-		if (!isModalVisible) return // init form only if the modal is opened
+		if (!visible) return // init form only if the modal is opened
 
 		let initData: any
 
@@ -67,7 +48,7 @@ const OpenHoursNoteModal = (props: Props) => {
 		dispatch(initialize(FORM.OPEN_HOURS_NOTE, initData || {}))
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isModalVisible])
+	}, [visible])
 
 	const hideModal = () => {
 		dispatch(reset(FORM.OPEN_HOURS_NOTE))
@@ -93,7 +74,7 @@ const OpenHoursNoteModal = (props: Props) => {
 	}
 
 	return (
-		<Modal key={`${isModalVisible}`} title={title} visible={isModalVisible} onCancel={hideModal} footer={null} closeIcon={<CloseIcon />}>
+		<Modal key={`${visible}`} title={title} visible={visible} onCancel={hideModal} footer={null} closeIcon={<CloseIcon />}>
 			<OpenHoursNoteForm onSubmit={handleSubmit} />
 		</Modal>
 	)

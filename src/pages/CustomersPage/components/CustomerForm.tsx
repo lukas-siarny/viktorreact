@@ -1,8 +1,8 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, GENDER } from '../../../utils/enums'
@@ -23,7 +23,6 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getSalons } from '../../../reducers/salons/salonsActions'
 
 type ComponentProps = {}
 
@@ -31,7 +30,6 @@ type Props = InjectedFormProps<ICustomerForm, ComponentProps> & ComponentProps
 
 const CustomerForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const { handleSubmit } = props
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
@@ -40,13 +38,15 @@ const CustomerForm: FC<Props> = (props) => {
 		{ label: `${t('loc:Žena')}`, value: GENDER.FEMALE, key: GENDER.FEMALE }
 	]
 
-	const searchSalon = useCallback(
-		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
-		},
-		[dispatch]
-	)
+	const countryOptionRender = (itemData: any) => {
+		const { value, label, flag } = itemData
+		return (
+			<div className='flex items-center'>
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+				{label}
+			</div>
+		)
+	}
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -64,15 +64,27 @@ const CustomerForm: FC<Props> = (props) => {
 						size={'large'}
 						prefixName={'phonePrefixCountryCode'}
 						phoneName={'phone'}
+						formName={FORM.CUSTOMER}
 						required
 					/>
-					<Field component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+					<Row justify={'space-between'}>
+						<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+						<Field
+							className={'w-1/6'}
+							component={InputField}
+							label={t('loc:Popisné číslo')}
+							placeholder={t('loc:Zadajte číslo')}
+							name={'streetNumber'}
+							size={'large'}
+						/>
+					</Row>
 					<Row justify={'space-between'}>
 						<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} />
 						<Field className={'w-12/25'} component={InputField} label={t('loc:PSČ')} placeholder={t('loc:Zadajte smerovacie číslo')} name={'zipCode'} size={'large'} />
 					</Row>
 					<Field
 						component={SelectField}
+						optionRender={countryOptionRender}
 						label={t('loc:Štát')}
 						placeholder={t('loc:Vyber krajinu')}
 						options={countries?.enumerationsOptions || []}
@@ -80,21 +92,6 @@ const CustomerForm: FC<Props> = (props) => {
 						size={'large'}
 						loading={countries?.isLoading}
 						allowClear
-					/>
-					<Field
-						className='m-0'
-						label={t('loc:Salón')}
-						size={'large'}
-						component={SelectField}
-						allowClear
-						placeholder={t('loc:Vyberte salón')}
-						name={'salonID'}
-						showSearch
-						onSearch={searchSalon}
-						filterOption={false}
-						allowInfinityScroll
-						onDidMountSearch
-						required
 					/>
 				</Row>
 			</Col>

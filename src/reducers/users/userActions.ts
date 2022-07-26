@@ -5,7 +5,7 @@ import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchablePayload, IPermissions } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
@@ -14,7 +14,10 @@ import { Paths } from '../../types/api'
 import { setAccessToken, clearAccessToken, clearRefreshToken, isLoggedIn, hasRefreshToken, getRefreshToken, setRefreshToken, getAccessToken } from '../../utils/auth'
 import { history } from '../../utils/history'
 import { getReq, postReq } from '../../utils/request'
-import { PERMISSION } from '../../utils/enums'
+import { normalizeQueryParams } from '../../utils/helper'
+
+// actions
+import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
 
 export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers
 
@@ -33,8 +36,8 @@ interface IGetUsers {
 	payload: IUsersPayload
 }
 
-interface IPermissions {
-	uniqPermissions?: PERMISSION[]
+export interface IGetUsersQueryParams extends IQueryParams {
+	roleID?: number | undefined | null
 }
 
 export interface IAuthUserPayload {
@@ -45,14 +48,12 @@ export interface IUserPayload {
 	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
 }
 
-export interface IUsersPayload {
-	data: Paths.GetApiB2BAdminUsers.Responses.$200 | null
-	usersOptions: ISelectOptionItem[]
-}
+export interface IUsersPayload extends ISearchablePayload<Paths.GetApiB2BAdminUsers.Responses.$200> {}
 
 export const processAuthorizationResult =
 	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>
 	async (dispatch) => {
+		let salons: Paths.GetApiB2BAdminUsersUserId.Responses.$200['user']['salons'] = []
 		try {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
 			setAccessToken(result.accessToken)
@@ -68,6 +69,8 @@ export const processAuthorizationResult =
 				}
 			}
 
+			salons = result.user.salons
+
 			dispatch({
 				type: AUTH_USER.AUTH_USER_LOAD_DONE,
 				payload
@@ -79,11 +82,15 @@ export const processAuthorizationResult =
 			history.push(i18next.t('paths:login'))
 			// eslint-disable-next-line no-console
 			console.log(e)
+		} finally {
+			dispatch(setSelectionOptions(salons))
 		}
 	}
 
 export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => async (dispatch) => {
 	let payload = {} as IAuthUserPayload
+
+	let salons: Paths.GetApiB2BAdminUsersUserId.Responses.$200['user']['salons'] = []
 
 	try {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_START })
@@ -104,11 +111,15 @@ export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => asyn
 			}
 		}
 
+		salons = data.user.salons
+
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_DONE, payload })
 	} catch (err) {
 		dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
 		// eslint-disable-next-line no-console
 		console.error(err)
+	} finally {
+		dispatch(setSelectionOptions(salons))
 	}
 
 	return payload
@@ -147,27 +158,35 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 }
 
 export const getUserAccountDetails =
-	(userID: number): ThunkResult<Promise<void>> =>
+	(userID: number): ThunkResult<Promise<IUserPayload>> =>
 	async (dispatch) => {
+		let payload = {} as IUserPayload
 		try {
 			dispatch({ type: USER.USER_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/users/{userID}', { userID })
-			dispatch({ type: USER.USER_LOAD_DONE, payload: { data: data.user } })
+
+			payload = {
+				data
+			}
+
+			dispatch({ type: USER.USER_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: USER.USER_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+
+		return payload
 	}
 
 export const getUsers =
-	(page: number, limit?: any | undefined, order?: string | undefined, search?: string | undefined | null, roleID?: number | undefined): ThunkResult<Promise<IUsersPayload>> =>
+	(queryParams: IGetUsersQueryParams): ThunkResult<Promise<IUsersPayload>> =>
 	// eslint-disable-next-line consistent-return
 	async (dispatch) => {
 		let payload = {} as IUsersPayload
 		try {
 			dispatch({ type: USERS.USERS_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/users/', { page: page || 1, limit, order, search, roleID })
+			const { data } = await getReq('/api/b2b/admin/users/', { ...normalizeQueryParams(queryParams) })
 
 			const usersOptions: ISelectOptionItem[] = map(data?.users, (user) => ({
 				key: user?.id,
@@ -177,7 +196,7 @@ export const getUsers =
 
 			payload = {
 				data,
-				usersOptions
+				options: usersOptions
 			}
 
 			dispatch({ type: USERS.USERS_LOAD_DONE, payload })

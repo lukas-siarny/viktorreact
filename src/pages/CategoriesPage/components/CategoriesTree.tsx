@@ -1,7 +1,7 @@
 import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
-import { Button, Col, Row, Tree, Divider, notification } from 'antd'
+import { Button, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { filter, forEach, get, map } from 'lodash'
 import { initialize } from 'redux-form'
@@ -16,14 +16,13 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, LANGUAGE } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
-import { convertCountriesToLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
+import { normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
-
-const DEFAULT_NAME_LANGUAGE = LANGUAGE.EN
+import { LOCALES } from '../../../components/LanguagePicker'
 
 type TreeCategories = {
 	title?: ReactElement
@@ -42,7 +41,7 @@ type TreeCategories = {
 	isParentDeleted: boolean
 }
 
-const editPermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_EDIT]
+const editPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]
 
 const CategoriesTree = () => {
 	const dispatch = useDispatch()
@@ -53,11 +52,22 @@ const CategoriesTree = () => {
 	const [lastOpenedNode, setLastOpenedNode] = useState<any>()
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
-	const countries = useSelector((state: RootState) => state.enumerationsStore.countries)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const emptyNameLocalizations = useMemo(() => convertCountriesToLocalizations(countries, DEFAULT_NAME_LANGUAGE), [countries])
+	// default language must be first
+	const emptyNameLocalizations = useMemo(
+		() =>
+			Object.keys(LOCALES)
+				.sort((a: string, b: string) => {
+					if (a === DEFAULT_LANGUAGE) {
+						return -1
+					}
+					return b === DEFAULT_LANGUAGE ? 1 : 0
+				})
+				.map((language) => ({ language })),
+		[]
+	)
 
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
@@ -84,7 +94,7 @@ const CategoriesTree = () => {
 				name,
 				parentId,
 				orderIndex: index,
-				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_NAME_LANGUAGE),
+				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_LANGUAGE),
 				level,
 				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
 				deletedAt,
@@ -97,13 +107,13 @@ const CategoriesTree = () => {
 	)
 
 	const deleteCategoryHandler = useCallback(
-		async (id: number, restore: boolean) => {
+		async (id: number) => {
 			if (isRemoving) {
 				return
 			}
 			try {
 				setIsRemoving(true)
-				await deleteReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: id, restore }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+				await deleteReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: id }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 				dispatch(getCategories())
 				setShowForm(false)
 				setIsRemoving(false)
@@ -209,7 +219,7 @@ const CategoriesTree = () => {
 		}
 		try {
 			// key of dropped node
-			const dropKey: number = droppedData.node.key
+			// const dropKey: number = droppedData.node.key
 			// key of dragged node
 			const dragKey: number = droppedData.dragNode.key
 			// drag node actual index/position in array children nodes
@@ -223,15 +233,7 @@ const CategoriesTree = () => {
 			}
 
 			// check condition if user dropped node to gap between nodes
-			if (!droppedData.dropToGap) {
-				// dropped node outside of gap between nodes
-				if (dropKey >= 0) {
-					body = {
-						...body,
-						parentID: dropKey
-					}
-				}
-			} else {
+			if (droppedData.dropToGap) {
 				// check if drop subcategory to root level
 				if (droppedData.dragNode.level > 0 && droppedData.node.level === 0) {
 					notification.warning({
@@ -266,12 +268,11 @@ const CategoriesTree = () => {
 				// prepare body for request
 				body = {
 					...body,
-					parentID: droppedData.node.props.data.parentId,
 					orderIndex,
 					imageID: get(droppedData, 'dragNode.image.id')
 				}
 			}
-			// check and update categories on be
+			// check and update categories on BE
 			await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: dragKey }, body)
 			dispatch(getCategories())
 			setShowForm(false)
@@ -285,23 +286,26 @@ const CategoriesTree = () => {
 		const cat: any | null = categories?.data
 		try {
 			let body: any = {
-				orderIndex: (formData.orderIndex || formData.childrenLength || cat?.length || 0) + 1,
+				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
 			}
-			if (formData.parentId >= 0) {
-				body = {
-					...body,
-					parentID: formData.parentId
-				}
-			}
+
 			if (formData.id && formData.id >= 0) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
 			} else {
+				if (formData.parentId >= 0) {
+					body = {
+						...body,
+						parentID: formData.parentId || undefined
+					}
+				}
+
 				await postReq('/api/b2b/admin/enums/categories/', null, body)
 			}
 			dispatch(getCategories())
-			setShowForm(false)
+			// clear 'dirty' state from Form
+			dispatch(initialize(FORM.CATEGORY, formData))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -327,24 +331,20 @@ const CategoriesTree = () => {
 
 	return (
 		<>
-			<Row className={'flex justify-between'}>
-				<Col span={6}>
-					<h3>{t('loc:Kategórie')}</h3>
-				</Col>
-				<Col span={6}>
-					<Button
-						onClick={() => {
-							dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations, level: 0 }))
-							setShowForm(true)
-						}}
-						type='primary'
-						htmlType='button'
-						className={'noti-btn w-full'}
-						icon={<PlusIcon />}
-					>
-						{t('loc:Pridať kategóriu')}
-					</Button>
-				</Col>
+			<Row className={'gap-2'} justify={'space-between'}>
+				<h3>{t('loc:Kategórie')}</h3>
+				<Button
+					onClick={() => {
+						dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations, level: 0 }))
+						setShowForm(true)
+					}}
+					type='primary'
+					htmlType='button'
+					className={'noti-btn'}
+					icon={<PlusIcon />}
+				>
+					{t('loc:Pridať kategóriu')}
+				</Button>
 			</Row>
 			<div className={'w-full flex'}>
 				<div className={formClass}>

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
@@ -39,24 +39,37 @@ const UserPage: FC<Props> = (props) => {
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
+	const isMyAccountPath = computedMatch.path === t('paths:my-account')
+	let submitPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]
+
+	if (isMyAccountPath) {
+		submitPermissions = [...submitPermissions, PERMISSION.PARTNER]
+	}
 
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
 	const isMyAccountPage: boolean = authUser.data?.id === get(userAccountDetail, 'data.id')
 
-	useEffect(() => {
-		if (userID) {
-			dispatch(getUserAccountDetails(userID))
+	const isLoading = userAccountDetail.isLoading || isRemoving
+
+	const fetchUserData = async () => {
+		const { data } = await dispatch(getUserAccountDetails(userID))
+		if (!data?.user?.id) {
+			history.push('/404')
 		}
+	}
+
+	useEffect(() => {
+		fetchUserData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, userID])
 
 	// init forms
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.USER_ACCOUNT, {
-				...userAccountDetail.data,
-				...get(userAccountDetail, 'data.company'),
-				avatar: userAccountDetail?.data?.image ? [{ url: userAccountDetail?.data?.image?.original, uid: userAccountDetail?.data?.image?.id }] : null
+				...get(userAccountDetail, 'data.user'),
+				avatar: userAccountDetail?.data?.user?.image ? [{ url: userAccountDetail?.data?.user?.image?.original, uid: userAccountDetail?.data?.user?.image?.id }] : null
 			})
 		)
 	}, [userAccountDetail, dispatch])
@@ -92,9 +105,9 @@ const UserPage: FC<Props> = (props) => {
 			{
 				name: t('loc:Detail používateľa'),
 				titleName:
-					get(userAccountDetail, 'data.firstName') && get(userAccountDetail, 'data.lastName')
-						? `${get(userAccountDetail, 'data.firstName')} ${get(userAccountDetail, 'data.lastName')}`
-						: get(userAccountDetail, 'data.email')
+					get(userAccountDetail, 'data.user.firstName') && get(userAccountDetail, 'data.user.lastName')
+						? `${get(userAccountDetail, 'data.user.firstName')} ${get(userAccountDetail, 'data.user.lastName')}`
+						: get(userAccountDetail, 'data.user.email')
 			}
 		]
 	}
@@ -130,48 +143,52 @@ const UserPage: FC<Props> = (props) => {
 
 	return (
 		<>
-			<Row className={hideClass}>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
-			</Row>
-			<div className='content-body small mt-2'>
-				<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
-				<div className={'content-footer'}>
-					<Row className={'justify-between'}>
-						<DeleteButton
-							permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_DELETE]}
-							className={'w-1/3'}
-							onConfirm={deleteUser}
-							entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
-							type={'default'}
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
-						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_EDIT, PERMISSION.PARTNER]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular w-1/3'}
-									htmlType={'submit'}
-									onClick={(e) => {
-										if (hasPermission) {
-											dispatch(submit(FORM.USER_ACCOUNT))
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									disabled={submitting || isFormPristine}
-									loading={submitting}
-								>
-									{t('loc:Uložiť')}
-								</Button>
-							)}
-						/>
-					</Row>
+			{!isMyAccountPath && (
+				<Row className={hideClass}>
+					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
+				</Row>
+			)}
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
+					<div className={'content-footer pt-0'}>
+						<Row className={'justify-between gap-2'}>
+							<DeleteButton
+								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_DELETE]}
+								className={'mt-2-5 w-52 xl:w-60'}
+								onConfirm={deleteUser}
+								entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
+								type={'default'}
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							/>
+							<Permissions
+								allowed={submitPermissions}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+										htmlType={'submit'}
+										onClick={(e) => {
+											if (hasPermission) {
+												dispatch(submit(FORM.USER_ACCOUNT))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={submitting || isFormPristine}
+										loading={submitting}
+									>
+										{t('loc:Uložiť')}
+									</Button>
+								)}
+							/>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }

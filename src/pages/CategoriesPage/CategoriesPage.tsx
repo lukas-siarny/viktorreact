@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
-import { Col, Row } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
+import { Col, Row, Spin } from 'antd'
 import { compose } from 'redux'
 
 // reducers
@@ -12,17 +12,18 @@ import CategoriesTree from './components/CategoriesTree'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ROW_GUTTER_X_DEFAULT, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
-
-const browsePermissions = [PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]
+import { RootState } from '../../reducers'
 
 const CategoriesPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+
+	const { isLoading } = useSelector((state: RootState) => state.categories.categories)
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -32,7 +33,7 @@ const CategoriesPage = () => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Správa kategórií')
+				name: t('loc:Zoznam kategórií')
 			}
 		]
 	}
@@ -42,15 +43,17 @@ const CategoriesPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Row gutter={ROW_GUTTER_X_DEFAULT}>
-				<Col span={24}>
-					<div className='content-body'>
-						<CategoriesTree />
-					</div>
-				</Col>
-			</Row>
+			<Spin spinning={isLoading}>
+				<Row gutter={ROW_GUTTER_X_DEFAULT}>
+					<Col span={24}>
+						<div className='content-body'>
+							<CategoriesTree />
+						</div>
+					</Col>
+				</Row>
+			</Spin>
 		</>
 	)
 }
 
-export default compose(withPermissions(browsePermissions))(CategoriesPage)
+export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(CategoriesPage)

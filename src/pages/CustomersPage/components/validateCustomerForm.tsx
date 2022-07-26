@@ -46,8 +46,28 @@ export default (values: any) => {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!values.salonID) {
-		errors.salonID = i18next.t('loc:Toto pole je povinné')
+	if (values?.street && values?.street?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+		errors.street = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_100
+		})
+	}
+
+	if (values?.streetNumber && values?.streetNumber?.length > VALIDATION_MAX_LENGTH.LENGTH_10) {
+		errors.streetNumber = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_10
+		})
+	}
+
+	if (values?.city && values?.city?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
+		errors.city = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_100
+		})
+	}
+
+	if (values?.zipCode && values?.zipCode?.length > VALIDATION_MAX_LENGTH.LENGTH_10) {
+		errors.zipCode = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_10
+		})
 	}
 
 	return errors

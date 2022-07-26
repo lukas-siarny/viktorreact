@@ -1,16 +1,15 @@
 /* eslint-disable import/no-cycle */
-import { map } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
 import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IUserAvatar } from '../../types/interfaces'
+import { IUserAvatar, IQueryParams, ISearchablePayload } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { getServiceRange, normalizeQueryParams } from '../../utils/helper'
+import { decodePrice, getServiceRange, normalizeQueryParams, showServiceCategory } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
@@ -26,56 +25,57 @@ interface ServicesTableData {
 	employees: IUserAvatar[]
 	price: string
 	duration: string
-	category: string
+	categoryFirst: string
+	categorySecond: string
 	salon: string | undefined
 }
 
-export interface ServiceOptionItem {
-	label: string | undefined | number
-	value: number
-	key: string
+export interface IGetServicesQueryParams extends IQueryParams {
+	categoryID?: number | undefined | null
+	employeeID?: number | undefined | null
+	salonID?: number | undefined | null
 }
 
-export interface IServicesPayload {
-	data: Paths.GetApiB2BAdminServices.Responses.$200 | null
+export interface IServicesPayload extends ISearchablePayload<Paths.GetApiB2BAdminServices.Responses.$200> {
 	tableData: ServicesTableData[] | undefined
-	servicesOptions: ServiceOptionItem[] | undefined
 }
 
 export const getServices =
-	(page: number, limit?: any | undefined, order?: string | undefined, queryParams = {}): ThunkResult<Promise<IServicesPayload>> =>
+	(queryParams: IGetServicesQueryParams): ThunkResult<Promise<IServicesPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IServicesPayload
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
-			const pageLimit = limit
 
-			const { data } = await getReq('/api/b2b/admin/services/', { page: page || 1, limit: pageLimit, order, ...normalizeQueryParams(queryParams) })
-			const tableData: ServicesTableData[] = map(data.services, (item) => {
+			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) })
+			const tableData: ServicesTableData[] = data.services.map((item) => {
 				const tableItem = {
 					key: item.id,
 					serviceID: item.id,
-					name: item.name || '-',
+					name: item.category?.child?.child?.name || '-',
+					categoryFirst: item.category?.name || '-',
+					categorySecond: item.category?.child?.name || '-',
 					employees: item.employees.map((employee) => ({
 						src: employee.image?.resizedImages?.thumbnail,
+						fallBackSrc: employee.image?.original,
 						alt: `${employee.firstName} ${employee.lastName}`,
 						text: `${employee.firstName} ${employee.lastName}`,
 						key: employee.id
 					})),
-					price: getServiceRange(item.priceFrom, item.priceTo),
+					price: getServiceRange(decodePrice(item.priceFrom), decodePrice(item.priceTo)),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
-					category: item.category.name || '-',
+					category: (item.category.child ? showServiceCategory(item.category) : item.category.name) || '-',
 					salon: item.salon.name
 				}
 				return tableItem
 			})
-			const servicesOptions = map(data.services, (service) => {
-				return { label: service.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
+			const servicesOptions = data.services.map((service) => {
+				return { label: service.category.child?.child?.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
 			})
 			payload = {
 				data,
 				tableData,
-				servicesOptions
+				options: servicesOptions
 			}
 
 			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })

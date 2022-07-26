@@ -52,25 +52,32 @@
 		.ant-select
 			text-align: left
 			position: relative
-			&:before
-				position: absolute
-				z-index: 1
-				content: ''
-				border-radius: 4px
-				transition: background-color 400ms
-				top: calc(50% - 10px)
-				right: 10px
-				width: 20px
-				transform: rotate(270deg)
-				height: 20px
-				background: url('../assets/icons/arrow.svg') no-repeat center center
+			z-index: 2
 			span.ant-select-arrow
 				display: none
 			.ant-select-selector
 				border: none
 				border-radius: 4px
 				background-color: $backgroundColor-gray-100
+				position: relative
 				&:hover
 					background-color: $backgroundColor-gray-200
+				&:before
+					position: absolute
+					z-index: 1
+					content: ''
+					border-radius: 4px
+					transition: 400ms
+					transition-property: background-color opacity
+					top: calc(50% - 10px)
+					right: 10px
+					width: 20px
+					transform: rotate(270deg)
+					height: 20px
+					background: url('../assets/icons/arrow.svg') no-repeat center center
+			&.ant-select-open
+				.ant-select-selector
+					&:before
+						opacity: 0.2
 .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector
 	box-shadow: none

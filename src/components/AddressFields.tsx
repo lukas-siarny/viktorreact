@@ -33,6 +33,7 @@ export type AddressInputFields = {
 	longitude: number
 	city?: string
 	street?: string
+	streetNumber?: string
 	zipCode?: string
 	country?: string
 	address?: string
@@ -98,10 +99,13 @@ const AddressFields = (props: Props) => {
 		changeFormFieldValue('zipCode', address.zip)
 
 		if (streetNumber) {
-			changeFormFieldValue('street', `${address.street} ${streetNumber}`)
+			changeFormFieldValue('streetNumber', streetNumber)
+			changeFormFieldValue('street', address.street)
 		} else if (houseNumber) {
-			changeFormFieldValue('street', `${address.city} ${houseNumber}`)
+			changeFormFieldValue('streetNumber', houseNumber)
+			changeFormFieldValue('street', address.city)
 		} else {
+			changeFormFieldValue('streetNumber', '')
 			changeFormFieldValue('street', address.street)
 		}
 
@@ -136,7 +140,7 @@ const AddressFields = (props: Props) => {
 			{googleMapUrl && (
 				<>
 					<Row>
-						<Col span={24}>
+						<Col span={24} className={'mb-4'}>
 							<LocationSearchInputField
 								googleMapURL={googleMapUrl}
 								loadingElement={locationSearchElements.loadingElement}
@@ -145,10 +149,11 @@ const AddressFields = (props: Props) => {
 								onPlaceSelected={selectLocation}
 								type='search'
 								placeholder={t('loc:Vyhľadajte miesto na mape')}
+								className={'mb-0'}
 								error={error && touched}
 								disabled={disabled}
 							/>
-							<div className={cx('text-danger h-6', { hidden: !(error && touched) })}>{error}</div>
+							<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 						</Col>
 					</Row>
 					<Row gutter={ROW_GUTTER_X_M} justify={'space-around'} className={'mb-6'}>
@@ -176,7 +181,7 @@ const AddressFields = (props: Props) => {
 							{'street' in inputValues && (
 								<div>
 									{getLabelField(t('loc:Ulica'))}
-									<h4>{get(inputValues, 'street')}</h4>
+									<h4>{`${get(inputValues, 'street') ?? ''} ${get(inputValues, 'streetNumber') ?? ''}`}</h4>
 								</div>
 							)}
 							{'zipCode' in inputValues && (

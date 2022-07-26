@@ -1,59 +1,127 @@
-import React, { useCallback, useState } from 'react'
+import React, { MouseEventHandler, ReactNode, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { InjectedFormProps, reduxForm, Field } from 'redux-form'
-import { Form, Spin, Divider, Row, Col, Button } from 'antd'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Button, Col, Divider, Form, Row, Spin } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-
-// assets
-import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
-import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { isEmpty } from 'lodash'
+import cx from 'classnames'
 
 // atoms
 import SelectField from '../../../atoms/SelectField'
 import validateServiceForm from './validateServiceForm'
-import InputField from '../../../atoms/InputField'
-import TextareaField from '../../../atoms/TextareaField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
-import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
 import CategoryFields from './CategoryFields'
+import AvatarComponents from '../../../components/AvatarComponents'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getSalons } from '../../../reducers/salons/salonsActions'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
+import searchWrapper from '../../../utils/filters'
 
 // types
 import { IServiceForm } from '../../../types/interfaces'
+
+// assets
+import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
+import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
+import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
 
 const numberMin0 = validationNumberMin(0)
 
 type ComponentProps = {
 	serviceID?: number
+	parentPath?: string
+	salonID: number
+	addEmployee: MouseEventHandler<HTMLElement>
 }
+
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
 
+export const renderListFields = (props: any) => {
+	// eslint-disable-next-line react-hooks/rules-of-hooks
+	const [t] = useTranslation()
+	const { fields } = props
+
+	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, icon: ReactNode) => {
+		if (from || to) {
+			return (
+				<div className={'flex items-center mr-3'}>
+					{icon}
+					{from}
+					{to ? ` - ${to}` : undefined}
+				</div>
+			)
+		}
+		return undefined
+	}
+
+	return (
+		<>
+			<div className={'employee-list'}>
+				{fields.map((field: any, index: number) => {
+					const fieldData = fields.get(index)
+					return (
+						<div className={'employee-list-item flex items-center justify-between'} key={index}>
+							<div className={'title flex items-center'}>
+								<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
+								{fieldData?.name}
+								{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
+								{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
+							</div>
+							<div className={'flex items-center'}>
+								<div className={'flex items-center'}>
+									{renderFromTo(fieldData?.employeeData?.durationFrom, fieldData?.employeeData?.durationTo, <ClockIcon className={'mr-1'} />)}
+									{renderFromTo(fieldData?.employeeData?.priceFrom, fieldData?.employeeData?.priceTo, <CouponIcon className={'mr-1'} />)}
+								</div>
+								<DeleteButton
+									onConfirm={() => {
+										fields.remove(index)
+									}}
+									smallIcon
+									size={'small'}
+									entityName={t('loc:službu')}
+									type={'default'}
+									onlyIcon
+								/>
+							</div>
+						</div>
+					)
+				})}
+			</div>
+		</>
+	)
+}
+
 const ServiceForm = (props: Props) => {
-	const { serviceID, handleSubmit, pristine } = props
+	const { salonID, serviceID, handleSubmit, pristine, addEmployee, parentPath } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM].values)
+	const employees = useSelector((state: RootState) => state.employees.employees)
 	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
-	const isLoading = serviceLoading || categoriesLoading || isRemoving
+	const isLoading = serviceLoading || categoriesLoading || isRemoving || salon.isLoading
 	const submitting = false
+
+	const variableDuration = formValues?.variableDuration
+	const variablePrice = formValues?.variablePrice
 
 	const onConfirmDelete = async () => {
 		if (isRemoving) {
@@ -63,51 +131,31 @@ const ServiceForm = (props: Props) => {
 			setIsRemoving(true)
 			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID: serviceID || -1 }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			setIsRemoving(false)
-			const url = t('paths:services')
-			history.push(url)
+			history.push(parentPath + t('paths:services'))
 		} catch (e) {
 			setIsRemoving(false)
 		}
 	}
 
-	const searchSalon = useCallback(
+	const searchEmployees = useCallback(
 		async (search: string, page: number) => {
-			const { data, salonsOptions } = await dispatch(getSalons(page, undefined, undefined, search, undefined, undefined))
-			return { pagination: data?.pagination, page: data?.pagination?.page, data: salonsOptions }
+			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.EMPLOYEE)
 		},
-		[dispatch]
+		[dispatch, salonID]
 	)
 
-	const variableDuration = form?.values?.variableDuration
-	const variablePrice = form?.values?.variablePrice
-
 	return (
-		<Spin tip={STRINGS(t).loading} spinning={isLoading}>
+		<Spin spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
 				<CategoryFields />
-				<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} required />
-				<Field component={TextareaField} label={t('loc:Popis')} placeholder={t('loc:Zadajte popis')} name={'description'} size={'large'} />
-				<Field
-					className='m-0'
-					label={t('loc:Salón')}
-					component={SelectField}
-					allowClear
-					placeholder={t('loc:Vyberte salón')}
-					name='salonID'
-					showSearch
-					onSearch={searchSalon}
-					onDidMountSearch
-					size={'large'}
-					required
-					filterOption={false}
-					allowInfinityScroll
-				/>
-				<Divider />
-				<Row gutter={8}>
-					<Col span={variableDuration ? 12 : 24}>
+				<Row gutter={8} align='middle'>
+					<Col span={8}>
+						<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
+					</Col>
+					<Col span={variableDuration ? 8 : 16}>
 						<Field
 							component={InputNumberField}
-							label={variableDuration ? t('loc:Trvanie od') : t('loc:Trvanie')}
+							label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
 							placeholder={t('loc:min')}
 							name='durationFrom'
 							precision={0}
@@ -120,10 +168,10 @@ const ServiceForm = (props: Props) => {
 					</Col>
 
 					{variableDuration && (
-						<Col span={12}>
+						<Col span={8}>
 							<Field
 								component={InputNumberField}
-								label={t('loc:Trvanie do')}
+								label={t('loc:Trvanie do (minúty)')}
 								placeholder={t('loc:min')}
 								name='durationTo'
 								precision={0}
@@ -136,15 +184,20 @@ const ServiceForm = (props: Props) => {
 						</Col>
 					)}
 				</Row>
-				<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
-				<Divider />
-				<Row gutter={8}>
-					<Col span={variablePrice ? 12 : 24}>
+
+				<Row gutter={8} align='middle'>
+					<Col span={8}>
+						<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+					</Col>
+					<Col span={variablePrice ? 8 : 16}>
 						<Field
 							component={InputNumberField}
-							label={variablePrice ? t('loc:Cena od') : t('loc:Cena')}
-							// TODO add currency
-							// placeholder={t('loc:min')}
+							label={
+								variablePrice
+									? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
+									: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
+							}
+							placeholder={salon.data?.currency.symbol}
 							name='priceFrom'
 							precision={2}
 							step={1}
@@ -155,12 +208,11 @@ const ServiceForm = (props: Props) => {
 						/>
 					</Col>
 					{variablePrice && (
-						<Col span={12}>
+						<Col span={8}>
 							<Field
 								component={InputNumberField}
-								label={t('loc:Cena do')}
-								// TODO add currency
-								// placeholder={t('loc:min')}
+								label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
+								placeholder={salon.data?.currency.symbol}
 								name='priceTo'
 								precision={2}
 								step={1}
@@ -172,34 +224,45 @@ const ServiceForm = (props: Props) => {
 						</Col>
 					)}
 				</Row>
-				<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
-				<Divider />
-				<Field
-					className='m-0'
-					component={ImgUploadField}
-					name='gallery'
-					label={t('loc:Referenčné obrázky')}
-					signUrl={URL_UPLOAD_IMAGES}
-					multiple
-					maxCount={10}
-					category={UPLOAD_IMG_CATEGORIES.SALON}
-				/>
-				<Row className={'content-footer'} id={'content-footer-container'}>
-					<Col span={8}>
+				<h3>{t('loc:Zoznam priradených zamestnancov')}</h3>
+				<Divider className={'mb-3 mt-3'} />
+				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
+					<Field
+						label={t('loc:Zamestnanci')}
+						size={'large'}
+						className={'flex-1'}
+						component={SelectField}
+						allowClear
+						placeholder={t('loc:Vyberte zamestnancov')}
+						name={'employee'}
+						onSearch={searchEmployees}
+						filterOption={true}
+						options={employees?.options}
+						mode={'multiple'}
+						showSearch
+						allowInfinityScroll
+					/>
+
+					<Button type={'primary'} size={'middle'} className={'self-start noti-btn m-regular md:mt-5'} onClick={addEmployee} disabled={isEmpty(formValues?.employee)}>
+						{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
+					</Button>
+				</div>
+				<FieldArray component={renderListFields} name={'employees'} />
+				<div className={'content-footer pt-0'} id={'content-footer-container'}>
+					<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
 						{serviceID ? (
 							<DeleteButton
-								className={'noti-btn w-full'}
+								className={'noti-btn mt-2-5 w-52 xl:w-60'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								onConfirm={onConfirmDelete}
 								entityName={t('loc:službu')}
-								permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.PARTNER, PERMISSION.SALON_EDIT]}
+								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_DELETE]}
 							/>
 						) : null}
-					</Col>
-					<Col span={8} offset={8}>
+
 						<Button
 							type={'primary'}
-							className={'noti-btn w-full'}
+							className={'noti-btn mt-2-5 w-52 xl:w-60'}
 							htmlType={'submit'}
 							icon={serviceID ? <EditIcon /> : <CreateIcon />}
 							disabled={submitting || pristine}
@@ -207,8 +270,8 @@ const ServiceForm = (props: Props) => {
 						>
 							{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
 						</Button>
-					</Col>
-				</Row>
+					</Row>
+				</div>
 			</Form>
 		</Spin>
 	)

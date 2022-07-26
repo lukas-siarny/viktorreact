@@ -7,7 +7,7 @@ import user from '../../fixtures/user.json'
 
 context('Auth', () => {
 	// TODO
-	it('Sign up', () => {
+	/* it('Sign up', () => {
 		cy.clearLocalStorage()
 		cy.intercept({
 			method: 'POST',
@@ -48,7 +48,7 @@ context('Auth', () => {
 		})
 		// check redirect to login page
 		cy.location('pathname').should('eq', '/login')
-	})
+	}) */
 
 	it('Sign in', () => {
 		cy.clearLocalStorage()

@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import cx from 'classnames'
 
 // assets
@@ -18,6 +18,8 @@ import { ReactComponent as LogOutIcon } from '../../assets/icons/logout-icon.svg
 import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
 import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.svg'
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
+import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
+import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -26,31 +28,47 @@ import Permissions from '../../utils/Permissions'
 
 // redux
 import { logOutUser } from '../../reducers/users/userActions'
+import { RootState } from '../../reducers'
+import { getSupportContact } from '../../reducers/supportContacts/supportContactsActions'
 
 // components
 import LanguagePicker from '../LanguagePicker'
 import AvatarComponents from '../AvatarComponents'
-import { RootState } from '../../reducers'
 
 const { Sider } = Layout
 
 export type LayoutSiderProps = {
 	page?: PAGE
 	showNavigation?: boolean
+	salonID?: number
+	parentPath?: string
 }
 
 const LayoutSider = (props: LayoutSiderProps) => {
-	const { page, showNavigation = true } = props
+	const { page, showNavigation = true, salonID, parentPath } = props
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
+	const location = useLocation()
+
+	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
 	const MY_ACCOUNT_MENU = (
 		<Menu className='noti-sider-menu'>
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
+			</Menu.Item>
+			<Menu.Item
+				key='support'
+				onClick={() => {
+					dispatch(getSupportContact())
+					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
+				}}
+				icon={<HelpIcon />}
+			>
+				{t('loc:Potrebujete pomôcť?')}
 			</Menu.Item>
 			<LanguagePicker asMenuItem />
 			<Menu.Item key='logOut' onClick={() => dispatch(logOutUser())} icon={<LogOutIcon />}>
@@ -74,78 +92,117 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					{showNavigation && (
 						<Menu mode='inline' inlineIndent={8} selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
 							<Menu.Item eventKey={PAGE.HOME} key={PAGE.HOME} onClick={() => history.push(t('paths:index'))} icon={<HomeIcon />}>
-								{t('loc:Home')}
+								{t('loc:Prehľad')}
 							</Menu.Item>
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.USER_BROWSING]}>
-								<Menu.Item
-									eventKey={PAGE.USERS}
-									key={PAGE.USERS}
-									onClick={() => history.push(t('paths:users'))}
-									icon={<UsersIcon />}
-									// fix style issue due wrapped item into <Permission> component
-									className={cx({ 'ant-menu-item-selected': page === PAGE.USERS })}
-								>
-									{t('loc:Používatelia')}
-								</Menu.Item>
-							</Permissions>
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.ENUM_BROWSING]}>
-								<Menu.Item
-									eventKey={PAGE.CATEGORIES}
-									key={PAGE.CATEGORIES}
-									onClick={() => history.push(t('paths:categories'))}
-									icon={<CategoryIcon />}
-									// fix style issue due wrapped item into <Permission> component
-									className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
-								>
-									{t('loc:Kategórie')}
-								</Menu.Item>
-							</Permissions>
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.SALON_BROWSING, PERMISSION.PARTNER]}>
-								<Menu.Item
-									eventKey={PAGE.SALONS}
-									key={PAGE.SALONS}
-									onClick={() => history.push(t('paths:salons'))}
-									icon={<SalonIcon />}
-									// fix style issue due wrapped item into <Permission> component
-									className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
-								>
-									{t('loc:Salóny')}
-								</Menu.Item>
-								<Menu.Item
-									eventKey={PAGE.SERVICES}
-									key={PAGE.SERVICES}
-									onClick={() => history.push(t('paths:services'))}
-									icon={<ServiceIcon />}
-									// fix style issue due wrapped item into <Permission> component
-									className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
-								>
-									{t('loc:Služby')}
-								</Menu.Item>
-							</Permissions>
+							{/* ADMIN VIEW */}
+							{!salonID && (
+								<>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]}>
+										<Menu.Item
+											eventKey={PAGE.USERS}
+											key={PAGE.USERS}
+											onClick={() => history.push(t('paths:users'))}
+											icon={<UsersIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.USERS })}
+										>
+											{t('loc:Používatelia')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
+										<Menu.Item
+											eventKey={PAGE.CATEGORIES}
+											key={PAGE.CATEGORIES}
+											onClick={() => history.push(t('paths:categories'))}
+											icon={<CategoryIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
+										>
+											{t('loc:Kategórie')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
+										<Menu.Item
+											eventKey={PAGE.COSMETICS}
+											key={PAGE.COSMETICS}
+											onClick={() => history.push(t('paths:cosmetics'))}
+											icon={<CosmeticIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.COSMETICS })}
+										>
+											{t('loc:Kozmetika')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+										<Menu.Item
+											eventKey={PAGE.SUPPORT_CONTACTS}
+											key={PAGE.SUPPORT_CONTACTS}
+											onClick={() => history.push(t('paths:support-contacts'))}
+											icon={<HelpIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.SUPPORT_CONTACTS })}
+										>
+											{t('loc:Podpora')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+										<Menu.Item
+											eventKey={PAGE.SALONS}
+											key={PAGE.SALONS}
+											onClick={() => history.push(t('paths:salons'))}
+											icon={<SalonIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
+										>
+											{t('loc:Salóny')}
+										</Menu.Item>
+									</Permissions>
+								</>
+							)}
 
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]}>
-								<Menu.Item
-									eventKey={PAGE.CUSTOMERS}
-									key={PAGE.CUSTOMERS}
-									onClick={() => history.push(t('paths:customers'))}
-									icon={<CustomerIcon />} // fix style issue due wrapped item into <Permission> component
-									className={cx({ 'ant-menu-item-selected': page === PAGE.CUSTOMERS })}
-								>
-									{t('loc:Zákazníci')}
-								</Menu.Item>
-							</Permissions>
-
-							<Permissions allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.EMPLOYEE_BROWSING, PERMISSION.PARTNER]}>
-								<Menu.Item
-									eventKey={PAGE.EMPLOYEES}
-									key={PAGE.EMPLOYEES}
-									onClick={() => history.push(t('paths:employees'))}
-									icon={<EmployeesIcon />} // fix style issue due wrapped item into <Permission> component
-									className={cx({ 'ant-menu-item-selected': page === PAGE.EMPLOYEES })}
-								>
-									{t('loc:Zamestnanci')}
-								</Menu.Item>
-							</Permissions>
+							{/* PARTNER VIEW */}
+							{salonID && (
+								<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
+									<Menu.Item
+										eventKey={PAGE.SALONS}
+										key={PAGE.SALONS}
+										onClick={() => history.push(parentPath)}
+										icon={<SalonIcon />}
+										// fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
+									>
+										{t('loc:Detail salónu')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.SERVICES}
+										key={PAGE.SERVICES}
+										onClick={() => history.push(getPath(t('paths:services')))}
+										icon={<ServiceIcon />}
+										// fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
+									>
+										{t('loc:Služby')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.CUSTOMERS}
+										key={PAGE.CUSTOMERS}
+										onClick={() => history.push(getPath(t('paths:customers')))}
+										icon={<CustomerIcon />} // fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.CUSTOMERS })}
+									>
+										{t('loc:Zákazníci')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.EMPLOYEES}
+										key={PAGE.EMPLOYEES}
+										onClick={() => history.push(getPath(t('paths:employees')))}
+										icon={<EmployeesIcon />} // fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.EMPLOYEES })}
+									>
+										{t('loc:Zamestnanci')}
+									</Menu.Item>
+								</Permissions>
+							)}
 						</Menu>
 					)}
 				</div>

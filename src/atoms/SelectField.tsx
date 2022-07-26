@@ -1,13 +1,15 @@
 import React, { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { FormAction, WrappedFieldProps } from 'redux-form'
+import { useTranslation } from 'react-i18next'
+import { change, FormAction, WrappedFieldProps } from 'redux-form'
+import { useDispatch } from 'react-redux'
 import cx from 'classnames'
 import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, some, take } from 'lodash'
 
 // ant
-import { Button, Divider, Empty, Form, Select, Spin } from 'antd'
+import { Button, Divider, Empty, Form, Popconfirm, Select, Spin } from 'antd'
 import { SelectProps } from 'antd/lib/select'
 import { FormItemProps } from 'antd/lib/form/FormItem'
-import { createSlug, formFieldID } from '../utils/helper'
+
 // icons
 import { ReactComponent as ArrowIcon } from '../assets/icons/select-arrow-icon.svg'
 import { ReactComponent as CheckedIcon } from '../assets/icons/checkbox-checked-icon-24.svg'
@@ -15,7 +17,11 @@ import { ReactComponent as CloseIconSmall } from '../assets/icons/close-icon-16.
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
 
-import { FIELD_MODE } from '../utils/enums'
+// utils
+import { FIELD_MODE, FORM } from '../utils/enums'
+import { createSlug, formFieldID } from '../utils/helper'
+
+// assets
 import { ReactComponent as LoadingIcon } from '../assets/icons/loading-icon.svg'
 
 const { Item } = Form
@@ -58,6 +64,9 @@ export type Props = {
 	disableMenuItemSelectedIcon?: boolean // niekedy tuto ikonu renderujeme nie cez propu ale cez position absolute a vtedy by sa tu dve zobrazovali lebo je || SearchIcon (vo filtroch pre vyhladavanie)
 	onSelect?: (opt: any, option: any, value: any) => any
 	optionRender?: any // custom render for item(option)
+	formName?: FORM
+	confirmSelection?: boolean
+	confirmModalExtraTitle?: string
 } & WrappedFieldProps &
 	SelectProps<any> &
 	FormItemProps
@@ -108,7 +117,14 @@ const renderMenuItemSelectedIcon = (
 
 const getOptions = (optionRender: any, options: any) =>
 	map(options, (option) => (
-		<Option key={option.key} value={option.value} disabled={option.disabled} label={option.label} extra={option.extra}>
+		<Option
+			key={option.key}
+			value={option.value}
+			disabled={option.disabled}
+			label={option.label}
+			extra={option.extra}
+			style={option.level ? { paddingLeft: 16 * option.level } : undefined}
+		>
 			{optionRender ? optionRender(option) : option.label}
 		</Option>
 	))
@@ -281,11 +297,19 @@ const SelectField = (props: Props) => {
 		maxTagLength,
 		maxTagsLimit,
 		autoBlur,
-		hasExtra
+		hasExtra,
+		formName,
+		confirmSelection,
+		confirmModalExtraTitle
 	} = props
 
+	const dispatch = useDispatch()
 	const localItemRef = useRef()
+	const [t] = useTranslation()
 	const itemRef = props.itemRef || localItemRef
+	const [confVisibility, setConfVisibility] = useState<boolean>(false)
+	const [onChangeValue, setOnChangeValue] = useState()
+	const [onChangeAntdOptions, setOnChangeAntdOptions] = useState<any>()
 
 	const [selectState, setSelectState] = useState<SelectStateTypes>({
 		data: [],
@@ -322,9 +346,16 @@ const SelectField = (props: Props) => {
 	const onChange = useCallback(
 		async (value: any, antdOptions: any) => {
 			if (!input.onChange) return
+			// if confirmSelection is active show confirmation modal and save selected option and value
+			if (confirmSelection) {
+				setOnChangeValue(value)
+				setOnChangeAntdOptions(antdOptions)
+				setConfVisibility(true)
+				return
+			}
 			handleChange({ value, options: antdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update })
 		},
-		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update]
+		[autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update, confirmSelection]
 	)
 
 	const onSelectWrap = async (value: any, option: any) => {
@@ -441,6 +472,18 @@ const SelectField = (props: Props) => {
 		opt = selectState.data
 	}
 
+	// select first option
+	useEffect(() => {
+		if (opt?.length === 1 && formName) {
+			if (mode === 'tags' || mode === 'multiple') {
+				dispatch(change(formName, input?.name, [opt[0]?.value]))
+			} else {
+				dispatch(change(formName, input?.name, opt[0]?.value))
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [opt, formName])
+
 	let suffIcon
 	if (!loading && !selectState.fetching) {
 		if (showSearch && !suffixIcon) {
@@ -457,7 +500,7 @@ const SelectField = (props: Props) => {
 		notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={selectState.emptyText || emptyText} />
 	}
 
-	return (
+	const selectItem = (
 		<Item
 			label={label}
 			required={required}
@@ -477,6 +520,7 @@ const SelectField = (props: Props) => {
 				onFocus={onFocus}
 				onChange={onChange}
 				size={size || 'middle'}
+				// if is only one option select it
 				value={value}
 				onBlur={onBlur}
 				placeholder={placeholder || ''}
@@ -518,6 +562,46 @@ const SelectField = (props: Props) => {
 				{getOptions(optionRender, opt)}
 			</Select>
 		</Item>
+	)
+
+	return (
+		<>
+			{confirmSelection ? (
+				<Popconfirm
+					visible={confVisibility}
+					placement={'bottom'}
+					title={
+						<>
+							<p className={'font-bold'}>{t('loc:Upozornenie!')}</p>
+							{confirmModalExtraTitle}
+						</>
+					}
+					okButtonProps={{
+						type: 'default',
+						className: 'noti-btn'
+					}}
+					cancelButtonProps={{
+						type: 'primary',
+						className: 'noti-btn'
+					}}
+					okText={t('loc:Potvrdiť')}
+					onConfirm={() => {
+						// change input value
+						handleChange({ value: onChangeValue, options: onChangeAntdOptions, autoBlur, hasExtra, input, itemRef, maxTagLength, maxTagsLimit, mode, update })
+						// close conf modal
+						setConfVisibility(false)
+					}}
+					cancelText={t('loc:Zrušiť')}
+					onCancel={() => {
+						setConfVisibility(false)
+					}}
+				>
+					{selectItem}
+				</Popconfirm>
+			) : (
+				selectItem
+			)}
+		</>
 	)
 }
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Row } from 'antd'
+import { Button, Row, Spin } from 'antd'
 import { get } from 'lodash'
 import { compose } from 'redux'
 import { initialize, submit, isPristine } from 'redux-form'
@@ -12,7 +12,7 @@ import DeleteButton from '../../components/DeleteButton'
 import CustomerForm from './components/CustomerForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, ICustomerForm } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
 import { getCustomer } from '../../reducers/customers/customerActions'
@@ -20,25 +20,40 @@ import { RootState } from '../../reducers'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 
-type Props = {
-	computedMatch: IComputedMatch<{ customerID: number }>
+type Props = SalonSubPageProps & {
+	computedMatch: IComputedMatch<{
+		customerID: number
+	}>
 }
+
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const CustomerPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const { parentPath } = props
 	const { customerID } = props.computedMatch.params
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const isFormPristine = useSelector(isPristine(FORM.CUSTOMER))
 	const customer = useSelector((state: RootState) => state.customers.customer)
 
+	const isLoading = customer?.isLoading || isRemoving
+
+	const fetchCustomerData = async () => {
+		const { data } = await dispatch(getCustomer(customerID))
+		if (!data?.customer?.id) {
+			history.push('/404')
+		}
+	}
+
 	useEffect(() => {
-		dispatch(getCustomer(customerID))
+		fetchCustomerData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, customerID])
 
 	useEffect(() => {
@@ -59,7 +74,7 @@ const CustomerPage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: t('paths:customers')
+				link: parentPath + t('paths:customers')
 			},
 			{
 				name: t('loc:Detail zákazníka'),
@@ -84,8 +99,8 @@ const CustomerPage = (props: Props) => {
 					firstName: data.firstName,
 					gender: data.gender,
 					lastName: data.lastName,
-					salonID: data.salonID,
 					street: data.street,
+					streetNumber: data.streetNumber,
 					zipCode: data.zipCode,
 					phone: data.phone,
 					phonePrefixCountryCode: data.phonePrefixCountryCode
@@ -107,7 +122,7 @@ const CustomerPage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/customers/{customerID}', { customerID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(t('paths:customers'))
+			history.push(parentPath + t('paths:customers'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -119,49 +134,51 @@ const CustomerPage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:customers')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				<CustomerForm onSubmit={updateCustomer} />
-				<div className={'content-footer'}>
-					<Row className={'justify-between'}>
-						<DeleteButton
-							permissions={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
-							className={'w-1/3'}
-							onConfirm={deleteCustomer}
-							entityName={t('loc:zákazníka')}
-							type={'default'}
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
-						<Permissions
-							allowed={[PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_EDIT, PERMISSION.PARTNER]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'middle'}
-									className={'noti-btn m-regular mb-2 w-1/3'}
-									htmlType={'submit'}
-									onClick={(e) => {
-										if (hasPermission) {
-											dispatch(submit(FORM.CUSTOMER))
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									disabled={submitting || isFormPristine}
-									loading={submitting}
-								>
-									{t('loc:Uložiť')}
-								</Button>
-							)}
-						/>
-					</Row>
+			<Spin spinning={isLoading}>
+				<div className='content-body small mt-2'>
+					<CustomerForm onSubmit={updateCustomer} />
+					<div className={'content-footer pt-0'}>
+						<Row className={'justify-between gap-2'}>
+							<DeleteButton
+								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_DELETE]}
+								className={'mt-2-5 w-52 xl:w-60'}
+								onConfirm={deleteCustomer}
+								entityName={t('loc:zákazníka')}
+								type={'default'}
+								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							/>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_UPDATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<Button
+										type={'primary'}
+										block
+										size={'middle'}
+										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+										htmlType={'submit'}
+										onClick={(e) => {
+											if (hasPermission) {
+												dispatch(submit(FORM.CUSTOMER))
+											} else {
+												e.preventDefault()
+												openForbiddenModal()
+											}
+										}}
+										disabled={submitting || isFormPristine}
+										loading={submitting}
+									>
+										{t('loc:Uložiť')}
+									</Button>
+								)}
+							/>
+						</Row>
+					</div>
 				</div>
-			</div>
+			</Spin>
 		</>
 	)
 }
 
-export default compose(withPermissions([PERMISSION.SUPER_ADMIN, PERMISSION.ADMIN, PERMISSION.CUSTOMER_BROWSING, PERMISSION.PARTNER]))(CustomerPage)
+export default compose(withPermissions(permissions))(CustomerPage)

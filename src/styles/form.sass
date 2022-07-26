@@ -26,9 +26,8 @@
 // Label
 .ant-form-item-label,
 .ant-form-vertical .ant-form-item-label // this is for higher specificity so it can override the original style
-	margin-bottom: 4px
-	height: 14px
-	line-height: 100%
+	line-height: 1.5
+	padding-bottom: 0
 
 	label
 		color: $textColor-notino-black
@@ -66,3 +65,16 @@ label.ant-form-item-required::before
 			line-height: 100%
 			margin-top: 0.25rem
 			font-size: 12px
+
+.statuses-filter-select
+	.ant-select.ant-select-lg
+		.ant-select-selector
+			.ant-select-selection-placeholder
+				font-size: 14px
+			.ant-select-selection-item
+				display: flex
+				align-items: center
+
+.statuses-filter-all-col
+	min-width: 130px
+	margin-right: 2px

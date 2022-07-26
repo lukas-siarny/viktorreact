@@ -1,8 +1,7 @@
+import { get, map } from 'lodash'
+import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../../utils/enums'
 /* eslint-disable import/no-cycle */
-import { get, map, isEmpty } from 'lodash'
-
 import { IResetStore } from '../generalTypes'
-
 import { ThunkResult } from '../index'
 
 // types
@@ -11,8 +10,8 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { ENUMERATIONS_KEYS, getTranslatedCountriesLabels } from '../../utils/enums'
 import { Paths } from '../../types/api'
+import i18n from '../../utils/i18n'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 
@@ -25,6 +24,8 @@ interface IGetEnumerationsActions {
 export interface IEnumerationOptions {
 	key: string | number
 	label: string
+	value: string | number
+	flag?: string
 }
 
 export interface IEnumerationsPayload {
@@ -53,24 +54,21 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			...item
 		}))
 
-		const enumerationsPhonePrefixOptions: ISelectOptionItem[] = map(data, (item) => ({
+		const enumerationsPhonePrefixOptions: IEnumerationOptions[] = map(data, (item) => ({
 			key: item.code,
 			label: item.phonePrefix,
 			value: item.code,
 			flag: item.flag
 		}))
 
-		const countriesLabels = getTranslatedCountriesLabels()
-		// prepare countries list with translated label
+		const currentLng = i18n.language || DEFAULT_LANGUAGE
+
 		const enumerationsCountriesOptions: ISelectOptionItem[] = map(data, (item) => {
-			const countryLabel: string | null = countriesLabels?.[item.code]
-			if (isEmpty(countryLabel)) {
-				// eslint-disable-next-line no-console
-				console.error(`Missing translation for country with code ${item.code}!`)
-			}
+			const countryTranslation = item.nameLocalizations.find((translation: any) => translation.language === currentLng)
+
 			return {
 				key: item.code,
-				label: countryLabel || item.code,
+				label: countryTranslation?.value || item.code,
 				value: item.code,
 				flag: item.flag
 			}
@@ -87,6 +85,7 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			enumerationsOptions: enumerationsCountriesOptions,
 			pagination: get(response, 'data.pagination')
 		}
+
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX, payload: { ...countriesPhonePrefixPayload } })
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.COUNTRIES, payload: { ...countriesPayload } })
 	} catch (e) {
@@ -94,4 +93,31 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.COUNTRIES })
 	}
 	return { countriesPayload, countriesPhonePrefixPayload }
+}
+
+export const getCurrencies = (): ThunkResult<Promise<IEnumerationsPayload>> => async (dispatch) => {
+	let payload: IEnumerationsPayload = {} as IEnumerationsPayload
+
+	try {
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.CURRENCIES })
+		const response = await getReq('/api/b2b/admin/enums/currencies', undefined, undefined, undefined, undefined, true)
+
+		const data: any[] = map(get(response, 'data.currencies', []), (item, index) => ({
+			key: index + 1,
+			...item
+		}))
+
+		payload = {
+			data,
+			pagination: get(response, 'data.pagination'),
+			enumerationsOptions: []
+		}
+
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.CURRENCIES, payload: { ...payload } })
+	} catch (error) {
+		// eslint-disable-next-line no-console
+		console.error(error)
+		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.CURRENCIES })
+	}
+	return payload
 }

@@ -1,17 +1,10 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
-import en_GB from 'antd/lib/locale-provider/en_GB'
-import sk_SK from 'antd/lib/locale-provider/sk_SK'
-import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
-
-import { ReactComponent as SK_Flag } from '../assets/flags/SK.svg'
-import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
-import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICountryLabel } from '../types/interfaces'
+import { ICurrency } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -24,32 +17,25 @@ export enum NAMESPACE {
 
 export enum LANGUAGE {
 	SK = 'sk',
-	CZ = 'cz',
-	EN = 'en'
+	CZ = 'cs',
+	EN = 'en',
+	HU = 'hu',
+	RO = 'ro',
+	BG = 'bg',
+	IT = 'it'
 }
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
-export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hurs
+export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
-export const DEFAULT_LANGUAGE = LANGUAGE.SK
+export const DEFAULT_LANGUAGE = LANGUAGE.EN
 
-export const LOCALES = {
-	[LANGUAGE.SK]: {
-		ISO_639: 'sk',
-		antD: sk_SK,
-		icon: SK_Flag
-	},
-	[LANGUAGE.CZ]: {
-		ISO_639: 'cs',
-		antD: cs_CZ,
-		icon: CZ_Flag
-	},
-	[LANGUAGE.EN]: {
-		ISO_639: 'en',
-		antD: en_GB,
-		icon: EN_Flag
-	}
+export const DEFAULT_PHONE_PREFIX = 'CZ'
+
+export const DEFAULT_CURRENCY: ICurrency = {
+	code: 'EUR',
+	symbol: '€'
 }
 
 export enum NOTIFICATION_TYPE {
@@ -67,6 +53,13 @@ export enum MSG_TYPE {
 export enum FIELD_MODE {
 	INPUT = 'INPUT',
 	FILTER = 'FILTER'
+}
+
+export enum FILTER_ENTITY {
+	EMPLOYEE = 'EMPLOYEE',
+	SALON = 'SALON',
+	SERVICE = 'SERVICE',
+	USER = 'USER'
 }
 
 export enum TABS_TYPE {
@@ -98,6 +91,8 @@ export enum FORM {
 	SALON = 'SALON',
 	LOGIN = 'LOGIN',
 	CATEGORY = 'CATEGORY',
+	COSMETIC = 'COSMETIC',
+	COSMETICS_FILTER = 'COSMETICS_FILTER',
 	SALONS_FILTER = 'SALONS_FILTER',
 	ACTIVATION = 'ACTIVATION',
 	FORGOT_PASSWORD = 'FORGOT_PASSWORD',
@@ -114,26 +109,46 @@ export enum FORM {
 	CUSTOMERS_FILTER = 'CUSTOMERS_FILTER',
 	SERVICES_FILTER = 'SERVICES_FILTER',
 	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE',
-	EMPLOYEE = 'EMPLOYEE'
+	EMPLOYEE = 'EMPLOYEE',
+	INVITE_EMPLOYEE = 'INVITE_EMPLOYEE',
+	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
+	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
+	NOTE = 'NOTE',
+	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
+	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM'
 }
 
+// System permissions
 export enum PERMISSION {
-	SUPER_ADMIN = 'SUPER_ADMIN',
-	ADMIN = 'ADMIN',
+	NOTINO_SUPER_ADMIN = 'NOTINO_SUPER_ADMIN',
+	NOTINO_ADMIN = 'NOTINO_ADMIN',
 	PARTNER = 'PARTNER',
 	USER_CREATE = 'USER_CREATE',
 	USER_BROWSING = 'USER_BROWSING',
 	USER_EDIT = 'USER_EDIT',
 	USER_DELETE = 'USER_DELETE',
-	ENUM_BROWSING = 'ENUM_BROWSING',
-	ENUM_EDIT = 'ENUM_EDIT',
-	SALON_BROWSING = 'SALON_BROWSING',
-	SALON_EDIT = 'SALON_EDIT',
-	CUSTOMER_BROWSING = 'CUSTOMER_BROWSING',
-	CUSTOMER_EDIT = 'CUSTOMER_EDIT',
-	EMPLOYEE_BROWSING = 'EMPLOYEE_BROWSING',
-	EMPLOYEE_EDIT = 'EMPLOYEE_EDIT'
+	ENUM_EDIT = 'ENUM_EDIT'
 }
+
+// Salon's permissions
+export enum SALON_PERMISSION {
+	PARTNER_ADMIN = 'PARTNER_ADMIN',
+	SALON_UPDATE = 'SALON_UPDATE',
+	SALON_DELETE = 'SALON_DELETE',
+	SALON_BILLING_UPDATE = 'SALON_BILLING_UPDATE',
+	SERVICE_CREATE = 'SERVICE_CREATE',
+	SERVICE_UPDATE = 'SERVICE_UDPATE',
+	SERVICE_DELETE = 'SERVICE_DELETE',
+	CUSTOMER_CREATE = 'CUSTOMER_CREATE',
+	CUSTOMER_UPDATE = 'CUSTOMER_UPDATE',
+	CUSTOMER_DELETE = 'CUSTOMER_DELETE',
+	EMPLOYEE_CREATE = 'EMPLOYEE_CREATE',
+	EMPLOYEE_UPDATE = 'EMPLOYEE_UPDATE',
+	EMPLOYEE_DELETE = 'EMPLOYEE_DELETE',
+	USER_ROLE_EDIT = 'USER_ROLE_EDIT'
+}
+
+export const ADMIN_PERMISSIONS: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
 export enum RESOLUTIONS {
 	SM = 'SM',
@@ -171,7 +186,10 @@ export enum PAGE {
 	HOME = 'HOME',
 	MY_ACCOUNT = 'MY_ACCOUNT',
 	ACTIVATION = 'ACTIVATION',
-	EMPLOYEES = 'EMPLOYEES'
+	EMPLOYEES = 'EMPLOYEES',
+	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
+	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
+	COSMETICS = 'COSMETICS'
 }
 
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
@@ -194,11 +212,12 @@ export const BACK_DATA_QUERY = 'backData'
 
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
-	COUNTRIES = 'countries'
+	COUNTRIES = 'countries',
+	CURRENCIES = 'currencies'
 }
 
-export const GOOGLE_MAPS_API_KEY = 'AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw'
-export const GOOGLE_MAP_URL = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDg42FXI6ehKk2h9R9I01TRjcwaY-Bcvuw&libraries=places&language=sk'
+export const GOOGLE_MAPS_API_KEY = 'AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw'
+export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=sk`
 
 export enum ENUMERATIONS_PATHS {
 	COUNTRIES = 'countries'
@@ -265,12 +284,28 @@ export const MAP = {
 	maxZoom: 20
 }
 
-export enum SALON_STATUSES {
+export enum SALON_FILTER_STATES {
 	PUBLISHED = 'PUBLISHED',
-	VISIBLE = 'VISIBLE',
+	NOT_PUBLISHED = 'NOT_PUBLISHED',
 	DELETED = 'DELETED',
 	NOT_DELETED = 'NOT_DELETED',
+	PENDING_PUBLICATION = 'PENDING_PUBLICATION',
+	DECLINED = 'DECLINED',
 	ALL = 'ALL'
+}
+
+export enum SALON_STATES {
+	NOT_PUBLISHED = 'NOT_PUBLISHED',
+	PUBLISHED = 'PUBLISHED',
+	NOT_PUBLISHED_PENDING = 'NOT_PUBLISHED_PENDING',
+	PUBLISHED_PENDING = 'PUBLISHED_PENDING',
+	NOT_PUBLISHED_DECLINED = 'NOT_PUBLISHED_DECLINED',
+	PUBLISHED_DECLINED = 'PUBLISHED_DECLINED'
+}
+
+export enum SALON_CREATE_TYPES {
+	BASIC = 'BASIC',
+	NON_BASIC = 'NON_BASIC'
 }
 
 export enum PAGE_VIEW {
@@ -330,6 +365,7 @@ export enum UPLOAD_ERROR_TYPE {
 	INVALID_TYPE = 'INVALID_TYPE'
 }
 
+// NOTE: do not change days order!
 export enum DAY {
 	MONDAY = 'MONDAY',
 	TUESDAY = 'TUESDAY',
@@ -354,15 +390,9 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_100 = 100,
 	LENGTH_60 = 60,
 	LENGTH_50 = 50,
+	LENGTH_30 = 30,
 	LENGTH_20 = 20,
 	LENGTH_10 = 10
-}
-
-export const getTranslatedCountriesLabels = (): ICountryLabel => {
-	return {
-		SK: `${i18next.t('loc:Slovenská republika')}`,
-		CZ: `${i18next.t('loc:Česká republika')}`
-	} as ICountryLabel
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
@@ -381,10 +411,19 @@ export enum UPLOAD_IMG_CATEGORIES {
 	SALON_PRICELIST = 'SALON_PRICELIST',
 	EMPLOYEE = 'EMPLOYEE_IMAGE',
 	USER = 'USER_IMAGE',
-	CATEGORY = 'CATEGORY_IMAGE'
+	CATEGORY = 'CATEGORY_IMAGE',
+	COSMETIC = 'COSMETIC_IMAGE'
 }
 
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
 export const PUBLICATION_STATUSES = Object.keys(PUBLICATION_STATUS)
 export const GENDERS = Object.keys(GENDER) as GENDER[]
 export const DAYS = Object.keys(DAY) as DAY[]
+
+export enum ACCOUNT_STATE {
+	UNPAIRED = 'UNPAIRED',
+	PENDING = 'PENDING',
+	PAIRED = 'PAIRED'
+}
+
+export const IMAGE_UPLOADING_PROP = 'imageUploading'

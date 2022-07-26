@@ -3,10 +3,15 @@ import { RESET_STORE } from '../generalTypes'
 import { IRolesActions, IRolesPayload } from './rolesActions'
 // eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { ROLES } from './rolesTypes'
+import { SYSTEM_ROLES, SALON_ROLES } from './rolesTypes'
 
 export const initState = {
-	roles: {
+	systemRoles: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IRolesPayload & ILoadingAndFailure,
+	salonRoles: {
 		data: null,
 		isLoading: false,
 		isFailure: false
@@ -16,28 +21,53 @@ export const initState = {
 // eslint-disable-next-line default-param-last
 export default (state = initState, action: IRolesActions) => {
 	switch (action.type) {
-		// Roles
-		case ROLES.ROLES_LOAD_START:
+		// System roles
+		case SYSTEM_ROLES.SYSTEM_ROLES_LOAD_START:
 			return {
 				...state,
-				roles: {
-					...state.roles,
+				systemRoles: {
+					...state.systemRoles,
 					isLoading: true
 				}
 			}
-		case ROLES.ROLES_LOAD_FAIL:
+		case SYSTEM_ROLES.SYSTEM_ROLES_LOAD_FAIL:
 			return {
 				...state,
-				roles: {
-					...initState.roles,
+				systemRoles: {
+					...initState.systemRoles,
 					isFailure: true
 				}
 			}
-		case ROLES.ROLES_LOAD_DONE:
+		case SYSTEM_ROLES.SYSTEM_ROLES_LOAD_DONE:
 			return {
 				...state,
-				roles: {
-					...initState.roles,
+				systemRoles: {
+					...initState.systemRoles,
+					data: action.payload.data
+				}
+			}
+		// Salon roles
+		case SALON_ROLES.SALON_ROLES_LOAD_START:
+			return {
+				...state,
+				salonRoles: {
+					...state.salonRoles,
+					isLoading: true
+				}
+			}
+		case SALON_ROLES.SALON_ROLES_LOAD_FAIL:
+			return {
+				...state,
+				salonRoles: {
+					...initState.salonRoles,
+					isFailure: true
+				}
+			}
+		case SALON_ROLES.SALON_ROLES_LOAD_DONE:
+			return {
+				...state,
+				salonRoles: {
+					...initState.salonRoles,
 					data: action.payload.data
 				}
 			}

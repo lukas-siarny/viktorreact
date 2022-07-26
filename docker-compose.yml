@@ -3,8 +3,8 @@ version: '3.8'
 services:
   database_test:
     build:
-      context: ../notino_backend/.
-      dockerfile: ../notino_backend/docker/local/postgres/Dockerfile
+      context: ./notino_backend/.
+      dockerfile: ./notino_backend/docker/local/postgres/Dockerfile
     ports:
       - "25432:5432"
     environment:
@@ -27,11 +27,11 @@ services:
       - SERVICES=s3
     volumes:
     # after init container create bucket
-      - '../notino_backend/docker/CI/localstack:/docker-entrypoint-initaws.d'
+      - './notino_backend/docker/CI/localstack:/docker-entrypoint-initaws.d'
   backend:
     build:
-        context: ../notino_backend/.
-        dockerfile: ../notino_backend/docker/CI/Dockerfile.api
+        context: ./notino_backend/.
+        dockerfile: ./notino_backend/docker/CI/Dockerfile.api
     ports:
       - "3000:3000"
     environment:

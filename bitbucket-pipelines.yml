@@ -1,4 +1,6 @@
 image: node:16.14.0
+clone:
+  depth: full
 options:
   docker: true
   max-time: 20

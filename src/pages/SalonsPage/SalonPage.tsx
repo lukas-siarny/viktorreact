@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
@@ -682,13 +682,48 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			</Permissions>
 		)
 
-	// TODO: declined salon
-	const getInfoMessage = useCallback(() => {
+	const infoMessage = useMemo(() => {
 		if (!salonID || deletedSalon) {
 			return null
 		}
 
-		const declinedSalonAlert = declinedSalon ? (
+		if (!isFormPristine && !pendingPublication) {
+			return (
+				<Alert
+					message={t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')}
+					showIcon
+					type={'warning'}
+					className={'noti-alert mb-4'}
+				/>
+			)
+		}
+
+		if (!isPublishedVersionSameAsDraft?.isEqual && !pendingPublication) {
+			return (
+				<Alert
+					message={t('loc:V sálone sú vykonané zmeny, ktoré je pred publikovaním potrebné schváliť administrátorom.')}
+					showIcon
+					type={'warning'}
+					className={'noti-alert mb-4'}
+				/>
+			)
+		}
+		if (pendingPublication) {
+			return (
+				<Alert
+					message={t('loc:Salón čaká na schválenie zmien. Údaje, ktoré podliehajú schvaľovaniu, po túto dobu nie je možné editovať.')}
+					showIcon
+					type={'warning'}
+					className={'noti-alert mb-4'}
+				/>
+			)
+		}
+
+		return null
+	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t])
+
+	const declinedSalonMessage = useMemo(
+		() => (
 			<Alert
 				message={
 					<>
@@ -702,67 +737,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				type={'error'}
 				className={'noti-alert mb-4'}
 			/>
-		) : null
-
-		let alert = null
-
-		if (!isFormPristine && !pendingPublication) {
-			alert = (
-				<Alert
-					message={t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')}
-					showIcon
-					type={'warning'}
-					className={'noti-alert mb-4'}
-				/>
-			)
-		}
-
-		if (declinedSalon) {
-			alert = (
-				<Alert
-					message={
-						<>
-							<strong className={'block'}>{`${t('loc:Zmeny v salóne boli zamietnuté z dôvodu')}:`}</strong>
-							<p className={'whitespace-pre-wrap m-0'}>
-								{salon?.data?.publicationDeclineReason ? `"${salon?.data?.publicationDeclineReason}"` : t('loc:Bez udania dôvodu.')}
-							</p>
-						</>
-					}
-					showIcon
-					type={'error'}
-					className={'noti-alert mb-4'}
-				/>
-			)
-		}
-
-		if (!isPublishedVersionSameAsDraft?.isEqual && !pendingPublication) {
-			alert = (
-				<Alert
-					message={t('loc:V sálone sú vykonané zmeny, ktoré je pred publikovaním potrebné schváliť administrátorom.')}
-					showIcon
-					type={'warning'}
-					className={'noti-alert mb-4'}
-				/>
-			)
-		}
-		if (pendingPublication) {
-			alert = (
-				<Alert
-					message={t('loc:Salón čaká na schválenie zmien. Údaje, ktoré podliehajú schvaľovaniu, po túto dobu nie je možné editovať.')}
-					showIcon
-					type={'warning'}
-					className={'noti-alert mb-4'}
-				/>
-			)
-		}
-
-		return (
-			<>
-				{declinedSalonAlert}
-				{alert}
-			</>
-		)
-	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t, declinedSalon, salon?.data?.publicationDeclineReason])
+		),
+		[t, salon?.data?.publicationDeclineReason]
+	)
 
 	return (
 		<>
@@ -772,7 +749,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			<Spin spinning={isLoading}>
 				<div className='content-body mt-2'>
 					{renderContentHeader()}
-					{getInfoMessage()}
+					{declinedSalon && declinedSalonMessage}
+					{infoMessage}
 					<SalonForm
 						onSubmit={handleSubmit}
 						openNoteModal={() => setVisible(true)}

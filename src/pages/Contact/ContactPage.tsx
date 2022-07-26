@@ -19,6 +19,8 @@ import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
 import { LOCALES } from '../../components/LanguagePicker'
 
+const NOTE_MAX_LENGTH = 150
+
 type Props = {}
 
 const { Option } = Select
@@ -173,9 +175,9 @@ const ContactPage: FC<Props> = () => {
 												{selectedContact?.note && (
 													<li className={'note-list-item'}>
 														<p className={'m-0 whitespace-pre-wrap'}>
-															{selectedContact?.note.length > 150 ? (
+															{selectedContact?.note.length > NOTE_MAX_LENGTH ? (
 																<>
-																	{`${selectedContact?.note.slice(0, 150)}…`}
+																	{`${selectedContact?.note.slice(0, NOTE_MAX_LENGTH)}…`}
 																	<Popover
 																		overlayClassName={'max-w-xs md:max-w-md'}
 																		content={<p className={'whitespace-pre-wrap m-0'}>{selectedContact?.note}</p>}

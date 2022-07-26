@@ -44,6 +44,7 @@ services:
       - AWS_S3_SECRET_KEY=test
       - AWS_KEYPAIR_ID=test
       - PORT=3000
+      - NODE_ENV=development
       - AWS_S3_PUBLIC_URL=http://sample-bucket.s3.eu-cental-1.localstack:4566
       - AWS_S3_ENDPOINT=http://s3.eu-cental-1.localstack:4566
     depends_on:

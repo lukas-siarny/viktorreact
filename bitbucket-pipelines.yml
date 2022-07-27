@@ -177,4 +177,4 @@ definitions:
     frontend: $BITBUCKET_CLONE_DIR/node_modules
   services:
     docker:
-      memory: 512
+      memory: 4092

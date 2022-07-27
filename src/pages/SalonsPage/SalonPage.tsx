@@ -49,10 +49,12 @@ const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalonPayloa
 	const isAddressEqual = isEqual(salonData?.data?.address || null, salonData?.data?.publishedSalonData?.address || null)
 	const isAboutUsFirstEqual = (salonData?.data?.aboutUsFirst || null) === (salonData?.data?.publishedSalonData?.aboutUsFirst || null)
 	const isAboutUsSecondEqual = (salonData?.data?.aboutUsSecond || null) === (salonData?.data?.publishedSalonData?.aboutUsSecond || null)
-	const isPhoneEqual =
+	// TODO edit when BE is done - issue NOT-1451
+	/* const isPhoneEqual =
 		(salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null) &&
-		(salonData?.data?.phonePrefixCountryCode || null) === (salonData?.data?.publishedSalonData?.phonePrefixCountryCode || null)
+		(salonData?.data?.phonePrefixCountryCode || null) === (salonData?.data?.publishedSalonData?.phonePrefixCountryCode || null) */
 	const isEmailEqual = (salonData?.data?.email || null) === (salonData?.data?.publishedSalonData?.email || null)
+	const isPhoneEqual = (salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null)
 
 	return isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual
 }
@@ -85,9 +87,11 @@ const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPublishedV
 	const isAddressNoteEqual = (formValues?.description || null) === (formValues?.publishedSalonData?.address?.description || null)
 	const isAboutUsFirstEqual = (formValues?.aboutUsFirst || null) === (formValues?.publishedSalonData?.aboutUsFirst || null)
 	const isAboutUsSecondEqual = (formValues?.aboutUsSecond || null) === (formValues?.publishedSalonData?.aboutUsSecond || null)
-	const isPhoneEqual =
+	// TODO edit when BE is done - issue NOT-1451
+	/* const isPhoneEqual =
 		(formValues?.phone || null) === (formValues?.publishedSalonData?.phone || null) &&
-		(formValues?.phonePrefixCountryCode || null) === (formValues?.publishedSalonData?.phonePrefixCountryCode || null)
+		(formValues?.phonePrefixCountryCode || null) === (formValues?.publishedSalonData?.phonePrefixCountryCode || null) */
+	const isPhoneEqual = (formValues?.phone || null) === (formValues?.publishedSalonData?.phone || null)
 	const isEmailEqual = (formValues?.email || null) === (formValues?.publishedSalonData?.email || null)
 
 	return {
@@ -216,8 +220,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			const openOverWeekend: boolean = checkWeekend(salonData?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData?.openingHours)
 			const openingHours: OpeningHours = initOpeningHours(salonData?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
-			// je potrebne dat pozor, aby isPristine fungovalo spravne, aby uzivatelia nemuseli zbytocne ukladat formular ak realne ziadne zmeny nevykonali
-			// napr. ak pride z BE aboutUsFirst: undefined, potom nejak prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
+			// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
+			// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
+			// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
 			let initialData: any = {
 				...salonData,
 				aboutUsFirst: salonData?.aboutUsFirst || null,
@@ -683,44 +688,36 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		)
 
 	const infoMessage = useMemo(() => {
-		if (!salonID || deletedSalon) {
-			return null
+		let message: string | null
+
+		// order of cases is important to show correct message
+		switch (true) {
+			case !salonID:
+			case deletedSalon:
+				message = null
+				break
+			case !isFormPristine && !pendingPublication:
+				message = t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')
+				break
+			case salon.data?.state === SALON_STATES.NOT_PUBLISHED || salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED:
+				message = t('loc:Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.')
+				break
+			case !isPublishedVersionSameAsDraft?.isEqual && !pendingPublication:
+				message = t('loc:V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.')
+				break
+			case pendingPublication:
+				message = t('loc:Salón čaká na schválenie zmien. Údaje, ktoré podliehajú schvaľovaniu, po túto dobu nie je možné editovať.')
+				break
+			default:
+				message = null
 		}
 
-		if (!isFormPristine && !pendingPublication) {
-			return (
-				<Alert
-					message={t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')}
-					showIcon
-					type={'warning'}
-					className={'noti-alert mb-4'}
-				/>
-			)
-		}
-
-		if (!isPublishedVersionSameAsDraft?.isEqual && !pendingPublication) {
-			return (
-				<Alert
-					message={t('loc:V sálone sú vykonané zmeny, ktoré je pred publikovaním potrebné schváliť administrátorom.')}
-					showIcon
-					type={'warning'}
-					className={'noti-alert mb-4'}
-				/>
-			)
-		}
-		if (pendingPublication) {
-			return (
-				<Alert
-					message={t('loc:Salón čaká na schválenie zmien. Údaje, ktoré podliehajú schvaľovaniu, po túto dobu nie je možné editovať.')}
-					showIcon
-					type={'warning'}
-					className={'noti-alert mb-4'}
-				/>
-			)
+		if (message) {
+			return <Alert message={message} showIcon type={'warning'} className={'noti-alert mb-4'} />
 		}
 
 		return null
-	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t])
+	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t, salon.data?.state])
 
 	const declinedSalonMessage = useMemo(
 		() => (

@@ -3,6 +3,35 @@ import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
 import { persistStore } from 'redux-persist'
 
+import i18next from 'i18next'
+import { IMAGE_UPLOADING_PROP, MSG_TYPE, NOTIFICATION_TYPE } from './enums'
+// eslint-disable-next-line import/no-cycle
+import showNotifications from './tsxHelpers'
+
+/**
+ * OnSubmit validate if IMAGE_UPLOADING_PROP is true -> indicates uploading
+ * During upload will be submit action denied
+ * IMAGE_UPLOADING_PROP must be set outside e.g. ImgUploadField
+ */
+const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: any) => {
+	if (action.type === '@@redux-form/SUBMIT') {
+		const { form } = store.getState()
+		const submittedForm = form[action.meta.form]
+
+		if (submittedForm) {
+			const { values } = submittedForm
+
+			if (values && values[IMAGE_UPLOADING_PROP]) {
+				const error = i18next.t('loc:Prebieha nahrávanie')
+				showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
+				next(null)
+			}
+		}
+	}
+
+	next(action)
+}
+
 const loggerFilter = (getState: any, action: any) => {
 	if (action.type.startsWith('persist')) {
 		return false
@@ -16,6 +45,7 @@ const loggerFilter = (getState: any, action: any) => {
 const configureStoreProd = (rootReducer: Reducer) => {
 	const middlewares = [
 		// Add other middleware on this line...
+		preventSubmitFormDuringUpload,
 		thunk
 	]
 
@@ -31,7 +61,7 @@ const configureStoreDev = (rootReducer: Reducer) => {
 		predicate: loggerFilter
 	})
 
-	const middlewares = [thunk, logger]
+	const middlewares = [thunk, logger, preventSubmitFormDuringUpload]
 	// eslint-disable-next-line no-underscore-dangle
 	const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose // add support for Redux dev tools
 	const store = createStore(rootReducer, composeEnhancers(applyMiddleware(...middlewares)))

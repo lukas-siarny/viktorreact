@@ -14,7 +14,7 @@ import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
 
 // utils
-import { uploadFile, postReq } from '../utils/request'
+import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
 import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
@@ -34,8 +34,6 @@ type Props = WrappedFieldProps &
 		className?: CSSProperties
 		uploaderClassName?: string
 	}
-
-// export type ImgUploadParam = { [key: string]: { uid: string } }
 
 /**
  * Umoznuje nahrat obrazky na podpisanu url
@@ -70,19 +68,18 @@ const ImgUploadField: FC<Props> = (props) => {
 			const values = info.fileList
 			values.pop()
 			input.onChange(values)
+
 			// uploading process finished
 			dispatch(change(form, IMAGE_UPLOADING_PROP, false))
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = getImagesFormValues(info.fileList, imagesUrls.current)
 			input.onChange(values)
+
 			// uploading process finished
 			dispatch(change(form, IMAGE_UPLOADING_PROP, false))
 		}
 		if (info.file.status === 'uploading') {
-			// uploading process started
-			dispatch(change(form, IMAGE_UPLOADING_PROP, true))
-
 			input.onChange(info.fileList)
 		}
 		if (isEmpty(info.fileList)) {
@@ -98,28 +95,19 @@ const ImgUploadField: FC<Props> = (props) => {
 		[staticMode]
 	)
 
-	const handleAction = async (file: any) => {
-		const { uid, name, size, type } = file
-		const files = [{ name, size, mimeType: type }]
-
-		const { data } = await postReq(signUrl as any, undefined, { files, category })
-		const imgData = data?.files?.[0]
-		imagesUrls.current[uid] = { uid, ...imgData }
-
-		return imgData.signedUrl
-	}
-
 	const uploader = (
 		<Upload
 			id={formFieldID(form, input.name)}
 			className={cx(uploaderClassName, '-mb-2')}
 			accept={accept}
-			action={handleAction}
 			disabled={disabled}
 			onChange={onChange}
 			listType='picture-card'
 			multiple={multiple}
-			customRequest={uploadFile}
+			customRequest={(options: any) => {
+				dispatch(change(form, IMAGE_UPLOADING_PROP, true))
+				uploadImage(options, signUrl, category, imagesUrls)
+			}}
 			fileList={input.value || []}
 			onPreview={(file) => setPreviewUrl(file.url || get(imagesUrls, `current.[${file.uid}].url`))}
 			maxCount={maxCount}

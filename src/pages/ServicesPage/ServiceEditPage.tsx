@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { forEach, map } from 'lodash'
+import { forEach } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { change, initialize } from 'redux-form'
 import { Action, compose, Dispatch } from 'redux'

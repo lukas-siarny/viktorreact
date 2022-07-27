@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { get, map } from 'lodash'
+import { get } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 

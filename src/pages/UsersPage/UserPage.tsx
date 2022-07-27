@@ -48,7 +48,7 @@ const UserPage: FC<Props> = (props) => {
 
 	const isFormPristine = useSelector(isPristine(FORM.USER_ACCOUNT))
 
-	const isMyAccountPage: boolean = authUser.data?.id === get(userAccountDetail, 'data.id')
+	const isMyAccountPage: boolean = authUser.data?.id === get(userAccountDetail, 'data.user.id')
 
 	const isLoading = userAccountDetail.isLoading || isRemoving
 
@@ -160,6 +160,7 @@ const UserPage: FC<Props> = (props) => {
 								entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								ignorePermissions={isMyAccountPage}
 							/>
 							<Permissions
 								allowed={submitPermissions}

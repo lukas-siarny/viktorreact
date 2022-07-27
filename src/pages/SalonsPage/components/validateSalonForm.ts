@@ -116,7 +116,9 @@ export default (values: any) => {
 		})
 	}
 
-	errors.companyContactPerson = contactPersonErrors
+	if (!isEmpty(contactPersonErrors)) {
+		errors.companyContactPerson = contactPersonErrors
+	}
 
 	const companyInfo = values?.companyInfo
 
@@ -147,7 +149,9 @@ export default (values: any) => {
 			})
 		}
 
-		errors.companyInfo = companyErrors
+		if (!isEmpty(companyErrors)) {
+			errors.companyInfo = companyErrors
+		}
 	}
 
 	return errors

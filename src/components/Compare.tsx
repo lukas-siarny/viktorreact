@@ -10,22 +10,25 @@ type Props = {
 	oldFormField?: any
 	equal?: boolean
 	ellipsis?: boolean
+	disableComparsion?: boolean
 }
 
 const Compare = (props: Props) => {
-	const { newValue, oldValue, newFormField, oldFormField, equal, ellipsis = false } = props
+	const { newValue, oldValue, newFormField, oldFormField, equal, ellipsis = false, disableComparsion = false } = props
 	const isSame = equal ?? oldValue === newValue
 
-	return (
+	return disableComparsion ? (
+		newFormField
+	) : (
 		<div className={'mb-2'}>
 			<div className={'flex items-center'}>
-				{!isSame && oldValue && (
+				{!isSame && (
 					<Typography.Text ellipsis={ellipsis} className={cx('rounded bg-gray-50 p-2 w-full h-full text-gray-900')}>
 						{oldFormField}
 					</Typography.Text>
 				)}
-				{!isSame && oldValue && <StepArrow className={'text-notino-black w-24'} />}
-				<Typography.Text ellipsis={ellipsis} className={cx('rounded w-full', { 'bg-emerald-100 p-2': !isSame && oldValue })}>
+				{!isSame && <StepArrow className={'text-notino-black w-24'} />}
+				<Typography.Text ellipsis={ellipsis} className={cx('rounded w-full', { 'bg-emerald-100 p-2': !isSame })}>
 					{newFormField}
 				</Typography.Text>
 			</div>

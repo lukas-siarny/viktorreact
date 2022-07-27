@@ -32,7 +32,7 @@ const CreatePasswordForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, showForgottenPasswordModal } = props
 
 	return (
-		<Form layout={'vertical'} className={'form h-full flex flex-col'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form h-full flex flex-col w-full'} onSubmitCapture={handleSubmit}>
 			<h3 className='mb-4'>{t('loc:Nastavenie hesla')}</h3>
 			<Field
 				component={InputPasswordField}

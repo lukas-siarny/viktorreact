@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
+import { Alert, Button, Modal, Row, Spin, Tooltip, notification } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
-import { get, isEmpty, isEqual, map, unionBy } from 'lodash'
+import { get, isEmpty, map, unionBy, isEqual } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -40,6 +40,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+import validateSalonFormForPublication from './components/validateSalonFormForPublication'
 
 const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalonPayload) => {
 	// compare all fields that needs to be approved
@@ -427,6 +428,19 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const sendConfirmationRequest = async () => {
 		if (isSendingConfRequest) {
+			return
+		}
+
+		const errors = validateSalonFormForPublication(formValues as ISalonForm)
+		if (!isEmpty(errors)) {
+			notification.error({
+				message: t('loc:Chybne vyplnený formulár'),
+				description: (
+					<>
+						{t(`loc:Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje`)}: {errors.join(', ')}
+					</>
+				)
+			})
 			return
 		}
 

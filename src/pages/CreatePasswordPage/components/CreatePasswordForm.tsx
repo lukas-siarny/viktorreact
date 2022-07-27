@@ -54,7 +54,13 @@ const CreatePasswordForm: FC<Props> = (props) => {
 				required
 			/>
 			<Row justify={'end'} className=''>
-				<Button className={'p-0 font-medium h-4'} onClick={showForgottenPasswordModal} type={'link'} htmlType={'button'}>
+				<Button
+					className={'p-0 font-medium h-auto whitespace-normal max-w-full'}
+					style={{ minHeight: 16 }}
+					type={'link'}
+					htmlType={'button'}
+					onClick={showForgottenPasswordModal}
+				>
 					{t('loc:Vyžiadať nový odkaz pre nastavenie hesla')}
 				</Button>
 			</Row>

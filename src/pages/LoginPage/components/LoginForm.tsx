@@ -36,7 +36,13 @@ const LoginForm: FC<Props> = (props) => {
 				<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} required />
 			</Space>
 			<Row justify={'end'}>
-				<Button className={'p-0 font-medium h-auto'} style={{ minHeight: 16, maxWidth: '100%' }} onClick={showForgottenPasswordModal} type={'link'} htmlType={'button'}>
+				<Button
+					className={'p-0 font-medium h-auto whitespace-normal max-w-full'}
+					style={{ minHeight: 16 }}
+					onClick={showForgottenPasswordModal}
+					type={'link'}
+					htmlType={'button'}
+				>
 					{t('loc:Zabudnuté heslo')}
 				</Button>
 			</Row>

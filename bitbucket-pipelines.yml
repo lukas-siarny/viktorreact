@@ -164,6 +164,8 @@ pipelines:
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
               - docker-compose up -d
+              - sleep 10
+              - curl http://localhost:80
               - npm run test:CI
 
 definitions:
@@ -172,4 +174,4 @@ definitions:
     frontend: $BITBUCKET_CLONE_DIR/node_modules
   services:
     docker:
-      memory: 512
+      memory: 4092

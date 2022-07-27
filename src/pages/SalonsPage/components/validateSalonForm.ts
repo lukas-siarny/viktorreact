@@ -37,6 +37,12 @@ export default (values: any) => {
 		errors.phone = i18next.t('loc:Toto pole je povinné')
 	}
 
+	if (values?.phone && values.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_20
+		})
+	}
+
 	if (!values?.email) {
 		errors.email = i18next.t('loc:Toto pole je povinné')
 	}

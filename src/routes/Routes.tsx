@@ -55,7 +55,7 @@ const Routes: FC = (props) => {
 		<AppInit>
 			<Switch>
 				<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} className={'noti-login-page'} />
-				<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} className={'noti-login-page'} />
+				<PublicRoute {...props} exact path={t('paths:signup')} component={/* RegistrationPage */ CreatePasswordPage} layout={PublicLayout} className={'noti-login-page'} />
 				<PublicRoute
 					{...props}
 					exact

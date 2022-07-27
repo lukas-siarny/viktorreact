@@ -30,13 +30,13 @@ const LoginForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, showForgottenPasswordModal } = props
 
 	return (
-		<Form layout={'vertical'} className={'form h-full'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form h-full w-full'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction={'vertical'} size={26}>
 				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
 				<Field component={InputPasswordField} label={t('loc:Heslo')} placeholder={t('loc:Zadajte heslo')} type={'password'} size={'large'} name={'password'} required />
 			</Space>
 			<Row justify={'end'}>
-				<Button className={'noti-btn text-notino-black font-medium pr-0'} onClick={showForgottenPasswordModal} type={'link'} htmlType={'button'}>
+				<Button className={'p-0 font-medium h-auto'} style={{ minHeight: 16, maxWidth: '100%' }} onClick={showForgottenPasswordModal} type={'link'} htmlType={'button'}>
 					{t('loc:Zabudnuté heslo')}
 				</Button>
 			</Row>

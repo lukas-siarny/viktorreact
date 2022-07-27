@@ -230,12 +230,10 @@ const SalonsPage = () => {
 		{
 			title: t('loc:Vyplnenie profilu'),
 			dataIndex: 'fillingProgressSalon',
-			key: 'fillingProgressSalon',
+			key: 'fillingProgress',
 			ellipsis: true,
-			sorter: false,
-			// NOTE: sort by fillingProgressSalon when BE is done
-			/* sorter: true,
-			sortOrder: setOrder(query.order, 'fillingProgressSalon'), */
+			sorter: true,
+			sortOrder: setOrder(query.order, 'fillingProgress'),
 			render: (value) => (
 				<Row className={'gap-2'} wrap={false}>
 					<span className={'w-9'}>{value ? `${value}%` : ''}</span>

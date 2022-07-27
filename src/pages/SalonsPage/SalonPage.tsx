@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Button, Modal, Row, Spin } from 'antd'
+import { Alert, Button, Modal, Row, Spin, Tooltip, notification } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
-import { get, isEmpty, map, unionBy } from 'lodash'
+import { get, isEmpty, map, unionBy, isEqual } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -21,11 +21,11 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERM
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
-import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { ISalonPayloadData, ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IIsPublishedVersionSameAsDraft, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -40,6 +40,75 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+import validateSalonFormForPublication from './components/validateSalonFormForPublication'
+
+const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalonPayload) => {
+	// compare all fields that needs to be approved
+	const isNameEqual = (salonData?.data?.name || null) === (salonData?.data?.publishedSalonData?.name || null)
+	const isLogoEqual = isEqual(salonData?.data?.logo || null, salonData?.data?.publishedSalonData?.logo || null)
+	const isGalleryEqual = isEqual(salonData?.data?.images || [], salonData?.data?.publishedSalonData?.images || [])
+	const isAddressEqual = isEqual(salonData?.data?.address || null, salonData?.data?.publishedSalonData?.address || null)
+	const isAboutUsFirstEqual = (salonData?.data?.aboutUsFirst || null) === (salonData?.data?.publishedSalonData?.aboutUsFirst || null)
+	const isAboutUsSecondEqual = (salonData?.data?.aboutUsSecond || null) === (salonData?.data?.publishedSalonData?.aboutUsSecond || null)
+	// TODO edit when BE is done - issue NOT-1451
+	/* const isPhoneEqual =
+		(salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null) &&
+		(salonData?.data?.phonePrefixCountryCode || null) === (salonData?.data?.publishedSalonData?.phonePrefixCountryCode || null) */
+	const isEmailEqual = (salonData?.data?.email || null) === (salonData?.data?.publishedSalonData?.email || null)
+	const isPhoneEqual = (salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null)
+
+	return isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual
+}
+
+const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPublishedVersionSameAsDraft => {
+	// compare all fields that needs to be approved
+	const addressPublished = {
+		countryCode: formValues?.publishedSalonData?.address?.countryCode || null,
+		zipCode: formValues?.publishedSalonData?.address?.zipCode || null,
+		city: formValues?.publishedSalonData?.address?.city || null,
+		street: formValues?.publishedSalonData?.address?.street || null,
+		streetNumber: formValues?.publishedSalonData?.address?.streetNumber || null,
+		latitude: formValues?.publishedSalonData?.address?.latitude ?? null,
+		longitude: formValues?.publishedSalonData?.address?.longitude ?? null
+	}
+	const addressDraft = {
+		countryCode: formValues?.country,
+		zipCode: formValues?.zipCode,
+		city: formValues?.city,
+		street: formValues?.street,
+		streetNumber: formValues?.streetNumber,
+		latitude: formValues?.latitude,
+		longitude: formValues?.longitude
+	}
+
+	const isNameEqual = (formValues?.name || null) === (formValues?.publishedSalonData?.name || null)
+	const isLogoEqual = isEqual(formValues?.logo || null, formValues?.publishedSalonData?.logo || null)
+	const isGalleryEqual = isEqual(formValues?.gallery || [], formValues?.publishedSalonData?.gallery || [])
+	const isAddressEqual = isEqual(addressDraft, addressPublished)
+	const isAddressNoteEqual = (formValues?.description || null) === (formValues?.publishedSalonData?.address?.description || null)
+	const isAboutUsFirstEqual = (formValues?.aboutUsFirst || null) === (formValues?.publishedSalonData?.aboutUsFirst || null)
+	const isAboutUsSecondEqual = (formValues?.aboutUsSecond || null) === (formValues?.publishedSalonData?.aboutUsSecond || null)
+	// TODO edit when BE is done - issue NOT-1451
+	/* const isPhoneEqual =
+		(formValues?.phone || null) === (formValues?.publishedSalonData?.phone || null) &&
+		(formValues?.phonePrefixCountryCode || null) === (formValues?.publishedSalonData?.phonePrefixCountryCode || null) */
+	const isPhoneEqual = (formValues?.phone || null) === (formValues?.publishedSalonData?.phone || null)
+	const isEmailEqual = (formValues?.email || null) === (formValues?.publishedSalonData?.email || null)
+
+	return {
+		isEqual:
+			isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAddressNoteEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual,
+		isNameEqual,
+		isLogoEqual,
+		isGalleryEqual,
+		isAddressEqual,
+		isAddressNoteEqual,
+		isAboutUsFirstEqual,
+		isAboutUsSecondEqual,
+		isPhoneEqual,
+		isEmailEqual
+	}
+}
 
 type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
@@ -73,10 +142,12 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
 	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
 	const pendingPublication = salon.data && pendingStates.includes(salon.data.state)
+	const isPublishedVersionSameAsDraft = getIsPublishedVersionSameAsDraft(formValues as ISalonForm)
 
 	// check permissions for submit in case of create or update salon
 	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
 	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
+	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
@@ -150,24 +221,42 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			const openOverWeekend: boolean = checkWeekend(salonData?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData?.openingHours)
 			const openingHours: OpeningHours = initOpeningHours(salonData?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+			// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
+			// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
+			// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
 			let initialData: any = {
 				...salonData,
+				aboutUsFirst: salonData?.aboutUsFirst || null,
+				aboutUsSecond: salonData?.aboutUsSecond || null,
 				openOverWeekend,
 				sameOpenHoursOverWeek,
 				openingHours,
-				note: salonData?.openingHoursNote?.note,
-				noteFrom: salonData?.openingHoursNote?.validFrom,
-				noteTo: salonData?.openingHoursNote?.validTo,
-				latitude: salonData?.address?.latitude,
-				longitude: salonData?.address?.longitude,
-				city: salonData?.address?.city,
-				street: salonData?.address?.street,
-				zipCode: salonData?.address?.zipCode,
-				country: salonData?.address?.countryCode,
-				streetNumber: salonData?.address?.streetNumber,
-				description: salonData?.address?.description,
-				companyContactPerson: salonData?.companyContactPerson || defaultContactPerson,
-				companyInfo: salonData?.companyInfo,
+				note: salonData?.openingHoursNote?.note || null,
+				noteFrom: salonData?.openingHoursNote?.validFrom || null,
+				noteTo: salonData?.openingHoursNote?.validTo || null,
+				latitude: salonData?.address?.latitude ?? null,
+				longitude: salonData?.address?.longitude ?? null,
+				city: salonData?.address?.city || null,
+				street: salonData?.address?.street || null,
+				zipCode: salonData?.address?.zipCode || null,
+				country: salonData?.address?.countryCode || null,
+				streetNumber: salonData?.address?.streetNumber || null,
+				description: salonData?.address?.description || null,
+				companyContactPerson: {
+					email: salonData?.companyContactPerson?.email || null,
+					firstName: salonData?.companyContactPerson?.firstName || null,
+					lastName: salonData?.companyContactPerson?.lastName || null,
+					phonePrefixCountryCode: salonData?.companyContactPerson?.phonePrefixCountryCode || defaultContactPerson.phonePrefixCountryCode,
+					phone: salonData?.companyContactPerson?.phone || null
+				},
+				companyInfo: {
+					taxID: salonData?.companyInfo?.taxID || null,
+					businessID: salonData?.companyInfo?.businessID || null,
+					companyName: salonData?.companyInfo?.companyName || null,
+					vatID: salonData?.companyInfo?.vatID || null
+				},
+				phonePrefixCountryCode: salonData?.phonePrefixCountryCode || null,
+				phone: salonData?.phone || null,
 				gallery: map(salonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
 				logo: salonData?.logo?.id
 					? [
@@ -177,7 +266,11 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 							}
 					  ]
 					: null,
-				categoryIDs: map(salonData?.categories, (categorie) => ({ label: categorie.name, value: categorie.id }))
+				categoryIDs: map(salonData?.categories, (categorie) => ({ label: categorie.name, value: categorie.id })),
+				address: !!salonData?.address || null,
+				socialLinkWebPage: salonData?.socialLinkWebPage || null,
+				socialLinkFB: salonData?.socialLinkFB || null,
+				socialLinkInstagram: salonData?.socialLinkInstagram || null
 			}
 
 			if (salonData?.publishedSalonData) {
@@ -218,7 +311,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 			const salonData: SalonPatch = {
-				imageIDs: (data.gallery || []).map((image) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
+				imageIDs: (data.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 				logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
 				name: data.name,
 				openingHours: openingHours || [],
@@ -239,7 +332,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				socialLinkFB: data.socialLinkFB,
 				socialLinkInstagram: data.socialLinkInstagram,
 				socialLinkWebPage: data.socialLinkWebPage,
-				payByCard: data.payByCard,
+				payByCard: !!data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
 				companyInfo: data.companyInfo,
@@ -335,6 +428,19 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const sendConfirmationRequest = async () => {
 		if (isSendingConfRequest) {
+			return
+		}
+
+		const errors = validateSalonFormForPublication(formValues as ISalonForm)
+		if (!isEmpty(errors)) {
+			notification.error({
+				message: t('loc:Chybne vyplnený formulár'),
+				description: (
+					<>
+						{t(`loc:Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje`)}: {errors.join(', ')}
+					</>
+				)
+			})
 			return
 		}
 
@@ -452,34 +558,52 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		/>
 	)
 
-	const requestApprovalButton = (className = '') => (
-		<Permissions
-			allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
-			render={(hasPermission, { openForbiddenModal }) =>
-				salonExists &&
-				!pendingPublication && (
-					<Button
-						type={'dashed'}
-						block
-						size={'middle'}
-						className={cx('noti-btn m-regular', className)}
-						onClick={(e) => {
-							if (hasPermission) {
-								sendConfirmationRequest()
-							} else {
-								e.preventDefault()
-								openForbiddenModal()
-							}
-						}}
-						disabled={submitting || deletedSalon}
-						loading={submitting}
-					>
-						{t('loc:Požiadať o schválenie')}
-					</Button>
-				)
-			}
-		/>
-	)
+	const requestApprovalButton = (className = '') => {
+		const approvalButtonDisabled = submitting || deletedSalon || !isFormPristine
+		const approvalButtonInitiallyDisabled = isFormPristine && getIsInitialPublishedVersionSameAsDraft(salon)
+
+		let tooltipMessage: string | null = null
+
+		if (approvalButtonInitiallyDisabled) {
+			tooltipMessage = t('loc:V salóne nie sú žiadne zmeny, ktoré by bolo potrebné schváliť.')
+		} else if (approvalButtonDisabled) tooltipMessage = t('loc:Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')
+
+		// Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
+		return (
+			<Permissions
+				allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+				render={(hasPermission, { openForbiddenModal }) =>
+					salonExists &&
+					!pendingPublication && (
+						<Tooltip title={tooltipMessage}>
+							<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled || approvalButtonInitiallyDisabled })}>
+								<Button
+									type={'dashed'}
+									block
+									size={'middle'}
+									className={cx('noti-btn m-regular', className, {
+										'pointer-events-none': approvalButtonDisabled || approvalButtonInitiallyDisabled
+									})}
+									disabled={approvalButtonDisabled || approvalButtonInitiallyDisabled}
+									onClick={(e) => {
+										if (hasPermission) {
+											sendConfirmationRequest()
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+									loading={submitting}
+								>
+									{t('loc:Požiadať o schválenie')}
+								</Button>
+							</span>
+						</Tooltip>
+					)
+				}
+			/>
+		)
+	}
 
 	const renderContentFooter = () => {
 		switch (true) {
@@ -495,12 +619,12 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				return (
 					<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
 						<Row className={'gap-2 flex-row-reverse justify-end'}>
-							{hideSalonButton('w-48 lg:w-60 mt-2-5')}
-							{deleteButton('w-48 lg:w-60 mt-2-5')}
+							{hideSalonButton('w-52 lg:w-60 mt-2-5')}
+							{deleteButton('w-52 lg:w-60 mt-2-5')}
 						</Row>
 						<Row className={'gap-2 md:justify-end'}>
-							{requestApprovalButton('w-48 lg:w-60 mt-2-5')}
-							{submitButton('w-48 lg:w-60 mt-2-5')}
+							{requestApprovalButton('w-52 lg:w-60 mt-2-5')}
+							{submitButton('w-52 lg:w-60 mt-2-5')}
 						</Row>
 					</Row>
 				)
@@ -577,6 +701,57 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			</Permissions>
 		)
 
+	const infoMessage = useMemo(() => {
+		let message: string | null
+
+		// order of cases is important to show correct message
+		switch (true) {
+			case !salonID:
+			case deletedSalon:
+				message = null
+				break
+			case !isFormPristine && !pendingPublication:
+				message = t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')
+				break
+			case salon.data?.state === SALON_STATES.NOT_PUBLISHED || salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED:
+				message = t('loc:Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.')
+				break
+			case !isPublishedVersionSameAsDraft?.isEqual && !pendingPublication:
+				message = t('loc:V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.')
+				break
+			case pendingPublication:
+				message = t('loc:Salón čaká na schválenie zmien. Údaje, ktoré podliehajú schvaľovaniu, po túto dobu nie je možné editovať.')
+				break
+			default:
+				message = null
+		}
+
+		if (message) {
+			return <Alert message={message} showIcon type={'warning'} className={'noti-alert mb-4'} />
+		}
+
+		return null
+	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t, salon.data?.state])
+
+	const declinedSalonMessage = useMemo(
+		() => (
+			<Alert
+				message={
+					<>
+						<strong className={'block'}>{`${t('loc:Zmeny v salóne boli zamietnuté z dôvodu')}:`}</strong>
+						<p className={'whitespace-pre-wrap m-0'}>
+							{salon?.data?.publicationDeclineReason ? `"${salon?.data?.publicationDeclineReason}"` : t('loc:Bez udania dôvodu.')}
+						</p>
+					</>
+				}
+				showIcon
+				type={'error'}
+				className={'noti-alert mb-4'}
+			/>
+		),
+		[t, salon?.data?.publicationDeclineReason]
+	)
+
 	return (
 		<>
 			<Row>
@@ -585,32 +760,40 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			<Spin spinning={isLoading}>
 				<div className='content-body mt-2'>
 					{renderContentHeader()}
-					<SalonForm onSubmit={handleSubmit} openNoteModal={() => setVisible(true)} salonID={salonID} disabledForm={deletedSalon} />
+					{declinedSalon && declinedSalonMessage}
+					{infoMessage}
+					<SalonForm
+						onSubmit={handleSubmit}
+						openNoteModal={() => setVisible(true)}
+						salonID={salonID}
+						disabledForm={deletedSalon}
+						deletedSalon={deletedSalon}
+						pendingPublication={!!pendingPublication}
+						isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
+					/>
 					{salonExists && (
 						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
 					)}
 					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
 				</div>
 			</Spin>
-			<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-				<Modal
-					key={`${modalConfig.visible}`}
-					title={modalConfig.title}
-					visible={modalConfig.visible}
-					onCancel={() =>
-						setModalConfig({
-							title: '',
-							fieldPlaceholderText: '',
-							visible: false,
-							onSubmit: undefined
-						})
-					}
-					footer={null}
-					closeIcon={<CloseIcon />}
-				>
-					<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
-				</Modal>
-			</Permissions>
+			<Modal
+				key={`${modalConfig.visible}`}
+				title={modalConfig.title}
+				visible={modalConfig.visible}
+				onCancel={() =>
+					setModalConfig({
+						title: '',
+						fieldPlaceholderText: '',
+						visible: false,
+						onSubmit: undefined
+					})
+				}
+				footer={null}
+				closeIcon={<CloseIcon />}
+			>
+				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
+			</Modal>
 		</>
 	)
 }

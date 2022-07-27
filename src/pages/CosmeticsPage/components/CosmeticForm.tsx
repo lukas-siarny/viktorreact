@@ -6,7 +6,7 @@ import { Col, Divider, Form, Row, Button } from 'antd'
 // utils
 import { isEmpty } from 'lodash'
 import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { showErrorNotification } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -57,7 +57,7 @@ const CosmeticForm: FC<Props> = (props) => {
 	)
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'mx-8 xl:mx-9 w-full h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 relative pr-7'}>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { get, map } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,7 +12,6 @@ import { addEmployee, parseEmployeeIds } from './ServiceEditPage'
 import { IServiceForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
-import { getCategories } from '../../reducers/categories/categoriesActions'
 import { RootState } from '../../reducers'
 
 // utils
@@ -32,23 +31,16 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
 
-	useEffect(() => {
-		dispatch(getCategories())
-	}, [dispatch])
-
 	const handleSubmit = async (values: IServiceForm) => {
 		try {
 			const reqData = {
-				name: values.name,
-				description: values.description,
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
 				priceFrom: encodePrice(values.priceFrom),
 				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
 				salonID,
 				employeeIDs: parseEmployeeIds(values.employees),
-				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
-				imageIDs: map(values?.gallery, (image) => image.id)
+				categoryID: values.categorySecondLevel
 			}
 
 			const { data } = await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)

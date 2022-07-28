@@ -921,6 +921,7 @@ a
 
 .phone-prefix
 	width: 110px
+	margin-right: 8px
 
 .collapse-list.ant-collapse
 	background-color: $backgroundColor-notino-white
@@ -968,8 +969,183 @@ span.ant-tag
 		.title
 			font-weight: bolder
 
+.noti-phone-prefix-array
+	.ant-form-item
+		margin: 0
+
+.noti-support-contact-wrapper
+	max-width: 640px
+	padding: 0 56px
+	.contact-row
+		.contact-col
+			flex: 50%
+	.ant-spin-nested-loading > div > .ant-spin
+		max-height: 100%
+	@media (max-width: 1280px)
+		max-width: 496px
+		padding: 0 40px
+	@media (max-width: 744px)
+		max-width: 100%
+		padding: 0 0 64px 0
+		.ant-select
+			max-width: 100% !important
+
+.noti-support-contact-list
+	list-style: none
+	padding-left: 0
+	li
+		display: flex
+		align-items: flex-start
+		gap: 8px
+		line-height: 175%
+		&::before
+			content: ''
+			display: block
+			width: 16px
+			height: 16px
+			margin-top: 4px
+			flex: 0 0 auto
+		&.phone-list-item
+			&::before
+				background: url("../assets/icons/phone-icon-16.svg") no-repeat center center
+		&.email-list-item
+			&::before
+				background: url("../assets/icons/message-icon-16-thin.svg") no-repeat center center
+		&.address-list-item
+			&::before
+				background: url("../assets/icons/home-icon-16.svg") no-repeat center center
+		&.note-list-item
+			margin-top: 14px
+			&::before
+				background: url("../assets/icons/pencil-icon-16.svg") no-repeat center center
+
+.noti-opening-hours-table
+	display: flex
+	flex-direction: column
+	width: fit-content
+	margin-bottom: 16px
+	.day-row
+		min-height: 28px
+		display: inline-flex
+		align-items: center
+		gap: 16px
+		&:not(:last-of-type)
+			border-bottom: 1px solid $borderColor-notino-grayLight
+		.day-name
+			width: 120px
+			flex: 0 0 auto
+		.day-intervals
+			display: flex
+			gap: 16px
+			.day-interval
+				width: 85px
+	@media (max-width: 1280px)
+		.day-row
+			.day-name
+				width: 100px
+	@media (max-width: 744px)
+		margin-bottom: 0
+	@media (max-width: 450px)
+		width: 100%
+		.day-row
+			flex-direction: column
+			align-items: flex-start
+			gap: 0
+			padding: 4px 0
+			.day-name
+				font-weight: bold
+			.day-intervals
+				gap: 8px
+
+
+.noti-support-collapse
+	background: transparent
+	max-width: 528px
+	.ant-collapse-item
+		border-bottom: 1px solid $borderColor-notino-grayLight
+		.ant-collapse-header
+			padding: 0
+			position: relative
+			div:first-of-type
+				position: absolute
+				right: 0
+				top: 50%
+				transform: translateY(-50%)
+	.ant-collapse-content
+		.ant-collapse-content-box
+			padding: 0
+
+	@media (max-width: 1280px)
+		max-width: 416px
+		width: 100%
+	@media (max-width: 744px)
+		max-width: 100%
+
 .noti-alert.ant-alert
 	border-radius: 8px
 	border: none
 	align-items: flex-start
 	background: $backgroundColor-notino-grayLight
+
+.noti-tag.ant-tag
+	border: none
+	border-radius: 999px
+	display: flex
+	align-items: center
+	gap: 4px
+	padding: 8px
+	max-width: fit-content
+	background: $backgroundColor-notino-grayLight
+	min-width: 0
+	height: 28px
+	svg
+		flex: 0 0 auto
+	span
+		color: $textColor-notino-black
+		font-size: 10px
+		line-height: 12px
+		min-width: 0
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+	// TODO: add colors to config file and use variables instead
+	&.success
+		background: $backgroundColor-green-200
+	&.warning
+		background: $backgroundColor-yellow-200
+	&.danger
+		background: $backgroundColor-red-200
+	&.info
+		background: $backgroundColor-blue-100
+
+.cosmetics-logo
+	display: block
+	width: 300px
+	height: 64px
+	object-fit: scale-down
+	object-position: left center
+
+.mt-2-5
+	margin-top: 10px
+
+.homepage-wrapper
+	width: calc(100% + 80px)
+	height: calc(100% + 32px)
+	background: linear-gradient(180deg, rgba(198, 151, 109, 0) 0%, rgba(159, 126, 96, 0.4) 89.21%), #FFFFFF
+	margin: -16px -40px
+	position: relative
+	padding: 16px 40px
+	overflow-y: auto
+	display: flex
+	flex-direction: column
+
+	.image
+		width: 100%
+		height: 100%
+		max-width: 1000px
+		max-height: 90vh
+		min-width: 280px
+		background: url('../assets/images/homepage-min.png') no-repeat center center
+		background-size: contain
+		align-self: center
+

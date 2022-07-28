@@ -20,7 +20,7 @@ import PopConfirmComponent from '../../../components/PopConfirmComponent'
 import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
-import { validationString } from '../../../utils/helper'
+import { validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 
 // redux
@@ -100,7 +100,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const localizationInputCss = values?.level === 0 ? 'w-2/3' : 'w-full'
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 relative pr-7'}>
@@ -139,7 +139,7 @@ const CategoryForm: FC<Props> = (props) => {
 								<Field
 									className='mb-0'
 									component={InputField}
-									label={t('loc:Názov kategórie (en)')}
+									label={t('loc:Názov kategórie (EN)')}
 									placeholder={t('loc:Zadajte názov')}
 									key='nameLocalizations[0].value'
 									name='nameLocalizations[0].value'
@@ -171,12 +171,6 @@ const CategoryForm: FC<Props> = (props) => {
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								/>
 							</Permissions>
-						) : undefined}
-
-						{values?.id && values?.deletedAt && !values?.isParentDeleted ? (
-							<Button className={'noti-btn'} size='middle' onClick={() => deleteCategory(values?.id, true)}>
-								{t('loc:Obnoviť')}
-							</Button>
 						) : undefined}
 
 						{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}

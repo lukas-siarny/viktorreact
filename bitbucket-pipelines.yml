@@ -1,4 +1,11 @@
 image: node:16.14.0
+# be sure that clone enoughth commits
+clone:
+  depth: 150
+options:
+  docker: true
+  max-time: 20
+  size: 2x
 pipelines:
   branches:
     development:
@@ -8,20 +15,18 @@ pipelines:
             - npm install --legacy-peer-deps
           caches:
             - node
+          artifacts:
+            - node_modules/**
       - parallel:
           - step:
               name: Lint checking
-              caches:
-                - node
               script:
                 - npm run lint
           - step:
               name: Build and push docker image
-              caches:
-                - node
               script:
                 # push source maps to sentry service
-                - HOST=testServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                - REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
                 # remove source maps from bundle build
                 - find build/static/js/ -name "*.map" -type f -delete
                 - docker build -t registry.goodrequest.com/notino-b2b-web:development -f docker/development/Dockerfile.web .
@@ -34,25 +39,79 @@ pipelines:
             - npm install --legacy-peer-deps
           caches:
             - node
+          artifacts:
+            - node_modules/**
       - parallel:
           - step:
               name: Lint checking
-              caches:
-                - node
               script:
                 - npm run lint
           - step:
               name: Build and push docker image
-              caches:
-                - node
               script:
                 # push source maps to sentry service
-                - HOST=testServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                - REACT_APP_HOST=testServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
                 # remove source maps from bundle build
                 - find build/static/js/ -name "*.map" -type f -delete
                 - docker build -t registry.goodrequest.com/notino-b2b-web:test -f docker/test/Dockerfile.web .
                 - docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
                 - docker push registry.goodrequest.com/notino-b2b-web:test
+    uat:
+      - step:
+          name: Install npm modules
+          script:
+            - npm install --legacy-peer-deps
+          caches:
+            - node
+          artifacts:
+            - node_modules/**
+      - step:
+          name: Build and release sentry sourcemaps
+          script:
+            # push source maps to sentry service
+            - REACT_APP_HOST=uatServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+            # remove source maps from bundle build
+            - find build/static/js/ -name "*.map" -type f -delete
+          artifacts:
+            - build/**
+      - step:
+          name: Build and push docker image
+          image: amazon/aws-cli
+          script:
+            - export AWS_ECR_NAME=809210427750.dkr.ecr.eu-central-1.amazonaws.com
+            - docker build -t $AWS_ECR_NAME/notino-b2b-web:uat -f docker/uat/Dockerfile.web .
+            - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR_NAME
+            - docker push $AWS_ECR_NAME/notino-b2b-web:uat
+            - IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --output json )
+            - aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --image-ids "$IMAGES_TO_DELETE" || true
+    production:
+      - step:
+          name: Install npm modules
+          script:
+            - npm install --legacy-peer-deps
+          caches:
+            - node
+          artifacts:
+            - node_modules/**
+      - step:
+          name: Build and release sentry sourcemaps
+          script:
+            # push source maps to sentry service
+            - REACT_APP_HOST=productionServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+            # remove source maps from bundle build
+            - find build/static/js/ -name "*.map" -type f -delete
+          artifacts:
+            - build/**
+      - step:
+          name: Build and push docker image
+          image: amazon/aws-cli
+          script:
+            - export AWS_ECR_NAME=809210427750.dkr.ecr.eu-central-1.amazonaws.com
+            - docker build -t $AWS_ECR_NAME/notino-b2b-web:production -f docker/production/Dockerfile.web .
+            - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR_NAME
+            - docker push $AWS_ECR_NAME/notino-b2b-web:production
+            - IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --output json )
+            - aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --image-ids "$IMAGES_TO_DELETE" || true
   pull-requests:
     'NOT-*':
       - step:
@@ -61,20 +120,58 @@ pipelines:
             - npm install --legacy-peer-deps
           caches:
             - node
+          artifacts:
+            - node_modules/**
       - parallel:
           - step:
               name: Lint checking
-              caches:
-                - node
               script:
                 - npm run lint
           - step:
               name: Build and push docker image
-              caches:
-                - node
               script:
                 - CI=false npm run build
-options:
-  docker: true
-  max-time: 20
-  size: 2x
+  custom:
+    e2e:
+        - parallel:      # these 2 steps will run in parallel
+          - step:
+              name: download BE
+              image: cypress/browsers:node16.13.0-chrome95-ff94
+              script:
+                - git clone git@bitbucket.org:GoodRequest/notino_backend.git
+                - cd notino_backend && npm install --legacy-peer-deps
+              artifacts: # defining the artifacts to be passed to each future step.
+                - notino_backend/**
+          - step:
+              name: install FE deps
+              image: cypress/browsers:node16.13.0-chrome95-ff94
+              caches:
+                - cypress
+                - frontend
+              script:
+                - npm install --legacy-peer-deps && CI=false npm run build
+              artifacts: # defining the artifacts to be passed to each future step.
+                - build/**
+        - step:
+            name: run Test
+            image: cypress/browsers:node16.13.0-chrome95-ff94
+            caches:
+              - cypress
+              - frontend
+            services:
+              - "docker"
+            script:
+              - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              - chmod +x /usr/local/bin/docker-compose
+              - docker-compose up -d
+              - sleep 10
+              - curl http://localhost:80
+              - npm run test:CI
+
+definitions:
+  caches:
+    cypress: $HOME/.cache/Cypress
+    frontend: $BITBUCKET_CLONE_DIR/node_modules
+  services:
+    docker:
+      memory: 4092

@@ -113,20 +113,31 @@ export interface ISalonForm {
 }
 
 export interface IServiceForm {
-	name: string
-	description: string
-	salonID: number
 	durationFrom: number
 	durationTo: number
 	variableDuration: boolean
 	priceFrom: number
 	priceTo: number
 	variablePrice: boolean
-	gallery: GalleryItem[]
 	categoryRoot: number
 	categoryFirstLevel: number
 	categorySecondLevel: number
 	employees: any
+}
+
+export interface ISupportContactForm {
+	id: number | null
+	note: string
+	openingHours: OpeningHours
+	sameOpenHoursOverWeek: boolean
+	openOverWeekend: boolean
+	countryCode: string
+	zipCode: string
+	city: string
+	street: string
+	streetNumber: string
+	phones: { phonePrefixCountryCode: string, phone: string }[]
+	emails: { email: string }[]
 }
 
 export interface IRegistrationForm {
@@ -248,6 +259,11 @@ export interface IEmployeeForm {
 	role: number
 }
 
+export interface ICosmeticForm {
+	name: string
+	image: any
+}
+
 export interface ILanguagePickerForm {
 	language: LANGUAGE
 }
@@ -322,3 +338,5 @@ export interface INoteModal {
 export interface IDataUploadForm {
 	file: string | Blob
 }
+
+export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0]

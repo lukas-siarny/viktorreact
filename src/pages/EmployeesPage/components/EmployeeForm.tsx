@@ -7,10 +7,9 @@ import cx from 'classnames'
 
 // utils
 import { isEmpty } from 'lodash'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY, SALON_PERMISSION, PERMISSION } from '../../../utils/enums'
-import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
+import { showErrorNotification, showServiceCategory, validationNumberMin, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import searchWrapper from '../../../utils/filters'
-import Permissions from '../../../utils/Permissions'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -42,7 +41,6 @@ const { Panel } = Collapse
 type ComponentProps = {
 	salonID: number
 	addService: MouseEventHandler<HTMLElement>
-	onEditRoleClick?: () => void
 }
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
@@ -54,11 +52,11 @@ const renderListFields = (props: any) => {
 	const [t] = useTranslation()
 	const { fields, salon } = props
 
-	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode) => (
+	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => (
 		<div className={'flex items-center mr-3'}>
 			{icon}
 			{from}
-			{variable && to ? ` - ${to}` : undefined}
+			{variable && to ? ` - ${to}` : undefined} {extra}
 		</div>
 	)
 
@@ -79,8 +77,8 @@ const renderListFields = (props: any) => {
 	const genExtra = (index: number, field: any) => (
 		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
 			<div className={'flex'}>
-				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />)}
-				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />)}
+				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
+				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
 			</div>
 			<DeleteButton
 				onConfirm={() => {
@@ -208,12 +206,11 @@ const renderListFields = (props: any) => {
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const { handleSubmit, salonID, addService, onEditRoleClick } = props
+	const { handleSubmit, salonID, addService } = props
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE].values)
 	const services = useSelector((state: RootState) => state.service.services)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const roles = useSelector((state: RootState) => state.roles.salonRoles)
 
 	useEffect(() => {
 		dispatch(getServices({ page: 1, salonID }))
@@ -228,7 +225,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	)
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Col className={'flex'}>
 				<Row className={'mx-9 w-full h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
@@ -261,59 +258,12 @@ const EmployeeForm: FC<Props> = (props) => {
 						phoneName={'phone'}
 						formName={FORM.EMPLOYEE}
 					/>
-					{formValues?.hasActiveAccount && (
-						<>
-							<h3>{t('loc:Oprávnenie')}</h3>
-							<Divider className={'mb-3 mt-3'} />
-							<div className={'flex w-full justify-between'}>
-								<Field
-									component={InputField}
-									options={roles?.data}
-									label={t('loc:Rola')}
-									placeholder={t('loc:Vyberte rolu')}
-									name={'role.name'}
-									size={'large'}
-									loading={roles?.isLoading}
-									className={'w-4/5'}
-									readOnly
-									required
-								/>
-								<Permissions
-									allowed={[
-										PERMISSION.NOTINO_SUPER_ADMIN,
-										PERMISSION.NOTINO_ADMIN,
-										PERMISSION.PARTNER,
-										SALON_PERMISSION.PARTNER_ADMIN,
-										SALON_PERMISSION.USER_ROLE_EDIT
-									]}
-									render={(hasPermission, { openForbiddenModal }) => (
-										<Button
-											type={'primary'}
-											block
-											size={'middle'}
-											className={'noti-btn m-regular w-2/12 mt-4'}
-											onClick={(e) => {
-												if (hasPermission && onEditRoleClick) {
-													onEditRoleClick()
-												} else {
-													e.preventDefault()
-													openForbiddenModal()
-												}
-											}}
-										>
-											{t('loc:Upraviť rolu')}
-										</Button>
-									)}
-								/>
-							</div>
-						</>
-					)}
 					<h3>{t('loc:Zoznam priradených služieb')}</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<div className={'flex w-full justify-between'}>
+					<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 						<Field
 							label={t('loc:Služby')}
-							className={'w-4/5'}
+							className={'flex-1'}
 							size={'large'}
 							component={SelectField}
 							allowClear
@@ -327,7 +277,7 @@ const EmployeeForm: FC<Props> = (props) => {
 							allowInfinityScroll
 							formName={FORM.EMPLOYEE}
 						/>
-						<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-2/12 mt-4'} onClick={addService} disabled={isEmpty(formValues?.service)}>
+						<Button type={'primary'} size={'middle'} className={'self-start noti-btn m-regular md:mt-5'} onClick={addService} disabled={isEmpty(formValues?.service)}>
 							{t('loc:Pridať službu')}
 						</Button>
 					</div>

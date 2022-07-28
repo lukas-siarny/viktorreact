@@ -18,8 +18,6 @@ interface IGetServices {
 	payload: IServicesPayload
 }
 
-type IService = Paths.GetApiB2BAdminServices.Responses.$200['services']['0']
-
 interface ServicesTableData {
 	key: number
 	serviceID: number
@@ -27,7 +25,8 @@ interface ServicesTableData {
 	employees: IUserAvatar[]
 	price: string
 	duration: string
-	category: string
+	categoryFirst: string
+	categorySecond: string
 	salon: string | undefined
 }
 
@@ -53,9 +52,12 @@ export const getServices =
 				const tableItem = {
 					key: item.id,
 					serviceID: item.id,
-					name: item.name || '-',
+					name: item.category?.child?.child?.name || '-',
+					categoryFirst: item.category?.name || '-',
+					categorySecond: item.category?.child?.name || '-',
 					employees: item.employees.map((employee) => ({
 						src: employee.image?.resizedImages?.thumbnail,
+						fallBackSrc: employee.image?.original,
 						alt: `${employee.firstName} ${employee.lastName}`,
 						text: `${employee.firstName} ${employee.lastName}`,
 						key: employee.id
@@ -67,8 +69,8 @@ export const getServices =
 				}
 				return tableItem
 			})
-			const servicesOptions = data.services.map((service: IService) => {
-				return { label: service.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
+			const servicesOptions = data.services.map((service) => {
+				return { label: service.category.child?.child?.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
 			})
 			payload = {
 				data,

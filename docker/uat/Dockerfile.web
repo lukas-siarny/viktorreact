@@ -1,0 +1,9 @@
+FROM nginx
+USER root
+
+COPY ./build /usr/share/nginx/html
+COPY  ./docker/uat/nginx.conf /etc/nginx
+
+STOPSIGNAL SIGTERM
+
+CMD ["nginx", "-g", "daemon off;"]

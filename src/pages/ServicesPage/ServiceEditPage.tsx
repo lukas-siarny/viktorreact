@@ -12,7 +12,6 @@ import ServiceForm from './components/ServiceForm'
 // reducers
 import { RootState } from '../../reducers'
 import { getService } from '../../reducers/services/serviceActions'
-import { getCategories } from '../../reducers/categories/categoriesActions'
 import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
 
 // types
@@ -91,22 +90,18 @@ const ServiceEditPage = (props: Props) => {
 
 	const fetchData = async () => {
 		const { data } = await dispatch(getService(serviceID))
-		dispatch(getCategories())
 		if (!data?.service?.id) {
 			history.push('/404')
 		}
 		let initData: any
 		if (data) {
 			initData = {
-				name: data?.service?.name,
-				description: data?.service?.description,
 				durationFrom: data?.service?.durationFrom,
 				durationTo: data?.service?.durationTo,
 				variableDuration: !!data?.service?.durationTo,
 				priceFrom: decodePrice(data?.service?.priceFrom),
 				priceTo: decodePrice(data?.service?.priceTo),
 				variablePrice: !!data?.service?.priceTo,
-				gallery: map(data?.service?.images, (image) => ({ id: image.id, url: image.original })),
 				categoryRoot: data?.service?.category?.id,
 				categoryFirstLevel: data?.service?.category?.child?.id,
 				categorySecondLevel: data?.service?.category?.child?.child?.id,
@@ -124,15 +119,12 @@ const ServiceEditPage = (props: Props) => {
 	const handleSubmit = async (values: IServiceForm) => {
 		try {
 			const reqData = {
-				name: values.name,
-				description: values.description,
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
 				priceFrom: encodePrice(values.priceFrom),
 				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
-				categoryID: values.categorySecondLevel || values.categoryFirstLevel,
-				employeeIDs: parseEmployeeIds(values.employees),
-				imageIDs: map(values?.gallery, (image) => image.id)
+				categoryID: values.categorySecondLevel,
+				employeeIDs: parseEmployeeIds(values.employees)
 			}
 			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			dispatch(getService(serviceID))

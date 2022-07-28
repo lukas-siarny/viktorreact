@@ -17,6 +17,7 @@ type Props = WithTranslation &
 	RouteProps & {
 		translatePathKey?: string
 		layout: any
+		className?: string
 	}
 
 class CreatePasswordRoute extends Route<Props> {

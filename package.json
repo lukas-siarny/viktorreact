@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "0.2.0-RC",
+  "version": "0.2.3",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -10,7 +10,7 @@
     "node": "^16.13.0"
   },
   "scripts": {
-    "start": "cross-env PORT=3210 npm-run-all -p start-watch translate-watch build:tailwind",
+    "start": "cross-env PORT=80 npm-run-all -p start-watch translate-watch build:tailwind",
     "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
     "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true  npm-run-all -p build:tailwind rebuild:sass",
     "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired build",
@@ -18,6 +18,7 @@
     "release": "npm run build && npm run sentry",
     "sentry": "cross-env REACT_APP_VERSION=$npm_package_version node sentry.js",
     "test": "cypress open",
+	"test:CI": "cypress run",
     "eject": "react-scripts eject",
     "translate-scan": "i18next-scanner 'src/**/*.{js,jsx,ts,tsx}'",
     "translate-watch": "npm run translate-scan && gulp watch",
@@ -128,8 +129,7 @@
     "@types/redux-form": "8.3.3",
     "@types/redux-logger": "3.0.9",
     "@types/sortablejs": "1.10.7",
-    "antd-form-fields": "github:GoodRequest/antd-form-fields",
-    "convert-translations-i18next": "github:GoodRequest/i18nextJsonToCsv",
+    "@goodrequest/antd-form-fields": "0.0.1",
     "cypress": "9.6.0",
     "cypress-file-upload": "5.0.8",
     "cypress-localstorage-commands": "1.7.0",

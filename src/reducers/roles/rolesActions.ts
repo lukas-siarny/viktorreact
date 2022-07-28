@@ -26,33 +26,50 @@ export interface IRolesPayload {
 	data: Paths.GetApiB2BAdminRolesSystemUser.Responses.$200 | null
 }
 
-export const getSystemRoles = (): ThunkResult<Promise<void>> => async (dispatch, getState) => {
-	try {
-		dispatch({ type: SYSTEM_ROLES.SYSTEM_ROLES_LOAD_START })
+export const getSystemRoles =
+	(filterByPermission = false): ThunkResult<Promise<void>> =>
+	async (dispatch, getState) => {
+		try {
+			dispatch({ type: SYSTEM_ROLES.SYSTEM_ROLES_LOAD_START })
 
-		const currentUserRole = getState().user.authUser.data?.roles[0]
+			const currentUserRole = getState().user.authUser.data?.roles[0]
 
-		const { data } = await getReq('/api/b2b/admin/roles/system-user', null)
+			const { data } = await getReq('/api/b2b/admin/roles/system-user', null)
 
-		const parsedData: ILabelInValueOption[] = []
-		const highestUserRoleIndex = data.roles.findIndex((role) => role?.id === currentUserRole?.id)
-		const currentUserAllowedRolesOptions = data.roles.slice(highestUserRoleIndex)
+			const parsedData: ILabelInValueOption[] = []
 
-		currentUserAllowedRolesOptions.forEach((role) => {
-			parsedData.push({
-				label: role?.name || '',
-				value: role?.id,
-				key: role?.id,
-				extra: { permissions: role?.permissions }
-			})
-		})
-		dispatch({ type: SYSTEM_ROLES.SYSTEM_ROLES_LOAD_DONE, payload: { data: parsedData } })
-	} catch (err) {
-		dispatch({ type: SYSTEM_ROLES.SYSTEM_ROLES_LOAD_FAIL })
-		// eslint-disable-next-line no-console
-		console.error(err)
+			if (filterByPermission) {
+				// return only roles that current user have permission to assign them
+				const highestUserRoleIndex = data.roles.findIndex((role) => role?.id === currentUserRole?.id)
+				const currentUserAllowedRolesOptions = data.roles.slice(highestUserRoleIndex)
+
+				currentUserAllowedRolesOptions.forEach((role) => {
+					parsedData.push({
+						label: role?.name || '',
+						value: role?.id,
+						key: role?.id,
+						extra: { permissions: role?.permissions }
+					})
+				})
+			} else {
+				// return all roles
+				data.roles.forEach((role) => {
+					parsedData.push({
+						label: role?.name || '',
+						value: role?.id,
+						key: role?.id,
+						extra: { permissions: role?.permissions }
+					})
+				})
+			}
+
+			dispatch({ type: SYSTEM_ROLES.SYSTEM_ROLES_LOAD_DONE, payload: { data: parsedData } })
+		} catch (err) {
+			dispatch({ type: SYSTEM_ROLES.SYSTEM_ROLES_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
 	}
-}
 
 export const getSalonRoles = (): ThunkResult<Promise<ILabelInValueOption[]>> => async (dispatch) => {
 	const options: ILabelInValueOption[] = []

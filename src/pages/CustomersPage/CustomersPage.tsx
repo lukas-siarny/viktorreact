@@ -15,7 +15,7 @@ import CustomersFilter from './components/CustomersFilter'
 
 // utils
 import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -116,6 +116,15 @@ const CustomersPage = (props: SalonSubPageProps) => {
 					</>
 				)
 			}
+		},
+		{
+			title: t('loc:Vytvorené'),
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			ellipsis: true,
+			sorter: true,
+			sortOrder: setOrder(query.order, 'createdAt'),
+			render: (value) => formatDateByLocale(value)
 		}
 	]
 
@@ -159,6 +168,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 							rowClassName={'clickable-row'}
 							loading={customers?.isLoading}
 							twoToneRows
+							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
 									history.push(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id }))

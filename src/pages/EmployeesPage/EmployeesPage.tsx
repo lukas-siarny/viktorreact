@@ -119,7 +119,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			ellipsis: true,
 			sorter: false,
 			width: '15%',
-			render: (value, record) => <>{value && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${value}}` : '-'}</>
+			render: (value, record) => <>{value && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${value}` : '-'}</>
 		},
 		{
 			title: t('loc:Služby'),
@@ -127,7 +127,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			key: 'services',
 			ellipsis: true,
 			render: (value) => {
-				return value && value.length ? <PopoverList elements={value} /> : '-'
+				return value && value.length ? <PopoverList elements={value.map((service: any) => ({ name: service.category.name }))} /> : '-'
 			}
 		},
 		{
@@ -195,6 +195,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 							rowClassName={'clickable-row'}
 							loading={employees?.isLoading}
 							twoToneRows
+							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
 									history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))

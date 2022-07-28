@@ -1,6 +1,7 @@
 import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
+import { isEmpty } from 'lodash'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 export default (values: any) => {
@@ -27,7 +28,9 @@ export default (values: any) => {
 	}
 
 	if (!(values?.zipCode && values?.city && values?.street && values?.streetNumber && values?.latitude && values?.longitude && values?.country)) {
-		errors.address = i18next.t('loc:Upresnite adresu vo vyhľadávaní alebo priamo v mape')
+		errors.address = i18next.t(
+			'loc:Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica (s číslom!), PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.'
+		)
 	}
 
 	if (!values?.phone) {
@@ -44,7 +47,7 @@ export default (values: any) => {
 		errors.email = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!values?.categoryIDs) {
+	if (!values?.categoryIDs || isEmpty(values?.categoryIDs)) {
 		errors.categoryIDs = i18next.t('loc:Toto pole je povinné')
 	}
 
@@ -56,10 +59,6 @@ export default (values: any) => {
 		} else if (!isEmail(values?.email)) {
 			errors.email = i18next.t('loc:Email nie je platný')
 		}
-	}
-
-	if (!(values?.gallery?.length > 0)) {
-		errors.gallery = i18next.t('loc:Nahrajte aspoň jeden obrázok')
 	}
 
 	if (values?.email && values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
@@ -120,41 +119,36 @@ export default (values: any) => {
 	errors.companyContactPerson = contactPersonErrors
 
 	const companyInfo = values?.companyInfo
-	const companyErrors: any = {}
 
-	if (!companyInfo?.companyName) {
-		companyErrors.companyName = i18next.t('loc:Toto pole je povinné')
+	if (companyInfo) {
+		const companyErrors: any = {}
+
+		if (companyInfo?.companyName && companyInfo?.companyName?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
+			companyErrors.companyName = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_255
+			})
+		}
+
+		if (companyInfo?.businessID && companyInfo?.businessID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+			companyErrors.businessID = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_20
+			})
+		}
+
+		if (companyInfo?.vatID && companyInfo?.vatID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+			companyErrors.vatID = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_20
+			})
+		}
+
+		if (companyInfo?.taxID && companyInfo?.taxID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+			companyErrors.taxID = i18next.t('loc:Max. počet znakov je {{max}}', {
+				max: VALIDATION_MAX_LENGTH.LENGTH_20
+			})
+		}
+
+		errors.companyInfo = companyErrors
 	}
-
-	if (companyInfo?.companyName && companyInfo?.companyName?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-		companyErrors.companyName = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_255
-		})
-	}
-
-	if (!companyInfo?.businessID) {
-		companyErrors.businessID = i18next.t('loc:Toto pole je povinné')
-	}
-
-	if (companyInfo?.businessID && companyInfo?.businessID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		companyErrors.businessID = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
-	}
-
-	if (companyInfo?.vatID && companyInfo?.vatID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		companyErrors.vatID = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
-	}
-
-	if (companyInfo?.taxID && companyInfo?.taxID?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		companyErrors.taxID = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
-	}
-
-	errors.companyInfo = companyErrors
 
 	return errors
 }

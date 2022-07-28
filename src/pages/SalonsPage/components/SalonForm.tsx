@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { get, isEqual } from 'lodash'
 
 // components
-import OpeningHours from './OpeningHours'
+import OpeningHours from '../../../components/OpeningHours/OpeningHours'
 import AddressFields from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import Compare from '../../../components/Compare'
@@ -16,10 +16,11 @@ import InputField from '../../../atoms/InputField'
 import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+import SelectField from '../../../atoms/SelectField'
 
 // utils
-import { showErrorNotification } from '../../../utils/helper'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
 import { ISalonForm } from '../../../types/interfaces'
@@ -42,7 +43,6 @@ import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
-import SelectField from '../../../atoms/SelectField'
 
 type ComponentProps = {
 	openNoteModal?: Function
@@ -69,31 +69,35 @@ const SalonForm: FC<Props> = (props) => {
 	const aboutUsFirstLabel = t('loc:O nás')
 	const aboutUsSecondPlaceholder = t('loc:Zadajte doplňujúce informácie o salóne')
 	const aboutUsSecondLabel = t('loc:Doplňujúci popis')
-	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string) => {
+	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string, maxLength: number) => {
 		return (
-			<Field
-				component={TextareaField}
-				label={label}
-				name={filedName}
-				size={'large'}
-				placeholder={placeholder}
-				disabled={disabled}
-				maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
-				showLettersCount
-			/>
+			<Field component={TextareaField} label={label} name={filedName} size={'large'} placeholder={placeholder} disabled={disabled} maxLength={maxLength} showLettersCount />
 		)
 	}
 
 	const imagesFormField = (filedName: string, disabled: boolean) => (
 		<Field
 			className={'m-0'}
+			uploaderClassName={'overflow-x-auto'}
 			component={ImgUploadField}
 			name={filedName}
 			label={t('loc:Fotogaléria')}
 			signUrl={URL_UPLOAD_IMAGES}
 			multiple
-			required
 			maxCount={10}
+			category={UPLOAD_IMG_CATEGORIES.SALON}
+			disabled={disabled}
+		/>
+	)
+
+	const logoFormField = (filedName: string, disabled: boolean) => (
+		<Field
+			component={ImgUploadField}
+			name={filedName}
+			label={t('loc:Logo')}
+			signUrl={URL_UPLOAD_IMAGES}
+			multiple={false}
+			maxCount={1}
 			category={UPLOAD_IMG_CATEGORIES.SALON}
 			disabled={disabled}
 		/>
@@ -108,6 +112,7 @@ const SalonForm: FC<Props> = (props) => {
 			phoneName={phoneFiledName}
 			disabled={disabled}
 			formName={FORM.SALON}
+			getPopupContainer={() => document.querySelector('.content-body')}
 			required
 		/>
 	)
@@ -125,43 +130,69 @@ const SalonForm: FC<Props> = (props) => {
 		/>
 	)
 
+	const nameFormField = (filedName: string, disabled: boolean) => (
+		<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={filedName} size={'large'} disabled={disabled} required />
+	)
+
 	const addressDescriptionFormFiled = (filedName: string, disabled: boolean) => (
 		<Field
 			component={TextareaField}
 			label={t('loc:Poznámka k adrese')}
 			name={filedName}
 			size={'large'}
-			placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie v ľavo"')}
+			placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie vľavo"')}
 			disabled={disabled}
 			maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
 			showLettersCount
 		/>
 	)
+
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Space className={'w-full'} direction='vertical' size={36}>
 				<Row>
 					<Col span={24}>
-						<div className={'flex justify-between w-full items-center'}>
+						<Row justify={'space-between'}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<InfoIcon className={'text-notino-black mr-2'} />
 								{t('loc:Základné údaje')}
 							</h3>
-						</div>
+							<Row className={'py-2'} wrap={false}>
+								{getSalonTagPublished(formValues?.state as SALON_STATES)}
+								{getSalonTagChanges(formValues?.state as SALON_STATES)}
+								{getSalonTagDeleted(!!formValues?.deletedAt, true)}
+							</Row>
+						</Row>
 						<Divider className={'mb-3 mt-3'} />
-
-						<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={'name'} size={'large'} disabled={disabledForm} required />
+						<Compare
+							oldValue={formValues?.publishedSalonData?.name}
+							newValue={formValues?.name}
+							oldFormField={nameFormField('publishedSalonData.name', true)}
+							newFormField={nameFormField('name', disabledForm)}
+						/>
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsFirst}
 							newValue={formValues?.aboutUsFirst}
-							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsFirst', true, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
-							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel)}
+							oldFormField={aboutUsFirstFormField(
+								'publishedSalonData.aboutUsFirst',
+								true,
+								aboutUsFirstPlaceholder,
+								aboutUsFirstLabel,
+								VALIDATION_MAX_LENGTH.LENGTH_1000
+							)}
+							newFormField={aboutUsFirstFormField('aboutUsFirst', disabledForm, aboutUsFirstPlaceholder, aboutUsFirstLabel, VALIDATION_MAX_LENGTH.LENGTH_1000)}
 						/>
 						<Compare
 							oldValue={formValues?.publishedSalonData?.aboutUsSecond}
 							newValue={formValues?.aboutUsSecond}
-							oldFormField={aboutUsFirstFormField('publishedSalonData.aboutUsSecond', true, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
-							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel)}
+							oldFormField={aboutUsFirstFormField(
+								'publishedSalonData.aboutUsSecond',
+								true,
+								aboutUsSecondPlaceholder,
+								aboutUsSecondLabel,
+								VALIDATION_MAX_LENGTH.LENGTH_500
+							)}
+							newFormField={aboutUsFirstFormField('aboutUsSecond', disabledForm, aboutUsSecondPlaceholder, aboutUsSecondLabel, VALIDATION_MAX_LENGTH.LENGTH_500)}
 						/>
 						<Field
 							component={SelectField}
@@ -172,23 +203,22 @@ const SalonForm: FC<Props> = (props) => {
 							size={'large'}
 							loading={categories.isLoading}
 							mode={'multiple'}
+							disabled={disabledForm}
 							required
 						/>
-						<Field
-							component={ImgUploadField}
-							name={'logo'}
-							label={t('loc:Logo')}
-							signUrl={URL_UPLOAD_IMAGES}
-							multiple={false}
-							maxCount={1}
-							category={UPLOAD_IMG_CATEGORIES.SALON}
-							disabled={disabledForm}
+						<Compare
+							oldValue={formValues?.publishedSalonData?.logo}
+							equal={isEqual(formValues?.logo, formValues?.publishedSalonData?.logo)}
+							oldFormField={logoFormField('publishedSalonData.logo', true)}
+							newFormField={logoFormField('logo', disabledForm)}
+							ellipsis
 						/>
 						<Compare
 							oldValue={formValues?.publishedSalonData?.gallery}
 							equal={isEqual(formValues?.gallery, formValues?.publishedSalonData?.gallery)}
 							oldFormField={imagesFormField('publishedSalonData.gallery', true)}
 							newFormField={imagesFormField('gallery', disabledForm)}
+							ellipsis
 						/>
 					</Col>
 				</Row>
@@ -298,17 +328,15 @@ const SalonForm: FC<Props> = (props) => {
 								name={'companyInfo.companyName'}
 								size={'large'}
 								disabled={disabledForm}
-								required
 							/>
 							<Field
 								className={'w-12/25'}
 								component={InputField}
 								label={t('loc:IČO')}
-								placeholder={t('loc:Zadajte ičo')}
+								placeholder={t('loc:Zadajte IČO')}
 								name={'companyInfo.businessID'}
 								size={'large'}
 								disabled={disabledForm}
-								required
 							/>
 						</Row>
 						<Row justify={'space-between'}>
@@ -320,7 +348,6 @@ const SalonForm: FC<Props> = (props) => {
 								name={'companyInfo.vatID'}
 								size={'large'}
 								disabled={disabledForm}
-								required
 							/>
 							<Field
 								className={'w-12/25'}
@@ -330,7 +357,6 @@ const SalonForm: FC<Props> = (props) => {
 								name={'companyInfo.taxID'}
 								size={'large'}
 								disabled={disabledForm}
-								required
 							/>
 						</Row>
 					</Col>
@@ -381,7 +407,7 @@ const SalonForm: FC<Props> = (props) => {
 								prefixName={'companyContactPerson.phonePrefixCountryCode'}
 								phoneName={'companyContactPerson.phone'}
 								disabled={disabledForm}
-								style={{ width: 'calc(50% - 8px' }}
+								className='w-12/25'
 								formName={FORM.SALON}
 								required
 							/>

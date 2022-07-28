@@ -63,12 +63,12 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Služba ${serviceData?.name} je už priradená!`)
+				description: i18next.t(`Služba ${serviceData?.category.name} je už priradená!`)
 			})
 		} else if (serviceData) {
 			let newServiceData = {
 				id: serviceData?.id,
-				name: serviceData?.name,
+				name: serviceData?.category.name,
 				salonData: {
 					durationFrom: serviceData?.durationFrom,
 					durationTo: serviceData?.durationTo,
@@ -163,6 +163,8 @@ const EmployeePage = (props: Props) => {
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
 
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
+
 	const emploeyeeExists = !!employee?.data?.employee?.id
 
 	const isLoading = employee.isLoading || services.isLoading || isRemoving
@@ -195,22 +197,30 @@ const EmployeePage = (props: Props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employee.data])
 
+	useEffect(() => {
+		dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))
+	}, [dispatch, form?.values?.roleID])
+
 	const updateEmployee = async (data: IEmployeeForm) => {
 		try {
 			setSubmitting(true)
-			await patchReq(
-				'/api/b2b/admin/employees/{employeeID}',
-				{ employeeID },
-				{
-					firstName: data?.firstName,
-					lastName: data?.lastName,
-					email: data?.email,
+			let reqBody: any = {
+				firstName: data?.firstName,
+				lastName: data?.lastName,
+				email: data?.email,
+				services: parseServicesForCreateAndUpdate(data?.services),
+				imageID: data?.imageID
+			}
+
+			if (data?.phonePrefixCountryCode && data?.phone) {
+				reqBody = {
+					...reqBody,
 					phonePrefixCountryCode: data?.phonePrefixCountryCode,
-					phone: data?.phone,
-					services: parseServicesForCreateAndUpdate(data?.services),
-					imageID: data?.imageID
+					phone: data?.phone
 				}
-			)
+			}
+
+			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
 			dispatch(getEmployee(employeeID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -244,7 +254,9 @@ const EmployeePage = (props: Props) => {
 			},
 			{
 				name: t('loc:Detail zamestnanca'),
-				titleName: `${get(employee.data?.employee, 'firstName')} ${get(employee.data?.employee, 'lastName')}`
+				titleName:
+					get(employee.data?.employee, 'firstName') ||
+					(get(employee.data?.employee, 'lastName') && `${get(employee.data?.employee, 'firstName')} ${get(employee.data?.employee, 'lastName')}`.trim())
 			}
 		]
 	}
@@ -290,21 +302,7 @@ const EmployeePage = (props: Props) => {
 		}
 	}
 
-	const rowClass = cx({
-		'justify-between': emploeyeeExists,
-		'justify-center': !emploeyeeExists
-	})
-
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
-
-	const buttonWidthClass = cx({
-		'w-12/25': isProfileInActive
-	})
-
-	const wrapperWidthClass = cx({
-		'w-1/2': isProfileInActive,
-		'w-1/3': !isProfileInActive
-	})
 
 	return (
 		<>
@@ -312,29 +310,31 @@ const EmployeePage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
 			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
-					<EmployeeForm
-						addService={() => addService(services, form, dispatch)}
-						salonID={salonID}
-						onSubmit={updateEmployee}
-						onEditRoleClick={() => {
-							setVisible(true)
-							dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))
-						}}
-					/>
-					<div className={'content-footer'}>
-						<Row className={rowClass}>
+				{formValues?.hasActiveAccount && (
+					<div className='content-body small mt-2 mb-8'>
+						<EditRoleForm onSubmit={editEmployeeRole} />
+					</div>
+				)}
+				<div className='content-body small mt-2 mb-8'>
+					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
+					<div className={'content-footer pt-0'}>
+						<Row
+							className={cx({
+								'justify-between': emploeyeeExists,
+								'justify-center': !emploeyeeExists
+							})}
+						>
 							{emploeyeeExists ? (
 								<DeleteButton
 									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
-									className={'w-1/3'}
+									className={'mt-2-5 w-52 xl:w-60'}
 									onConfirm={deleteEmployee}
 									entityName={t('loc:zamestnanca')}
 									type={'default'}
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 								/>
 							) : undefined}
-							<div className={`flex justify-between ${wrapperWidthClass}`}>
+							<div className={`flex flex-wrap`}>
 								{isProfileInActive && (
 									<Permissions
 										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
@@ -343,7 +343,7 @@ const EmployeePage = (props: Props) => {
 												type={'primary'}
 												block
 												size={'middle'}
-												className={'noti-btn m-regular w-12/25'}
+												className={'noti-btn m-regular mt-2-5 w-40 mr-2'}
 												htmlType={'submit'}
 												onClick={(e) => {
 													if (hasPermission) {
@@ -357,7 +357,7 @@ const EmployeePage = (props: Props) => {
 												disabled={isInviteFromSubmitting}
 												loading={isInviteFromSubmitting}
 											>
-												{t(isProfileInActive ? 'loc:Pozvať do tímu' : 'loc:Upraviť rolu')}
+												{t('loc:Pozvať do tímu')}
 											</Button>
 										)}
 									/>
@@ -369,7 +369,7 @@ const EmployeePage = (props: Props) => {
 											type={'primary'}
 											block
 											size={'middle'}
-											className={`noti-btn m-regular ${buttonWidthClass}`}
+											className={`noti-btn m-regular w-40 mt-2-5`}
 											htmlType={'submit'}
 											onClick={(e) => {
 												if (hasPermission) {
@@ -390,7 +390,7 @@ const EmployeePage = (props: Props) => {
 
 							<Modal
 								className='rounded-fields'
-								title={t(isProfileInActive ? 'loc:Pozvať do tímu' : 'Upraviť rolu')}
+								title={t('loc:Pozvať do tímu')}
 								centered
 								visible={visible}
 								footer={null}
@@ -398,7 +398,7 @@ const EmployeePage = (props: Props) => {
 								closeIcon={<CloseIcon />}
 								width={394}
 							>
-								{isProfileInActive ? <InviteForm onSubmit={inviteEmployee} /> : <EditRoleForm onSubmit={editEmployeeRole} />}
+								{<InviteForm onSubmit={inviteEmployee} />}
 							</Modal>
 						</Row>
 					</div>

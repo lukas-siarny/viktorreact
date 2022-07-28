@@ -646,9 +646,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						}
 					/>
 					{renderContentHeader()}
-					{salonExists && (
-						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
-					)}
+					{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
 					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
 				</div>
 			</Spin>

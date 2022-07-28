@@ -4,9 +4,10 @@ import { message as antMessage } from 'antd'
 import { get, has, isEmpty, split } from 'lodash'
 import i18next from 'i18next'
 import qs from 'qs'
+import { change } from 'redux-form'
 import rootReducer from '../reducers'
 import { getAccessToken, isLoggedIn } from './auth'
-import { MSG_TYPE, NOTIFICATION_TYPE } from './enums'
+import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from './enums'
 import configureStore from './configureStore'
 import { history } from './history'
 
@@ -412,6 +413,31 @@ export const uploadFile = async (options: any) => {
 			}
 		})
 		onSuccess(data.status, data.request)
+	} catch (error) {
+		onError(error)
+	}
+}
+
+export const uploadImage = async (options: any, signUrl: string, category: UPLOAD_IMG_CATEGORIES, imagesUrls: any) => {
+	const { file, onSuccess, onError } = options
+
+	const { uid, name, size, type } = file
+	const files = [{ name, size, mimeType: type }]
+
+	try {
+		// sign imageUrl
+		const { data } = await postReq(signUrl as any, undefined, { files, category })
+		const imgData = data?.files?.[0]
+		// eslint-disable-next-line no-param-reassign
+		imagesUrls.current[uid] = { uid, ...imgData }
+		// upload file to signed URL
+		const result = await axios.put(imgData.signedUrl, file, {
+			headers: {
+				'Content-Type': file.type
+			}
+		})
+
+		onSuccess(result.status, result.request)
 	} catch (error) {
 		onError(error)
 	}

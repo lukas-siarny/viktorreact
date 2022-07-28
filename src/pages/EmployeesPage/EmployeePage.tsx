@@ -187,7 +187,15 @@ const EmployeePage = (props: Props) => {
 			dispatch(
 				initialize(FORM.EMPLOYEE, {
 					...employee.data?.employee,
-					avatar: employee.data?.employee?.image ? [{ url: employee.data?.employee?.image?.resizedImages?.thumbnail, uid: employee.data?.employee?.image?.id }] : [],
+					avatar: employee.data?.employee?.image
+						? [
+								{
+									url: employee.data?.employee?.image?.original,
+									thumbUrl: employee.data?.employee?.image?.resizedImages?.thumbnail,
+									uid: employee.data?.employee?.image?.id
+								}
+						  ]
+						: [],
 					services: checkAndParseServices(employee.data?.employee?.services),
 					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id },
 					roleID: employee.data?.employee?.role?.id
@@ -209,7 +217,7 @@ const EmployeePage = (props: Props) => {
 				lastName: data?.lastName,
 				email: data?.email,
 				services: parseServicesForCreateAndUpdate(data?.services),
-				imageID: data?.imageID
+				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid')
 			}
 
 			if (data?.phonePrefixCountryCode && data?.phone) {

@@ -45,9 +45,10 @@ import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.sv
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 
 type ComponentProps = {
-	openNoteModal: Function
+	openNoteModal?: Function
 	disabledForm: boolean
 	salonID?: number
+	noteModalControlButtons?: React.ReactNode
 }
 
 type SalonAddress = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['address']
@@ -60,7 +61,7 @@ const compareAddress = (oldAddress: SalonAddress, newAddress: SalonAddress): boo
 
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, openNoteModal, salonID, disabledForm } = props
+	const { handleSubmit, change, noteModalControlButtons, disabledForm } = props
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
@@ -428,11 +429,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
-						{!!salonID && (
-							<Button type={'primary'} size={'middle'} className={'noti-btn w-48 lg:w-60 mb-6 mt-3'} onClick={() => openNoteModal()} disabled={disabledForm}>
-								{t('loc:Pridať poznámku')}
-							</Button>
-						)}
+						{noteModalControlButtons}
 					</Col>
 				</Row>
 				<Row>

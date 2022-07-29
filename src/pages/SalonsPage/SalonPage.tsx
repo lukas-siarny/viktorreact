@@ -191,6 +191,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				phonePrefixCountryCode: salonData?.phonePrefixCountryCode || null,
 				phone: salonData?.phone || null,
 				gallery: map(salonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
+				pricelists: map(salonData?.pricelists, (file) => ({ url: file?.original, uid: file?.id })),
 				logo: salonData?.logo?.id
 					? [
 							{
@@ -212,7 +213,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					publishedSalonData: {
 						...salonData.publishedSalonData,
 						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
-						logo: salonData.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null
+						logo: salonData.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null,
+						pricelists: map(salonData.publishedSalonData?.pricelists, (file) => ({ url: file?.original, uid: file?.id }))
 					}
 				}
 			}

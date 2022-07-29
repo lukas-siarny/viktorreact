@@ -387,4 +387,5 @@ export interface IIsPublishedVersionSameAsDraft {
 	isAboutUsSecondEqual: boolean
 	isPhoneEqual: boolean
 	isEmailEqual: boolean
+	isPriceListsEqual: boolean
 }

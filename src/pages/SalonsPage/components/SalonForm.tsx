@@ -17,6 +17,7 @@ import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 import SelectField from '../../../atoms/SelectField'
+import FileUploadField from '../../../atoms/FileUploadField'
 
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification } from '../../../utils/helper'
@@ -146,6 +147,22 @@ const SalonForm: FC<Props> = (props) => {
 			disabled={disabled}
 			maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
 			showLettersCount
+		/>
+	)
+
+	const priceListFormField = (filedName: string, disabled: boolean) => (
+		<Field
+			className={'m-0'}
+			uploaderClassName={'overflow-x-auto'}
+			component={ImgUploadField}
+			name={filedName}
+			label={t('loc:Cenník')}
+			signUrl={URL_UPLOAD_IMAGES}
+			multiple
+			maxCount={10}
+			category={UPLOAD_IMG_CATEGORIES.SALON_PRICELIST}
+			disabled={disabled}
+			accept={'image/jpeg,image/png,application/pdf,application/doc,application/xls'}
 		/>
 	)
 
@@ -487,6 +504,15 @@ const SalonForm: FC<Props> = (props) => {
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
 						/>
 						<Field className={'mb-6'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} disabled={disabledForm} required />
+						<Compare
+							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
+							oldValue={formValues?.publishedSalonData?.pricelists}
+							equal={isPublishedVersionSameAsDraft?.isPriceListsEqual}
+							oldFormField={priceListFormField('publishedSalonData.pricelists', true)}
+							newFormField={priceListFormField('pricelists', disabledForm || !!pendingPublication)}
+							ellipsis
+							disableComparsion={disableComparsion}
+						/>
 					</Col>
 				</Row>
 				<Row>

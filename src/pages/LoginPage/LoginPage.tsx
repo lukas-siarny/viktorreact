@@ -34,7 +34,7 @@ const LoginPage: FC<Props> = () => {
 	}
 
 	return (
-		<div className='mt-16'>
+		<div className='mt-16 max-w-80 w-full'>
 			<h3>{t('loc:Prihlásenie')}</h3>
 			<LoginForm onSubmit={handleLoginSubmit} showForgottenPasswordModal={() => setModalVisible(true)} />
 			{modalVisible && <ForgottenPasswordModal visible={modalVisible} onClose={() => setModalVisible(false)} />}

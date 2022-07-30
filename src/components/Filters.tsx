@@ -1,6 +1,5 @@
 import React, { useState, ReactNode, useCallback } from 'react'
 import { Collapse, Button, Badge, Row, Col } from 'antd'
-import { black } from 'tailwindcss/colors'
 import { ReactComponent as FilterIcon } from '../assets/icons/filter-icon.svg'
 import { ROW_GUTTER_X_DEFAULT } from '../utils/enums'
 

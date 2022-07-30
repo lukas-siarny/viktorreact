@@ -8,10 +8,11 @@ import { useTranslation } from 'react-i18next'
 import Geocode from 'react-geocode'
 
 // components
+import i18next from 'i18next'
 import MapContainer from './MapContainer'
 
 // utils
-import { GOOGLE_MAPS_API_KEY, MAP, ROW_GUTTER_X_M } from '../utils/enums'
+import { GOOGLE_MAPS_API_KEY, MAP } from '../utils/enums'
 import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents } from '../utils/helper'
 
 // atoms
@@ -67,15 +68,39 @@ export interface IAddressValues {
 	zipCode?: string
 }
 
-export const AddressLayout = (values?: IAddressValues, className?: string) => (
-	<Row className={cx('address-field-address gap-2 items-start', className)} wrap={false}>
-		<Col className={'flex flex-col gap-1 text-base'}>
-			{get(values, 'street') || get(values, 'streetNumber') ? <span>{`${get(values, 'street') ?? ''} ${get(values, 'streetNumber') ?? ''}`}</span> : null}
-			{get(values, 'zipCode') || get(values, 'city') ? <span>{`${get(values, 'zipCode') ?? ''} ${get(values, 'city') ?? ''}`}</span> : null}
-			{get(values, 'country')}
-		</Col>
-	</Row>
-)
+export const AddressLayout = (values?: IAddressValues, className?: string) => {
+	const street = values?.street
+	const streetNumber = values?.streetNumber
+	const city = values?.city
+	const zipCode = values?.zipCode
+	const country = values?.country
+
+	const isEmpty = !street && !streetNumber && !city && !zipCode && !country
+
+	return (
+		<Row className={cx('address-field-address gap-2 items-start', className)} wrap={false}>
+			<Col className={'flex flex-col gap-1 text-base'}>
+				{isEmpty ? (
+					<i>{i18next.t('loc:Vyhľadajte adresu na mape alebo vo vyhľadávači')}</i>
+				) : (
+					<>
+						{street || streetNumber ? (
+							<span>
+								{street} {streetNumber}
+							</span>
+						) : null}
+						{zipCode || city ? (
+							<span>
+								{zipCode} {city}
+							</span>
+						) : null}
+						{country}
+					</>
+				)}
+			</Col>
+		</Row>
+	)
+}
 
 const AddressFields = (props: Props) => {
 	const {

@@ -20,7 +20,7 @@ import PopConfirmComponent from '../../../components/PopConfirmComponent'
 import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
-import { validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { validationString } from '../../../utils/helper'
 import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 
 // redux
@@ -100,7 +100,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const localizationInputCss = values?.level === 0 ? 'w-2/3' : 'w-full'
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 relative pr-7'}>
@@ -149,16 +149,28 @@ const CategoryForm: FC<Props> = (props) => {
 							}
 						/>
 						{values?.level === 0 ? (
-							<Field
-								className='w-1/4'
-								component={ImgUploadField}
-								name='image'
-								label={t('loc:Obrázok')}
-								maxCount={1}
-								signUrl={URL_UPLOAD_IMAGES}
-								category={UPLOAD_IMG_CATEGORIES.CATEGORY}
-								required
-							/>
+							<div className='w-1/4'>
+								<Field
+									className='w-full'
+									component={ImgUploadField}
+									name='image'
+									label={t('loc:Obrázok')}
+									maxCount={1}
+									signUrl={URL_UPLOAD_IMAGES}
+									category={UPLOAD_IMG_CATEGORIES.CATEGORY}
+									required
+								/>
+								<Field
+									className='w-full'
+									component={ImgUploadField}
+									name='icon'
+									label={t('loc:Ikona')}
+									maxCount={1}
+									signUrl={URL_UPLOAD_IMAGES}
+									category={UPLOAD_IMG_CATEGORIES.CATEGORY}
+									required
+								/>
+							</div>
 						) : undefined}
 					</Row>
 					<div className={'flex justify-between flex-wrap gap-2'}>

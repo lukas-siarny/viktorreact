@@ -149,16 +149,28 @@ const CategoryForm: FC<Props> = (props) => {
 							}
 						/>
 						{values?.level === 0 ? (
-							<Field
-								className='w-1/4'
-								component={ImgUploadField}
-								name='image'
-								label={t('loc:Obrázok')}
-								maxCount={1}
-								signUrl={URL_UPLOAD_IMAGES}
-								category={UPLOAD_IMG_CATEGORIES.CATEGORY}
-								required
-							/>
+							<div className='w-1/4'>
+								<Field
+									className='w-full'
+									component={ImgUploadField}
+									name='image'
+									label={t('loc:Obrázok')}
+									maxCount={1}
+									signUrl={URL_UPLOAD_IMAGES}
+									category={UPLOAD_IMG_CATEGORIES.CATEGORY}
+									required
+								/>
+								<Field
+									className='w-full'
+									component={ImgUploadField}
+									name='icon'
+									label={t('loc:Ikona')}
+									maxCount={1}
+									signUrl={URL_UPLOAD_IMAGES}
+									category={UPLOAD_IMG_CATEGORIES.CATEGORY}
+									required
+								/>
+							</div>
 						) : undefined}
 					</Row>
 					<div className={'flex justify-between flex-wrap gap-2'}>

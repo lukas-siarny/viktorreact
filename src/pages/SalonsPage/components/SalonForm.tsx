@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Form, Row, Space } from 'antd'
+import { Col, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
 import { get } from 'lodash'
 
@@ -44,9 +44,9 @@ import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.sv
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 
 type ComponentProps = {
-	openNoteModal: Function
 	disabledForm: boolean
 	salonID?: number
+	noteModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
 	pendingPublication?: boolean
 	isPublishedVersionSameAsDraft?: IIsPublishedVersionSameAsDraft
@@ -56,7 +56,7 @@ type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, openNoteModal, salonID, disabledForm, deletedSalon = false, isPublishedVersionSameAsDraft, pendingPublication } = props
+	const { handleSubmit, change, noteModalControlButtons, salonID, disabledForm, deletedSalon = false, isPublishedVersionSameAsDraft, pendingPublication } = props
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
@@ -467,11 +467,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
-						{!!salonID && (
-							<Button type={'primary'} size={'middle'} className={'noti-btn w-48 lg:w-60 mb-6 mt-3'} onClick={() => openNoteModal()} disabled={disabledForm}>
-								{t('loc:Pridať poznámku')}
-							</Button>
-						)}
+						{noteModalControlButtons}
 					</Col>
 				</Row>
 				<Row>

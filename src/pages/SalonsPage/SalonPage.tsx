@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip, notification } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
-import { get, isEmpty, map, unionBy, isEqual } from 'lodash'
+import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -16,16 +16,16 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
-import { ISalonPayloadData, ISelectedSalonPayload, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IBreadcrumbs, IIsPublishedVersionSameAsDraft, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -34,6 +34,7 @@ import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft } from './components/salonVersionsUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -41,74 +42,6 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
-
-const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalonPayload) => {
-	// compare all fields that needs to be approved
-	const isNameEqual = (salonData?.data?.name || null) === (salonData?.data?.publishedSalonData?.name || null)
-	const isLogoEqual = isEqual(salonData?.data?.logo || null, salonData?.data?.publishedSalonData?.logo || null)
-	const isGalleryEqual = isEqual(salonData?.data?.images || [], salonData?.data?.publishedSalonData?.images || [])
-	const isAddressEqual = isEqual(salonData?.data?.address || null, salonData?.data?.publishedSalonData?.address || null)
-	const isAboutUsFirstEqual = (salonData?.data?.aboutUsFirst || null) === (salonData?.data?.publishedSalonData?.aboutUsFirst || null)
-	const isAboutUsSecondEqual = (salonData?.data?.aboutUsSecond || null) === (salonData?.data?.publishedSalonData?.aboutUsSecond || null)
-	// TODO edit when BE is done - issue NOT-1451
-	/* const isPhoneEqual =
-		(salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null) &&
-		(salonData?.data?.phonePrefixCountryCode || null) === (salonData?.data?.publishedSalonData?.phonePrefixCountryCode || null) */
-	const isEmailEqual = (salonData?.data?.email || null) === (salonData?.data?.publishedSalonData?.email || null)
-	const isPhoneEqual = (salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null)
-
-	return isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual
-}
-
-const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPublishedVersionSameAsDraft => {
-	// compare all fields that needs to be approved
-	const addressPublished = {
-		countryCode: formValues?.publishedSalonData?.address?.countryCode || null,
-		zipCode: formValues?.publishedSalonData?.address?.zipCode || null,
-		city: formValues?.publishedSalonData?.address?.city || null,
-		street: formValues?.publishedSalonData?.address?.street || null,
-		streetNumber: formValues?.publishedSalonData?.address?.streetNumber || null,
-		latitude: formValues?.publishedSalonData?.address?.latitude ?? null,
-		longitude: formValues?.publishedSalonData?.address?.longitude ?? null
-	}
-	const addressDraft = {
-		countryCode: formValues?.country,
-		zipCode: formValues?.zipCode,
-		city: formValues?.city,
-		street: formValues?.street,
-		streetNumber: formValues?.streetNumber,
-		latitude: formValues?.latitude,
-		longitude: formValues?.longitude
-	}
-
-	const isNameEqual = (formValues?.name || null) === (formValues?.publishedSalonData?.name || null)
-	const isLogoEqual = isEqual(formValues?.logo || null, formValues?.publishedSalonData?.logo || null)
-	const isGalleryEqual = isEqual(formValues?.gallery || [], formValues?.publishedSalonData?.gallery || [])
-	const isAddressEqual = isEqual(addressDraft, addressPublished)
-	const isAddressNoteEqual = (formValues?.description || null) === (formValues?.publishedSalonData?.address?.description || null)
-	const isAboutUsFirstEqual = (formValues?.aboutUsFirst || null) === (formValues?.publishedSalonData?.aboutUsFirst || null)
-	const isAboutUsSecondEqual = (formValues?.aboutUsSecond || null) === (formValues?.publishedSalonData?.aboutUsSecond || null)
-	// TODO edit when BE is done - issue NOT-1451
-	/* const isPhoneEqual =
-		(formValues?.phone || null) === (formValues?.publishedSalonData?.phone || null) &&
-		(formValues?.phonePrefixCountryCode || null) === (formValues?.publishedSalonData?.phonePrefixCountryCode || null) */
-	const isPhoneEqual = (formValues?.phone || null) === (formValues?.publishedSalonData?.phone || null)
-	const isEmailEqual = (formValues?.email || null) === (formValues?.publishedSalonData?.email || null)
-
-	return {
-		isEqual:
-			isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAddressNoteEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual,
-		isNameEqual,
-		isLogoEqual,
-		isGalleryEqual,
-		isAddressEqual,
-		isAddressNoteEqual,
-		isAboutUsFirstEqual,
-		isAboutUsSecondEqual,
-		isPhoneEqual,
-		isEmailEqual
-	}
-}
 
 type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
@@ -395,6 +328,24 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			history.push(t('paths:salons'))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setIsRemoving(false)
+		}
+	}
+
+	const deleteOpenHoursNote = async () => {
+		if (isRemoving) {
+			return
+		}
+
+		setIsRemoving(true)
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/open-hours-note', { salonID }, { openingHoursNote: null }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			dispatch(reset(FORM.OPEN_HOURS_NOTE))
+			await dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -764,16 +715,51 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					{infoMessage}
 					<SalonForm
 						onSubmit={handleSubmit}
-						openNoteModal={() => setVisible(true)}
 						salonID={salonID}
 						disabledForm={deletedSalon}
 						deletedSalon={deletedSalon}
 						pendingPublication={!!pendingPublication}
 						isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
+						noteModalControlButtons={
+							salonExists && (
+								<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
+									{salon?.data?.openingHoursNote ? (
+										<>
+											<Button
+												type={'primary'}
+												block
+												size={'middle'}
+												className={'noti-btn m-regular w-12/25 xl:w-1/3'}
+												onClick={() => setVisible(true)}
+												disabled={deletedSalon}
+											>
+												{STRINGS(t).edit(t('loc:poznámku'))}
+											</Button>
+											<DeleteButton
+												className={'ml-2 w-12/25 xl:w-1/3'}
+												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+												onConfirm={deleteOpenHoursNote}
+												entityName={t('loc:poznámku')}
+												disabled={deletedSalon}
+											/>
+										</>
+									) : (
+										<Button
+											type={'primary'}
+											block
+											size={'middle'}
+											className={'noti-btn m-regular w-1/3'}
+											onClick={() => setVisible(true)}
+											disabled={deletedSalon}
+										>
+											{STRINGS(t).addRecord(t('loc:poznámku'))}
+										</Button>
+									)}
+								</Row>
+							)
+						}
 					/>
-					{salonExists && (
-						<OpenHoursNoteModal visible={visible} salonID={salon?.data?.id || 0} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
-					)}
+					{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
 					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
 				</div>
 			</Spin>

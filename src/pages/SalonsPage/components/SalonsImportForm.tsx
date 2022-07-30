@@ -7,14 +7,11 @@ import { Button, Form } from 'antd'
 import FileUploadField from '../../../atoms/FileUploadField'
 
 // utils
-import { showErrorNotification } from '../../../utils/helper'
+import { showErrorNotification, validationRequired } from '../../../utils/helper'
 import { FORM } from '../../../utils/enums'
 
 // types
 import { IDataUploadForm } from '../../../types/interfaces'
-
-// validate
-import validateSalonForm from './validateSalonForm'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -37,6 +34,7 @@ const SalonsImportForm: FC<Props> = (props) => {
 				type={'file'}
 				disabled={submitting}
 				handleUploadOutside
+				validate={validationRequired}
 				required
 			/>
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={disabledForm || submitting || pristine} loading={submitting}>
@@ -51,8 +49,7 @@ const form = reduxForm<IDataUploadForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	onSubmitFail: showErrorNotification,
-	validate: validateSalonForm
+	onSubmitFail: showErrorNotification
 })(SalonsImportForm)
 
 export default form

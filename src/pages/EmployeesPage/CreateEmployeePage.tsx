@@ -117,7 +117,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
 			<Spin spinning={isLoading}>
-				<h2 className={'content-body-width-small'}>Poslať kolegovi pozvánku</h2>
+				<h2 className={'content-body-width-small'}>{t('loc:Poslať kolegovi pozvánku')}</h2>
 				<div className='content-body small mt-2 mb-8 without-content-footer'>
 					<InviteForm onSubmit={inviteEmployee} />
 					<Row justify={'center'}>
@@ -132,14 +132,14 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 							disabled={isInviteFromSubmitting || isInviteFormPristine}
 							loading={isInviteFromSubmitting}
 						>
-							{t('loc:Pozvať do týmu')}
+							{t('loc:Pozvať do tímu')}
 						</Button>
 					</Row>
 				</div>
 				<div className='content-body-width-small'>
-					<Divider className={'mt-10 mb-6'}>{'alebo'}</Divider>
+					<Divider className={'mt-10 mb-6'}>{t('loc:alebo')}</Divider>
 				</div>
-				<h2 className={'content-body-width-small'}>Vytrvoriť dočasný profil kolegu</h2>
+				<h2 className={'content-body-width-small'}>{t('loc:Vytrvoriť dočasný profil kolegu')}</h2>
 				<div className='content-body small mt-2 without-content-footer'>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
 					<Row justify={'center'}>

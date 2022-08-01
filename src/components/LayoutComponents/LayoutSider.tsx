@@ -60,9 +60,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
 			</Menu.Item>
-			<Menu.Item key='invites' onClick={() => history.push(t('paths:invites'))} icon={<ProfileIcon />}>
-				{t('loc:Pozvánky')}
-			</Menu.Item>
+			<Permissions allowed={[PERMISSION.PARTNER]}>
+				<Menu.Item key='pending-invites' onClick={() => history.push(t('paths:pending-invites'))} icon={<EmployeesIcon />}>
+					{t('loc:Čakajúce pozvánky')}
+				</Menu.Item>
+			</Permissions>
 			<Menu.Item
 				key='support'
 				onClick={() => {

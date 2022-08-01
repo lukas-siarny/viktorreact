@@ -111,7 +111,7 @@ export default (state = initState, action: IUserActions) => {
 			return {
 				...state,
 				pendingInvites: {
-					...state.users,
+					...state.pendingInvites,
 					isLoading: true
 				}
 			}
@@ -119,7 +119,7 @@ export default (state = initState, action: IUserActions) => {
 			return {
 				...state,
 				pendingInvites: {
-					...initState.users,
+					...initState.pendingInvites,
 					isFailure: true
 				}
 			}
@@ -127,7 +127,7 @@ export default (state = initState, action: IUserActions) => {
 			return {
 				...state,
 				pendingInvites: {
-					...initState.users,
+					...initState.pendingInvites,
 					data: action.payload.data
 				}
 			}

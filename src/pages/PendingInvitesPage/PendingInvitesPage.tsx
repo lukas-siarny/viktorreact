@@ -1,40 +1,34 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { StringParam, useQueryParams } from 'use-query-params'
 import { Button, Col, Row } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
-import { initialize } from 'redux-form'
 
 // components
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // utils
-import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, LANGUAGE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { history } from '../../utils/history'
-import i18n from '../../utils/i18n'
-import { getSupportContactCountryName } from '../../utils/helper'
+import { withPermissions } from '../../utils/Permissions'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { patchReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
+import { getCurrentUser, getPendingInvites } from '../../reducers/users/userActions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
 
-// assets
-import { getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
-import { getPendingInvites } from '../../reducers/users/userActions'
-
 type Columns = ColumnsType<any>
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
+const permissions: PERMISSION[] = [PERMISSION.PARTNER]
 
-const InvitesPage = () => {
+const PendingInvitesPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const [submitting, setIsSubmitting] = useState(false)
 
 	const pendingInvites = useSelector((state: RootState) => state.user.pendingInvites)
 	const currentUser = useSelector((state: RootState) => state.user.authUser)
@@ -45,35 +39,47 @@ const InvitesPage = () => {
 		}
 	}, [dispatch, currentUser.data?.id])
 
+	const acceptInvite = async (salonID: number) => {
+		if (!currentUser.data?.id) {
+			return
+		}
+
+		setIsSubmitting(true)
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/accept-employee-invite', { salonID }, { accept: true })
+			dispatch(getPendingInvites(currentUser.data?.id))
+			dispatch(getCurrentUser())
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		} finally {
+			setIsSubmitting(false)
+		}
+	}
+
 	const columns: Columns = [
 		{
 			title: t('loc:Názov salónu'),
-			dataIndex: 'country',
-			key: 'country',
+			dataIndex: 'salon',
+			key: 'name',
 			sorter: false,
-			render: (value) => {
-				const name = getSupportContactCountryName(value.nameLocalizations, i18n.language as LANGUAGE) || value.code
-				return (
-					<div className={'flex items-center gap-2'}>
-						{value.flag && <img src={value.flag} alt={name} width={24} />}
-						<span className={'truncate inline-block'}>{name}</span>
-					</div>
-				)
-			}
+			width: '100%',
+			render: (value) => value.name
 		},
 		{
 			key: 'action',
+			dataIndex: 'salon',
 			sorter: false,
-			render: (_value, record) => {
+			render: (value) => {
 				return (
 					<Button
 						type={'primary'}
 						block
 						size={'middle'}
-						className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+						className={'noti-btn m-regular'}
 						htmlType={'button'}
-						onClick={() => console.log('accept invite')}
-						disabled={false}
+						onClick={() => acceptInvite(value.id)}
+						disabled={pendingInvites?.isLoading || currentUser?.isLoading || submitting}
 					>
 						{t('loc:Prijať pozvánku')}
 					</Button>
@@ -85,7 +91,7 @@ const InvitesPage = () => {
 	const breadcrumbs: IBreadcrumbs | undefined = {
 		items: [
 			{
-				name: t('loc:Zoznam podporných centier')
+				name: t('loc:Zoznam čakajúcich pozvánok')
 			}
 		]
 	}
@@ -102,10 +108,8 @@ const InvitesPage = () => {
 							className='table-fixed'
 							columns={columns}
 							dataSource={pendingInvites?.data?.pendingEmployeeInvites}
-							rowClassName={'clickable-row'}
-							loading={pendingInvites?.isLoading}
+							loading={pendingInvites?.isLoading || currentUser?.isLoading || submitting}
 							twoToneRows
-							scroll={{ x: 800 }}
 							pagination={false}
 						/>
 					</div>
@@ -115,4 +119,4 @@ const InvitesPage = () => {
 	)
 }
 
-export default compose(withPermissions(permissions))(InvitesPage)
+export default compose(withPermissions(permissions))(PendingInvitesPage)

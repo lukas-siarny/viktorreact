@@ -25,6 +25,7 @@ import ActivationPage from '../pages/ActivationPage/ActivationPage'
 import UserPage from '../pages/UsersPage/UserPage'
 import CreateUserPage from '../pages/UsersPage/CreateUserPage'
 import UsersPage from '../pages/UsersPage/UsersPage'
+import PendingInvitesPage from '../pages/PendingInvitesPage/PendingInvitesPage'
 
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
@@ -94,7 +95,15 @@ const Routes: FC = (props) => {
 				/>
 				<AuthRoute {...props} exact path={t('paths:users')} component={UsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
 				<AuthRoute {...props} exact path={t('paths:my-account')} translatePathKey={t('paths:my-account')} component={UserPage} layout={MainLayout} page={PAGE.MY_ACCOUNT} />
-				<AuthRoute {...props} exact path={t('paths:invites')} translatePathKey={t('paths:invites')} component={UserPage} layout={MainLayout} page={PAGE.INVITES} />
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:pending-invites')}
+					translatePathKey={t('paths:pending-invites')}
+					component={PendingInvitesPage}
+					layout={MainLayout}
+					page={PAGE.PENDING_INVITES}
+				/>
 				<AuthRoute {...props} exact path={t('paths:index')} component={HomePage} translatePathKey={t('paths:index')} layout={MainLayout} page={PAGE.HOME} />
 				<AuthRoute
 					{...props}

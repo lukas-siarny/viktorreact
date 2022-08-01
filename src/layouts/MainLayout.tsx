@@ -82,7 +82,13 @@ const MainLayout: FC<Props> = (props) => {
 			}
 
 			return (
-				<Dropdown overlay={SALONS_MENU} placement='bottomRight' trigger={['click']} overlayStyle={{ minWidth: 226 }}>
+				<Dropdown
+					overlay={SALONS_MENU}
+					placement='bottomRight'
+					trigger={['click']}
+					overlayStyle={{ minWidth: 226 }}
+					getPopupContainer={() => document.querySelector('#noti-header') as HTMLElement}
+				>
 					<div role={'button'} className={cx(labelClassname, 'cursor-pointer')} tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
 						{content}
 					</div>
@@ -106,7 +112,7 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.PARTNER]}
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
-							<Header className='shadow-md bg-notino-white sticky top-0 z-10 px-4 flex items-center w-full z-50'>
+							<Header className='shadow-md bg-notino-white sticky top-0 z-10 px-4 flex items-center w-full z-50' id={'noti-header'}>
 								<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
 									{!hasPermission && (
 										<Button

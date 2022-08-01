@@ -155,6 +155,7 @@ const LanguagePicker: FC<Props> = (props) => {
 					key='currentLanguage'
 					title={get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase()}
 					icon={getLanguageFlag(currentLanguage)}
+					popupOffset={[0, -100]}
 				>
 					{options?.map((option: any, index: number) => (
 						<Menu.Item onClick={() => handleLanguageChange(option.value)} key={index} icon={getLanguageFlag(option.value)}>

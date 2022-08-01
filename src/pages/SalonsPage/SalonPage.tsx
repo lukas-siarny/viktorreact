@@ -73,7 +73,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const languages = useSelector((state: RootState) => state.enumerationsStore.languages)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
@@ -224,9 +223,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					  ]
 					: null,
 				categoryIDs: map(salonData?.categories, (category) => category.id),
-				// TODO: edit when NOT-1515 is done - use id as value instead of code then
-				// change langauge enumumerationOptions in getLanguages action as well (value will be id)
-				languages: map(salonData?.languages, (lng) => lng.code),
+				// TODO: remove any when NOT-1515 is done
+				languageIDs: map(salonData?.languages, (lng: any) => lng.id),
 				cosmeticIDs: map(salonData?.cosmetics, (cosmetic) => cosmetic.id),
 				address: !!salonData?.address || null,
 				socialLinkWebPage: salonData?.socialLinkWebPage || null,
@@ -289,14 +287,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 			const phones = data.phones?.filter((phone) => phone?.phone)
-			// TODO: edit when NOT-1515 is done - id will be used as value so mapping won't be needed
-			const languageIDs = data?.languages?.reduce((acc, langCode) => {
-				const lang: any = languages.data?.find((lng) => lng.code === langCode)
-				if (lang) {
-					return [...acc, lang.id]
-				}
-				return acc
-			}, [] as number[])
 
 			const salonData = {
 				imageIDs: (data.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
@@ -328,7 +318,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				companyInfo: data.companyInfo,
 				categoryIDs: data.categoryIDs,
 				cosmeticIDs: data.cosmeticIDs,
-				languageIDs
+				languageIDs: data.languageIDs
 			}
 
 			if (salonID > 0) {

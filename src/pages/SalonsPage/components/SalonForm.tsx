@@ -44,6 +44,7 @@ import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
 import { ReactComponent as SocialPinterest } from '../../../assets/icons/social-pinterest.svg'
 import { ReactComponent as SocialYoutube } from '../../../assets/icons/social-youtube.svg'
+import { ReactComponent as SocialTikTok } from '../../../assets/icons/social-tiktok.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 
 type ComponentProps = {
@@ -86,7 +87,7 @@ const SalonForm: FC<Props> = (props) => {
 		const { value, label, flag } = itemData
 		return (
 			<div className='flex items-center'>
-				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+				{flag ? <img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} /> : <div className={'noti-flag-fallback mr-1'} />}
 				{label}
 			</div>
 		)
@@ -237,7 +238,7 @@ const SalonForm: FC<Props> = (props) => {
 							options={languages.enumerationsOptions}
 							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}
 							placeholder={t('loc:Vyberte jazyk')}
-							name={'languages'}
+							name={'languageIDs'}
 							optionRender={langaugesOptionRender}
 							size={'large'}
 							loading={languages.isLoading}
@@ -579,13 +580,12 @@ const SalonForm: FC<Props> = (props) => {
 							placeholder={t('loc:Odkaz na Youtube')}
 							disabled={disabledForm}
 						/>
-						{/* TODO: icon */}
 						<Field
 							component={InputField}
 							label={t('loc:TikTok')}
 							name={'socialLinkTikTok'}
 							size={'large'}
-							prefix={(<GlobeIcon />) as any}
+							prefix={(<SocialTikTok />) as any}
 							placeholder={t('loc:Odkaz na TikTok')}
 							disabled={disabledForm}
 						/>

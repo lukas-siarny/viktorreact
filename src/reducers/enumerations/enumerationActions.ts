@@ -142,7 +142,7 @@ export const getLanguages = (): ThunkResult<Promise<IEnumerationsPayload>> => as
 			return {
 				key: `language_${item.id}`,
 				label: countryTranslation?.value || item.code,
-				value: item.code,
+				value: item.id,
 				flag: item.flag
 			}
 		})

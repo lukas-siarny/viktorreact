@@ -131,7 +131,7 @@ export interface ISalonForm {
 	],*/
 	categoryIDs: number[]
 	cosmeticIDs: number[]
-	languages: string[]
+	languageIDs: number[]
 	/* address: {
 		countryCode: string | null
 		zipCode: string | null

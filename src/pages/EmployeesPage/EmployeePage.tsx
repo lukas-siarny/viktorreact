@@ -28,7 +28,6 @@ import { decodePrice, encodePrice } from '../../utils/helper'
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
 import { IServicesPayload } from '../../reducers/services/serviceActions'
-import { getSalonRoles } from '../../reducers/roles/rolesActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -178,7 +177,6 @@ const EmployeePage = (props: Props) => {
 
 	useEffect(() => {
 		fetchEmployeeData()
-		dispatch(getSalonRoles())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
 
@@ -312,6 +310,17 @@ const EmployeePage = (props: Props) => {
 
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
 
+	/*
+						<Image
+					src={record?.image?.resizedImages.thumbnail as string}
+					loading='lazy'
+					fallback={record?.image?.original}
+					alt={record?.name}
+					preview={false}
+					className='cosmetics-logo'
+				/>
+	*/
+
 	return (
 		<>
 			<Row>
@@ -395,7 +404,6 @@ const EmployeePage = (props: Props) => {
 									)}
 								/>
 							</div>
-
 							<Modal
 								className='rounded-fields'
 								title={t('loc:Pozvať do tímu')}
@@ -406,7 +414,21 @@ const EmployeePage = (props: Props) => {
 								closeIcon={<CloseIcon />}
 								width={394}
 							>
-								{<InviteForm onSubmit={inviteEmployee} />}
+								<InviteForm onSubmit={inviteEmployee} />
+								<Button
+									className='noti-btn'
+									onClick={() => {
+										dispatch(submit(FORM.INVITE_EMPLOYEE))
+									}}
+									block
+									size='large'
+									type='primary'
+									htmlType='submit'
+									disabled={isInviteFromSubmitting}
+									loading={isInviteFromSubmitting}
+								>
+									{t('loc:Odoslať email')}
+								</Button>
 							</Modal>
 						</Row>
 					</div>

@@ -60,6 +60,9 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
 			</Menu.Item>
+			<Menu.Item key='invites' onClick={() => history.push(t('paths:invites'))} icon={<ProfileIcon />}>
+				{t('loc:Pozvánky')}
+			</Menu.Item>
 			<Menu.Item
 				key='support'
 				onClick={() => {

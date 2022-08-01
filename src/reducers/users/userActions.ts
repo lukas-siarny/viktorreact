@@ -6,7 +6,7 @@ import { get, map, flatten, uniq } from 'lodash'
 // types
 import { ThunkResult } from '../index'
 import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchablePayload, IPermissions } from '../../types/interfaces'
-import { AUTH_USER, USER, USERS } from './userTypes'
+import { AUTH_USER, USER, USERS, PENDING_INVITES } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
@@ -19,7 +19,7 @@ import { normalizeQueryParams } from '../../utils/helper'
 // actions
 import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
 
-export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers
+export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites
 
 interface IGetAuthUser {
 	type: AUTH_USER
@@ -36,6 +36,11 @@ interface IGetUsers {
 	payload: IUsersPayload
 }
 
+interface IGetPendingInvites {
+	type: PENDING_INVITES
+	payload: IPendingInvitesPayload
+}
+
 export interface IGetUsersQueryParams extends IQueryParams {
 	roleID?: number | undefined | null
 }
@@ -49,6 +54,10 @@ export interface IUserPayload {
 }
 
 export interface IUsersPayload extends ISearchablePayload<Paths.GetApiB2BAdminUsers.Responses.$200> {}
+
+export interface IPendingInvitesPayload {
+	data: Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200 | null
+}
 
 export const processAuthorizationResult =
 	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>
@@ -202,6 +211,29 @@ export const getUsers =
 			dispatch({ type: USERS.USERS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: USERS.USERS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getPendingInvites =
+	(userID: number): ThunkResult<Promise<IPendingInvitesPayload>> =>
+	// eslint-disable-next-line consistent-return
+	async (dispatch) => {
+		let payload = {} as IPendingInvitesPayload
+		try {
+			dispatch({ type: PENDING_INVITES.PENDING_INVITES_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/users/{userID}/pending-employee-invites', { userID })
+
+			payload = {
+				data
+			}
+
+			dispatch({ type: PENDING_INVITES.PENDING_INVITES_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: PENDING_INVITES.PENDING_INVITES_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

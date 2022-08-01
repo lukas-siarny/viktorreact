@@ -94,6 +94,7 @@ const Routes: FC = (props) => {
 				/>
 				<AuthRoute {...props} exact path={t('paths:users')} component={UsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
 				<AuthRoute {...props} exact path={t('paths:my-account')} translatePathKey={t('paths:my-account')} component={UserPage} layout={MainLayout} page={PAGE.MY_ACCOUNT} />
+				<AuthRoute {...props} exact path={t('paths:invites')} translatePathKey={t('paths:invites')} component={UserPage} layout={MainLayout} page={PAGE.INVITES} />
 				<AuthRoute {...props} exact path={t('paths:index')} component={HomePage} translatePathKey={t('paths:index')} layout={MainLayout} page={PAGE.HOME} />
 				<AuthRoute
 					{...props}

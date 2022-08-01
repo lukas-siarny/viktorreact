@@ -1,9 +1,9 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
-import { IUserActions, IAuthUserPayload, IUserPayload, IUsersPayload } from './userActions'
+import { IUserActions, IAuthUserPayload, IUserPayload, IUsersPayload, IPendingInvitesPayload } from './userActions'
 // eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { AUTH_USER, USERS, USER } from './userTypes'
+import { AUTH_USER, USERS, USER, PENDING_INVITES } from './userTypes'
 
 export const initState = {
 	authUser: {
@@ -20,7 +20,12 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as IUsersPayload & ILoadingAndFailure
+	} as IUsersPayload & ILoadingAndFailure,
+	pendingInvites: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IPendingInvitesPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -97,6 +102,31 @@ export default (state = initState, action: IUserActions) => {
 			return {
 				...state,
 				users: {
+					...initState.users,
+					data: action.payload.data
+				}
+			}
+		// pending invites
+		case PENDING_INVITES.PENDING_INVITES_LOAD_START:
+			return {
+				...state,
+				pendingInvites: {
+					...state.users,
+					isLoading: true
+				}
+			}
+		case PENDING_INVITES.PENDING_INVITES_LOAD_FAIL:
+			return {
+				...state,
+				pendingInvites: {
+					...initState.users,
+					isFailure: true
+				}
+			}
+		case PENDING_INVITES.PENDING_INVITES_LOAD_DONE:
+			return {
+				...state,
+				pendingInvites: {
 					...initState.users,
 					data: action.payload.data
 				}

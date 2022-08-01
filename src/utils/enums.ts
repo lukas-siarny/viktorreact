@@ -214,7 +214,8 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	CURRENCIES = 'currencies'
+	CURRENCIES = 'currencies',
+	LANGUAGES = 'languages'
 }
 
 export const GOOGLE_MAPS_API_KEY = 'AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw'

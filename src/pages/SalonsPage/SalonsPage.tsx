@@ -236,7 +236,7 @@ const SalonsPage = () => {
 			sortOrder: setOrder(query.order, 'fillingProgress'),
 			render: (value) => (
 				<Row className={'gap-2'} wrap={false}>
-					<span className={'w-9'}>{value ? `${value}%` : ''}</span>
+					<span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>
 					<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
 				</Row>
 			)

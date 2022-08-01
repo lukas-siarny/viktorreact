@@ -17,6 +17,7 @@ import SwitchField from '../../../atoms/SwitchField'
 import TextareaField from '../../../atoms/TextareaField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 import SelectField from '../../../atoms/SelectField'
+import PhoneArrayField from '../../../atoms/PhoneArrayField'
 
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification } from '../../../utils/helper'
@@ -41,6 +42,9 @@ import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.sv
 import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
+import { ReactComponent as SocialPinterest } from '../../../assets/icons/social-pinterest.svg'
+import { ReactComponent as SocialYoutube } from '../../../assets/icons/social-youtube.svg'
+import { ReactComponent as SocialTikTok } from '../../../assets/icons/social-tiktok.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
 
 type ComponentProps = {
@@ -58,6 +62,8 @@ const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, change, noteModalControlButtons, salonID, disabledForm, deletedSalon = false, isPublishedVersionSameAsDraft, pendingPublication } = props
 	const categories = useSelector((state: RootState) => state.categories.categories)
+	const languages = useSelector((state: RootState) => state.enumerationsStore.languages)
+	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
 	const aboutUsFirstPlaceholder = t('loc:Zadajte základné informácie o salóne')
@@ -76,6 +82,16 @@ const SalonForm: FC<Props> = (props) => {
 		formValues?.state === SALON_STATES.NOT_PUBLISHED ||
 		formValues?.state === SALON_STATES.NOT_PUBLISHED_PENDING ||
 		formValues?.state === SALON_STATES.NOT_PUBLISHED_DECLINED
+
+	const langaugesOptionRender = (itemData: any) => {
+		const { value, label, flag } = itemData
+		return (
+			<div className='flex items-center'>
+				{flag ? <img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} /> : <div className={'noti-flag-fallback mr-1'} />}
+				{label}
+			</div>
+		)
+	}
 
 	const imagesFormField = (filedName: string, disabled: boolean) => (
 		<Field
@@ -105,19 +121,7 @@ const SalonForm: FC<Props> = (props) => {
 		/>
 	)
 
-	const phoneFormField = (phoneFiledName: string, phonePrefixFiledName: string, disabled: boolean) => (
-		<PhoneWithPrefixField
-			label={'Telefón'}
-			placeholder={t('loc:Zadajte telefón')}
-			size={'large'}
-			prefixName={phonePrefixFiledName}
-			phoneName={phoneFiledName}
-			disabled={disabled}
-			formName={FORM.SALON}
-			getPopupContainer={() => document.querySelector('.content-body')}
-			required
-		/>
-	)
+	const phoneFormField = (phoneFiledName: string, disabled: boolean) => <FieldArray component={PhoneArrayField} name={phoneFiledName} props={{ disabled, requied: false }} />
 
 	const emailFormField = (filedName: string, disabled: boolean) => (
 		<Field
@@ -229,6 +233,31 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							required
 						/>
+						<Field
+							component={SelectField}
+							options={languages.enumerationsOptions}
+							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}
+							placeholder={t('loc:Vyberte jazyk')}
+							name={'languageIDs'}
+							optionRender={langaugesOptionRender}
+							size={'large'}
+							loading={languages.isLoading}
+							mode={'multiple'}
+							disabled={disabledForm}
+							allowClear
+						/>
+						<Field
+							component={SelectField}
+							options={cosmetics.enumerationsOptions}
+							label={t('loc:Kozmetika')}
+							placeholder={t('loc:Vyberte kozmetiku')}
+							name={'cosmeticIDs'}
+							size={'large'}
+							loading={cosmetics.isLoading}
+							mode={'multiple'}
+							disabled={disabledForm}
+							allowClear
+						/>
 						<Compare
 							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
 							oldValue={formValues?.publishedSalonData?.logo}
@@ -258,11 +287,11 @@ const SalonForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 						<Compare
 							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.phone || null}
-							newValue={formValues?.phone || null}
+							oldValue={formValues?.publishedSalonData?.phones || []}
+							newValue={formValues?.phones || []}
 							equal={isPublishedVersionSameAsDraft?.isPhoneEqual}
-							oldFormField={phoneFormField('publishedSalonData.phone', 'publishedSalonData.phonePrefixCountryCode', true)}
-							newFormField={phoneFormField('phone', 'phonePrefixCountryCode', disabledForm || !!pendingPublication)}
+							oldFormField={phoneFormField('publishedSalonData.phones', true)}
+							newFormField={phoneFormField('phones', disabledForm || !!pendingPublication)}
 							disableComparsion={disableComparsion}
 						/>
 						<Compare
@@ -289,16 +318,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm || !!pendingPublication}
 							name={'address'}
 						/>
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.address?.description || null}
-							newValue={formValues?.description || null}
-							equal={isPublishedVersionSameAsDraft?.isAddressNoteEqual}
-							oldFormField={addressDescriptionFormFiled('publishedSalonData.address.description', true)}
-							newFormField={addressDescriptionFormFiled('description', disabledForm || !!pendingPublication)}
-							disableComparsion={disableComparsion}
-						/>
-						{!isPublishedVersionSameAsDraft?.isAddressEqual && formValues?.publishedSalonData?.address && (
+						{!isPublishedVersionSameAsDraft?.isAddressEqual && !disableComparsion && (
 							<Compare
 								// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
 								oldValue={formValues?.publishedSalonData?.address}
@@ -348,6 +368,25 @@ const SalonForm: FC<Props> = (props) => {
 								}
 							/>
 						)}
+						<Compare
+							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
+							oldValue={formValues?.publishedSalonData?.address?.description || null}
+							newValue={formValues?.description || null}
+							equal={isPublishedVersionSameAsDraft?.isAddressNoteEqual}
+							oldFormField={addressDescriptionFormFiled('publishedSalonData.address.description', true)}
+							newFormField={addressDescriptionFormFiled('description', disabledForm || !!pendingPublication)}
+							disableComparsion={disableComparsion}
+						/>
+						<Field
+							component={TextareaField}
+							label={t('loc:Poznámka k parkovaniu')}
+							name={'parkingNote'}
+							size={'large'}
+							placeholder={t('loc:Zadajte poznámku k parkovaniu, napr. "Parkovanie oproti budove."')}
+							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+							showLettersCount
+						/>
 					</Col>
 				</Row>
 				<Row>
@@ -498,6 +537,15 @@ const SalonForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 						<Field
 							component={InputField}
+							label={t('loc:Webstránka')}
+							name={'socialLinkWebPage'}
+							size={'large'}
+							prefix={(<GlobeIcon />) as any}
+							placeholder={t('loc:Odkaz na webovú stránku salóna')}
+							disabled={disabledForm}
+						/>
+						<Field
+							component={InputField}
 							label={t('loc:Facebook')}
 							name={'socialLinkFB'}
 							size={'large'}
@@ -516,11 +564,29 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={InputField}
-							label={t('loc:Webstránka')}
-							name={'socialLinkWebPage'}
+							label={t('loc:Pinterest')}
+							name={'socialLinkPinterest'}
 							size={'large'}
-							prefix={(<GlobeIcon />) as any}
-							placeholder={t('loc:Odkaz na webovú stránku salóna')}
+							prefix={(<SocialPinterest />) as any}
+							placeholder={t('loc:Odkaz na Pinterest')}
+							disabled={disabledForm}
+						/>
+						<Field
+							component={InputField}
+							label={t('loc:Youtube')}
+							name={'socialLinkYoutube'}
+							size={'large'}
+							prefix={(<SocialYoutube />) as any}
+							placeholder={t('loc:Odkaz na Youtube')}
+							disabled={disabledForm}
+						/>
+						<Field
+							component={InputField}
+							label={t('loc:TikTok')}
+							name={'socialLinkTikTok'}
+							size={'large'}
+							prefix={(<SocialTikTok />) as any}
+							placeholder={t('loc:Odkaz na TikTok')}
 							disabled={disabledForm}
 						/>
 					</Col>

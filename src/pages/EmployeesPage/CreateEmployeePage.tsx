@@ -11,19 +11,19 @@ import { withPermissions } from '../../utils/Permissions'
 import { PERMISSION, SALON_PERMISSION, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
+import { getPrefixCountryCode } from '../../utils/helper'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeeForm from './components/EmployeeForm'
 import { addService, parseServicesForCreateAndUpdate } from './EmployeePage'
+import InviteForm from './components/InviteForm'
 
 // types
 import { IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getPrefixCountryCode } from '../../utils/helper'
-import InviteForm from './components/InviteForm'
 
 const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]
 
@@ -99,7 +99,6 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				{},
 				{
 					inviteEmail: formData?.email,
-					employeeID: undefined,
 					salonID,
 					roleID: formData?.roleID
 				}

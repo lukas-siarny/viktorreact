@@ -13,6 +13,7 @@ import EmployeeForm from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
+import EditRoleForm from './components/EditRoleForm'
 
 // types
 import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
@@ -31,7 +32,6 @@ import { IServicesPayload } from '../../reducers/services/serviceActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import EditRoleForm from './components/EditRoleForm'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: number }>
@@ -309,17 +309,6 @@ const EmployeePage = (props: Props) => {
 	}
 
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
-
-	/*
-						<Image
-					src={record?.image?.resizedImages.thumbnail as string}
-					loading='lazy'
-					fallback={record?.image?.original}
-					alt={record?.name}
-					preview={false}
-					className='cosmetics-logo'
-				/>
-	*/
 
 	return (
 		<>

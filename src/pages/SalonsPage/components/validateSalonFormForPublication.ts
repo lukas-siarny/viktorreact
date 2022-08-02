@@ -13,8 +13,10 @@ export default (values: ISalonForm) => {
 		requiedFields.push(i18next.t('loc:O nás'))
 	}
 
-	if (!values?.phone || !values?.phonePrefixCountryCode) {
-		requiedFields.push(i18next.t('loc:Telefón'))
+	const filledPhoneInputs = values?.phones?.filter((phone: any) => phone.phone)
+
+	if (filledPhoneInputs?.length < 1) {
+		requiedFields.push(i18next.t('loc:Telefónne čísla'))
 	}
 
 	if (!values?.email) {

@@ -14,6 +14,7 @@ import SalonForm from './components/SalonForm'
 import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
+import validateSalonFormForPublication from './components/validateSalonFormForPublication'
 
 // enums
 import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
@@ -23,6 +24,8 @@ import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
+import { getLanguages } from '../../reducers/enumerations/enumerationActions'
+import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 
 // types
 import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
@@ -41,7 +44,13 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
-import validateSalonFormForPublication from './components/validateSalonFormForPublication'
+
+const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
+	{
+		phonePrefixCountryCode,
+		phone: null
+	}
+]
 
 type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
@@ -71,6 +80,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 	const salonExists = salonID > 0
 	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null) && salonExists
+
+	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
 	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
@@ -129,12 +140,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(getCategories())
+		dispatch(getLanguages())
+		dispatch(getCosmetics())
 	}, [dispatch])
 
 	const updateOnlyOpeningHours = useRef(false)
 
 	const initData = async (salonData: ISalonPayloadData | null) => {
-		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		const defaultContactPerson = {
 			phonePrefixCountryCode
 		}
@@ -157,8 +169,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
 			// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
 			// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
-			let initialData: any = {
-				...salonData,
+			const initialData: ISalonForm = {
+				id: salonData?.id || null,
+				state: salonData?.state as SALON_STATES,
+				name: salonData?.name || null,
+				email: salonData?.email || null,
+				payByCard: !!salonData?.payByCard,
+				otherPaymentMethods: salonData?.otherPaymentMethods || null,
 				aboutUsFirst: salonData?.aboutUsFirst || null,
 				aboutUsSecond: salonData?.aboutUsSecond || null,
 				openOverWeekend,
@@ -175,6 +192,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				country: salonData?.address?.countryCode || null,
 				streetNumber: salonData?.address?.streetNumber || null,
 				description: salonData?.address?.description || null,
+				parkingNote: salonData?.parkingNote || null,
 				companyContactPerson: {
 					email: salonData?.companyContactPerson?.email || null,
 					firstName: salonData?.companyContactPerson?.firstName || null,
@@ -188,8 +206,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					companyName: salonData?.companyInfo?.companyName || null,
 					vatID: salonData?.companyInfo?.vatID || null
 				},
-				phonePrefixCountryCode: salonData?.phonePrefixCountryCode || null,
-				phone: salonData?.phone || null,
+				phones:
+					salonData?.phones && !isEmpty(salonData?.phones)
+						? salonData.phones.map((phone) => ({
+								phonePrefixCountryCode: phone.phonePrefixCountryCode || null,
+								phone: phone.phone || null
+						  }))
+						: getPhoneDefaultValue(phonePrefixCountryCode),
 				gallery: map(salonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
 				logo: salonData?.logo?.id
 					? [
@@ -199,21 +222,41 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 							}
 					  ]
 					: null,
-				categoryIDs: map(salonData?.categories, (categorie) => ({ label: categorie.name, value: categorie.id })),
+				categoryIDs: map(salonData?.categories, (category) => category.id),
+				// TODO: remove any when NOT-1515 is done
+				languageIDs: map(salonData?.languages, (lng: any) => lng.id),
+				cosmeticIDs: map(salonData?.cosmetics, (cosmetic) => cosmetic.id),
 				address: !!salonData?.address || null,
 				socialLinkWebPage: salonData?.socialLinkWebPage || null,
 				socialLinkFB: salonData?.socialLinkFB || null,
-				socialLinkInstagram: salonData?.socialLinkInstagram || null
-			}
-
-			if (salonData?.publishedSalonData) {
-				initialData = {
-					...initialData,
-					publishedSalonData: {
-						...salonData.publishedSalonData,
-						gallery: map(salonData.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
-						logo: salonData.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null
-					}
+				socialLinkInstagram: salonData?.socialLinkInstagram || null,
+				socialLinkYoutube: salonData?.socialLinkYoutube || null,
+				socialLinkTikTok: salonData?.socialLinkTikTok || null,
+				socialLinkPinterest: salonData?.socialLinkPinterest || null,
+				publishedSalonData: {
+					name: salonData?.publishedSalonData?.name || null,
+					aboutUsFirst: salonData?.publishedSalonData?.aboutUsFirst || null,
+					aboutUsSecond: salonData?.publishedSalonData?.aboutUsSecond || null,
+					email: salonData?.publishedSalonData?.email || null,
+					address: {
+						countryCode: salonData?.publishedSalonData?.address?.countryCode || null,
+						zipCode: salonData?.publishedSalonData?.address?.zipCode || null,
+						city: salonData?.publishedSalonData?.address?.city || null,
+						street: salonData?.publishedSalonData?.address?.street || null,
+						streetNumber: salonData?.publishedSalonData?.address?.streetNumber || null,
+						latitude: salonData?.publishedSalonData?.address?.latitude ?? null,
+						longitude: salonData?.publishedSalonData?.address?.longitude ?? null,
+						description: salonData?.publishedSalonData?.address?.description || null
+					},
+					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
+					logo: salonData?.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null,
+					phones:
+						salonData?.publishedSalonData?.phones && !isEmpty(salonData?.publishedSalonData?.phones)
+							? salonData.publishedSalonData.phones.map((phone) => ({
+									phonePrefixCountryCode: phone.phonePrefixCountryCode || null,
+									phone: phone.phone || null
+							  }))
+							: getPhoneDefaultValue(phonePrefixCountryCode)
 				}
 			}
 
@@ -226,8 +269,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					sameOpenHoursOverWeek: true,
 					openingHours: initOpeningHours(undefined, true, false),
 					payByCard: false,
-					phonePrefixCountryCode,
-					companyContactPerson: defaultContactPerson
+					companyContactPerson: defaultContactPerson,
+					phones: getPhoneDefaultValue(phonePrefixCountryCode)
 				})
 			)
 		}
@@ -243,14 +286,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		try {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
-			const salonData: SalonPatch = {
+			const phones = data.phones?.filter((phone) => phone?.phone)
+
+			const salonData = {
 				imageIDs: (data.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 				logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
 				name: data.name,
 				openingHours: openingHours || [],
 				aboutUsFirst: data.aboutUsFirst,
 				aboutUsSecond: data.aboutUsSecond,
-				// ...data.address,
 				city: data.city,
 				countryCode: data.country,
 				latitude: data.latitude,
@@ -259,26 +303,31 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				streetNumber: data.streetNumber,
 				zipCode: data.zipCode,
 				description: data.description,
-				phonePrefixCountryCode: data.phonePrefixCountryCode,
-				phone: data.phone,
+				phones,
 				email: data.email,
 				socialLinkFB: data.socialLinkFB,
 				socialLinkInstagram: data.socialLinkInstagram,
 				socialLinkWebPage: data.socialLinkWebPage,
+				socialLinkTikTok: data.socialLinkTikTok,
+				socialLinkYoutube: data.socialLinkYoutube,
+				socialLinkPinterest: data.socialLinkPinterest,
+				parkingNote: data.parkingNote,
 				payByCard: !!data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
 				companyInfo: data.companyInfo,
-				categoryIDs: data.categoryIDs.map((category) => get(category, 'value', category)) as [number, ...number[]]
+				categoryIDs: data.categoryIDs,
+				cosmeticIDs: data.cosmeticIDs,
+				languageIDs: data.languageIDs
 			}
 
 			if (salonID > 0) {
 				// update existing salon
-				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData)
+				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as SalonPatch)
 				dispatch(selectSalon(salonID))
 			} else {
 				// create new salon
-				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData)
+				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as SalonPatch)
 				if (result?.data?.salon?.id) {
 					// load new salon for current user
 					await dispatch(getCurrentUser())

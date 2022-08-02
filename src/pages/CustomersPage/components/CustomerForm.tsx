@@ -17,6 +17,7 @@ import validateCustomerForm from './validateCustomerForm'
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
+import TextareaField from '../../../atoms/TextareaField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -121,7 +122,7 @@ const CustomerForm: FC<Props> = (props) => {
 						loading={countries?.isLoading}
 						allowClear
 					/>
-					<Field component={InputField} label={t('loc:Poznámka')} placeholder={t('loc:Zadajte poznámku')} name={'note'} size={'large'} />
+					<Field component={TextareaField} label={t('loc:Poznámka')} placeholder={t('loc:Zadajte poznámku')} name={'note'} size={'large'} />
 				</Row>
 			</Col>
 		</Form>

@@ -105,7 +105,7 @@ const UserPage: FC<Props> = (props) => {
 		items: [
 			{
 				name: t('loc:Zoznam používateľov'),
-				link: backUrl as string
+				link: backUrl
 			},
 			{
 				name: t('loc:Detail používateľa'),

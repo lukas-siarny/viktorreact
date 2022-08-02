@@ -217,8 +217,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				logo: salonData?.logo?.id
 					? [
 							{
+								uid: salonData?.logo?.id,
 								url: salonData?.logo?.original,
-								uid: salonData?.logo?.id
+								thumbUrl: salonData.logo?.resizedImages?.thumbnail
 							}
 					  ]
 					: null,
@@ -248,8 +249,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						longitude: salonData?.publishedSalonData?.address?.longitude ?? null,
 						description: salonData?.publishedSalonData?.address?.description || null
 					},
-					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
-					logo: salonData?.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null,
+					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
+					logo: salonData?.publishedSalonData?.logo ? [
+						{
+							url: uid: salonData.publishedSalonData.logo.id,
+							url: salonData.publishedSalonData.logo.original,
+							thumbUrl: salonData.publishedSalonData.logo?.resizedImages?.thumbnail
+						}
+					] : null,
 					phones:
 						salonData?.publishedSalonData?.phones && !isEmpty(salonData?.publishedSalonData?.phones)
 							? salonData.publishedSalonData.phones.map((phone) => ({

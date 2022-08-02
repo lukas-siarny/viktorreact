@@ -1,9 +1,9 @@
 import React, { CSSProperties, FC, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps, change } from 'redux-form'
-import { isEmpty, isEqual, get } from 'lodash'
+import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Form, Upload, UploadProps, Modal } from 'antd'
+import { Form, Upload, UploadProps, Image } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
@@ -11,8 +11,6 @@ import cx from 'classnames'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
-import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
-
 // utils
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
@@ -148,9 +146,19 @@ const ImgUploadField: FC<Props> = (props) => {
 		>
 			{staticMode && !input.value && '-'}
 			{uploader}
-			<Modal visible={!!previewUrl} onCancel={() => setPreviewUrl('')} footer={null} closeIcon={<CloseIcon />}>
-				<img key={previewUrl} className={'w-full'} src={previewUrl} alt='preview' />
-			</Modal>
+			<div className={'hidden'}>
+				<Image.PreviewGroup
+					preview={{
+						visible: !!previewUrl,
+						onVisibleChange: () => setPreviewUrl(''),
+						current: input.value ? input.value?.findIndex((image: any) => image?.url === previewUrl) : -1
+					}}
+				>
+					{map(input.value, (images) => (
+						<Image key={images.url} src={images.url} fallback={images.thumbUrl} />
+					))}
+				</Image.PreviewGroup>
+			</div>
 		</Item>
 	)
 }

@@ -250,13 +250,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						description: salonData?.publishedSalonData?.address?.description || null
 					},
 					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
-					logo: salonData?.publishedSalonData?.logo ? [
-						{
-							url: uid: salonData.publishedSalonData.logo.id,
-							url: salonData.publishedSalonData.logo.original,
-							thumbUrl: salonData.publishedSalonData.logo?.resizedImages?.thumbnail
-						}
-					] : null,
+					logo: salonData?.publishedSalonData?.logo
+						? [
+								{
+									uid: salonData.publishedSalonData.logo.id,
+									url: salonData.publishedSalonData.logo.original,
+									thumbUrl: salonData.publishedSalonData.logo?.resizedImages?.thumbnail
+								}
+						  ]
+						: null,
 					phones:
 						salonData?.publishedSalonData?.phones && !isEmpty(salonData?.publishedSalonData?.phones)
 							? salonData.publishedSalonData.phones.map((phone) => ({

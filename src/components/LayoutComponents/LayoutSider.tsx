@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom'
 import cx from 'classnames'
 
 // assets
+import MenuItem from 'antd/lib/menu/MenuItem'
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
 import { ReactComponent as HomeIcon } from '../../assets/icons/home-24-icon.svg'
 import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-24-icon.svg'
@@ -20,6 +21,7 @@ import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.s
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
 import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
+import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -119,6 +121,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
 										>
 											{t('loc:Kategórie')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
+										<Menu.Item
+											eventKey={PAGE.CATEGORY_PARAMETERS}
+											key={PAGE.CATEGORY_PARAMETERS}
+											onClick={() => history.push(t('paths:category-parameters'))}
+											icon={<ParametersIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORY_PARAMETERS })}
+										>
+											{t('loc:Parametre kategórii')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>

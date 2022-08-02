@@ -5,7 +5,7 @@ import { ThunkResult } from '../index'
 import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IUserAvatar, IQueryParams, ISearchablePayload } from '../../types/interfaces'
+import { IUserAvatar, IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -36,7 +36,7 @@ export interface IGetServicesQueryParams extends IQueryParams {
 	salonID?: number | undefined | null
 }
 
-export interface IServicesPayload extends ISearchablePayload<Paths.GetApiB2BAdminServices.Responses.$200> {
+export interface IServicesPayload extends ISearchable<Paths.GetApiB2BAdminServices.Responses.$200> {
 	tableData: ServicesTableData[] | undefined
 }
 

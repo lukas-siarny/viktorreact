@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import { ColumnsType } from 'antd/lib/table'
 import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
 
@@ -24,15 +25,7 @@ export interface ISelectOptionItem {
 	level?: number
 }
 
-/**
- * ValueType  number | string
- */
-export interface ILabelInValueOption<ValueType = number, ExtraType = any> {
-	key: ValueType
-	value: ValueType
-	label: string
-	extra?: ExtraType
-}
+export type Columns = ColumnsType<any>
 
 export interface ILoginForm {
 	email: string
@@ -69,10 +62,6 @@ export interface IUserAccountForm {
 	city?: string
 	street?: string
 	countryCode?: string
-}
-
-interface GalleryItem {
-	id: number
 }
 
 export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
@@ -236,10 +225,6 @@ export interface IBreadcrumbs {
 	items: IBreadcrumbItem[]
 }
 
-export interface ICountryLabel {
-	[key: string]: string
-}
-
 export interface IStructuredAddress {
 	zip: string | null
 	street: string | null
@@ -333,23 +318,37 @@ interface IDataPagination {
 	pagination: IResponsePagination
 }
 
-export interface ISearchablePayload<T extends IDataPagination> {
-	options: ISelectOptionItem[] | undefined
-	data: T | null
-}
-
-export interface SalonSubPageProps {
-	salonID: number
-	parentPath?: string
+/**
+ * enumerationsOptions are used for Select component
+ */
+export interface ISelectable<T> {
+	enumerationsOptions: ISelectOptionItem[] | undefined
+	data: T | undefined
 }
 
 interface IDataPagination {
 	pagination: IResponsePagination
 }
 
-export interface ISearchablePayload<T extends IDataPagination> {
+/**
+ * options are used for Select component
+ * contains pagination
+ * support async (on BE) searching
+ */
+export interface ISearchable<T extends IDataPagination> {
 	options: ISelectOptionItem[] | undefined
 	data: T | null
+}
+
+// type ITableItem  = { key: string | number }
+
+// export interface ITableItems {
+// 	tableData: (any & ITableItem)[] | undefined
+// }
+
+export interface SalonSubPageProps {
+	salonID: number
+	parentPath?: string
 }
 
 export type _Permissions = (PERMISSION | SALON_PERMISSION)[]
@@ -388,3 +387,7 @@ export interface IIsPublishedVersionSameAsDraft {
 	isPhoneEqual: boolean
 	isEmailEqual: boolean
 }
+
+export type ICategoryParameters = Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200['categoryParameters']
+
+export type ICategoryParameter = Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200['categoryParameter']

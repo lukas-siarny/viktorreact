@@ -1,6 +1,9 @@
 {
   "activation": "/activation",
   "categories": "/categories",
+  "category-parameters": "/category-parameters",
+  "category-parameters/create": "/category-parameters/create",
+  "category-parameters/{{parameterID}}": "/category-parameters/{{parameterID}}",
   "contact": "/contact",
   "cosmetics": "/cosmetics",
   "customers": "/customers",
@@ -9,7 +12,7 @@
   "employees": "/employees",
   "employees/create": "/employees/create",
   "employees/{{employeeID}}": "/employees/{{employeeID}}",
-  "index": "/index",
+  "index": "/",
   "login": "/login",
   "my-account": "/my-account",
   "reset-password": "/reset-password",

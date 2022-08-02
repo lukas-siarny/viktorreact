@@ -25,10 +25,13 @@ type Props = WrappedFieldArrayProps & {
 	style?: React.CSSProperties
 	// 0 = infinite count
 	maxCount?: number
+	nestedFieldName?: string
+	inputSize?: string
+	placeholder?: string
 }
 
 const InputsArrayField = (props: Props) => {
-	const { fields, disabled, requied, entityName, label, style, maxCount = 5 } = props
+	const { fields, disabled, requied, entityName, label, style, maxCount = 5, nestedFieldName, inputSize = 'large', placeholder } = props
 	const [t] = useTranslation()
 
 	const buttonAdd = (
@@ -42,18 +45,18 @@ const InputsArrayField = (props: Props) => {
 			<div className={'flex flex-col gap-4 w-full'}>
 				{fields.map((field: any, index: any) => {
 					return (
-						<div key={index} className={'flex gap-2'}>
+						<div key={index} className={'flex gap-2 items-center'}>
 							<Field
 								className={'flex-1 m-0'}
 								component={InputField}
-								name={`${field}.email`}
-								size={'large'}
-								placeholder={STRINGS(t).enter(entityName)}
+								name={`${field}.${nestedFieldName ?? entityName}`}
+								size={inputSize}
+								placeholder={placeholder || STRINGS(t).enter(entityName)}
 								disabled={disabled}
 							/>
 
 							<DeleteButton
-								className={'bg-red-100 mt-2'}
+								className={'bg-red-100'}
 								onClick={() => fields.remove(index)}
 								onlyIcon
 								smallIcon

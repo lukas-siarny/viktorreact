@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -26,11 +25,9 @@ import { getServices } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, IUserAvatar, SalonSubPageProps, Columns } from '../../types/interfaces'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
-
-type Columns = ColumnsType<any>
 
 interface IAdminUsersFilter {
 	search: string

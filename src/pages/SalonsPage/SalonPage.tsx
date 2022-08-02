@@ -188,8 +188,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					companyName: salonData?.companyInfo?.companyName || null,
 					vatID: salonData?.companyInfo?.vatID || null
 				},
-				phonePrefixCountryCode: salonData?.phonePrefixCountryCode || null,
-				phone: salonData?.phone || null,
+				// phonePrefixCountryCode: salonData?.phonePrefixCountryCode || null,
+				// phone: salonData?.phone || null,
 				gallery: map(salonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
 				logo: salonData?.logo?.id
 					? [
@@ -259,8 +259,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				streetNumber: data.streetNumber,
 				zipCode: data.zipCode,
 				description: data.description,
-				phonePrefixCountryCode: data.phonePrefixCountryCode,
-				phone: data.phone,
+				// phonePrefixCountryCode: data.phonePrefixCountryCode,
+				// phone: data.phone,
 				email: data.email,
 				socialLinkFB: data.socialLinkFB,
 				socialLinkInstagram: data.socialLinkInstagram,

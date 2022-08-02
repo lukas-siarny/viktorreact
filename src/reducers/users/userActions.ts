@@ -5,7 +5,7 @@ import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchablePayload, IPermissions } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IPermissions } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
@@ -48,7 +48,7 @@ export interface IUserPayload {
 	data: Paths.GetApiB2BAdminUsersUserId.Responses.$200 | null
 }
 
-export interface IUsersPayload extends ISearchablePayload<Paths.GetApiB2BAdminUsers.Responses.$200> {}
+export interface IUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsers.Responses.$200> {}
 
 export const processAuthorizationResult =
 	(result: Paths.PostApiB2BAdminAuthLogin.Responses.$200, redirectPath = i18next.t('paths:index')): ThunkResult<void> =>

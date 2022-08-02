@@ -17,7 +17,7 @@ export const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalo
 		(salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null) &&
 		(salonData?.data?.phonePrefixCountryCode || null) === (salonData?.data?.publishedSalonData?.phonePrefixCountryCode || null) */
 	const isEmailEqual = (salonData?.data?.email || null) === (salonData?.data?.publishedSalonData?.email || null)
-	const isPhoneEqual = (salonData?.data?.phone || null) === (salonData?.data?.publishedSalonData?.phone || null)
+	const isPhoneEqual = (salonData?.data?.phones || null) === (salonData?.data?.publishedSalonData?.phones || null)
 
 	return isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual
 }

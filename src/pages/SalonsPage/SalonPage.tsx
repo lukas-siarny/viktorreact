@@ -45,6 +45,9 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
 		phonePrefixCountryCode,
@@ -94,6 +97,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
+
+	const [backUrl] = useBackUrl(t('paths:salons'))
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -362,7 +367,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			? [
 					{
 						name: t('loc:Zoznam salónov'),
-						link: t('paths:salons')
+						link: backUrl
 					},
 					breadcrumbDetailItem
 			  ]

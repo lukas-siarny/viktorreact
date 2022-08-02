@@ -34,6 +34,9 @@ import { getSalonRoles } from '../../reducers/roles/rolesActions'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import EditRoleForm from './components/EditRoleForm'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: number }>
 }
@@ -169,6 +172,8 @@ const EmployeePage = (props: Props) => {
 
 	const isLoading = employee.isLoading || services.isLoading || isRemoving
 
+	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
+
 	const fetchEmployeeData = async () => {
 		const { data } = await dispatch(getEmployee(employeeID))
 		if (!data?.employee?.id) {
@@ -258,7 +263,7 @@ const EmployeePage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zamestnancov'),
-				link: parentPath + t('paths:employees')
+				link: backUrl
 			},
 			{
 				name: t('loc:Detail zamestnanca'),

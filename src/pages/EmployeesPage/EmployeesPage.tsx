@@ -13,10 +13,11 @@ import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeesFilter, { IEmployeesFilter } from './components/EmployeesFilter'
 import PopoverList from '../../components/PopoverList'
+import TooltipEllipsis from '../../components/TooltipEllipsis'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { getEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -30,7 +31,6 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
-import TooltipEllipsis from '../../components/TooltipEllipsis'
 
 type Columns = ColumnsType<any>
 
@@ -43,6 +43,8 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+
+	const backUrl = getEncodedBackUrl()
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -177,7 +179,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								<EmployeesFilter
 									createEmployee={() => {
 										if (hasPermission) {
-											history.push(parentPath + t('paths:employees/create'))
+											history.push(`${parentPath + t('paths:employees/create')}?backUrl=${backUrl}`)
 										} else {
 											openForbiddenModal()
 										}
@@ -198,7 +200,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 							scroll={{ x: 800 }}
 							onRow={(record) => ({
 								onClick: () => {
-									history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))
+									history.push(`${parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })}?backUrl=${backUrl}`)
 								}
 							})}
 							pagination={{

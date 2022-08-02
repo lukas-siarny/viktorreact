@@ -119,6 +119,14 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			render: (value) => value || '-'
 		},
 		{
+			title: t('loc:Pozvánkový email'),
+			dataIndex: 'inviteEmail',
+			key: 'inviteEmail',
+			ellipsis: true,
+			width: '20%',
+			render: (value) => value || '-'
+		},
+		{
 			title: t('loc:Telefón'),
 			dataIndex: 'phone',
 			key: 'phone',

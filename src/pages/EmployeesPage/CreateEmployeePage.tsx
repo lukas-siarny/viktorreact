@@ -139,7 +139,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				<div className='content-body-width-small'>
 					<Divider className={'mt-10 mb-6'}>{t('loc:alebo')}</Divider>
 				</div>
-				<h2 className={'content-body-width-small'}>{t('loc:Vytrvoriť dočasný profil kolegu')}</h2>
+				<h2 className={'content-body-width-small'}>{t('loc:Vytvoriť profil kolegu')}</h2>
 				<div className='content-body small mt-2 without-content-footer'>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
 					<Row justify={'center'}>
@@ -154,7 +154,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 							disabled={submitting || isFormPristine}
 							loading={submitting}
 						>
-							{t('loc:Vytvoriť dočasný profil')}
+							{t('loc:Vytvoriť profil')}
 						</Button>
 					</Row>
 				</div>

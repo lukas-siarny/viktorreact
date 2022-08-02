@@ -319,6 +319,13 @@ export interface ICosmeticForm {
 	image: any
 }
 
+export interface ILanguageForm {
+	code: string
+	countryCode: string
+	isoFormat: string
+	nameLocalizations: NameLocalizationsItem[]
+}
+
 export interface ILanguagePickerForm {
 	language: LANGUAGE
 }
@@ -396,6 +403,8 @@ export interface IDataUploadForm {
 
 export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0]
 
+export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
+
 export interface IIsPublishedVersionSameAsDraft {
 	isEqual: boolean
 	isNameEqual: boolean
@@ -408,3 +417,9 @@ export interface IIsPublishedVersionSameAsDraft {
 	isPhoneEqual: boolean
 	isEmailEqual: boolean
 }
+
+export type NameLocalizationsItem = {
+	language: string
+	value: string
+}
+

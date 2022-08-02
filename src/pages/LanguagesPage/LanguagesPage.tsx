@@ -4,113 +4,126 @@ import { Col, Row, Spin, Button, Divider, Image } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { initialize, reset } from 'redux-form'
-import { get } from 'lodash'
+import { initialize } from 'redux-form'
 import cx from 'classnames'
+import { filter } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
-import CosmeticForm from './components/CosmeticForm'
-import CosmeticsFilter from './components/CosmeticsFilter'
+import LanguagesForm from './components/LanguagesForm'
+import CosmeticsFilter from './components/LanguagesFilter'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { getEmptyNameLocalizations, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
-import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { RootState } from '../../reducers'
+import { getLanguages } from '../../reducers/languages/languagesActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ICosmetic, ICosmeticForm } from '../../types/interfaces'
+import { IBreadcrumbs, ILanguage, ILanguageForm } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 type Columns = ColumnsType<any>
 
-const CosmeticsPage = () => {
+type LanguagesPatch = Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.RequestBody
+
+const LanguagesPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
 	const [filterQuery, setFilterQuery] = useState<string | undefined>(undefined)
 	// 0 - represents new record
-	const [cosmeticID, setCosmeticID] = useState<number>(0)
+	const [languageID, setLanguageID] = useState<number>(0)
 
-	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
+	const languages = useSelector((state: RootState) => state.languages.languages)
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam kozmetiky')
+				name: t('loc:Zoznam jazykov')
 			}
 		]
 	}
 
 	useEffect(() => {
-		dispatch(getCosmetics())
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+		dispatch(getLanguages())
+	}, [dispatch])
+
+	const emptyNameLocalizations = getEmptyNameLocalizations()
 
 	const tableData = useMemo(() => {
-		if (!cosmetics || !cosmetics.data) {
+		if (!languages || !languages.data) {
 			return []
 		}
 
 		const source = filterQuery
-			? cosmetics.data.filter((cosmetic) => {
-					const name = transformToLowerCaseWithoutAccent(cosmetic.name)
+			? languages.data.filter((lang) => {
+					const name = transformToLowerCaseWithoutAccent(lang.name || lang.code)
 					const query = transformToLowerCaseWithoutAccent(filterQuery)
 					return name.includes(query)
 			  })
-			: cosmetics.data
+			: languages.data
 
 		// transform to table data
-		return source.map((cosmetic) => ({
-			...cosmetic,
-			key: cosmetic.id
+		return source.map((lang) => ({
+			...lang,
+			key: lang.id
 		}))
-	}, [filterQuery, cosmetics])
+	}, [filterQuery, languages])
 
-	const changeFormVisibility = (show?: boolean, cosmetic?: ICosmetic) => {
+	const changeFormVisibility = (show?: boolean, lang?: ILanguage) => {
 		if (!show) {
 			setVisibleForm(false)
-			dispatch(reset(FORM.COSMETIC))
 			return
 		}
 
-		if (cosmetic) {
-			const { image } = cosmetic
-
+		if (lang) {
 			dispatch(
-				initialize(FORM.COSMETIC, {
-					image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
-					name: cosmetic.name
+				initialize(FORM.LANGUAGES, {
+					code: lang.code,
+					countryCode: lang.code,
+					isoFormat: lang.isoFormat,
+					nameLocalizations: lang.nameLocalizations
+				})
+			)
+		} else {
+			dispatch(
+				initialize(FORM.LANGUAGES, {
+					code: null,
+					countryCode: null,
+					isoFormat: null,
+					nameLocalizations: emptyNameLocalizations
 				})
 			)
 		}
 
-		setCosmeticID(cosmetic ? cosmetic.id : 0)
+		setLanguageID(lang ? lang.id : 0)
 		setVisibleForm(true)
 	}
 
-	const handleSubmit = async (formData: ICosmeticForm) => {
+	const handleSubmit = async (formData: ILanguageForm) => {
 		const body = {
-			name: formData.name,
-			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
+			code: 'sk',
+			countryCode: 'sk',
+			isoFormat: 'ISO_639_1',
+			nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value)
 		}
-
 		try {
-			if (cosmeticID > 0) {
-				await patchReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID }, body)
+			if (languageID > 0) {
+				await patchReq('/api/b2b/admin/enums/languages/{languageID}', { languageID }, body as LanguagesPatch)
 			} else {
-				await postReq('/api/b2b/admin/enums/cosmetics/', null, body)
+				await postReq('/api/b2b/admin/enums/languages/', null, body as LanguagesPatch)
 			}
-			dispatch(getCosmetics())
+			dispatch(getLanguages())
 			changeFormVisibility()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -120,8 +133,8 @@ const CosmeticsPage = () => {
 
 	const handleDelete = async () => {
 		try {
-			await deleteReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID })
-			dispatch(getCosmetics())
+			await deleteReq('/api/b2b/admin/enums/languages/{languageID}', { languageID })
+			dispatch(getLanguages())
 			changeFormVisibility()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -131,24 +144,20 @@ const CosmeticsPage = () => {
 
 	const columns: Columns = [
 		{
-			title: t('loc:Logo'),
-			dataIndex: 'image',
-			key: 'image',
-			render: (value, record) => (
-				<Image
-					src={record?.image?.resizedImages.thumbnail as string}
-					loading='lazy'
-					fallback={record?.image?.original}
-					alt={record?.name}
-					preview={false}
-					className='cosmetics-logo'
-				/>
-			)
-		},
-		{
 			title: t('loc:Názov'),
 			dataIndex: 'name',
 			key: 'name',
+			render: (value, record) => (
+				<div className='flex items-center base-regular'>
+					{record.flag ? <img className='noti-flag w-6 mr-1 rounded' src={record.flag} alt={value} /> : <div className={'noti-flag-fallback mr-1'} />}
+					{value}
+				</div>
+			)
+		},
+		{
+			title: t('loc:Kód jazyka'),
+			dataIndex: 'code',
+			key: 'code',
 			ellipsis: true,
 			render: (value) => <span className='base-regular'>{value}</span>
 		}
@@ -163,17 +172,17 @@ const CosmeticsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={cosmetics?.isLoading}>
+			<Spin spinning={languages?.isLoading}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					<Col span={24}>
 						<div className='content-body'>
 							<CosmeticsFilter
-								total={cosmetics?.data?.length}
+								total={languages?.data?.length}
 								onSubmit={(query: any) => setFilterQuery(query.search)}
 								addButton={
 									<Button
 										onClick={() => {
-											dispatch(initialize(FORM.COSMETIC, {}))
+											// dispatch(initialize(FORM.LANGUAGES, {}))
 											changeFormVisibility(true)
 										}}
 										type='primary'
@@ -181,7 +190,7 @@ const CosmeticsPage = () => {
 										className={'noti-btn'}
 										icon={<PlusIcon />}
 									>
-										{STRINGS(t).addRecord(t('loc:kozmetiku'))}
+										{STRINGS(t).addRecord(t('loc:jazyk'))}
 									</Button>
 								}
 							/>
@@ -202,12 +211,12 @@ const CosmeticsPage = () => {
 								{visibleForm ? (
 									<div className={'w-6/12 flex justify-around items-start'}>
 										<Divider className={'h-full'} type={'vertical'} />
-										<CosmeticForm
+										<LanguagesForm
 											closeForm={changeFormVisibility}
-											cosmeticID={cosmeticID}
+											languageID={languageID}
 											onSubmit={handleSubmit}
 											onDelete={handleDelete}
-											usedBrands={cosmetics.data?.map((item) => item.name)}
+											// usedBrands={languages.data?.map((item) => item.name)}
 										/>
 									</div>
 								) : undefined}
@@ -220,4 +229,4 @@ const CosmeticsPage = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(CosmeticsPage)
+export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]))(LanguagesPage)

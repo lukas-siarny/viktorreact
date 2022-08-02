@@ -27,15 +27,13 @@ import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../.
 import { RootState } from '../../../reducers'
 import Permissions from '../../../utils/Permissions'
 
+// types
+import { NameLocalizationsItem } from '../../../types/interfaces'
+
 type ComponentProps = {
 	deleteCategory: any
 	createCategory: any
 	closeCategoryForm: any
-}
-
-type NameLocalizationsItem = {
-	language: string
-	value: string
 }
 
 export interface ICategoryForm {

@@ -18,7 +18,7 @@ import { RootState } from '../../../reducers'
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
-import { normalizeNameLocalizations } from '../../../utils/helper'
+import { getEmptyNameLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
@@ -55,19 +55,7 @@ const CategoriesTree = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	// default language must be first
-	const emptyNameLocalizations = useMemo(
-		() =>
-			Object.keys(LOCALES)
-				.sort((a: string, b: string) => {
-					if (a === DEFAULT_LANGUAGE) {
-						return -1
-					}
-					return b === DEFAULT_LANGUAGE ? 1 : 0
-				})
-				.map((language) => ({ language })),
-		[]
-	)
+	const emptyNameLocalizations = getEmptyNameLocalizations()
 
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {

@@ -68,6 +68,7 @@ import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
 import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
+import { LOCALES } from '../components/LanguagePicker'
 
 type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
 
@@ -649,6 +650,17 @@ export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsI
 	})
 	return [defaultLanguage, ...otherLanguages]
 }
+
+// default language must be first
+export const getEmptyNameLocalizations = () =>
+	Object.keys(LOCALES)
+		.sort((a: string, b: string) => {
+			if (a === DEFAULT_LANGUAGE) {
+				return -1
+			}
+			return b === DEFAULT_LANGUAGE ? 1 : 0
+		})
+		.map((language) => ({ language }))
 
 type SelectDataItem = {
 	id: number

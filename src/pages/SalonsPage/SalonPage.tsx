@@ -24,8 +24,8 @@ import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
-import { getLanguages } from '../../reducers/enumerations/enumerationActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
+import { getLanguages } from '../../reducers/languages/languagesActions'
 
 // types
 import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'

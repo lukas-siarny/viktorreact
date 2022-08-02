@@ -11,7 +11,7 @@ import Geocode from 'react-geocode'
 import MapContainer from './MapContainer'
 
 // utils
-import { GOOGLE_MAPS_API_KEY, MAP, ROW_GUTTER_X_M } from '../utils/enums'
+import { MAP, ROW_GUTTER_X_M } from '../utils/enums'
 import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents } from '../utils/helper'
 
 // atoms
@@ -83,9 +83,9 @@ const AddressFields = (props: Props) => {
 
 	useEffect(() => {
 		// init react-google-maps
-		setGoogleMapUrl(getGoogleMapUrl())
+		setGoogleMapUrl(getGoogleMapUrl(window.RUNTIME_CONFIG.GOOGLE_MAPS_API_KEY))
 		// init react-geocode
-		Geocode.setApiKey(GOOGLE_MAPS_API_KEY)
+		Geocode.setApiKey(window.RUNTIME_CONFIG.GOOGLE_MAPS_API_KEY)
 		Geocode.setLanguage(getCurrentLanguageCode())
 	}, [])
 

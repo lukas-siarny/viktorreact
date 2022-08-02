@@ -36,7 +36,6 @@ import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { SubmissionError, submit } from 'redux-form'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -44,9 +43,7 @@ import {
 	FORM,
 	INVALID_DATE_FORMAT,
 	MSG_TYPE,
-	NOTIFICATION_TYPE,
 	DEFAULT_LANGUAGE,
-	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER,
 	MONDAY_TO_FRIDAY,
 	DAY,
@@ -56,7 +53,6 @@ import {
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX
 } from './enums'
-import showNotifications from './tsxHelpers'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
@@ -70,8 +66,6 @@ import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-cros
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 
 type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
-
-export const preventDefault = (e: any) => e?.preventDefault?.()
 
 /**
  * Zakóduj dáta do base64 stringu, pre použitie v url query parametry
@@ -416,13 +410,13 @@ export const getCurrentLanguageCode = (fallbackLng = DEFAULT_LANGUAGE) => {
 	return result.toLowerCase()
 }
 
-export const getGoogleMapUrl = (): string => {
+export const getGoogleMapUrl = (apiKey: string): string => {
 	const locale = getCurrentLanguageCode()
 
 	// query params for google API
 	const base = 'https://maps.googleapis.com/maps/api/'
 	// TODO read Google Map API key from .env file
-	const key = `key=${GOOGLE_MAPS_API_KEY}`
+	const key = `key=${apiKey}`
 	const language = `language=${locale.toLowerCase()}`
 
 	return `${base}js?${key}&libraries=places&${language}`

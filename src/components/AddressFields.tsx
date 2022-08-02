@@ -18,14 +18,6 @@ import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents } from 
 // atoms
 import LocationSearchInputField from '../atoms/LocationSearchInputField'
 
-function getLabelField(label: string): ReactElement<any> {
-	return (
-		<div className='ant-col ant-form-item-label'>
-			<label title={label}>{label}</label>
-		</div>
-	)
-}
-
 /**
  * Define in props only variables required for form
  */

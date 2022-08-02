@@ -3,11 +3,10 @@ import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
-import { get } from 'lodash'
 
 // components
 import OpeningHours from '../../../components/OpeningHours/OpeningHours'
-import AddressFields from '../../../components/AddressFields'
+import AddressFields, { AddressLayout } from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import Compare from '../../../components/Compare'
 
@@ -277,13 +276,13 @@ const SalonForm: FC<Props> = (props) => {
 						<Field
 							component={AddressFields}
 							inputValues={{
-								latitude: get(formValues, 'latitude'),
-								longitude: get(formValues, 'longitude'),
-								city: get(formValues, 'city'),
-								street: get(formValues, 'street'),
-								streetNumber: get(formValues, 'streetNumber'),
-								zipCode: get(formValues, 'zipCode'),
-								country: get(formValues, 'country')
+								latitude: formValues?.latitude,
+								longitude: formValues?.longitude,
+								city: formValues?.city,
+								street: formValues?.street,
+								streetNumber: formValues?.streetNumber,
+								zipCode: formValues?.zipCode,
+								country: formValues?.country
 							}}
 							changeFormFieldValue={change}
 							disabled={disabledForm || !!pendingPublication}
@@ -303,49 +302,26 @@ const SalonForm: FC<Props> = (props) => {
 								// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
 								oldValue={formValues?.publishedSalonData?.address}
 								equal={isPublishedVersionSameAsDraft?.isAddressEqual}
-								disableComparsion={disableComparsion}
-								oldFormField={
-									<Col xl={6} md={9}>
-										<div>
-											{t('loc:Mesto')}
-											<h4>{get(formValues, 'publishedSalonData.address.city')}</h4>
-										</div>
-										<div>
-											{t('loc:Ulica')}
-											<h4>{`${get(formValues, 'publishedSalonData.address.street') ?? ''} ${
-												get(formValues, 'publishedSalonData.address.streetNumber') ?? ''
-											}`}</h4>
-										</div>
-										<div>
-											{t('loc:PSČ')}
-											<h4>{get(formValues, 'publishedSalonData.address.zipCode')}</h4>
-										</div>
-										<div>
-											{t('loc:Krajina')}
-											<h4>{get(formValues, 'publishedSalonData.address.countryCode')}</h4>
-										</div>
-									</Col>
-								}
-								newFormField={
-									<Col xl={6} md={9}>
-										<div>
-											{t('loc:Mesto')}
-											<h4>{get(formValues, 'city')}</h4>
-										</div>
-										<div>
-											{t('loc:Ulica')}
-											<h4>{`${get(formValues, 'street') ?? ''} ${get(formValues, 'streetNumber') ?? ''}`}</h4>
-										</div>
-										<div>
-											{t('loc:PSČ')}
-											<h4>{get(formValues, 'zipCode')}</h4>
-										</div>
-										<div>
-											{t('loc:Krajina')}
-											<h4>{get(formValues, 'country')}</h4>
-										</div>
-									</Col>
-								}
+								oldFormField={AddressLayout(
+									{
+										street: formValues?.publishedSalonData?.address?.street,
+										streetNumber: formValues?.publishedSalonData?.address?.streetNumber,
+										city: formValues?.publishedSalonData?.address?.city,
+										zipCode: formValues?.publishedSalonData?.address?.zipCode,
+										country: formValues?.publishedSalonData?.address?.countryCode
+									},
+									'p-2'
+								)}
+								newFormField={AddressLayout(
+									{
+										street: formValues?.street,
+										streetNumber: formValues?.streetNumber,
+										city: formValues?.city,
+										zipCode: formValues?.zipCode,
+										country: formValues?.country
+									},
+									'p-2'
+								)}
 							/>
 						)}
 					</Col>

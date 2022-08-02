@@ -40,21 +40,25 @@ const MainLayout: FC<Props> = (props) => {
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
 
 	const SALONS_MENU = (
-		<Menu className='p-2 shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header'>
-			{salonOptions.map((item) => (
-				<Menu.Item
-					key={item.key}
-					className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
-					onClick={() => dispatch(selectSalon(item.value as number))}
-				>
-					<AvatarComponents src={item.logo} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5'} />
-					{item.label}
+		<Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header'>
+			<div className={'px-2 pt-2 pb-0'} style={{ height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }}>
+				{salonOptions.map((item) => (
+					<Menu.Item
+						key={item.key}
+						className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
+						onClick={() => dispatch(selectSalon(item.value as number))}
+					>
+						<AvatarComponents src={item.logo} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5'} />
+						{item.label}
+					</Menu.Item>
+				))}
+			</div>
+			<div className={'px-2 pb-2'}>
+				<Menu.Divider className={'m-0'} />
+				<Menu.Item key='add-salon' className={'mt-2 p-2 font-medium button-add'} icon={<AddPurple />} onClick={() => history.push(t('paths:salons/create'))}>
+					{t('loc:Pridať salón')}
 				</Menu.Item>
-			))}
-			<Menu.Divider className={'m-0'} />
-			<Menu.Item key='add-salon' className={'mt-2 p-2 font-medium button-add'} icon={<AddPurple />} onClick={() => history.push(t('paths:salons/create'))}>
-				{t('loc:Pridať salón')}
-			</Menu.Item>
+			</div>
 		</Menu>
 	)
 

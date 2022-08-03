@@ -288,7 +288,8 @@ const CategoriesTree = () => {
 			let body: any = {
 				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
-				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
+				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid'),
+				iconID: get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')
 			}
 
 			if (formData.id && formData.id >= 0) {

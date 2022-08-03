@@ -36,7 +36,6 @@ const ContactPage: FC<Props> = () => {
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [view, setView] = useState<'empty' | 'default' | 'not_found'>()
-	const [visibleNote, setVisibleNote] = useState(false)
 
 	const currentLng = i18n.language
 

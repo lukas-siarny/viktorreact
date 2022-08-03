@@ -1,11 +1,11 @@
-import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
 import { isEmpty } from 'lodash'
+import { ISalonForm } from '../../../types/interfaces'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
-export default (values: any) => {
-	const errors: FormErrors<any> = {}
+export default (values: ISalonForm) => {
+	const errors: any = {}
 
 	if (!values?.name) {
 		errors.name = i18next.t('loc:Toto pole je povinné')
@@ -17,14 +17,28 @@ export default (values: any) => {
 		})
 	}
 
-	if (values?.phone && values.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
-	}
+	const filledPhoneInputs = values?.phones?.filter((phone: any) => phone.phone)
 
-	if (values?.phone && !values?.phonePrefixCountryCode) {
-		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
+	if (!isEmpty(filledPhoneInputs)) {
+		const phonesErrors: { [key: number]: { phone?: string; phonePrefixCountryCode?: string } } = {}
+
+		values?.phones?.forEach((phone: any, index: number) => {
+			const phoneError: any = {}
+
+			if (phone.phone && !phone.phonePrefixCountryCode) {
+				phoneError.phonePrefixCountryCode = i18next.t('loc:Zadajte predvoľbu')
+			}
+
+			if (phone.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
+				phoneError.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
+					max: VALIDATION_MAX_LENGTH.LENGTH_20
+				})
+			}
+
+			phonesErrors[index] = phoneError
+		})
+
+		errors.phones = phonesErrors
 	}
 
 	if (!(values?.zipCode && values?.city && values?.street && values?.streetNumber && values?.latitude && values?.longitude && values?.country)) {
@@ -33,13 +47,15 @@ export default (values: any) => {
 		)
 	}
 
-	if (!values?.phone) {
-		errors.phone = i18next.t('loc:Toto pole je povinné')
+	if (values?.description && values.description.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
+		errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_1000
+		})
 	}
 
-	if (values?.phone && values.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
-		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
+	if (values?.parkingNote && values.parkingNote.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
+		errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_1000
 		})
 	}
 

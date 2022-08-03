@@ -162,7 +162,7 @@ const SalonForm: FC<Props> = (props) => {
 			maxCount={10}
 			category={UPLOAD_IMG_CATEGORIES.SALON_PRICELIST}
 			disabled={disabled}
-			accept={'image/jpeg,image/png,application/pdf,application/doc,application/xls'}
+			accept={'image/jpeg,image/png,application/pdf'}
 		/>
 	)
 

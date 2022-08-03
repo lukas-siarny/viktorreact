@@ -1,13 +1,12 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React, { useCallback, useRef, useState } from 'react'
-
 import cx from 'classnames'
-
-// ant
 import { Pagination, PaginationProps, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
+
+// utils
 import { PAGINATION } from '../utils/enums'
 
 // hooks

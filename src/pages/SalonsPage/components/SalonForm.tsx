@@ -156,7 +156,7 @@ const SalonForm: FC<Props> = (props) => {
 			uploaderClassName={'overflow-x-auto'}
 			component={ImgUploadField}
 			name={filedName}
-			label={t('loc:Cenník')}
+			label={t('loc:Cenníky')}
 			signUrl={URL_UPLOAD_IMAGES}
 			multiple
 			maxCount={10}

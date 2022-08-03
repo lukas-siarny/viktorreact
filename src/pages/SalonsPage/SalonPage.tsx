@@ -213,7 +213,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								phone: phone.phone || null
 						  }))
 						: getPhoneDefaultValue(phonePrefixCountryCode),
-				gallery: map(salonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
+				gallery: map(salonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
 				logo: salonData?.logo?.id
 					? [
 							{

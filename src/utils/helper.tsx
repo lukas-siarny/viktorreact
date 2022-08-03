@@ -805,3 +805,13 @@ export const transformToLowerCaseWithoutAccent = (source: string): string =>
 		.toLowerCase()
 		.normalize('NFD')
 		.replace(/\p{Diacritic}/gu, '')
+
+export const countryOptionRender = (itemData: any) => {
+	const { value, label, flag } = itemData
+	return (
+		<div className='flex items-center'>
+			<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			{label}
+		</div>
+	)
+}

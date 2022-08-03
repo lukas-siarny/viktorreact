@@ -226,7 +226,7 @@ export enum ENUMERATIONS_PATHS {
 
 export const PAGINATION = {
 	defaultPageSize: 25,
-	pageSizeOptions: ['25', '50', '100'],
+	pageSizeOptions: [25, 50, 100],
 	limit: 25 // 25 | 50 | 100
 }
 

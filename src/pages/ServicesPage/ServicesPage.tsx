@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row } from 'antd'
+import { Col, Row, Spin } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,6 +27,7 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
+import CustomTablePagination from '../../components/CustomTablePagination'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -70,17 +71,24 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		)
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, salonID])
 
-	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
 				...query,
-				limit: pagination.pageSize,
-				page: pagination.current,
 				order
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const onPaginationChange = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: IAdminUsersFilter) => {
@@ -158,51 +166,56 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Permissions
-							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<ServicesFilter
-									createService={() => {
-										if (hasPermission) {
-											history.push(parentPath + t('paths:services/create'))
-										} else {
-											openForbiddenModal()
-										}
-									}}
-									onSubmit={handleSubmit}
-									total={services?.data?.pagination?.totalCount}
-								/>
-							)}
-						/>
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={services?.tableData}
-							rowClassName={'clickable-row'}
-							loading={services?.isLoading}
-							scroll={{ x: 800 }}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
+						<Spin spinning={services?.isLoading}>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<ServicesFilter
+										createService={() => {
+											if (hasPermission) {
+												history.push(parentPath + t('paths:services/create'))
+											} else {
+												openForbiddenModal()
+											}
+										}}
+										onSubmit={handleSubmit}
+										total={services?.data?.pagination?.totalCount}
+									/>
+								)}
+							/>
+							<CustomTable
+								className='table-fixed'
+								onChange={onChangeTable}
+								columns={columns}
+								dataSource={services?.tableData}
+								rowClassName={'clickable-row'}
+								scroll={{ x: 800 }}
+								twoToneRows
+								onRow={(record) => ({
+									onClick: () => {
+										history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
+									}
+								})}
+								pagination={false}
+							/>
+							<CustomTablePagination
+								showTotal={(total, [from, to]) =>
 									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
 										total,
 										from,
 										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								showSizeChanger: true,
-								pageSize: services?.data?.pagination?.limit,
-								total: services?.data?.pagination?.totalCount,
-								current: services?.data?.pagination?.page
-							}}
-						/>
+									})
+								}
+								defaultPageSize={PAGINATION.defaultPageSize}
+								pageSizeOptions={PAGINATION.pageSizeOptions}
+								pageSize={services?.data?.pagination?.limit}
+								showSizeChanger={true}
+								total={services?.data?.pagination?.totalCount}
+								current={services?.data?.pagination?.page}
+								onChange={onPaginationChange}
+								disabled={services?.isLoading}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>

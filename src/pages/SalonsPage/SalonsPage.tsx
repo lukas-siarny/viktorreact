@@ -14,6 +14,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 import SalonsImportForm from './components/SalonsImportForm'
 import UploadSuccess from './components/UploadSuccess'
+import CustomTablePagination from '../../components/CustomTablePagination'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
@@ -115,17 +116,24 @@ const SalonsPage = () => {
 		query.createType
 	])
 
-	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
 				...query,
-				limit: pagination.pageSize,
-				page: pagination.current,
 				order
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const onPaginationChange = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: ISalonsFilter) => {
@@ -271,36 +279,41 @@ const SalonsPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={salons?.data?.salons}
-							scroll={{ x: 1000 }}
-							rowClassName={'clickable-row'}
-							loading={salons?.isLoading}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
+						<Spin spinning={salons?.isLoading}>
+							<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
+							<CustomTable
+								className='table-fixed'
+								onChange={onChangeTable}
+								columns={columns}
+								dataSource={salons?.data?.salons}
+								scroll={{ x: 1000 }}
+								rowClassName={'clickable-row'}
+								twoToneRows
+								pagination={false}
+								onRow={(record) => ({
+									onClick: () => {
+										history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
+									}
+								})}
+							/>
+							<CustomTablePagination
+								showTotal={(total, [from, to]) =>
 									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
 										total,
 										from,
 										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: salons?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: salons?.data?.pagination?.totalCount,
-								current: salons?.data?.pagination?.page
-							}}
-						/>
+									})
+								}
+								defaultPageSize={PAGINATION.defaultPageSize}
+								pageSizeOptions={PAGINATION.pageSizeOptions}
+								pageSize={salons?.data?.pagination?.limit}
+								showSizeChanger={true}
+								total={salons?.data?.pagination?.totalCount}
+								current={salons?.data?.pagination?.page}
+								onChange={onPaginationChange}
+								disabled={salons?.isLoading}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>

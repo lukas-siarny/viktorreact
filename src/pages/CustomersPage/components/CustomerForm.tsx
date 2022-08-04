@@ -5,7 +5,7 @@ import { Col, Divider, Form, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, GENDER } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, GENDER, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
 
 // types
@@ -17,12 +17,14 @@ import validateCustomerForm from './validateCustomerForm'
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
+import TextareaField from '../../../atoms/TextareaField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // reducers
 import { RootState } from '../../../reducers'
+import ImgUploadField from '../../../atoms/ImgUploadField'
 
 type ComponentProps = {}
 
@@ -54,8 +56,24 @@ const CustomerForm: FC<Props> = (props) => {
 				<Row className={'mx-9 w-full h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
-					<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
+					<div className={'flex space-between w-full'}>
+						<div className={'w-1/5'}>
+							<Field
+								className={'m-0'}
+								component={ImgUploadField}
+								name={'avatar'}
+								label={t('loc:Avatar')}
+								signUrl={URL_UPLOAD_IMAGES}
+								multiple={false}
+								maxCount={1}
+								category={UPLOAD_IMG_CATEGORIES.CUSTOMER}
+							/>
+						</div>
+						<div className={'w-full'}>
+							<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
+							<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
+						</div>
+					</div>
 					<Field component={SelectField} label={t('loc:Pohlavie')} placeholder={t('loc:Vyber pohlavie')} options={genders} name={'gender'} size={'large'} allowClear />
 					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} />
 					<PhoneWithPrefixField
@@ -66,6 +84,17 @@ const CustomerForm: FC<Props> = (props) => {
 						phoneName={'phone'}
 						formName={FORM.CUSTOMER}
 						required
+					/>
+					<Field
+						className={'m-0'}
+						uploaderClassName={'overflow-x-auto'}
+						component={ImgUploadField}
+						name={'gallery'}
+						label={t('loc:Fotogaléria')}
+						signUrl={URL_UPLOAD_IMAGES}
+						multiple
+						maxCount={10}
+						category={UPLOAD_IMG_CATEGORIES.CUSTOMER}
 					/>
 					<Row justify={'space-between'}>
 						<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
@@ -93,6 +122,7 @@ const CustomerForm: FC<Props> = (props) => {
 						loading={countries?.isLoading}
 						allowClear
 					/>
+					<Field component={TextareaField} label={t('loc:Poznámka')} placeholder={t('loc:Zadajte poznámku')} name={'note'} size={'large'} />
 				</Row>
 			</Col>
 		</Form>

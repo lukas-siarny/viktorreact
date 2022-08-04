@@ -82,6 +82,16 @@ export const LOCALES = {
 	}
 }
 
+// default language must be first
+export const EMPTY_NAME_LOCALIZATIONS = Object.keys(LOCALES)
+	.sort((a: string, b: string) => {
+		if (a === DEFAULT_LANGUAGE) {
+			return -1
+		}
+		return b === DEFAULT_LANGUAGE ? 1 : 0
+	})
+	.map((language) => ({ language }))
+
 const { Option } = Select
 const { SubMenu } = Menu
 

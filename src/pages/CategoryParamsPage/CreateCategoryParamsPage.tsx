@@ -9,29 +9,19 @@ import { map, get } from 'lodash'
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CategoryParamsForm from './components/CategoryParamsForm'
-import { LOCALES } from '../../components/LanguagePicker'
+import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 
 // reducers
 import { RootState } from '../../reducers'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, FORM, DEFAULT_LANGUAGE } from '../../utils/enums'
+import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import { normalizeNameLocalizations } from '../../utils/helper'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
-
-const emptyNameLocalizations = Object.keys(LOCALES)
-	.sort((a: string, b: string) => {
-		if (a === DEFAULT_LANGUAGE) {
-			return -1
-		}
-		return b === DEFAULT_LANGUAGE ? 1 : 0
-	})
-	.map((language) => ({ language }))
 
 const CreateCategoryParamsPage = () => {
 	const [t] = useTranslation()
@@ -40,17 +30,30 @@ const CreateCategoryParamsPage = () => {
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.CATEGORY_PARAMS, {
-				nameLocalizations: emptyNameLocalizations,
-				valuesInMinutes: false,
-				values: [{ value: '', valueLocalizations: emptyNameLocalizations }]
+				nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
+				valueType: PARAMETERS_VALUE_TYPES.ENUM,
+				values: [{ value: null, valueLocalizations: EMPTY_NAME_LOCALIZATIONS }]
 			})
 		)
 	}, [dispatch])
 
 	const handleSubmit = async (formData: any) => {
+		console.log('🚀 ~ file: CreateCategoryParamsPage.tsx ~ line 40 ~ handleSubmit ~ formData', formData)
+		let values = []
+
+		if (formData.valueType === PARAMETERS_VALUE_TYPES.TIME) {
+			values = formData.values.map((item: any) => ({ value: item.value }))
+		} else {
+			values = formData.values.map((item: any) => ({ valueLocalizations: item.valueLocalizations.filter((valueLocalization: any) => !!valueLocalization.value) }))
+		}
+
 		try {
 			// TODO
-			const reqBody = {}
+			const reqBody = {
+				nameLocalizations: formData.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value),
+				valueType: formData.valueType,
+				values
+			}
 			const { data } = await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody as any)
 			history.push(t('paths:category-parameters/{{parameterID}}', { parameterID: data.categoryParameter.id }))
 		} catch (error: any) {

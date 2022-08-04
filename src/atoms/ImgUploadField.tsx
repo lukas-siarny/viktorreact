@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useMemo, useRef, useState } from 'react'
+import React, { CSSProperties, FC, useEffect, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +11,7 @@ import cx from 'classnames'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
+
 // utils
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
@@ -32,6 +33,11 @@ type Props = WrappedFieldProps &
 		className?: CSSProperties
 		uploaderClassName?: string
 	}
+
+interface IPreviewFile {
+	type: string | undefined
+	url: string
+}
 
 /**
  * Umoznuje nahrat obrazky na podpisanu url
@@ -57,7 +63,8 @@ const ImgUploadField: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const imagesUrls = useRef<ImgUploadParam>({})
-	const [previewUrl, setPreviewUrl] = useState('')
+	const [previewUrl, setPreviewUrl] = useState<IPreviewFile | null>(null)
+	const [images, setImages] = useState<any[]>([])
 
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
@@ -72,6 +79,8 @@ const ImgUploadField: FC<Props> = (props) => {
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = getImagesFormValues(info.fileList, imagesUrls.current)
+			// order application/['pdf'] file type to end of array
+			values.sort((a: any, b: any) => a.type.length - b.type.length)
 			input.onChange(values)
 
 			// uploading process finished
@@ -107,7 +116,7 @@ const ImgUploadField: FC<Props> = (props) => {
 				uploadImage(options, signUrl, category, imagesUrls)
 			}}
 			fileList={input.value || []}
-			onPreview={(file) => setPreviewUrl(file.url || get(imagesUrls, `current.[${file.uid}].url`))}
+			onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type })}
 			maxCount={maxCount}
 			showUploadList={showUploadList}
 			beforeUpload={(file, fileList) => {
@@ -136,6 +145,20 @@ const ImgUploadField: FC<Props> = (props) => {
 		</Upload>
 	)
 
+	useEffect(() => {
+		if (!isEmpty(input.value)) {
+			// filter application/pdf file
+			setImages(input.value.filter((file: any) => file.type !== 'application/pdf'))
+		}
+	}, [input.value])
+
+	const openPdf = () => {
+		// open application pdf
+		if (previewUrl?.type === 'application/pdf') {
+			window.open(previewUrl.url)
+		}
+	}
+
 	return (
 		<Item
 			className={`${className ?? 'w-full'}`}
@@ -149,16 +172,17 @@ const ImgUploadField: FC<Props> = (props) => {
 			<div className={'hidden'}>
 				<Image.PreviewGroup
 					preview={{
-						visible: !!previewUrl,
-						onVisibleChange: () => setPreviewUrl(''),
-						current: input.value ? input.value?.findIndex((image: any) => image?.url === previewUrl) : -1
+						visible: !!previewUrl && previewUrl?.type !== 'application/pdf',
+						onVisibleChange: () => setPreviewUrl(null),
+						current: images?.findIndex((image: any) => image?.url === previewUrl?.url)
 					}}
 				>
-					{map(input.value, (images) => (
-						<Image key={images.url} src={images.url} fallback={images.thumbUrl} />
+					{map(images, (image) => (
+						<Image key={image.url} src={image.url} fallback={image.thumbUrl} />
 					))}
 				</Image.PreviewGroup>
 			</div>
+			{openPdf()}
 		</Item>
 	)
 }

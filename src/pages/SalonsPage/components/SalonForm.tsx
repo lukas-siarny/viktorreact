@@ -17,7 +17,6 @@ import TextareaField from '../../../atoms/TextareaField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 import SelectField from '../../../atoms/SelectField'
 import PhoneArrayField from '../../../atoms/PhoneArrayField'
-import FileUploadField from '../../../atoms/FileUploadField'
 
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification } from '../../../utils/helper'

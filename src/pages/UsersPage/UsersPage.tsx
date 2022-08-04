@@ -12,10 +12,9 @@ import { compose } from 'redux'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
-import CustomTablePagination from '../../components/CustomTablePagination'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -75,7 +74,7 @@ const UsersPage = () => {
 		}
 	}
 
-	const onPaginationChange = (page: number, limit: number) => {
+	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
 			limit,
@@ -198,24 +197,14 @@ const UsersPage = () => {
 										history.push(t('paths:users/{{userID}}', { userID: record.id }))
 									}
 								})}
-								pagination={false}
-							/>
-							<CustomTablePagination
-								showTotal={(total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									})
-								}
-								defaultPageSize={PAGINATION.defaultPageSize}
-								pageSizeOptions={PAGINATION.pageSizeOptions}
-								pageSize={users?.data?.pagination?.limit}
-								showSizeChanger={true}
-								total={users?.data?.pagination?.totalCount}
-								current={users?.data?.pagination?.page}
-								onChange={onPaginationChange}
-								disabled={users?.isLoading}
+								useCustomPagination
+								pagination={{
+									pageSize: users?.data?.pagination?.limit,
+									total: users?.data?.pagination?.totalCount,
+									current: users?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: users?.isLoading
+								}}
 							/>
 						</Spin>
 					</div>

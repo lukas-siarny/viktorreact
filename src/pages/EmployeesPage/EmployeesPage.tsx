@@ -15,7 +15,7 @@ import EmployeesFilter, { IEmployeesFilter } from './components/EmployeesFilter'
 import PopoverList from '../../components/PopoverList'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -31,7 +31,6 @@ import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
 import TooltipEllipsis from '../../components/TooltipEllipsis'
-import CustomTablePagination from '../../components/CustomTablePagination'
 
 type Columns = ColumnsType<any>
 
@@ -83,7 +82,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const onPaginationChange = (page: number, limit: number) => {
+	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
 			limit,
@@ -209,24 +208,14 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 										history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))
 									}
 								})}
-								pagination={false}
-							/>
-							<CustomTablePagination
-								showTotal={(total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									})
-								}
-								defaultPageSize={PAGINATION.defaultPageSize}
-								pageSizeOptions={PAGINATION.pageSizeOptions}
-								pageSize={employees?.data?.pagination?.limit}
-								showSizeChanger={true}
-								total={employees?.data?.pagination?.totalCount}
-								current={employees?.data?.pagination?.page}
-								onChange={onPaginationChange}
-								disabled={employees?.isLoading}
+								useCustomPagination
+								pagination={{
+									pageSize: employees?.data?.pagination?.limit,
+									total: employees?.data?.pagination?.totalCount,
+									current: employees?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: employees?.isLoading
+								}}
 							/>
 						</Spin>
 					</div>

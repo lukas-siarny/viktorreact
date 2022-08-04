@@ -15,7 +15,7 @@ import ServicesFilter from './components/ServicesFilter'
 import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, normalizeDirectionKeys, normalizeQueryParams, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -27,7 +27,6 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, IUserAvatar, SalonSubPageProps } from '../../types/interfaces'
-import CustomTablePagination from '../../components/CustomTablePagination'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -82,7 +81,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		}
 	}
 
-	const onPaginationChange = (page: number, limit: number) => {
+	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
 			limit,
@@ -196,24 +195,14 @@ const ServicesPage = (props: SalonSubPageProps) => {
 										history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID }))
 									}
 								})}
-								pagination={false}
-							/>
-							<CustomTablePagination
-								showTotal={(total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									})
-								}
-								defaultPageSize={PAGINATION.defaultPageSize}
-								pageSizeOptions={PAGINATION.pageSizeOptions}
-								pageSize={services?.data?.pagination?.limit}
-								showSizeChanger={true}
-								total={services?.data?.pagination?.totalCount}
-								current={services?.data?.pagination?.page}
-								onChange={onPaginationChange}
-								disabled={services?.isLoading}
+								useCustomPagination
+								pagination={{
+									pageSize: services?.data?.pagination?.limit,
+									total: services?.data?.pagination?.totalCount,
+									current: services?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: services?.isLoading
+								}}
 							/>
 						</Spin>
 					</div>

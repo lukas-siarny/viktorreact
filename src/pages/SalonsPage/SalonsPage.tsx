@@ -14,11 +14,10 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 import SalonsImportForm from './components/SalonsImportForm'
 import UploadSuccess from './components/UploadSuccess'
-import CustomTablePagination from '../../components/CustomTablePagination'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
 import { formatDateByLocale, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
@@ -127,7 +126,7 @@ const SalonsPage = () => {
 		}
 	}
 
-	const onPaginationChange = (page: number, limit: number) => {
+	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
 			limit,
@@ -289,29 +288,19 @@ const SalonsPage = () => {
 								scroll={{ x: 1000 }}
 								rowClassName={'clickable-row'}
 								twoToneRows
-								pagination={false}
+								useCustomPagination
+								pagination={{
+									pageSize: salons?.data?.pagination?.limit,
+									total: salons?.data?.pagination?.totalCount,
+									current: salons?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: salons?.isLoading
+								}}
 								onRow={(record) => ({
 									onClick: () => {
 										history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
 									}
 								})}
-							/>
-							<CustomTablePagination
-								showTotal={(total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									})
-								}
-								defaultPageSize={PAGINATION.defaultPageSize}
-								pageSizeOptions={PAGINATION.pageSizeOptions}
-								pageSize={salons?.data?.pagination?.limit}
-								showSizeChanger={true}
-								total={salons?.data?.pagination?.totalCount}
-								current={salons?.data?.pagination?.page}
-								onChange={onPaginationChange}
-								disabled={salons?.isLoading}
 							/>
 						</Spin>
 					</div>

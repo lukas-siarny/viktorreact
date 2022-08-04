@@ -12,10 +12,9 @@ import { compose } from 'redux'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
-import CustomTablePagination from '../../components/CustomTablePagination'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -72,7 +71,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		}
 	}
 
-	const onPaginationChange = (page: number, limit: number) => {
+	const onChangePagination = (page: number, limit: number) => {
 		const newQuery = {
 			...query,
 			limit,
@@ -182,37 +181,14 @@ const CustomersPage = (props: SalonSubPageProps) => {
 										history.push(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id }))
 									}
 								})}
+								useCustomPagination
 								pagination={{
-									showTotal: (total, [from, to]) =>
-										t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-											total,
-											from,
-											to
-										}),
-									defaultPageSize: PAGINATION.defaultPageSize,
-									pageSizeOptions: PAGINATION.pageSizeOptions,
-									showSizeChanger: true,
 									pageSize: customers?.data?.pagination?.limit,
 									total: customers?.data?.pagination?.totalCount,
-									current: customers?.data?.pagination?.page
+									current: customers?.data?.pagination?.page,
+									disabled: customers?.isLoading,
+									onChange: onChangePagination
 								}}
-							/>
-							<CustomTablePagination
-								showTotal={(total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									})
-								}
-								defaultPageSize={PAGINATION.defaultPageSize}
-								pageSizeOptions={PAGINATION.pageSizeOptions}
-								pageSize={customers?.data?.pagination?.limit}
-								showSizeChanger={true}
-								total={customers?.data?.pagination?.totalCount}
-								current={customers?.data?.pagination?.page}
-								onChange={onPaginationChange}
-								disabled={customers?.isLoading}
 							/>
 						</Spin>
 					</div>

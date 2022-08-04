@@ -8,7 +8,7 @@ import cx from 'classnames'
 // utils
 import { isEmpty } from 'lodash'
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
-import { showErrorNotification, showServiceCategory, validationNumberMin, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
 import searchWrapper from '../../../utils/filters'
 
 // types
@@ -225,7 +225,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	)
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'mx-9 w-full h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>

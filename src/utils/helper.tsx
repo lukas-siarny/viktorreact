@@ -803,22 +803,10 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
  * Usefull for searching on FE
  * @link https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
  */
-export const transformToLowerCaseWithoutAccent = (source: string): string =>
+export const transformToLowerCaseWithoutAccent = (source?: string): string =>
 	source
-		.toLowerCase()
-		.normalize('NFD')
-		.replace(/\p{Diacritic}/gu, '')
-
-export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
-	const { form } = props
-
-	if (values && values[IMAGE_UPLOADING_PROP]) {
-		const error = i18next.t('loc:Prebieha nahrávanie')
-		showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
-		throw new SubmissionError({
-			[IMAGE_UPLOADING_PROP]: error
-		})
-	} else {
-		dispatch(submit(form))
-	}
-}
+		? source
+				.toLowerCase()
+				.normalize('NFD')
+				.replace(/\p{Diacritic}/gu, '')
+		: ''

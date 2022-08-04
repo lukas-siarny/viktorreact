@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState, ReactElement } from 'react'
 import { Field, InjectedFormProps, WrappedFieldProps } from 'redux-form'
-import { Col, Row } from 'antd'
+import { Alert, Col, Row } from 'antd'
 import cx from 'classnames'
 import { get } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +14,7 @@ import MapContainer from './MapContainer'
 
 // utils
 import { ENUMERATIONS_KEYS, GOOGLE_MAPS_API_KEY, MAP } from '../utils/enums'
-import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents, countryOptionRender } from '../utils/helper'
+import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents, countryOptionRender, validationRequired } from '../utils/helper'
 
 // atoms
 import LocationSearchInputField from '../atoms/LocationSearchInputField'
@@ -192,6 +192,7 @@ const AddressFields = (props: Props) => {
 					<Row className={'mb-4 gap-4'} wrap={false}>
 						{mapError ? (
 							<Row className={'w-full h-full block'} justify='center'>
+								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4'} />
 								<Row justify={'space-between'}>
 									<Field
 										className={'w-4/5'}
@@ -200,6 +201,7 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte ulicu')}
 										name={'street'}
 										size={'large'}
+										validate={validationRequired}
 										required
 									/>
 									<Field
@@ -209,6 +211,7 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
 										size={'large'}
+										validate={validationRequired}
 										required
 									/>
 								</Row>
@@ -220,6 +223,7 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte mesto')}
 										name={'city'}
 										size={'large'}
+										validate={validationRequired}
 										required
 									/>
 									<Field
@@ -229,6 +233,7 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte smerovacie číslo')}
 										name={'zipCode'}
 										size={'large'}
+										validate={validationRequired}
 										required
 									/>
 								</Row>
@@ -241,6 +246,7 @@ const AddressFields = (props: Props) => {
 									name={'country'}
 									size={'large'}
 									loading={countries?.isLoading}
+									validate={validationRequired}
 									required
 								/>
 							</Row>

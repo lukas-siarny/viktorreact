@@ -89,18 +89,13 @@ const LanguagesPage = () => {
 		if (lang) {
 			dispatch(
 				initialize(FORM.LANGUAGES, {
-					code: lang.code,
-					countryCode: lang.code,
-					isoFormat: lang.isoFormat,
+					flag: lang.flag,
 					nameLocalizations: lang.nameLocalizations
 				})
 			)
 		} else {
 			dispatch(
 				initialize(FORM.LANGUAGES, {
-					code: null,
-					countryCode: null,
-					isoFormat: null,
 					nameLocalizations: emptyNameLocalizations
 				})
 			)
@@ -112,16 +107,14 @@ const LanguagesPage = () => {
 
 	const handleSubmit = async (formData: ILanguageForm) => {
 		const body = {
-			code: 'sk',
-			countryCode: 'sk',
-			isoFormat: 'ISO_639_1',
+			flag: formData.flag,
 			nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value)
 		}
 		try {
 			if (languageID > 0) {
-				await patchReq('/api/b2b/admin/enums/languages/{languageID}', { languageID }, body as LanguagesPatch)
+				await patchReq('/api/b2b/admin/enums/languages/{languageID}', { languageID }, body /* as LanguagesPatch */ as any)
 			} else {
-				await postReq('/api/b2b/admin/enums/languages/', null, body as LanguagesPatch)
+				await postReq('/api/b2b/admin/enums/languages/', null, body /* as LanguagesPatch */ as any)
 			}
 			dispatch(getLanguages())
 			changeFormVisibility()
@@ -147,10 +140,11 @@ const LanguagesPage = () => {
 			title: t('loc:Názov'),
 			dataIndex: 'name',
 			key: 'name',
+			ellipsis: true,
 			render: (value, record) => (
-				<div className='flex items-center base-regular'>
+				<div className='flex items-center base-regular min-w-0'>
 					{record.flag ? <img className='noti-flag w-6 mr-1 rounded' src={record.flag} alt={value} /> : <div className={'noti-flag-fallback mr-1'} />}
-					{value}
+					<span className={'truncate min-w-0'}>{value}</span>
 				</div>
 			)
 		},
@@ -182,7 +176,6 @@ const LanguagesPage = () => {
 								addButton={
 									<Button
 										onClick={() => {
-											// dispatch(initialize(FORM.LANGUAGES, {}))
 											changeFormVisibility(true)
 										}}
 										type='primary'
@@ -211,13 +204,7 @@ const LanguagesPage = () => {
 								{visibleForm ? (
 									<div className={'w-6/12 flex justify-around items-start'}>
 										<Divider className={'h-full'} type={'vertical'} />
-										<LanguagesForm
-											closeForm={changeFormVisibility}
-											languageID={languageID}
-											onSubmit={handleSubmit}
-											onDelete={handleDelete}
-											// usedBrands={languages.data?.map((item) => item.name)}
-										/>
+										<LanguagesForm closeForm={changeFormVisibility} languageID={languageID} onSubmit={handleSubmit} onDelete={handleDelete} />
 									</div>
 								) : undefined}
 							</div>

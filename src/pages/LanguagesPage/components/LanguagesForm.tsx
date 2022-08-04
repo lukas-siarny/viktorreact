@@ -26,7 +26,6 @@ type ComponentProps = {
 	languageID: number
 	closeForm: () => void
 	onDelete: () => void
-	usedBrands?: string[]
 }
 
 type Props = InjectedFormProps<ILanguageForm, ComponentProps> & ComponentProps
@@ -48,14 +47,14 @@ const LanguagesForm: FC<Props> = (props) => {
 						</Button>
 					</h3>
 					<Divider className={'my-3'} />
-					<Row className={'w-full items-center'} justify='space-between'>
+					<Row className={'w-full gap-4'} justify='space-between'>
 						<FieldArray
 							key='nameLocalizations'
 							name='nameLocalizations'
 							component={Localizations}
 							placeholder={t('loc:Zadajte názov')}
 							horizontal
-							className={'w-full'}
+							className={'flex-1 noti-languages-localizations'}
 							ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
 							customValidate={fixLength255}
 							mainField={
@@ -70,6 +69,15 @@ const LanguagesForm: FC<Props> = (props) => {
 									validate={fixLength255}
 								/>
 							}
+						/>
+						<Field
+							component={ImgUploadField}
+							name='flag'
+							label={t('loc:Vlajka')}
+							maxCount={1}
+							signUrl={URL_UPLOAD_IMAGES}
+							category={UPLOAD_IMG_CATEGORIES.CATEGORY}
+							required
 						/>
 					</Row>
 					<div className={'flex w-full justify-around space-between mt-10 gap-2 flex-wrap'}>

@@ -36,7 +36,6 @@ import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { SubmissionError, submit } from 'redux-form'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -44,7 +43,6 @@ import {
 	FORM,
 	INVALID_DATE_FORMAT,
 	MSG_TYPE,
-	NOTIFICATION_TYPE,
 	DEFAULT_LANGUAGE,
 	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER,
@@ -56,7 +54,6 @@ import {
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX
 } from './enums'
-import showNotifications from './tsxHelpers'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 

@@ -2,6 +2,7 @@ import { SALON_STATES } from './../utils/enums'
 /* eslint-disable import/no-cycle */
 import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
+import { PaginationProps } from 'antd'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -411,4 +412,8 @@ export interface IIsPublishedVersionSameAsDraft {
 	isAboutUsSecondEqual: boolean
 	isPhoneEqual: boolean
 	isEmailEqual: boolean
+}
+
+export interface IPagination extends PaginationProps {
+	pageSizeOptions?: number[]
 }

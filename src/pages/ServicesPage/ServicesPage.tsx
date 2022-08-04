@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row } from 'antd'
+import { Col, Row, Spin } from 'antd'
 import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,7 +15,7 @@ import ServicesFilter from './components/ServicesFilter'
 import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
@@ -72,17 +72,24 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		)
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, salonID])
 
-	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
 				...query,
-				limit: pagination.pageSize,
-				page: pagination.current,
 				order
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const onChangePagination = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: IAdminUsersFilter) => {
@@ -160,51 +167,46 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Permissions
-							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<ServicesFilter
-									createService={() => {
-										if (hasPermission) {
-											history.push(`${parentPath + t('paths:services/create')}?backUrl=${backUrl}`)
-										} else {
-											openForbiddenModal()
-										}
-									}}
-									onSubmit={handleSubmit}
-									total={services?.data?.pagination?.totalCount}
-								/>
-							)}
-						/>
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={services?.tableData}
-							rowClassName={'clickable-row'}
-							loading={services?.isLoading}
-							scroll={{ x: 800 }}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(`${parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID })}?backUrl=${backUrl}`)
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								showSizeChanger: true,
-								pageSize: services?.data?.pagination?.limit,
-								total: services?.data?.pagination?.totalCount,
-								current: services?.data?.pagination?.page
-							}}
-						/>
+						<Spin spinning={services?.isLoading}>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<ServicesFilter
+										createService={() => {
+											if (hasPermission) {
+												history.push(`${parentPath + t('paths:services/create')}?backUrl=${backUrl}`)
+											} else {
+												openForbiddenModal()
+											}
+										}}
+										onSubmit={handleSubmit}
+										total={services?.data?.pagination?.totalCount}
+									/>
+								)}
+							/>
+							<CustomTable
+								className='table-fixed'
+								onChange={onChangeTable}
+								columns={columns}
+								dataSource={services?.tableData}
+								rowClassName={'clickable-row'}
+								scroll={{ x: 800 }}
+								twoToneRows
+								onRow={(record) => ({
+									onClick: () => {
+										history.push(`${parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID })}?backUrl=${backUrl}`)
+									}
+								})}
+								useCustomPagination
+								pagination={{
+									pageSize: services?.data?.pagination?.limit,
+									total: services?.data?.pagination?.totalCount,
+									current: services?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: services?.isLoading
+								}}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>

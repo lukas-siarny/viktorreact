@@ -591,7 +591,14 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 
 		let img = {
 			...file,
-			url: get(file, 'url') || fileData?.path
+			url: get(file, 'url') || fileData.path
+		}
+
+		if (get(file, 'resizedImages')) {
+			img = {
+				...img,
+				thumbUrl: fileData?.resizedImages?.thumbnail
+			}
 		}
 
 		if (get(file, 'id') || fileData?.id) {

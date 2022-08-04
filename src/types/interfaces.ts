@@ -112,6 +112,7 @@ export interface ISalonForm {
 	logo: any | null;
 	gallery: any | null;
 	pricelistIDs?: number[]
+	pricelists?: any
 	companyContactPerson: {
 		email: string | null
 		firstName: string | null
@@ -163,8 +164,9 @@ export interface ISalonForm {
 			phone: string | null
 		}[]
 		email: string | null
-		logo: any;
-		gallery: any;
+		logo: any
+		gallery: any
+		pricelists: any
 	}
 }
 
@@ -412,6 +414,7 @@ export interface IIsPublishedVersionSameAsDraft {
 	isAboutUsSecondEqual: boolean
 	isPhoneEqual: boolean
 	isEmailEqual: boolean
+	isPriceListsEqual: boolean
 }
 
 export interface IPagination extends PaginationProps {

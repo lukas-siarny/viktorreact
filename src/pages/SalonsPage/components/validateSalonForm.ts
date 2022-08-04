@@ -3,6 +3,7 @@ import { isEmail } from 'lodash-checkit'
 import { isEmpty } from 'lodash'
 import { ISalonForm } from '../../../types/interfaces'
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { socialMediaRegex } from '../../../utils/regex'
 
 export default (values: ISalonForm) => {
 	const errors: any = {}
@@ -167,6 +168,42 @@ export default (values: ISalonForm) => {
 
 		if (!isEmpty(companyErrors)) {
 			errors.companyInfo = companyErrors
+		}
+
+		if (values?.socialLinkFB && !socialMediaRegex.facebook.test(values.socialLinkFB)) {
+			errors.socialLinkFB = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+				url: 'https://www.facebook.com/facebook'
+			})
+		}
+
+		if (values?.socialLinkYoutube && !socialMediaRegex.youtube.test(values.socialLinkYoutube)) {
+			errors.socialLinkYoutube = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+				url: 'https://www.youtube.com/youtube'
+			})
+		}
+
+		if (values?.socialLinkInstagram && !socialMediaRegex.instagram.test(values.socialLinkInstagram)) {
+			errors.socialLinkInstagram = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+				url: 'https://www.instagram.com/instagram'
+			})
+		}
+
+		if (values?.socialLinkPinterest && !socialMediaRegex.pinterest.test(values.socialLinkPinterest)) {
+			errors.socialLinkPinterest = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+				url: 'https://www.pinterest.com/pinterest'
+			})
+		}
+
+		if (values?.socialLinkTikTok && !socialMediaRegex.tiktok.test(values.socialLinkTikTok)) {
+			errors.socialLinkTikTok = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+				url: 'https://www.tiktok.com/tiktok'
+			})
+		}
+
+		if (values?.socialLinkWebPage && !socialMediaRegex.website.test(values.socialLinkWebPage)) {
+			errors.socialLinkWebPage = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
+				url: 'https://www.notino.com/'
+			})
 		}
 	}
 

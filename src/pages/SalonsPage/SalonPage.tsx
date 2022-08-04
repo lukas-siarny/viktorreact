@@ -316,7 +316,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
 				companyInfo: data.companyInfo,
-				categoryIDs: data.categoryIDs,
+				// categoryIDs: data.categoryIDs,
 				cosmeticIDs: data.cosmeticIDs,
 				languageIDs: data.languageIDs
 			}

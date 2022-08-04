@@ -14,6 +14,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeesFilter, { IEmployeesFilter } from './components/EmployeesFilter'
 import PopoverList from '../../components/PopoverList'
 import TooltipEllipsis from '../../components/TooltipEllipsis'
+import UserAvatar from '../../components/AvatarComponents'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
@@ -103,15 +104,28 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			ellipsis: true,
 			sorter: true,
 			sortOrder: setOrder(query.order, 'lastName'),
-			width: '20%',
-			render: (value, record) => <>{record?.firstName || record?.lastName ? `${record?.firstName} ${record?.lastName}`.trim() : '-'}</>
+			width: '25%',
+			render: (_value, record) => (
+				<>
+					<UserAvatar className='mr-2-5 w-7 h-7' src={record?.image?.resizedImages?.thumbnail} fallBackSrc={record?.image?.original} />
+					{record?.firstName || record?.lastName ? `${record?.firstName} ${record?.lastName}`.trim() : '-'}
+				</>
+			)
 		},
 		{
 			title: t('loc:Email'),
 			dataIndex: 'email',
 			key: 'email',
 			ellipsis: true,
-			width: '25%',
+			width: '20%',
+			render: (value) => value || '-'
+		},
+		{
+			title: t('loc:Pozvánkový email'),
+			dataIndex: 'inviteEmail',
+			key: 'inviteEmail',
+			ellipsis: true,
+			width: '20%',
 			render: (value) => value || '-'
 		},
 		{

@@ -12,6 +12,7 @@
   "index": "/index",
   "login": "/login",
   "my-account": "/my-account",
+  "pending-invites": "/pending-invites",
   "reset-password": "/reset-password",
   "salons": "/salons",
   "salons/create": "/salons/create",

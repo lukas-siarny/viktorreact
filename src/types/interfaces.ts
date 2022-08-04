@@ -249,6 +249,7 @@ export interface IComputedMatch<Params> {
 export interface IBreadcrumbItem {
 	name: string
 	link?: string
+	queryParams?: string
 	action?: any
 	titleName?: string | null | undefined
 }

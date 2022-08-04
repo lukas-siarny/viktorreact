@@ -98,6 +98,8 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	return decoded
 }
 
+export const getEncodedBackUrl = () => btoa(`${window.location.pathname}${window.location.search}`)
+
 export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: string[]) => {
 	const pickQueryParams = pick(queryParams, Object.values(allowQueryParams))
 
@@ -805,3 +807,13 @@ export const transformToLowerCaseWithoutAccent = (source: string): string =>
 		.toLowerCase()
 		.normalize('NFD')
 		.replace(/\p{Diacritic}/gu, '')
+
+export const countryOptionRender = (itemData: any) => {
+	const { value, label, flag } = itemData
+	return (
+		<div className='flex items-center'>
+			<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			{label}
+		</div>
+	)
+}

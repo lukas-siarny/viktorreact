@@ -18,7 +18,7 @@ import UploadSuccess from './components/UploadSuccess'
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
-import { formatDateByLocale, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { formatDateByLocale, getEncodedBackUrl, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
 
@@ -298,7 +298,7 @@ const SalonsPage = () => {
 								}}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
+										history.push(`${t('paths:salons/{{salonID}}', { salonID: record.id })}?backUrl=${getEncodedBackUrl()}`)
 									}
 								})}
 							/>

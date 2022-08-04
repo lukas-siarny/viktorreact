@@ -6,12 +6,20 @@ type Props = GoogleMapProps & {
 	lat: number
 	long: number
 	onLocationChange: (e: any) => void
+	onError: (message: string) => void
 	zoomChanged?: (newZoom: number) => void
 	disabled?: boolean
 }
 
 const MapContainer = (props: Props) => {
-	const { onLocationChange, lat, long, zoom = MAP.defaultZoom, zoomChanged, disabled } = props
+	const { onLocationChange, lat, long, zoom = MAP.defaultZoom, zoomChanged, disabled, onError } = props
+
+	// catch google API authentication errors
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	window.gm_authFailure = () => {
+		onError('Goggle Map auth error')
+	}
 
 	const mapRef: any = useRef()
 

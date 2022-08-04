@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, GENDER, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { countryOptionRender, showErrorNotification } from '../../../utils/helper'
 
 // types
 import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -39,16 +39,6 @@ const CustomerForm: FC<Props> = (props) => {
 		{ label: `${t('loc: Muž')}`, value: GENDER.MALE, key: GENDER.MALE },
 		{ label: `${t('loc:Žena')}`, value: GENDER.FEMALE, key: GENDER.FEMALE }
 	]
-
-	const countryOptionRender = (itemData: any) => {
-		const { value, label, flag } = itemData
-		return (
-			<div className='flex items-center'>
-				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
-				{label}
-			</div>
-		)
-	}
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>

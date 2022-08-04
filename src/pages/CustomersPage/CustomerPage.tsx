@@ -25,6 +25,9 @@ import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { Paths } from '../../types/api'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
 		customerID: number
@@ -44,6 +47,8 @@ const CustomerPage = (props: Props) => {
 	const customer = useSelector((state: RootState) => state.customers.customer)
 
 	const isLoading = customer?.isLoading || isRemoving
+
+	const [backUrl] = useBackUrl(parentPath + t('paths:customers'))
 
 	const fetchCustomerData = async () => {
 		const { data } = await dispatch(getCustomer(customerID))
@@ -80,7 +85,7 @@ const CustomerPage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: parentPath + t('paths:customers')
+				link: backUrl
 			},
 			{
 				name: t('loc:Detail zákazníka'),

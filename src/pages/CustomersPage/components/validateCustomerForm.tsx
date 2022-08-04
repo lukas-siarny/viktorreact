@@ -46,6 +46,12 @@ export default (values: any) => {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
 	}
 
+	if (values?.note && values.note?.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
+		errors.note = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_1000
+		})
+	}
+
 	if (values?.street && values?.street?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {
 		errors.street = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_100

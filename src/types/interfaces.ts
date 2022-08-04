@@ -294,12 +294,15 @@ export interface ICustomerForm {
 	phonePrefixCountryCode: string
 	phone: string
 	gender?: GENDER
+	note?: string
 	zipCode?: string
 	city?: string
 	street?: string
 	streetNumber?: string
 	countryCode?: string
 	salonID: number
+	gallery: any,
+	avatar: any
 }
 
 export interface IEmployeeForm {

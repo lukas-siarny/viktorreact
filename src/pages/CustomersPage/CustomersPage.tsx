@@ -12,6 +12,7 @@ import { compose } from 'redux'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
+import UserAvatar from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
@@ -92,6 +93,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			sortOrder: setOrder(query.order, 'lastName'),
 			render: (value, record) => (
 				<>
+					<UserAvatar className={'mr-1'} src={record.profileImage?.resizedImages?.thumbnail} fallBackSrc={record.profileImage?.original} size={'small'} />
 					{record?.firstName} {record?.lastName}
 				</>
 			)

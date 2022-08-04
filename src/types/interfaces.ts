@@ -391,3 +391,10 @@ export interface IIsPublishedVersionSameAsDraft {
 export type ICategoryParameters = Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200['categoryParameters']
 
 export type ICategoryParameter = Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200['categoryParameter']
+
+export interface ICategoryParamForm {
+	nameLocalizations: ICategoryParameter['nameLocalizations']
+	valueType: ICategoryParameter['valueType']
+	localizedValues: ICategoryParameter['values']['0']['valueLocalizations']
+	values: Pick<ICategoryParameter['values']['0'], 'value'>[]
+}

@@ -1,27 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { compose } from 'redux'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
-import { Button, Row, Spin } from 'antd'
-import { initialize, isPristine, submit } from 'redux-form'
-import { map, get } from 'lodash'
+import { useDispatch } from 'react-redux'
+import { Row } from 'antd'
+import { initialize } from 'redux-form'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CategoryParamsForm from './components/CategoryParamsForm'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 
-// reducers
-import { RootState } from '../../reducers'
-
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES } from '../../utils/enums'
+import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
 
 const CreateCategoryParamsPage = () => {
 	const [t] = useTranslation()
@@ -32,27 +28,30 @@ const CreateCategoryParamsPage = () => {
 			initialize(FORM.CATEGORY_PARAMS, {
 				nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
 				valueType: PARAMETERS_VALUE_TYPES.ENUM,
-				values: [{ value: null, valueLocalizations: EMPTY_NAME_LOCALIZATIONS }]
+				localizedValues: [{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }],
+				values: [{ value: null }]
 			})
 		)
 	}, [dispatch])
 
-	const handleSubmit = async (formData: any) => {
-		console.log('🚀 ~ file: CreateCategoryParamsPage.tsx ~ line 40 ~ handleSubmit ~ formData', formData)
+	const handleSubmit = async (formData: ICategoryParamForm) => {
 		let values = []
+		let unitType = null
 
 		if (formData.valueType === PARAMETERS_VALUE_TYPES.TIME) {
-			values = formData.values.map((item: any) => ({ value: item.value }))
+			unitType = PARAMETERS_UNIT_TYPES.MINUTES
+			values = formData.values.map((item: any) => ({ value: item.value.toString() }))
 		} else {
-			values = formData.values.map((item: any) => ({ valueLocalizations: item.valueLocalizations.filter((valueLocalization: any) => !!valueLocalization.value) }))
+			values =
+				formData.localizedValues?.map((item: any) => ({ valueLocalizations: item.valueLocalizations.filter((valueLocalization: any) => !!valueLocalization.value) })) || []
 		}
 
 		try {
-			// TODO
 			const reqBody = {
 				nameLocalizations: formData.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value),
 				valueType: formData.valueType,
-				values
+				values,
+				unitType
 			}
 			const { data } = await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody as any)
 			history.push(t('paths:category-parameters/{{parameterID}}', { parameterID: data.categoryParameter.id }))

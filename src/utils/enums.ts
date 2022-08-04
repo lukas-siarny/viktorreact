@@ -437,3 +437,7 @@ export enum PARAMETERS_VALUE_TYPES {
 	TIME = 'TIME',
 	ENUM = 'ENUM'
 }
+
+export enum PARAMETERS_UNIT_TYPES {
+	MINUTES = 'MINUTES'
+}

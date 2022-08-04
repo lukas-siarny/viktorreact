@@ -28,17 +28,17 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon-16.svg'
 
 // types
-import { ISupportContactForm } from '../../../types/interfaces'
+import { ICategoryParamForm } from '../../../types/interfaces'
 
 const { Item } = Form
 
-const fixLength100 = validationString(100)
+const maxLength100 = validationString(100)
 
 type ComponentProps = {
 	onDelete?: () => void
 }
 
-type Props = InjectedFormProps<ISupportContactForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ICategoryParamForm, ComponentProps> & ComponentProps
 
 const LocalizationsArray = (props: any) => {
 	const { fields, required, label, addBtnLabel, maxCount = MAX_VALUES_PER_PARAMETER, nestedFieldName, placeholder, emptyValue } = props
@@ -65,7 +65,7 @@ const LocalizationsArray = (props: any) => {
 							placeholder={placeholder}
 							horizontal
 							ignoreFieldIndex={0}
-							customValidate={fixLength100}
+							customValidate={maxLength100}
 							mainField={
 								<div key={index} className={'flex gap-2 items-center'}>
 									<Field
@@ -76,7 +76,7 @@ const LocalizationsArray = (props: any) => {
 										key={`${key}[0].value`}
 										name={`${key}[0].value`}
 										required
-										validate={fixLength100}
+										validate={maxLength100}
 									/>
 									<DeleteButton
 										className={'bg-red-100 mt-5'}
@@ -104,8 +104,6 @@ const CategoryParamsForm: FC<Props> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.CATEGORY_PARAMS]?.values)
 	const entityName = useMemo(() => t('loc:parameter'), [t])
 
-	console.log('🚀 ~ file: CategoryParamsForm.tsx ~ line 119 ~ LocalizationsArray ~ formValues', formValues)
-
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={36}>
@@ -121,7 +119,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte názov')}
 								horizontal
 								ignoreFieldIndex={0}
-								customValidate={fixLength100}
+								customValidate={maxLength100}
 								className='w-7/12'
 								mainField={
 									<Field
@@ -132,7 +130,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 										key='nameLocalizations[0].value'
 										name='nameLocalizations[0].value'
 										required
-										validate={fixLength100}
+										validate={maxLength100}
 									/>
 								}
 							/>
@@ -163,11 +161,12 @@ const CategoryParamsForm: FC<Props> = (props) => {
 								maxCount={MAX_VALUES_PER_PARAMETER}
 								inputSize={'middle'}
 								type='number'
+								emptyValue={{ value: null }}
 								required
 							/>
 						) : (
 							<FieldArray
-								name={'values'}
+								name={'localizedValues'}
 								component={LocalizationsArray}
 								placeholder={t('loc:Zadajte hodnotu')}
 								required
@@ -208,7 +207,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ISupportContactForm, ComponentProps>({
+const form = reduxForm<ICategoryParamForm, ComponentProps>({
 	form: FORM.CATEGORY_PARAMS,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

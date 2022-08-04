@@ -98,6 +98,8 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	return decoded
 }
 
+export const getEncodedBackUrl = () => btoa(`${window.location.pathname}${window.location.search}`)
+
 export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: string[]) => {
 	const pickQueryParams = pick(queryParams, Object.values(allowQueryParams))
 

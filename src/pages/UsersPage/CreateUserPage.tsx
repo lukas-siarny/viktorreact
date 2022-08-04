@@ -24,6 +24,9 @@ import { getSystemRoles } from '../../reducers/roles/rolesActions'
 import { getPrefixCountryCode } from '../../utils/helper'
 import { RootState } from '../../reducers'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 const permission: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]
 
 const CreateUserPage = () => {
@@ -35,11 +38,13 @@ const CreateUserPage = () => {
 
 	const { isLoading } = phonePrefixes
 
+	const [backUrl] = useBackUrl(t('paths:users'))
+
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
 				name: t('loc:Zoznam používateľov'),
-				link: t('paths:users')
+				link: backUrl
 			},
 			{
 				name: t('loc:Nový používateľ')

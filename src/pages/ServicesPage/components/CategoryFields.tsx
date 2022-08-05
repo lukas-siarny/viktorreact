@@ -73,7 +73,7 @@ const CategoryFields = () => {
 					name='categoryFirstLevel'
 					options={categoryFirstLevelOptions}
 					onChange={() => {
-						dispatch(dispatch(change(FORM.SERVICE_FORM, 'categorySecondLevel', null)))
+						dispatch(change(FORM.SERVICE_FORM, 'categorySecondLevel', null))
 					}}
 					size={'large'}
 					required

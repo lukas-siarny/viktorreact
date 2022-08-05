@@ -3,6 +3,7 @@ import { isEqual } from 'lodash'
 // types
 import { IIsPublishedVersionSameAsDraft, ISalonForm } from '../../../types/interfaces'
 import { ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
+import { Paths } from '../../../types/api'
 
 export const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalonPayload) => {
 	// compare all fields that needs to be approved
@@ -48,6 +49,7 @@ export const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPub
 	const isAboutUsSecondEqual = (formValues?.aboutUsSecond || null) === (formValues?.publishedSalonData?.aboutUsSecond || null)
 	const isPhoneEqual = isEqual(formValues?.phones, formValues?.publishedSalonData?.phones)
 	const isEmailEqual = (formValues?.email || null) === (formValues?.publishedSalonData?.email || null)
+	const isPriceListsEqual = isEqual(formValues?.pricelistIDs || [], formValues?.publishedSalonData?.pricelists || [])
 
 	return {
 		isEqual:
@@ -60,6 +62,7 @@ export const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPub
 		isAboutUsFirstEqual,
 		isAboutUsSecondEqual,
 		isPhoneEqual,
-		isEmailEqual
+		isEmailEqual,
+		isPriceListsEqual
 	}
 }

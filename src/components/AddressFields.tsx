@@ -22,14 +22,6 @@ import InputField from '../atoms/InputField'
 import SelectField from '../atoms/SelectField'
 import { RootState } from '../reducers'
 
-function getLabelField(label: string): ReactElement<any> {
-	return (
-		<div className='ant-col ant-form-item-label'>
-			<label title={label}>{label}</label>
-		</div>
-	)
-}
-
 /**
  * Define in props only variables required for form
  */

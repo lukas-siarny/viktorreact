@@ -47,6 +47,7 @@ export interface ICategoryForm {
 	childrenLength: number
 	nameLocalizations: NameLocalizationsItem[]
 	image: any
+	categoryParameterID: number
 }
 
 const fixLength100 = validationString(100)
@@ -60,6 +61,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm, pristine } = props
 
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
+	const categoriesParameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))
 
 	const renderFormTitle = () => {
@@ -177,11 +179,11 @@ const CategoryForm: FC<Props> = (props) => {
 							<Field
 								className={'w-full'}
 								component={SelectField}
-								options={[]}
+								options={categoriesParameters.enumerationsOptions}
 								label={t('loc:Parameter')}
 								placeholder={t('loc:Vyberte parameter')}
 								name={'categoryParameterID'}
-								loading={false}
+								loading={categoriesParameters.isLoading}
 								allowClear
 							/>
 						) : undefined}

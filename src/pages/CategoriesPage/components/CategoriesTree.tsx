@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
+import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Row, Tree, Divider, notification } from 'antd'
@@ -85,7 +85,7 @@ const CategoriesTree = () => {
 				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
 				deletedAt,
 				isParentDeleted,
-				categoryParameterID: { label: categoryParameterID.name, value: categoryParameterID.id }
+				categoryParameterID: categoryParameterID ? { label: categoryParameterID.name, value: categoryParameterID.id } : undefined
 			}
 			dispatch(initialize(FORM.CATEGORY, formData))
 			setLastOpenedNode(formData)
@@ -277,8 +277,9 @@ const CategoriesTree = () => {
 			let body: any = {
 				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
-				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid'),
-				iconID: get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')
+				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
+				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,
+				categoryParameterID: formData.categoryParameterID ?? undefined
 			}
 
 			if (formData.id && formData.id >= 0) {

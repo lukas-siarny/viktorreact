@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row } from 'antd'
+import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -11,10 +11,11 @@ import { compose } from 'redux'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomersFilter from './components/CustomersFilter'
+import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale } from '../../utils/helper'
+import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale, getEncodedBackUrl } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -34,6 +35,8 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+
+	const backUrl = getEncodedBackUrl()
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -57,17 +60,24 @@ const CustomersPage = (props: SalonSubPageProps) => {
 		setPrefixOptions(prefixes)
 	}, [phonePrefixes])
 
-	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
 				...query,
-				limit: pagination.pageSize,
-				page: pagination.current,
 				order
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const onChangePagination = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: ISearchFilter) => {
@@ -89,6 +99,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			sortOrder: setOrder(query.order, 'lastName'),
 			render: (value, record) => (
 				<>
+					<UserAvatar className={'mr-1'} src={record.profileImage?.resizedImages?.thumbnail} fallBackSrc={record.profileImage?.original} size={'small'} />
 					{record?.firstName} {record?.lastName}
 				</>
 			)
@@ -141,51 +152,46 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Permissions
-							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<CustomersFilter
-									onSubmit={handleSubmit}
-									total={customers?.data?.pagination?.totalCount}
-									createCustomer={() => {
-										if (!hasPermission) {
-											openForbiddenModal()
-										} else {
-											history.push(parentPath + t('paths:customers/create'))
-										}
-									}}
-								/>
-							)}
-						/>
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={customers?.data?.customers}
-							rowClassName={'clickable-row'}
-							loading={customers?.isLoading}
-							twoToneRows
-							scroll={{ x: 800 }}
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id }))
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								showSizeChanger: true,
-								pageSize: customers?.data?.pagination?.limit,
-								total: customers?.data?.pagination?.totalCount,
-								current: customers?.data?.pagination?.page
-							}}
-						/>
+						<Spin spinning={customers?.isLoading}>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<CustomersFilter
+										onSubmit={handleSubmit}
+										total={customers?.data?.pagination?.totalCount}
+										createCustomer={() => {
+											if (!hasPermission) {
+												openForbiddenModal()
+											} else {
+												history.push(`${parentPath + t('paths:customers/create')}?backUrl=${backUrl}`)
+											}
+										}}
+									/>
+								)}
+							/>
+							<CustomTable
+								className='table-fixed'
+								onChange={onChangeTable}
+								columns={columns}
+								dataSource={customers?.data?.customers}
+								rowClassName={'clickable-row'}
+								twoToneRows
+								scroll={{ x: 800 }}
+								onRow={(record) => ({
+									onClick: () => {
+										history.push(`${parentPath + t('paths:customers/{{customerID}}', { customerID: record.id })}?backUrl=${backUrl}`)
+									}
+								})}
+								useCustomPagination
+								pagination={{
+									pageSize: customers?.data?.pagination?.limit,
+									total: customers?.data?.pagination?.totalCount,
+									current: customers?.data?.pagination?.page,
+									disabled: customers?.isLoading,
+									onChange: onChangePagination
+								}}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>

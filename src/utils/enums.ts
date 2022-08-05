@@ -192,7 +192,8 @@ export enum PAGE {
 	EMPLOYEES = 'EMPLOYEES',
 	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
-	COSMETICS = 'COSMETICS'
+	COSMETICS = 'COSMETICS',
+	PENDING_INVITES = 'PENDING_INVITES'
 }
 
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
@@ -216,7 +217,8 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	CURRENCIES = 'currencies'
+	CURRENCIES = 'currencies',
+	LANGUAGES = 'languages'
 }
 
 export const GOOGLE_MAPS_API_KEY = 'AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw'
@@ -228,7 +230,7 @@ export enum ENUMERATIONS_PATHS {
 
 export const PAGINATION = {
 	defaultPageSize: 25,
-	pageSizeOptions: ['25', '50', '100'],
+	pageSizeOptions: [25, 50, 100],
 	limit: 25 // 25 | 50 | 100
 }
 
@@ -415,7 +417,8 @@ export enum UPLOAD_IMG_CATEGORIES {
 	EMPLOYEE = 'EMPLOYEE_IMAGE',
 	USER = 'USER_IMAGE',
 	CATEGORY = 'CATEGORY_IMAGE',
-	COSMETIC = 'COSMETIC_IMAGE'
+	COSMETIC = 'COSMETIC_IMAGE',
+	CUSTOMER = 'CUSTOMER_IMAGE'
 }
 
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'

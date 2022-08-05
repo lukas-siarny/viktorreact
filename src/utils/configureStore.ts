@@ -24,7 +24,7 @@ const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: an
 			if (values && values[IMAGE_UPLOADING_PROP]) {
 				const error = i18next.t('loc:Prebieha nahrávanie')
 				showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
-				next(null)
+				return
 			}
 		}
 	}

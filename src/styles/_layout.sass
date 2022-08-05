@@ -206,6 +206,22 @@ $inner-padding: 16px
 		&.warning
 			background: $backgroundColor-yellow-50
 
+.content-body-width
+	&-floating
+		width: calc(100% + 38px)
+	&-small
+		width: 50%
+		margin: 0 auto
+	&-medium
+		width: 75%
+		margin: 0 auto
+	@media (max-width: 1700px)
+		&-small
+			width: 75%
+	@media (max-width: 1200px)
+		&-small, &-medium
+			width: 100%
+
 // Dropdown pre MENU
 .noti-layout-popup
 	.ant-menu.ant-menu-sub

@@ -36,7 +36,6 @@ import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { SubmissionError, submit } from 'redux-form'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -44,7 +43,6 @@ import {
 	FORM,
 	INVALID_DATE_FORMAT,
 	MSG_TYPE,
-	NOTIFICATION_TYPE,
 	DEFAULT_LANGUAGE,
 	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER,
@@ -56,7 +54,6 @@ import {
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX
 } from './enums'
-import showNotifications from './tsxHelpers'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
@@ -100,6 +97,8 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	}
 	return decoded
 }
+
+export const getEncodedBackUrl = () => btoa(`${window.location.pathname}${window.location.search}`)
 
 export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: string[]) => {
 	const pickQueryParams = pick(queryParams, Object.values(allowQueryParams))
@@ -592,7 +591,14 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 
 		let img = {
 			...file,
-			url: get(file, 'url') || fileData?.path
+			url: get(file, 'url') || fileData.path
+		}
+
+		if (get(file, 'resizedImages')) {
+			img = {
+				...img,
+				thumbUrl: fileData?.resizedImages?.thumbnail
+			}
 		}
 
 		if (get(file, 'id') || fileData?.id) {
@@ -810,3 +816,13 @@ export const transformToLowerCaseWithoutAccent = (source?: string): string =>
 				.normalize('NFD')
 				.replace(/\p{Diacritic}/gu, '')
 		: ''
+
+export const countryOptionRender = (itemData: any) => {
+	const { value, label, flag } = itemData
+	return (
+		<div className='flex items-center'>
+			<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			{label}
+		</div>
+	)
+}

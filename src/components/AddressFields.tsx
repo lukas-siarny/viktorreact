@@ -1,29 +1,26 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useState, ReactElement } from 'react'
-import { InjectedFormProps, WrappedFieldProps } from 'redux-form'
-import { Col, Row } from 'antd'
+import { Field, InjectedFormProps, WrappedFieldProps } from 'redux-form'
+import { Alert, Col, Row } from 'antd'
 import cx from 'classnames'
 import { get } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import Geocode from 'react-geocode'
 
 // components
+import i18next from 'i18next'
+import { useSelector } from 'react-redux'
 import MapContainer from './MapContainer'
 
 // utils
-import { GOOGLE_MAPS_API_KEY, MAP, ROW_GUTTER_X_M } from '../utils/enums'
-import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents } from '../utils/helper'
+import { ENUMERATIONS_KEYS, GOOGLE_MAPS_API_KEY, MAP } from '../utils/enums'
+import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents, countryOptionRender, validationRequired } from '../utils/helper'
 
 // atoms
 import LocationSearchInputField from '../atoms/LocationSearchInputField'
-
-function getLabelField(label: string): ReactElement<any> {
-	return (
-		<div className='ant-col ant-form-item-label'>
-			<label title={label}>{label}</label>
-		</div>
-	)
-}
+import InputField from '../atoms/InputField'
+import SelectField from '../atoms/SelectField'
+import { RootState } from '../reducers'
 
 /**
  * Define in props only variables required for form
@@ -59,6 +56,48 @@ type Props = WrappedFieldProps & {
 
 const FULL_H_ELEMENT = <div className='h-full' />
 
+export interface IAddressValues {
+	street?: string
+	streetNumber?: string
+	city?: string
+	country?: string
+	zipCode?: string
+}
+
+export const AddressLayout = (values?: IAddressValues, className?: string) => {
+	const street = values?.street
+	const streetNumber = values?.streetNumber
+	const city = values?.city
+	const zipCode = values?.zipCode
+	const country = values?.country
+
+	const isEmpty = !street && !streetNumber && !city && !zipCode && !country
+
+	return (
+		<Row className={cx('address-field-address gap-2 items-start', className)} wrap={false}>
+			<Col className={'flex flex-col gap-1 text-base'}>
+				{isEmpty ? (
+					<i>{i18next.t('loc:Vyhľadajte adresu na mape alebo vo vyhľadávači')}</i>
+				) : (
+					<>
+						{street || streetNumber ? (
+							<span>
+								{street} {streetNumber}
+							</span>
+						) : null}
+						{zipCode || city ? (
+							<span>
+								{zipCode} {city}
+							</span>
+						) : null}
+						{country}
+					</>
+				)}
+			</Col>
+		</Row>
+	)
+}
+
 const AddressFields = (props: Props) => {
 	const {
 		changeFormFieldValue,
@@ -73,13 +112,16 @@ const AddressFields = (props: Props) => {
 		mapContainerElements = {
 			loadingElement: FULL_H_ELEMENT,
 			mapElement: FULL_H_ELEMENT,
-			containerElement: <div className='h-96' />
+			containerElement: <div className='h-56 lg:h-72' />
 		},
 		disabled
 	} = props
 	const { t } = useTranslation()
 
 	const [googleMapUrl, setGoogleMapUrl] = useState<string | undefined>(undefined)
+	const [mapError, setMapError] = useState<boolean>(false)
+
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	useEffect(() => {
 		// init react-google-maps
@@ -139,64 +181,111 @@ const AddressFields = (props: Props) => {
 		<>
 			{googleMapUrl && (
 				<>
-					<Row>
-						<Col span={24} className={'mb-4'}>
-							<LocationSearchInputField
-								googleMapURL={googleMapUrl}
-								loadingElement={locationSearchElements.loadingElement}
-								containerElement={locationSearchElements.containerElement}
-								label={t('loc:Vyhľadať')}
-								onPlaceSelected={selectLocation}
-								type='search'
-								placeholder={t('loc:Vyhľadajte miesto na mape')}
-								className={'mb-0'}
-								error={error && touched}
-								disabled={disabled}
-							/>
-							<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
-						</Col>
-					</Row>
-					<Row gutter={ROW_GUTTER_X_M} justify={'space-around'} className={'mb-6'}>
-						<Col xl={18} md={15}>
-							<MapContainer
-								googleMapURL={googleMapUrl}
-								containerElement={mapContainerElements.containerElement}
-								mapElement={mapContainerElements.mapElement}
-								loadingElement={mapContainerElements.loadingElement}
-								onLocationChange={changeLocation}
-								lat={get(inputValues, 'latitude')}
-								long={get(inputValues, 'longitude')}
-								zoom={zoom}
-								disabled={disabled}
-							/>
-						</Col>
-						<Col xl={6} md={9}>
-							{/* Display only fields defined in inputValues */}
-							{'city' in inputValues && (
-								<div>
-									{getLabelField(t('loc:Mesto'))}
-									<h4>{get(inputValues, 'city')}</h4>
+					<Row className={'mb-4 gap-4'} wrap={false}>
+						{mapError ? (
+							<Row className={'w-full h-full block'} justify='center'>
+								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4'} />
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-4/5'}
+										component={InputField}
+										label={t('loc:Ulica')}
+										placeholder={t('loc:Zadajte ulicu')}
+										name={'street'}
+										size={'large'}
+										validate={validationRequired}
+										required
+									/>
+									<Field
+										className={'w-1/6'}
+										component={InputField}
+										label={t('loc:Popisné číslo')}
+										placeholder={t('loc:Zadajte číslo')}
+										name={'streetNumber'}
+										size={'large'}
+										validate={validationRequired}
+										required
+									/>
+								</Row>
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:Mesto')}
+										placeholder={t('loc:Zadajte mesto')}
+										name={'city'}
+										size={'large'}
+										validate={validationRequired}
+										required
+									/>
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:PSČ')}
+										placeholder={t('loc:Zadajte smerovacie číslo')}
+										name={'zipCode'}
+										size={'large'}
+										validate={validationRequired}
+										required
+									/>
+								</Row>
+								<Field
+									component={SelectField}
+									optionRender={countryOptionRender}
+									label={t('loc:Štát')}
+									placeholder={t('loc:Vyber krajinu')}
+									options={countries?.enumerationsOptions || []}
+									name={'country'}
+									size={'large'}
+									loading={countries?.isLoading}
+									validate={validationRequired}
+									required
+								/>
+							</Row>
+						) : (
+							<>
+								<div className={'mb-7 flex-1 w-1/2 xl:w-full'}>
+									<Row>
+										<Col span={24} className={'mb-7'}>
+											<LocationSearchInputField
+												googleMapURL={googleMapUrl}
+												loadingElement={locationSearchElements.loadingElement}
+												containerElement={locationSearchElements.containerElement}
+												label={t('loc:Vyhľadať')}
+												onPlaceSelected={selectLocation}
+												type='search'
+												placeholder={t('loc:Vyhľadajte miesto na mape')}
+												className={'mb-0'}
+												error={error && touched}
+												disabled={disabled}
+											/>
+											<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
+										</Col>
+									</Row>
+									{AddressLayout({
+										street: get(inputValues, 'street'),
+										streetNumber: get(inputValues, 'streetNumber'),
+										city: get(inputValues, 'city'),
+										zipCode: get(inputValues, 'zipCode'),
+										country: get(inputValues, 'country')
+									})}
 								</div>
-							)}
-							{'street' in inputValues && (
-								<div>
-									{getLabelField(t('loc:Ulica'))}
-									<h4>{`${get(inputValues, 'street') ?? ''} ${get(inputValues, 'streetNumber') ?? ''}`}</h4>
+								<div className={'mt-6 w-1/2 xl:w-2/3 max-w-3xl'}>
+									<MapContainer
+										onError={() => setMapError(true)}
+										googleMapURL={googleMapUrl}
+										containerElement={mapContainerElements.containerElement}
+										mapElement={mapContainerElements.mapElement}
+										loadingElement={mapContainerElements.loadingElement}
+										onLocationChange={changeLocation}
+										lat={get(inputValues, 'latitude')}
+										long={get(inputValues, 'longitude')}
+										zoom={zoom}
+										disabled={disabled}
+									/>
 								</div>
-							)}
-							{'zipCode' in inputValues && (
-								<div>
-									{getLabelField(t('loc:PSČ'))}
-									<h4>{get(inputValues, 'zipCode')}</h4>
-								</div>
-							)}
-							{'country' in inputValues && (
-								<div>
-									{getLabelField(t('loc:Krajina'))}
-									<h4>{get(inputValues, 'country')}</h4>
-								</div>
-							)}
-						</Col>
+							</>
+						)}
 					</Row>
 				</>
 			)}

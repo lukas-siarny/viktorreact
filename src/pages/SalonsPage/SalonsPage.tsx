@@ -16,8 +16,8 @@ import UploadSuccess from './components/UploadSuccess'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
-import { formatDateByLocale, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
+import { formatDateByLocale, getEncodedBackUrl, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
 
@@ -112,17 +112,24 @@ const SalonsPage = () => {
 		query.createType
 	])
 
-	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
 				...query,
-				limit: pagination.pageSize,
-				page: pagination.current,
 				order
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const onChangePagination = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: ISalonsFilter) => {
@@ -233,7 +240,7 @@ const SalonsPage = () => {
 			sortOrder: setOrder(query.order, 'fillingProgress'),
 			render: (value) => (
 				<Row className={'gap-2'} wrap={false}>
-					<span className={'w-9'}>{value ? `${value}%` : ''}</span>
+					<span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>
 					<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
 				</Row>
 			)
@@ -268,36 +275,31 @@ const SalonsPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={salons?.data?.salons}
-							scroll={{ x: 1000 }}
-							rowClassName={'clickable-row'}
-							loading={salons?.isLoading}
-							twoToneRows
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(t('paths:salons/{{salonID}}', { salonID: record.id }))
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: salons?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: salons?.data?.pagination?.totalCount,
-								current: salons?.data?.pagination?.page
-							}}
-						/>
+						<Spin spinning={salons?.isLoading}>
+							<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
+							<CustomTable
+								className='table-fixed'
+								onChange={onChangeTable}
+								columns={columns}
+								dataSource={salons?.data?.salons}
+								scroll={{ x: 1000 }}
+								rowClassName={'clickable-row'}
+								twoToneRows
+								useCustomPagination
+								pagination={{
+									pageSize: salons?.data?.pagination?.limit,
+									total: salons?.data?.pagination?.totalCount,
+									current: salons?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: salons?.isLoading
+								}}
+								onRow={(record) => ({
+									onClick: () => {
+										history.push(`${t('paths:salons/{{salonID}}', { salonID: record.id })}?backUrl=${getEncodedBackUrl()}`)
+									}
+								})}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>

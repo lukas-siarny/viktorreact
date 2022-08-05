@@ -165,6 +165,9 @@ const LanguagePicker: FC<Props> = (props) => {
 					key='currentLanguage'
 					title={get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase()}
 					icon={getLanguageFlag(currentLanguage)}
+					// it is necessary to check whether menu is overflowing viewport everytime new language is added
+					// if so, popupOffset needs to be changed manually
+					popupOffset={[0, -100]}
 				>
 					{options?.map((option: any, index: number) => (
 						<Menu.Item onClick={() => handleLanguageChange(option.value)} key={index} icon={getLanguageFlag(option.value)}>

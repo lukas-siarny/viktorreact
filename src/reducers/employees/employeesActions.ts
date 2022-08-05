@@ -44,7 +44,7 @@ export const getEmployees =
 			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
 			const employeesOptions = map(data.employees, (employee) => {
 				return {
-					label: `${employee.firstName} ${employee.lastName}` || `${employee.id}`,
+					label: `${employee.firstName || ''} ${employee.lastName || ''}`.trim() || `${employee.id}`,
 					value: employee.id,
 					key: `${employee.id}-key`
 				}

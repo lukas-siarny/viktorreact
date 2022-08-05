@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "0.2.4",
+  "version": "0.3.0",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -18,7 +18,7 @@
     "release": "npm run build && npm run sentry",
     "sentry": "cross-env REACT_APP_VERSION=$npm_package_version node sentry.js",
     "test": "cypress open",
-	"test:CI": "cypress run",
+    "test:CI": "cypress run",
     "eject": "react-scripts eject",
     "translate-scan": "i18next-scanner 'src/**/*.{js,jsx,ts,tsx}'",
     "translate-watch": "npm run translate-scan && gulp watch",

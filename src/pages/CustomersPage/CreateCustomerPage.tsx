@@ -23,6 +23,9 @@ import { getPrefixCountryCode } from '../../utils/helper'
 // reducers
 import { RootState } from '../../reducers'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]
 
 const CreateCustomerPage = (props: SalonSubPageProps) => {
@@ -35,12 +38,14 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 
 	const { isLoading } = countriesPhonePrefix
 
+	const [backUrl] = useBackUrl(parentPath + t('paths:customers'))
+
 	// View
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: parentPath + t('paths:customers')
+				link: backUrl
 			},
 			{
 				name: t('loc:Vytvorenie zákazníka')

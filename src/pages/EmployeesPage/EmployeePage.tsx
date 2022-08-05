@@ -13,6 +13,7 @@ import EmployeeForm from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
+import EditRoleForm from './components/EditRoleForm'
 
 // types
 import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
@@ -28,11 +29,12 @@ import { decodePrice, encodePrice } from '../../utils/helper'
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
 import { IServicesPayload } from '../../reducers/services/serviceActions'
-import { getSalonRoles } from '../../reducers/roles/rolesActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import EditRoleForm from './components/EditRoleForm'
+
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: number }>
@@ -169,6 +171,8 @@ const EmployeePage = (props: Props) => {
 
 	const isLoading = employee.isLoading || services.isLoading || isRemoving
 
+	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
+
 	const fetchEmployeeData = async () => {
 		const { data } = await dispatch(getEmployee(employeeID))
 		if (!data?.employee?.id) {
@@ -178,7 +182,6 @@ const EmployeePage = (props: Props) => {
 
 	useEffect(() => {
 		fetchEmployeeData()
-		dispatch(getSalonRoles())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
 
@@ -258,7 +261,7 @@ const EmployeePage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zamestnancov'),
-				link: parentPath + t('paths:employees')
+				link: backUrl
 			},
 			{
 				name: t('loc:Detail zamestnanca'),
@@ -395,7 +398,6 @@ const EmployeePage = (props: Props) => {
 									)}
 								/>
 							</div>
-
 							<Modal
 								className='rounded-fields'
 								title={t('loc:Pozvať do tímu')}
@@ -406,7 +408,21 @@ const EmployeePage = (props: Props) => {
 								closeIcon={<CloseIcon />}
 								width={394}
 							>
-								{<InviteForm onSubmit={inviteEmployee} />}
+								<InviteForm onSubmit={inviteEmployee} />
+								<Button
+									className='noti-btn'
+									onClick={() => {
+										dispatch(submit(FORM.INVITE_EMPLOYEE))
+									}}
+									block
+									size='large'
+									type='primary'
+									htmlType='submit'
+									disabled={isInviteFromSubmitting}
+									loading={isInviteFromSubmitting}
+								>
+									{t('loc:Odoslať email')}
+								</Button>
 							</Modal>
 						</Row>
 					</div>

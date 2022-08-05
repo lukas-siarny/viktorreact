@@ -65,7 +65,8 @@ export const getServices =
 					price: getServiceRange(decodePrice(item.priceFrom), decodePrice(item.priceTo)),
 					duration: getServiceRange(item.durationFrom, item.durationTo),
 					category: (item.category.child ? showServiceCategory(item.category) : item.category.name) || '-',
-					salon: item.salon.name
+					salon: item.salon.name,
+					createdAt: item.createdAt
 				}
 				return tableItem
 			})

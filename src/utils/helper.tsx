@@ -802,11 +802,13 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
  * Usefull for searching on FE
  * @link https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
  */
-export const transformToLowerCaseWithoutAccent = (source: string): string =>
+export const transformToLowerCaseWithoutAccent = (source?: string): string =>
 	source
-		.toLowerCase()
-		.normalize('NFD')
-		.replace(/\p{Diacritic}/gu, '')
+		? source
+				.toLowerCase()
+				.normalize('NFD')
+				.replace(/\p{Diacritic}/gu, '')
+		: ''
 
 export const countryOptionRender = (itemData: any) => {
 	const { value, label, flag } = itemData

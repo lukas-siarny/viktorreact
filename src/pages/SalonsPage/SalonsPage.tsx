@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { ArrayParam, BooleanParam, NumberParam, NumericArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Modal, Progress, Row, Spin } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, reset } from 'redux-form'
 
@@ -29,13 +28,11 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 
 // types
-import { IBreadcrumbs, IDataUploadForm } from '../../types/interfaces'
+import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-
-type Columns = ColumnsType<any>
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 

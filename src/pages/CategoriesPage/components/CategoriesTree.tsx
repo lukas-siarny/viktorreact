@@ -22,7 +22,7 @@ import { normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
-import { LOCALES } from '../../../components/LanguagePicker'
+import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 
 type TreeCategories = {
 	title?: ReactElement
@@ -55,20 +55,6 @@ const CategoriesTree = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	// default language must be first
-	const emptyNameLocalizations = useMemo(
-		() =>
-			Object.keys(LOCALES)
-				.sort((a: string, b: string) => {
-					if (a === DEFAULT_LANGUAGE) {
-						return -1
-					}
-					return b === DEFAULT_LANGUAGE ? 1 : 0
-				})
-				.map((language) => ({ language })),
-		[]
-	)
-
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
 			setShowForm(true)
@@ -77,12 +63,12 @@ const CategoriesTree = () => {
 					parentId,
 					parentTitle,
 					childrenLength,
-					nameLocalizations: emptyNameLocalizations,
+					nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
 					level
 				})
 			)
 		},
-		[dispatch, emptyNameLocalizations]
+		[dispatch]
 	)
 
 	const updateCategoryHandler = useCallback(
@@ -339,7 +325,7 @@ const CategoriesTree = () => {
 				<h3>{t('loc:Kategórie')}</h3>
 				<Button
 					onClick={() => {
-						dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations, level: 0 }))
+						dispatch(initialize(FORM.CATEGORY, { nameLocalizations: EMPTY_NAME_LOCALIZATIONS, level: 0 }))
 						setShowForm(true)
 					}}
 					type='primary'

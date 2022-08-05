@@ -13,31 +13,42 @@ export default (values: ICategoryParamForm) => {
 		errors.nameLocalizations = [{ value: i18next.t('loc:Toto pole je povinné') }]
 	}
 
+	const valuesErrors: any = {}
+
 	if (!values.valueType) {
 		errors.valueType = i18next.t('loc:Toto pole je povinné')
 	} else if (values.valueType === PARAMETERS_VALUE_TYPES.TIME) {
-		const valuesErrors: any = {}
 		const enteredValues = values.values
-		console.log('🚀 ~ file: validateCategoryParamsForm.ts ~ line 22 ~ enteredValues', enteredValues)
 
 		const filledValues = enteredValues.filter((item) => item.value)
 
 		if (filledValues.length < 1) {
 			valuesErrors[0] = { value: i18next.t('loc:Toto pole je povinné') }
-		}
+		} else {
+			const onlyValues = enteredValues.map((item) => item.value)
 
-		if (enteredValues.length > 1) {
-			const hasDuplicate = enteredValues
-				.slice(0, -1)
-				.map((item) => item.value)
-				.includes(enteredValues[enteredValues.length - 1].value)
+			const duplicates: number[] = []
 
-			if (hasDuplicate) {
-				valuesErrors[enteredValues.length - 1] = { value: i18next.t('loc:Táto hodnota už je zadaná') }
-			}
+			enteredValues.forEach((item, index) => {
+				if (onlyValues.indexOf(item.value) !== index) {
+					duplicates.push(index)
+				}
+			})
+
+			duplicates.forEach((index: number) => {
+				valuesErrors[index] = { value: i18next.t('loc:Táto hodnota už je zadaná') }
+			})
 		}
 
 		errors.values = valuesErrors
+	} else {
+		const { localizedValues } = values
+
+		if (!localizedValues || localizedValues.length < 1 || !localizedValues[0].value) {
+			valuesErrors[0] = { value: i18next.t('loc:Toto pole je povinné') }
+		}
+
+		errors.localizedValues = valuesErrors
 	}
 
 	return errors

@@ -132,7 +132,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											// fix style issue due wrapped item into <Permission> component
 											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORY_PARAMETERS })}
 										>
-											{t('loc:Parametre kategórii')}
+											{t('loc:Parametre')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>

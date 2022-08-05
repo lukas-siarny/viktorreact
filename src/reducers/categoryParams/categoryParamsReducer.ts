@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { CATEGORY_PARAMETERS } from './categoryParamsTypes'
-import { ICategoryParametersActions, IParametersPayload } from './categoryParamsActions'
+import { CATEGORY_PARAMETER, CATEGORY_PARAMETERS } from './categoryParamsTypes'
+import { ICategoryParametersActions, IParametersPayload, IParameterPayload } from './categoryParamsActions'
 
 export const initState = {
 	parameters: {
@@ -10,12 +10,18 @@ export const initState = {
 		enumerationsOptions: [],
 		isLoading: false,
 		isFailure: false
-	} as IParametersPayload & ILoadingAndFailure
+	} as IParametersPayload & ILoadingAndFailure,
+	parameter: {
+		data: undefined,
+		isLoading: false,
+		isFailure: false
+	} as IParameterPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
 export default (state = initState, action: ICategoryParametersActions) => {
 	switch (action.type) {
+		// Parameters
 		case CATEGORY_PARAMETERS.CATEGORY_PARAMETERS_LOAD_START:
 			return {
 				...state,
@@ -38,6 +44,31 @@ export default (state = initState, action: ICategoryParametersActions) => {
 				parameters: {
 					...initState.parameters,
 					enumerationsOptions: action.payload.enumerationsOptions,
+					data: action.payload.data
+				}
+			}
+		// Parameter detail
+		case CATEGORY_PARAMETER.CATEGORY_PARAMETER_LOAD_START:
+			return {
+				...state,
+				parameter: {
+					...state.parameter,
+					isLoading: true
+				}
+			}
+		case CATEGORY_PARAMETER.CATEGORY_PARAMETER_LOAD_FAIL:
+			return {
+				...state,
+				parameter: {
+					...initState.parameter,
+					isFailure: true
+				}
+			}
+		case CATEGORY_PARAMETER.CATEGORY_PARAMETER_LOAD_DONE:
+			return {
+				...state,
+				parameter: {
+					...initState.parameter,
 					data: action.payload.data
 				}
 			}

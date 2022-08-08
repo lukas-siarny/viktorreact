@@ -5,7 +5,6 @@ import { Alert, Col, Row } from 'antd'
 import cx from 'classnames'
 import { get } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import Geocode from 'react-geocode'
 
 // components
 import i18next from 'i18next'
@@ -13,22 +12,14 @@ import { useSelector } from 'react-redux'
 import MapContainer from './MapContainer'
 
 // utils
-import { ENUMERATIONS_KEYS, GOOGLE_MAPS_API_KEY, MAP } from '../utils/enums'
-import { getGoogleMapUrl, getCurrentLanguageCode, parseAddressComponents, countryOptionRender, validationRequired } from '../utils/helper'
+import { ENUMERATIONS_KEYS, MAP } from '../utils/enums'
+import { getGoogleMapUrl, parseAddressComponents, countryOptionRender, validationRequired } from '../utils/helper'
 
 // atoms
 import LocationSearchInputField from '../atoms/LocationSearchInputField'
 import InputField from '../atoms/InputField'
 import SelectField from '../atoms/SelectField'
 import { RootState } from '../reducers'
-
-function getLabelField(label: string): ReactElement<any> {
-	return (
-		<div className='ant-col ant-form-item-label'>
-			<label title={label}>{label}</label>
-		</div>
-	)
-}
 
 /**
  * Define in props only variables required for form
@@ -134,9 +125,6 @@ const AddressFields = (props: Props) => {
 	useEffect(() => {
 		// init react-google-maps
 		setGoogleMapUrl(getGoogleMapUrl())
-		// init react-geocode
-		Geocode.setApiKey(GOOGLE_MAPS_API_KEY)
-		Geocode.setLanguage(getCurrentLanguageCode())
 	}, [])
 
 	const parseAddressObject = (addressComponents: any[]) => {
@@ -168,21 +156,37 @@ const AddressFields = (props: Props) => {
 		changeFormFieldValue('longitude', parseFloat(place.location.lng().toFixed(8)))
 	}
 
-	const changeLocation = (event: any) => {
-		const lat = event.latLng.lat().toFixed(8)
-		const lng = event.latLng.lng().toFixed(8)
+	const changeLocation = async (event: any) => {
+		const lat = parseFloat(event.latLng.lat().toFixed(8))
+		const lng = parseFloat(event.latLng.lng().toFixed(8))
 
-		changeFormFieldValue('latitude', parseFloat(lat))
-		changeFormFieldValue('longitude', parseFloat(lng))
+		changeFormFieldValue('latitude', lat)
+		changeFormFieldValue('longitude', lng)
 
 		// reverse geocoding
-		Geocode.fromLatLng(lat, lng).then(
-			(response: any) => parseAddressObject(response.results[0].address_components),
-			(e: any) => {
-				// eslint-disable-next-line no-console
-				console.error(e)
+		try {
+			const windowObj = window as any
+			if (windowObj.google?.maps) {
+				const geocoder = new windowObj.google.maps.Geocoder()
+				const response = await geocoder.geocode({
+					location: {
+						lat,
+						lng
+					}
+				})
+
+				if (response) {
+					parseAddressObject(response.results[0].address_components)
+					setMapError(false)
+				} else {
+					setMapError(true)
+				}
 			}
-		)
+		} catch (err) {
+			// eslint-disable-next-line no-console
+			console.error(err)
+			setMapError(true)
+		}
 	}
 
 	return (

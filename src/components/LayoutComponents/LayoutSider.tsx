@@ -58,7 +58,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
 	const MY_ACCOUNT_MENU = (
-		<Menu className='noti-sider-menu'>
+		<Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}>
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
 			</Menu.Item>
@@ -90,7 +90,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 	return (
 		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0'>
-			<div className='sticky top-0 flex flex-col h-screen'>
+			<div className='sticky top-0 flex flex-col h-screen z-50' id={'noti-sider-wrapper'}>
 				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`}>
 					<LogoIcon className='h-8' />
 				</Link>
@@ -227,7 +227,12 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
-					<Dropdown overlay={MY_ACCOUNT_MENU} placement='topLeft' trigger={['click']}>
+					<Dropdown
+						overlay={MY_ACCOUNT_MENU}
+						placement='topLeft'
+						trigger={['click']}
+						getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
+					>
 						<div
 							role='button'
 							className='cursor-pointer hover:bg-notino-grayLighter py-2'

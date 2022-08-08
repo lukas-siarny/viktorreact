@@ -7,4 +7,13 @@
 const passwordRegEx = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?([^\w\s]|[_])).{8,}$/ // 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak
 export const positiveIntegerRegEx = /^[0-9]+$/ // allow 0 on start, prevent + / - and exponential character
 export const phoneRegEx = /^\d+$/
+export const socialMediaRegex = {
+	facebook: /^http[s]?:\/\/(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$/,
+	instagram: /^http[s]?:\/\/(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$/,
+	youtube: /^http[s]?:\/\/(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$/,
+	tiktok: /^http[s]?:\/\/(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$/,
+	pinterest: /^http[s]?:\/\/(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$/,
+	website: /^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$/
+}
+
 export default passwordRegEx

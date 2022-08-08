@@ -3,6 +3,7 @@ import { SALON_STATES } from './../utils/enums'
 import { ColumnsType } from 'antd/lib/table'
 import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
+import { PaginationProps } from 'antd'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -100,6 +101,7 @@ export interface ISalonForm {
 	logo: any | null;
 	gallery: any | null;
 	pricelistIDs?: number[]
+	pricelists?: any
 	companyContactPerson: {
 		email: string | null
 		firstName: string | null
@@ -151,8 +153,9 @@ export interface ISalonForm {
 			phone: string | null
 		}[]
 		email: string | null
-		logo: any;
-		gallery: any;
+		logo: any
+		gallery: any
+		pricelists: any
 	}
 }
 
@@ -416,6 +419,11 @@ export interface IIsPublishedVersionSameAsDraft {
 	isAboutUsSecondEqual: boolean
 	isPhoneEqual: boolean
 	isEmailEqual: boolean
+	isPriceListsEqual: boolean
+}
+
+export interface IPagination extends PaginationProps {
+	pageSizeOptions?: number[]
 }
 
 export type ICategoryParameters = Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200['categoryParameters']

@@ -409,20 +409,12 @@ export function setIntervalImmediately(func: Function, interval: number) {
 	return setInterval(func, interval)
 }
 
-export const getCurrentLanguageCode = (fallbackLng = DEFAULT_LANGUAGE) => {
-	const locale = split(i18next.language, '-')
-	const result = locale[0] || fallbackLng
-	return result.toLowerCase()
-}
-
 export const getGoogleMapUrl = (): string => {
-	const locale = getCurrentLanguageCode()
-
 	// query params for google API
 	const base = 'https://maps.googleapis.com/maps/api/'
 	// TODO read Google Map API key from .env file
 	const key = `key=${GOOGLE_MAPS_API_KEY}`
-	const language = `language=${locale.toLowerCase()}`
+	const language = `language=${i18next.language.toLowerCase()}`
 
 	return `${base}js?${key}&libraries=places&${language}`
 }

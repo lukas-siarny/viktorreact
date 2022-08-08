@@ -177,6 +177,7 @@ const AddressFields = (props: Props) => {
 
 				if (response) {
 					parseAddressObject(response.results[0].address_components)
+					setMapError(false)
 				} else {
 					setMapError(true)
 				}

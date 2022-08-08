@@ -196,7 +196,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				zipCode: salonData?.address?.zipCode || null,
 				country: salonData?.address?.countryCode || null,
 				streetNumber: salonData?.address?.streetNumber || null,
-				description: salonData?.address?.description || null,
+				// TODO - remove description
+				description: '' || null,
 				parkingNote: salonData?.parkingNote || null,
 				companyContactPerson: {
 					email: salonData?.companyContactPerson?.email || null,
@@ -251,7 +252,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						streetNumber: salonData?.publishedSalonData?.address?.streetNumber || null,
 						latitude: salonData?.publishedSalonData?.address?.latitude ?? null,
 						longitude: salonData?.publishedSalonData?.address?.longitude ?? null,
-						description: salonData?.publishedSalonData?.address?.description || null
+						// TODO - remove description
+						description: '' || null
 					},
 					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
 					logo: salonData?.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null,
@@ -328,11 +330,11 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 			if (salonID > 0) {
 				// update existing salon
-				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as SalonPatch)
+				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
 				dispatch(selectSalon(salonID))
 			} else {
 				// create new salon
-				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as SalonPatch)
+				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
 				if (result?.data?.salon?.id) {
 					// load new salon for current user
 					await dispatch(getCurrentUser())

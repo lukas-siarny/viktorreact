@@ -350,8 +350,14 @@ export interface ISelectable<T> {
 	data: T | undefined
 }
 
-interface IDataPagination {
-	pagination: IResponsePagination
+/**
+ * options are used for Select component
+ * contains pagination
+ * support async (on BE) searching
+ */
+export interface ISearchable<T extends IDataPagination> {
+	options: ISelectOptionItem[] | undefined
+	data: T | null
 }
 
 /**
@@ -359,7 +365,7 @@ interface IDataPagination {
  * contains pagination
  * support async (on BE) searching
  */
-export interface ISearchable<T extends IDataPagination> {
+export interface ISearchableWithoutPagination<T> {
 	options: ISelectOptionItem[] | undefined
 	data: T | null
 }

@@ -5,7 +5,6 @@ import { FILTER_ENTITY } from './enums'
 
 // reducers
 import { getSalons } from '../reducers/salons/salonsActions'
-import { getServices } from '../reducers/services/serviceActions'
 import { getUsers } from '../reducers/users/userActions'
 import { getEmployees } from '../reducers/employees/employeesActions'
 
@@ -16,9 +15,6 @@ const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResul
 
 		case FILTER_ENTITY.SALON:
 			return getSalons
-
-		case FILTER_ENTITY.SERVICE:
-			return getServices
 
 		case FILTER_ENTITY.USER:
 			return getUsers

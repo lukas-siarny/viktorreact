@@ -66,8 +66,6 @@ import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 
-type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
-
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
 /**
@@ -690,7 +688,7 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 	return undefined
 }
 
-export const showServiceCategory = (category: serviceCategory): string | undefined => {
+export const showServiceCategory = (category: any): string | undefined => {
 	if (category?.child?.child) {
 		return category.child.child.name
 	}

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { NumberParam, useQueryParams } from 'use-query-params'
 import { Col, Row } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,7 +15,7 @@ import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams, setOrder } from '../../utils/helper'
+import { formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -46,28 +46,18 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam,
-		categoryID: NumberParam,
-		employeeID: NumberParam,
-		limit: NumberParam,
-		page: withDefault(NumberParam, 1),
-		order: withDefault(StringParam, 'createdAt:ASC')
+		rootCategoryID: NumberParam
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SERVICES_FILTER, { search: query.search, categoryID: query.categoryID, employeeID: query.employeeID }))
+		dispatch(initialize(FORM.SERVICES_FILTER, { rootCategoryID: query.rootCategoryID }))
 		dispatch(
 			getServices({
-				page: query.page,
-				limit: query.limit,
-				order: query.order,
-				search: query.search,
-				categoryID: query.categoryID,
-				employeeID: query.employeeID,
+				rootCategoryID: query.rootCategoryID,
 				salonID
 			})
 		)
-	}, [dispatch, query.page, query.limit, query.search, query.order, query.categoryID, query.employeeID, salonID])
+	}, [dispatch, salonID, query.rootCategoryID])
 
 	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -93,32 +83,6 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	const columns: Columns = [
 		{
-			title: t('loc:Názov'),
-			dataIndex: 'name',
-			key: 'name',
-			ellipsis: true
-		},
-		{
-			title: t('loc:Zamestnanec'),
-			dataIndex: 'employees',
-			key: 'employees',
-			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} /> : null)
-		},
-		{
-			title: t('loc:Trvanie (min)'),
-			dataIndex: 'duration',
-			key: 'duration',
-			ellipsis: true,
-			width: '10%'
-		},
-		{
-			title: t('loc:Cena (€)'),
-			dataIndex: 'price',
-			key: 'price',
-			ellipsis: true,
-			width: '10%'
-		},
-		{
 			title: t('loc:Odvetvie'),
 			dataIndex: 'categoryFirst',
 			key: 'categoryFirst',
@@ -131,12 +95,22 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			ellipsis: true
 		},
 		{
+			title: t('loc:Názov'),
+			dataIndex: 'name',
+			key: 'name',
+			ellipsis: true
+		},
+		{
+			title: t('loc:Zamestnanec'),
+			dataIndex: 'employees',
+			key: 'employees',
+			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} /> : null)
+		},
+		{
 			title: t('loc:Vytvorené'),
 			dataIndex: 'createdAt',
 			key: 'createdAt',
 			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'createdAt'),
 			render: (value) => formatDateByLocale(value)
 		}
 	]
@@ -169,7 +143,6 @@ const ServicesPage = (props: SalonSubPageProps) => {
 										}
 									}}
 									onSubmit={handleSubmit}
-									total={services?.data?.pagination?.totalCount}
 								/>
 							)}
 						/>
@@ -187,20 +160,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 									history.push(`${parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID })}?backUrl=${backUrl}`)
 								}
 							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								showSizeChanger: true,
-								pageSize: services?.data?.pagination?.limit,
-								total: services?.data?.pagination?.totalCount,
-								current: services?.data?.pagination?.page
-							}}
+							pagination={false}
 						/>
 					</div>
 				</Col>

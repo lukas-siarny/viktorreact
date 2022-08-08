@@ -213,7 +213,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	useEffect(() => {
-		dispatch(getServices({ page: 1, salonID }))
+		dispatch(getServices({ salonID }))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
 

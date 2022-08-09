@@ -35,6 +35,10 @@ import EmployeesPage from '../pages/EmployeesPage/EmployeesPage'
 import EmployeePage from '../pages/EmployeesPage/EmployeePage'
 import CreateEmployeePage from '../pages/EmployeesPage/CreateEmployeePage'
 
+// Industries
+import IndustriesPage from '../pages/IndustriesPage/IndustriesPage'
+import IndustryPage from '../pages/IndustriesPage/IndustryPage'
+
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
 }
@@ -108,7 +112,7 @@ const SalonSubRoutes: FC = () => {
 				page={PAGE.CUSTOMERS}
 			/>
 			{/* SERVICES */}
-			<AuthRoute
+			{/* <AuthRoute
 				exact
 				path={getPath(t('paths:services'))}
 				component={ServicesPage}
@@ -137,7 +141,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.SERVICES}
-			/>
+			/> */}
 			{/* EMPLOYEES */}
 			<AuthRoute
 				exact
@@ -168,6 +172,27 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.EMPLOYEES}
+			/>
+			{/* Industries */}
+			<AuthRoute
+				exact
+				path={getPath(t('paths:industries'))}
+				component={IndustriesPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:industries'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.INDUSTRIES}
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
+				component={IndustryPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.INDUSTRY}
 			/>
 		</Switch>
 	)

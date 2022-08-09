@@ -36,6 +36,7 @@ import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
+import { ArgsProps } from 'antd/lib/notification'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -66,7 +67,7 @@ import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 
-type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
+type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['groupedServicesByCategory'][0]['category']
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -676,7 +677,7 @@ export const getSelectOptionsFromData = (data: SelectDataItem[] | null, useOnly:
 	})
 }
 
-export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any) => {
+export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any, customMessage?: ArgsProps) => {
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
 		const errorKeys = Object.keys(errors)
@@ -687,24 +688,27 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		}
 
 		const isErrors: boolean = errorKeys.length > 1
-		return notification.error({
-			message: i18next.t('loc:Chybne vyplnený formulár'),
-			description: i18next.t(
-				`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-			)
-		})
+		return notification.error(
+			customMessage || {
+				message: i18next.t('loc:Chybne vyplnený formulár'),
+				description: i18next.t(
+					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
+				)
+			}
+		)
 	}
 	return undefined
 }
 
 export const showServiceCategory = (category: serviceCategory): string | undefined => {
-	if (category?.child?.child) {
+	/* if (category?.child?.child) {
 		return category.child.child.name
 	}
 	if (category?.child) {
 		return category.child.name
 	}
-	return category?.name
+	return category?.name */
+	return undefined
 }
 
 /**

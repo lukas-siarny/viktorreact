@@ -179,6 +179,15 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										{t('loc:Detail salónu')}
 									</Menu.Item>
 									<Menu.Item
+										eventKey={PAGE.INDUSTRIES}
+										key={PAGE.INDUSTRIES}
+										onClick={() => history.push(getPath(t('paths:industries')))}
+										icon={<CategoryIcon />} // fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES })}
+									>
+										{t('loc:Odvetvia')}
+									</Menu.Item>
+									<Menu.Item
 										eventKey={PAGE.SERVICES}
 										key={PAGE.SERVICES}
 										onClick={() => history.push(getPath(t('paths:services')))}

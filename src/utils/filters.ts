@@ -18,8 +18,8 @@ const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResul
 			return getSalons
 
 		case FILTER_ENTITY.SERVICE:
-			return getServices
-
+			// return getServices
+			return getSalons
 		case FILTER_ENTITY.USER:
 			return getUsers
 

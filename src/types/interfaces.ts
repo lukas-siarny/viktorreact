@@ -420,3 +420,11 @@ export interface IIsPublishedVersionSameAsDraft {
 export interface IPagination extends PaginationProps {
 	pageSizeOptions?: number[]
 }
+
+export interface IIndustriesForm {
+	categoryIDs: number[]
+}
+
+export interface IIndustryForm {
+	categoryIDs: string[]
+}

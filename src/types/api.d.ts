@@ -672,7 +672,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -710,10 +710,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -829,7 +829,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -867,10 +867,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -908,10 +908,6 @@ declare namespace Paths {
                         category: {
                             id: number;
                             name?: string;
-                            children: {
-                                id: number;
-                                name?: string;
-                            }[];
                         };
                     }[];
                     image: {
@@ -2034,6 +2030,7 @@ declare namespace Paths {
                         name: string;
                     }[];
                     languages: {
+                        id: number;
                         code: string;
                     }[];
                     companyContactPerson?: {
@@ -2167,102 +2164,96 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryID = number;
-            export type EmployeeID = number;
-            export type Limit = 25 | 50 | 100;
-            export type Order = string;
-            export type Page = number;
+            export type RootCategoryID = number;
             export type SalonID = number;
-            export type Search = string | null;
         }
         export interface QueryParameters {
-            search?: Parameters.Search;
-            categoryID?: Parameters.CategoryID;
-            employeeID?: Parameters.EmployeeID;
-            salonID?: Parameters.SalonID;
-            order?: Parameters.Order;
-            limit?: Parameters.Limit;
-            page?: Parameters.Page;
+            rootCategoryID?: Parameters.RootCategoryID;
+            salonID: Parameters.SalonID;
         }
         namespace Responses {
             export interface $200 {
-                services: {
-                    id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    priceTo?: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    employees: {
-                        id: number;
-                        firstName: string;
-                        lastName: string;
-                        image: {
-                            id: number;
-                            original: string;
-                            resizedImages: {
-                                [key: string]: any;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                    }[];
-                    category: {
+                groupedServicesByCategory: {
+                    category?: {
                         id: number;
                         name?: string;
-                        child: {
-                            id: number;
-                            name?: string;
-                            child?: {
+                        children: {
+                            category?: {
                                 id: number;
                                 name?: string;
+                                children: {
+                                    category: {
+                                        id: number;
+                                        name?: string;
+                                    };
+                                    service: {
+                                        id: number;
+                                        isComplete: boolean;
+                                        rangePriceAndDurationData: {
+                                            durationFrom?: number;
+                                            durationTo?: number;
+                                            priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
+                                                currency: string;
+                                                /**
+                                                 * example:
+                                                 * -1
+                                                 */
+                                                exponent: number;
+                                                /**
+                                                 * example:
+                                                 * 23
+                                                 */
+                                                significand: number;
+                                            };
+                                            priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
+                                                currency: string;
+                                                /**
+                                                 * example:
+                                                 * -1
+                                                 */
+                                                exponent: number;
+                                                /**
+                                                 * example:
+                                                 * 23
+                                                 */
+                                                significand: number;
+                                            };
+                                        };
+                                        employeesCount: number;
+                                        employees: {
+                                            id: number;
+                                            firstName: string;
+                                            lastName: string;
+                                            image: {
+                                                id: number;
+                                                original: string;
+                                                resizedImages: {
+                                                    [key: string]: any;
+                                                };
+                                                isAutogenerated: boolean;
+                                            };
+                                        }[];
+                                        salon: {
+                                            id: number;
+                                            name: string;
+                                        };
+                                        createdAt: string; // date-time
+                                        updatedAt: string; // date-time
+                                        deletedAt?: string; // date-time
+                                    };
+                                }[];
                             };
-                        };
+                        }[];
                     };
-                    salon: {
-                        id: number;
-                        name?: string;
-                    };
-                    createdAt: string; // date-time
-                    updatedAt: string; // date-time
-                    deletedAt?: string; // date-time
                 }[];
-                pagination: {
-                    limit: number;
-                    page: number;
-                    totalPages: number;
-                    totalCount: number;
-                };
             }
         }
     }
@@ -2289,56 +2280,48 @@ declare namespace Paths {
             export interface $200 {
                 service: {
                     id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    priceTo?: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    employees: {
-                        id: number;
-                        fullName: string;
-                        hasActiveAccount: boolean;
-                        inviteEmail?: string;
-                        image: {
-                            id: number;
-                            original: string;
-                            resizedImages: {
-                                [key: string]: any;
-                            };
-                            isAutogenerated: boolean;
+                    useCategoryParameter: boolean;
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
                         };
-                        employeeData?: {
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                    };
+                    serviceCategoryParameterValues: {
+                        id: number;
+                        priceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -2376,6 +2359,137 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
+                    }[];
+                    rangePriceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                    };
+                    employees: {
+                        id: number;
+                        fullName: string;
+                        hasActiveAccount: boolean;
+                        inviteEmail?: string;
+                        image: {
+                            id: number;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        priceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                        };
+                        serviceCategoryParameterValues: {
+                            id: number;
+                            priceAndDurationData: {
+                                durationFrom?: number;
+                                durationTo?: number;
+                                priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
+                                    currency: string;
+                                    /**
+                                     * example:
+                                     * -1
+                                     */
+                                    exponent: number;
+                                    /**
+                                     * example:
+                                     * 23
+                                     */
+                                    significand: number;
+                                };
+                                priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
+                                    currency: string;
+                                    /**
+                                     * example:
+                                     * -1
+                                     */
+                                    exponent: number;
+                                    /**
+                                     * example:
+                                     * 23
+                                     */
+                                    significand: number;
+                                };
+                            };
+                        }[];
                     }[];
                     category: {
                         id: number;
@@ -2741,7 +2855,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -2779,10 +2893,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -2898,7 +3012,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -2936,10 +3050,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -2977,10 +3091,6 @@ declare namespace Paths {
                         category: {
                             id: number;
                             name?: string;
-                            children: {
-                                id: number;
-                                name?: string;
-                            }[];
                         };
                     }[];
                     image: {
@@ -3933,6 +4043,7 @@ declare namespace Paths {
                     };
                     languagesSegment?: {
                         languages: {
+                            id: number;
                             code: string;
                         }[];
                     };
@@ -4176,6 +4287,7 @@ declare namespace Paths {
                     };
                     languagesSegment?: {
                         languages: {
+                            id: number;
                             code: string;
                         }[];
                     };
@@ -4317,20 +4429,122 @@ declare namespace Paths {
         }
         export interface QueryParameters {
             rootCategoryID?: Parameters.RootCategoryID;
-            salonID?: Parameters.SalonID;
+            salonID: Parameters.SalonID;
         }
         namespace Responses {
             export interface $200 {
                 groupedServicesByCategory: {
-                    category: {
+                    category?: {
                         id: number;
                         name?: string;
+                        children: {
+                            category?: {
+                                id: number;
+                                name?: string;
+                                children: {
+                                    category: {
+                                        id: number;
+                                        name?: string;
+                                    };
+                                    service: {
+                                        id: number;
+                                        isComplete: boolean;
+                                        rangePriceAndDurationData: {
+                                            durationFrom?: number;
+                                            durationTo?: number;
+                                            priceFrom?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
+                                                currency: string;
+                                                /**
+                                                 * example:
+                                                 * -1
+                                                 */
+                                                exponent: number;
+                                                /**
+                                                 * example:
+                                                 * 23
+                                                 */
+                                                significand: number;
+                                            };
+                                            priceTo?: {
+                                                /**
+                                                 * example:
+                                                 * EUR
+                                                 */
+                                                currency: string;
+                                                /**
+                                                 * example:
+                                                 * -1
+                                                 */
+                                                exponent: number;
+                                                /**
+                                                 * example:
+                                                 * 23
+                                                 */
+                                                significand: number;
+                                            };
+                                        };
+                                        employeesCount: number;
+                                        employees: {
+                                            id: number;
+                                            firstName: string;
+                                            lastName: string;
+                                            image: {
+                                                id: number;
+                                                original: string;
+                                                resizedImages: {
+                                                    [key: string]: any;
+                                                };
+                                                isAutogenerated: boolean;
+                                            };
+                                        }[];
+                                        salon: {
+                                            id: number;
+                                            name: string;
+                                        };
+                                        createdAt: string; // date-time
+                                        updatedAt: string; // date-time
+                                        deletedAt?: string; // date-time
+                                    };
+                                }[];
+                            };
+                        }[];
                     };
-                    services: {
-                        id: number;
-                        durationFrom: number;
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: number;
+                    useCategoryParameter: boolean;
+                    priceAndDurationData: {
+                        durationFrom?: number;
                         durationTo?: number;
-                        priceFrom: {
+                        priceFrom?: {
                             /**
                              * example:
                              * EUR
@@ -4364,117 +4578,10 @@ declare namespace Paths {
                              */
                             significand: number;
                         };
-                        employeesCount: number;
-                        employees: {
-                            id: number;
-                            firstName: string;
-                            lastName: string;
-                            image: {
-                                id: number;
-                                original: string;
-                                resizedImages: {
-                                    [key: string]: any;
-                                };
-                                isAutogenerated: boolean;
-                            };
-                        }[];
-                        category: {
-                            id: number;
-                            name?: string;
-                            child: {
-                                id: number;
-                                name?: string;
-                                child?: {
-                                    id: number;
-                                    name?: string;
-                                };
-                            };
-                        };
-                        salon: {
-                            id: number;
-                            name: string;
-                        };
-                        createdAt: string; // date-time
-                        updatedAt: string; // date-time
-                        deletedAt?: string; // date-time
-                    }[];
-                }[];
-            }
-        }
-    }
-    namespace GetApiB2BV1ServicesServiceId {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-            export type ServiceID = number;
-        }
-        export interface PathParameters {
-            serviceID: Parameters.ServiceID;
-        }
-        namespace Responses {
-            export interface $200 {
-                service: {
-                    id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
                     };
-                    priceTo?: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    employees: {
+                    serviceCategoryParameterValues: {
                         id: number;
-                        fullName: string;
-                        hasActiveAccount: boolean;
-                        inviteEmail?: string;
-                        image: {
-                            id: number;
-                            original: string;
-                            resizedImages: {
-                                [key: string]: any;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                        employeeData?: {
+                        priceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -4512,6 +4619,137 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
+                    }[];
+                    rangePriceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                    };
+                    employees: {
+                        id: number;
+                        fullName: string;
+                        hasActiveAccount: boolean;
+                        inviteEmail?: string;
+                        image: {
+                            id: number;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        priceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                        };
+                        serviceCategoryParameterValues: {
+                            id: number;
+                            priceAndDurationData: {
+                                durationFrom?: number;
+                                durationTo?: number;
+                                priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
+                                    currency: string;
+                                    /**
+                                     * example:
+                                     * -1
+                                     */
+                                    exponent: number;
+                                    /**
+                                     * example:
+                                     * 23
+                                     */
+                                    significand: number;
+                                };
+                                priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
+                                    currency: string;
+                                    /**
+                                     * example:
+                                     * -1
+                                     */
+                                    exponent: number;
+                                    /**
+                                     * example:
+                                     * 23
+                                     */
+                                    significand: number;
+                                };
+                            };
+                        }[];
                     }[];
                     category: {
                         id: number;
@@ -5137,10 +5375,44 @@ declare namespace Paths {
                 }[];
                 services: {
                     id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: number; // float
-                    priceTo?: number; // float
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                    };
                 }[];
             }
         }
@@ -5216,41 +5488,43 @@ declare namespace Paths {
             export interface $200 {
                 services: {
                     id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    priceTo?: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
                     };
                 }[];
             }
@@ -5437,49 +5711,7 @@ declare namespace Paths {
              * 906047188
              */
             phone?: string | null; // ^\d+$
-            services?: {
-                /**
-                 * example:
-                 * 1
-                 */
-                id: number;
-                employeeData?: {
-                    /**
-                     * example:
-                     * 10
-                     */
-                    durationFrom?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    durationTo?: number;
-                    priceFrom?: {
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    } | null;
-                    priceTo?: {
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    } | null;
-                } | null;
-            }[] | null;
+            serviceIDs?: number[] | null;
             /**
              * example:
              * 1
@@ -5504,7 +5736,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -5542,10 +5774,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -5583,10 +5815,6 @@ declare namespace Paths {
                         category: {
                             id: number;
                             name?: string;
-                            children: {
-                                id: number;
-                                name?: string;
-                            }[];
                         };
                     }[];
                     image: {
@@ -5707,7 +5935,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -5745,10 +5973,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -5786,10 +6014,6 @@ declare namespace Paths {
                         category: {
                             id: number;
                             name?: string;
-                            children: {
-                                id: number;
-                                name?: string;
-                            }[];
                         };
                     }[];
                     image: {
@@ -5863,6 +6087,113 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type EmployeeID = number;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            employeeID: Parameters.EmployeeID;
+            serviceID: Parameters.ServiceID;
+        }
+        export interface RequestBody {
+            priceAndDurationData: {
+                /**
+                 * example:
+                 * 10
+                 */
+                durationFrom?: number;
+                /**
+                 * example:
+                 * 10
+                 */
+                durationTo?: number;
+                priceFrom?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+                priceTo?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+            };
+            serviceCategoryParameterValues?: {
+                id: number;
+                priceAndDurationData: {
+                    /**
+                     * example:
+                     * 10
+                     */
+                    durationFrom?: number;
+                    /**
+                     * example:
+                     * 10
+                     */
+                    durationTo?: number;
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                };
+            }[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -6541,32 +6872,32 @@ declare namespace Paths {
              * example:
              * https://www.facebook.com/GoodRequestCom
              */
-            socialLinkFB?: string | null;
+            socialLinkFB?: string | null; // ^http[s]?:\/\/(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
-             * https://www.instagram.com/goodrequest/
+             * https://www.instagram.com/GoodRequestCom
              */
-            socialLinkInstagram?: string | null;
+            socialLinkInstagram?: string | null; // ^http[s]?:\/\/(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.goodrequest.com/
              */
-            socialLinkWebPage?: string | null;
+            socialLinkWebPage?: string | null; // ^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.youtube.com/GoodRequestCom
              */
-            socialLinkYoutube?: string | null;
+            socialLinkYoutube?: string | null; // ^http[s]?:\/\/(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
-             * https://www.tiktok.com/goodrequest/
+             * https://www.tiktok.com/GoodRequestCom
              */
-            socialLinkTikTok?: string | null;
+            socialLinkTikTok?: string | null; // ^http[s]?:\/\/(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
-             * https://www.pinterest.com/goodrequest
+             * https://www.pinterest.com/GoodRequestCom
              */
-            socialLinkPinterest?: string | null;
+            socialLinkPinterest?: string | null; // ^http[s]?:\/\/(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * true
@@ -6583,10 +6914,6 @@ declare namespace Paths {
              * 1
              */
             logoID?: null | number;
-            /**
-             * example:
-             * 1
-             */
             pricelistIDs?: number[];
             companyContactPerson: {
                 /**
@@ -6637,10 +6964,6 @@ declare namespace Paths {
                  */
                 companyName: string;
             };
-            categoryIDs: [
-                number,
-                ...number[]
-            ];
             cosmeticIDs?: number[] | null;
             languageIDs?: number[] | null;
         }
@@ -6681,6 +7004,43 @@ declare namespace Paths {
              * true
              */
             accept: boolean;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdCategories {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            categoryIDs: [
+                number,
+                ...number[]
+            ];
         }
         namespace Responses {
             export interface $200 {
@@ -6872,6 +7232,46 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BAdminSalonsSalonIdServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 1
+             */
+            rootCategoryID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryIDs: number[];
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BAdminSalonsSalonIdUnpublish {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -6926,101 +7326,244 @@ declare namespace Paths {
             serviceID: Parameters.ServiceID;
         }
         export interface RequestBody {
-            /**
-             * example:
-             * 10
-             */
-            durationFrom: number;
-            /**
-             * example:
-             * 10
-             */
-            durationTo?: null | number;
-            priceFrom: {
+            useCategoryParameter: boolean;
+            priceAndDurationData: {
                 /**
                  * example:
-                 * -1
+                 * 10
                  */
-                exponent: number;
+                durationFrom?: number;
                 /**
                  * example:
-                 * 23
+                 * 10
                  */
-                significand: number;
+                durationTo?: number;
+                priceFrom?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+                priceTo?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+            } | {
+                /**
+                 * example:
+                 * 10
+                 */
+                durationFrom?: number;
+                /**
+                 * example:
+                 * 10
+                 */
+                durationTo?: number;
+                priceFrom?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+                priceTo?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
             };
-            priceTo?: {
-                /**
-                 * example:
-                 * -1
-                 */
-                exponent: number;
-                /**
-                 * example:
-                 * 23
-                 */
-                significand: number;
-            } | null;
-            /**
-             * example:
-             * 1
-             */
-            categoryID: number;
+            categoryParameterValues?: [
+                {
+                    id: number;
+                    priceAndDurationData: {
+                        /**
+                         * example:
+                         * 10
+                         */
+                        durationFrom?: number;
+                        /**
+                         * example:
+                         * 10
+                         */
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        } | null;
+                        priceTo?: {
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        } | null;
+                    };
+                },
+                ...{
+                    id: number;
+                    priceAndDurationData: {
+                        /**
+                         * example:
+                         * 10
+                         */
+                        durationFrom?: number;
+                        /**
+                         * example:
+                         * 10
+                         */
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        } | null;
+                        priceTo?: {
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        } | null;
+                    };
+                }[]
+            ] | {
+                id: number;
+                priceAndDurationData: {
+                    /**
+                     * example:
+                     * 10
+                     */
+                    durationFrom?: number;
+                    /**
+                     * example:
+                     * 10
+                     */
+                    durationTo?: number;
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                };
+            }[];
             employeeIDs?: number[] | null;
         }
         namespace Responses {
             export interface $200 {
                 service: {
                     id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    priceTo?: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    employees: {
-                        id: number;
-                        fullName: string;
-                        hasActiveAccount: boolean;
-                        inviteEmail?: string;
-                        image: {
-                            id: number;
-                            original: string;
-                            resizedImages: {
-                                [key: string]: any;
-                            };
-                            isAutogenerated: boolean;
+                    useCategoryParameter: boolean;
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
                         };
-                        employeeData?: {
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                    };
+                    serviceCategoryParameterValues: {
+                        id: number;
+                        priceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -7058,6 +7601,137 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
+                    }[];
+                    rangePriceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                    };
+                    employees: {
+                        id: number;
+                        fullName: string;
+                        hasActiveAccount: boolean;
+                        inviteEmail?: string;
+                        image: {
+                            id: number;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        priceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                        };
+                        serviceCategoryParameterValues: {
+                            id: number;
+                            priceAndDurationData: {
+                                durationFrom?: number;
+                                durationTo?: number;
+                                priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
+                                    currency: string;
+                                    /**
+                                     * example:
+                                     * -1
+                                     */
+                                    exponent: number;
+                                    /**
+                                     * example:
+                                     * 23
+                                     */
+                                    significand: number;
+                                };
+                                priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
+                                    currency: string;
+                                    /**
+                                     * example:
+                                     * -1
+                                     */
+                                    exponent: number;
+                                    /**
+                                     * example:
+                                     * 23
+                                     */
+                                    significand: number;
+                                };
+                            };
+                        }[];
                     }[];
                     category: {
                         id: number;
@@ -7373,49 +8047,7 @@ declare namespace Paths {
              * 906047188
              */
             phone?: string | null; // ^\d+$
-            services?: {
-                /**
-                 * example:
-                 * 1
-                 */
-                id: number;
-                employeeData?: {
-                    /**
-                     * example:
-                     * 10
-                     */
-                    durationFrom?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    durationTo?: number;
-                    priceFrom?: {
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    } | null;
-                    priceTo?: {
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    } | null;
-                } | null;
-            }[] | null;
+            serviceIDs?: number[] | null;
             /**
              * example:
              * 1
@@ -7440,7 +8072,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -7478,10 +8110,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -7519,10 +8151,6 @@ declare namespace Paths {
                         category: {
                             id: number;
                             name?: string;
-                            children: {
-                                id: number;
-                                name?: string;
-                            }[];
                         };
                     }[];
                     image: {
@@ -7643,7 +8271,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -7681,10 +8309,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -7722,10 +8350,6 @@ declare namespace Paths {
                         category: {
                             id: number;
                             name?: string;
-                            children: {
-                                id: number;
-                                name?: string;
-                            }[];
                         };
                     }[];
                     image: {
@@ -7799,6 +8423,113 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1EmployeesEmployeeIdServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type EmployeeID = number;
+            export type ServiceID = number;
+        }
+        export interface PathParameters {
+            employeeID: Parameters.EmployeeID;
+            serviceID: Parameters.ServiceID;
+        }
+        export interface RequestBody {
+            priceAndDurationData: {
+                /**
+                 * example:
+                 * 10
+                 */
+                durationFrom?: number;
+                /**
+                 * example:
+                 * 10
+                 */
+                durationTo?: number;
+                priceFrom?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+                priceTo?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+            };
+            serviceCategoryParameterValues?: {
+                id: number;
+                priceAndDurationData: {
+                    /**
+                     * example:
+                     * 10
+                     */
+                    durationFrom?: number;
+                    /**
+                     * example:
+                     * 10
+                     */
+                    durationTo?: number;
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                };
+            }[] | null;
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -8020,32 +8751,32 @@ declare namespace Paths {
                  * example:
                  * https://www.facebook.com/GoodRequestCom
                  */
-                socialLinkFB?: string | null;
+                socialLinkFB?: string | null; // ^http[s]?:\/\/(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
-                 * https://www.instagram.com/goodrequest/
+                 * https://www.instagram.com/GoodRequestCom
                  */
-                socialLinkInstagram?: string | null;
+                socialLinkInstagram?: string | null; // ^http[s]?:\/\/(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * https://www.goodrequest.com/
                  */
-                socialLinkWebPage?: string | null;
+                socialLinkWebPage?: string | null; // ^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * https://www.youtube.com/GoodRequestCom
                  */
-                socialLinkYoutube?: string | null;
+                socialLinkYoutube?: string | null; // ^http[s]?:\/\/(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
-                 * https://www.tiktok.com/goodrequest/
+                 * https://www.tiktok.com/GoodRequestCom
                  */
-                socialLinkTikTok?: string | null;
+                socialLinkTikTok?: string | null; // ^http[s]?:\/\/(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
-                 * https://www.pinterest.com/goodrequest
+                 * https://www.pinterest.com/GoodRequestCom
                  */
-                socialLinkPinterest?: string | null;
+                socialLinkPinterest?: string | null; // ^http[s]?:\/\/(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * Parkovanie oproti budove.
@@ -8119,17 +8850,7 @@ declare namespace Paths {
                 companyName?: string | null;
             };
             pricelistSegment?: {
-                /**
-                 * example:
-                 * 1
-                 */
                 pricelistIDs?: number[];
-            };
-            categorySegment?: {
-                categoryIDs: [
-                    number,
-                    ...number[]
-                ];
             };
             cosmeticSegment?: {
                 cosmeticIDs: number[];
@@ -8329,6 +9050,7 @@ declare namespace Paths {
                     };
                     languagesSegment?: {
                         languages: {
+                            id: number;
                             code: string;
                         }[];
                     };
@@ -8391,6 +9113,43 @@ declare namespace Paths {
              * true
              */
             accept: boolean;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: number;
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdCategories {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            categoryIDs: [
+                number,
+                ...number[]
+            ];
         }
         namespace Responses {
             export interface $200 {
@@ -8643,6 +9402,7 @@ declare namespace Paths {
                     };
                     languagesSegment?: {
                         languages: {
+                            id: number;
                             code: string;
                         }[];
                     };
@@ -8713,6 +9473,46 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BV1SalonsSalonIdServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = number;
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 1
+             */
+            rootCategoryID: number;
+            /**
+             * example:
+             * 1
+             */
+            categoryIDs: number[];
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BV1SalonsSalonIdUnpublish {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -8767,101 +9567,244 @@ declare namespace Paths {
             serviceID: Parameters.ServiceID;
         }
         export interface RequestBody {
-            /**
-             * example:
-             * 10
-             */
-            durationFrom: number;
-            /**
-             * example:
-             * 10
-             */
-            durationTo?: null | number;
-            priceFrom: {
+            useCategoryParameter: boolean;
+            priceAndDurationData: {
                 /**
                  * example:
-                 * -1
+                 * 10
                  */
-                exponent: number;
+                durationFrom?: number;
                 /**
                  * example:
-                 * 23
+                 * 10
                  */
-                significand: number;
+                durationTo?: number;
+                priceFrom?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+                priceTo?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+            } | {
+                /**
+                 * example:
+                 * 10
+                 */
+                durationFrom?: number;
+                /**
+                 * example:
+                 * 10
+                 */
+                durationTo?: number;
+                priceFrom?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
+                priceTo?: {
+                    /**
+                     * example:
+                     * -1
+                     */
+                    exponent: number;
+                    /**
+                     * example:
+                     * 23
+                     */
+                    significand: number;
+                } | null;
             };
-            priceTo?: {
-                /**
-                 * example:
-                 * -1
-                 */
-                exponent: number;
-                /**
-                 * example:
-                 * 23
-                 */
-                significand: number;
-            } | null;
-            /**
-             * example:
-             * 1
-             */
-            categoryID: number;
+            categoryParameterValues?: [
+                {
+                    id: number;
+                    priceAndDurationData: {
+                        /**
+                         * example:
+                         * 10
+                         */
+                        durationFrom?: number;
+                        /**
+                         * example:
+                         * 10
+                         */
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        } | null;
+                        priceTo?: {
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        } | null;
+                    };
+                },
+                ...{
+                    id: number;
+                    priceAndDurationData: {
+                        /**
+                         * example:
+                         * 10
+                         */
+                        durationFrom?: number;
+                        /**
+                         * example:
+                         * 10
+                         */
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        } | null;
+                        priceTo?: {
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        } | null;
+                    };
+                }[]
+            ] | {
+                id: number;
+                priceAndDurationData: {
+                    /**
+                     * example:
+                     * 10
+                     */
+                    durationFrom?: number;
+                    /**
+                     * example:
+                     * 10
+                     */
+                    durationTo?: number;
+                    priceFrom?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                    priceTo?: {
+                        /**
+                         * example:
+                         * -1
+                         */
+                        exponent: number;
+                        /**
+                         * example:
+                         * 23
+                         */
+                        significand: number;
+                    } | null;
+                };
+            }[];
             employeeIDs?: number[] | null;
         }
         namespace Responses {
             export interface $200 {
                 service: {
                     id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    priceTo?: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    employees: {
-                        id: number;
-                        fullName: string;
-                        hasActiveAccount: boolean;
-                        inviteEmail?: string;
-                        image: {
-                            id: number;
-                            original: string;
-                            resizedImages: {
-                                [key: string]: any;
-                            };
-                            isAutogenerated: boolean;
+                    useCategoryParameter: boolean;
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
                         };
-                        employeeData?: {
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                    };
+                    serviceCategoryParameterValues: {
+                        id: number;
+                        priceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -8899,6 +9842,137 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
+                    }[];
+                    rangePriceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                        priceTo?: {
+                            /**
+                             * example:
+                             * EUR
+                             */
+                            currency: string;
+                            /**
+                             * example:
+                             * -1
+                             */
+                            exponent: number;
+                            /**
+                             * example:
+                             * 23
+                             */
+                            significand: number;
+                        };
+                    };
+                    employees: {
+                        id: number;
+                        fullName: string;
+                        hasActiveAccount: boolean;
+                        inviteEmail?: string;
+                        image: {
+                            id: number;
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        priceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                            priceTo?: {
+                                /**
+                                 * example:
+                                 * EUR
+                                 */
+                                currency: string;
+                                /**
+                                 * example:
+                                 * -1
+                                 */
+                                exponent: number;
+                                /**
+                                 * example:
+                                 * 23
+                                 */
+                                significand: number;
+                            };
+                        };
+                        serviceCategoryParameterValues: {
+                            id: number;
+                            priceAndDurationData: {
+                                durationFrom?: number;
+                                durationTo?: number;
+                                priceFrom?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
+                                    currency: string;
+                                    /**
+                                     * example:
+                                     * -1
+                                     */
+                                    exponent: number;
+                                    /**
+                                     * example:
+                                     * 23
+                                     */
+                                    significand: number;
+                                };
+                                priceTo?: {
+                                    /**
+                                     * example:
+                                     * EUR
+                                     */
+                                    currency: string;
+                                    /**
+                                     * example:
+                                     * -1
+                                     */
+                                    exponent: number;
+                                    /**
+                                     * example:
+                                     * 23
+                                     */
+                                    significand: number;
+                                };
+                            };
+                        }[];
                     }[];
                     category: {
                         id: number;
@@ -9454,49 +10528,7 @@ declare namespace Paths {
              * 906047188
              */
             phone?: string | null; // ^\d+$
-            services?: {
-                /**
-                 * example:
-                 * 1
-                 */
-                id: number;
-                employeeData?: {
-                    /**
-                     * example:
-                     * 10
-                     */
-                    durationFrom?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    durationTo?: number;
-                    priceFrom?: {
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    } | null;
-                    priceTo?: {
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    } | null;
-                } | null;
-            }[] | null;
+            serviceIDs?: number[] | null;
             /**
              * example:
              * 1
@@ -9526,7 +10558,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -9564,10 +10596,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -9605,10 +10637,6 @@ declare namespace Paths {
                         category: {
                             id: number;
                             name?: string;
-                            children: {
-                                id: number;
-                                name?: string;
-                            }[];
                         };
                     }[];
                     image: {
@@ -10487,32 +11515,32 @@ declare namespace Paths {
              * example:
              * https://www.facebook.com/GoodRequestCom
              */
-            socialLinkFB?: string | null;
+            socialLinkFB?: string | null; // ^http[s]?:\/\/(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
-             * https://www.instagram.com/goodrequest/
+             * https://www.instagram.com/GoodRequestCom
              */
-            socialLinkInstagram?: string | null;
+            socialLinkInstagram?: string | null; // ^http[s]?:\/\/(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.goodrequest.com/
              */
-            socialLinkWebPage?: string | null;
+            socialLinkWebPage?: string | null; // ^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.youtube.com/GoodRequestCom
              */
-            socialLinkYoutube?: string | null;
+            socialLinkYoutube?: string | null; // ^http[s]?:\/\/(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
-             * https://www.tiktok.com/goodrequest/
+             * https://www.tiktok.com/GoodRequestCom
              */
-            socialLinkTikTok?: string | null;
+            socialLinkTikTok?: string | null; // ^http[s]?:\/\/(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
-             * https://www.pinterest.com/goodrequest
+             * https://www.pinterest.com/GoodRequestCom
              */
-            socialLinkPinterest?: string | null;
+            socialLinkPinterest?: string | null; // ^http[s]?:\/\/(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * true
@@ -10529,10 +11557,6 @@ declare namespace Paths {
              * 1
              */
             logoID?: null | number;
-            /**
-             * example:
-             * 1
-             */
             pricelistIDs?: number[];
             companyContactPerson: {
                 /**
@@ -10583,10 +11607,6 @@ declare namespace Paths {
                  */
                 companyName: string;
             };
-            categoryIDs: [
-                number,
-                ...number[]
-            ];
             cosmeticIDs?: number[] | null;
             languageIDs?: number[] | null;
         }
@@ -10594,187 +11614,6 @@ declare namespace Paths {
             export interface $200 {
                 salon: {
                     id: number;
-                };
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
-    namespace PostApiB2BAdminServices {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            /**
-             * example:
-             * 10
-             */
-            durationFrom: number;
-            /**
-             * example:
-             * 10
-             */
-            durationTo?: null | number;
-            priceFrom: {
-                /**
-                 * example:
-                 * -1
-                 */
-                exponent: number;
-                /**
-                 * example:
-                 * 23
-                 */
-                significand: number;
-            };
-            priceTo?: {
-                /**
-                 * example:
-                 * -1
-                 */
-                exponent: number;
-                /**
-                 * example:
-                 * 23
-                 */
-                significand: number;
-            } | null;
-            /**
-             * example:
-             * 1
-             */
-            salonID: number;
-            /**
-             * example:
-             * 1
-             */
-            categoryID: number;
-            employeeIDs?: number[] | null;
-        }
-        namespace Responses {
-            export interface $200 {
-                service: {
-                    id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    priceTo?: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    employees: {
-                        id: number;
-                        fullName: string;
-                        hasActiveAccount: boolean;
-                        inviteEmail?: string;
-                        image: {
-                            id: number;
-                            original: string;
-                            resizedImages: {
-                                [key: string]: any;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                        employeeData?: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                /**
-                                 * example:
-                                 * EUR
-                                 */
-                                currency: string;
-                                /**
-                                 * example:
-                                 * -1
-                                 */
-                                exponent: number;
-                                /**
-                                 * example:
-                                 * 23
-                                 */
-                                significand: number;
-                            };
-                            priceTo?: {
-                                /**
-                                 * example:
-                                 * EUR
-                                 */
-                                currency: string;
-                                /**
-                                 * example:
-                                 * -1
-                                 */
-                                exponent: number;
-                                /**
-                                 * example:
-                                 * 23
-                                 */
-                                significand: number;
-                            };
-                        };
-                    }[];
-                    category: {
-                        id: number;
-                        name?: string;
-                        child: {
-                            id: number;
-                            name?: string;
-                            child?: {
-                                id: number;
-                                name?: string;
-                            };
-                        };
-                    };
-                    salon: {
-                        id: number;
-                        name?: string;
-                    };
-                    createdAt: string; // date-time
-                    updatedAt: string; // date-time
-                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -11531,49 +12370,7 @@ declare namespace Paths {
              * 906047188
              */
             phone?: string | null; // ^\d+$
-            services?: {
-                /**
-                 * example:
-                 * 1
-                 */
-                id: number;
-                employeeData?: {
-                    /**
-                     * example:
-                     * 10
-                     */
-                    durationFrom?: number;
-                    /**
-                     * example:
-                     * 10
-                     */
-                    durationTo?: number;
-                    priceFrom?: {
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    } | null;
-                    priceTo?: {
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    } | null;
-                } | null;
-            }[] | null;
+            serviceIDs?: number[] | null;
             /**
              * example:
              * 1
@@ -11603,7 +12400,7 @@ declare namespace Paths {
                     };
                     services: {
                         id: number;
-                        employeeData?: {
+                        salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
                             priceFrom?: {
@@ -11641,10 +12438,10 @@ declare namespace Paths {
                                 significand: number;
                             };
                         };
-                        salonData: {
-                            durationFrom: number;
+                        employeePriceAndDurationData: {
+                            durationFrom?: number;
                             durationTo?: number;
-                            priceFrom: {
+                            priceFrom?: {
                                 /**
                                  * example:
                                  * EUR
@@ -11682,10 +12479,6 @@ declare namespace Paths {
                         category: {
                             id: number;
                             name?: string;
-                            children: {
-                                id: number;
-                                name?: string;
-                            }[];
                         };
                     }[];
                     image: {
@@ -11944,10 +12737,6 @@ declare namespace Paths {
             export type AcceptLanguage = string;
         }
         export interface RequestBody {
-            categoryIDs: [
-                number,
-                ...number[]
-            ];
         }
         namespace Responses {
             export interface $200 {
@@ -12140,6 +12929,7 @@ declare namespace Paths {
                     };
                     languagesSegment?: {
                         languages: {
+                            id: number;
                             code: string;
                         }[];
                     };
@@ -12168,187 +12958,6 @@ declare namespace Paths {
                     };
                     createdAt?: string; // date-time
                     updatedAt?: string; // date-time
-                    deletedAt?: string; // date-time
-                };
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
-    namespace PostApiB2BV1Services {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            /**
-             * example:
-             * 10
-             */
-            durationFrom: number;
-            /**
-             * example:
-             * 10
-             */
-            durationTo?: null | number;
-            priceFrom: {
-                /**
-                 * example:
-                 * -1
-                 */
-                exponent: number;
-                /**
-                 * example:
-                 * 23
-                 */
-                significand: number;
-            };
-            priceTo?: {
-                /**
-                 * example:
-                 * -1
-                 */
-                exponent: number;
-                /**
-                 * example:
-                 * 23
-                 */
-                significand: number;
-            } | null;
-            /**
-             * example:
-             * 1
-             */
-            salonID: number;
-            /**
-             * example:
-             * 1
-             */
-            categoryID: number;
-            employeeIDs?: number[] | null;
-        }
-        namespace Responses {
-            export interface $200 {
-                service: {
-                    id: number;
-                    durationFrom: number;
-                    durationTo?: number;
-                    priceFrom: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    priceTo?: {
-                        /**
-                         * example:
-                         * EUR
-                         */
-                        currency: string;
-                        /**
-                         * example:
-                         * -1
-                         */
-                        exponent: number;
-                        /**
-                         * example:
-                         * 23
-                         */
-                        significand: number;
-                    };
-                    employees: {
-                        id: number;
-                        fullName: string;
-                        hasActiveAccount: boolean;
-                        inviteEmail?: string;
-                        image: {
-                            id: number;
-                            original: string;
-                            resizedImages: {
-                                [key: string]: any;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                        employeeData?: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                /**
-                                 * example:
-                                 * EUR
-                                 */
-                                currency: string;
-                                /**
-                                 * example:
-                                 * -1
-                                 */
-                                exponent: number;
-                                /**
-                                 * example:
-                                 * 23
-                                 */
-                                significand: number;
-                            };
-                            priceTo?: {
-                                /**
-                                 * example:
-                                 * EUR
-                                 */
-                                currency: string;
-                                /**
-                                 * example:
-                                 * -1
-                                 */
-                                exponent: number;
-                                /**
-                                 * example:
-                                 * 23
-                                 */
-                                significand: number;
-                            };
-                        };
-                    }[];
-                    category: {
-                        id: number;
-                        name?: string;
-                        child: {
-                            id: number;
-                            name?: string;
-                            child?: {
-                                id: number;
-                                name?: string;
-                            };
-                        };
-                    };
-                    salon: {
-                        id: number;
-                        name?: string;
-                    };
-                    createdAt: string; // date-time
-                    updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
                 messages: {
@@ -13304,6 +13913,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
   /**
+   * patchApiB2BAdminSalonsSalonIdCategories - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
+   */
+  'patchApiB2BAdminSalonsSalonIdCategories'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCategories.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCategories.Responses.$200>
+  /**
    * patchApiB2BAdminSalonsSalonIdRequestPublication - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
   'patchApiB2BAdminSalonsSalonIdRequestPublication'(
@@ -13336,6 +13953,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   /**
+   * patchApiB2BAdminSalonsSalonIdServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]
+   */
+  'patchApiB2BAdminSalonsSalonIdServices'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdServices.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdServices.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdServices.Responses.$200>
+  /**
    * getApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminServices'(
@@ -13343,14 +13968,6 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
-  /**
-   * postApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_CREATE]
-   */
-  'postApiB2BAdminServices'(
-    parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminServices.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
   /**
    * getApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
@@ -13471,6 +14088,14 @@ export interface OperationMethods {
     data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
+  /**
+   * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
+   */
+  'patchApiB2BAdminEmployeesEmployeeIdServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.Responses.$200>
   /**
    * postApiB2BAdminImportsSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]
    */
@@ -13600,6 +14225,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
   /**
+   * patchApiB2BV1SalonsSalonIdCategories - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
+   */
+  'patchApiB2BV1SalonsSalonIdCategories'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCategories.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdCategories.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCategories.Responses.$200>
+  /**
    * patchApiB2BV1SalonsSalonIdRequestPublication - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
   'patchApiB2BV1SalonsSalonIdRequestPublication'(
@@ -13624,7 +14257,15 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   /**
-   * getApiB2BV1Services - PERMISSION: [PARTNER]
+   * patchApiB2BV1SalonsSalonIdServices - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]
+   */
+  'patchApiB2BV1SalonsSalonIdServices'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdServices.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdServices.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
+  /**
+   * getApiB2BV1Services - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BV1Services'(
     parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
@@ -13632,15 +14273,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
   /**
-   * postApiB2BV1Services - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_CREATE]
-   */
-  'postApiB2BV1Services'(
-    parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
-    data?: Paths.PostApiB2BV1Services.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
-  /**
-   * getApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+   * getApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -13648,7 +14281,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
+   * patchApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
    */
   'patchApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -13656,7 +14289,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
+   * deleteApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
    */
   'deleteApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -13759,6 +14392,14 @@ export interface OperationMethods {
     data?: Paths.PatchApiB2BV1EmployeesEmployeeIdRole.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
+  /**
+   * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
+   */
+  'patchApiB2BV1EmployeesEmployeeIdServicesServiceId'(
+    parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.Responses.$200>
   /**
    * getApiB2BV1RolesSalon - PERMISSION: [PARTNER]
    */
@@ -14584,6 +15225,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/categories']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCategories - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCategories.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCategories.Responses.$200>
+  }
   ['/api/b2b/admin/salons/{salonID}/request-publication']: {
     /**
      * patchApiB2BAdminSalonsSalonIdRequestPublication - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -14624,6 +15275,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/services']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdServices.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdServices.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdServices.Responses.$200>
+  }
   ['/api/b2b/admin/services/']: {
     /**
      * getApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -14633,14 +15294,6 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
-    /**
-     * postApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_CREATE]
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminServices.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminServices.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminServices.Responses.$200>
   }
   ['/api/b2b/admin/services/{serviceID}']: {
     /**
@@ -14775,6 +15428,16 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
+  }
+  ['/api/b2b/admin/employees/{employeeID}/services/{serviceID}']: {
+    /**
+     * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.Responses.$200>
   }
   ['/api/b2b/admin/imports/salons']: {
     /**
@@ -14930,6 +15593,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
   }
+  ['/api/b2b/v1/salons/{salonID}/categories']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdCategories - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCategories.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdCategories.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCategories.Responses.$200>
+  }
   ['/api/b2b/v1/salons/{salonID}/request-publication']: {
     /**
      * patchApiB2BV1SalonsSalonIdRequestPublication - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -14960,27 +15633,29 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   }
+  ['/api/b2b/v1/salons/{salonID}/services']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdServices - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdServices.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdServices.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
+  }
   ['/api/b2b/v1/services/']: {
     /**
-     * getApiB2BV1Services - PERMISSION: [PARTNER]
+     * getApiB2BV1Services - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
-    /**
-     * postApiB2BV1Services - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_CREATE]
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BV1Services.HeaderParameters> | null,
-      data?: Paths.PostApiB2BV1Services.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1Services.Responses.$200>
   }
   ['/api/b2b/v1/services/{serviceID}']: {
     /**
-     * getApiB2BV1ServicesServiceId - PERMISSION: [PARTNER]
+     * getApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -14988,7 +15663,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * patchApiB2BV1ServicesServiceId - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
+     * patchApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -14996,7 +15671,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * deleteApiB2BV1ServicesServiceId - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
+     * deleteApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -15111,6 +15786,16 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2BV1EmployeesEmployeeIdRole.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
+  }
+  ['/api/b2b/v1/employees/{employeeID}/services/{serviceID}']: {
+    /**
+     * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.Responses.$200>
   }
   ['/api/b2b/v1/roles/salon']: {
     /**

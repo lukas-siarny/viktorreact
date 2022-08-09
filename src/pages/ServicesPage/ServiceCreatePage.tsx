@@ -43,9 +43,9 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 				categoryID: values.categorySecondLevel
 			}
 
-			const { data } = await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			// const { data } = await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 
-			const serviceID = get(data, 'service.id', 0)
+			const serviceID = /* get(data, 'service.id', 0) */ 0
 			history.push(parentPath + (serviceID > 0 ? t('paths:services/{{serviceID}}', { serviceID }) : t('paths:services')))
 		} catch (e) {
 			// eslint-disable-next-line no-console

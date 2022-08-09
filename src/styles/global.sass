@@ -1167,3 +1167,215 @@ span.ant-tag
 		background-size: contain
 		flex: 0 0 auto
 
+.checkbox-group-image-wrapper
+	display: flex
+	flex-wrap: wrap
+	gap: 2%
+	width: 100%
+	// max-width: 780px
+	margin: 0 auto
+	// justify-content: center
+
+	legend
+		border-bottom: none
+		color: $textColor-trueGray-700
+		margin-bottom: 8px
+		&.required
+			&::before
+				display: inline-block
+				margin-right: 4px
+				color: #ff4d4f
+				font-size: 14px
+				font-family: SimSun,sans-serif
+				line-height: 1
+				content: "*"
+
+.checkbox-with-image
+	// width: 24%
+	// min-width: 160px
+	// max-width: 180px
+	width: 160px
+	margin-bottom: 16px
+
+	label
+		display: block
+		width: 100%
+		position: relative
+		padding-bottom: 100%
+		cursor: pointer
+		overflow: hidden
+		border-radius: 12px
+		transition: 300ms ease
+
+		.inner-wrapper
+			display: block
+			position: absolute
+			top: 0
+			left: 0
+			width: 100%
+			height: 100%
+			border-radius: 12px
+			overflow: hidden
+			z-index: 1
+			background: $textColor-notino-grayLighter center center no-repeat
+			background-size: cover
+
+			&::after
+				content: ''
+				position: absolute
+				top: 0
+				left: 0
+				width: 100%
+				height: 100%
+				background: linear-gradient(180deg, rgba(0, 0, 0, 0) 51.77%, rgba(0, 0, 0, 0.0526959) 64.37%, rgba(0, 0, 0, 0.524324) 82.54%, rgba(0, 0, 0, 0.76) 100%)
+				z-index: 2
+
+			&::before
+				content: ''
+				position: absolute
+				top: 0
+				left: 0
+				width: 100%
+				height: 100%
+				border: 2px solid transparent
+				z-index: 3
+				border-radius: 12px
+				transition: border-color 300ms ease
+
+			.checker
+				position: absolute
+				right: 8px
+				top: 8px
+				display: block
+				width: 24px
+				height: 24px
+				background: $backgroundColor-notino-white url('../assets/icons/checker-icon.svg') center center no-repeat
+				background-size: 12px 12px
+				background-position: contain
+				border-radius: 50%
+				border: 1px solid $borderColor-notino-gray
+				z-index: 3
+				transition: 300ms ease
+				transition-property: background border-color
+			.label
+				position: absolute
+				bottom: 8px
+				left: 8px
+				right: 8px
+				top: 8px
+				display: flex
+				flex-direction: column-reverse
+				font-size: 16px
+				line-height: 1.5
+				color: $textColor-notino-white
+				font-weight: 700
+				z-index: 3
+
+		input
+			position: absolute
+			opacity: 0
+			width: 0
+			height: 0
+
+			&:checked
+				+ .inner-wrapper
+					&::before
+						border-color: $borderColor-notino-pink
+					.checker
+						border-color: $borderColor-notino-pink
+						background-color: $backgroundColor-notino-pink
+
+			&:hover,
+			&:focus-visible
+				+ .inner-wrapper
+					&::before
+						border-color: $borderColor-notino-pink
+
+	button
+		width: 100%
+		background: transparent
+		outline: none
+		border: none
+		color: $textColor-trueGray-700
+		font-size: 14px
+		text-align: center
+		height: 40px
+		transition: 300ms ease
+		background: $backgroundColor-notino-grayLight
+		border-bottom-left-radius: 12px
+		border-bottom-right-radius: 12px
+		position: relative
+		font-weight: 500
+
+		&::before
+			content: ''
+			position: absolute
+			bottom: 100%
+			left: 0
+			right: 0
+			height: 20px
+			background: $backgroundColor-notino-grayLight
+
+		&:not(:disabled)
+			cursor: pointer
+			&:hover, &:focus-visible
+				color: $textColor-notino-pink
+
+		&:disabled
+			cursor: not-allowed
+			color: $textColor-notino-gray
+
+	&.error
+		label
+			.inner-wrapper
+				.checker
+					border-color: #ff4d4f
+
+.category-select-header
+	background-color: $backgroundColor-notino-black
+	padding: 24px
+	overflow: hidden
+	border-radius: 16px
+	position: relative
+	width: 100%
+	display: flex
+	flex-direction: column
+	justify-content: center
+
+	.image
+		position: absolute
+		top: 0
+		right: 0
+		bottom: 0
+		width: 60%
+		max-width: 400px
+		min-width: 160px
+		background: right center no-repeat
+		background-size: cover
+		z-index: 2
+		opacity: 0.7
+
+	&::before
+		content: ''
+		display: block
+		position: absolute
+		top: 0
+		bottom: 0
+		right: 0
+		width: 60%
+		max-width: 400px
+		min-width: 160px
+		background-image: linear-gradient(90deg, $backgroundColor-notino-black 15%, rgba(0, 0, 0, 0) 86.3%)
+		z-index: 3
+
+	.label
+		position: relative
+		z-index: 4
+		color: $textColor-notino-white
+		font-size: 20px
+		font-weight: 500
+		max-width: 80%
+
+	.count
+		color: $textColor-notino-gray
+		font-size: 14px

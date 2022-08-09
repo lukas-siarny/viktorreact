@@ -5,7 +5,7 @@ import { ThunkResult } from '../index'
 import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IUserAvatar, IQueryParams, ISearchablePayload } from '../../types/interfaces'
+import { IUserAvatar, IQueryParams, ISearchablePayload, ISelectOptionItem } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -30,14 +30,14 @@ interface ServicesTableData {
 	salon: string | undefined
 }
 
-export interface IGetServicesQueryParams extends IQueryParams {
-	categoryID?: number | undefined | null
-	employeeID?: number | undefined | null
-	salonID?: number | undefined | null
+export interface IGetServicesQueryParams {
+	salonID: number
 }
 
-export interface IServicesPayload extends ISearchablePayload<Paths.GetApiB2BAdminServices.Responses.$200> {
+export interface IServicesPayload {
 	tableData: ServicesTableData[] | undefined
+	data: Paths.GetApiB2BAdminServices.Responses.$200 | null
+	options: ISelectOptionItem[] | undefined
 }
 
 export const getServices =
@@ -47,8 +47,8 @@ export const getServices =
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) })
-			const tableData: ServicesTableData[] = data.services.map((item) => {
+			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
+			/* const tableData: ServicesTableData[] = data.groupedServicesByCategory.map((item) => {
 				const tableItem = {
 					key: item.id,
 					serviceID: item.id,
@@ -70,13 +70,13 @@ export const getServices =
 				}
 				return tableItem
 			})
-			const servicesOptions = data.services.map((service) => {
+			const servicesOptions = data.groupedServicesByCategory.map((service) => {
 				return { label: service.category.child?.child?.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
-			})
+			}) */
 			payload = {
 				data,
-				tableData,
-				options: servicesOptions
+				tableData: [],
+				options: []
 			}
 
 			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })

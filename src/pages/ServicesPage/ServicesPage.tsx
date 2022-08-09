@@ -37,7 +37,7 @@ interface IAdminUsersFilter {
 }
 
 const ServicesPage = (props: SalonSubPageProps) => {
-	const [t] = useTranslation()
+	/* const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const services = useSelector((state: RootState) => state.service.services)
 	const { salonID, parentPath } = props
@@ -211,7 +211,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 				</Col>
 			</Row>
 		</>
-	)
+	) */
 }
 
 export default compose(withPermissions(permissions))(ServicesPage)

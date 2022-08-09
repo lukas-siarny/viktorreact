@@ -94,7 +94,7 @@ const ServiceEditPage = (props: Props) => {
 			history.push('/404')
 		}
 		let initData: any
-		if (data) {
+		/* if (data) {
 			initData = {
 				durationFrom: data?.service?.durationFrom,
 				durationTo: data?.service?.durationTo,
@@ -107,7 +107,7 @@ const ServiceEditPage = (props: Props) => {
 				categorySecondLevel: data?.service?.category?.child?.child?.id,
 				employees: parseEmployees(data?.service?.employees)
 			}
-		}
+		} */
 		dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
 	}
 
@@ -118,7 +118,7 @@ const ServiceEditPage = (props: Props) => {
 
 	const handleSubmit = async (values: IServiceForm) => {
 		try {
-			const reqData = {
+			/* const reqData = {
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
 				priceFrom: encodePrice(values.priceFrom),
@@ -126,7 +126,7 @@ const ServiceEditPage = (props: Props) => {
 				categoryID: values.categorySecondLevel,
 				employeeIDs: parseEmployeeIds(values.employees)
 			}
-			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true) */
 			dispatch(getService(serviceID))
 		} catch (e) {
 			// eslint-disable-next-line no-console

@@ -61,33 +61,33 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	const updatedServices: any[] = []
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		const serviceData = services?.data?.services?.find((service: any) => service?.id === serviceId)
+		const serviceData = services?.data?.groupedServicesByCategory?.find((service: any) => service?.id === serviceId)
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Služba ${serviceData?.category.name} je už priradená!`)
+				description: i18next.t(`Služba ${serviceData?.category?.name} je už priradená!`)
 			})
 		} else if (serviceData) {
-			let newServiceData = {
-				id: serviceData?.id,
-				name: serviceData?.category.name,
+			const newServiceData = {
+				id: serviceData?.category?.id,
+				name: serviceData?.category?.name,
 				salonData: {
-					durationFrom: serviceData?.durationFrom,
-					durationTo: serviceData?.durationTo,
-					priceFrom: decodePrice(serviceData?.priceFrom),
-					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
+					durationFrom: null,
+					durationTo: null,
+					priceFrom: null,
+					priceTo: null
 				},
 				employeeData: {
-					durationFrom: serviceData?.durationFrom,
-					durationTo: serviceData?.durationTo,
-					priceFrom: decodePrice(serviceData?.priceFrom),
-					priceTo: serviceData?.priceTo && serviceData?.priceFrom ? decodePrice(serviceData?.priceTo) : undefined
+					durationFrom: null,
+					durationTo: null,
+					priceFrom: null,
+					priceTo: null
 				},
 				variableDuration: false,
 				variablePrice: false,
 				category: serviceData?.category
 			}
-			if (serviceData?.durationFrom && serviceData?.durationTo) {
+			/* if (serviceData?.durationFrom && serviceData?.durationTo) {
 				newServiceData = {
 					...newServiceData,
 					variableDuration: true
@@ -98,7 +98,7 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 					...newServiceData,
 					variablePrice: true
 				}
-			}
+			} */
 			updatedServices.push(newServiceData)
 		}
 	})

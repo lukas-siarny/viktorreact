@@ -5,11 +5,11 @@ import { ThunkResult } from '../index'
 import { SERVICES, SERVICE } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IUserAvatar, IQueryParams, ISearchablePayload } from '../../types/interfaces'
+import { IUserAvatar, ISearchableWithoutPagination } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { decodePrice, getServiceRange, normalizeQueryParams, showServiceCategory } from '../../utils/helper'
+import { decodePrice, getServiceRange, normalizeQueryParams } from '../../utils/helper'
 
 export type IServiceActions = IResetStore | IGetServices | IGetService
 
@@ -27,16 +27,14 @@ interface ServicesTableData {
 	duration: string
 	categoryFirst: string
 	categorySecond: string
-	salon: string | undefined
 }
 
-export interface IGetServicesQueryParams extends IQueryParams {
-	categoryID?: number | undefined | null
-	employeeID?: number | undefined | null
-	salonID?: number | undefined | null
+export interface IGetServicesQueryParams {
+	rootCategoryID?: number | undefined | null
+	salonID: number | undefined | null
 }
 
-export interface IServicesPayload extends ISearchablePayload<Paths.GetApiB2BAdminServices.Responses.$200> {
+export interface IServicesPayload extends ISearchableWithoutPagination<Paths.GetApiB2BAdminServices.Responses.$200> {
 	tableData: ServicesTableData[] | undefined
 }
 
@@ -47,32 +45,34 @@ export const getServices =
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) })
-			const tableData: ServicesTableData[] = data.services.map((item) => {
-				const tableItem = {
-					key: item.id,
-					serviceID: item.id,
-					name: item.category?.child?.child?.name || '-',
-					categoryFirst: item.category?.name || '-',
-					categorySecond: item.category?.child?.name || '-',
-					employees: item.employees.map((employee) => ({
-						src: employee.image?.resizedImages?.thumbnail,
-						fallBackSrc: employee.image?.original,
-						alt: `${employee.firstName} ${employee.lastName}`,
-						text: `${employee.firstName} ${employee.lastName}`,
-						key: employee.id
-					})),
-					price: getServiceRange(decodePrice(item.priceFrom), decodePrice(item.priceTo)),
-					duration: getServiceRange(item.durationFrom, item.durationTo),
-					category: (item.category.child ? showServiceCategory(item.category) : item.category.name) || '-',
-					salon: item.salon.name,
-					createdAt: item.createdAt
-				}
-				return tableItem
+			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) } as any)
+			const [categories] = data.groupedServicesByCategory
+			const tableData: ServicesTableData[] = []
+			categories?.category?.children?.forEach((secondCategory) => {
+				secondCategory?.category?.children?.forEach((thirdCategory) => {
+					const rangePriceAndDurationData = thirdCategory?.service?.rangePriceAndDurationData
+					tableData.push({
+						key: thirdCategory?.category?.id,
+						serviceID: thirdCategory?.service?.id,
+						name: thirdCategory?.category?.name || '-',
+						categoryFirst: categories?.category?.name || '-',
+						categorySecond: secondCategory?.category?.name || '-',
+						employees: thirdCategory?.service?.employees?.map((employee) => ({
+							src: employee.image?.resizedImages?.thumbnail,
+							fallBackSrc: employee.image?.original,
+							alt: `${employee.firstName} ${employee.lastName}`,
+							text: `${employee.firstName} ${employee.lastName}`,
+							key: employee.id
+						})),
+						price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo)),
+						duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo)
+					})
+				})
 			})
-			const servicesOptions = data.services.map((service) => {
+			const servicesOptions = [{ key: '', label: '', value: '' }]
+			/* const servicesOptions = data.services.map((service) => {
 				return { label: service.category.child?.child?.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
-			})
+			}) */
 			payload = {
 				data,
 				tableData,

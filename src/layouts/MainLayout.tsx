@@ -140,7 +140,7 @@ const MainLayout: FC<Props> = (props) => {
 						)
 					}
 				/>
-				<Content className='p-4 px-10'>{children}</Content>
+				<Content className='p-4 px-10 main-background'>{children}</Content>
 			</Layout>
 		</Layout>
 	)

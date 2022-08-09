@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Spin, Button, Divider, Image } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize, reset } from 'redux-form'
@@ -27,10 +26,8 @@ import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ICosmetic, ICosmeticForm } from '../../types/interfaces'
+import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns } from '../../types/interfaces'
 import { RootState } from '../../reducers'
-
-type Columns = ColumnsType<any>
 
 const CosmeticsPage = () => {
 	const [t] = useTranslation()
@@ -53,8 +50,7 @@ const CosmeticsPage = () => {
 
 	useEffect(() => {
 		dispatch(getCosmetics())
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [])
+	}, [dispatch])
 
 	const tableData = useMemo(() => {
 		if (!cosmetics || !cosmetics.data) {
@@ -197,6 +193,7 @@ const CosmeticsPage = () => {
 										onRow={(record) => ({
 											onClick: () => changeFormVisibility(true, record)
 										})}
+										loading={cosmetics.isLoading}
 									/>
 								</div>
 								{visibleForm ? (

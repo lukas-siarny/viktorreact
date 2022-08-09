@@ -30,6 +30,11 @@ import PendingInvitesPage from '../pages/PendingInvitesPage/PendingInvitesPage'
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
+// Category params
+import CategoryParamsPage from '../pages/CategoryParamsPage/CategoryParamsPage'
+import CreateCategoryParamsPage from '../pages/CategoryParamsPage/CreateCategoryParamsPage'
+import EditCategoryParamsPage from '../pages/CategoryParamsPage/EditCategoryParamsPage'
+
 // Cosmetics
 import CosmeticsPage from '../pages/CosmeticsPage/CosmeticsPage'
 
@@ -136,6 +141,33 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:categories')}
 					layout={MainLayout}
 					page={PAGE.CATEGORIES}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:category-parameters')}
+					component={CategoryParamsPage}
+					translatePathKey={t('paths:category-parameters')}
+					layout={MainLayout}
+					page={PAGE.CATEGORY_PARAMETERS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:category-parameters/create')}
+					component={CreateCategoryParamsPage}
+					translatePathKey={t('paths:category-parameters/create')}
+					layout={MainLayout}
+					page={PAGE.CATEGORY_PARAMETERS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:category-parameters/{{parameterID}}', { parameterID: ':parameterID' })}
+					component={EditCategoryParamsPage}
+					translatePathKey={t('paths:category-parameters/{{parameterID}}', { parameterID: ':parameterID' })}
+					layout={MainLayout}
+					page={PAGE.CATEGORY_PARAMETERS}
 				/>
 				<AuthRoute
 					{...props}

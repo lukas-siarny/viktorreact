@@ -6,7 +6,7 @@ import { IResetStore } from '../generalTypes'
 import { SALON, SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
-import { IQueryParams, ISearchablePayload } from '../../types/interfaces'
+import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -39,7 +39,7 @@ export interface ISalonPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 | null
 }
 
-export interface ISalonsPayload extends ISearchablePayload<Paths.GetApiB2BAdminSalons.Responses.$200> {}
+export interface ISalonsPayload extends ISearchable<Paths.GetApiB2BAdminSalons.Responses.$200> {}
 
 export const getSalons =
 	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>

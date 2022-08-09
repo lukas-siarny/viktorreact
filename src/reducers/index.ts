@@ -18,6 +18,7 @@ import employeesReducer from './employees/employeesReducer'
 import selectedSalonReducer from './selectedSalon/selectedSalonReducer'
 import supportContactReducer from './supportContacts/supportContactReducer'
 import cosmeticsReducer from './cosmetics/cosmeticsReducer'
+import categoryParamsReducer from './categoryParams/categoryParamsReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -31,7 +32,8 @@ export const REDUCER_KEYS = {
 	EMPLOYEES: 'EMPLOYEES',
 	SELECTED_SALON: 'SELECTED_SALON',
 	SUPPORT_CONTACTS: 'SUPPORT_CONTACTS',
-	COSMETICS: 'COSMETICS'
+	COSMETICS: 'COSMETICS',
+	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS'
 }
 
 const rootReducer = combineReducers({
@@ -62,6 +64,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		cosmeticsReducer
+	),
+	categoryParams: persistReducer(
+		{
+			key: REDUCER_KEYS.CATEGORY_PARAMETERS,
+			storage: storageSession
+		},
+		categoryParamsReducer
 	),
 	salons: persistReducer(
 		{

@@ -8,7 +8,7 @@ import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IQueryParams, ISearchablePayload } from '../../types/interfaces'
+import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
 
@@ -32,7 +32,7 @@ export interface IEmployeePayload {
 	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
 }
 
-export interface IEmployeesPayload extends ISearchablePayload<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
+export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
 
 export const getEmployees =
 	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IEmployeesPayload>> =>

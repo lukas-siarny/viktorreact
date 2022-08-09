@@ -25,9 +25,7 @@ import { RootState } from '../../reducers'
 import { getCustomers } from '../../reducers/customers/customerActions'
 
 // types
-import { IBreadcrumbs, ISearchFilter, SalonSubPageProps } from '../../types/interfaces'
-
-type Columns = ColumnsType<any>
+import { IBreadcrumbs, ISearchFilter, SalonSubPageProps, Columns } from '../../types/interfaces'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 

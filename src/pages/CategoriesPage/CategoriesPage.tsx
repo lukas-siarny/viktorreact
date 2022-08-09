@@ -5,7 +5,9 @@ import { Col, Row, Spin } from 'antd'
 import { compose } from 'redux'
 
 // reducers
+import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
+import { getCategoryParameters } from '../../reducers/categoryParams/categoryParamsActions'
 
 // components
 import CategoriesTree from './components/CategoriesTree'
@@ -17,7 +19,6 @@ import { withPermissions } from '../../utils/Permissions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
-import { RootState } from '../../reducers'
 
 const CategoriesPage = () => {
 	const [t] = useTranslation()
@@ -27,6 +28,7 @@ const CategoriesPage = () => {
 
 	useEffect(() => {
 		dispatch(getCategories())
+		dispatch(getCategoryParameters())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 

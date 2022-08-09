@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { StringParam, useQueryParams } from 'use-query-params'
 import { Col, Row } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
 import { initialize } from 'redux-form'
 
 // components
@@ -23,12 +22,10 @@ import { getSupportContactCountryName } from '../../utils/helper'
 import { RootState } from '../../reducers'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
+import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 // assets
 import { getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
-
-type Columns = ColumnsType<any>
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 

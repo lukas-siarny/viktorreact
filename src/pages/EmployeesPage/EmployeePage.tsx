@@ -61,7 +61,9 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	const updatedServices: any[] = []
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		const serviceData = services?.data?.groupedServicesByCategory?.find((service: any) => service?.id === serviceId)
+		// TODO - services?.data?.services
+		const test: any[] = []
+		const serviceData = test.find((service: any) => service?.id === serviceId)
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),

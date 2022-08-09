@@ -25,9 +25,7 @@ import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
-
-type Columns = ColumnsType<any>
+import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]
 

@@ -33,7 +33,8 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 
 	const handleSubmit = async (values: IServiceForm) => {
 		try {
-			const reqData = {
+			// TODO - remove c
+			/* const reqData = {
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
 				priceFrom: encodePrice(values.priceFrom),
@@ -45,8 +46,8 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 
 			// const { data } = await postReq('/api/b2b/admin/services/', undefined, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 
-			const serviceID = /* get(data, 'service.id', 0) */ 0
-			history.push(parentPath + (serviceID > 0 ? t('paths:services/{{serviceID}}', { serviceID }) : t('paths:services')))
+			const serviceID = get(data, 'service.id', 0)
+			history.push(parentPath + (serviceID > 0 ? t('paths:services/{{serviceID}}', { serviceID }) : t('paths:services'))) */
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

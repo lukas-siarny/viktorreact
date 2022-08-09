@@ -8,7 +8,7 @@ import { ThunkResult } from '../index'
 
 // utils
 import { getReq } from '../../utils/request'
-import { ILabelInValueOption } from '../../types/interfaces'
+import { ISelectOptionItem } from '../../types/interfaces'
 
 export type IRolesActions = IResetStore | IGetSystemRoles | IGetSalonRoles
 
@@ -36,7 +36,7 @@ export const getSystemRoles =
 
 			const { data } = await getReq('/api/b2b/admin/roles/system-user', null)
 
-			const parsedData: ILabelInValueOption[] = []
+			const parsedData: ISelectOptionItem[] = []
 
 			if (filterByPermission) {
 				// return only roles that current user have permission to assign them
@@ -71,12 +71,12 @@ export const getSystemRoles =
 		}
 	}
 
-export const getSalonRoles = (): ThunkResult<Promise<ILabelInValueOption[]>> => async (dispatch) => {
-	const options: ILabelInValueOption[] = []
+export const getSalonRoles = (): ThunkResult<Promise<ISelectOptionItem[]>> => async (dispatch) => {
+	const options: ISelectOptionItem[] = []
 	try {
 		dispatch({ type: SALON_ROLES.SALON_ROLES_LOAD_START })
 		const { data } = await getReq('/api/b2b/admin/roles/salon', null)
-		const parsedData: ILabelInValueOption[] = []
+		const parsedData: ISelectOptionItem[] = []
 		data.roles.forEach((role) => {
 			parsedData.push({
 				label: role?.name || '',

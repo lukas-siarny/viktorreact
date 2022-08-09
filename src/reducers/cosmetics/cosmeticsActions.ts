@@ -4,10 +4,10 @@ import { IResetStore } from '../generalTypes'
 // types
 import { COSMETICS } from './cosmeticsTypes'
 import { ThunkResult } from '../index'
+import { ISelectOptionItem, ICosmetic, ISelectable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { ISelectOptionItem, ICosmetic } from '../../types/interfaces'
 
 export type ICosmeticsActions = IResetStore | IGetCosmetics
 
@@ -16,10 +16,7 @@ interface IGetCosmetics {
 	payload: ICosmeticsPayload
 }
 
-export interface ICosmeticsPayload {
-	data: ICosmetic[] | undefined
-	enumerationsOptions: ISelectOptionItem[]
-}
+export interface ICosmeticsPayload extends ISelectable<ICosmetic[]> {}
 
 export const getCosmetics = (): ThunkResult<Promise<ICosmeticsPayload>> => async (dispatch) => {
 	let payload = {} as ICosmeticsPayload

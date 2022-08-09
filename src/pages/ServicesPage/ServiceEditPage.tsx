@@ -94,9 +94,11 @@ const ServiceEditPage = (props: Props) => {
 			history.push('/404')
 		}
 		let initData: any
-		/* if (data) {
+		console.log(data)
+		if (data) {
+			// TODO - fix init of service
 			initData = {
-				durationFrom: data?.service?.durationFrom,
+				/*	durationFrom: data?.service?.durationFrom,
 				durationTo: data?.service?.durationTo,
 				variableDuration: !!data?.service?.durationTo,
 				priceFrom: decodePrice(data?.service?.priceFrom),
@@ -105,7 +107,7 @@ const ServiceEditPage = (props: Props) => {
 				categoryRoot: data?.service?.category?.id,
 				categoryFirstLevel: data?.service?.category?.child?.id,
 				categorySecondLevel: data?.service?.category?.child?.child?.id,
-				employees: parseEmployees(data?.service?.employees)
+				employees: parseEmployees(data?.service?.employees) */
 			}
 		} */
 		dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
@@ -118,7 +120,8 @@ const ServiceEditPage = (props: Props) => {
 
 	const handleSubmit = async (values: IServiceForm) => {
 		try {
-			/* const reqData = {
+			// TODO - fix update
+			const reqData = {
 				durationFrom: values.durationFrom,
 				durationTo: values.variableDuration ? values.durationTo : undefined,
 				priceFrom: encodePrice(values.priceFrom),
@@ -126,7 +129,7 @@ const ServiceEditPage = (props: Props) => {
 				categoryID: values.categorySecondLevel,
 				employeeIDs: parseEmployeeIds(values.employees)
 			}
-			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true) */
+			// await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			dispatch(getService(serviceID))
 		} catch (e) {
 			// eslint-disable-next-line no-console

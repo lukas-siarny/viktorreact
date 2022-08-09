@@ -37,7 +37,22 @@ type Props = SalonSubPageProps & {
 }
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
 
+// create category keys
+//  keys with prefix level2 are service keys
 const getCategoryKey = (id: number, level: number) => `level${level}_${id}`
+
+// parse serviceIDs from category keys
+export const getServiceIdsFromFormValues = (values: IIndustryForm) => {
+	return values?.categoryIDs.reduce((categoryKeys, key) => {
+		if (key.startsWith('level2')) {
+			const split = key.split('_')
+			if (!Number.isNaN(split[1])) {
+				categoryKeys.push(Number(split[1]))
+			}
+		}
+		return categoryKeys
+	}, [] as number[])
+}
 
 export const getServicesCategoryKeys = (array: any[], levelOfDepth = 0) => {
 	let output: any[] = []
@@ -49,18 +64,6 @@ export const getServicesCategoryKeys = (array: any[], levelOfDepth = 0) => {
 		output = output.concat(getServicesCategoryKeys(item.category.children || [], levelOfDepth + 1))
 	})
 	return output
-}
-
-export const getServiceIdsFromFormValues = (values: IIndustryForm) => {
-	return values?.categoryIDs.reduce((categoryKeys, key) => {
-		if (key.startsWith('level2')) {
-			const split = key.split('_')
-			if (!Number.isNaN(split[1])) {
-				categoryKeys.push(Number(split[1]))
-			}
-		}
-		return categoryKeys
-	}, [] as number[])
 }
 
 const mapCategoriesForDataTree = (parentId: number | null, children: any[] | undefined, level = 0) => {
@@ -166,7 +169,7 @@ const IndustryPage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:industries')} />
 			</Row>
 			<Spin spinning={categories.isLoading || services.isLoading || submitting || isLoadingTree}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>

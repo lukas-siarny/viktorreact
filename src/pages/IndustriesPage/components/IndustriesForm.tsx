@@ -53,7 +53,8 @@ const IndustriesForm: FC<Props> = (props) => {
 			disabled: disabledForm,
 			extraAction: {
 				action: () => onShowMore(category.id),
-				label: `${t('loc:Priradiť služby')} (${selectedServices})`
+				label: `${t('loc:Priradiť služby')} (${selectedServices})`,
+				popconfirm: !pristine
 			}
 		}
 	})

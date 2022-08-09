@@ -1,6 +1,8 @@
 import React, { useCallback, useMemo } from 'react'
 import cx from 'classnames'
 import { WrappedFieldInputProps, WrappedFieldProps } from 'redux-form'
+import i18next from 'i18next'
+import PopConfirmComponent, { PopConfirmComponentProps } from '../../../components/PopConfirmComponent'
 
 export type CheckboxOption = {
 	id: string
@@ -13,6 +15,8 @@ export type CheckboxOption = {
 		action: () => void
 		disabled?: boolean
 		icon?: React.ReactNode
+		popconfirm?: boolean
+		popconfirmProps?: PopConfirmComponentProps
 	}
 }
 
@@ -51,6 +55,29 @@ const CheckboxGroupImageField = (props: Props) => {
 
 	const errorMsg = error && touched ? error : undefined
 
+	const getExtraActionButton = useCallback((option: CheckboxOption) => {
+		return option.extraAction?.popconfirm ? (
+			<PopConfirmComponent
+				placement={'bottom'}
+				title={i18next.t('loc:Vo formulári máte neuložené zmeny. Želáte si pokračovať ďalej?')}
+				onConfirm={option.extraAction?.action}
+				okText={i18next.t('loc:Pokračovať')}
+				{...(option.extraAction?.popconfirmProps || {})}
+				allowedButton={
+					<button type={'button'} disabled={option.extraAction.disabled || option.disabled}>
+						{option.extraAction.icon}
+						{option.extraAction.label}
+					</button>
+				}
+			/>
+		) : (
+			<button type={'button'} onClick={option.extraAction?.action} disabled={option.extraAction?.disabled || option.disabled}>
+				{option.extraAction?.icon}
+				{option.extraAction?.label}
+			</button>
+		)
+	}, [])
+
 	return (
 		<>
 			<fieldset className={'checkbox-group-image-wrapper'}>
@@ -66,12 +93,7 @@ const CheckboxGroupImageField = (props: Props) => {
 									<span className={'label'}>{option.label}</span>
 								</div>
 							</label>
-							{option.extraAction && (
-								<button type={'button'} onClick={option.extraAction.action} disabled={option.extraAction.disabled || option.disabled}>
-									{option.extraAction.icon}
-									{option.extraAction.label}
-								</button>
-							)}
+							{option.extraAction && getExtraActionButton(option)}
 						</div>
 					)
 				})}

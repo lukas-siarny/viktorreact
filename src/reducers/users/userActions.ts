@@ -5,7 +5,7 @@ import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem, IQueryParams, IPermissions, ISearchable } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IPermissions } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS, PENDING_INVITES } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'

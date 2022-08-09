@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
+import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Row, Tree, Divider, notification } from 'antd'
@@ -73,7 +73,7 @@ const CategoriesTree = () => {
 
 	const updateCategoryHandler = useCallback(
 		(node) => {
-			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted } = node
+			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted, categoryParameterID } = node
 			setShowForm(true)
 			const formData = {
 				id,
@@ -84,7 +84,8 @@ const CategoriesTree = () => {
 				level,
 				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
 				deletedAt,
-				isParentDeleted
+				isParentDeleted,
+				categoryParameterID: categoryParameterID ? { label: categoryParameterID.name, value: categoryParameterID.id } : undefined
 			}
 			dispatch(initialize(FORM.CATEGORY, formData))
 			setLastOpenedNode(formData)
@@ -137,6 +138,7 @@ const CategoriesTree = () => {
 				parentId,
 				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1, !!get(child, 'deletedAt')) : null,
 				nameLocalizations: get(child, 'nameLocalizations'),
+				categoryParameterID: get(child, 'categoryParameter'),
 				level,
 				index,
 				image: get(child, 'image'),
@@ -160,6 +162,7 @@ const CategoriesTree = () => {
 				disabled: !!get(category, 'deletedAt'),
 				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[], 1, !!get(category, 'deletedAt')) : null,
 				nameLocalizations: get(category, 'nameLocalizations'),
+				categoryParameterID: get(category, 'categoryParameter'),
 				level,
 				index,
 				image: get(category, 'image'),
@@ -274,8 +277,9 @@ const CategoriesTree = () => {
 			let body: any = {
 				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
-				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid'),
-				iconID: get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')
+				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
+				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,
+				categoryParameterID: formData.categoryParameterID ?? undefined
 			}
 
 			if (formData.id && formData.id >= 0) {

@@ -196,7 +196,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				zipCode: salonData?.address?.zipCode || null,
 				country: salonData?.address?.countryCode || null,
 				streetNumber: salonData?.address?.streetNumber || null,
-				description: salonData?.address?.description || null,
+				// TODO - remove description
+				description: '' || null,
 				parkingNote: salonData?.parkingNote || null,
 				companyContactPerson: {
 					email: salonData?.companyContactPerson?.email || null,
@@ -253,7 +254,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						streetNumber: salonData?.publishedSalonData?.address?.streetNumber || null,
 						latitude: salonData?.publishedSalonData?.address?.latitude ?? null,
 						longitude: salonData?.publishedSalonData?.address?.longitude ?? null,
-						description: salonData?.publishedSalonData?.address?.description || null
+						// TODO - remove description
+						description: '' || null
 					},
 					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
 					logo: salonData?.publishedSalonData?.logo

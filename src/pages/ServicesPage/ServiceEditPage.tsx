@@ -24,6 +24,18 @@ import { decodePrice, encodePrice } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
 
+interface IParameterValue {
+	id: number
+	name: string
+	durationFrom: number | null | undefined
+	durationTo: number | null | undefined
+	variableDuration: boolean
+	priceFrom: number | null | undefined
+	priceTo: number | null | undefined
+	variablePrice: boolean
+	useParameter: boolean
+}
+
 type Props = SalonSubPageProps & {
 	serviceID: number
 	salonID: number
@@ -31,8 +43,26 @@ type Props = SalonSubPageProps & {
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-export const parseEmployeeIds = (employees: any[]) => {
+export const parseEmployeeCreateAndUpdate = (employees: any[]): any => {
 	return employees?.map((employee: any) => employee?.id)
+}
+
+export const parseParameterValuesCreateAndUpdate = (values: any[]): any => {
+	const result: any[] = []
+	values?.forEach((value: any) => {
+		if (value?.useParameter) {
+			result.push({
+				id: value?.id,
+				priceAndDurationData: {
+					durationFrom: value?.durationFrom,
+					durationTo: value?.variableDuration ? value?.durationTo : undefined,
+					priceFrom: encodePrice(value?.priceFrom),
+					priceTo: value?.variablePrice ? encodePrice(value?.priceTo) : undefined
+				}
+			})
+		}
+	})
+	return result
 }
 
 export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
@@ -65,18 +95,39 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 	dispatch(change(FORM.SERVICE_FORM, 'employee', null))
 }
 
-const parseEmployees = (employees: any[]) => {
+const parseParameterValuesInit = (values: any): IParameterValue[] => {
+	return values.map((value: any) => {
+		const durationFrom = value?.priceAndDurationData?.durationFrom
+		const durationTo = value?.priceAndDurationData?.durationTo
+		const priceFrom = decodePrice(value?.priceAndDurationData?.priceFrom)
+		const priceTo = decodePrice(value?.priceAndDurationData?.priceTo)
+		return {
+			id: value?.id,
+			name: value?.value,
+			durationFrom,
+			durationTo,
+			variableDuration: !!value?.priceAndDurationData?.durationTo,
+			priceFrom,
+			priceTo,
+			variablePrice: !!value?.priceAndDurationData?.priceTo,
+			useParameter: !!(durationFrom && priceFrom)
+		}
+	})
+}
+
+const parseEmployeesInit = (employees: any[]) => {
 	return employees.map((employee) => {
 		return {
 			id: employee?.id,
 			name: employee?.fullName,
 			image: employee?.image,
-			employeeData: {
-				...employee.employeeData,
-				// decode and set price
-				priceFrom: decodePrice(employee?.employeeData?.priceFrom),
-				priceTo: decodePrice(employee?.employeeData?.priceTo)
-			}
+			durationFrom: employee.priceAndDurationData?.durationFrom,
+			durationTo: employee.priceAndDurationData?.durationFrom,
+			priceFrom: decodePrice(employee.priceAndDurationData?.priceFrom),
+			priceTo: decodePrice(employee.priceAndDurationData?.priceTo),
+			variableDuration: !!employee?.priceAndDurationData?.durationTo,
+			variablePrice: !!employee?.priceAndDurationData?.priceTo,
+			serviceCategoryParameter: parseParameterValuesInit(employee?.serviceCategoryParameter?.values)
 		}
 	})
 }
@@ -94,20 +145,18 @@ const ServiceEditPage = (props: Props) => {
 			history.push('/404')
 		}
 		let initData: any
-		console.log(data)
 		if (data) {
-			// TODO - fix init of service
 			initData = {
-				/*	durationFrom: data?.service?.durationFrom,
-				durationTo: data?.service?.durationTo,
-				variableDuration: !!data?.service?.durationTo,
-				priceFrom: decodePrice(data?.service?.priceFrom),
-				priceTo: decodePrice(data?.service?.priceTo),
-				variablePrice: !!data?.service?.priceTo,
-				categoryRoot: data?.service?.category?.id,
-				categoryFirstLevel: data?.service?.category?.child?.id,
-				categorySecondLevel: data?.service?.category?.child?.child?.id,
-				employees: parseEmployees(data?.service?.employees) */
+				id: data.service.id,
+				serviceCategoryParameter: parseParameterValuesInit(data.service.serviceCategoryParameter?.values),
+				durationFrom: data.service.priceAndDurationData.durationFrom,
+				durationTo: data.service.priceAndDurationData.durationTo,
+				variableDuration: !!data.service.priceAndDurationData.durationTo,
+				priceFrom: decodePrice(data.service.priceAndDurationData.priceFrom),
+				priceTo: decodePrice(data.service.priceAndDurationData.priceTo),
+				variablePrice: !!data.service.priceAndDurationData.priceTo,
+				employees: parseEmployeesInit(data?.service?.employees),
+				useCategoryParameter: data.service.useCategoryParameter
 			}
 		}
 		dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
@@ -120,16 +169,22 @@ const ServiceEditPage = (props: Props) => {
 
 	const handleSubmit = async (values: IServiceForm) => {
 		try {
-			// TODO - fix update
 			const reqData = {
-				durationFrom: values.durationFrom,
-				durationTo: values.variableDuration ? values.durationTo : undefined,
-				priceFrom: encodePrice(values.priceFrom),
-				priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined,
-				categoryID: values.categorySecondLevel,
-				employeeIDs: parseEmployeeIds(values.employees)
+				useCategoryParameter: values.useCategoryParameter,
+				noteForPriceAndDuration: undefined,
+				// set null if useCategoryParameter is true
+				priceAndDurationData: values.useCategoryParameter
+					? null
+					: {
+							durationFrom: values.durationFrom,
+							durationTo: values.variableDuration ? values.durationTo : undefined,
+							priceFrom: encodePrice(values.priceFrom),
+							priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined
+					  },
+				categoryParameterValues: parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter),
+				employeeIDs: parseEmployeeCreateAndUpdate(values.employees)
 			}
-			// await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData as any, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			dispatch(getService(serviceID))
 		} catch (e) {
 			// eslint-disable-next-line no-console

@@ -196,6 +196,11 @@ export enum PAGE {
 	PENDING_INVITES = 'PENDING_INVITES'
 }
 
+export enum PARAMETER_TYPE {
+	ENUM = 'ENUM',
+	TIME = 'TIME'
+}
+
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
 
 export const DEFAULT_DATE_INIT_FORMAT = 'YYYY-MM-DD'

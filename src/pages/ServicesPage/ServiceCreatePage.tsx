@@ -6,7 +6,7 @@ import { compose } from 'redux'
 
 // components
 import ServiceForm from './components/ServiceForm'
-import { addEmployee, parseEmployeeIds } from './ServiceEditPage'
+import { addEmployee, parseEmployeeCreateAndUpdate } from './ServiceEditPage'
 
 // types
 import { IServiceForm, SalonSubPageProps } from '../../types/interfaces'

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 // components
 import i18next from 'i18next'
 import CheckboxGroupImageField from './CheckboxGroupImageField'
+import { getServicesCategoryKeys } from '../IndustryPage'
 
 // validate
 import validateCategoryFrom from './validateIndustriesFrom'
@@ -24,7 +25,6 @@ import { IIndustriesForm } from '../../../types/interfaces'
 
 // assets
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
-import { getServicesCategoryKeys } from '../IndustryPage'
 
 type ComponentProps = {
 	selectedCategoryIDs?: number[]

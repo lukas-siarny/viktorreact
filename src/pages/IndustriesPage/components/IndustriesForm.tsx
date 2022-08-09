@@ -54,9 +54,6 @@ const IndustriesForm: FC<Props> = (props) => {
 			extraAction: {
 				action: () => onShowMore(category.id),
 				label: `${t('loc:Priradiť služby')} (${selectedServices})`
-				// disabled: !((selectedCategoryIDs || []).includes(category.id) && (values?.categoryIDs || []).includes(category.id))
-				// disabled: !(values?.categoryIDs || []).includes(category.id)
-				// disabled: !(selectedCategoryIDs || []).includes(category.id)
 			}
 		}
 	})

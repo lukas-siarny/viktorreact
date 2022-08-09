@@ -6,6 +6,7 @@ import { compose } from 'redux'
 import { getFormValues, initialize, isSubmitting } from 'redux-form'
 import { DataNode } from 'antd/lib/tree'
 import { isEmpty, map } from 'lodash'
+import i18next from 'i18next'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
@@ -20,14 +21,15 @@ import IndustryForm from './components/IndustryForm'
 import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
+import { flattenTree } from '../../utils/helper'
 
 // types
-import { IBreadcrumbs, IIndustryForm, SalonSubPageProps, IComputedMatch, IIndustriesForm } from '../../types/interfaces'
+import { IBreadcrumbs, IIndustryForm, SalonSubPageProps, IComputedMatch } from '../../types/interfaces'
 import { NestedMultiselectDataItem } from './components/CheckboxGroupNestedField'
 
 // assets
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
-import { flattenTree } from '../../utils/helper'
+import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ industryID: number }>
@@ -59,12 +61,44 @@ export const getServiceIdsFromFormValues = (values: IIndustryForm) => {
 	}, [] as number[])
 }
 
+/* const getTreeNodeStyle = (level: number): React.CSSProperties | undefined => {
+	switch (level) {
+		case 0:
+			return {
+				flexDirection: 'row-reverse'
+			}
+		case 1:
+			return {
+				flexDirection: 'row-reverse',
+				fontWeight: 700,
+				fontSize: 16
+			}
+		case 2:
+			return {
+				background: '#F5F5F5',
+				flexDirection: 'row-reverse',
+				borderRadius: 4,
+				margin: '1px 0 1px 0'
+			}
+		default:
+			return undefined
+	}
+} */
+
 const mapCategoriesForDataTree = (parentId: number | null, children: any[] | undefined, level = 0) => {
 	const childs: NestedMultiselectDataItem[] & any = children
 	const items: DataNode[] = map(childs, (child, index) => {
 		return {
+			className: `noti-tree-node-${level}`,
+			// style: getTreeNodeStyle(level),
+			switcherIcon: (props) => {
+				if (level !== 1) {
+					return undefined
+				}
+				return props?.expanded ? <ChevronDown style={{ transform: 'rotate(180deg)' }} /> : <ChevronDown />
+			},
 			id: child.id,
-			title: child.name,
+			title: level === 0 ? i18next.t('loc:Vybrať všetky služby odevetvia') : child.name,
 			key: getCategoryKey(child.id, level),
 			disabled: false,
 			parentId,
@@ -92,8 +126,8 @@ const IndustryPage = (props: Props) => {
 	const rootUserCategory = services?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
 
 	// https://ant.design/components/tree/#Note - nastava problem, ze pokial nie je vygenerovany strom, tak sa vyrendruje collapsnuty, aj ked je nastavena propa defaultExpandAll
-	// preto sa setuje cez state az po tom, co su dostupne data (vid useEffect nizzsie)
-	// cize pokial je null, znamena ze strom este nebol vygenerovany
+	// preto sa setuje cez state az po tom, co sa vytvoria data pre strom (vid useEffect nizzsie)
+	// cize pokial je null, znamena ze strom este nebol vygenerovany a zobrazuje sa loading state
 	const [dataTree, setDataTree] = useState<DataNode[] | null>(null)
 	const isLoadingTree = dataTree === null
 
@@ -170,7 +204,7 @@ const IndustryPage = (props: Props) => {
 								{t('loc:Priradiť služby')}
 							</h3>
 							<Divider className={'mb-3 mt-3'} />
-							<header className={'category-select-header'}>
+							<header className={'category-select-header mb-4'}>
 								<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.original}")` }} />
 								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
 								<span className={'label'}>{rootCategory?.name}</span>

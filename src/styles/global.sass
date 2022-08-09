@@ -1184,17 +1184,16 @@ span.ant-tag
 			&::before
 				display: inline-block
 				margin-right: 4px
-				color: #ff4d4f
+				color: #ff4d4f // interna antd farba ktora sa nenachadza v nasej palete
 				font-size: 14px
 				font-family: SimSun,sans-serif
 				line-height: 1
 				content: "*"
 
 .checkbox-with-image
-	// width: 24%
-	// min-width: 160px
-	// max-width: 180px
-	width: 160px
+	width: 23%
+	min-width: 160px
+	max-width: 220px
 	margin-bottom: 16px
 
 	label
@@ -1329,18 +1328,19 @@ span.ant-tag
 		label
 			.inner-wrapper
 				.checker
-					border-color: #ff4d4f
+					border-color: $borderColor-notino-red
 
 .category-select-header
 	background-color: $backgroundColor-notino-black
 	padding: 24px
+	min-height: 160px
 	overflow: hidden
 	border-radius: 16px
 	position: relative
 	width: 100%
 	display: flex
 	flex-direction: column
-	justify-content: center
+	justify-content: space-between
 
 	.image
 		position: absolute
@@ -1372,10 +1372,80 @@ span.ant-tag
 		position: relative
 		z-index: 4
 		color: $textColor-notino-white
-		font-size: 20px
+		font-size: 24px
 		font-weight: 500
 		max-width: 80%
 
 	.count
 		color: $textColor-notino-gray
 		font-size: 14px
+
+.noti-services-tree
+	.ant-tree-list
+		.ant-tree-list-holder
+			.ant-tree-list-holder-inner
+				.ant-tree-treenode
+					flex-direction: row-reverse
+					align-items: stretch
+					.ant-tree-checkbox
+						display: flex
+						flex-direction: column
+						justify-content: center
+						.ant-tree-checkbox-inner
+							border-radius: 50%
+							width: 20px
+							height: 20px
+							background: $backgroundColor-notino-white
+							border: 1px solid $borderColor-notino-gray
+						&.ant-tree-checkbox-indeterminate
+							.ant-tree-checkbox-inner
+								&::after
+									width: 12px
+									height: 12px
+									border-radius: 50%
+									background: $backgroundColor-notino-pink
+						&.ant-tree-checkbox-checked
+							.ant-tree-checkbox-inner
+								border-radius: 50%
+								width: 20px
+								height: 20px
+								background: $backgroundColor-notino-pink
+								border: 1px solid $borderColor-notino-pink
+								&::after
+									left: 5px
+							&::after
+								border: none
+							&:hover
+								outline: none
+					.ant-tree-node-content-wrapper
+						padding: 8px
+					.ant-tree-indent
+						display: none
+					&:hover
+						.ant-tree-checkbox
+							.ant-tree-checkbox-inner
+								border-color: $backgroundColor-notino-pink
+					&.noti-tree-node-0
+						.ant-tree-switcher
+							display: none
+					&.noti-tree-node-1
+						position: relative
+						font-weight: 700
+						font-size: 16px
+						padding-left: 16px
+						.ant-tree-switcher
+							position: absolute
+							left: 0
+							top: 50%
+							transform: translateY(-50%)
+					&.noti-tree-node-2
+						margin: 1px 0 1px 16px
+						border-radius: 4px
+						background: $backgroundColor-trueGray-100
+						transition: background 300ms ease
+						.ant-tree-switcher
+							display: none
+						&:hover
+							background: $backgroundColor-trueGray-200
+						&.ant-tree-treenode-checkbox-checked
+							background: $backgroundColor-trueGray-200

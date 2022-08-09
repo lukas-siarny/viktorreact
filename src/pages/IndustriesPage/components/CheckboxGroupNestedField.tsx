@@ -38,7 +38,21 @@ const CheckboxGroupNestedField = (props: Props) => {
 		input.onChange(checked)
 	}
 
-	return <Tree checkable blockNode onCheck={onCheck} checkedKeys={input.value} selectable={false} treeData={dataTree} defaultExpandAll />
+	return (
+		<Tree
+			className={'noti-services-tree'}
+			checkable
+			blockNode
+			onCheck={onCheck}
+			checkedKeys={input.value}
+			selectable={false}
+			treeData={dataTree}
+			defaultExpandAll
+			// animacie su disabled, pretoze pri zatvarani a otvarani sposobju problemy so stylmi a performance
+			// styly, ktore su definovane cez react style proporety (v dataTree pre jednotlive nody) funguju ok, ale styly definovane v nasom cssku sa aplikuju az po dokonceni otvaracej / zatvaracej animacie
+			motion={null}
+		/>
+	)
 }
 
 export default CheckboxGroupNestedField

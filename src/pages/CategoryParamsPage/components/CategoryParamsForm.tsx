@@ -181,6 +181,15 @@ const CategoryParamsForm: FC<Props> = (props) => {
 			</Space>
 			<div className={'content-footer pt-0'}>
 				<Row className={`w-full ${onDelete ? 'justify-between' : 'justify-center'}`}>
+					{onDelete && (
+						<DeleteButton
+							className={'mt-2-5 w-52 xl:w-60'}
+							onConfirm={onDelete}
+							entityName={t('loc:parameter')}
+							type={'default'}
+							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+						/>
+					)}
 					<Button
 						type={'primary'}
 						block
@@ -192,15 +201,6 @@ const CategoryParamsForm: FC<Props> = (props) => {
 					>
 						{onDelete ? STRINGS(t).save(entityName) : STRINGS(t).createRecord(entityName)}
 					</Button>
-					{onDelete && (
-						<DeleteButton
-							className={'mt-2-5 w-52 xl:w-60'}
-							onConfirm={onDelete}
-							entityName={t('loc:parameter')}
-							type={'default'}
-							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-						/>
-					)}
 				</Row>
 			</div>
 		</Form>

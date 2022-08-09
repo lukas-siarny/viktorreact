@@ -2,20 +2,29 @@
 import { IResetStore } from '../generalTypes'
 
 // types
-import { CATEGORY_PARAMETERS } from './categoryParamsTypes'
+import { CATEGORY_PARAMETERS, CATEGORY_PARAMETER } from './categoryParamsTypes'
 import { ThunkResult } from '../index'
-import { ISelectOptionItem, ICategoryParameters, ISelectable } from '../../types/interfaces'
+import { ISelectOptionItem, ICategoryParameters, ISelectable, ICategoryParameter } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
 
-export type ICategoryParametersActions = IResetStore | IGetCategoryParameters
+export type ICategoryParametersActions = IResetStore | IGetCategoryParameters | IGetCategoryParameter
 
 export interface IParametersPayload extends ISelectable<ICategoryParameters> {}
 
 interface IGetCategoryParameters {
 	type: CATEGORY_PARAMETERS
 	payload: IParametersPayload
+}
+
+export interface IParameterPayload {
+	data?: ICategoryParameter
+}
+
+interface IGetCategoryParameter {
+	type: CATEGORY_PARAMETER
+	payload: IParameterPayload
 }
 
 export const getCategoryParameters = (): ThunkResult<Promise<IParametersPayload>> => async (dispatch) => {
@@ -50,3 +59,26 @@ export const getCategoryParameters = (): ThunkResult<Promise<IParametersPayload>
 
 	return payload
 }
+
+export const getCategoryParameter =
+	(parameterID: number): ThunkResult<Promise<IParameterPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IParameterPayload
+
+		try {
+			dispatch({ type: CATEGORY_PARAMETER.CATEGORY_PARAMETER_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID })
+
+			payload = {
+				data: data.categoryParameter
+			}
+
+			dispatch({ type: CATEGORY_PARAMETER.CATEGORY_PARAMETER_LOAD_DONE, payload })
+		} catch (error) {
+			dispatch({ type: CATEGORY_PARAMETER.CATEGORY_PARAMETER_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(error)
+		}
+		return payload
+	}

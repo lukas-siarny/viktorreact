@@ -109,7 +109,7 @@ const ServiceEditPage = (props: Props) => {
 				categorySecondLevel: data?.service?.category?.child?.child?.id,
 				employees: parseEmployees(data?.service?.employees) */
 			}
-		} */
+		}
 		dispatch(initialize(FORM.SERVICE_FORM, initData || {}))
 	}
 

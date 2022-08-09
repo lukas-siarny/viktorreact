@@ -24,6 +24,9 @@ import { patchReq } from '../../utils/request'
 
 // types
 import { IBreadcrumbs, IIndustriesForm, SalonSubPageProps } from '../../types/interfaces'
+import { Paths } from '../../types/api'
+
+type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody
 
 const IndustriesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
@@ -73,13 +76,9 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 
 	const handleSubmit = async (values: IIndustriesForm) => {
 		try {
-			await patchReq(
-				'/api/b2b/admin/salons/{salonID}/categories',
-				{ salonID },
-				{
-					categoryIDs: values.categoryIDs as [number, ...number[]]
-				}
-			)
+			await patchReq('/api/b2b/admin/salons/{salonID}/categories', { salonID }, {
+				categoryIDs: values.categoryIDs
+			} as CategoriesPatch)
 			dispatch(getServices({ salonID }))
 		} catch (e) {
 			// eslint-disable-next-line no-console

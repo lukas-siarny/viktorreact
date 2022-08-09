@@ -112,7 +112,7 @@ const SalonSubRoutes: FC = () => {
 				page={PAGE.CUSTOMERS}
 			/>
 			{/* SERVICES */}
-			{/* <AuthRoute
+			<AuthRoute
 				exact
 				path={getPath(t('paths:services'))}
 				component={ServicesPage}
@@ -141,7 +141,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.SERVICES}
-			/> */}
+			/>
 			{/* EMPLOYEES */}
 			<AuthRoute
 				exact

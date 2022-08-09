@@ -16,6 +16,7 @@ import { getServices } from '../../reducers/services/serviceActions'
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import IndustryForm from './components/IndustryForm'
+import { NestedMultiselectDataItem } from './components/CheckboxGroupNestedField'
 
 // utils
 import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM } from '../../utils/enums'
@@ -25,7 +26,7 @@ import { flattenTree } from '../../utils/helper'
 
 // types
 import { IBreadcrumbs, IIndustryForm, SalonSubPageProps, IComputedMatch } from '../../types/interfaces'
-import { NestedMultiselectDataItem } from './components/CheckboxGroupNestedField'
+import { Paths } from '../../types/api'
 
 // assets
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
@@ -34,6 +35,7 @@ import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.s
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ industryID: number }>
 }
+type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
 
 const getCategoryKey = (id: number, level: number) => `level${level}_${id}`
 
@@ -61,36 +63,11 @@ export const getServiceIdsFromFormValues = (values: IIndustryForm) => {
 	}, [] as number[])
 }
 
-/* const getTreeNodeStyle = (level: number): React.CSSProperties | undefined => {
-	switch (level) {
-		case 0:
-			return {
-				flexDirection: 'row-reverse'
-			}
-		case 1:
-			return {
-				flexDirection: 'row-reverse',
-				fontWeight: 700,
-				fontSize: 16
-			}
-		case 2:
-			return {
-				background: '#F5F5F5',
-				flexDirection: 'row-reverse',
-				borderRadius: 4,
-				margin: '1px 0 1px 0'
-			}
-		default:
-			return undefined
-	}
-} */
-
 const mapCategoriesForDataTree = (parentId: number | null, children: any[] | undefined, level = 0) => {
 	const childs: NestedMultiselectDataItem[] & any = children
 	const items: DataNode[] = map(childs, (child, index) => {
 		return {
 			className: `noti-tree-node-${level}`,
-			// style: getTreeNodeStyle(level),
 			switcherIcon: (props) => {
 				if (level !== 1) {
 					return undefined
@@ -172,14 +149,10 @@ const IndustryPage = (props: Props) => {
 		const categoryIDs = getServiceIdsFromFormValues(values)
 
 		try {
-			await patchReq(
-				'/api/b2b/admin/salons/{salonID}/services',
-				{ salonID },
-				{
-					rootCategoryID: industryID,
-					categoryIDs
-				}
-			)
+			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID }, {
+				rootCategoryID: industryID,
+				categoryIDs
+			} as CategoriesPatch)
 			dispatch(getServices({ salonID }))
 		} catch (e) {
 			// eslint-disable-next-line no-console

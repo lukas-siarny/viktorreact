@@ -697,8 +697,7 @@ export const showServiceCategory = (category: any): string | undefined => {
 	if (category?.child) {
 		return category.child.name
 	}
-	return category?.name */
-	return undefined
+	return category?.name
 }
 
 /**

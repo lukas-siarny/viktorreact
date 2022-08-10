@@ -83,33 +83,15 @@ const LanguagesPage = () => {
 			: languages.data
 
 		// transform to table data
-		return source
-			.map((lang) => {
-				const fallbackName = lang.nameLocalizations.find((localization) => localization.language === DEFAULT_LANGUAGE)
+		return source.map((lang) => {
+			const fallbackName = lang.nameLocalizations.find((localization) => localization.language === DEFAULT_LANGUAGE)
 
-				return {
-					...lang,
-					name: lang.name || fallbackName?.value,
-					key: lang.id
-				}
-			})
-			.sort((a, b) => {
-				const nameA = a.name?.toUpperCase()
-				const nameB = b.name?.toUpperCase()
-
-				if (!nameA || !nameB) {
-					return 0
-				}
-
-				if (nameA < nameB) {
-					return -1
-				}
-				if (nameA > nameB) {
-					return 1
-				}
-
-				return 0
-			})
+			return {
+				...lang,
+				name: lang.name || fallbackName?.value,
+				key: lang.id
+			}
+		})
 	}, [query.search, languages])
 
 	const changeFormVisibility = (show?: boolean, lang?: ILanguage) => {
@@ -172,7 +154,27 @@ const LanguagesPage = () => {
 			title: t('loc:Názov'),
 			dataIndex: 'name',
 			key: 'name',
-			ellipsis: true
+			ellipsis: true,
+			sorter: {
+				compare: (a, b) => {
+					const nameA = a.name?.toUpperCase()
+					const nameB = b.name?.toUpperCase()
+
+					if (!nameA || !nameB) {
+						return 0
+					}
+
+					if (nameA < nameB) {
+						return -1
+					}
+					if (nameA > nameB) {
+						return 1
+					}
+
+					return 0
+				},
+				multiple: 1
+			}
 		},
 		{
 			title: t('loc:Vlajka'),

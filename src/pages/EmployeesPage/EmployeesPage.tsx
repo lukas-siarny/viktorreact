@@ -112,12 +112,16 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			sorter: true,
 			sortOrder: setOrder(query.order, 'lastName'),
 			width: '25%',
-			render: (_value, record) => (
-				<>
-					<UserAvatar className='mr-2-5 w-7 h-7' src={record?.image?.resizedImages?.thumbnail} fallBackSrc={record?.image?.original} />
-					{record?.firstName || record?.lastName ? `${record?.firstName} ${record?.lastName}`.trim() : '-'}
-				</>
-			)
+			render: (_value, record) => {
+				const source = record.firstName || record.lastName ? record : record.user
+
+				return (
+					<>
+						<UserAvatar className='mr-2-5 w-7 h-7' src={source?.image?.resizedImages?.thumbnail} fallBackSrc={source?.image?.original} />
+						{source?.firstName || source?.lastName ? `${source?.firstName} ${source?.lastName}`.trim() : '-'}
+					</>
+				)
+			}
 		},
 		{
 			title: t('loc:Email'),
@@ -125,7 +129,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			key: 'email',
 			ellipsis: true,
 			width: '20%',
-			render: (value) => value || '-'
+			render: (value, record) => value || record.user?.email || '-'
 		},
 		{
 			title: t('loc:Pozvánkový email'),
@@ -142,7 +146,11 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			ellipsis: true,
 			sorter: false,
 			width: '15%',
-			render: (value, record) => <>{value && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${value}` : '-'}</>
+			render: (value, record) => {
+				const source = value ? record : record.user
+
+				return <>{source?.phone && prefixOptions[source?.phonePrefixCountryCode] ? `${prefixOptions[source?.phonePrefixCountryCode]} ${source.phone}` : '-'}</>
+			}
 		},
 		{
 			title: t('loc:Služby'),

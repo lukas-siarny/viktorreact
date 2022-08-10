@@ -87,7 +87,7 @@ const SalonForm: FC<Props> = (props) => {
 		return (
 			<div className='flex items-center'>
 				{label}
-				{flag && <img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />}
+				{flag && <img className='noti-flag w-6 h-4 mr-1 rounded object-scale-down object-left' src={flag} alt={value} />}
 			</div>
 		)
 	}

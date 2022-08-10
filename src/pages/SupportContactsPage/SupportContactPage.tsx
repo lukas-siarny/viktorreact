@@ -32,6 +32,7 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
+import useBackUrl from '../../hooks/useBackUrl'
 
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
@@ -67,6 +68,8 @@ const SupportContactPage: FC<Props> = (props) => {
 	const isLoading = supportContact.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving
 
 	const supportContactExists = supportContactID > 0
+
+	const [backUrl] = useBackUrl(t('paths:support-contacts'))
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -229,7 +232,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		items: [
 			{
 				name: t('loc:Zoznam podporných centier'),
-				link: t('paths:support-contacts')
+				link: backUrl
 			},
 			breadcrumbDetailItem
 		]

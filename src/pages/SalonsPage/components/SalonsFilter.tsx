@@ -23,7 +23,7 @@ import { ReactComponent as CloseIcon12 } from '../../../assets/icons/close-12.sv
 
 // utils
 import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
-import { getEncodedBackUrl, validationString } from '../../../utils/helper'
+import { getLinkWithEncodedBackUrl, validationString } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
 
@@ -148,7 +148,7 @@ const SalonsFilter = (props: Props) => {
 						<Button
 							onClick={() => {
 								if (hasPermission) {
-									history.push(`${t('paths:salons/create')}?backUrl=${getEncodedBackUrl()}`)
+									history.push(getLinkWithEncodedBackUrl(t('paths:salons/create')))
 								} else {
 									openForbiddenModal()
 								}

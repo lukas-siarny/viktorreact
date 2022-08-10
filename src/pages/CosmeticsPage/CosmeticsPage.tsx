@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin, Button, Divider, Image } from 'antd'
+import { Col, Row, Spin, Button, Divider, Image, TablePaginationConfig } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize, reset } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
+import { StringParam, withDefault, useQueryParams } from 'use-query-params'
 
 // components
+import { SorterResult } from 'antd/lib/table/interface'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import CosmeticForm from './components/CosmeticForm'
@@ -17,7 +19,7 @@ import CosmeticsFilter from './components/CosmeticsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, sortTableData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
@@ -34,11 +36,15 @@ const CosmeticsPage = () => {
 	const dispatch = useDispatch()
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
-	const [filterQuery, setFilterQuery] = useState<string | undefined>(undefined)
 	// 0 - represents new record
 	const [cosmeticID, setCosmeticID] = useState<number>(0)
 
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
+
+	const [query, setQuery] = useQueryParams({
+		search: StringParam,
+		order: withDefault(StringParam, 'name:ASC')
+	})
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -52,16 +58,24 @@ const CosmeticsPage = () => {
 		dispatch(getCosmetics())
 	}, [dispatch])
 
+	useEffect(() => {
+		dispatch(
+			initialize(FORM.COSMETICS_FILTER, {
+				search: query.search
+			})
+		)
+	}, [dispatch, query.search])
+
 	const tableData = useMemo(() => {
 		if (!cosmetics || !cosmetics.data) {
 			return []
 		}
 
-		const source = filterQuery
+		const source = query.search
 			? cosmetics.data.filter((cosmetic) => {
 					const name = transformToLowerCaseWithoutAccent(cosmetic.name)
-					const query = transformToLowerCaseWithoutAccent(filterQuery)
-					return name.includes(query)
+					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
+					return name.includes(searchedValue)
 			  })
 			: cosmetics.data
 
@@ -70,7 +84,7 @@ const CosmeticsPage = () => {
 			...cosmetic,
 			key: cosmetic.id
 		}))
-	}, [filterQuery, cosmetics])
+	}, [query.search, cosmetics])
 
 	const changeFormVisibility = (show?: boolean, cosmetic?: ICosmetic) => {
 		if (!show) {
@@ -92,6 +106,17 @@ const CosmeticsPage = () => {
 
 		setCosmeticID(cosmetic ? cosmetic.id : 0)
 		setVisibleForm(true)
+	}
+
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+		if (!(sorter instanceof Array)) {
+			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
+			const newQuery = {
+				...query,
+				order
+			}
+			setQuery(newQuery)
+		}
 	}
 
 	const handleSubmit = async (formData: ICosmeticForm) => {
@@ -127,26 +152,33 @@ const CosmeticsPage = () => {
 
 	const columns: Columns = [
 		{
-			title: t('loc:Logo'),
-			dataIndex: 'image',
-			key: 'image',
-			render: (value, record) => (
-				<Image
-					src={record?.image?.resizedImages.thumbnail as string}
-					loading='lazy'
-					fallback={record?.image?.original}
-					alt={record?.name}
-					preview={false}
-					className='cosmetics-logo'
-				/>
-			)
-		},
-		{
 			title: t('loc:Názov'),
 			dataIndex: 'name',
 			key: 'name',
 			ellipsis: true,
-			render: (value) => <span className='base-regular'>{value}</span>
+			render: (value) => <span className='base-regular'>{value}</span>,
+			sortOrder: setOrder(query.order, 'name'),
+			sorter: {
+				compare: (a, b) => sortTableData(a.name?.toUpperCase(), b.name?.toUpperCase())
+			}
+		},
+		{
+			title: t('loc:Logo'),
+			dataIndex: 'image',
+			key: 'image',
+			render: (value, record) =>
+				record?.image ? (
+					<Image
+						src={record?.image?.resizedImages.thumbnail as string}
+						loading='lazy'
+						fallback={record?.image?.original}
+						alt={record?.name}
+						preview={false}
+						className='cosmetics-logo'
+					/>
+				) : (
+					<div className={'cosmetics-logo'} />
+				)
 		}
 	]
 
@@ -165,7 +197,7 @@ const CosmeticsPage = () => {
 						<div className='content-body'>
 							<CosmeticsFilter
 								total={cosmetics?.data?.length}
-								onSubmit={(query: any) => setFilterQuery(query.search)}
+								onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
 								addButton={
 									<Button
 										onClick={() => {
@@ -189,6 +221,7 @@ const CosmeticsPage = () => {
 										dataSource={tableData}
 										rowClassName={'clickable-row'}
 										twoToneRows
+										onChange={onChangeTable}
 										pagination={false}
 										onRow={(record) => ({
 											onClick: () => changeFormVisibility(true, record)

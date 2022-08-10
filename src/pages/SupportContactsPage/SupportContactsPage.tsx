@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { StringParam, useQueryParams } from 'use-query-params'
-import { Col, Row } from 'antd'
+import { StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { Col, Row, TablePaginationConfig } from 'antd'
 import { initialize } from 'redux-form'
 
 // components
+import { SorterResult } from 'antd/lib/table/interface'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SupportContactsFilter, { ISupportContactsFilter } from './components/SupportContactsFilter'
@@ -16,7 +17,7 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, LANGUAGE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { history } from '../../utils/history'
 import i18n from '../../utils/i18n'
-import { getSupportContactCountryName } from '../../utils/helper'
+import { getLinkWithEncodedBackUrl, getSupportContactCountryName, normalizeDirectionKeys, setOrder, sortTableData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -36,13 +37,17 @@ const SupportContactsPage = () => {
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 
 	const [query, setQuery] = useQueryParams({
-		countryCode: StringParam
+		search: StringParam,
+		order: withDefault(StringParam, 'country:ASC')
 	})
 
 	useEffect(() => {
-		dispatch(initialize(FORM.SALONS_FILTER, { countryCode: query.countryCode }))
-		dispatch(getSupportContacts({ countryCode: query.countryCode }))
-	}, [dispatch, query.countryCode])
+		dispatch(getSupportContacts())
+	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(initialize(FORM.SUPPORT_CONTACTS_FILTER, { search: query.search }))
+	}, [dispatch, query.search])
 
 	const handleSubmit = (values: ISupportContactsFilter) => {
 		const newQuery = {
@@ -52,13 +57,47 @@ const SupportContactsPage = () => {
 		setQuery(newQuery)
 	}
 
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+		if (!(sorter instanceof Array)) {
+			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
+			const newQuery = {
+				...query,
+				order
+			}
+			setQuery(newQuery)
+		}
+	}
+
+	const tableData = useMemo(() => {
+		if (!supportContacts || !supportContacts.tableData) {
+			return []
+		}
+
+		return query.search
+			? supportContacts.tableData.filter((country) => {
+					const countryName = transformToLowerCaseWithoutAccent(
+						getSupportContactCountryName(country.country?.nameLocalizations, i18n.language as LANGUAGE) || country.country?.code
+					)
+					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
+					return countryName.includes(searchedValue)
+			  })
+			: supportContacts.tableData
+	}, [query.search, supportContacts])
+
 	const columns: Columns = [
 		{
 			title: t('loc:Krajina'),
 			dataIndex: 'country',
 			key: 'country',
-			sorter: false,
 			width: '30%',
+			sortOrder: setOrder(query.order, 'country'),
+			sorter: {
+				compare: (a, b) => {
+					const aValue = getSupportContactCountryName(a?.country?.nameLocalizations, i18n.language as LANGUAGE) || a?.country?.code
+					const bValue = getSupportContactCountryName(b?.country?.nameLocalizations, i18n.language as LANGUAGE) || b?.country?.code
+					return sortTableData(aValue, bValue)
+				}
+			},
 			render: (value) => {
 				const name = getSupportContactCountryName(value.nameLocalizations, i18n.language as LANGUAGE) || value.code
 				return (
@@ -123,9 +162,10 @@ const SupportContactsPage = () => {
 							allowed={permissions}
 							render={(hasPermission, { openForbiddenModal }) => (
 								<SupportContactsFilter
+									total={supportContacts.data?.supportContacts?.length || 0}
 									createSupportContact={() => {
 										if (hasPermission) {
-											history.push(t('paths:support-contacts/create'))
+											history.push(getLinkWithEncodedBackUrl(t('paths:support-contacts/create')))
 										} else {
 											openForbiddenModal()
 										}
@@ -137,15 +177,16 @@ const SupportContactsPage = () => {
 						<CustomTable
 							className='table-fixed'
 							columns={columns}
-							dataSource={supportContacts?.tableData}
+							dataSource={tableData}
 							rowClassName={'clickable-row'}
 							loading={supportContacts?.isLoading}
+							onChange={onChangeTable}
 							twoToneRows
 							scroll={{ x: 800 }}
 							onRow={(record) => {
 								return {
 									onClick: () => {
-										history.push(t('paths:support-contacts/{{supportContactID}}', { supportContactID: record.supportContactID }))
+										history.push(getLinkWithEncodedBackUrl(t('paths:support-contacts/{{supportContactID}}', { supportContactID: record.supportContactID })))
 									}
 								}
 							}}

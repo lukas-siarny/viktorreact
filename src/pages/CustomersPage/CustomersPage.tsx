@@ -15,7 +15,7 @@ import UserAvatar from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale, getEncodedBackUrl } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, normalizeQueryParams, formatDateByLocale, getLinkWithEncodedBackUrl } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -35,8 +35,6 @@ const CustomersPage = (props: SalonSubPageProps) => {
 	const customers = useSelector((state: RootState) => state.customers.customers)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
-
-	const backUrl = getEncodedBackUrl()
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -163,7 +161,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 											if (!hasPermission) {
 												openForbiddenModal()
 											} else {
-												history.push(`${parentPath + t('paths:customers/create')}?backUrl=${backUrl}`)
+												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/create')))
 											}
 										}}
 									/>
@@ -179,7 +177,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(`${parentPath + t('paths:customers/{{customerID}}', { customerID: record.id })}?backUrl=${backUrl}`)
+										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:customers/{{customerID}}', { customerID: record.id })))
 									}
 								})}
 								useCustomPagination

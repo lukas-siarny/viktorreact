@@ -96,7 +96,13 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	return decoded
 }
 
-export const getEncodedBackUrl = () => btoa(`${window.location.pathname}${window.location.search}`)
+export const getLinkWithEncodedBackUrl = (link: string) => {
+	if (!window.location.search) {
+		return link
+	}
+	const backUrl = btoa(`${window.location.pathname}${window.location.search}`)
+	return `${link}?backUrl=${backUrl}`
+}
 
 export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: string[]) => {
 	const pickQueryParams = pick(queryParams, Object.values(allowQueryParams))
@@ -815,4 +821,17 @@ export const countryOptionRender = (itemData: any) => {
 			{label}
 		</div>
 	)
+}
+
+export const sortTableData = (a?: any, b?: any) => {
+	if (!isNil(a) && !isNil(b)) {
+		if (a < b) {
+			return -1
+		}
+		if (a > b) {
+			return 1
+		}
+	}
+
+	return 0
 }

@@ -14,7 +14,7 @@ import showNotifications from './tsxHelpers'
  * IMAGE_UPLOADING_PROP must be set outside e.g. ImgUploadField
  */
 const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: any) => {
-	if (action.type === '@@redux-form/SUBMIT') {
+	if (action?.type === '@@redux-form/SUBMIT') {
 		const { form } = store.getState()
 		const submittedForm = form[action.meta.form]
 

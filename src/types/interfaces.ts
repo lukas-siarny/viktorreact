@@ -1,7 +1,9 @@
 import { SALON_STATES } from './../utils/enums'
 /* eslint-disable import/no-cycle */
+import { ColumnsType } from 'antd/lib/table'
 import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
+import { PaginationProps } from 'antd'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -25,15 +27,7 @@ export interface ISelectOptionItem {
 	level?: number
 }
 
-/**
- * ValueType  number | string
- */
-export interface ILabelInValueOption<ValueType = number, ExtraType = any> {
-	key: ValueType
-	value: ValueType
-	label: string
-	extra?: ExtraType
-}
+export type Columns = ColumnsType<any>
 
 export interface ILoginForm {
 	email: string
@@ -72,10 +66,6 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
-interface GalleryItem {
-	id: number
-}
-
 export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 
 export interface ISalonForm {
@@ -111,6 +101,7 @@ export interface ISalonForm {
 	logo: any | null;
 	gallery: any | null;
 	pricelistIDs?: number[]
+	pricelists?: any
 	companyContactPerson: {
 		email: string | null
 		firstName: string | null
@@ -162,8 +153,9 @@ export interface ISalonForm {
 			phone: string | null
 		}[]
 		email: string | null
-		logo: any;
-		gallery: any;
+		logo: any
+		gallery: any
+		pricelists: any
 	}
 }
 
@@ -248,16 +240,13 @@ export interface IComputedMatch<Params> {
 export interface IBreadcrumbItem {
 	name: string
 	link?: string
+	queryParams?: string
 	action?: any
 	titleName?: string | null | undefined
 }
 
 export interface IBreadcrumbs {
 	items: IBreadcrumbItem[]
-}
-
-export interface ICountryLabel {
-	[key: string]: string
 }
 
 export interface IStructuredAddress {
@@ -323,7 +312,7 @@ export interface ICosmeticForm {
 }
 
 export interface ILanguageForm {
-	flag?: string
+	image?: string
 	nameLocalizations: NameLocalizationsItem[]
 }
 
@@ -361,23 +350,43 @@ interface IDataPagination {
 	pagination: IResponsePagination
 }
 
-export interface ISearchablePayload<T extends IDataPagination> {
+/**
+ * enumerationsOptions are used for Select component
+ */
+export interface ISelectable<T> {
+	enumerationsOptions: ISelectOptionItem[] | undefined
+	data: T | undefined
+}
+
+/**
+ * options are used for Select component
+ * contains pagination
+ * support async (on BE) searching
+ */
+export interface ISearchable<T extends IDataPagination> {
 	options: ISelectOptionItem[] | undefined
 	data: T | null
 }
+
+/**
+ * options are used for Select component
+ * contains pagination
+ * support async (on BE) searching
+ */
+export interface ISearchableWithoutPagination<T> {
+	options: ISelectOptionItem[] | undefined
+	data: T | null
+}
+
+// type ITableItem  = { key: string | number }
+
+// export interface ITableItems {
+// 	tableData: (any & ITableItem)[] | undefined
+// }
 
 export interface SalonSubPageProps {
 	salonID: number
 	parentPath?: string
-}
-
-interface IDataPagination {
-	pagination: IResponsePagination
-}
-
-export interface ISearchablePayload<T extends IDataPagination> {
-	options: ISelectOptionItem[] | undefined
-	data: T | null
 }
 
 export type _Permissions = (PERMISSION | SALON_PERMISSION)[]
@@ -417,6 +426,26 @@ export interface IIsPublishedVersionSameAsDraft {
 	isAboutUsSecondEqual: boolean
 	isPhoneEqual: boolean
 	isEmailEqual: boolean
+	isPriceListsEqual: boolean
+}
+
+export interface IPagination extends PaginationProps {
+	pageSizeOptions?: number[]
+}
+
+export type ICategoryParameters = Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200['categoryParameters']
+
+export type ICategoryParameter = Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200['categoryParameter']
+
+interface ILocalizedValue {
+	valueLocalizations: ICategoryParameter['values']['0']['valueLocalizations']
+}
+
+export interface ICategoryParamForm {
+	nameLocalizations: ICategoryParameter['nameLocalizations']
+	valueType: ICategoryParameter['valueType']
+	localizedValues: ILocalizedValue[]
+	values: Pick<ICategoryParameter['values']['0'], 'value'>[]
 }
 
 export type NameLocalizationsItem = {

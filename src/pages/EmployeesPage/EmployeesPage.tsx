@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
+import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -17,8 +16,8 @@ import TooltipEllipsis from '../../components/TooltipEllipsis'
 import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { getEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -27,13 +26,11 @@ import { getEmployees } from '../../reducers/employees/employeesActions'
 import { RootState } from '../../reducers'
 
 // types
-import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
-
-type Columns = ColumnsType<any>
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -44,6 +41,8 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+
+	const backUrl = getEncodedBackUrl()
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -72,17 +71,24 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		setPrefixOptions(prefixes)
 	}, [phonePrefixes, dispatch])
 
-	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
 				...query,
-				limit: pagination.pageSize,
-				page: pagination.current,
 				order
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const onChangePagination = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: IEmployeesFilter) => {
@@ -185,51 +191,46 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Permissions
-							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<EmployeesFilter
-									createEmployee={() => {
-										if (hasPermission) {
-											history.push(parentPath + t('paths:employees/create'))
-										} else {
-											openForbiddenModal()
-										}
-									}}
-									onSubmit={handleSubmit}
-								/>
-							)}
-						/>
+						<Spin spinning={employees?.isLoading}>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<EmployeesFilter
+										createEmployee={() => {
+											if (hasPermission) {
+												history.push(`${parentPath + t('paths:employees/create')}?backUrl=${backUrl}`)
+											} else {
+												openForbiddenModal()
+											}
+										}}
+										onSubmit={handleSubmit}
+									/>
+								)}
+							/>
 
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={employees?.data?.employees}
-							rowClassName={'clickable-row'}
-							loading={employees?.isLoading}
-							twoToneRows
-							scroll={{ x: 800 }}
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: employees?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: employees?.data?.pagination?.totalCount,
-								current: employees?.data?.pagination?.page
-							}}
-						/>
+							<CustomTable
+								className='table-fixed'
+								onChange={onChangeTable}
+								columns={columns}
+								dataSource={employees?.data?.employees}
+								rowClassName={'clickable-row'}
+								twoToneRows
+								scroll={{ x: 800 }}
+								onRow={(record) => ({
+									onClick: () => {
+										history.push(`${parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })}?backUrl=${backUrl}`)
+									}
+								})}
+								useCustomPagination
+								pagination={{
+									pageSize: employees?.data?.pagination?.limit,
+									total: employees?.data?.pagination?.totalCount,
+									current: employees?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: employees?.isLoading
+								}}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>

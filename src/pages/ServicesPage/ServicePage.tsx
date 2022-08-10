@@ -14,6 +14,9 @@ import { IBreadcrumbs, IComputedMatch, SalonSubPageProps } from '../../types/int
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
 		serviceID: number
@@ -26,6 +29,8 @@ const ServicePage = (props: Props) => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 
+	const [backUrl] = useBackUrl(parentPath + t('paths:services'))
+
 	useEffect(() => {
 		dispatch(getCategories())
 	}, [dispatch])
@@ -34,7 +39,7 @@ const ServicePage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam služieb'),
-				link: parentPath + t('paths:services')
+				link: backUrl
 			},
 			{
 				name: serviceID ? t('loc:Detail služby') : t('loc:Vytvoriť službu')

@@ -25,6 +25,9 @@ import { IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } f
 // reducers
 import { RootState } from '../../reducers'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]
 
 const CreateEmployeePage = (props: SalonSubPageProps) => {
@@ -42,11 +45,13 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 
 	const { isLoading } = services
 
+	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
+
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
 				name: t('loc:Zoznam zamestnancov'),
-				link: parentPath + t('paths:employees')
+				link: backUrl
 			},
 			{
 				name: t('loc:Vytvoriť zamestnanca')

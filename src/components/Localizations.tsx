@@ -90,7 +90,7 @@ const Localizations = (param: any) => {
 				activeKey={finalCollapseKey}
 			>
 				<Collapse.Panel header={''} key={keyName}>
-					<div className='mt-2'>{otherFields}</div>
+					<div className={`mt-2 ${get(param, 'otherFieldsClass', '')}`}>{otherFields}</div>
 				</Collapse.Panel>
 			</Collapse>
 			<button type='button' className={'absolute -top-1 right-0 flex items-center justify-end cursor-pointer border-none bg-none p-0 bg-transparent'} onClick={onChange}>

@@ -6,19 +6,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
-import { filter } from 'lodash'
+import { filter, get } from 'lodash'
 
 // components
+import { StringParam, useQueryParams } from 'use-query-params'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import LanguagesForm from './components/LanguagesForm'
 import CosmeticsFilter from './components/LanguagesFilter'
+import { EMPTY_NAME_LOCALIZATIONS, sortNameLocalizationsWithDefaultLangFirst } from '../../components/LanguagePicker'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getEmptyNameLocalizations, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -40,11 +42,14 @@ const LanguagesPage = () => {
 	const dispatch = useDispatch()
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
-	const [filterQuery, setFilterQuery] = useState<string | undefined>(undefined)
 	// 0 - represents new record
 	const [languageID, setLanguageID] = useState<number>(0)
 
 	const languages = useSelector((state: RootState) => state.languages.languages)
+
+	const [query, setQuery] = useQueryParams({
+		search: StringParam
+	})
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -56,29 +61,56 @@ const LanguagesPage = () => {
 
 	useEffect(() => {
 		dispatch(getLanguages())
-	}, [dispatch])
-
-	const emptyNameLocalizations = getEmptyNameLocalizations()
+		dispatch(
+			initialize(FORM.LANGUAGES_FILTER, {
+				search: query.search
+			})
+		)
+	}, [dispatch, query.search])
 
 	const tableData = useMemo(() => {
 		if (!languages || !languages.data) {
 			return []
 		}
 
-		const source = filterQuery
+		const source = query?.search
 			? languages.data.filter((lang) => {
-					const name = transformToLowerCaseWithoutAccent(lang.name || lang.code)
-					const query = transformToLowerCaseWithoutAccent(filterQuery)
-					return name.includes(query)
+					const fallbackName = lang.nameLocalizations.find((localization) => localization.language === DEFAULT_LANGUAGE)
+					const name = transformToLowerCaseWithoutAccent(lang.name || (fallbackName?.value as string))
+					const searchValue = transformToLowerCaseWithoutAccent(query.search || undefined)
+					return name.includes(searchValue)
 			  })
 			: languages.data
 
 		// transform to table data
-		return source.map((lang) => ({
-			...lang,
-			key: lang.id
-		}))
-	}, [filterQuery, languages])
+		return source
+			.map((lang) => {
+				const fallbackName = lang.nameLocalizations.find((localization) => localization.language === DEFAULT_LANGUAGE)
+
+				return {
+					...lang,
+					name: lang.name || fallbackName?.value,
+					key: lang.id
+				}
+			})
+			.sort((a, b) => {
+				const nameA = a.name?.toUpperCase()
+				const nameB = b.name?.toUpperCase()
+
+				if (!nameA || !nameB) {
+					return 0
+				}
+
+				if (nameA < nameB) {
+					return -1
+				}
+				if (nameA > nameB) {
+					return 1
+				}
+
+				return 0
+			})
+	}, [query.search, languages])
 
 	const changeFormVisibility = (show?: boolean, lang?: ILanguage) => {
 		if (!show) {
@@ -89,14 +121,14 @@ const LanguagesPage = () => {
 		if (lang) {
 			dispatch(
 				initialize(FORM.LANGUAGES, {
-					flag: lang.flag,
-					nameLocalizations: lang.nameLocalizations
+					image: lang.image?.resizedImages?.thumbnail,
+					nameLocalizations: sortNameLocalizationsWithDefaultLangFirst(lang.nameLocalizations)
 				})
 			)
 		} else {
 			dispatch(
 				initialize(FORM.LANGUAGES, {
-					nameLocalizations: emptyNameLocalizations
+					nameLocalizations: EMPTY_NAME_LOCALIZATIONS
 				})
 			)
 		}
@@ -107,14 +139,14 @@ const LanguagesPage = () => {
 
 	const handleSubmit = async (formData: ILanguageForm) => {
 		const body = {
-			flag: formData.flag,
+			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid'),
 			nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value)
 		}
 		try {
 			if (languageID > 0) {
-				await patchReq('/api/b2b/admin/enums/languages/{languageID}', { languageID }, body /* as LanguagesPatch */ as any)
+				await patchReq('/api/b2b/admin/enums/languages/{languageID}', { languageID }, body as LanguagesPatch)
 			} else {
-				await postReq('/api/b2b/admin/enums/languages/', null, body /* as LanguagesPatch */ as any)
+				await postReq('/api/b2b/admin/enums/languages/', null, body as LanguagesPatch)
 			}
 			dispatch(getLanguages())
 			changeFormVisibility()
@@ -140,20 +172,25 @@ const LanguagesPage = () => {
 			title: t('loc:Názov'),
 			dataIndex: 'name',
 			key: 'name',
-			ellipsis: true,
-			render: (value, record) => (
-				<div className='flex items-center base-regular min-w-0'>
-					{record.flag ? <img className='noti-flag w-6 mr-1 rounded' src={record.flag} alt={value} /> : <div className={'noti-flag-fallback mr-1'} />}
-					<span className={'truncate min-w-0'}>{value}</span>
-				</div>
-			)
+			ellipsis: true
 		},
 		{
-			title: t('loc:Kód jazyka'),
-			dataIndex: 'code',
-			key: 'code',
+			title: t('loc:Vlajka'),
+			dataIndex: 'image',
+			key: 'image',
 			ellipsis: true,
-			render: (value) => <span className='base-regular'>{value}</span>
+			render: (_value, record) =>
+				record?.image ? (
+					<Image
+						key={record.id}
+						src={record?.image?.resizedImages.small as string}
+						loading='lazy'
+						fallback={record?.image?.original}
+						alt={record?.name}
+						preview={false}
+						className='languages-flag'
+					/>
+				) : null
 		}
 	]
 
@@ -166,13 +203,13 @@ const LanguagesPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={languages?.isLoading}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body'>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body'>
+						<Spin spinning={languages?.isLoading}>
 							<CosmeticsFilter
 								total={languages?.data?.length}
-								onSubmit={(query: any) => setFilterQuery(query.search)}
+								onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
 								addButton={
 									<Button
 										onClick={() => {
@@ -208,10 +245,10 @@ const LanguagesPage = () => {
 									</div>
 								) : undefined}
 							</div>
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+						</Spin>
+					</div>
+				</Col>
+			</Row>
 		</>
 	)
 }

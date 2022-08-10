@@ -39,12 +39,13 @@ export const getLanguages = (): ThunkResult<Promise<ILanguagesPayload>> => async
 
 		const enumerationsOptions: IEnumerationOptionItem[] = map(data.languages, (item) => {
 			const countryTranslation = item.nameLocalizations.find((translation: any) => translation.language === currentLng)
+			const fallbackTranslation = item.nameLocalizations.find((translation) => translation.language === 'en')
 
 			return {
 				key: `language_${item.id}`,
-				label: countryTranslation?.value || item.code,
+				label: countryTranslation?.value || fallbackTranslation?.value || '-',
 				value: item.id,
-				flag: item.flag
+				flag: item.image?.resizedImages.thumbnail
 			}
 		})
 

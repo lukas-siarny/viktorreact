@@ -35,6 +35,7 @@ import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
 import { ReactComponent as RO_Flag } from '../assets/flags/RO.svg'
 import { ReactComponent as BG_Flag } from '../assets/flags/BG.svg'
 import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg'
+import { NameLocalizationsItem } from '../types/interfaces'
 
 export const LOCALES = {
 	[LANGUAGE.SK]: {
@@ -80,6 +81,25 @@ export const LOCALES = {
 		icon: IT_Flag,
 		countryCode: 'IT'
 	}
+}
+
+// default language must be first
+export const EMPTY_NAME_LOCALIZATIONS = Object.keys(LOCALES)
+	.sort((a: string, b: string) => {
+		if (a === DEFAULT_LANGUAGE) {
+			return -1
+		}
+		return b === DEFAULT_LANGUAGE ? 1 : 0
+	})
+	.map((language) => ({ language }))
+
+export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { language: string; value: string | null }[]) => {
+	return nameLocalizations?.sort((a, b) => {
+		if (a.language === DEFAULT_LANGUAGE) {
+			return -1
+		}
+		return b.language === DEFAULT_LANGUAGE ? 1 : 0
+	})
 }
 
 const { Option } = Select
@@ -155,6 +175,9 @@ const LanguagePicker: FC<Props> = (props) => {
 					key='currentLanguage'
 					title={get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase()}
 					icon={getLanguageFlag(currentLanguage)}
+					// it is necessary to check whether menu is overflowing viewport everytime new language is added
+					// if so, popupOffset needs to be changed manually
+					popupOffset={[0, -100]}
 				>
 					{options?.map((option: any, index: number) => (
 						<Menu.Item onClick={() => handleLanguageChange(option.value)} key={index} icon={getLanguageFlag(option.value)}>

@@ -69,7 +69,6 @@ const FileUploadField: FC<Props> = (props) => {
 	} = props
 
 	const [t] = useTranslation()
-	const signedUrl = get(input, 'value.url') ? `${get(input, 'value.url')}?t=${getAccessToken()}` : undefined
 
 	const [loadedFile, setLoadedFile] = useState<string | RcFile | Blob>()
 
@@ -77,7 +76,7 @@ const FileUploadField: FC<Props> = (props) => {
 		if (handleUploadOutside) {
 			return loadedFile ? [loadedFile] : []
 		}
-		return input.value ? [{ ...input.value, url: signedUrl }] : []
+		return input.value || []
 	}
 
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {

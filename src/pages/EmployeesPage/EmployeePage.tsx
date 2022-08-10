@@ -33,6 +33,9 @@ import { IServicesPayload } from '../../reducers/services/serviceActions'
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: number }>
 }
@@ -58,7 +61,9 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	const updatedServices: any[] = []
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		const serviceData = services?.data?.services?.find((service: any) => service?.id === serviceId)
+		// TODO - services?.data?.services
+		const test: any[] = []
+		const serviceData = test.find((service: any) => service?.id === serviceId)
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
@@ -168,6 +173,8 @@ const EmployeePage = (props: Props) => {
 
 	const isLoading = employee.isLoading || services.isLoading || isRemoving
 
+	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
+
 	const fetchEmployeeData = async () => {
 		const { data } = await dispatch(getEmployee(employeeID))
 		if (!data?.employee?.id) {
@@ -256,7 +263,7 @@ const EmployeePage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zamestnancov'),
-				link: parentPath + t('paths:employees')
+				link: backUrl
 			},
 			{
 				name: t('loc:Detail zamestnanca'),

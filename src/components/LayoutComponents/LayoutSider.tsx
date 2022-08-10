@@ -21,6 +21,7 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
 import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
 import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24.svg'
+import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -57,7 +58,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
 	const MY_ACCOUNT_MENU = (
-		<Menu className='noti-sider-menu'>
+		<Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}>
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
 			</Menu.Item>
@@ -89,7 +90,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 	return (
 		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0'>
-			<div className='sticky top-0 flex flex-col h-screen'>
+			<div className='sticky top-0 flex flex-col h-screen z-50' id={'noti-sider-wrapper'}>
 				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`}>
 					<LogoIcon className='h-8' />
 				</Link>
@@ -125,6 +126,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
 										>
 											{t('loc:Kategórie')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
+										<Menu.Item
+											eventKey={PAGE.CATEGORY_PARAMETERS}
+											key={PAGE.CATEGORY_PARAMETERS}
+											onClick={() => history.push(t('paths:category-parameters'))}
+											icon={<ParametersIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORY_PARAMETERS })}
+										>
+											{t('loc:Parametre')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
@@ -226,7 +239,12 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
-					<Dropdown overlay={MY_ACCOUNT_MENU} placement='topLeft' trigger={['click']}>
+					<Dropdown
+						overlay={MY_ACCOUNT_MENU}
+						placement='topLeft'
+						trigger={['click']}
+						getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
+					>
 						<div
 							role='button'
 							className='cursor-pointer hover:bg-notino-grayLighter py-2'

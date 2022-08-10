@@ -45,6 +45,9 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
 		phonePrefixCountryCode,
@@ -94,6 +97,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
+
+	const [backUrl] = useBackUrl(t('paths:salons'))
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -191,7 +196,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				zipCode: salonData?.address?.zipCode || null,
 				country: salonData?.address?.countryCode || null,
 				streetNumber: salonData?.address?.streetNumber || null,
-				description: salonData?.address?.description || null,
+				// TODO - remove description
+				description: '' || null,
 				parkingNote: salonData?.parkingNote || null,
 				companyContactPerson: {
 					email: salonData?.companyContactPerson?.email || null,
@@ -213,12 +219,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								phone: phone.phone || null
 						  }))
 						: getPhoneDefaultValue(phonePrefixCountryCode),
-				gallery: map(salonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
+				gallery: map(salonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
+				pricelists: map(salonData?.pricelists, (file) => ({ url: file?.original, uid: file?.id })),
 				logo: salonData?.logo?.id
 					? [
 							{
+								uid: salonData?.logo?.id,
 								url: salonData?.logo?.original,
-								uid: salonData?.logo?.id
+								thumbUrl: salonData.logo?.resizedImages?.thumbnail
 							}
 					  ]
 					: null,
@@ -246,10 +254,20 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						streetNumber: salonData?.publishedSalonData?.address?.streetNumber || null,
 						latitude: salonData?.publishedSalonData?.address?.latitude ?? null,
 						longitude: salonData?.publishedSalonData?.address?.longitude ?? null,
-						description: salonData?.publishedSalonData?.address?.description || null
+						// TODO - remove description
+						description: '' || null
 					},
-					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
-					logo: salonData?.publishedSalonData?.logo ? [{ url: salonData.publishedSalonData.logo.original, uid: salonData.publishedSalonData.logo.id }] : null,
+					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
+					logo: salonData?.publishedSalonData?.logo
+						? [
+								{
+									uid: salonData.publishedSalonData.logo.id,
+									url: salonData.publishedSalonData.logo.original,
+									thumbUrl: salonData.publishedSalonData.logo?.resizedImages?.thumbnail
+								}
+						  ]
+						: null,
+					pricelists: map(salonData?.publishedSalonData?.pricelists, (file) => ({ url: file?.original, uid: file?.id })),
 					phones:
 						salonData?.publishedSalonData?.phones && !isEmpty(salonData?.publishedSalonData?.phones)
 							? salonData.publishedSalonData.phones.map((phone) => ({
@@ -323,11 +341,11 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 			if (salonID > 0) {
 				// update existing salon
-				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as SalonPatch)
+				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
 				dispatch(selectSalon(salonID))
 			} else {
 				// create new salon
-				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as SalonPatch)
+				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
 				if (result?.data?.salon?.id) {
 					// load new salon for current user
 					await dispatch(getCurrentUser())
@@ -362,7 +380,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			? [
 					{
 						name: t('loc:Zoznam salónov'),
-						link: t('paths:salons')
+						link: backUrl
 					},
 					breadcrumbDetailItem
 			  ]

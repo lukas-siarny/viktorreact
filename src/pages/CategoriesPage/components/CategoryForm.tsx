@@ -26,6 +26,7 @@ import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../.
 // redux
 import { RootState } from '../../../reducers'
 import Permissions from '../../../utils/Permissions'
+import SelectField from '../../../atoms/SelectField'
 
 // types
 import { NameLocalizationsItem } from '../../../types/interfaces'
@@ -44,6 +45,7 @@ export interface ICategoryForm {
 	childrenLength: number
 	nameLocalizations: NameLocalizationsItem[]
 	image: any
+	categoryParameterID: number
 }
 
 const fixLength100 = validationString(100)
@@ -57,6 +59,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm, pristine } = props
 
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
+	const categoriesParameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))
 
 	const renderFormTitle = () => {
@@ -77,7 +80,7 @@ const CategoryForm: FC<Props> = (props) => {
 				<PopConfirmComponent
 					placement={'left'}
 					title={t('loc:Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?')}
-					onConfirm={() => createCategory(values?.id, values?.name, values?.childrenLength, values?.level || 0 + 1)}
+					onConfirm={() => createCategory(values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}
 					okText={t('loc:Pokračovať')}
 					getPopupContainer={() => documentFooter}
 					allowedButton={
@@ -89,7 +92,7 @@ const CategoryForm: FC<Props> = (props) => {
 			)
 		}
 		return (
-			<Button className={'noti-btn'} size='middle' onClick={() => createCategory(values?.id, values?.name, values?.childrenLength, values?.level || 0 + 1)}>
+			<Button className={'noti-btn'} size='middle' onClick={() => createCategory(values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}>
 				{t('loc:Vytvoriť podkategóriu')}
 			</Button>
 		)
@@ -169,6 +172,18 @@ const CategoryForm: FC<Props> = (props) => {
 									required
 								/>
 							</div>
+						) : undefined}
+						{values?.level === 2 ? (
+							<Field
+								className={'w-full'}
+								component={SelectField}
+								options={categoriesParameters.enumerationsOptions}
+								label={t('loc:Parameter')}
+								placeholder={t('loc:Vyberte parameter')}
+								name={'categoryParameterID'}
+								loading={categoriesParameters.isLoading}
+								allowClear
+							/>
 						) : undefined}
 					</Row>
 					<div className={'flex justify-between flex-wrap gap-2'}>

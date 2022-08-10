@@ -67,8 +67,6 @@ import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-cros
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 import { LOCALES } from '../components/LanguagePicker'
 
-type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
-
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
 /**
@@ -98,6 +96,8 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	}
 	return decoded
 }
+
+export const getEncodedBackUrl = () => btoa(`${window.location.pathname}${window.location.search}`)
 
 export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: string[]) => {
 	const pickQueryParams = pick(queryParams, Object.values(allowQueryParams))
@@ -408,20 +408,12 @@ export function setIntervalImmediately(func: Function, interval: number) {
 	return setInterval(func, interval)
 }
 
-export const getCurrentLanguageCode = (fallbackLng = DEFAULT_LANGUAGE) => {
-	const locale = split(i18next.language, '-')
-	const result = locale[0] || fallbackLng
-	return result.toLowerCase()
-}
-
 export const getGoogleMapUrl = (): string => {
-	const locale = getCurrentLanguageCode()
-
 	// query params for google API
 	const base = 'https://maps.googleapis.com/maps/api/'
 	// TODO read Google Map API key from .env file
 	const key = `key=${GOOGLE_MAPS_API_KEY}`
-	const language = `language=${locale.toLowerCase()}`
+	const language = `language=${i18next.language.toLowerCase()}`
 
 	return `${base}js?${key}&libraries=places&${language}`
 }
@@ -590,7 +582,14 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 
 		let img = {
 			...file,
-			url: get(file, 'url') || fileData?.path
+			url: get(file, 'url') || fileData.path
+		}
+
+		if (get(file, 'resizedImages')) {
+			img = {
+				...img,
+				thumbUrl: fileData?.resizedImages?.thumbnail
+			}
 		}
 
 		if (get(file, 'id') || fileData?.id) {
@@ -648,17 +647,6 @@ export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsI
 	return [defaultLanguage, ...otherLanguages]
 }
 
-// default language must be first
-export const getEmptyNameLocalizations = () =>
-	Object.keys(LOCALES)
-		.sort((a: string, b: string) => {
-			if (a === DEFAULT_LANGUAGE) {
-				return -1
-			}
-			return b === DEFAULT_LANGUAGE ? 1 : 0
-		})
-		.map((language) => ({ language }))
-
 type SelectDataItem = {
 	id: number
 	children?: any
@@ -700,7 +688,7 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 	return undefined
 }
 
-export const showServiceCategory = (category: serviceCategory): string | undefined => {
+export const showServiceCategory = (category: any): string | undefined => {
 	if (category?.child?.child) {
 		return category.child.child.name
 	}
@@ -812,8 +800,20 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
  * Usefull for searching on FE
  * @link https://stackoverflow.com/questions/990904/remove-accents-diacritics-in-a-string-in-javascript
  */
-export const transformToLowerCaseWithoutAccent = (source: string): string =>
+export const transformToLowerCaseWithoutAccent = (source?: string): string =>
 	source
-		.toLowerCase()
-		.normalize('NFD')
-		.replace(/\p{Diacritic}/gu, '')
+		? source
+				.toLowerCase()
+				.normalize('NFD')
+				.replace(/\p{Diacritic}/gu, '')
+		: ''
+
+export const countryOptionRender = (itemData: any) => {
+	const { value, label, flag } = itemData
+	return (
+		<div className='flex items-center'>
+			<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			{label}
+		</div>
+	)
+}

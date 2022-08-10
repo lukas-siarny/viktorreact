@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useEffect, useState, useMemo } from 'react'
+import React, { ReactElement, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Row, Tree, Divider, notification } from 'antd'
@@ -18,11 +18,11 @@ import { RootState } from '../../../reducers'
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
-import { getEmptyNameLocalizations, normalizeNameLocalizations } from '../../../utils/helper'
+import { normalizeNameLocalizations } from '../../../utils/helper'
 
 // components
 import CategoryForm, { ICategoryForm } from './CategoryForm'
-import { LOCALES } from '../../../components/LanguagePicker'
+import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 
 type TreeCategories = {
 	title?: ReactElement
@@ -55,8 +55,6 @@ const CategoriesTree = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const emptyNameLocalizations = getEmptyNameLocalizations()
-
 	const createCategoryHandler = useCallback(
 		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
 			setShowForm(true)
@@ -65,17 +63,17 @@ const CategoriesTree = () => {
 					parentId,
 					parentTitle,
 					childrenLength,
-					nameLocalizations: emptyNameLocalizations,
+					nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
 					level
 				})
 			)
 		},
-		[dispatch, emptyNameLocalizations]
+		[dispatch]
 	)
 
 	const updateCategoryHandler = useCallback(
 		(node) => {
-			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted } = node
+			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted, categoryParameterID } = node
 			setShowForm(true)
 			const formData = {
 				id,
@@ -86,7 +84,8 @@ const CategoriesTree = () => {
 				level,
 				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
 				deletedAt,
-				isParentDeleted
+				isParentDeleted,
+				categoryParameterID: categoryParameterID ? { label: categoryParameterID.name, value: categoryParameterID.id } : undefined
 			}
 			dispatch(initialize(FORM.CATEGORY, formData))
 			setLastOpenedNode(formData)
@@ -139,6 +138,7 @@ const CategoriesTree = () => {
 				parentId,
 				children: get(child, 'children') ? childrenRecursive(child.id, get(child, 'children'), level + 1, !!get(child, 'deletedAt')) : null,
 				nameLocalizations: get(child, 'nameLocalizations'),
+				categoryParameterID: get(child, 'categoryParameter'),
 				level,
 				index,
 				image: get(child, 'image'),
@@ -162,6 +162,7 @@ const CategoriesTree = () => {
 				disabled: !!get(category, 'deletedAt'),
 				children: get(category, 'children') ? childrenRecursive(get(category, 'id'), get(category, 'children') as any[], 1, !!get(category, 'deletedAt')) : null,
 				nameLocalizations: get(category, 'nameLocalizations'),
+				categoryParameterID: get(category, 'categoryParameter'),
 				level,
 				index,
 				image: get(category, 'image'),
@@ -276,8 +277,9 @@ const CategoriesTree = () => {
 			let body: any = {
 				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
-				imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid'),
-				iconID: get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')
+				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
+				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,
+				categoryParameterID: formData.categoryParameterID ?? undefined
 			}
 
 			if (formData.id && formData.id >= 0) {
@@ -324,7 +326,7 @@ const CategoriesTree = () => {
 				<h3>{t('loc:Kategórie')}</h3>
 				<Button
 					onClick={() => {
-						dispatch(initialize(FORM.CATEGORY, { nameLocalizations: emptyNameLocalizations, level: 0 }))
+						dispatch(initialize(FORM.CATEGORY, { nameLocalizations: EMPTY_NAME_LOCALIZATIONS, level: 0 }))
 						setShowForm(true)
 					}}
 					type='primary'

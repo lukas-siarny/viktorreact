@@ -48,6 +48,7 @@ export const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPub
 	const isAboutUsSecondEqual = (formValues?.aboutUsSecond || null) === (formValues?.publishedSalonData?.aboutUsSecond || null)
 	const isPhoneEqual = isEqual(formValues?.phones, formValues?.publishedSalonData?.phones)
 	const isEmailEqual = (formValues?.email || null) === (formValues?.publishedSalonData?.email || null)
+	const isPriceListsEqual = isEqual(formValues?.pricelistIDs || [], formValues?.publishedSalonData?.pricelists || [])
 
 	return {
 		isEqual:
@@ -60,6 +61,7 @@ export const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPub
 		isAboutUsFirstEqual,
 		isAboutUsSecondEqual,
 		isPhoneEqual,
-		isEmailEqual
+		isEmailEqual,
+		isPriceListsEqual
 	}
 }

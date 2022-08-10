@@ -1,11 +1,10 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Button } from 'antd'
 
 // utils
-import { isEmpty } from 'lodash'
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM } from '../../../utils/enums'
 import { showErrorNotification, validationString } from '../../../utils/helper'
 
 // atoms
@@ -14,13 +13,16 @@ import ImgUploadField from '../../../atoms/ImgUploadField'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
+import Localizations from '../../../components/Localizations'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 
 // types
 import { ILanguageForm } from '../../../types/interfaces'
-import Localizations from '../../../components/Localizations'
+
+// validate
+import validateLanguagesFrom from './validateLanguagesFrom'
 
 type ComponentProps = {
 	languageID: number
@@ -72,12 +74,11 @@ const LanguagesForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={ImgUploadField}
-							name='flag'
+							name='image'
 							label={t('loc:Vlajka')}
 							maxCount={1}
 							signUrl={URL_UPLOAD_IMAGES}
-							category={UPLOAD_IMG_CATEGORIES.CATEGORY}
-							required
+							category={UPLOAD_IMG_CATEGORIES.LANGUAGE_IMAGE}
 						/>
 					</Row>
 					<div className={'flex w-full justify-around space-between mt-10 gap-2 flex-wrap'}>
@@ -105,7 +106,8 @@ const form = reduxForm<ILanguageForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	onSubmitFail: showErrorNotification
+	onSubmitFail: showErrorNotification,
+	validate: validateLanguagesFrom
 })(LanguagesForm)
 
 export default form

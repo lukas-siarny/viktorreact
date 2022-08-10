@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Collapse, Divider, Form, Row, Spin, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { isEmpty } from 'lodash'
+import { isEmpty, get } from 'lodash'
 import cx from 'classnames'
 
 // atoms
+import i18next from 'i18next'
 import SelectField from '../../../atoms/SelectField'
 import validateServiceForm from './validateServiceForm'
 import InputNumberField from '../../../atoms/InputNumberField'
@@ -21,7 +22,7 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
@@ -36,6 +37,8 @@ import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.sv
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
+import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
+import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 
 const { Panel } = Collapse
 
@@ -63,16 +66,34 @@ const renderFromTo = (from: number | undefined | null, to: number | undefined | 
 	return undefined
 }
 
-export const renderParameterValues = (props: any) => {
+const validateParameterValuePriceAndDuration = (value: string, allValues: any, props: any, name: string) => {
+	const [pathToParameterValue] = name.split('.')
+	const key = name.split('.')[1]
+	const parameterValueFormValues = get(allValues, pathToParameterValue)
+	if ((!parameterValueFormValues?.variablePrice && key === 'priceTo') || (!parameterValueFormValues?.variableDuration && key === 'durationTo')) {
+		return undefined
+	}
+	if (parameterValueFormValues?.useParameter && !value) {
+		return i18next.t('loc:Toto pole je povinné')
+	}
+	return undefined
+}
+
+const renderParameterValues = (props: any) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
-	const { fields, salon } = props
+	const {
+		fields,
+		meta: { error, invalid },
+		salon,
+		showDuration
+	} = props
 
 	const genExtra = (index: number, fieldData: any, field: any) => {
 		return (
 			<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
 				<div className={'flex'}>
-					{renderFromTo(fieldData?.durationFrom, fieldData?.durationTo, fieldData?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
+					{showDuration && renderFromTo(fieldData?.durationFrom, fieldData?.durationTo, fieldData?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
 					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, fieldData?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
 					<Field
 						className={'mb-0'}
@@ -88,7 +109,12 @@ export const renderParameterValues = (props: any) => {
 
 	return (
 		<>
-			<Collapse className={'collapse-list'} bordered={false}>
+			{invalid && error && (
+				<div role='alert' className='ant-form-item-explain-error'>
+					{error}
+				</div>
+			)}
+			<Collapse className={cx('collapse-list', { 'error-border': invalid && error })} bordered={false}>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.variableDuration
@@ -103,45 +129,45 @@ export const renderParameterValues = (props: any) => {
 							key={index}
 							extra={genExtra(index, fieldData, field)}
 						>
-							<Row gutter={8} align='middle'>
-								<Col span={8}>
-									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
-								</Col>
-								<Col span={variableDuration ? 8 : 16}>
-									<Field
-										component={InputNumberField}
-										label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
-										placeholder={t('loc:min')}
-										name={`${field}.durationFrom`}
-										precision={0}
-										step={1}
-										maxChars={3}
-										size={'large'}
-										validate={[numberMin0]}
-										required
-									/>
-								</Col>
-
-								{variableDuration && (
-									<Col span={8}>
+							{showDuration && (
+								<Row gutter={8} align='top' justify='center'>
+									<Col className={'mt-5'} span={8}>
+										<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
+									</Col>
+									<Col span={variableDuration ? 8 : 16}>
 										<Field
 											component={InputNumberField}
-											label={t('loc:Trvanie do (minúty)')}
+											label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
 											placeholder={t('loc:min')}
-											name={`${field}.durationTo`}
+											name={`${field}.durationFrom`}
 											precision={0}
 											step={1}
 											maxChars={3}
 											size={'large'}
-											validate={[numberMin0]}
+											validate={[numberMin0, validateParameterValuePriceAndDuration]}
 											required
 										/>
 									</Col>
-								)}
-							</Row>
-							<Divider />
-							<Row gutter={8} align='middle'>
-								<Col span={8}>
+									{variableDuration && (
+										<Col span={8}>
+											<Field
+												component={InputNumberField}
+												label={t('loc:Trvanie do (minúty)')}
+												placeholder={t('loc:min')}
+												name={`${field}.durationTo`}
+												precision={0}
+												step={1}
+												maxChars={3}
+												size={'large'}
+												validate={[numberMin0, validateParameterValuePriceAndDuration]}
+												required
+											/>
+										</Col>
+									)}
+								</Row>
+							)}
+							<Row gutter={8} align='top' justify='center'>
+								<Col className={'mt-5'} span={8}>
 									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={`${field}.variablePrice`} size={'middle'} />
 								</Col>
 								<Col span={variablePrice ? 8 : 16}>
@@ -158,7 +184,7 @@ export const renderParameterValues = (props: any) => {
 										step={1}
 										maxChars={5}
 										size={'large'}
-										validate={[numberMin0]}
+										validate={[numberMin0, validateParameterValuePriceAndDuration]}
 										required
 									/>
 								</Col>
@@ -173,7 +199,7 @@ export const renderParameterValues = (props: any) => {
 											step={1}
 											maxChars={5}
 											size={'large'}
-											validate={[numberMin0]}
+											validate={[numberMin0, validateParameterValuePriceAndDuration]}
 											required
 										/>
 									</Col>
@@ -190,7 +216,7 @@ export const renderParameterValues = (props: any) => {
 export const renderEmployees = (props: any) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
-	const { fields, salon } = props
+	const { fields, salon, showDuration } = props
 
 	const genExtra = (index: number, field: any) => (
 		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
@@ -198,12 +224,13 @@ export const renderEmployees = (props: any) => {
 				{field?.serviceCategoryParameter && field?.serviceCategoryParameter?.length >= 1 ? (
 					<div className={'flex items-center justify-center mr-2'}>
 						<div className={'title mr-2'}>{field?.serviceCategoryParameter[0]?.name}</div>
-						{renderFromTo(
-							field?.serviceCategoryParameter[0]?.durationFrom,
-							field?.serviceCategoryParameter[0]?.durationTo,
-							field?.serviceCategoryParameter[0]?.variableDuration,
-							<ClockIcon className={'mr-1'} />
-						)}
+						{showDuration &&
+							renderFromTo(
+								field?.serviceCategoryParameter[0]?.durationFrom,
+								field?.serviceCategoryParameter[0]?.durationTo,
+								field?.serviceCategoryParameter[0]?.variableDuration,
+								<ClockIcon className={'mr-1'} />
+							)}
 						{renderFromTo(
 							field?.serviceCategoryParameter[0]?.priceFrom,
 							field?.serviceCategoryParameter[0]?.priceTo,
@@ -215,7 +242,7 @@ export const renderEmployees = (props: any) => {
 					</div>
 				) : (
 					<>
-						{renderFromTo(field?.durationFrom, field?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
+						{showDuration && renderFromTo(field?.durationFrom, field?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
 						{renderFromTo(field?.priceFrom, field?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
 					</>
 				)}
@@ -259,7 +286,13 @@ export const renderEmployees = (props: any) => {
 								fieldData?.serviceCategoryParameter?.map((parameterValue: any) => (
 									<Tag className={'my-1'}>
 										<div className={'title mr-2'}>{parameterValue?.name}</div>
-										{renderFromTo(parameterValue?.durationFrom, parameterValue?.durationTo, parameterValue?.variableDuration, <ClockIcon className={'mr-1'} />)}
+										{showDuration &&
+											renderFromTo(
+												parameterValue?.durationFrom,
+												parameterValue?.durationTo,
+												parameterValue?.variableDuration,
+												<ClockIcon className={'mr-1'} />
+											)}
 										{renderFromTo(
 											parameterValue?.priceFrom,
 											parameterValue?.priceTo,
@@ -282,7 +315,7 @@ const ServiceForm = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM].values)
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM]?.values)
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
@@ -320,17 +353,25 @@ const ServiceForm = (props: Props) => {
 	return (
 		<Spin spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-				<h3>{t('loc:Nastavenia')}</h3>
+				<h3 className={'mb-0 mt-0 flex items-center'}>
+					<SettingIcon className={'text-notino-black mr-2'} />
+					{t('loc:Nastavenia')}
+				</h3>
 				<Divider className={'mb-3 mt-3'} />
 				<Field className={'mb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
 				{formValues?.useCategoryParameter ? (
 					<div className={'my-2'}>
-						<FieldArray component={renderParameterValues} name={'serviceCategoryParameter'} salon={salon} />
+						<FieldArray
+							component={renderParameterValues}
+							name={'serviceCategoryParameter'}
+							salon={salon}
+							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
+						/>
 					</div>
 				) : (
-					<>
-						<Row gutter={8} align='middle'>
-							<Col span={8}>
+					<div className={'mt-2'}>
+						<Row gutter={8} align='top' justify='center'>
+							<Col className={'mt-5'} span={8}>
 								<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
 							</Col>
 							<Col span={variableDuration ? 8 : 16}>
@@ -365,8 +406,8 @@ const ServiceForm = (props: Props) => {
 								</Col>
 							)}
 						</Row>
-						<Row gutter={8} align='middle'>
-							<Col span={8}>
+						<Row gutter={8} align='top' justify='center'>
+							<Col className={'mt-5'} span={8}>
 								<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
 							</Col>
 							<Col span={variablePrice ? 8 : 16}>
@@ -404,10 +445,12 @@ const ServiceForm = (props: Props) => {
 								</Col>
 							)}
 						</Row>{' '}
-					</>
+					</div>
 				)}
-
-				<h3>{t('loc:Zoznam priradených zamestnancov')}</h3>
+				<h3 className={'mb-0 mt-0 flex items-center'}>
+					<EmployeesIcon className={'text-notino-black mr-2'} />
+					{t('loc:Priradení zamestnanci')}
+				</h3>
 				<Divider className={'mb-3 mt-3'} />
 				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 					<Field
@@ -430,7 +473,7 @@ const ServiceForm = (props: Props) => {
 						{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
 					</Button>
 				</div>
-				<FieldArray component={renderEmployees} name={'employees'} salon={salon} />
+				<FieldArray component={renderEmployees} name={'employees'} salon={salon} showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME} />
 				<div className={'content-footer pt-0'} id={'content-footer-container'}>
 					<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
 						{serviceID ? (

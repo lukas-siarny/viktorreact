@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 
 // components
-import ServiceCreatePage from './ServiceCreatePage'
 import ServiceEditPage from './ServiceEditPage'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
@@ -52,9 +51,7 @@ const ServicePage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:services')} />
 			</Row>
-			<div className='content-body small mt-2'>
-				{serviceID ? <ServiceEditPage serviceID={serviceID} salonID={salonID} parentPath={parentPath} /> : <ServiceCreatePage salonID={salonID} parentPath={parentPath} />}
-			</div>
+			<div className='content-body small mt-2'>{serviceID && <ServiceEditPage serviceID={serviceID} salonID={salonID} parentPath={parentPath} />}</div>
 		</>
 	)
 }

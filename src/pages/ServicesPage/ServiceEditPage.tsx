@@ -148,6 +148,7 @@ const ServiceEditPage = (props: Props) => {
 		if (data) {
 			initData = {
 				id: data.service.id,
+				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType,
 				serviceCategoryParameter: parseParameterValuesInit(data.service.serviceCategoryParameter?.values),
 				durationFrom: data.service.priceAndDurationData.durationFrom,
 				durationTo: data.service.priceAndDurationData.durationTo,

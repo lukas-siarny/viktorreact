@@ -12,7 +12,7 @@
   "employees": "/employees",
   "employees/create": "/employees/create",
   "employees/{{employeeID}}": "/employees/{{employeeID}}",
-  "index": "/index",
+  "index": "/",
   "languages-in-salons": "/languages-in-salons",
   "login": "/login",
   "my-account": "/my-account",

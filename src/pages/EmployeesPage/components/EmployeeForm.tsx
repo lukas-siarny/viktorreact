@@ -1,22 +1,19 @@
-import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
+import React, { FC, MouseEventHandler, ReactNode } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
+import { Col, Divider, Form, Row, Collapse, Tag } from 'antd'
+import { useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // utils
-import { isEmpty } from 'lodash'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
-import searchWrapper from '../../../utils/filters'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 import InputNumberField from '../../../atoms/InputNumberField'
 import SwitchField from '../../../atoms/SwitchField'
@@ -29,7 +26,6 @@ import DeleteButton from '../../../components/DeleteButton'
 import validateEmployeeForm from './validateEmployeeForm'
 
 // reducers
-import { getServices } from '../../../reducers/services/serviceActions'
 import { RootState } from '../../../reducers'
 
 // assets
@@ -205,24 +201,9 @@ const renderListFields = (props: any) => {
 
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
-	const { handleSubmit, salonID, addService } = props
+	const { handleSubmit } = props
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE].values)
-	const services = useSelector((state: RootState) => state.service.services)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-
-	useEffect(() => {
-		dispatch(getServices({ salonID }))
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salonID])
-
-	const searchService = useCallback(
-		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.SERVICE)
-		},
-		[dispatch, salonID]
-	)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -260,27 +241,6 @@ const EmployeeForm: FC<Props> = (props) => {
 					/>
 					<h3>{t('loc:Zoznam priradených služieb')}</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
-						<Field
-							label={t('loc:Služby')}
-							className={'flex-1'}
-							size={'large'}
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Vyberte služby')}
-							name={'service'}
-							onSearch={searchService}
-							filterOption={true}
-							mode={'multiple'}
-							options={services?.options}
-							showSearch
-							allowInfinityScroll
-							formName={FORM.EMPLOYEE}
-						/>
-						<Button type={'primary'} size={'middle'} className={'self-start noti-btn m-regular md:mt-5'} onClick={addService} disabled={isEmpty(formValues?.service)}>
-							{t('loc:Pridať službu')}
-						</Button>
-					</div>
 					<FieldArray component={renderListFields} name={'services'} salon={salon} />
 				</Row>
 			</Col>

@@ -23,6 +23,7 @@ import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../uti
 import { decodePrice, encodePrice } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
+import { getCategory } from '../../reducers/categories/categoriesActions'
 
 interface IParameterValue {
 	id: number
@@ -96,7 +97,7 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 }
 
 const parseParameterValuesInit = (values: any): IParameterValue[] => {
-	return values.map((value: any) => {
+	return values?.map((value: any) => {
 		const durationFrom = value?.priceAndDurationData?.durationFrom
 		const durationTo = value?.priceAndDurationData?.durationTo
 		const priceFrom = decodePrice(value?.priceAndDurationData?.priceFrom)
@@ -116,7 +117,7 @@ const parseParameterValuesInit = (values: any): IParameterValue[] => {
 }
 
 const parseEmployeesInit = (employees: any[]) => {
-	return employees.map((employee) => {
+	return employees?.map((employee) => {
 		return {
 			id: employee?.id,
 			name: employee?.fullName,
@@ -141,10 +142,12 @@ const ServiceEditPage = (props: Props) => {
 
 	const fetchData = async () => {
 		const { data } = await dispatch(getService(serviceID))
+		const categoryDetail = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
 		if (!data?.service?.id) {
 			history.push('/404')
 		}
 		let initData: any
+		console.log('categoryDetail: ', categoryDetail)
 		if (data) {
 			initData = {
 				id: data.service.id,

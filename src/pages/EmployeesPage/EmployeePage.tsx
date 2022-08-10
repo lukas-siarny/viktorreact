@@ -122,10 +122,10 @@ const checkAndParseServices = (ser: any[]) => {
 			variableDuration: false,
 			variablePrice: false,
 			salonData: {
-				...service.salonData,
+				...service.salonPriceAndDurationData,
 				// decode and set price
-				priceFrom: decodePrice(service?.salonData?.priceFrom),
-				priceTo: decodePrice(service?.salonData?.priceTo)
+				priceFrom: decodePrice(service?.salonPriceAndDurationData?.priceFrom),
+				priceTo: decodePrice(service?.salonPriceAndDurationData?.priceTo)
 			},
 			employeeData: {
 				...service.employeeData,
@@ -221,7 +221,6 @@ const EmployeePage = (props: Props) => {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				email: data?.email,
-				services: parseServicesForCreateAndUpdate(data?.services),
 				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid')
 			}
 
@@ -232,7 +231,8 @@ const EmployeePage = (props: Props) => {
 					phone: data?.phone
 				}
 			}
-
+			/* const serviceData = parseServicesForCreateAndUpdate(data?.services)
+			await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData) */
 			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
 			dispatch(getEmployee(employeeID))
 		} catch (error: any) {

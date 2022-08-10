@@ -14,18 +14,20 @@ import ServicesFilter from './components/ServicesFilter'
 import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
+import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
+import { encodePrice, formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getServices } from '../../reducers/services/serviceActions'
+import { getService, getServices } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, IUserAvatar, SalonSubPageProps, Columns } from '../../types/interfaces'
+import { patchReq } from '../../utils/request'
+import { parseEmployeeCreateAndUpdate, parseParameterValuesCreateAndUpdate } from './ServiceEditPage'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -41,8 +43,19 @@ const ServicesPage = (props: SalonSubPageProps) => {
 
 	const backUrl = getEncodedBackUrl()
 
+	/* const test = async () => {
+		// /api/b2b/admin/salons/{salonID}/services
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID: 1 }, { rootCategoryID: 1, categoryIDs: [68, 69, 81, 79] })
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	} */
+
 	useEffect(() => {
 		dispatch(getCategories(false))
+		// test()
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({

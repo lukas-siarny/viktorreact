@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Col, Row, Spin, Button, Divider, Image } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
+import { ColumnsType, TablePaginationConfig } from 'antd/lib/table'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 import { filter, get } from 'lodash'
+import { SorterResult } from 'antd/lib/table/interface'
 
 // components
-import { StringParam, useQueryParams } from 'use-query-params'
+import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import LanguagesForm from './components/LanguagesForm'
@@ -20,7 +21,7 @@ import { EMPTY_NAME_LOCALIZATIONS, sortNameLocalizationsWithDefaultLangFirst } f
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -48,7 +49,8 @@ const LanguagesPage = () => {
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
 	const [query, setQuery] = useQueryParams({
-		search: StringParam
+		search: StringParam,
+		order: withDefault(StringParam, 'name:ASC')
 	})
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -132,6 +134,7 @@ const LanguagesPage = () => {
 			}
 			dispatch(getLanguages())
 			changeFormVisibility()
+			setQuery({ ...query, search: null })
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -149,12 +152,24 @@ const LanguagesPage = () => {
 		}
 	}
 
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+		if (!(sorter instanceof Array)) {
+			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
+			const newQuery = {
+				...query,
+				order
+			}
+			setQuery(newQuery)
+		}
+	}
+
 	const columns: Columns = [
 		{
 			title: t('loc:Názov'),
 			dataIndex: 'name',
 			key: 'name',
 			ellipsis: true,
+			sortOrder: setOrder(query.order, 'name'),
 			sorter: {
 				compare: (a, b) => {
 					const nameA = a.name?.toUpperCase()
@@ -172,8 +187,7 @@ const LanguagesPage = () => {
 					}
 
 					return 0
-				},
-				multiple: 1
+				}
 			}
 		},
 		{
@@ -232,6 +246,7 @@ const LanguagesPage = () => {
 										className='table-fixed'
 										columns={columns}
 										dataSource={tableData}
+										onChange={onChangeTable}
 										rowClassName={'clickable-row'}
 										twoToneRows
 										pagination={false}

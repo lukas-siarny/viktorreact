@@ -1386,7 +1386,8 @@ span.ant-tag
 						display: flex
 						flex-direction: column
 						justify-content: center
-						margin-right: 16px
+						margin-right: 0
+						padding-right: 16px
 						.ant-tree-checkbox-inner
 							border-radius: 50%
 							width: 20px
@@ -1417,15 +1418,15 @@ span.ant-tag
 						padding: 8px 16px
 					.ant-tree-indent
 						display: none
+					&:hover
+						.ant-tree-checkbox
+							.ant-tree-checkbox-inner
+								border-color: $backgroundColor-notino-pink
 					&.noti-tree-node-0
 						.ant-tree-node-content-wrapper
 							padding-left: 0
 						.ant-tree-switcher
 							display: none
-						&:hover
-							.ant-tree-checkbox
-								.ant-tree-checkbox-inner
-									border-color: $backgroundColor-notino-pink
 					&.noti-tree-node-1
 						position: relative
 						font-weight: 700
@@ -1448,16 +1449,8 @@ span.ant-tag
 							border-radius: 2px
 							&:hover
 								background-color: $backgroundColor-trueGray-200
-						/*.ant-tree-node-content-wrapper
-							&:hover
 								& ~ .ant-tree-checkbox .ant-tree-checkbox-inner
-									border-color: $backgroundColor-notino-pink
-						/*.ant-tree-checkbox:hover .ant-tree-checkbox-inner
-							border-color: $backgroundColor-notino-pink
-						&:hover
-							.ant-tree-checkbox
-								.ant-tree-checkbox-inner
-									border-color: $backgroundColor-notino-pink
+									border-color: $borderColor-notino-gray
 					&.noti-tree-node-2
 						margin: 1px 0 1px 16px
 						border-radius: 4px
@@ -1467,9 +1460,6 @@ span.ant-tag
 							display: none
 						&:hover
 							background: $backgroundColor-trueGray-200
-							.ant-tree-checkbox
-								.ant-tree-checkbox-inner
-									border-color: $backgroundColor-notino-pink
 						&.ant-tree-treenode-checkbox-checked
 							background: $backgroundColor-trueGray-200
 

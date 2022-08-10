@@ -35,7 +35,6 @@ import { ReactComponent as HU_Flag } from '../assets/flags/HU.svg'
 import { ReactComponent as RO_Flag } from '../assets/flags/RO.svg'
 import { ReactComponent as BG_Flag } from '../assets/flags/BG.svg'
 import { ReactComponent as IT_Flag } from '../assets/flags/IT.svg'
-import { NameLocalizationsItem } from '../types/interfaces'
 
 export const LOCALES = {
 	[LANGUAGE.SK]: {

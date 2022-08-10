@@ -31,12 +31,12 @@ type Props = InjectedFormProps<ICosmeticsFilter, ComponentProps> & ComponentProp
 
 const fixLength100 = validationString(100)
 
-const CosmeticsFilter = (props: Props) => {
+const LanguagesFilter = (props: Props) => {
 	const { handleSubmit, total, addButton } = props
 	const [t] = useTranslation()
-	const formValues = useSelector((state: RootState) => getFormValues(FORM.COSMETICS_FILTER)(state))
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.LANGUAGES_FILTER)(state))
 
-	// disable filter fields if count of cosmetics is less than 2
+	// disable filter fields if count of languages is less than 2
 	const isFilterDisabled = useMemo(() => {
 		if (checkFiltersSize(formValues) > 0) return false
 		if (total > 1) return false
@@ -74,6 +74,6 @@ const form = reduxForm({
 		}
 	}, 300),
 	destroyOnUnmount: true
-})(CosmeticsFilter)
+})(LanguagesFilter)
 
 export default form

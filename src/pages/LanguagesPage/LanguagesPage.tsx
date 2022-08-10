@@ -56,7 +56,7 @@ const LanguagesPage = () => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam jazykov')
+				name: t('loc:Zoznam jazykov v salónoch')
 			}
 		]
 	}

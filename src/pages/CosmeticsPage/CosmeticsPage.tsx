@@ -21,13 +21,13 @@ import { transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
-import { RootState } from '../../reducers'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
 import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 const CosmeticsPage = () => {
 	const [t] = useTranslation()

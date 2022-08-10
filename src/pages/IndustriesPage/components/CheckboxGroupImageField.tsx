@@ -64,10 +64,12 @@ const CheckboxGroupImageField = (props: Props) => {
 				okText={i18next.t('loc:Pokračovať')}
 				{...(option.extraAction?.popconfirmProps || {})}
 				allowedButton={
-					<button type={'button'} disabled={option.extraAction.disabled || option.disabled}>
-						{option.extraAction.icon}
-						{option.extraAction.label}
-					</button>
+					<div>
+						<button type={'button'} disabled={option.extraAction.disabled || option.disabled}>
+							{option.extraAction.icon}
+							{option.extraAction.label}
+						</button>
+					</div>
 				}
 			/>
 		) : (

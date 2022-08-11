@@ -38,13 +38,13 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	const isCategoriesFromSubmitting = useSelector(isSubmitting(FORM.INDUSTRIES))
 
 	useEffect(() => {
-		if (isEmpty(categories.data) || !categories.data) {
+		if (isEmpty(categories.data)) {
 			dispatch(getCategories())
 		}
 	}, [dispatch, categories.data])
 
 	useEffect(() => {
-		if (isEmpty(services.data) || !services.data) {
+		if (isEmpty(services.data)) {
 			dispatch(getServices({ salonID }))
 		}
 	}, [dispatch, salonID, services.data])

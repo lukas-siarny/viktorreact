@@ -110,7 +110,7 @@ const IndustryPage = (props: Props) => {
 	const isLoadingTree = dataTree === null
 
 	useEffect(() => {
-		if (isEmpty(categories.data) || !categories.data) {
+		if (isEmpty(categories.data)) {
 			dispatch(getCategories())
 		}
 
@@ -183,7 +183,7 @@ const IndustryPage = (props: Props) => {
 								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
 								<span className={'label'}>{rootCategory?.name}</span>
 							</header>
-							{(rootCategory?.children.length || []) > 0 && !categories.isLoading ? (
+							{isEmpty(rootCategory?.children) && !categories.isLoading ? (
 								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
 							) : (
 								<div className='h-100 w-full flex items-center justify-center'>

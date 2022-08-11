@@ -78,6 +78,7 @@ const IndustriesForm: FC<Props> = (props) => {
 								htmlType={'submit'}
 								className={'noti-btn m-regular w-52 xl:w-60'}
 								disabled={submitting || pristine}
+								loading={submitting}
 								onClick={(e) => {
 									if (hasPermission) {
 										submit(FORM.INDUSTRIES)

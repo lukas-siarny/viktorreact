@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, useQueryParams } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -68,15 +67,6 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			}
 			setQuery(newQuery)
 		}
-	}
-
-	const onChangePagination = (page: number, limit: number) => {
-		const newQuery = {
-			...query,
-			limit,
-			page
-		}
-		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: IAdminUsersFilter) => {

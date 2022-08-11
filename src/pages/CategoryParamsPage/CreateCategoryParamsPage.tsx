@@ -40,21 +40,21 @@ const CreateCategoryParamsPage = () => {
 
 		if (formData.valueType === PARAMETERS_VALUE_TYPES.TIME) {
 			unitType = PARAMETERS_UNIT_TYPES.MINUTES
-			values = formData.values.map((item: any) => ({ value: item.value.toString() }))
+			values = formData.values.filter((item) => item.value).map((item: any) => ({ value: item.value.toString() }))
 		} else {
 			values =
 				formData.localizedValues?.map((item: any) => ({ valueLocalizations: item.valueLocalizations.filter((valueLocalization: any) => !!valueLocalization.value) })) || []
 		}
 
 		try {
-			const reqBody = {
+			const reqBody: any = {
 				nameLocalizations: formData.nameLocalizations.filter((nameLocalization: any) => !!nameLocalization.value),
 				valueType: formData.valueType,
 				values,
 				unitType
 			}
-			const { data } = await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody as any)
-			history.push(t('paths:category-parameters/{{parameterID}}', { parameterID: data.categoryParameter.id }))
+			await postReq('/api/b2b/admin/enums/category-parameters/', {}, reqBody)
+			history.push(t('paths:category-parameters'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

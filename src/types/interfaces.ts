@@ -430,10 +430,14 @@ export type ICategoryParameters = Paths.GetApiB2BAdminEnumsCategoryParameters.Re
 
 export type ICategoryParameter = Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200['categoryParameter']
 
+interface ILocalizedValue {
+	valueLocalizations: ICategoryParameter['values']['0']['valueLocalizations']
+}
+
 export interface ICategoryParamForm {
 	nameLocalizations: ICategoryParameter['nameLocalizations']
 	valueType: ICategoryParameter['valueType']
-	localizedValues: ICategoryParameter['values']['0']['valueLocalizations']
+	localizedValues: ILocalizedValue[]
 	values: Pick<ICategoryParameter['values']['0'], 'value'>[]
 }
 

@@ -38,16 +38,12 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	const isCategoriesFromSubmitting = useSelector(isSubmitting(FORM.INDUSTRIES))
 
 	useEffect(() => {
-		if (isEmpty(categories.data)) {
-			dispatch(getCategories())
-		}
-	}, [dispatch, categories.data])
+		dispatch(getCategories())
+	}, [dispatch])
 
 	useEffect(() => {
-		if (isEmpty(services.data)) {
-			dispatch(getServices({ salonID }))
-		}
-	}, [dispatch, salonID, services.data])
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [

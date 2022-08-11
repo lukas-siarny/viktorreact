@@ -110,20 +110,19 @@ const IndustryPage = (props: Props) => {
 	const isLoadingTree = dataTree === null
 
 	useEffect(() => {
-		if (isEmpty(categories.data)) {
-			dispatch(getCategories())
-		}
+		;(async () => {
+			const categoriesData = await dispatch(getCategories())
+			const root = categoriesData?.data?.find((category) => category.id === industryID)
 
-		if (categories.data && !isEmpty(categories.data) && dataTree === null) {
-			setDataTree(mapCategoriesForDataTree(null, rootCategory ? [rootCategory] : undefined))
-		}
-	}, [dispatch, categories.data, rootCategory, dataTree])
+			if (dataTree === null) {
+				setDataTree(mapCategoriesForDataTree(null, root ? [root] : undefined))
+			}
+		})()
+	}, [dispatch, dataTree, industryID])
 
 	useEffect(() => {
-		if (isEmpty(services.data) || !services.data) {
-			dispatch(getServices({ salonID }))
-		}
-	}, [dispatch, salonID, services.data])
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
 
 	useEffect(() => {
 		const initialValues = {
@@ -183,7 +182,7 @@ const IndustryPage = (props: Props) => {
 								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
 								<span className={'label'}>{rootCategory?.name}</span>
 							</header>
-							{isEmpty(rootCategory?.children) && !categories.isLoading ? (
+							{!isEmpty(rootCategory?.children) && !categories.isLoading ? (
 								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
 							) : (
 								<div className='h-100 w-full flex items-center justify-center'>

@@ -43,9 +43,9 @@ export interface ISalonSelectionOptionsPayload {
 }
 
 export const selectSalon =
-	(salonID?: number): ThunkResult<void> =>
+	(salonID?: string): ThunkResult<void> =>
 	async (dispatch, getState) => {
-		if (!salonID || salonID < 1) {
+		if (!salonID) {
 			dispatch({ type: SELECTED_SALON.SELECTED_SALON_CLEAR })
 			return
 		}

@@ -28,14 +28,14 @@ type ComponentProps = {
 }
 
 interface IServicesFilter {
-	rootCategoryID: number
-	salonID: number
+	rootCategoryID: String
+	salonID: String
 }
 
 type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps
 
 const ServicesFilter = (props: Props) => {
-	const { handleSubmit, total, createService } = props
+	const { handleSubmit, createService } = props
 	const [t] = useTranslation()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SERVICES_FILTER)(state))
 	const categories = useSelector((state: RootState) => state.categories.categories)
@@ -45,8 +45,6 @@ const ServicesFilter = (props: Props) => {
 			{t('loc:Pridať službu')}
 		</Button>
 	)
-
-	console.log('categories', categories)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>

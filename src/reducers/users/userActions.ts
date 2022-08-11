@@ -42,7 +42,7 @@ interface IGetPendingInvites {
 }
 
 export interface IGetUsersQueryParams extends IQueryParams {
-	roleID?: number | undefined | null
+	roleID?: string | undefined | null
 }
 
 export interface IAuthUserPayload {
@@ -167,7 +167,7 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 }
 
 export const getUserAccountDetails =
-	(userID: number): ThunkResult<Promise<IUserPayload>> =>
+	(userID: string): ThunkResult<Promise<IUserPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IUserPayload
 		try {
@@ -219,7 +219,7 @@ export const getUsers =
 	}
 
 export const getPendingInvites =
-	(userID: number): ThunkResult<Promise<IPendingInvitesPayload>> =>
+	(userID: string): ThunkResult<Promise<IPendingInvitesPayload>> =>
 	// eslint-disable-next-line consistent-return
 	async (dispatch) => {
 		let payload = {} as IPendingInvitesPayload

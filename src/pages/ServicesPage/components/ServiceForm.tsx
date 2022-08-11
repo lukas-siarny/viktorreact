@@ -42,9 +42,9 @@ const { Panel } = Collapse
 const numberMin0 = validationNumberMin(0)
 
 type ComponentProps = {
-	serviceID?: number
+	serviceID?: string
 	parentPath?: string
-	salonID: number
+	salonID: string
 	addEmployee: MouseEventHandler<HTMLElement>
 }
 
@@ -266,7 +266,8 @@ const ServiceForm = (props: Props) => {
 		}
 		try {
 			setIsRemoving(true)
-			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID: serviceID || -1 }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			// toto 'undefined' je divne
+			await deleteReq(`/api/b2b/admin/services/{serviceID}`, { serviceID: serviceID || 'undefined' }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			setIsRemoving(false)
 			history.push(parentPath + t('paths:services'))
 		} catch (e) {

@@ -170,6 +170,10 @@ const IndustryPage = (props: Props) => {
 	const servicesLength = rootCategory ? flattenTree([rootCategory], (item, level) => ({ ...item, level })).filter((category) => category.level === 2).length : 0
 	const selectedServicesLength = getServiceIdsFromFormValues(formValues)?.length || 0
 
+	const areThereAnyServiceCategories = rootCategory?.children.some((secondLevelCategory) => secondLevelCategory.children?.length)
+
+	const loading = categories.isLoading || services.isLoading || isLoadingTree
+
 	return (
 		<>
 			<Row>
@@ -178,7 +182,7 @@ const IndustryPage = (props: Props) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body small'>
-						<Spin spinning={categories.isLoading || services.isLoading || submitting || isLoadingTree}>
+						<Spin spinning={loading || submitting}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<ServiceIcon className={'text-notino-black mr-2'} />
 								{t('loc:Priradiť služby')}
@@ -190,12 +194,12 @@ const IndustryPage = (props: Props) => {
 								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
 								<span className={'label'}>{rootCategory?.name}</span>
 							</header>
-							{!isEmpty(rootCategory?.children) && !categories.isLoading ? (
-								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
-							) : (
+							{!loading && !areThereAnyServiceCategories ? (
 								<div className='h-100 w-full flex items-center justify-center'>
-									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:V tomto odvetví nie sú výber dostupné žiadne služby')} />
+									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:V tomto odvetví nie sú dostupné na výber žiadne služby')} />
 								</div>
+							) : (
+								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
 							)}
 						</Spin>
 					</div>

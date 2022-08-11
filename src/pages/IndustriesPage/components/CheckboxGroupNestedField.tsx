@@ -17,11 +17,11 @@ export type NestedMultiselectDataItem = {
 	key: number | string
 	title: string
 	disabled?: boolean
-	parentId?: number | null
+	parentId?: string | null
 	children?: DataNode[]
 	level: number
 	index: number
-	id: number
+	id: string
 }[]
 
 const CheckboxGroupNestedField = (props: Props) => {

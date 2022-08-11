@@ -23,6 +23,7 @@ import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 import { flattenTree } from '../../utils/helper'
+import { history } from '../../utils/history'
 
 // types
 import { IBreadcrumbs, IIndustryForm, SalonSubPageProps, IComputedMatch } from '../../types/interfaces'
@@ -152,7 +153,14 @@ const IndustryPage = (props: Props) => {
 				rootCategoryID: industryID,
 				categoryIDs
 			} as CategoriesPatch)
-			dispatch(getServices({ salonID }))
+
+			// redirect to service detail edit page in case it's users's first selected service
+			const servicesKeys = getServicesCategoryKeys(services.data?.groupedServicesByCategory || [])
+			if (isEmpty(servicesKeys) && !isEmpty(categoryIDs)) {
+				history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID: categoryIDs[0] }))
+			} else {
+				dispatch(getServices({ salonID }))
+			}
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.log(e)
@@ -186,7 +194,7 @@ const IndustryPage = (props: Props) => {
 								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
 							) : (
 								<div className='h-100 w-full flex items-center justify-center'>
-									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:Na výber nie sú dostupné žiadne služby')} />
+									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:V tomto odvetví nie sú výber dostupné žiadne služby')} />
 								</div>
 							)}
 						</Spin>

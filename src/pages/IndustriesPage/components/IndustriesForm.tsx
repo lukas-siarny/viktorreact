@@ -25,6 +25,7 @@ import { IIndustriesForm } from '../../../types/interfaces'
 
 // assets
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 type ComponentProps = {
 	selectedCategoryIDs?: string[]
@@ -54,7 +55,8 @@ const IndustriesForm: FC<Props> = (props) => {
 			extraAction: {
 				action: () => onShowMore(category.id),
 				label: `${t('loc:Priradiť služby')} (${selectedServices})`,
-				popconfirm: !pristine
+				popconfirm: !pristine,
+				icon: <ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
 			}
 		}
 	})

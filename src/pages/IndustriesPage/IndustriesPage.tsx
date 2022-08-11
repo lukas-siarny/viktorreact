@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
 import { compose } from 'redux'
 import { initialize, isSubmitting } from 'redux-form'
-import { isEmpty } from 'lodash'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'

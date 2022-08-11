@@ -11,7 +11,7 @@ import i18next from 'i18next'
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { RootState } from '../../reducers'
-import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
+import { getServices } from '../../reducers/services/serviceActions'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -126,12 +126,9 @@ const IndustryPage = (props: Props) => {
 		;(async () => {
 			const categoriesData = await dispatch(getCategories())
 			const root = categoriesData?.data?.find((category) => category.id === industryID)
-
-			if (dataTree === null) {
-				setDataTree(mapCategoriesForDataTree(null, root ? [root] : undefined))
-			}
+			setDataTree(mapCategoriesForDataTree(null, root ? [root] : undefined))
 		})()
-	}, [dispatch, dataTree, industryID])
+	}, [dispatch, industryID])
 
 	useEffect(() => {
 		dispatch(getServices({ salonID }))

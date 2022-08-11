@@ -30,7 +30,7 @@ import Permissions from '../../utils/Permissions'
 import useBackUrl from '../../hooks/useBackUrl'
 
 type Props = {
-	computedMatch: IComputedMatch<{ userID: number }>
+	computedMatch: IComputedMatch<{ userID: string }>
 }
 
 const UserPage: FC<Props> = (props) => {
@@ -91,7 +91,7 @@ const UserPage: FC<Props> = (props) => {
 			}
 
 			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
-			if (!userID || Number(authUser.data?.id) === Number(userID)) dispatch(getCurrentUser())
+			if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

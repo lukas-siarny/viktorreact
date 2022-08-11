@@ -51,7 +51,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		order: withDefault(StringParam, 'createdAt:desc'),
 		accountState: StringParam,
 		serviceID: StringParam,
-		salonID: NumberParam
+		salonID: StringParam
 	})
 
 	useEffect(() => {

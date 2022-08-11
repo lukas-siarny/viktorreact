@@ -98,9 +98,9 @@ export interface ISalonForm {
 	socialLinkPinterest: string | null
 	payByCard: boolean
 	otherPaymentMethods: string | null
-	logo: any | null;
-	gallery: any | null;
-	pricelistIDs?: number[]
+	logo: any | null
+	gallery: any | null
+	pricelistIDs?: string[]
 	pricelists?: any
 	companyContactPerson: {
 		email: string | null
@@ -279,7 +279,7 @@ export interface ICustomerForm {
 	street?: string
 	streetNumber?: string
 	countryCode?: string
-	salonID: number
+	salonID: string
 	gallery: any,
 	avatar: any
 }
@@ -287,7 +287,7 @@ export interface ICustomerForm {
 export interface IEmployeeForm {
 	firstName: string
 	lastName: string
-	salonID: number
+	salonID: string
 	email?: string
 	phonePrefixCountryCode?: string
 	phone?: string

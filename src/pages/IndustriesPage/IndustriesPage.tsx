@@ -75,8 +75,9 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	}, [dispatch, selectedCategoryIDs])
 
 	const handleSubmit = async (values: IIndustriesForm) => {
+		// TODO: remove any
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/categories', { salonID }, {
+			await patchReq('/api/b2b/admin/salons/{salonID}/categories', { salonID: salonID as any }, {
 				categoryIDs: values.categoryIDs
 			} as CategoriesPatch)
 			dispatch(getServices({ salonID }))
@@ -93,10 +94,10 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={categories.isLoading || services.isLoading || isCategoriesFromSubmitting}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body small'>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body small'>
+						<Spin spinning={categories.isLoading || services.isLoading || isCategoriesFromSubmitting}>
 							<IndustriesForm
 								selectedCategoryIDs={selectedCategoryIDs}
 								onSubmit={handleSubmit}
@@ -105,10 +106,10 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 									history.push(parentPath + t('paths:industries/{{industryID}}', { industryID }))
 								}}
 							/>
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+						</Spin>
+					</div>
+				</Col>
+			</Row>
 		</>
 	)
 }

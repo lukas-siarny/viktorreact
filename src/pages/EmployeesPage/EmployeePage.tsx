@@ -275,6 +275,7 @@ const EmployeePage = (props: Props) => {
 	}
 
 	const inviteEmployee = async (formData: IInviteEmployeeForm) => {
+		// TODO: remove any
 		try {
 			await postReq(
 				'/api/b2b/admin/employees/invite',
@@ -282,7 +283,7 @@ const EmployeePage = (props: Props) => {
 				{
 					inviteEmail: formData?.email,
 					employeeID,
-					salonID,
+					salonID: salonID as any,
 					roleID: formData?.roleID
 				}
 			)

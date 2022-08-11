@@ -380,7 +380,7 @@ export interface ISearchableWithoutPagination<T> {
 // }
 
 export interface SalonSubPageProps {
-	salonID: number
+	salonID: string
 	parentPath?: string
 }
 

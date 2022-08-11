@@ -98,16 +98,13 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	}
 
 	const inviteEmployee = async (formData: IInviteEmployeeForm) => {
+		// TODO: remove any
 		try {
-			await postReq(
-				'/api/b2b/admin/employees/invite',
-				{},
-				{
-					inviteEmail: formData?.email,
-					salonID,
-					roleID: formData?.roleID
-				}
-			)
+			await postReq('/api/b2b/admin/employees/invite', {}, {
+				inviteEmail: formData?.email,
+				salonID,
+				roleID: formData?.roleID
+			} as any)
 			history.push(parentPath + t('paths:employees'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

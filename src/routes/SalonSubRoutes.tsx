@@ -46,9 +46,9 @@ const redirectoToForbiddenPage = () => {
 const SalonSubRoutes: FC = () => {
 	const { path, url, params } = useRouteMatch()
 
-	const salonID = Number((params as any).salonID)
+	const { salonID } = (params as any) || {}
 
-	if (!salonID || Number.isNaN(salonID)) {
+	if (!salonID) {
 		redirectoToForbiddenPage()
 	}
 

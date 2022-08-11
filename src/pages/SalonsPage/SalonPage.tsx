@@ -65,7 +65,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { salonID } = props
+	// TODO: remove any
+	const salonID = props.salonID as any
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
@@ -81,7 +82,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
-	const salonExists = salonID > 0
+	const salonExists = salonID
 	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null) && salonExists
 
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
@@ -92,7 +93,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isPublishedVersionSameAsDraft = getIsPublishedVersionSameAsDraft(formValues as ISalonForm)
 
 	// check permissions for submit in case of create or update salon
-	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
+	const submitPermissions = salonID ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
 	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
@@ -166,7 +167,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				})
 			)
 			updateOnlyOpeningHours.current = false
-		} else if (!isEmpty(salonData) && salonID > 0) {
+		} else if (!isEmpty(salonData) && salonID) {
 			// init data for existing salon
 			const openOverWeekend: boolean = checkWeekend(salonData?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData?.openingHours)
@@ -339,10 +340,11 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				languageIDs: data.languageIDs
 			}
 
-			if (salonID > 0) {
+			if (salonID) {
 				// update existing salon
-				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
-				dispatch(selectSalon(salonID))
+				// TODO: remove any
+				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: salonID as any }, salonData as any)
+				dispatch(selectSalon(salonID as any))
 			} else {
 				// create new salon
 				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
@@ -363,16 +365,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const breadcrumbDetailItem =
-		salonID > 0
-			? {
-					name: t('loc:Detail salónu'),
-					titleName: get(salon, 'data.name')
-			  }
-			: {
-					name: t('loc:Vytvoriť salón'),
-					link: t('paths:salons/create')
-			  }
+	const breadcrumbDetailItem = salonID
+		? {
+				name: t('loc:Detail salónu'),
+				titleName: get(salon, 'data.name')
+		  }
+		: {
+				name: t('loc:Vytvoriť salón'),
+				link: t('paths:salons/create')
+		  }
 
 	// View
 	const breadcrumbs: IBreadcrumbs = {
@@ -393,7 +394,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 		try {
 			setIsRemoving(true)
-			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID: salonID as any }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			history.push(t('paths:salons'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -427,9 +428,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		setSubmitting(true)
+		// TODO: remove any
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/unpublish', { salonID }, { reason: formData.note })
-			dispatch(selectSalon(salonID))
+			await patchReq('/api/b2b/admin/salons/{salonID}/unpublish', { salonID: salonID as any }, { reason: formData.note })
+			dispatch(selectSalon(salonID as any))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -463,9 +465,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		setIsSendingConfRequest(true)
+		// TODO: remove any
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID }, {})
-			dispatch(selectSalon(salonID))
+			await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID: salonID as any }, {})
+			dispatch(selectSalon(salonID as any))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

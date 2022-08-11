@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Col, Divider, Row, Spin } from 'antd'
+import { Col, Divider, Empty, Row, Spin } from 'antd'
 import { compose } from 'redux'
 import { getFormValues, initialize, isSubmitting } from 'redux-form'
 import { DataNode } from 'antd/lib/tree'
@@ -46,12 +46,10 @@ export const getServiceIdsFromFormValues = (values: IIndustryForm) => {
 	return values?.categoryIDs.reduce((categoryKeys, key) => {
 		if (key.startsWith('level2')) {
 			const split = key.split('_')
-			if (!Number.isNaN(split[1])) {
-				categoryKeys.push(Number(split[1]))
-			}
+			categoryKeys.push(split[1])
 		}
 		return categoryKeys
-	}, [] as number[])
+	}, [] as string[])
 }
 
 export const getServicesCategoryKeys = (array: any[], levelOfDepth = 0) => {
@@ -94,7 +92,7 @@ const IndustryPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const { salonID, parentPath } = props
-	const industryID = Number(props.computedMatch.params.industryID)
+	const { industryID } = props.computedMatch.params
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const services = useSelector((state: RootState) => state.service.services)
@@ -132,7 +130,7 @@ const IndustryPage = (props: Props) => {
 			categoryIDs: getServicesCategoryKeys(rootUserCategory ? [rootUserCategory] : [])
 		}
 
-		dispatch(initialize(FORM.INDUSTRIES, initialValues))
+		dispatch(initialize(FORM.INDUSTRY, initialValues))
 	}, [dispatch, rootUserCategory])
 
 	const breadcrumbs: IBreadcrumbs = {
@@ -150,12 +148,12 @@ const IndustryPage = (props: Props) => {
 
 	const handleSubmit = async (values: IIndustryForm) => {
 		const categoryIDs = getServiceIdsFromFormValues(values)
-
+		// TODO: remove any
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID }, {
+			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID: salonID as any }, {
 				rootCategoryID: industryID,
 				categoryIDs
-			} as CategoriesPatch)
+			} as any)
 			dispatch(getServices({ salonID }))
 		} catch (e) {
 			// eslint-disable-next-line no-console
@@ -171,25 +169,32 @@ const IndustryPage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:industries')} />
 			</Row>
-			<Spin spinning={categories.isLoading || services.isLoading || submitting || isLoadingTree}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body small'>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body small'>
+						<Spin spinning={categories.isLoading || services.isLoading || submitting || isLoadingTree}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<ServiceIcon className={'text-notino-black mr-2'} />
 								{t('loc:Priradiť služby')}
 							</h3>
 							<Divider className={'mb-3 mt-3'} />
+
 							<header className={'category-select-header mb-4'}>
 								<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.original}")` }} />
 								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
 								<span className={'label'}>{rootCategory?.name}</span>
 							</header>
-							<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+							{(rootCategory?.children.length || []) > 0 && !categories.isLoading ? (
+								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
+							) : (
+								<div className='h-100 w-full flex items-center justify-center'>
+									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:Na výber nie sú dostupné žiadne služby')} />
+								</div>
+							)}
+						</Spin>
+					</div>
+				</Col>
+			</Row>
 		</>
 	)
 }

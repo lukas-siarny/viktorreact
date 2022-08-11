@@ -39,7 +39,7 @@ import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 const { Panel } = Collapse
 
 type ComponentProps = {
-	salonID: number
+	salonID: string
 	addService: MouseEventHandler<HTMLElement>
 }
 

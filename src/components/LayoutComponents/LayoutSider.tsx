@@ -42,7 +42,7 @@ const { Sider } = Layout
 export type LayoutSiderProps = {
 	page?: PAGE
 	showNavigation?: boolean
-	salonID?: number
+	salonID?: string
 	parentPath?: string
 }
 

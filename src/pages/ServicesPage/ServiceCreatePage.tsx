@@ -54,8 +54,7 @@ const ServiceCreatePage = (props: SalonSubPageProps) => {
 		}
 	}
 
-	// TODO: remove any
-	return <ServiceForm addEmployee={() => addEmployee(employees, form, dispatch)} onSubmit={handleSubmit} salonID={salonID as any} />
+	return <ServiceForm addEmployee={() => addEmployee(employees, form, dispatch)} onSubmit={handleSubmit} salonID={salonID} />
 }
 
 export default compose(withPermissions(permissions))(ServiceCreatePage)

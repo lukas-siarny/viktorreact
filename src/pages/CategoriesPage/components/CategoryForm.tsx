@@ -41,13 +41,13 @@ type NameLocalizationsItem = {
 
 export interface ICategoryForm {
 	name: string
-	id: number
+	id: string
 	orderIndex: number
-	parentId: number
+	parentId: string
 	childrenLength: number
 	nameLocalizations: NameLocalizationsItem[]
 	image: any
-	categoryParameterID: number
+	categoryParameterID: string
 }
 
 const fixLength100 = validationString(100)

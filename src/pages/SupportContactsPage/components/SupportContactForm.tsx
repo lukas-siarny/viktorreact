@@ -34,7 +34,7 @@ import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.sv
 
 type ComponentProps = {
 	disabledForm: boolean
-	supportContactID?: number
+	supportContactID?: string
 }
 
 type Props = InjectedFormProps<ISupportContactForm, ComponentProps> & ComponentProps

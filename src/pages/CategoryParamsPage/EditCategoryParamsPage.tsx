@@ -25,7 +25,7 @@ import { IBreadcrumbs, IComputedMatch, ICategoryParamForm } from '../../types/in
 import { RootState } from '../../reducers'
 
 type Props = {
-	computedMatch: IComputedMatch<{ parameterID: number }>
+	computedMatch: IComputedMatch<{ parameterID: string }>
 }
 
 function EditCategoryParamsPage(props: Props) {

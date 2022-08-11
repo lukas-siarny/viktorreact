@@ -75,7 +75,7 @@ const CreateUserPage = () => {
 			})
 
 			const userID = data.user.id
-			history.push(userID > 0 ? t('paths:users/{{userID}}', { userID }) : t('paths:users'))
+			history.push(userID ? t('paths:users/{{userID}}', { userID }) : t('paths:users'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

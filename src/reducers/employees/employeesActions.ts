@@ -23,8 +23,8 @@ interface IGetEmployee {
 }
 
 export interface IGetEmployeesQueryParams extends IQueryParams {
-	salonID?: number | undefined | null
-	serviceID?: number | undefined | null
+	salonID?: string | undefined | null
+	serviceID?: string | undefined | null
 	accountState?: string | undefined | null
 }
 
@@ -65,12 +65,12 @@ export const getEmployees =
 	}
 
 export const getEmployee =
-	(employeeID: number): ThunkResult<Promise<IEmployeePayload>> =>
+	(employeeID: string): ThunkResult<Promise<IEmployeePayload>> =>
 	async (dispatch) => {
 		let payload = {} as IEmployeePayload
 		try {
 			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/employees/{employeeID}', { employeeID } as any)
+			const { data } = await getReq('/api/b2b/admin/employees/{employeeID}', { employeeID })
 			payload = {
 				data
 			}

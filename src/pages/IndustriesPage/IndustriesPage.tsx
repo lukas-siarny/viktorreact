@@ -63,7 +63,7 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 				acc.push(item.category.id)
 			}
 			return acc
-		}, [] as number[])
+		}, [] as string[])
 	}, [services?.data])
 
 	useEffect(() => {
@@ -75,11 +75,14 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	}, [dispatch, selectedCategoryIDs])
 
 	const handleSubmit = async (values: IIndustriesForm) => {
-		// TODO: remove any
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/categories', { salonID: salonID as any }, {
-				categoryIDs: values.categoryIDs
-			} as CategoriesPatch)
+			await patchReq(
+				'/api/b2b/admin/salons/{salonID}/categories',
+				{ salonID },
+				{
+					categoryIDs: values.categoryIDs as unknown as CategoriesPatch['categoryIDs']
+				}
+			)
 			dispatch(getServices({ salonID }))
 		} catch (e) {
 			// eslint-disable-next-line no-console

@@ -16,7 +16,7 @@ interface IGetCustomersQueryParams {
 	limit?: any | undefined
 	order?: string | undefined
 	search?: string | undefined | null
-	salonID?: number | undefined | null
+	salonID?: string | undefined | null
 }
 
 interface IGetCustomers {
@@ -58,7 +58,7 @@ export const getCustomers =
 	}
 
 export const getCustomer =
-	(customerID: number): ThunkResult<Promise<ICustomerPayload>> =>
+	(customerID: string): ThunkResult<Promise<ICustomerPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICustomerPayload
 		try {

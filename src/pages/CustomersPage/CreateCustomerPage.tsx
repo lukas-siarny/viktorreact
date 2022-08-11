@@ -63,7 +63,6 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
-	// TODO: remove any
 	const createCustomer = async (formData: ICustomerForm) => {
 		try {
 			setSubmitting(true)
@@ -74,7 +73,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				firstName: formData.firstName,
 				gender: formData.gender,
 				lastName: formData.lastName,
-				salonID: salonID as any,
+				salonID,
 				street: formData.street,
 				streetNumber: formData.streetNumber,
 				zipCode: formData.zipCode,

@@ -37,7 +37,7 @@ type TreeCategories = {
 	index: number
 	image: any
 	deletedAt?: string
-	id: number
+	id: string
 	isParentDeleted: boolean
 }
 
@@ -94,7 +94,7 @@ const CategoriesTree = () => {
 	)
 
 	const deleteCategoryHandler = useCallback(
-		async (id: number) => {
+		async (id: string) => {
 			if (isRemoving) {
 				return
 			}
@@ -210,7 +210,7 @@ const CategoriesTree = () => {
 			// key of dropped node
 			// const dropKey: number = droppedData.node.key
 			// key of dragged node
-			const dragKey: number = droppedData.dragNode.key
+			const dragKey: string = droppedData.dragNode.key
 			// drag node actual index/position in array children nodes
 			const dragPos: string = droppedData.dragNode.pos.split('-')
 			const dropPos: string = droppedData.node.pos.split('-')
@@ -282,10 +282,10 @@ const CategoriesTree = () => {
 				categoryParameterID: formData.categoryParameterID ?? undefined
 			}
 
-			if (formData.id && formData.id >= 0) {
+			if (formData.id) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
 			} else {
-				if (formData.parentId >= 0) {
+				if (formData.parentId) {
 					body = {
 						...body,
 						parentID: formData.parentId || undefined

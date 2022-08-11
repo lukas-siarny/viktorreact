@@ -50,13 +50,12 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:desc'),
 		accountState: StringParam,
-		serviceID: NumberParam,
+		serviceID: StringParam,
 		salonID: NumberParam
 	})
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
-		// TODO: remove any
 		dispatch(
 			getEmployees({
 				page: query.page,
@@ -65,7 +64,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				search: query.search,
 				accountState: query.accountState,
 				serviceID: query.serviceID,
-				salonID: salonID as any
+				salonID
 			})
 		)
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID, salonID])

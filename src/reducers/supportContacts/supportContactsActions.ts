@@ -35,8 +35,8 @@ export interface IGetSupportContactsOptions {
 }
 
 export interface ISupportContactsTableData {
-	key: number
-	supportContactID: number
+	key: string
+	supportContactID: string
 	country: {
 		nameLocalizations: {
 			language: string
@@ -142,7 +142,7 @@ export const getSupportContacts =
 	}
 
 export const getSupportContact =
-	(supportContactID?: number): ThunkResult<Promise<ISupportContactPayload>> =>
+	(supportContactID?: string): ThunkResult<Promise<ISupportContactPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISupportContactPayload
 

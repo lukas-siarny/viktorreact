@@ -21,7 +21,7 @@ type Props = {
 	visible?: boolean
 	onClose?: () => void
 	title?: string
-	salonID: number
+	salonID: string
 	openingHoursNote?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHoursNote']
 }
 

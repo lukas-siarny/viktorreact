@@ -35,8 +35,8 @@ const CosmeticsPage = () => {
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
 	const [filterQuery, setFilterQuery] = useState<string | undefined>(undefined)
-	// 0 - represents new record
-	const [cosmeticID, setCosmeticID] = useState<number>(0)
+	// null - represents new record
+	const [cosmeticID, setCosmeticID] = useState<string | undefined>(undefined)
 
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 
@@ -90,7 +90,7 @@ const CosmeticsPage = () => {
 			)
 		}
 
-		setCosmeticID(cosmetic ? cosmetic.id : 0)
+		setCosmeticID(cosmetic ? cosmetic.id : undefined)
 		setVisibleForm(true)
 	}
 
@@ -101,7 +101,7 @@ const CosmeticsPage = () => {
 		}
 
 		try {
-			if (cosmeticID > 0) {
+			if (cosmeticID) {
 				await patchReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID }, body)
 			} else {
 				await postReq('/api/b2b/admin/enums/cosmetics/', null, body)
@@ -116,7 +116,7 @@ const CosmeticsPage = () => {
 
 	const handleDelete = async () => {
 		try {
-			await deleteReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID })
+			await deleteReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID: cosmeticID || 'undefined' })
 			dispatch(getCosmetics())
 			changeFormVisibility()
 		} catch (error: any) {

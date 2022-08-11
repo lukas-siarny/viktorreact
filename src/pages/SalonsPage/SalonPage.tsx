@@ -65,8 +65,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	// TODO: remove any
-	const salonID = props.salonID as any
+	const { salonID } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
@@ -82,7 +81,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
-	const salonExists = salonID
+	const salonExists = !!salonID
 	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null) && salonExists
 
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
@@ -232,9 +231,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					  ]
 					: null,
 				categoryIDs: map(salonData?.categories, (category) => category.id),
-				// TODO: remove any when NOT-1515 is done
-				languageIDs: map(salonData?.languages, (lng: any) => lng.id),
-				cosmeticIDs: map(salonData?.cosmetics, (cosmetic) => cosmetic.id),
+				languageIDs: map(salonData?.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
+				cosmeticIDs: map(salonData?.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
 				address: !!salonData?.address || null,
 				socialLinkWebPage: salonData?.socialLinkWebPage || null,
 				socialLinkFB: salonData?.socialLinkFB || null,
@@ -342,8 +340,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 			if (salonID) {
 				// update existing salon
-				// TODO: remove any
-				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID: salonID as any }, salonData as any)
+				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
 				dispatch(selectSalon(salonID as any))
 			} else {
 				// create new salon
@@ -428,9 +425,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		setSubmitting(true)
-		// TODO: remove any
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/unpublish', { salonID: salonID as any }, { reason: formData.note })
+			await patchReq('/api/b2b/admin/salons/{salonID}/unpublish', { salonID }, { reason: formData.note })
 			dispatch(selectSalon(salonID as any))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -465,9 +461,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		setIsSendingConfRequest(true)
-		// TODO: remove any
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID: salonID as any }, {})
+			await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID }, {})
 			dispatch(selectSalon(salonID as any))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console

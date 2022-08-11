@@ -27,9 +27,9 @@ import { IIndustriesForm } from '../../../types/interfaces'
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 type ComponentProps = {
-	selectedCategoryIDs?: number[]
+	selectedCategoryIDs?: string[]
 	disabledForm?: boolean
-	onShowMore: (id: number) => void
+	onShowMore: (id: string) => void
 }
 
 type Props = InjectedFormProps<IIndustriesForm, ComponentProps> & ComponentProps

@@ -33,7 +33,7 @@ import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-ic
 import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
 
 type Props = SalonSubPageProps & {
-	computedMatch: IComputedMatch<{ industryID: number }>
+	computedMatch: IComputedMatch<{ industryID: string }>
 }
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
 
@@ -148,12 +148,11 @@ const IndustryPage = (props: Props) => {
 
 	const handleSubmit = async (values: IIndustryForm) => {
 		const categoryIDs = getServiceIdsFromFormValues(values)
-		// TODO: remove any
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID: salonID as any }, {
+			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID }, {
 				rootCategoryID: industryID,
 				categoryIDs
-			} as any)
+			} as CategoriesPatch)
 			dispatch(getServices({ salonID }))
 		} catch (e) {
 			// eslint-disable-next-line no-console

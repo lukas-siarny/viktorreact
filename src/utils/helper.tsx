@@ -648,7 +648,7 @@ export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsI
 }
 
 type SelectDataItem = {
-	id: number
+	id: string
 	children?: any
 	name?: string | undefined
 }

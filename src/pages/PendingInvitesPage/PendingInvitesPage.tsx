@@ -39,7 +39,7 @@ const PendingInvitesPage = () => {
 		}
 	}, [dispatch, currentUser.data?.id])
 
-	const acceptInvite = async (salonID: number) => {
+	const acceptInvite = async (salonID: string) => {
 		if (!currentUser.data?.id) {
 			return
 		}

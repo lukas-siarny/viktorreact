@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, useQueryParams } from 'use-query-params'
+import { NumberParam, StringParam, useQueryParams } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
@@ -46,7 +46,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
-		rootCategoryID: NumberParam
+		rootCategoryID: StringParam
 	})
 
 	useEffect(() => {

@@ -42,7 +42,7 @@ interface IGetPendingInvites {
 }
 
 export interface IGetUsersQueryParams extends IQueryParams {
-	roleID?: number | undefined | null
+	roleID?: string | undefined | null
 }
 
 export interface IAuthUserPayload {

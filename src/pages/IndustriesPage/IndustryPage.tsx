@@ -39,7 +39,7 @@ type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
 
 // create category keys
 //  keys with prefix level2 are service keys
-const getCategoryKey = (id: number, level: number) => `level${level}_${id}`
+const getCategoryKey = (id: string, level: number) => `level${level}_${id}`
 
 // parse serviceIDs from category keys
 export const getServiceIdsFromFormValues = (values: IIndustryForm) => {
@@ -64,7 +64,7 @@ export const getServicesCategoryKeys = (array: any[], levelOfDepth = 0) => {
 	return output
 }
 
-const mapCategoriesForDataTree = (parentId: number | null, children: any[] | undefined, level = 0) => {
+const mapCategoriesForDataTree = (parentId: string | null, children: any[] | undefined, level = 0) => {
 	const childs: NestedMultiselectDataItem[] & any = children
 	const items: DataNode[] = map(childs, (child, index) => {
 		return {

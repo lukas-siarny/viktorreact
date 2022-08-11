@@ -26,7 +26,7 @@ type Props = RouteProps & {
 	}
 	/** e.g. tabKey or other extra props for page */
 	extra?: Dictionary<any>
-	salonID?: number
+	salonID?: string
 	parentPath?: string
 }
 

@@ -448,3 +448,5 @@ export enum PARAMETERS_VALUE_TYPES {
 export enum PARAMETERS_UNIT_TYPES {
 	MINUTES = 'MINUTES'
 }
+
+export const NEW_SALON_ID = 'new_salon'

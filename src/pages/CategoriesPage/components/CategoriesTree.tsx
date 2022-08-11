@@ -27,10 +27,10 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 type TreeCategories = {
 	title?: ReactElement
 	icon?: ReactElement
-	key: number
+	key: string
 	name: string
 	disabled?: boolean
-	parentId?: number | null
+	parentId?: string | null
 	children?: TreeCategories[] | null
 	nameLocalizations?: any
 	level: number
@@ -56,7 +56,7 @@ const CategoriesTree = () => {
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
 	const createCategoryHandler = useCallback(
-		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
+		(parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
 			setShowForm(true)
 			dispatch(
 				initialize(FORM.CATEGORY, {
@@ -127,7 +127,7 @@ const CategoriesTree = () => {
 		)
 	}
 
-	const childrenRecursive = (parentId: number, children: any[], level = 1, isParentDeleted = false) => {
+	const childrenRecursive = (parentId: string, children: any[], level = 1, isParentDeleted = false) => {
 		const childs: TreeCategories[] & any = children
 		const items: any = map(childs, (child, index) => {
 			const data = {

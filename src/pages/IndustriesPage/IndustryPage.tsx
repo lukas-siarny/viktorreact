@@ -11,7 +11,7 @@ import i18next from 'i18next'
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { RootState } from '../../reducers'
-import { getServices } from '../../reducers/services/serviceActions'
+import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -63,6 +63,18 @@ export const getServicesCategoryKeys = (array: any[], levelOfDepth = 0) => {
 		output = output.concat(getServicesCategoryKeys(item.category.children || [], levelOfDepth + 1))
 	})
 	return output
+}
+
+const getCategoryById = (category: any, serviceCategoryID: string) => {
+	let result = null
+	if (category?.category?.id === serviceCategoryID) {
+		return category
+	}
+	if (category?.category?.children) {
+		// eslint-disable-next-line no-return-assign
+		category.category.children.some((node: any) => (result = getCategoryById(node, serviceCategoryID)))
+	}
+	return result
 }
 
 const mapCategoriesForDataTree = (parentId: string | null, children: any[] | undefined, level = 0) => {
@@ -153,13 +165,20 @@ const IndustryPage = (props: Props) => {
 				rootCategoryID: industryID,
 				categoryIDs
 			} as CategoriesPatch)
+			const updatedServicesData = await dispatch(getServices({ salonID }))
 
-			// redirect to service detail edit page in case it's users's first selected service
+			// redirect to service detail edit page in case it's first selected service in salon
 			const servicesKeys = getServicesCategoryKeys(services.data?.groupedServicesByCategory || [])
+			// check if there were any services saved before (servicesKeys) and if there are any new services to be saved (categoryIDs)
 			if (isEmpty(servicesKeys) && !isEmpty(categoryIDs)) {
-				history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID: categoryIDs[0] }))
-			} else {
-				dispatch(getServices({ salonID }))
+				// find rootCategory from updated service data
+				const updatedUserRootCategory = updatedServicesData.data?.groupedServicesByCategory.find((category) => category.category?.id === industryID)
+				// find service id in a rootCategory tree based on first selected service ID
+				const serviceID = getCategoryById(updatedUserRootCategory, categoryIDs[0])?.service?.id
+				// redirect
+				if (serviceID) {
+					history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID }))
+				}
 			}
 		} catch (e) {
 			// eslint-disable-next-line no-console

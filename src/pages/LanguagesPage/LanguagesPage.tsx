@@ -105,7 +105,7 @@ const LanguagesPage = () => {
 		if (lang) {
 			dispatch(
 				initialize(FORM.LANGUAGES, {
-					image: lang.image?.resizedImages?.thumbnail,
+					image: lang.image?.original ? [{ url: lang.image?.original, uid: lang.image?.id }] : undefined,
 					nameLocalizations: sortNameLocalizationsWithDefaultLangFirst(lang.nameLocalizations)
 				})
 			)
@@ -206,7 +206,9 @@ const LanguagesPage = () => {
 						preview={false}
 						className='languages-flag'
 					/>
-				) : null
+				) : (
+					<div className={'languages-flag'} />
+				)
 		}
 	]
 

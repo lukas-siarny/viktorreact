@@ -123,12 +123,12 @@ export const getSupportContacts =
 				return tableItem
 			})
 
-			const { options } = await dispatch(getSupportContactsOptions((i18n.language as LANGUAGE) || DEFAULT_LANGUAGE, data))
+			const supportContactOptions = await dispatch(getSupportContactsOptions((i18n.language as LANGUAGE) || DEFAULT_LANGUAGE, data))
 
 			payload = {
 				data,
 				tableData,
-				options
+				options: supportContactOptions?.options || []
 			}
 
 			dispatch({ type: SUPPORT_CONTACTS.SUPPORT_CONTACTS_DONE, payload })

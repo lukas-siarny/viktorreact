@@ -18,7 +18,7 @@ import useBackUrl from '../../hooks/useBackUrl'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
-		serviceID: number
+		serviceID: string
 	}>
 }
 

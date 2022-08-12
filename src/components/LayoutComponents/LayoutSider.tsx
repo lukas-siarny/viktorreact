@@ -42,7 +42,7 @@ const { Sider } = Layout
 export type LayoutSiderProps = {
 	page?: PAGE
 	showNavigation?: boolean
-	salonID?: number
+	salonID?: string
 	parentPath?: string
 }
 
@@ -137,7 +137,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											// fix style issue due wrapped item into <Permission> component
 											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORY_PARAMETERS })}
 										>
-											{t('loc:Parametre kategórii')}
+											{t('loc:Parametre')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
@@ -191,6 +191,15 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
 									>
 										{t('loc:Detail salónu')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.INDUSTRIES}
+										key={PAGE.INDUSTRIES}
+										onClick={() => history.push(getPath(t('paths:industries')))}
+										icon={<CategoryIcon />} // fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES })}
+									>
+										{t('loc:Odvetvia')}
 									</Menu.Item>
 									<Menu.Item
 										eventKey={PAGE.SERVICES}

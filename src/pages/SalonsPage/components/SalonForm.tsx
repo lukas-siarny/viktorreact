@@ -48,7 +48,7 @@ import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-i
 
 type ComponentProps = {
 	disabledForm: boolean
-	salonID?: number
+	salonID?: string
 	noteModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
 	pendingPublication?: boolean

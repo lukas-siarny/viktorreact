@@ -30,7 +30,7 @@ export default (values: ICategoryParamForm) => {
 			const duplicates: number[] = []
 
 			enteredValues.forEach((item, index) => {
-				if (onlyValues.indexOf(item.value) !== index) {
+				if (item.value && onlyValues.indexOf(item.value) !== index) {
 					duplicates.push(index)
 				}
 			})
@@ -44,10 +44,28 @@ export default (values: ICategoryParamForm) => {
 	} else {
 		const { localizedValues } = values
 
-		if (!localizedValues || localizedValues.length < 1 || !localizedValues[0].value) {
-			valuesErrors[0] = { value: i18next.t('loc:Toto pole je povinné') }
-		}
+		if (!localizedValues || localizedValues.length < 1 || !localizedValues[0] || !localizedValues[0].valueLocalizations || !localizedValues[0].valueLocalizations[0]?.value) {
+			valuesErrors[0] = { valueLocalizations: [{ value: i18next.t('loc:Toto pole je povinné') }] }
+		} else {
+			const missingDefaultLanguage: number[] = []
 
+			localizedValues.forEach((localizedValue, rootIndex) => {
+				if (localizedValue && localizedValue.valueLocalizations) {
+					valuesErrors[rootIndex] = { valueLocalizations: [{ value: undefined }] }
+
+					const defaultValueIsEmpty = !localizedValue.valueLocalizations[0].value
+					const otherValueIsFilled = localizedValue.valueLocalizations.some((entry, index) => index > 0 && entry.value)
+
+					if (defaultValueIsEmpty && otherValueIsFilled) {
+						missingDefaultLanguage.push(rootIndex)
+					}
+				}
+			})
+
+			missingDefaultLanguage.forEach((index: number) => {
+				valuesErrors[index].valueLocalizations[0] = { value: i18next.t('loc:Toto pole je povinné') }
+			})
+		}
 		errors.localizedValues = valuesErrors
 	}
 

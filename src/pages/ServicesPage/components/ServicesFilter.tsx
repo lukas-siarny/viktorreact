@@ -25,8 +25,8 @@ type ComponentProps = {
 }
 
 interface IServicesFilter {
-	rootCategoryID: number
-	salonID: number
+	rootCategoryID: String
+	salonID: String
 }
 
 type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps

@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -51,14 +50,22 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:desc'),
 		accountState: StringParam,
-		serviceID: NumberParam,
-		salonID: NumberParam
+		serviceID: StringParam,
+		salonID: StringParam
 	})
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
 		dispatch(
-			getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, accountState: query.accountState, serviceID: query.serviceID, salonID })
+			getEmployees({
+				page: query.page,
+				limit: query.limit,
+				order: query.order,
+				search: query.search,
+				accountState: query.accountState,
+				serviceID: query.serviceID,
+				salonID
+			})
 		)
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID, salonID])
 

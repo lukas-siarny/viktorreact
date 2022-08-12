@@ -15,7 +15,7 @@ import MainLayout from '../layouts/MainLayout'
 import PublicLayout from '../layouts/PublicLayout'
 
 // utils
-import { PAGE } from '../utils/enums'
+import { PAGE, NEW_SALON_ID } from '../utils/enums'
 
 // User
 import LoginPage from '../pages/LoginPage/LoginPage'
@@ -127,8 +127,8 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:salons/create')}
 					layout={MainLayout}
 					page={PAGE.SALONS}
-					// override selected salon ID - 0 indicates CREATE form
-					salonID={0}
+					// NOTE: override selected salon ID -> NEW_SALON_ID indicates CREATE form
+					salonID={NEW_SALON_ID}
 				/>
 				<Route {...props} path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })} component={SalonSubRoutes} />
 

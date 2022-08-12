@@ -21,15 +21,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CustomerID = number;
+            export type CustomerID = string; // uuid
         }
         export interface PathParameters {
-            customerID: Parameters.CustomerID;
+            customerID: Parameters.CustomerID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 customer?: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -52,15 +52,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
+            export type EmployeeID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
+            employeeID: Parameters.EmployeeID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -83,15 +83,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryID = number;
+            export type CategoryID = string; // uuid
         }
         export interface PathParameters {
-            categoryID: Parameters.CategoryID;
+            categoryID: Parameters.CategoryID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 category: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -114,15 +114,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryParameterID = number;
+            export type CategoryParameterID = string; // uuid
         }
         export interface PathParameters {
-            categoryParameterID: Parameters.CategoryParameterID;
+            categoryParameterID: Parameters.CategoryParameterID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 categoryParameter: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -145,15 +145,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CosmeticID = number;
+            export type CosmeticID = string; // uuid
         }
         export interface PathParameters {
-            cosmeticID: Parameters.CosmeticID;
+            cosmeticID: Parameters.CosmeticID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 cosmetic: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -176,15 +176,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type LanguageID = number;
+            export type LanguageID = string; // uuid
         }
         export interface PathParameters {
-            languageID: Parameters.LanguageID;
+            languageID: Parameters.LanguageID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 language: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -207,15 +207,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SupportContactID = number;
+            export type SupportContactID = string; // uuid
         }
         export interface PathParameters {
-            supportContactID: Parameters.SupportContactID;
+            supportContactID: Parameters.SupportContactID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 supportContact: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -238,15 +238,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -269,15 +269,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type ServiceID = number;
+            export type ServiceID = string; // uuid
         }
         export interface PathParameters {
-            serviceID: Parameters.ServiceID;
+            serviceID: Parameters.ServiceID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 service?: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -300,15 +300,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type UserID = number;
+            export type UserID = string; // uuid
         }
         export interface PathParameters {
-            userID: Parameters.UserID;
+            userID: Parameters.UserID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -331,15 +331,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CustomerID = number;
+            export type CustomerID = string; // uuid
         }
         export interface PathParameters {
-            customerID: Parameters.CustomerID;
+            customerID: Parameters.CustomerID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 customer?: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -362,15 +362,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
+            export type EmployeeID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
+            employeeID: Parameters.EmployeeID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -412,15 +412,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -443,15 +443,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type ServiceID = number;
+            export type ServiceID = string; // uuid
         }
         export interface PathParameters {
-            serviceID: Parameters.ServiceID;
+            serviceID: Parameters.ServiceID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 service?: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -474,15 +474,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type UserID = number;
+            export type UserID = string; // uuid
         }
         export interface PathParameters {
-            userID: Parameters.UserID;
+            userID: Parameters.UserID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -508,12 +508,20 @@ declare namespace Paths {
             export type Limit = 25 | 50 | 100 | 1000;
             export type Order = string;
             export type Page = number;
-            export type SalonID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type SalonID = string; // uuid
             export type Search = string | null;
         }
         export interface QueryParameters {
             search?: Parameters.Search;
-            salonID?: Parameters.SalonID;
+            salonID?: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.SalonID /* uuid */;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -521,7 +529,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 customers: {
-                    id: number;
+                    id: string; // uuid
                     firstName: string;
                     lastName: string;
                     email?: string;
@@ -536,11 +544,11 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     profileImage: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -574,15 +582,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CustomerID = number;
+            export type CustomerID = string; // uuid
         }
         export interface PathParameters {
-            customerID: Parameters.CustomerID;
+            customerID: Parameters.CustomerID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 customer: {
-                    id: number;
+                    id: string; // uuid
                     firstName: string;
                     lastName: string;
                     email?: string;
@@ -598,11 +606,11 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     profileImage: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -610,7 +618,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     galleryImages: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -642,14 +650,30 @@ declare namespace Paths {
             export type Limit = 25 | 50 | 100;
             export type Order = string;
             export type Page = number;
-            export type SalonID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type SalonID = string; // uuid
             export type Search = string | null;
-            export type ServiceID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type ServiceID = string; // uuid
         }
         export interface QueryParameters {
             search?: Parameters.Search;
-            salonID?: Parameters.SalonID;
-            serviceID?: Parameters.ServiceID;
+            salonID?: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.SalonID /* uuid */;
+            serviceID?: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
@@ -658,7 +682,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 employees: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     email?: string;
@@ -667,11 +691,11 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     services: {
-                        id: number;
+                        id: string; // uuid
                         salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
@@ -701,16 +725,16 @@ declare namespace Paths {
                             };
                         };
                         category: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             children: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                             }[];
                         };
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -718,12 +742,12 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         firstName?: string;
                         lastName?: string;
                         email: string;
                         image: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -758,15 +782,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
+            export type EmployeeID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
+            employeeID: Parameters.EmployeeID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     description?: string;
@@ -776,46 +800,60 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
-                    services: {
-                        id: number;
-                        salonPriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        employeePriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        category: {
-                            id: number;
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
                             name?: string;
-                        };
+                            children: {
+                                id: string; // uuid
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        resizedImages: {
+                                            [key: string]: any;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -823,7 +861,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
@@ -833,36 +871,36 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         }[];
                         salons: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             logo?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 resizedImages: {
                                     [key: string]: any;
                                 };
                                 isAutogenerated: boolean;
                             };
-                            employeeID: number;
+                            employeeID: string; // uuid
                             role?: {
-                                id: number;
+                                id: string; // uuid
                                 permissions: {
-                                    id: number;
+                                    id: string; // uuid
                                     name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                                 }[];
                             };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -874,10 +912,10 @@ declare namespace Paths {
                         deletedAt?: string; // date-time
                     };
                     role?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     };
@@ -906,7 +944,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 categories: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -917,10 +955,10 @@ declare namespace Paths {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
-                    parentID?: number;
+                    parentID?: string; // uuid
                     orderIndex: number;
                     children: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -931,10 +969,10 @@ declare namespace Paths {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
-                        parentID?: number;
+                        parentID?: string; // uuid
                         orderIndex: number;
                         children: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -945,29 +983,29 @@ declare namespace Paths {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
-                            parentID?: number;
+                            parentID?: string; // uuid
                             orderIndex: number;
                             icon?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 isAutogenerated: boolean;
                             };
                         }[];
                         icon?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         };
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
                         };
                         isAutogenerated: boolean;
                     } | {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -975,7 +1013,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     icon?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         isAutogenerated: boolean;
                     };
@@ -999,15 +1037,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryID = number;
+            export type CategoryID = string; // uuid
         }
         export interface PathParameters {
-            categoryID: Parameters.CategoryID;
+            categoryID: Parameters.CategoryID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 category: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1018,10 +1056,10 @@ declare namespace Paths {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
-                    parentID?: number;
+                    parentID?: string; // uuid
                     orderIndex: number;
                     children: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1032,10 +1070,10 @@ declare namespace Paths {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
-                        parentID?: number;
+                        parentID?: string; // uuid
                         orderIndex: number;
                         children: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1046,22 +1084,22 @@ declare namespace Paths {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
-                            parentID?: number;
+                            parentID?: string; // uuid
                             orderIndex: number;
                             icon?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 isAutogenerated: boolean;
                             };
                             categoryParameter?: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                                 nameLocalizations: {
                                     language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                     value: string | null;
                                 }[];
                                 values: {
-                                    id: number;
+                                    id: string; // uuid
                                     value?: string;
                                     valueLocalizations?: {
                                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1071,19 +1109,19 @@ declare namespace Paths {
                             };
                         }[];
                         icon?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         };
                         categoryParameter?: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
                             values: {
-                                id: number;
+                                id: string; // uuid
                                 value?: string;
                                 valueLocalizations?: {
                                     language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1093,14 +1131,14 @@ declare namespace Paths {
                         };
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
                         };
                         isAutogenerated: boolean;
                     } | {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -1108,19 +1146,19 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     icon?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         isAutogenerated: boolean;
                     };
                     categoryParameter?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
                         values: {
-                            id: number;
+                            id: string; // uuid
                             value?: string;
                             valueLocalizations?: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1152,7 +1190,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 categoryParameters: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1161,7 +1199,7 @@ declare namespace Paths {
                     valueType?: "ENUM" | "TIME";
                     unitType?: "MINUTES";
                     values: {
-                        id: number;
+                        id: string; // uuid
                         value?: string;
                         valueLocalizations?: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1189,15 +1227,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryParameterID = number;
+            export type CategoryParameterID = string; // uuid
         }
         export interface PathParameters {
-            categoryParameterID: Parameters.CategoryParameterID;
+            categoryParameterID: Parameters.CategoryParameterID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 categoryParameter: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1206,7 +1244,7 @@ declare namespace Paths {
                     valueType?: "ENUM" | "TIME";
                     unitType?: "MINUTES";
                     values: {
-                        id: number;
+                        id: string; // uuid
                         value?: string;
                         valueLocalizations?: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -1242,10 +1280,10 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 cosmetics: {
-                    id: number;
+                    id: string; // uuid
                     name: string;
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -1270,18 +1308,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CosmeticID = number;
+            export type CosmeticID = string; // uuid
         }
         export interface PathParameters {
-            cosmeticID: Parameters.CosmeticID;
+            cosmeticID: Parameters.CosmeticID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 cosmetic: {
-                    id: number;
+                    id: string; // uuid
                     name: string;
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -1371,14 +1409,14 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 languages: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -1403,22 +1441,22 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type LanguageID = number;
+            export type LanguageID = string; // uuid
         }
         export interface PathParameters {
-            languageID: Parameters.LanguageID;
+            languageID: Parameters.LanguageID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 language: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -1451,7 +1489,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 supportContacts: {
-                    id: number;
+                    id: string; // uuid
                     phones: [
                         {
                             phonePrefixCountryCode: string;
@@ -1516,7 +1554,7 @@ declare namespace Paths {
                     }[];
                     note?: string;
                     address?: {
-                        id: number;
+                        id: string; // uuid
                         countryCode?: string;
                         city?: string;
                         zipCode?: string;
@@ -1552,15 +1590,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SupportContactID = number;
+            export type SupportContactID = string; // uuid
         }
         export interface PathParameters {
-            supportContactID: Parameters.SupportContactID;
+            supportContactID: Parameters.SupportContactID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 supportContact: {
-                    id: number;
+                    id: string; // uuid
                     phones: [
                         {
                             phonePrefixCountryCode: string;
@@ -1664,14 +1702,14 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 roles: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     permissions: {
-                        id: number;
+                        id: string; // uuid
                         name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                     }[];
                     createdAt: string; // date-time
@@ -1699,14 +1737,14 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 roles: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     permissions: {
-                        id: number;
+                        id: string; // uuid
                         name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                     }[];
                     createdAt: string; // date-time
@@ -1730,7 +1768,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryFirstLevelIDs = number[];
+            export type CategoryFirstLevelIDs = string /* uuid */[];
             export type CountryCode = string;
             export type CreateType = "NON_BASIC" | "BASIC";
             export type Limit = 25 | 50 | 100;
@@ -1754,7 +1792,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salons: {
-                    id: number;
+                    id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     publicationDeclineReason?: string;
                     name?: string;
@@ -1773,7 +1811,7 @@ declare namespace Paths {
                         longitude?: number; // float
                     };
                     categories: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     }[];
                     pendingPublication: boolean;
@@ -1818,7 +1856,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salons: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     address?: {
                         countryCode?: string;
@@ -1840,6 +1878,44 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminSalonsBasicSuggestion {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                salons: {
+                    id: string; // uuid
+                    suggestionHash: string;
+                    reject: boolean;
+                    name?: string | null;
+                    email?: string | null; // email
+                    phones: {
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
+                    address?: {
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        streetNumber?: string;
+                    };
+                }[];
+            }
+        }
+    }
     namespace GetApiB2BAdminSalonsSalonId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -1854,15 +1930,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     publicationDeclineReason?: string;
                     name?: string;
@@ -1941,13 +2017,13 @@ declare namespace Paths {
                     payByCard?: boolean;
                     otherPaymentMethods?: string;
                     categories: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     }[];
                     fillingProgressSalon: number;
-                    rating: number; // float
+                    rating?: number; // float
                     images: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -1955,7 +2031,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     }[];
                     logo?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -1965,18 +2041,134 @@ declare namespace Paths {
                     parkingNote?: string;
                     locationNote?: string;
                     pricelists: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         isAutogenerated: boolean;
                     }[];
-                    cosmetics: {
-                        id: number;
-                        name: string;
-                    }[];
-                    languages: {
-                        id: number;
-                        name?: string;
-                    }[];
+                    cosmetics: [
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                        }?
+                    ];
+                    languages: [
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?
+                    ];
                     companyContactPerson?: {
                         email?: string;
                         firstName?: string;
@@ -2016,7 +2208,7 @@ declare namespace Paths {
                         }[];
                         email?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -2024,7 +2216,7 @@ declare namespace Paths {
                             isAutogenerated: boolean;
                         };
                         images: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -2032,7 +2224,7 @@ declare namespace Paths {
                             isAutogenerated: boolean;
                         }[];
                         pricelists: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         }[];
@@ -2059,15 +2251,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     description?: string;
                     businessID?: string;
@@ -2084,7 +2276,7 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     categories: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     }[];
                     createdAt: string; // date-time
@@ -2108,30 +2300,30 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type RootCategoryID = number;
-            export type SalonID = number;
+            export type RootCategoryID = string; // uuid
+            export type SalonID = string; // uuid
         }
         export interface QueryParameters {
-            rootCategoryID?: Parameters.RootCategoryID;
-            salonID: Parameters.SalonID;
+            rootCategoryID?: Parameters.RootCategoryID /* uuid */;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 groupedServicesByCategory: {
                     category?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         children: {
                             category?: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                                 children: {
                                     category: {
-                                        id: number;
+                                        id: string; // uuid
                                         name?: string;
                                     };
                                     service: {
-                                        id: number;
+                                        id: string; // uuid
                                         isComplete: boolean;
                                         rangePriceAndDurationData: {
                                             durationFrom?: number;
@@ -2149,11 +2341,11 @@ declare namespace Paths {
                                         };
                                         employeesCount: number;
                                         employees: {
-                                            id: number;
+                                            id: string; // uuid
                                             firstName: string;
                                             lastName: string;
                                             image: {
-                                                id: number;
+                                                id: string; // uuid
                                                 original: string;
                                                 resizedImages: {
                                                     [key: string]: any;
@@ -2162,7 +2354,7 @@ declare namespace Paths {
                                             };
                                         }[];
                                         salon: {
-                                            id: number;
+                                            id: string; // uuid
                                             name: string;
                                         };
                                         createdAt: string; // date-time
@@ -2191,15 +2383,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type ServiceID = number;
+            export type ServiceID = string; // uuid
         }
         export interface PathParameters {
-            serviceID: Parameters.ServiceID;
+            serviceID: Parameters.ServiceID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 service: {
-                    id: number;
+                    id: string; // uuid
                     useCategoryParameter: boolean;
                     noteForPriceAndDuration?: string;
                     priceAndDurationData: {
@@ -2219,14 +2411,14 @@ declare namespace Paths {
                     serviceCategoryParameter?: {
                         /**
                          * example:
-                         * 1
+                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                          */
-                        id: number;
+                        id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
                         name?: string;
                         values: {
-                            id: number;
+                            id: string; // uuid
                             value?: string;
                             priceAndDurationData: {
                                 durationFrom?: number;
@@ -2259,12 +2451,12 @@ declare namespace Paths {
                         };
                     };
                     employees: {
-                        id: number;
+                        id: string; // uuid
                         fullName: string;
                         hasActiveAccount: boolean;
                         inviteEmail?: string;
                         image: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -2288,14 +2480,14 @@ declare namespace Paths {
                         serviceCategoryParameter?: {
                             /**
                              * example:
-                             * 1
+                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                              */
-                            id: number;
+                            id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
                             name?: string;
                             values: {
-                                id: number;
+                                id: string; // uuid
                                 value?: string;
                                 priceAndDurationData: {
                                     durationFrom?: number;
@@ -2315,19 +2507,22 @@ declare namespace Paths {
                         };
                     }[];
                     category: {
-                        id: number;
+                        id: string; // uuid
+                        description?: string;
                         name?: string;
                         child: {
-                            id: number;
+                            id: string; // uuid
+                            description?: string;
                             name?: string;
                             child?: {
-                                id: number;
+                                id: string; // uuid
+                                description?: string;
                                 name?: string;
                             };
                         };
                     };
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     createdAt: string; // date-time
@@ -2354,11 +2549,11 @@ declare namespace Paths {
             export type Limit = 25 | 50 | 100;
             export type Order = string;
             export type Page = number;
-            export type RoleID = number;
+            export type RoleID = string; // uuid
             export type Search = string | null;
         }
         export interface QueryParameters {
-            roleID?: Parameters.RoleID;
+            roleID?: Parameters.RoleID /* uuid */;
             search?: Parameters.Search;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
@@ -2367,7 +2562,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 users: {
-                    id: number;
+                    id: string; // uuid
                     email: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -2376,7 +2571,7 @@ declare namespace Paths {
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     }[];
                     createdAt: string; // date-time
@@ -2406,15 +2601,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type UserID = number;
+            export type UserID = string; // uuid
         }
         export interface PathParameters {
-            userID: Parameters.UserID;
+            userID: Parameters.UserID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -2424,36 +2619,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -2481,16 +2676,16 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type UserID = number;
+            export type UserID = string; // uuid
         }
         export interface PathParameters {
-            userID: Parameters.UserID;
+            userID: Parameters.UserID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 pendingEmployeeInvites: {
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                 }[];
@@ -2514,12 +2709,20 @@ declare namespace Paths {
             export type Limit = 25 | 50 | 100 | 1000;
             export type Order = string;
             export type Page = number;
-            export type SalonID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type SalonID = string; // uuid
             export type Search = string | null;
         }
         export interface QueryParameters {
             search?: Parameters.Search;
-            salonID?: Parameters.SalonID;
+            salonID?: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.SalonID /* uuid */;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -2527,7 +2730,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 customers: {
-                    id: number;
+                    id: string; // uuid
                     firstName: string;
                     lastName: string;
                     email?: string;
@@ -2542,11 +2745,11 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     profileImage: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -2580,15 +2783,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CustomerID = number;
+            export type CustomerID = string; // uuid
         }
         export interface PathParameters {
-            customerID: Parameters.CustomerID;
+            customerID: Parameters.CustomerID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 customer: {
-                    id: number;
+                    id: string; // uuid
                     firstName: string;
                     lastName: string;
                     email?: string;
@@ -2604,11 +2807,11 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     profileImage: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -2616,7 +2819,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     galleryImages: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -2648,14 +2851,30 @@ declare namespace Paths {
             export type Limit = 25 | 50 | 100;
             export type Order = string;
             export type Page = number;
-            export type SalonID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type SalonID = string; // uuid
             export type Search = string | null;
-            export type ServiceID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type ServiceID = string; // uuid
         }
         export interface QueryParameters {
             search?: Parameters.Search;
-            salonID?: Parameters.SalonID;
-            serviceID?: Parameters.ServiceID;
+            salonID?: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.SalonID /* uuid */;
+            serviceID?: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
@@ -2664,7 +2883,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 employees: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     email?: string;
@@ -2673,11 +2892,11 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     services: {
-                        id: number;
+                        id: string; // uuid
                         salonPriceAndDurationData: {
                             durationFrom?: number;
                             durationTo?: number;
@@ -2707,16 +2926,16 @@ declare namespace Paths {
                             };
                         };
                         category: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             children: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                             }[];
                         };
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -2724,12 +2943,12 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         firstName?: string;
                         lastName?: string;
                         email: string;
                         image: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -2764,15 +2983,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
+            export type EmployeeID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
+            employeeID: Parameters.EmployeeID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     description?: string;
@@ -2782,46 +3001,60 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
-                    services: {
-                        id: number;
-                        salonPriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        employeePriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        category: {
-                            id: number;
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
                             name?: string;
-                        };
+                            children: {
+                                id: string; // uuid
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        resizedImages: {
+                                            [key: string]: any;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -2829,7 +3062,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
@@ -2839,36 +3072,36 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         }[];
                         salons: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             logo?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 resizedImages: {
                                     [key: string]: any;
                                 };
                                 isAutogenerated: boolean;
                             };
-                            employeeID: number;
+                            employeeID: string; // uuid
                             role?: {
-                                id: number;
+                                id: string; // uuid
                                 permissions: {
-                                    id: number;
+                                    id: string; // uuid
                                     name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                                 }[];
                             };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -2880,10 +3113,10 @@ declare namespace Paths {
                         deletedAt?: string; // date-time
                     };
                     role?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     };
@@ -2912,7 +3145,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 categories: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -2923,10 +3156,10 @@ declare namespace Paths {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
-                    parentID?: number;
+                    parentID?: string; // uuid
                     orderIndex: number;
                     children: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -2937,10 +3170,10 @@ declare namespace Paths {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
-                        parentID?: number;
+                        parentID?: string; // uuid
                         orderIndex: number;
                         children: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -2951,29 +3184,29 @@ declare namespace Paths {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
-                            parentID?: number;
+                            parentID?: string; // uuid
                             orderIndex: number;
                             icon?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 isAutogenerated: boolean;
                             };
                         }[];
                         icon?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         };
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
                         };
                         isAutogenerated: boolean;
                     } | {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -2981,7 +3214,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     icon?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         isAutogenerated: boolean;
                     };
@@ -3005,15 +3238,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryID = number;
+            export type CategoryID = string; // uuid
         }
         export interface PathParameters {
-            categoryID: Parameters.CategoryID;
+            categoryID: Parameters.CategoryID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 category: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -3024,10 +3257,10 @@ declare namespace Paths {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
-                    parentID?: number;
+                    parentID?: string; // uuid
                     orderIndex: number;
                     children: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -3038,10 +3271,10 @@ declare namespace Paths {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
-                        parentID?: number;
+                        parentID?: string; // uuid
                         orderIndex: number;
                         children: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -3052,22 +3285,22 @@ declare namespace Paths {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
-                            parentID?: number;
+                            parentID?: string; // uuid
                             orderIndex: number;
                             icon?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 isAutogenerated: boolean;
                             };
                             categoryParameter?: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                                 nameLocalizations: {
                                     language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                     value: string | null;
                                 }[];
                                 values: {
-                                    id: number;
+                                    id: string; // uuid
                                     value?: string;
                                     valueLocalizations?: {
                                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -3077,19 +3310,19 @@ declare namespace Paths {
                             };
                         }[];
                         icon?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         };
                         categoryParameter?: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
                             values: {
-                                id: number;
+                                id: string; // uuid
                                 value?: string;
                                 valueLocalizations?: {
                                     language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -3099,14 +3332,14 @@ declare namespace Paths {
                         };
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
                         };
                         isAutogenerated: boolean;
                     } | {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -3114,19 +3347,19 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     icon?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         isAutogenerated: boolean;
                     };
                     categoryParameter?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
                         values: {
-                            id: number;
+                            id: string; // uuid
                             value?: string;
                             valueLocalizations?: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -3162,10 +3395,10 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 cosmetics: {
-                    id: number;
+                    id: string; // uuid
                     name: string;
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -3190,18 +3423,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CosmeticID = number;
+            export type CosmeticID = string; // uuid
         }
         export interface PathParameters {
-            cosmeticID: Parameters.CosmeticID;
+            cosmeticID: Parameters.CosmeticID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 cosmetic: {
-                    id: number;
+                    id: string; // uuid
                     name: string;
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -3291,14 +3524,14 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 languages: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -3323,22 +3556,22 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type LanguageID = number;
+            export type LanguageID = string; // uuid
         }
         export interface PathParameters {
-            languageID: Parameters.LanguageID;
+            languageID: Parameters.LanguageID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 language: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -3371,7 +3604,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 supportContacts: {
-                    id: number;
+                    id: string; // uuid
                     phones: [
                         {
                             phonePrefixCountryCode: string;
@@ -3436,7 +3669,7 @@ declare namespace Paths {
                     }[];
                     note?: string;
                     address?: {
-                        id: number;
+                        id: string; // uuid
                         countryCode?: string;
                         city?: string;
                         zipCode?: string;
@@ -3476,14 +3709,14 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 roles: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     permissions: {
-                        id: number;
+                        id: string; // uuid
                         name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                     }[];
                     createdAt: string; // date-time
@@ -3511,13 +3744,13 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salons: {
-                    id: number;
+                    id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     publicationDeclineReason?: string;
                     name?: string;
                     fillingProgressSalon: number;
                     images: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -3529,7 +3762,7 @@ declare namespace Paths {
                         phone: string; // ^\d+$
                     }[];
                     logo?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -3546,7 +3779,7 @@ declare namespace Paths {
                         longitude?: number; // float
                     };
                     categories: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     }[];
                     createdAt: string; // date-time
@@ -3582,7 +3815,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salons: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     address?: {
                         countryCode?: string;
@@ -3604,6 +3837,44 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BV1SalonsBasicSuggestion {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                salons: {
+                    id: string; // uuid
+                    suggestionHash: string;
+                    reject: boolean;
+                    name?: string | null;
+                    email?: string | null; // email
+                    phones: {
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
+                    address?: {
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        streetNumber?: string;
+                    };
+                }[];
+            }
+        }
+    }
     namespace GetApiB2BV1SalonsPreview {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -3622,20 +3893,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
-                    rating: number; // float
+                    rating?: number; // float
                     categorySegment?: {
                         categories: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                         }[];
                     };
                     gallerySegment?: {
                         images: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -3643,7 +3914,7 @@ declare namespace Paths {
                             isAutogenerated: boolean;
                         }[];
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -3749,7 +4020,7 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                         aboutUsSecond?: string;
                     };
-                    contactInfoSegment?: {
+                    addressSegment?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -3757,6 +4028,10 @@ declare namespace Paths {
                         streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
+                        parkingNote?: string;
+                        locationNote?: string;
+                    };
+                    contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
                             phone: string; // ^\d+$
@@ -3768,8 +4043,6 @@ declare namespace Paths {
                         socialLinkYoutube?: string;
                         socialLinkTikTok?: string;
                         socialLinkPinterest?: string;
-                        parkingNote?: string;
-                        locationNote?: string;
                     };
                     paymentSegment?: {
                         payByCard?: boolean;
@@ -3797,26 +4070,178 @@ declare namespace Paths {
                     };
                     pricelistSegment?: {
                         pricelists: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         }[];
                     };
                     cosmeticsSegment?: {
-                        cosmetics: {
-                            id: number;
-                            name: string;
-                        }[];
+                        cosmetics: [
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?
+                        ];
                     };
                     languagesSegment?: {
-                        languages: {
-                            id: number;
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                        }[];
+                        languages: [
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?
+                        ];
                     };
                     permissions: {
                         salon: {
@@ -3862,28 +4287,28 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
-                    rating: number; // float
+                    rating?: number; // float
                     categorySegment?: {
                         categories: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                         }[];
                     };
                     gallerySegment?: {
                         images: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -3891,7 +4316,7 @@ declare namespace Paths {
                             isAutogenerated: boolean;
                         }[];
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -3997,7 +4422,7 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                         aboutUsSecond?: string;
                     };
-                    contactInfoSegment?: {
+                    addressSegment?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -4005,6 +4430,10 @@ declare namespace Paths {
                         streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
+                        parkingNote?: string;
+                        locationNote?: string;
+                    };
+                    contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
                             phone: string; // ^\d+$
@@ -4016,8 +4445,6 @@ declare namespace Paths {
                         socialLinkYoutube?: string;
                         socialLinkTikTok?: string;
                         socialLinkPinterest?: string;
-                        parkingNote?: string;
-                        locationNote?: string;
                     };
                     paymentSegment?: {
                         payByCard?: boolean;
@@ -4045,26 +4472,178 @@ declare namespace Paths {
                     };
                     pricelistSegment?: {
                         pricelists: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         }[];
                     };
                     cosmeticsSegment?: {
-                        cosmetics: {
-                            id: number;
-                            name: string;
-                        }[];
+                        cosmetics: [
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?
+                        ];
                     };
                     languagesSegment?: {
-                        languages: {
-                            id: number;
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                        }[];
+                        languages: [
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?
+                        ];
                     };
                     permissions: {
                         salon: {
@@ -4110,15 +4689,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     description?: string;
                     businessID?: string;
@@ -4135,7 +4714,7 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                     categories: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     }[];
                     createdAt: string; // date-time
@@ -4159,23 +4738,23 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     groupedServicesByCategory: {
                         category: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                         };
                         groupedServicesByCategory: {
                             category: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                             };
                             servicesCount: number;
@@ -4199,30 +4778,30 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type RootCategoryID = number;
-            export type SalonID = number;
+            export type RootCategoryID = string; // uuid
+            export type SalonID = string; // uuid
         }
         export interface QueryParameters {
-            rootCategoryID?: Parameters.RootCategoryID;
-            salonID: Parameters.SalonID;
+            rootCategoryID?: Parameters.RootCategoryID /* uuid */;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 groupedServicesByCategory: {
                     category?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         children: {
                             category?: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                                 children: {
                                     category: {
-                                        id: number;
+                                        id: string; // uuid
                                         name?: string;
                                     };
                                     service: {
-                                        id: number;
+                                        id: string; // uuid
                                         isComplete: boolean;
                                         rangePriceAndDurationData: {
                                             durationFrom?: number;
@@ -4240,11 +4819,11 @@ declare namespace Paths {
                                         };
                                         employeesCount: number;
                                         employees: {
-                                            id: number;
+                                            id: string; // uuid
                                             firstName: string;
                                             lastName: string;
                                             image: {
-                                                id: number;
+                                                id: string; // uuid
                                                 original: string;
                                                 resizedImages: {
                                                     [key: string]: any;
@@ -4253,7 +4832,7 @@ declare namespace Paths {
                                             };
                                         }[];
                                         salon: {
-                                            id: number;
+                                            id: string; // uuid
                                             name: string;
                                         };
                                         createdAt: string; // date-time
@@ -4282,15 +4861,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type ServiceID = number;
+            export type ServiceID = string; // uuid
         }
         export interface PathParameters {
-            serviceID: Parameters.ServiceID;
+            serviceID: Parameters.ServiceID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 service: {
-                    id: number;
+                    id: string; // uuid
                     useCategoryParameter: boolean;
                     noteForPriceAndDuration?: string;
                     priceAndDurationData: {
@@ -4310,14 +4889,14 @@ declare namespace Paths {
                     serviceCategoryParameter?: {
                         /**
                          * example:
-                         * 1
+                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                          */
-                        id: number;
+                        id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
                         name?: string;
                         values: {
-                            id: number;
+                            id: string; // uuid
                             value?: string;
                             priceAndDurationData: {
                                 durationFrom?: number;
@@ -4350,12 +4929,12 @@ declare namespace Paths {
                         };
                     };
                     employees: {
-                        id: number;
+                        id: string; // uuid
                         fullName: string;
                         hasActiveAccount: boolean;
                         inviteEmail?: string;
                         image: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -4379,14 +4958,14 @@ declare namespace Paths {
                         serviceCategoryParameter?: {
                             /**
                              * example:
-                             * 1
+                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                              */
-                            id: number;
+                            id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
                             name?: string;
                             values: {
-                                id: number;
+                                id: string; // uuid
                                 value?: string;
                                 priceAndDurationData: {
                                     durationFrom?: number;
@@ -4406,19 +4985,22 @@ declare namespace Paths {
                         };
                     }[];
                     category: {
-                        id: number;
+                        id: string; // uuid
+                        description?: string;
                         name?: string;
                         child: {
-                            id: number;
+                            id: string; // uuid
+                            description?: string;
                             name?: string;
                             child?: {
-                                id: number;
+                                id: string; // uuid
+                                description?: string;
                                 name?: string;
                             };
                         };
                     };
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     createdAt: string; // date-time
@@ -4454,7 +5036,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 users: {
-                    id: number;
+                    id: string; // uuid
                     email: string;
                     fullName?: string;
                     createdAt: string; // date-time
@@ -4484,15 +5066,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type UserID = number;
+            export type UserID = string; // uuid
         }
         export interface PathParameters {
-            userID: Parameters.UserID;
+            userID: Parameters.UserID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -4502,36 +5084,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -4559,16 +5141,16 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type UserID = number;
+            export type UserID = string; // uuid
         }
         export interface PathParameters {
-            userID: Parameters.UserID;
+            userID: Parameters.UserID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 pendingEmployeeInvites: {
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                 }[];
@@ -4593,7 +5175,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 categories: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4604,10 +5186,10 @@ declare namespace Paths {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
-                    parentID?: number;
+                    parentID?: string; // uuid
                     orderIndex: number;
                     children: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4618,10 +5200,10 @@ declare namespace Paths {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
-                        parentID?: number;
+                        parentID?: string; // uuid
                         orderIndex: number;
                         children: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4632,29 +5214,29 @@ declare namespace Paths {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
-                            parentID?: number;
+                            parentID?: string; // uuid
                             orderIndex: number;
                             icon?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 isAutogenerated: boolean;
                             };
                         }[];
                         icon?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         };
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
                         };
                         isAutogenerated: boolean;
                     } | {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -4662,7 +5244,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     icon?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         isAutogenerated: boolean;
                     };
@@ -4686,15 +5268,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryID = number;
+            export type CategoryID = string; // uuid
         }
         export interface PathParameters {
-            categoryID: Parameters.CategoryID;
+            categoryID: Parameters.CategoryID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 category: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4705,10 +5287,10 @@ declare namespace Paths {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
-                    parentID?: number;
+                    parentID?: string; // uuid
                     orderIndex: number;
                     children: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4719,10 +5301,10 @@ declare namespace Paths {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
-                        parentID?: number;
+                        parentID?: string; // uuid
                         orderIndex: number;
                         children: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4733,22 +5315,22 @@ declare namespace Paths {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
-                            parentID?: number;
+                            parentID?: string; // uuid
                             orderIndex: number;
                             icon?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 isAutogenerated: boolean;
                             };
                             categoryParameter?: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                                 nameLocalizations: {
                                     language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                     value: string | null;
                                 }[];
                                 values: {
-                                    id: number;
+                                    id: string; // uuid
                                     value?: string;
                                     valueLocalizations?: {
                                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4758,19 +5340,19 @@ declare namespace Paths {
                             };
                         }[];
                         icon?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         };
                         categoryParameter?: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             nameLocalizations: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                                 value: string | null;
                             }[];
                             values: {
-                                id: number;
+                                id: string; // uuid
                                 value?: string;
                                 valueLocalizations?: {
                                     language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4780,14 +5362,14 @@ declare namespace Paths {
                         };
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
                         };
                         isAutogenerated: boolean;
                     } | {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -4795,19 +5377,19 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     icon?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         isAutogenerated: boolean;
                     };
                     categoryParameter?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         nameLocalizations: {
                             language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                             value: string | null;
                         }[];
                         values: {
-                            id: number;
+                            id: string; // uuid
                             value?: string;
                             valueLocalizations?: {
                                 language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
@@ -4843,10 +5425,10 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 cosmetics: {
-                    id: number;
+                    id: string; // uuid
                     name: string;
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -4871,18 +5453,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CosmeticID = number;
+            export type CosmeticID = string; // uuid
         }
         export interface PathParameters {
-            cosmeticID: Parameters.CosmeticID;
+            cosmeticID: Parameters.CosmeticID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 cosmetic: {
-                    id: number;
+                    id: string; // uuid
                     name: string;
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -4911,14 +5493,14 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 languages: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -4943,22 +5525,22 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type LanguageID = number;
+            export type LanguageID = string; // uuid
         }
         export interface PathParameters {
-            languageID: Parameters.LanguageID;
+            languageID: Parameters.LanguageID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 language: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                     nameLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -4983,16 +5565,13 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryIDs = number[];
-            export type CosmeticIDs = number[];
-            export type LanguageIDs = number[];
+            export type CategoryIDs = string /* uuid */[];
+            export type CosmeticIDs = string /* uuid */[];
+            export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
-            export type LatNW = number; // float
-            export type LatSE = number; // float
+            export type Liked = boolean;
             export type Limit = 20;
             export type LonMy = number; // float
-            export type LonNW = number; // float
-            export type LonSE = number; // float
             export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
             export type Order = string;
             export type Page = number;
@@ -5000,10 +5579,6 @@ declare namespace Paths {
             export type Rating = "ALL" | "1_0" | "1_5" | "2_0" | "2_5" | "3_0" | "3_5" | "4_0" | "4_5" | "5_0";
         }
         export interface QueryParameters {
-            latNW: Parameters.LatNW /* float */;
-            lonNW: Parameters.LonNW /* float */;
-            latSE: Parameters.LatSE /* float */;
-            lonSE: Parameters.LonSE /* float */;
             latMy?: Parameters.LatMy /* float */;
             lonMy?: Parameters.LonMy /* float */;
             categoryIDs?: Parameters.CategoryIDs;
@@ -5012,6 +5587,7 @@ declare namespace Paths {
             rating?: Parameters.Rating;
             languageIDs?: Parameters.LanguageIDs;
             cosmeticIDs?: Parameters.CosmeticIDs;
+            liked?: Parameters.Liked;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -5019,10 +5595,10 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salons: {
-                    id: number;
+                    id: string; // uuid
                     name: string;
                     logo?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -5030,7 +5606,79 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     images: {
-                        id: number;
+                        id: string; // uuid
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                        isAutogenerated: boolean;
+                    }[];
+                    rating?: number; // float
+                    distance?: number; // float
+                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                    }[];
+                    adresa?: {
+                        id: string; // uuid
+                        streetNumber?: string;
+                        street?: string;
+                        city?: string;
+                        zipCode?: string;
+                        countryCode?: string;
+                    };
+                    openingHoursData?: {
+                        isOpen: boolean;
+                        message: string;
+                    };
+                    liked?: boolean;
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2CV1SalonsDashboard {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type LatMy = number; // float
+            export type LonMy = number; // float
+        }
+        export interface QueryParameters {
+            latMy?: Parameters.LatMy /* float */;
+            lonMy?: Parameters.LonMy /* float */;
+        }
+        namespace Responses {
+            export interface $200 {
+                salonsInNeighbourhood: {
+                    id: number;
+                    name: string;
+                    logo?: {
+                        id: string; // uuid
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    images: {
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -5057,12 +5705,45 @@ declare namespace Paths {
                         message: string;
                     };
                 }[];
-                pagination: {
-                    limit: number;
-                    page: number;
-                    totalPages: number;
-                    totalCount: number;
-                };
+                likedSalons: {
+                    id: number;
+                    name: string;
+                    logo?: {
+                        id: string; // uuid
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    images: {
+                        id: string; // uuid
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                        isAutogenerated: boolean;
+                    }[];
+                    rating?: number; // float
+                    distance?: number; // float
+                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    categories: {
+                        id: number;
+                        name?: string;
+                    }[];
+                    adresa?: {
+                        id: number;
+                        streetNumber?: string;
+                        street?: string;
+                        city?: string;
+                        zipCode?: string;
+                        countryCode?: string;
+                    };
+                    openingHoursData?: {
+                        isOpen: boolean;
+                        message: string;
+                    };
+                }[];
             }
         }
     }
@@ -5089,10 +5770,10 @@ declare namespace Paths {
             export type Search = string;
         }
         export interface QueryParameters {
-            latNW: Parameters.LatNW /* float */;
-            lonNW: Parameters.LonNW /* float */;
-            latSE: Parameters.LatSE /* float */;
-            lonSE: Parameters.LonSE /* float */;
+            latNW?: Parameters.LatNW /* float */;
+            lonNW?: Parameters.LonNW /* float */;
+            latSE?: Parameters.LatSE /* float */;
+            lonSE?: Parameters.LonSE /* float */;
             latMy?: Parameters.LatMy /* float */;
             lonMy?: Parameters.LonMy /* float */;
             search: Parameters.Search;
@@ -5104,7 +5785,7 @@ declare namespace Paths {
                     placeID: string;
                 }[];
                 salons: {
-                    id: number;
+                    id: string; // uuid
                     name: string;
                     distance?: number; // float
                     lat: number; // float
@@ -5115,7 +5796,7 @@ declare namespace Paths {
                     };
                 }[];
                 categories: {
-                    id: number;
+                    id: string; // uuid
                     name?: string;
                 }[];
             }
@@ -5164,12 +5845,13 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryIDs = number[];
-            export type CosmeticIDs = number[];
-            export type LanguageIDs = number[];
+            export type CategoryIDs = string /* uuid */[];
+            export type CosmeticIDs = string /* uuid */[];
+            export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
             export type LatNW = number; // float
             export type LatSE = number; // float
+            export type Liked = boolean;
             export type LonMy = number; // float
             export type LonNW = number; // float
             export type LonSE = number; // float
@@ -5190,6 +5872,7 @@ declare namespace Paths {
             rating?: Parameters.Rating;
             languageIDs?: Parameters.LanguageIDs;
             cosmeticIDs?: Parameters.CosmeticIDs;
+            liked?: Parameters.Liked;
         }
         namespace Responses {
             export interface $200 {
@@ -5197,10 +5880,10 @@ declare namespace Paths {
                     lat: number; // float
                     lon: number; // float
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -5208,7 +5891,7 @@ declare namespace Paths {
                             isAutogenerated: boolean;
                         };
                         images: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -5219,11 +5902,11 @@ declare namespace Paths {
                         distance?: number; // float
                         priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
                         categories: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                         }[];
                         adresa?: {
-                            id: number;
+                            id: string; // uuid
                             streetNumber?: string;
                             street?: string;
                             city?: string;
@@ -5254,210 +5937,480 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
-                id: number;
-                name?: string;
-                images: {
-                    id: number;
-                    original: string;
-                    resizedImages: {
-                        [key: string]: any;
+                salon: {
+                    id: string; // uuid
+                    name?: string;
+                    email?: string;
+                    images: {
+                        id: string; // uuid
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                        isAutogenerated: boolean;
+                    }[];
+                    logo?: {
+                        id: string; // uuid
+                        original: string;
+                        resizedImages: {
+                            [key: string]: any;
+                        };
+                        isAutogenerated: boolean;
                     };
-                    isAutogenerated: boolean;
-                }[];
-                logo?: {
-                    id: number;
-                    original: string;
-                    resizedImages: {
-                        [key: string]: any;
+                    address?: {
+                        id: string; // uuid
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        streetNumber?: string;
+                        description?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
-                    isAutogenerated: boolean;
-                };
-                liked: boolean;
-                address?: {
-                    id: number;
-                    countryCode?: string;
-                    zipCode?: string;
-                    city?: string;
-                    street?: string;
-                    streetNumber?: string;
-                    description?: string;
-                    latitude?: number; // float
-                    longitude?: number; // float
-                };
-                formatedAddress?: string;
-                oppeningHoursData?: {
-                    isOpen: boolean;
-                    message: string;
-                    openingHours: [
+                    formattedAddress?: string;
+                    openingHoursData?: {
+                        isOpen: boolean;
+                        message: string;
+                        openingHours: [
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            }
+                        ];
+                        openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
+                            note: string;
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
+                            validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                            /**
+                             * example:
+                             * 2022-03-22
+                             */
+                            validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        };
+                    };
+                    services: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        rangePriceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                    }[];
+                    employees: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            resizedImages: {
+                                [key: string]: any;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    }[];
+                    aboutUsFirst?: string;
+                    cosmetics: [
                         {
-                            date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            isCurrentDate: boolean;
-                            isOpen: boolean;
-                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                            timeRanges: {
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[];
-                        },
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
                         {
-                            date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            isCurrentDate: boolean;
-                            isOpen: boolean;
-                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                            timeRanges: {
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[];
-                        },
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
                         {
-                            date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            isCurrentDate: boolean;
-                            isOpen: boolean;
-                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                            timeRanges: {
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[];
-                        },
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
                         {
-                            date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            isCurrentDate: boolean;
-                            isOpen: boolean;
-                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                            timeRanges: {
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[];
-                        },
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
                         {
-                            date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            isCurrentDate: boolean;
-                            isOpen: boolean;
-                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                            timeRanges: {
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[];
-                        },
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
                         {
-                            date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            isCurrentDate: boolean;
-                            isOpen: boolean;
-                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                            timeRanges: {
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[];
-                        },
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
                         {
-                            date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                            isCurrentDate: boolean;
-                            isOpen: boolean;
-                            day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
-                            timeRanges: {
-                                timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                                timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                            }[];
-                        }
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                resizedImages: {
+                                    [key: string]: any;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?
                     ];
-                    openingHoursNote?: {
-                        /**
-                         * example:
-                         * Poznámka
-                         */
-                        note: string;
-                        /**
-                         * example:
-                         * 2022-03-22
-                         */
-                        validFrom: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                        /**
-                         * example:
-                         * 2022-03-22
-                         */
-                        validTo: string | null; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
-                    };
-                };
-                services: {
-                    id: number;
-                    name?: string;
-                    description?: string;
-                    rangePriceAndDurationData: {
-                        durationFrom?: number;
-                        durationTo?: number;
-                        priceFrom?: {
-                            currency: string;
-                            exponent: number;
-                            significand: number;
-                        };
-                        priceTo?: {
-                            currency: string;
-                            exponent: number;
-                            significand: number;
-                        };
-                    };
-                }[];
-                employees: {
-                    id: number;
-                    firstName?: string;
-                    lastName?: string;
-                    image: {
-                        id: number;
+                    languages: [
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                        }?
+                    ];
+                    parkingNote?: string;
+                    phones: {
+                        id: string; // uuid
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
+                    payByCard?: boolean;
+                    otherPaymentMethods?: string;
+                    pricelists: {
+                        id: string; // uuid
                         original: string;
-                        resizedImages: {
+                        isAutogenerated: boolean;
+                    }[];
+                    socialLinkFB?: string;
+                    socialLinkInstagram?: string;
+                    socialLinkWebPage?: string;
+                    socialLinkYoutube?: string;
+                    socialLinkTikTok?: string;
+                    socialLinkPinterest?: string;
+                    ratingsData: {
+                        rating?: number; // float
+                        ratesCount: number;
+                        groupedRatings: {
                             [key: string]: any;
                         };
-                        isAutogenerated: boolean;
-                    };
-                }[];
-                aboutUsFirst?: string;
-                cosmetics: {
-                    id: number;
-                    name: string;
-                    image?: {
-                        id: number;
-                        original: string;
-                        resizedImages: {
-                            [key: string]: any;
-                        };
-                        isAutogenerated: boolean;
-                    };
-                }[];
-                languages: {
-                    id: number;
-                    name?: string;
-                }[];
-                parkingNote?: string;
-                phones: {
-                    id: number;
-                    phonePrefixCountryCode: string;
-                    phone: string; // ^\d+$
-                }[];
-                payByCard?: boolean;
-                otherPaymentMethods?: string;
-                pricelists: {
-                    id: number;
-                    original: string;
-                    isAutogenerated: boolean;
-                }[];
-                socialLinkFB?: string;
-                socialLinkInstagram?: string;
-                socialLinkWebPage?: string;
-                socialLinkYoutube?: string;
-                socialLinkTikTok?: string;
-                socialLinkPinterest?: string;
-                ratingsData: {
-                    rating: number; // float
-                    ratesCount: number;
-                    groupedRatings: {
-                        [key: string]: any;
                     };
                 };
             }
@@ -5479,10 +6432,10 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type Limit = 25 | 50 | 100 | 1000;
             export type Page = number;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface QueryParameters {
             limit?: Parameters.Limit;
@@ -5491,10 +6444,11 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 employees: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
+                    lastName?: string;
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -5502,6 +6456,34 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                 }[];
+            }
+        }
+    }
+    namespace GetApiB2CV1SalonsSalonIdLike {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: string; // uuid
+                    liked: boolean;
+                };
             }
         }
     }
@@ -5519,28 +6501,28 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         namespace Responses {
             export interface $200 {
                 groupedServicesByCategory: {
                     category?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         children: {
                             category?: {
-                                id: number;
+                                id: string; // uuid
                                 name?: string;
                                 children: {
                                     category: {
-                                        id: number;
+                                        id: string; // uuid
                                         name?: string;
                                     };
                                     service: {
-                                        id: number;
+                                        id: string; // uuid
                                         rangePriceAndDurationData: {
                                             durationFrom?: number;
                                             durationTo?: number;
@@ -5583,10 +6565,10 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type LatMy = number; // float
             export type LonMy = number; // float
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface QueryParameters {
             latMy?: Parameters.LatMy /* float */;
@@ -5594,9 +6576,62 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
-                id: number;
+                id: string; // uuid
                 distance?: number; // float
                 travelTime?: number;
+            }
+        }
+    }
+    namespace GetApiB2CV1SalonsSalonIdUserRating {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DeviceID = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            deviceID: Parameters.DeviceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                id: string; // uuid
+                rating?: {
+                    rate: 1 | 2 | 3 | 4 | 5; // float
+                    userName: string;
+                };
+            }
+        }
+    }
+    namespace GetApiPgsyncSalonsSalonIdRangePriceAndDurationData {
+        namespace Parameters {
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                id: string; // uuid
+                rangePriceAndDurationData: {
+                    durationFrom: null | number;
+                    durationTo: null | number;
+                    priceFrom: number | null; // float
+                    priceTo: number | null; // float
+                    currencyCode: string | null;
+                };
             }
         }
     }
@@ -5650,10 +6685,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CustomerID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type CustomerID = string; // uuid
         }
         export interface PathParameters {
-            customerID: Parameters.CustomerID;
+            customerID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.CustomerID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -5714,116 +6757,116 @@ declare namespace Paths {
             streetNumber?: string | null;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            profileImageID?: null | number;
+            profileImageID?: string | null; // uuid
             galleryImageIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
         }
         namespace Responses {
             export interface $200 {
                 customer?: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -5846,10 +6889,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
+            export type EmployeeID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
+            employeeID: Parameters.EmployeeID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -5883,117 +6926,117 @@ declare namespace Paths {
              */
             phone?: string | null; // ^\d+$
             serviceIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     description?: string;
@@ -6003,46 +7046,60 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
-                    services: {
-                        id: number;
-                        salonPriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        employeePriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        category: {
-                            id: number;
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
                             name?: string;
-                        };
+                            children: {
+                                id: string; // uuid
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        resizedImages: {
+                                            [key: string]: any;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -6050,7 +7107,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
@@ -6060,36 +7117,36 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         }[];
                         salons: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             logo?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 resizedImages: {
                                     [key: string]: any;
                                 };
                                 isAutogenerated: boolean;
                             };
-                            employeeID: number;
+                            employeeID: string; // uuid
                             role?: {
-                                id: number;
+                                id: string; // uuid
                                 permissions: {
-                                    id: number;
+                                    id: string; // uuid
                                     name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                                 }[];
                             };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -6101,10 +7158,10 @@ declare namespace Paths {
                         deletedAt?: string; // date-time
                     };
                     role?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     };
@@ -6133,18 +7190,30 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type EmployeeID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
+            employeeID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.EmployeeID /* uuid */;
         }
         export interface RequestBody {
-            roleID: number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            roleID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     description?: string;
@@ -6154,46 +7223,60 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
-                    services: {
-                        id: number;
-                        salonPriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        employeePriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        category: {
-                            id: number;
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
                             name?: string;
-                        };
+                            children: {
+                                id: string; // uuid
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        resizedImages: {
+                                            [key: string]: any;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -6201,7 +7284,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
@@ -6211,36 +7294,36 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         }[];
                         salons: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             logo?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 resizedImages: {
                                     [key: string]: any;
                                 };
                                 isAutogenerated: boolean;
                             };
-                            employeeID: number;
+                            employeeID: string; // uuid
                             role?: {
-                                id: number;
+                                id: string; // uuid
                                 permissions: {
-                                    id: number;
+                                    id: string; // uuid
                                     name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                                 }[];
                             };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -6252,10 +7335,10 @@ declare namespace Paths {
                         deletedAt?: string; // date-time
                     };
                     role?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     };
@@ -6284,12 +7367,12 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
-            export type ServiceID = number;
+            export type EmployeeID = string; // uuid
+            export type ServiceID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
-            serviceID: Parameters.ServiceID;
+            employeeID: Parameters.EmployeeID /* uuid */;
+            serviceID: Parameters.ServiceID /* uuid */;
         }
         export interface RequestBody {
             priceAndDurationData: {
@@ -6330,7 +7413,7 @@ declare namespace Paths {
             };
             serviceCategoryParameterValues?: [
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6369,7 +7452,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6408,7 +7491,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6447,7 +7530,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6486,7 +7569,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6525,7 +7608,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6564,7 +7647,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6603,7 +7686,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6642,7 +7725,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6681,7 +7764,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6720,7 +7803,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6759,7 +7842,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6798,7 +7881,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6837,7 +7920,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6876,7 +7959,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6915,7 +7998,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6954,7 +8037,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -6993,7 +8076,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7032,7 +8115,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7071,7 +8154,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7110,7 +8193,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7149,7 +8232,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7188,7 +8271,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7227,7 +8310,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7266,7 +8349,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7305,7 +8388,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7344,7 +8427,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7383,7 +8466,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7422,7 +8505,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7461,7 +8544,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7500,7 +8583,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7539,7 +8622,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7578,7 +8661,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7617,7 +8700,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7656,7 +8739,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7695,7 +8778,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7734,7 +8817,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7773,7 +8856,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7812,7 +8895,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7851,7 +8934,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7890,7 +8973,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7929,7 +9012,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -7968,7 +9051,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8007,7 +9090,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8046,7 +9129,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8085,7 +9168,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8124,7 +9207,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8163,7 +9246,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8202,7 +9285,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8241,7 +9324,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8280,7 +9363,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8319,7 +9402,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8358,7 +9441,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8397,7 +9480,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8436,7 +9519,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8475,7 +9558,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8514,7 +9597,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8553,7 +9636,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8592,7 +9675,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8631,7 +9714,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8670,7 +9753,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8709,7 +9792,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8748,7 +9831,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8787,7 +9870,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8826,7 +9909,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8865,7 +9948,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8904,7 +9987,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8943,7 +10026,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -8982,7 +10065,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9021,7 +10104,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9060,7 +10143,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9099,7 +10182,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9138,7 +10221,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9177,7 +10260,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9216,7 +10299,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9255,7 +10338,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9294,7 +10377,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9333,7 +10416,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9372,7 +10455,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9411,7 +10494,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9450,7 +10533,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9489,7 +10572,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9528,7 +10611,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9567,7 +10650,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9606,7 +10689,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9645,7 +10728,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9684,7 +10767,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9723,7 +10806,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9762,7 +10845,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9801,7 +10884,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9840,7 +10923,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9879,7 +10962,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9918,7 +11001,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9957,7 +11040,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -9996,7 +11079,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -10035,7 +11118,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -10074,7 +11157,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -10113,7 +11196,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -10152,7 +11235,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -10191,7 +11274,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -10254,10 +11337,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryID = number;
+            export type CategoryID = string; // uuid
         }
         export interface PathParameters {
-            categoryID: Parameters.CategoryID;
+            categoryID: Parameters.CategoryID /* uuid */;
         }
         export interface RequestBody {
             nameLocalizations: ({
@@ -10313,24 +11396,24 @@ declare namespace Paths {
             orderIndex: number;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            iconID?: null | number;
+            iconID?: string | null; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            categoryParameterID?: null | number;
+            categoryParameterID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 category: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -10353,10 +11436,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CategoryParameterID = number;
+            export type CategoryParameterID = string; // uuid
         }
         export interface PathParameters {
-            categoryParameterID: Parameters.CategoryParameterID;
+            categoryParameterID: Parameters.CategoryParameterID /* uuid */;
         }
         export interface RequestBody {
             nameLocalizations: ({
@@ -13402,7 +14485,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 categoryParameter: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -13425,10 +14508,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CosmeticID = number;
+            export type CosmeticID = string; // uuid
         }
         export interface PathParameters {
-            cosmeticID: Parameters.CosmeticID;
+            cosmeticID: Parameters.CosmeticID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -13438,14 +14521,14 @@ declare namespace Paths {
             name: string;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 cosmetic: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -13468,17 +14551,17 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type LanguageID = number;
+            export type LanguageID = string; // uuid
         }
         export interface PathParameters {
-            languageID: Parameters.LanguageID;
+            languageID: Parameters.LanguageID /* uuid */;
         }
         export interface RequestBody {
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: number | null; // float
+            imageID?: string | null; // uuid
             nameLocalizations: ({
                 /**
                  * example:
@@ -13506,7 +14589,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 language: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -13529,10 +14612,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SupportContactID = number;
+            export type SupportContactID = string; // uuid
         }
         export interface PathParameters {
-            supportContactID: Parameters.SupportContactID;
+            supportContactID: Parameters.SupportContactID /* uuid */;
         }
         export interface RequestBody {
             phones: [
@@ -13678,7 +14761,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 supportContact: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -13701,10 +14784,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -13908,213 +14991,213 @@ declare namespace Paths {
              */
             otherPaymentMethods?: string | null;
             imageIDs: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ];
             /**
              * example:
              * 1
              */
-            logoID?: null | number;
+            logoID?: string | null; // uuid
             pricelistIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ];
             companyContactPerson: {
                 /**
@@ -14166,214 +15249,44 @@ declare namespace Paths {
                 companyName?: string | null;
             };
             cosmeticIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
             languageIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -14396,10 +15309,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -14411,12 +15324,56 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
                 }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdBasicSuggestion {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            accept: boolean;
+            suggestionHash?: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: string; // uuid
+                    name?: string | null;
+                    email?: string | null; // email
+                    phones: {
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
+                    address?: {
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        streetNumber?: string;
+                    };
+                };
             }
         }
     }
@@ -14434,119 +15391,119 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             categoryIDs: [
-                number,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ];
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -14569,10 +15526,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             companyInvoiceAddress: {
@@ -14606,7 +15563,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -14629,10 +15586,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             openingHoursNote: {
@@ -14656,7 +15613,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -14679,17 +15636,17 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -14712,10 +15669,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             approve: boolean;
@@ -14724,7 +15681,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -14747,122 +15704,118 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            rootCategoryID: number;
-            /**
-             * example:
-             * 1
-             */
+            rootCategoryID: string; // uuid
             categoryIDs: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ];
         }
         namespace Responses {
@@ -14888,10 +15841,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             reason: string;
@@ -14899,7 +15852,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -14922,10 +15875,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type ServiceID = number;
+            export type ServiceID = string; // uuid
         }
         export interface PathParameters {
-            serviceID: Parameters.ServiceID;
+            serviceID: Parameters.ServiceID /* uuid */;
         }
         export interface RequestBody {
             useCategoryParameter: boolean;
@@ -15003,7 +15956,7 @@ declare namespace Paths {
             };
             categoryParameterValues?: [
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15042,7 +15995,7 @@ declare namespace Paths {
                     };
                 },
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15081,7 +16034,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15120,7 +16073,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15159,7 +16112,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15198,7 +16151,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15237,7 +16190,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15276,7 +16229,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15315,7 +16268,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15354,7 +16307,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15393,7 +16346,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15432,7 +16385,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15471,7 +16424,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15510,7 +16463,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15549,7 +16502,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15588,7 +16541,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15627,7 +16580,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15666,7 +16619,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15705,7 +16658,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15744,7 +16697,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15783,7 +16736,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15822,7 +16775,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15861,7 +16814,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15900,7 +16853,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15939,7 +16892,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -15978,7 +16931,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16017,7 +16970,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16056,7 +17009,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16095,7 +17048,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16134,7 +17087,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16173,7 +17126,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16212,7 +17165,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16251,7 +17204,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16290,7 +17243,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16329,7 +17282,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16368,7 +17321,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16407,7 +17360,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16446,7 +17399,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16485,7 +17438,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16524,7 +17477,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16563,7 +17516,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16602,7 +17555,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16641,7 +17594,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16680,7 +17633,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16719,7 +17672,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16758,7 +17711,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16797,7 +17750,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16836,7 +17789,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16875,7 +17828,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16914,7 +17867,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16953,7 +17906,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -16992,7 +17945,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17031,7 +17984,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17070,7 +18023,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17109,7 +18062,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17148,7 +18101,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17187,7 +18140,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17226,7 +18179,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17265,7 +18218,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17304,7 +18257,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17343,7 +18296,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17382,7 +18335,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17421,7 +18374,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17460,7 +18413,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17499,7 +18452,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17538,7 +18491,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17577,7 +18530,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17616,7 +18569,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17655,7 +18608,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17694,7 +18647,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17733,7 +18686,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17772,7 +18725,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17811,7 +18764,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17850,7 +18803,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17889,7 +18842,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17928,7 +18881,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -17967,7 +18920,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18006,7 +18959,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18045,7 +18998,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18084,7 +19037,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18123,7 +19076,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18162,7 +19115,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18201,7 +19154,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18240,7 +19193,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18279,7 +19232,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18318,7 +19271,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18357,7 +19310,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18396,7 +19349,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18435,7 +19388,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18474,7 +19427,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18513,7 +19466,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18552,7 +19505,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18591,7 +19544,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18630,7 +19583,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18669,7 +19622,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18708,7 +19661,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18747,7 +19700,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18786,7 +19739,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18825,7 +19778,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18864,7 +19817,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18904,7 +19857,7 @@ declare namespace Paths {
                 }?
             ] | [
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18943,7 +19896,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -18982,7 +19935,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19021,7 +19974,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19060,7 +20013,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19099,7 +20052,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19138,7 +20091,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19177,7 +20130,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19216,7 +20169,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19255,7 +20208,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19294,7 +20247,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19333,7 +20286,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19372,7 +20325,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19411,7 +20364,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19450,7 +20403,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19489,7 +20442,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19528,7 +20481,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19567,7 +20520,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19606,7 +20559,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19645,7 +20598,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19684,7 +20637,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19723,7 +20676,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19762,7 +20715,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19801,7 +20754,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19840,7 +20793,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19879,7 +20832,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19918,7 +20871,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19957,7 +20910,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -19996,7 +20949,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20035,7 +20988,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20074,7 +21027,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20113,7 +21066,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20152,7 +21105,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20191,7 +21144,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20230,7 +21183,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20269,7 +21222,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20308,7 +21261,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20347,7 +21300,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20386,7 +21339,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20425,7 +21378,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20464,7 +21417,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20503,7 +21456,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20542,7 +21495,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20581,7 +21534,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20620,7 +21573,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20659,7 +21612,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20698,7 +21651,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20737,7 +21690,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20776,7 +21729,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20815,7 +21768,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20854,7 +21807,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20893,7 +21846,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20932,7 +21885,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -20971,7 +21924,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21010,7 +21963,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21049,7 +22002,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21088,7 +22041,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21127,7 +22080,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21166,7 +22119,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21205,7 +22158,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21244,7 +22197,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21283,7 +22236,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21322,7 +22275,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21361,7 +22314,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21400,7 +22353,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21439,7 +22392,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21478,7 +22431,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21517,7 +22470,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21556,7 +22509,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21595,7 +22548,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21634,7 +22587,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21673,7 +22626,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21712,7 +22665,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21751,7 +22704,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21790,7 +22743,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21829,7 +22782,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21868,7 +22821,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21907,7 +22860,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21946,7 +22899,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -21985,7 +22938,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22024,7 +22977,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22063,7 +23016,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22102,7 +23055,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22141,7 +23094,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22180,7 +23133,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22219,7 +23172,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22258,7 +23211,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22297,7 +23250,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22336,7 +23289,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22375,7 +23328,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22414,7 +23367,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22453,7 +23406,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22492,7 +23445,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22531,7 +23484,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22570,7 +23523,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22609,7 +23562,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22648,7 +23601,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22687,7 +23640,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22726,7 +23679,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22765,7 +23718,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -22805,112 +23758,112 @@ declare namespace Paths {
                 }?
             ];
             employeeIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
         }
         namespace Responses {
             export interface $200 {
                 service: {
-                    id: number;
+                    id: string; // uuid
                     useCategoryParameter: boolean;
                     noteForPriceAndDuration?: string;
                     priceAndDurationData: {
@@ -22930,14 +23883,14 @@ declare namespace Paths {
                     serviceCategoryParameter?: {
                         /**
                          * example:
-                         * 1
+                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                          */
-                        id: number;
+                        id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
                         name?: string;
                         values: {
-                            id: number;
+                            id: string; // uuid
                             value?: string;
                             priceAndDurationData: {
                                 durationFrom?: number;
@@ -22970,12 +23923,12 @@ declare namespace Paths {
                         };
                     };
                     employees: {
-                        id: number;
+                        id: string; // uuid
                         fullName: string;
                         hasActiveAccount: boolean;
                         inviteEmail?: string;
                         image: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -22999,14 +23952,14 @@ declare namespace Paths {
                         serviceCategoryParameter?: {
                             /**
                              * example:
-                             * 1
+                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                              */
-                            id: number;
+                            id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
                             name?: string;
                             values: {
-                                id: number;
+                                id: string; // uuid
                                 value?: string;
                                 priceAndDurationData: {
                                     durationFrom?: number;
@@ -23026,19 +23979,22 @@ declare namespace Paths {
                         };
                     }[];
                     category: {
-                        id: number;
+                        id: string; // uuid
+                        description?: string;
                         name?: string;
                         child: {
-                            id: number;
+                            id: string; // uuid
+                            description?: string;
                             name?: string;
                             child?: {
-                                id: number;
+                                id: string; // uuid
+                                description?: string;
                                 name?: string;
                             };
                         };
                     };
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     createdAt: string; // date-time
@@ -23066,10 +24022,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type UserID = number;
+            export type UserID = string; // uuid
         }
         export interface PathParameters {
-            userID: Parameters.UserID;
+            userID: Parameters.UserID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -23094,14 +24050,14 @@ declare namespace Paths {
             phone?: string | null; // ^\d+$
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -23111,36 +24067,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -23208,10 +24164,18 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type CustomerID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type CustomerID = string; // uuid
         }
         export interface PathParameters {
-            customerID: Parameters.CustomerID;
+            customerID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.CustomerID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -23272,116 +24236,116 @@ declare namespace Paths {
             streetNumber?: string | null;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            profileImageID?: null | number;
+            profileImageID?: string | null; // uuid
             galleryImageIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
         }
         namespace Responses {
             export interface $200 {
                 customer?: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -23404,10 +24368,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
+            export type EmployeeID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
+            employeeID: Parameters.EmployeeID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -23441,117 +24405,117 @@ declare namespace Paths {
              */
             phone?: string | null; // ^\d+$
             serviceIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     description?: string;
@@ -23561,46 +24525,60 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
-                    services: {
-                        id: number;
-                        salonPriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        employeePriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        category: {
-                            id: number;
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
                             name?: string;
-                        };
+                            children: {
+                                id: string; // uuid
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        resizedImages: {
+                                            [key: string]: any;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -23608,7 +24586,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
@@ -23618,36 +24596,36 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         }[];
                         salons: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             logo?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 resizedImages: {
                                     [key: string]: any;
                                 };
                                 isAutogenerated: boolean;
                             };
-                            employeeID: number;
+                            employeeID: string; // uuid
                             role?: {
-                                id: number;
+                                id: string; // uuid
                                 permissions: {
-                                    id: number;
+                                    id: string; // uuid
                                     name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                                 }[];
                             };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -23659,10 +24637,10 @@ declare namespace Paths {
                         deletedAt?: string; // date-time
                     };
                     role?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     };
@@ -23691,18 +24669,30 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type EmployeeID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
+            employeeID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.EmployeeID /* uuid */;
         }
         export interface RequestBody {
-            roleID: number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            roleID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     description?: string;
@@ -23712,46 +24702,60 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
-                    services: {
-                        id: number;
-                        salonPriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        employeePriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        category: {
-                            id: number;
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
                             name?: string;
-                        };
+                            children: {
+                                id: string; // uuid
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        resizedImages: {
+                                            [key: string]: any;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -23759,7 +24763,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
@@ -23769,36 +24773,36 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         }[];
                         salons: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             logo?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 resizedImages: {
                                     [key: string]: any;
                                 };
                                 isAutogenerated: boolean;
                             };
-                            employeeID: number;
+                            employeeID: string; // uuid
                             role?: {
-                                id: number;
+                                id: string; // uuid
                                 permissions: {
-                                    id: number;
+                                    id: string; // uuid
                                     name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                                 }[];
                             };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -23810,10 +24814,10 @@ declare namespace Paths {
                         deletedAt?: string; // date-time
                     };
                     role?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     };
@@ -23842,12 +24846,12 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type EmployeeID = number;
-            export type ServiceID = number;
+            export type EmployeeID = string; // uuid
+            export type ServiceID = string; // uuid
         }
         export interface PathParameters {
-            employeeID: Parameters.EmployeeID;
-            serviceID: Parameters.ServiceID;
+            employeeID: Parameters.EmployeeID /* uuid */;
+            serviceID: Parameters.ServiceID /* uuid */;
         }
         export interface RequestBody {
             priceAndDurationData: {
@@ -23888,7 +24892,7 @@ declare namespace Paths {
             };
             serviceCategoryParameterValues?: [
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -23927,7 +24931,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -23966,7 +24970,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24005,7 +25009,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24044,7 +25048,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24083,7 +25087,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24122,7 +25126,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24161,7 +25165,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24200,7 +25204,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24239,7 +25243,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24278,7 +25282,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24317,7 +25321,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24356,7 +25360,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24395,7 +25399,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24434,7 +25438,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24473,7 +25477,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24512,7 +25516,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24551,7 +25555,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24590,7 +25594,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24629,7 +25633,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24668,7 +25672,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24707,7 +25711,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24746,7 +25750,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24785,7 +25789,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24824,7 +25828,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24863,7 +25867,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24902,7 +25906,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24941,7 +25945,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -24980,7 +25984,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25019,7 +26023,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25058,7 +26062,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25097,7 +26101,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25136,7 +26140,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25175,7 +26179,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25214,7 +26218,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25253,7 +26257,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25292,7 +26296,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25331,7 +26335,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25370,7 +26374,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25409,7 +26413,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25448,7 +26452,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25487,7 +26491,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25526,7 +26530,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25565,7 +26569,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25604,7 +26608,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25643,7 +26647,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25682,7 +26686,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25721,7 +26725,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25760,7 +26764,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25799,7 +26803,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25838,7 +26842,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25877,7 +26881,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25916,7 +26920,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25955,7 +26959,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -25994,7 +26998,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26033,7 +27037,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26072,7 +27076,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26111,7 +27115,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26150,7 +27154,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26189,7 +27193,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26228,7 +27232,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26267,7 +27271,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26306,7 +27310,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26345,7 +27349,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26384,7 +27388,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26423,7 +27427,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26462,7 +27466,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26501,7 +27505,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26540,7 +27544,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26579,7 +27583,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26618,7 +27622,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26657,7 +27661,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26696,7 +27700,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26735,7 +27739,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26774,7 +27778,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26813,7 +27817,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26852,7 +27856,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26891,7 +27895,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26930,7 +27934,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -26969,7 +27973,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27008,7 +28012,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27047,7 +28051,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27086,7 +28090,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27125,7 +28129,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27164,7 +28168,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27203,7 +28207,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27242,7 +28246,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27281,7 +28285,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27320,7 +28324,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27359,7 +28363,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27398,7 +28402,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27437,7 +28441,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27476,7 +28480,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27515,7 +28519,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27554,7 +28558,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27593,7 +28597,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27632,7 +28636,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27671,7 +28675,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27710,7 +28714,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27749,7 +28753,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -27812,22 +28816,30 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             gallerySegment?: {
                 imageIDs: [
-                    number,
-                    ...number[]
+                    string,
+                    ...string[]
                 ];
                 /**
                  * example:
-                 * 1
+                 * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                  */
-                logoID?: null | number;
+                logoID?: string | null; // uuid
             } | null;
             nameSegment?: {
                 /**
@@ -27835,6 +28847,53 @@ declare namespace Paths {
                  * Salon 1
                  */
                 name: string;
+            } | null;
+            addressSegment?: {
+                /**
+                 * example:
+                 * SK
+                 */
+                countryCode: string;
+                /**
+                 * example:
+                 * Parkovanie oproti budove.
+                 */
+                parkingNote?: string | null;
+                /**
+                 * example:
+                 * Vstup v podchode.
+                 */
+                locationNote?: string | null;
+                /**
+                 * example:
+                 * 010 01
+                 */
+                zipCode: string;
+                /**
+                 * example:
+                 * Žilina
+                 */
+                city: string;
+                /**
+                 * example:
+                 * Framborska 58
+                 */
+                street: string;
+                /**
+                 * example:
+                 * 1
+                 */
+                streetNumber?: string;
+                /**
+                 * example:
+                 * 49.226666
+                 */
+                latitude: number; // float
+                /**
+                 * example:
+                 * 18.7348681
+                 */
+                longitude: number; // float
             } | null;
             openingHoursSegment?: {
                 openingHours: {
@@ -27901,41 +28960,6 @@ declare namespace Paths {
                 aboutUsSecond?: string | null;
             } | null;
             contactInfoSegment?: {
-                /**
-                 * example:
-                 * SK
-                 */
-                countryCode: string;
-                /**
-                 * example:
-                 * 010 01
-                 */
-                zipCode: string;
-                /**
-                 * example:
-                 * Žilina
-                 */
-                city: string;
-                /**
-                 * example:
-                 * Framborska 58
-                 */
-                street: string;
-                /**
-                 * example:
-                 * 1
-                 */
-                streetNumber?: string;
-                /**
-                 * example:
-                 * 49.226666
-                 */
-                latitude: number; // float
-                /**
-                 * example:
-                 * 18.7348681
-                 */
-                longitude: number; // float
                 phones: [
                     {
                         /**
@@ -28033,16 +29057,6 @@ declare namespace Paths {
                  * test_notino@goodrequest.com
                  */
                 email?: string | null; // email
-                /**
-                 * example:
-                 * Parkovanie oproti budove.
-                 */
-                parkingNote?: string | null;
-                /**
-                 * example:
-                 * Vstup v podchode.
-                 */
-                locationNote?: string | null;
             } | null;
             paymentSegment?: {
                 /**
@@ -28106,32 +29120,64 @@ declare namespace Paths {
                 companyName?: string | null;
             };
             pricelistSegment?: {
-                pricelistIDs?: number[];
+                pricelistIDs?: string /* uuid */[];
             };
             cosmeticSegment?: {
-                cosmeticIDs: number[];
+                cosmeticIDs: [
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?
+                ];
             };
             languagesSegment?: {
-                languageIDs: number[];
+                languageIDs: [
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?,
+                    string?
+                ];
             };
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
-                    rating: number; // float
+                    rating?: number; // float
                     categorySegment?: {
                         categories: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                         }[];
                     };
                     gallerySegment?: {
                         images: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -28139,7 +29185,7 @@ declare namespace Paths {
                             isAutogenerated: boolean;
                         }[];
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -28245,7 +29291,7 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                         aboutUsSecond?: string;
                     };
-                    contactInfoSegment?: {
+                    addressSegment?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -28253,6 +29299,10 @@ declare namespace Paths {
                         streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
+                        parkingNote?: string;
+                        locationNote?: string;
+                    };
+                    contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
                             phone: string; // ^\d+$
@@ -28264,8 +29314,6 @@ declare namespace Paths {
                         socialLinkYoutube?: string;
                         socialLinkTikTok?: string;
                         socialLinkPinterest?: string;
-                        parkingNote?: string;
-                        locationNote?: string;
                     };
                     paymentSegment?: {
                         payByCard?: boolean;
@@ -28293,26 +29341,178 @@ declare namespace Paths {
                     };
                     pricelistSegment?: {
                         pricelists: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         }[];
                     };
                     cosmeticsSegment?: {
-                        cosmetics: {
-                            id: number;
-                            name: string;
-                        }[];
+                        cosmetics: [
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?
+                        ];
                     };
                     languagesSegment?: {
-                        languages: {
-                            id: number;
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                        }[];
+                        languages: [
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?
+                        ];
                     };
                     permissions: {
                         salon: {
@@ -28362,10 +29562,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -28377,12 +29577,56 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
                 }[];
+            }
+        }
+    }
+    namespace PatchApiB2BV1SalonsSalonIdBasicSuggestion {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            accept: boolean;
+            suggestionHash?: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: string; // uuid
+                    name?: string | null;
+                    email?: string | null; // email
+                    phones: {
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
+                    address?: {
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        streetNumber?: string;
+                    };
+                };
             }
         }
     }
@@ -28400,119 +29644,119 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             categoryIDs: [
-                number,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ];
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -28535,10 +29779,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             companyInvoiceAddressSegment: {
@@ -28572,20 +29816,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
-                    rating: number; // float
+                    rating?: number; // float
                     categorySegment?: {
                         categories: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                         }[];
                     };
                     gallerySegment?: {
                         images: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -28593,7 +29837,7 @@ declare namespace Paths {
                             isAutogenerated: boolean;
                         }[];
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -28699,7 +29943,7 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                         aboutUsSecond?: string;
                     };
-                    contactInfoSegment?: {
+                    addressSegment?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -28707,6 +29951,10 @@ declare namespace Paths {
                         streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
+                        parkingNote?: string;
+                        locationNote?: string;
+                    };
+                    contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
                             phone: string; // ^\d+$
@@ -28718,8 +29966,6 @@ declare namespace Paths {
                         socialLinkYoutube?: string;
                         socialLinkTikTok?: string;
                         socialLinkPinterest?: string;
-                        parkingNote?: string;
-                        locationNote?: string;
                     };
                     paymentSegment?: {
                         payByCard?: boolean;
@@ -28747,26 +29993,178 @@ declare namespace Paths {
                     };
                     pricelistSegment?: {
                         pricelists: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         }[];
                     };
                     cosmeticsSegment?: {
-                        cosmetics: {
-                            id: number;
-                            name: string;
-                        }[];
+                        cosmetics: [
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?
+                        ];
                     };
                     languagesSegment?: {
-                        languages: {
-                            id: number;
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                        }[];
+                        languages: [
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?
+                        ];
                     };
                     permissions: {
                         salon: {
@@ -28816,17 +30214,17 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -28849,122 +30247,118 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            rootCategoryID: number;
-            /**
-             * example:
-             * 1
-             */
+            rootCategoryID: string; // uuid
             categoryIDs: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ];
         }
         namespace Responses {
@@ -28990,10 +30384,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             reason: string;
@@ -29001,7 +30395,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -29024,10 +30418,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type ServiceID = number;
+            export type ServiceID = string; // uuid
         }
         export interface PathParameters {
-            serviceID: Parameters.ServiceID;
+            serviceID: Parameters.ServiceID /* uuid */;
         }
         export interface RequestBody {
             useCategoryParameter: boolean;
@@ -29105,7 +30499,7 @@ declare namespace Paths {
             };
             categoryParameterValues?: [
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29144,7 +30538,7 @@ declare namespace Paths {
                     };
                 },
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29183,7 +30577,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29222,7 +30616,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29261,7 +30655,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29300,7 +30694,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29339,7 +30733,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29378,7 +30772,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29417,7 +30811,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29456,7 +30850,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29495,7 +30889,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29534,7 +30928,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29573,7 +30967,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29612,7 +31006,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29651,7 +31045,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29690,7 +31084,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29729,7 +31123,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29768,7 +31162,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29807,7 +31201,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29846,7 +31240,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29885,7 +31279,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29924,7 +31318,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -29963,7 +31357,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30002,7 +31396,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30041,7 +31435,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30080,7 +31474,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30119,7 +31513,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30158,7 +31552,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30197,7 +31591,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30236,7 +31630,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30275,7 +31669,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30314,7 +31708,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30353,7 +31747,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30392,7 +31786,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30431,7 +31825,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30470,7 +31864,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30509,7 +31903,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30548,7 +31942,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30587,7 +31981,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30626,7 +32020,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30665,7 +32059,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30704,7 +32098,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30743,7 +32137,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30782,7 +32176,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30821,7 +32215,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30860,7 +32254,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30899,7 +32293,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30938,7 +32332,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -30977,7 +32371,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31016,7 +32410,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31055,7 +32449,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31094,7 +32488,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31133,7 +32527,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31172,7 +32566,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31211,7 +32605,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31250,7 +32644,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31289,7 +32683,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31328,7 +32722,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31367,7 +32761,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31406,7 +32800,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31445,7 +32839,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31484,7 +32878,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31523,7 +32917,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31562,7 +32956,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31601,7 +32995,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31640,7 +33034,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31679,7 +33073,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31718,7 +33112,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31757,7 +33151,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31796,7 +33190,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31835,7 +33229,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31874,7 +33268,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31913,7 +33307,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31952,7 +33346,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -31991,7 +33385,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32030,7 +33424,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32069,7 +33463,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32108,7 +33502,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32147,7 +33541,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32186,7 +33580,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32225,7 +33619,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32264,7 +33658,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32303,7 +33697,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32342,7 +33736,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32381,7 +33775,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32420,7 +33814,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32459,7 +33853,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32498,7 +33892,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32537,7 +33931,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32576,7 +33970,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32615,7 +34009,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32654,7 +34048,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32693,7 +34087,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32732,7 +34126,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32771,7 +34165,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32810,7 +34204,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32849,7 +34243,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32888,7 +34282,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32927,7 +34321,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -32966,7 +34360,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33006,7 +34400,7 @@ declare namespace Paths {
                 }?
             ] | [
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33045,7 +34439,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33084,7 +34478,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33123,7 +34517,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33162,7 +34556,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33201,7 +34595,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33240,7 +34634,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33279,7 +34673,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33318,7 +34712,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33357,7 +34751,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33396,7 +34790,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33435,7 +34829,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33474,7 +34868,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33513,7 +34907,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33552,7 +34946,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33591,7 +34985,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33630,7 +35024,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33669,7 +35063,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33708,7 +35102,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33747,7 +35141,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33786,7 +35180,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33825,7 +35219,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33864,7 +35258,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33903,7 +35297,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33942,7 +35336,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -33981,7 +35375,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34020,7 +35414,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34059,7 +35453,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34098,7 +35492,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34137,7 +35531,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34176,7 +35570,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34215,7 +35609,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34254,7 +35648,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34293,7 +35687,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34332,7 +35726,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34371,7 +35765,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34410,7 +35804,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34449,7 +35843,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34488,7 +35882,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34527,7 +35921,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34566,7 +35960,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34605,7 +35999,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34644,7 +36038,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34683,7 +36077,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34722,7 +36116,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34761,7 +36155,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34800,7 +36194,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34839,7 +36233,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34878,7 +36272,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34917,7 +36311,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34956,7 +36350,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -34995,7 +36389,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35034,7 +36428,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35073,7 +36467,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35112,7 +36506,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35151,7 +36545,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35190,7 +36584,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35229,7 +36623,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35268,7 +36662,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35307,7 +36701,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35346,7 +36740,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35385,7 +36779,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35424,7 +36818,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35463,7 +36857,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35502,7 +36896,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35541,7 +36935,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35580,7 +36974,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35619,7 +37013,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35658,7 +37052,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35697,7 +37091,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35736,7 +37130,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35775,7 +37169,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35814,7 +37208,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35853,7 +37247,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35892,7 +37286,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35931,7 +37325,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -35970,7 +37364,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36009,7 +37403,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36048,7 +37442,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36087,7 +37481,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36126,7 +37520,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36165,7 +37559,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36204,7 +37598,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36243,7 +37637,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36282,7 +37676,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36321,7 +37715,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36360,7 +37754,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36399,7 +37793,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36438,7 +37832,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36477,7 +37871,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36516,7 +37910,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36555,7 +37949,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36594,7 +37988,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36633,7 +38027,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36672,7 +38066,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36711,7 +38105,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36750,7 +38144,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36789,7 +38183,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36828,7 +38222,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36867,7 +38261,7 @@ declare namespace Paths {
                     };
                 }?,
                 {
-                    id: number;
+                    id: string; // uuid
                     priceAndDurationData: {
                         /**
                          * example:
@@ -36907,112 +38301,112 @@ declare namespace Paths {
                 }?
             ];
             employeeIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
         }
         namespace Responses {
             export interface $200 {
                 service: {
-                    id: number;
+                    id: string; // uuid
                     useCategoryParameter: boolean;
                     noteForPriceAndDuration?: string;
                     priceAndDurationData: {
@@ -37032,14 +38426,14 @@ declare namespace Paths {
                     serviceCategoryParameter?: {
                         /**
                          * example:
-                         * 1
+                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                          */
-                        id: number;
+                        id: string; // uuid
                         valueType: "ENUM" | "TIME";
                         unitType?: "MINUTES";
                         name?: string;
                         values: {
-                            id: number;
+                            id: string; // uuid
                             value?: string;
                             priceAndDurationData: {
                                 durationFrom?: number;
@@ -37072,12 +38466,12 @@ declare namespace Paths {
                         };
                     };
                     employees: {
-                        id: number;
+                        id: string; // uuid
                         fullName: string;
                         hasActiveAccount: boolean;
                         inviteEmail?: string;
                         image: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -37101,14 +38495,14 @@ declare namespace Paths {
                         serviceCategoryParameter?: {
                             /**
                              * example:
-                             * 1
+                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
                              */
-                            id: number;
+                            id: string; // uuid
                             valueType: "ENUM" | "TIME";
                             unitType?: "MINUTES";
                             name?: string;
                             values: {
-                                id: number;
+                                id: string; // uuid
                                 value?: string;
                                 priceAndDurationData: {
                                     durationFrom?: number;
@@ -37128,19 +38522,22 @@ declare namespace Paths {
                         };
                     }[];
                     category: {
-                        id: number;
+                        id: string; // uuid
+                        description?: string;
                         name?: string;
                         child: {
-                            id: number;
+                            id: string; // uuid
+                            description?: string;
                             name?: string;
                             child?: {
-                                id: number;
+                                id: string; // uuid
+                                description?: string;
                                 name?: string;
                             };
                         };
                     };
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
                     createdAt: string; // date-time
@@ -37168,10 +38565,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type UserID = number;
+            export type UserID = string; // uuid
         }
         export interface PathParameters {
-            userID: Parameters.UserID;
+            userID: Parameters.UserID /* uuid */;
         }
         export interface RequestBody {
             /**
@@ -37298,14 +38695,14 @@ declare namespace Paths {
             ];
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -37315,36 +38712,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -37376,10 +38773,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
             like: boolean;
@@ -37407,14 +38804,15 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SalonID = number;
+            export type SalonID = string; // uuid
         }
         export interface PathParameters {
-            salonID: Parameters.SalonID;
+            salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
-            deviceID: string;
             rate: 1 | 2 | 3 | 4 | 5; // float
+            userName: string;
+            deviceID: string;
         }
         namespace Responses {
             export interface $200 {
@@ -37488,7 +38886,7 @@ declare namespace Paths {
                 accessToken: string;
                 refreshToken: string;
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -37498,36 +38896,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -37619,7 +39017,7 @@ declare namespace Paths {
                 accessToken: string;
                 refreshToken: string;
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -37629,36 +39027,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -37748,119 +39146,123 @@ declare namespace Paths {
              * 1
              */
             streetNumber?: string;
-            salonID: number;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            profileImageID?: null | number;
+            salonID: string; // uuid
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            profileImageID?: string | null; // uuid
             galleryImageIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
         }
         namespace Responses {
             export interface $200 {
                 customer?: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -37916,122 +39318,122 @@ declare namespace Paths {
              */
             phone?: string | null; // ^\d+$
             serviceIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            salonID: number;
+            salonID: string; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     description?: string;
@@ -38041,46 +39443,60 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
-                    services: {
-                        id: number;
-                        salonPriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        employeePriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        category: {
-                            id: number;
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
                             name?: string;
-                        };
+                            children: {
+                                id: string; // uuid
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        resizedImages: {
+                                            [key: string]: any;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -38088,7 +39504,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
@@ -38098,36 +39514,36 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         }[];
                         salons: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             logo?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 resizedImages: {
                                     [key: string]: any;
                                 };
                                 isAutogenerated: boolean;
                             };
-                            employeeID: number;
+                            employeeID: string; // uuid
                             role?: {
-                                id: number;
+                                id: string; // uuid
                                 permissions: {
-                                    id: number;
+                                    id: string; // uuid
                                     name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                                 }[];
                             };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -38139,10 +39555,10 @@ declare namespace Paths {
                         deletedAt?: string; // date-time
                     };
                     role?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     };
@@ -38180,19 +39596,19 @@ declare namespace Paths {
             inviteEmail: string; // email
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            employeeID?: null | number;
+            employeeID?: string | null; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            salonID: number;
+            salonID: string; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            roleID: number;
+            roleID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -38274,31 +39690,31 @@ declare namespace Paths {
              * example:
              * 1
              */
-            parentID?: null | number;
+            parentID?: string | null; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             imageID?: /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            number | number;
+            string /* uuid */ | string /* uuid */ // uuid; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            iconID?: null | number;
+            iconID?: string | null; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            categoryParameterID?: null | number;
+            categoryParameterID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 category: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -41366,7 +42782,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 categoryParameter: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -41398,14 +42814,14 @@ declare namespace Paths {
             name: string;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 cosmetic: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -41432,9 +42848,9 @@ declare namespace Paths {
         export interface RequestBody {
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: number | null; // float
+            imageID?: string | null; // uuid
             nameLocalizations: ({
                 /**
                  * example:
@@ -41462,7 +42878,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 language: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -41630,7 +43046,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 supportContact: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -43358,14 +44774,14 @@ declare namespace Paths {
                 }?
             ];
             /**
-             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td></td> <td>salon logo</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> <tr> <td>CATEGORY_ICON</td> <td>category icon</td> </tr> <tr> <td>COSMETIC_IMAGE</td> <td>cosmetics image</td> </tr> <tr> <td>CUSTOMER_IMAGE</td> <td>customer profile image</td> </tr> <tr> <td></td> <td>customer gallery images</td> </tr> </tbody> </table> </div>
+             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td></td> <td>salon logo</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> <tr> <td>CATEGORY_ICON</td> <td>category icon</td> </tr> <tr> <td>COSMETIC_IMAGE</td> <td>cosmetics image</td> </tr> <tr> <td>CUSTOMER_IMAGE</td> <td>customer profile image</td> </tr> <tr> <td></td> <td>customer gallery images</td> </tr> <tr> <td>LANGUAGE_IMAGE</td> <td>language image</td> </tr> </tbody> </table> </div>
              */
-            category: "SALON_IMAGE" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "SALON_PRICELIST" | "CATEGORY_IMAGE" | "COSMETIC_IMAGE" | "CATEGORY_ICON" | "CUSTOMER_IMAGE" | "LANGUAGE_IMAGE";
+            category: "SALON_IMAGE" | "SALON_PRICELIST" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "CATEGORY_IMAGE" | "CATEGORY_ICON" | "COSMETIC_IMAGE" | "CUSTOMER_IMAGE" | "LANGUAGE_IMAGE";
         }
         namespace Responses {
             export interface $200 {
                 files: {
-                    id: number;
+                    id: string; // uuid
                     path: string;
                     signedUrl: string;
                     resizedImages?: {
@@ -43617,13 +45033,13 @@ declare namespace Paths {
              * Prevod na účet
              */
             otherPaymentMethods?: string | null;
-            imageIDs: number[];
+            imageIDs: string /* uuid */[];
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            logoID?: null | number;
-            pricelistIDs?: number[];
+            logoID?: string | null; // uuid
+            pricelistIDs?: string /* uuid */[];
             companyContactPerson: {
                 /**
                  * example:
@@ -43673,13 +45089,45 @@ declare namespace Paths {
                  */
                 companyName?: string | null;
             };
-            cosmeticIDs?: number[] | null;
-            languageIDs?: number[] | null;
+            cosmeticIDs?: [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ] | null;
+            languageIDs?: [
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
+            ] | null;
         }
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -43706,24 +45154,19 @@ declare namespace Paths {
         export interface RequestBody {
             /**
              * example:
-             * New category
-             */
-            serviceSuggestName: string;
-            /**
-             * example:
              * New category description
              */
             description: string;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            rootCategoryID: number;
+            rootCategoryID: string; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            salonID: number;
+            salonID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -43765,17 +45208,17 @@ declare namespace Paths {
              * 906047188
              */
             phone?: string | null; // ^\d+$
-            roleID: number;
+            roleID: string; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -43809,7 +45252,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -43819,36 +45262,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -43945,16 +45388,16 @@ declare namespace Paths {
             agreeGTC: boolean;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 accessToken: string;
                 refreshToken: string;
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -43964,36 +45407,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -44070,7 +45513,7 @@ declare namespace Paths {
                 accessToken: string;
                 refreshToken: string;
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -44080,36 +45523,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -44139,14 +45582,14 @@ declare namespace Paths {
             export type AcceptLanguage = string;
         }
         export interface RequestBody {
-            userID: number;
+            userID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
                 accessToken: string;
                 refreshToken: string;
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -44156,36 +45599,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -44287,7 +45730,7 @@ declare namespace Paths {
                 accessToken: string;
                 refreshToken: string;
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -44297,36 +45740,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -44416,119 +45859,123 @@ declare namespace Paths {
              * 1
              */
             streetNumber?: string;
-            salonID: number;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            profileImageID?: null | number;
+            salonID: string; // uuid
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            profileImageID?: string | null; // uuid
             galleryImageIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
         }
         namespace Responses {
             export interface $200 {
                 customer?: {
-                    id: number;
+                    id: string; // uuid
                 };
                 messages: {
                     message: string;
@@ -44584,122 +46031,122 @@ declare namespace Paths {
              */
             phone?: string | null; // ^\d+$
             serviceIDs?: [
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?,
-                number?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ] | null;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            salonID: number;
+            salonID: string; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 employee: {
-                    id: number;
+                    id: string; // uuid
                     firstName?: string;
                     lastName?: string;
                     description?: string;
@@ -44709,46 +46156,60 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasActiveAccount: boolean;
                     salon: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                     };
-                    services: {
-                        id: number;
-                        salonPriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        employeePriceAndDurationData: {
-                            durationFrom?: number;
-                            durationTo?: number;
-                            priceFrom?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                            priceTo?: {
-                                currency: string;
-                                exponent: number;
-                                significand: number;
-                            };
-                        };
-                        category: {
-                            id: number;
+                    totalServicesCount: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        totalThirdLevelCategoriesCount: number;
+                        children: {
+                            id: string; // uuid
                             name?: string;
-                        };
+                            children: {
+                                id: string; // uuid
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                                hasOverriddenPricesAndDurationData: boolean;
+                                category: {
+                                    id: string; // uuid
+                                    name?: string;
+                                };
+                                employees: {
+                                    id: string; // uuid
+                                    fullName: string;
+                                    hasActiveAccount: boolean;
+                                    inviteEmail?: string;
+                                    image: {
+                                        id: string; // uuid
+                                        original: string;
+                                        resizedImages: {
+                                            [key: string]: any;
+                                        };
+                                        isAutogenerated: boolean;
+                                    };
+                                }[];
+                            }[];
+                        }[];
                     }[];
                     image: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -44756,7 +46217,7 @@ declare namespace Paths {
                         isAutogenerated: boolean;
                     };
                     user?: {
-                        id: number;
+                        id: string; // uuid
                         email?: string;
                         lastAccess?: string; // date-time
                         activateAt?: string; // date-time
@@ -44766,36 +46227,36 @@ declare namespace Paths {
                         phone?: string; // ^\d+$
                         hasBasicInfo: boolean;
                         roles: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         }[];
                         salons: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                             logo?: {
-                                id: number;
+                                id: string; // uuid
                                 original: string;
                                 resizedImages: {
                                     [key: string]: any;
                                 };
                                 isAutogenerated: boolean;
                             };
-                            employeeID: number;
+                            employeeID: string; // uuid
                             role?: {
-                                id: number;
+                                id: string; // uuid
                                 permissions: {
-                                    id: number;
+                                    id: string; // uuid
                                     name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                                 }[];
                             };
                         }[];
                         disabledNotificationTypes?: ("TEST")[];
                         image?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -44807,10 +46268,10 @@ declare namespace Paths {
                         deletedAt?: string; // date-time
                     };
                     role?: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     };
@@ -44848,19 +46309,19 @@ declare namespace Paths {
             inviteEmail: string; // email
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            employeeID?: null | number;
+            employeeID?: string | null; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            salonID: number;
+            salonID: string; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            roleID: number;
+            roleID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -46590,14 +48051,14 @@ declare namespace Paths {
                 }?
             ];
             /**
-             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td></td> <td>salon logo</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> <tr> <td>CATEGORY_ICON</td> <td>category icon</td> </tr> <tr> <td>COSMETIC_IMAGE</td> <td>cosmetics image</td> </tr> <tr> <td>CUSTOMER_IMAGE</td> <td>customer profile image</td> </tr> <tr> <td></td> <td>customer gallery images</td> </tr> </tbody> </table> </div>
+             *  <span> Category is used to validate file (allowed mimetypes, max size, ...) and to determine, where can uploaded file be used (it is validated when files are assigned to other entities). For example file with SALON_IMAGE category can be used as image of salon, logo of salon or image of service<br><br> Category-entity usage </span> <div> <table> <thead> <tr> <th>category</th> <th>entity</th> </tr> </thead> <tbody> <tr> <td>SALON_IMAGE</td> <td>salon images</td> </tr> <tr> <td></td> <td>salon logo</td> </tr> <tr> <td>SALON_PRICELIST</td> <td>salon pricelists</td> </tr> <tr> <td>EMPLOYEE_IMAGE</td> <td>employee image</td> </tr> <tr> <td>USER_IMAGE</td> <td>user image</td> </tr> <tr> <td>CATEGORY_IMAGE</td> <td>category image</td> </tr> <tr> <td>CATEGORY_ICON</td> <td>category icon</td> </tr> <tr> <td>COSMETIC_IMAGE</td> <td>cosmetics image</td> </tr> <tr> <td>CUSTOMER_IMAGE</td> <td>customer profile image</td> </tr> <tr> <td></td> <td>customer gallery images</td> </tr> <tr> <td>LANGUAGE_IMAGE</td> <td>language image</td> </tr> </tbody> </table> </div>
              */
-            category: "SALON_IMAGE" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "SALON_PRICELIST" | "CATEGORY_IMAGE" | "COSMETIC_IMAGE" | "CATEGORY_ICON" | "CUSTOMER_IMAGE" | "LANGUAGE_IMAGE";
+            category: "SALON_IMAGE" | "SALON_PRICELIST" | "EMPLOYEE_IMAGE" | "USER_IMAGE" | "CATEGORY_IMAGE" | "CATEGORY_ICON" | "COSMETIC_IMAGE" | "CUSTOMER_IMAGE" | "LANGUAGE_IMAGE";
         }
         namespace Responses {
             export interface $200 {
                 files: {
-                    id: number;
+                    id: string; // uuid
                     path: string;
                     signedUrl: string;
                     resizedImages?: {
@@ -46673,20 +48134,20 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 salon: {
-                    id: number;
+                    id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
-                    rating: number; // float
+                    rating?: number; // float
                     categorySegment?: {
                         categories: {
-                            id: number;
+                            id: string; // uuid
                             name?: string;
                         }[];
                     };
                     gallerySegment?: {
                         images: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -46694,7 +48155,7 @@ declare namespace Paths {
                             isAutogenerated: boolean;
                         }[];
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
@@ -46800,7 +48261,7 @@ declare namespace Paths {
                         aboutUsFirst?: string;
                         aboutUsSecond?: string;
                     };
-                    contactInfoSegment?: {
+                    addressSegment?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
@@ -46808,6 +48269,10 @@ declare namespace Paths {
                         streetNumber?: string;
                         latitude?: number; // float
                         longitude?: number; // float
+                        parkingNote?: string;
+                        locationNote?: string;
+                    };
+                    contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
                             phone: string; // ^\d+$
@@ -46819,8 +48284,6 @@ declare namespace Paths {
                         socialLinkYoutube?: string;
                         socialLinkTikTok?: string;
                         socialLinkPinterest?: string;
-                        parkingNote?: string;
-                        locationNote?: string;
                     };
                     paymentSegment?: {
                         payByCard?: boolean;
@@ -46848,26 +48311,178 @@ declare namespace Paths {
                     };
                     pricelistSegment?: {
                         pricelists: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             isAutogenerated: boolean;
                         }[];
                     };
                     cosmeticsSegment?: {
-                        cosmetics: {
-                            id: number;
-                            name: string;
-                        }[];
+                        cosmetics: [
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?,
+                            {
+                                id: string; // uuid
+                                name: string;
+                            }?
+                        ];
                     };
                     languagesSegment?: {
-                        languages: {
-                            id: number;
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                        }[];
+                        languages: [
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?,
+                            {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }?
+                        ];
                     };
                     permissions: {
                         salon: {
@@ -46921,24 +48536,19 @@ declare namespace Paths {
         export interface RequestBody {
             /**
              * example:
-             * New category
-             */
-            serviceSuggestName: string;
-            /**
-             * example:
              * New category description
              */
             description: string;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            rootCategoryID: number;
+            rootCategoryID: string; // uuid
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            salonID: number;
+            salonID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -46974,7 +48584,7 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -46984,36 +48594,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -47141,16 +48751,16 @@ declare namespace Paths {
             agreeGTC: boolean;
             /**
              * example:
-             * 1
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
-            imageID?: null | number;
+            imageID?: string | null; // uuid
         }
         namespace Responses {
             export interface $200 {
                 accessToken: string;
                 refreshToken: string;
                 user: {
-                    id: number;
+                    id: string; // uuid
                     email?: string;
                     lastAccess?: string; // date-time
                     activateAt?: string; // date-time
@@ -47160,36 +48770,36 @@ declare namespace Paths {
                     phone?: string; // ^\d+$
                     hasBasicInfo: boolean;
                     roles: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         permissions: {
-                            id: number;
+                            id: string; // uuid
                             name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                         }[];
                     }[];
                     salons: {
-                        id: number;
+                        id: string; // uuid
                         name?: string;
                         logo?: {
-                            id: number;
+                            id: string; // uuid
                             original: string;
                             resizedImages: {
                                 [key: string]: any;
                             };
                             isAutogenerated: boolean;
                         };
-                        employeeID: number;
+                        employeeID: string; // uuid
                         role?: {
-                            id: number;
+                            id: string; // uuid
                             permissions: {
-                                id: number;
+                                id: string; // uuid
                                 name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
                             }[];
                         };
                     }[];
                     disabledNotificationTypes?: ("TEST")[];
                     image?: {
-                        id: number;
+                        id: string; // uuid
                         original: string;
                         resizedImages: {
                             [key: string]: any;
@@ -47711,6 +49321,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsMap.Responses.$200>
   /**
+   * getApiB2CV1SalonsDashboard - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsDashboard'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsDashboard.QueryParameters & Paths.GetApiB2CV1SalonsDashboard.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsDashboard.Responses.$200>
+  /**
    * getApiB2CV1SalonsFilter - PERMISSION: NO
    */
   'getApiB2CV1SalonsFilter'(
@@ -47758,6 +49376,22 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdTravelData.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdUserRating - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonIdUserRating'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdUserRating.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdLike - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonIdLike'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdLike.PathParameters & Paths.GetApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdLike.Responses.$200>
   /**
    * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
    */
@@ -47822,6 +49456,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
+  /**
+   * getApiPgsyncSalonsSalonIdRangePriceAndDurationData - PERMISSION: NO
+   */
+  'getApiPgsyncSalonsSalonIdRangePriceAndDurationData'(
+    parameters?: Parameters<Paths.GetApiPgsyncSalonsSalonIdRangePriceAndDurationData.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiPgsyncSalonsSalonIdRangePriceAndDurationData.Responses.$200>
   /**
    * postApiB2BAdminAuthLogin - PERMISSION: NO
    */
@@ -47903,6 +49545,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsBasic.Responses.$200>
   /**
+   * getApiB2BAdminSalonsBasicSuggestion - PERMISSION: [PARTNER]
+   */
+  'getApiB2BAdminSalonsBasicSuggestion'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasicSuggestion.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200>
+  /**
    * getApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
   'getApiB2BAdminSalonsSalonId'(
@@ -47934,6 +49584,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdBasic.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdBasicSuggestion - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BAdminSalonsSalonIdBasicSuggestion'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
@@ -48223,6 +49881,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
   /**
+   * getApiB2BV1SalonsBasicSuggestion - PERMISSION: [PARTNER]
+   */
+  'getApiB2BV1SalonsBasicSuggestion'(
+    parameters?: Parameters<Paths.GetApiB2BV1SalonsBasicSuggestion.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BV1SalonsBasicSuggestion.Responses.$200>
+  /**
    * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
    */
   'getApiB2BV1SalonsSalonId'(
@@ -48310,6 +49976,14 @@ export interface OperationMethods {
     data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
+  /**
+   * patchApiB2BV1SalonsSalonIdBasicSuggestion - PERMISSION: [PARTNER]
+   */
+  'patchApiB2BV1SalonsSalonIdBasicSuggestion'(
+    parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.Responses.$200>
   /**
    * getApiB2BV1Services - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
    */
@@ -49057,6 +50731,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsMap.Responses.$200>
   }
+  ['/api/b2c/v1/salons/dashboard']: {
+    /**
+     * getApiB2CV1SalonsDashboard - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsDashboard.QueryParameters & Paths.GetApiB2CV1SalonsDashboard.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsDashboard.Responses.$200>
+  }
   ['/api/b2c/v1/salons/filter']: {
     /**
      * getApiB2CV1SalonsFilter - PERMISSION: NO
@@ -49117,7 +50801,25 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdTravelData.Responses.$200>
   }
+  ['/api/b2c/v1/salons/{salonID}/user-rating']: {
+    /**
+     * getApiB2CV1SalonsSalonIdUserRating - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdUserRating.Responses.$200>
+  }
   ['/api/b2c/v1/salons/{salonID}/like']: {
+    /**
+     * getApiB2CV1SalonsSalonIdLike - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdLike.PathParameters & Paths.GetApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdLike.Responses.$200>
     /**
      * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
      */
@@ -49196,6 +50898,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
+  }
+  ['/api/pgsync/salons/{salonID}/range-price-and-duration-data']: {
+    /**
+     * getApiPgsyncSalonsSalonIdRangePriceAndDurationData - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiPgsyncSalonsSalonIdRangePriceAndDurationData.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiPgsyncSalonsSalonIdRangePriceAndDurationData.Responses.$200>
   }
   ['/api/b2b/admin/auth/login']: {
     /**
@@ -49293,6 +51005,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsBasic.Responses.$200>
   }
+  ['/api/b2b/admin/salons/basic-suggestion']: {
+    /**
+     * getApiB2BAdminSalonsBasicSuggestion - PERMISSION: [PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasicSuggestion.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200>
+  }
   ['/api/b2b/admin/salons/{salonID}']: {
     /**
      * getApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49328,6 +51050,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdBasic.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/basic-suggestion']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdBasicSuggestion - PERMISSION: [PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
     /**
@@ -49671,6 +51403,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
   }
+  ['/api/b2b/v1/salons/basic-suggestion']: {
+    /**
+     * getApiB2BV1SalonsBasicSuggestion - PERMISSION: [PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BV1SalonsBasicSuggestion.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BV1SalonsBasicSuggestion.Responses.$200>
+  }
   ['/api/b2b/v1/salons/{salonID}']: {
     /**
      * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
@@ -49776,6 +51518,16 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
+  }
+  ['/api/b2b/v1/salons/{salonID}/basic-suggestion']: {
+    /**
+     * patchApiB2BV1SalonsSalonIdBasicSuggestion - PERMISSION: [PARTNER]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.Responses.$200>
   }
   ['/api/b2b/v1/services/']: {
     /**

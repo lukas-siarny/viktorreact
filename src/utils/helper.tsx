@@ -36,6 +36,7 @@ import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
+import { ArgsProps } from 'antd/lib/notification'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -647,7 +648,7 @@ export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsI
 }
 
 type SelectDataItem = {
-	id: number
+	id: string
 	children?: any
 	name?: string | undefined
 }
@@ -666,7 +667,7 @@ export const getSelectOptionsFromData = (data: SelectDataItem[] | null, useOnly:
 	})
 }
 
-export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any) => {
+export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any, customMessage?: ArgsProps) => {
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
 		const errorKeys = Object.keys(errors)
@@ -677,12 +678,14 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		}
 
 		const isErrors: boolean = errorKeys.length > 1
-		return notification.error({
-			message: i18next.t('loc:Chybne vyplnený formulár'),
-			description: i18next.t(
-				`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-			)
-		})
+		return notification.error(
+			customMessage || {
+				message: i18next.t('loc:Chybne vyplnený formulár'),
+				description: i18next.t(
+					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
+				)
+			}
+		)
 	}
 	return undefined
 }

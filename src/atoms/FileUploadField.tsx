@@ -18,7 +18,7 @@ import showNotifications from '../utils/tsxHelpers'
 const { Item } = Form
 
 export interface IFileUploadFieldValue {
-	id: number
+	id: string
 	name: string
 	url: string
 }

@@ -37,7 +37,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import useBackUrl from '../../hooks/useBackUrl'
 
 type Props = SalonSubPageProps & {
-	computedMatch: IComputedMatch<{ employeeID: number }>
+	computedMatch: IComputedMatch<{ employeeID: string }>
 }
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
@@ -201,7 +201,7 @@ const EmployeePage = (props: Props) => {
 								}
 						  ]
 						: [],
-					services: checkAndParseServices(employee.data?.employee?.services),
+					services: /* checkAndParseServices(employee.data?.employee?.services) */ [],
 					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id },
 					roleID: employee.data?.employee?.role?.id
 				})

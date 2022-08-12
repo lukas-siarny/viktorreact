@@ -3,7 +3,6 @@ import { isEqual } from 'lodash'
 // types
 import { IIsPublishedVersionSameAsDraft, ISalonForm } from '../../../types/interfaces'
 import { ISelectedSalonPayload } from '../../../reducers/selectedSalon/selectedSalonActions'
-import { Paths } from '../../../types/api'
 
 export const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalonPayload) => {
 	// compare all fields that needs to be approved

@@ -36,6 +36,7 @@ import slugify from 'slugify'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
+import { ArgsProps } from 'antd/lib/notification'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -65,7 +66,7 @@ import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
 import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
-import { LOCALES } from '../components/LanguagePicker'
+import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -582,7 +583,7 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 
 		let img = {
 			...file,
-			url: get(file, 'url') || fileData.path
+			url: get(file, 'url') || fileData?.path
 		}
 
 		if (get(file, 'resizedImages')) {
@@ -648,7 +649,7 @@ export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsI
 }
 
 type SelectDataItem = {
-	id: number
+	id: string
 	children?: any
 	name?: string | undefined
 }
@@ -667,7 +668,7 @@ export const getSelectOptionsFromData = (data: SelectDataItem[] | null, useOnly:
 	})
 }
 
-export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any) => {
+export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any, customMessage?: ArgsProps) => {
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
 		const errorKeys = Object.keys(errors)
@@ -678,12 +679,14 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		}
 
 		const isErrors: boolean = errorKeys.length > 1
-		return notification.error({
-			message: i18next.t('loc:Chybne vyplnený formulár'),
-			description: i18next.t(
-				`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-			)
-		})
+		return notification.error(
+			customMessage || {
+				message: i18next.t('loc:Chybne vyplnený formulár'),
+				description: i18next.t(
+					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
+				)
+			}
+		)
 	}
 	return undefined
 }
@@ -813,6 +816,22 @@ export const countryOptionRender = (itemData: any) => {
 	return (
 		<div className='flex items-center'>
 			<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			{label}
+		</div>
+	)
+}
+
+export const langaugesOptionRender = (itemData: any) => {
+	const { value, label, flag } = itemData
+	return (
+		<div className='flex items-center'>
+			{flag ? (
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			) : (
+				<div className={'noti-flag mr-1'}>
+					<LanguageIcon />
+				</div>
+			)}
 			{label}
 		</div>
 	)

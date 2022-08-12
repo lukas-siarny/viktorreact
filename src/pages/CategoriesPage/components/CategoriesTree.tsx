@@ -27,17 +27,17 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 type TreeCategories = {
 	title?: ReactElement
 	icon?: ReactElement
-	key: number
+	key: string
 	name: string
 	disabled?: boolean
-	parentId?: number | null
+	parentId?: string | null
 	children?: TreeCategories[] | null
 	nameLocalizations?: any
 	level: number
 	index: number
 	image: any
 	deletedAt?: string
-	id: number
+	id: string
 	isParentDeleted: boolean
 }
 
@@ -56,7 +56,7 @@ const CategoriesTree = () => {
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
 	const createCategoryHandler = useCallback(
-		(parentId: number, parentTitle: string, childrenLength: number, level = 0) => {
+		(parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
 			setShowForm(true)
 			dispatch(
 				initialize(FORM.CATEGORY, {
@@ -94,7 +94,7 @@ const CategoriesTree = () => {
 	)
 
 	const deleteCategoryHandler = useCallback(
-		async (id: number) => {
+		async (id: string) => {
 			if (isRemoving) {
 				return
 			}
@@ -127,7 +127,7 @@ const CategoriesTree = () => {
 		)
 	}
 
-	const childrenRecursive = (parentId: number, children: any[], level = 1, isParentDeleted = false) => {
+	const childrenRecursive = (parentId: string, children: any[], level = 1, isParentDeleted = false) => {
 		const childs: TreeCategories[] & any = children
 		const items: any = map(childs, (child, index) => {
 			const data = {
@@ -210,7 +210,7 @@ const CategoriesTree = () => {
 			// key of dropped node
 			// const dropKey: number = droppedData.node.key
 			// key of dragged node
-			const dragKey: number = droppedData.dragNode.key
+			const dragKey: string = droppedData.dragNode.key
 			// drag node actual index/position in array children nodes
 			const dragPos: string = droppedData.dragNode.pos.split('-')
 			const dropPos: string = droppedData.node.pos.split('-')
@@ -282,10 +282,10 @@ const CategoriesTree = () => {
 				categoryParameterID: formData.categoryParameterID ?? undefined
 			}
 
-			if (formData.id && formData.id >= 0) {
+			if (formData.id) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
 			} else {
-				if (formData.parentId >= 0) {
+				if (formData.parentId) {
 					body = {
 						...body,
 						parentID: formData.parentId || undefined

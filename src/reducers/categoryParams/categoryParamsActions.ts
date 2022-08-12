@@ -61,7 +61,7 @@ export const getCategoryParameters = (): ThunkResult<Promise<IParametersPayload>
 }
 
 export const getCategoryParameter =
-	(parameterID: number): ThunkResult<Promise<IParameterPayload>> =>
+	(parameterID: string): ThunkResult<Promise<IParameterPayload>> =>
 	async (dispatch) => {
 		let payload = {} as IParameterPayload
 

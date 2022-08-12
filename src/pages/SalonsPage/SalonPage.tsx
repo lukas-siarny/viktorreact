@@ -17,7 +17,7 @@ import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS, NEW_SALON_ID } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -81,7 +81,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
-	const salonExists = salonID > 0
+	const salonExists = !!salonID && salonID === salon.data?.id
 	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null) && salonExists
 
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
@@ -92,7 +92,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isPublishedVersionSameAsDraft = getIsPublishedVersionSameAsDraft(formValues as ISalonForm)
 
 	// check permissions for submit in case of create or update salon
-	const submitPermissions = salonID > 0 ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
+	const submitPermissions = salonExists ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
 	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
@@ -166,7 +166,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				})
 			)
 			updateOnlyOpeningHours.current = false
-		} else if (!isEmpty(salonData) && salonID > 0) {
+		} else if (!isEmpty(salonData) && salonExists) {
 			// init data for existing salon
 			const openOverWeekend: boolean = checkWeekend(salonData?.openingHours)
 			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData?.openingHours)
@@ -231,9 +231,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					  ]
 					: null,
 				categoryIDs: map(salonData?.categories, (category) => category.id),
-				// TODO: remove any when NOT-1515 is done
-				languageIDs: map(salonData?.languages, (lng: any) => lng.id),
-				cosmeticIDs: map(salonData?.cosmetics, (cosmetic) => cosmetic.id),
+				languageIDs: map(salonData?.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
+				cosmeticIDs: map(salonData?.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
 				address: !!salonData?.address || null,
 				socialLinkWebPage: salonData?.socialLinkWebPage || null,
 				socialLinkFB: salonData?.socialLinkFB || null,
@@ -339,10 +338,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				languageIDs: data.languageIDs
 			}
 
-			if (salonID > 0) {
+			if (salonExists) {
 				// update existing salon
 				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
-				dispatch(selectSalon(salonID))
+				dispatch(selectSalon(salonID as any))
 			} else {
 				// create new salon
 				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
@@ -363,16 +362,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const breadcrumbDetailItem =
-		salonID > 0
-			? {
-					name: t('loc:Detail salónu'),
-					titleName: get(salon, 'data.name')
-			  }
-			: {
-					name: t('loc:Vytvoriť salón'),
-					link: t('paths:salons/create')
-			  }
+	const breadcrumbDetailItem = salonExists
+		? {
+				name: t('loc:Detail salónu'),
+				titleName: get(salon, 'data.name')
+		  }
+		: {
+				name: t('loc:Vytvoriť salón'),
+				link: t('paths:salons/create')
+		  }
 
 	// View
 	const breadcrumbs: IBreadcrumbs = {

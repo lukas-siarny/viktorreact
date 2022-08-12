@@ -21,7 +21,7 @@ interface IGetSalons {
 }
 
 export interface IGetSalonsQueryParams extends IQueryParams {
-	categoryFirstLevelIDs?: (number | null)[] | null
+	categoryFirstLevelIDs?: (string | null)[] | null
 	statuses_all?: boolean | null
 	statuses_published?: (string | null)[] | SALON_FILTER_STATES[] | null
 	statuses_deleted?: (string | null)[] | SALON_FILTER_STATES[] | null
@@ -82,7 +82,7 @@ export const getSalons =
 	}
 
 export const getSalon =
-	(salonID: number): ThunkResult<Promise<ISalonPayload>> =>
+	(salonID: string): ThunkResult<Promise<ISalonPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonPayload
 		try {

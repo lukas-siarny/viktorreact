@@ -43,8 +43,8 @@ const LanguagesPage = () => {
 	const dispatch = useDispatch()
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
-	// 0 - represents new record
-	const [languageID, setLanguageID] = useState<number>(0)
+	// undefined - represents new record
+	const [languageID, setLanguageID] = useState<string | undefined>(undefined)
 
 	const languages = useSelector((state: RootState) => state.languages.languages)
 
@@ -117,7 +117,7 @@ const LanguagesPage = () => {
 			)
 		}
 
-		setLanguageID(lang ? lang.id : 0)
+		setLanguageID(lang ? lang.id : undefined)
 		setVisibleForm(true)
 	}
 
@@ -127,7 +127,7 @@ const LanguagesPage = () => {
 			nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value)
 		}
 		try {
-			if (languageID > 0) {
+			if (languageID) {
 				await patchReq('/api/b2b/admin/enums/languages/{languageID}', { languageID }, body as LanguagesPatch)
 			} else {
 				await postReq('/api/b2b/admin/enums/languages/', null, body as LanguagesPatch)
@@ -142,13 +142,15 @@ const LanguagesPage = () => {
 	}
 
 	const handleDelete = async () => {
-		try {
-			await deleteReq('/api/b2b/admin/enums/languages/{languageID}', { languageID })
-			dispatch(getLanguages())
-			changeFormVisibility()
-		} catch (error: any) {
-			// eslint-disable-next-line no-console
-			console.error(error.message)
+		if (languageID) {
+			try {
+				await deleteReq('/api/b2b/admin/enums/languages/{languageID}', { languageID })
+				dispatch(getLanguages())
+				changeFormVisibility()
+			} catch (error: any) {
+				// eslint-disable-next-line no-console
+				console.error(error.message)
+			}
 		}
 	}
 
@@ -204,7 +206,7 @@ const LanguagesPage = () => {
 						fallback={record?.image?.original}
 						alt={record?.name}
 						preview={false}
-						className='languages-flag'
+						className='table-preview-image languages-flag'
 					/>
 				) : (
 					<div className={'languages-flag'} />

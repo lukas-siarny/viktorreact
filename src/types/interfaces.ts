@@ -37,18 +37,18 @@ export interface ILoginForm {
 
 export interface IInviteEmployeeForm {
 	email: string
-	roleID: number
+	roleID: string
 }
 
 export interface IEditEmployeeRoleForm {
-	roleID: number
+	roleID: string
 }
 
 export interface ICreateUserForm {
 	email: string
 	phonePrefixCountryCode: string
 	phone: string
-	roleID: number
+	roleID: string
 }
 
 export interface IUserAccountForm {
@@ -69,7 +69,7 @@ export interface IUserAccountForm {
 export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 
 export interface ISalonForm {
-	id: number | null
+	id: string | null
 	name: string | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
@@ -98,9 +98,9 @@ export interface ISalonForm {
 	socialLinkPinterest: string | null
 	payByCard: boolean
 	otherPaymentMethods: string | null
-	logo: any | null;
-	gallery: any | null;
-	pricelistIDs?: number[]
+	logo: any | null
+	gallery: any | null
+	pricelistIDs?: string[]
 	pricelists?: any
 	companyContactPerson: {
 		email: string | null
@@ -120,19 +120,9 @@ export interface ISalonForm {
 		number,
 	...number[]
 	],*/
-	categoryIDs: number[]
-	cosmeticIDs: number[]
-	languageIDs: number[]
-	/* address: {
-		countryCode: string | null
-		zipCode: string | null
-		city: string | null
-		street: string | null
-		streetNumber: string | null
-		latitude: number | null
-		longitude: number | null
-		description: string | null
-	} */
+	categoryIDs: string[]
+	cosmeticIDs: string[]
+	languageIDs: string[]
 	address: boolean | null
 	publishedSalonData: {
 		name: string | null
@@ -173,7 +163,7 @@ export interface IServiceForm {
 }
 
 export interface ISupportContactForm {
-	id: number | null
+	id: string | null
 	note: string
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
@@ -210,7 +200,7 @@ export interface IJwtPayload {
 	aud: string
 	exp: number
 	iat: number
-	uid: number
+	uid: string
 }
 export interface ICreatePasswordForm {
 	password: string
@@ -289,7 +279,7 @@ export interface ICustomerForm {
 	street?: string
 	streetNumber?: string
 	countryCode?: string
-	salonID: number
+	salonID: string
 	gallery: any,
 	avatar: any
 }
@@ -297,7 +287,7 @@ export interface ICustomerForm {
 export interface IEmployeeForm {
 	firstName: string
 	lastName: string
-	salonID: number
+	salonID: string
 	email?: string
 	phonePrefixCountryCode?: string
 	phone?: string
@@ -385,7 +375,7 @@ export interface ISearchableWithoutPagination<T> {
 // }
 
 export interface SalonSubPageProps {
-	salonID: number
+	salonID: string
 	parentPath?: string
 }
 
@@ -448,8 +438,15 @@ export interface ICategoryParamForm {
 	values: Pick<ICategoryParameter['values']['0'], 'value'>[]
 }
 
+export interface IIndustriesForm {
+	categoryIDs: string[]
+}
+
+export interface IIndustryForm {
+	categoryIDs: string[]
+}
+
 export type NameLocalizationsItem = {
 	language: string
 	value: string
 }
-

@@ -19,7 +19,7 @@ import SelectField from '../../../atoms/SelectField'
 import PhoneArrayField from '../../../atoms/PhoneArrayField'
 
 // utils
-import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification } from '../../../utils/helper'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, langaugesOptionRender, showErrorNotification } from '../../../utils/helper'
 import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
@@ -48,7 +48,7 @@ import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-i
 
 type ComponentProps = {
 	disabledForm: boolean
-	salonID?: number
+	salonID?: string
 	noteModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
 	pendingPublication?: boolean
@@ -81,16 +81,6 @@ const SalonForm: FC<Props> = (props) => {
 		formValues?.state === SALON_STATES.NOT_PUBLISHED ||
 		formValues?.state === SALON_STATES.NOT_PUBLISHED_PENDING ||
 		formValues?.state === SALON_STATES.NOT_PUBLISHED_DECLINED
-
-	const langaugesOptionRender = (itemData: any) => {
-		const { value, label, flag } = itemData
-		return (
-			<div className='flex items-center'>
-				{label}
-				{flag && <img className='noti-flag w-6 h-4 mr-1 rounded object-scale-down object-left' src={flag} alt={value} />}
-			</div>
-		)
-	}
 
 	const imagesFormField = (filedName: string, disabled: boolean) => (
 		<Field

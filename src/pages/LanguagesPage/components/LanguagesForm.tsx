@@ -25,7 +25,7 @@ import { ILanguageForm } from '../../../types/interfaces'
 import validateLanguagesFrom from './validateLanguagesFrom'
 
 type ComponentProps = {
-	languageID: number
+	languageID?: string
 	closeForm: () => void
 	onDelete: () => void
 }
@@ -43,7 +43,7 @@ const LanguagesForm: FC<Props> = (props) => {
 			<Col className={'flex'}>
 				<Row className={'mx-8 xl:mx-9 w-full h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 relative pr-7'}>
-						{languageID > 0 ? t('loc:Upraviť jazyk') : t('loc:Vytvoriť jazyk')}
+						{languageID ? t('loc:Upraviť jazyk') : t('loc:Vytvoriť jazyk')}
 						<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={() => closeForm()}>
 							<CloseIcon />
 						</Button>
@@ -82,7 +82,7 @@ const LanguagesForm: FC<Props> = (props) => {
 						/>
 					</Row>
 					<div className={'flex w-full justify-around space-between mt-10 gap-2 flex-wrap'}>
-						{languageID > 0 && (
+						{languageID && (
 							<DeleteButton
 								onConfirm={onDelete}
 								entityName={''}
@@ -92,7 +92,7 @@ const LanguagesForm: FC<Props> = (props) => {
 							/>
 						)}
 						<Button className={'noti-btn w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-							{languageID > 0 ? t('loc:Uložiť') : t('loc: Vytvoriť')}
+							{languageID ? t('loc:Uložiť') : t('loc: Vytvoriť')}
 						</Button>
 					</div>
 				</Row>

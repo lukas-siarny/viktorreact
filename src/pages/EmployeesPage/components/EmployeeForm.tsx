@@ -39,7 +39,7 @@ import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 const { Panel } = Collapse
 
 type ComponentProps = {
-	salonID: number
+	salonID: string
 	addService: MouseEventHandler<HTMLElement>
 }
 
@@ -228,6 +228,40 @@ const EmployeeForm: FC<Props> = (props) => {
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'mx-9 w-full h-full block'} justify='center'>
+					{formValues?.user && (
+						<>
+							<h3 className={'mb-0 mt-3'}>{t('loc:Používateľský profil')}</h3>
+							<Divider className={'mb-3 mt-3'} />
+							<div className={'flex space-between w-full'}>
+								<div className={'w-1/5'}>
+									<Field
+										className={'m-0'}
+										component={ImgUploadField}
+										name={'user.image'}
+										label={t('loc:Avatar')}
+										signUrl={URL_UPLOAD_IMAGES}
+										category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
+										multiple={false}
+										maxCount={1}
+										disabled
+									/>
+								</div>
+
+								<div className={'w-full'}>
+									<Field component={InputField} label={t('loc:Meno a Priezvisko')} name={'user.fullName'} size={'large'} disabled />
+									<Field component={InputField} label={t('loc:Email')} name={'user.email'} size={'large'} disabled />
+									<PhoneWithPrefixField
+										label={'Telefón'}
+										size={'large'}
+										prefixName={'user.phonePrefixCountryCode'}
+										phoneName={'user.phone'}
+										formName={FORM.EMPLOYEE}
+										disabled
+									/>
+								</div>
+							</div>
+						</>
+					)}
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>

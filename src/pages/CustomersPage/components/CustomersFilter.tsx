@@ -28,7 +28,7 @@ type ComponentProps = {
 
 interface ICustomersFilter {
 	search: string
-	salonID: number
+	salonID: string
 }
 
 type Props = InjectedFormProps<ICustomersFilter, ComponentProps> & ComponentProps

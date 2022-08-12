@@ -357,6 +357,7 @@
   "ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}": "which we have sent to you in a verification email to address {{email}}",
   "min": "min",
   "názov": "name",
+  "názvu": "name",
   "parameter": "parameter",
   "podporu": "support",
   "používateľa": "users",

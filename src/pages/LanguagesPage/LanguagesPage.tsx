@@ -14,7 +14,7 @@ import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import LanguagesForm from './components/LanguagesForm'
-import CosmeticsFilter from './components/LanguagesFilter'
+import LanguagesFilter from './components/LanguagesFilter'
 import { EMPTY_NAME_LOCALIZATIONS, sortNameLocalizationsWithDefaultLangFirst } from '../../components/LanguagePicker'
 
 // utils
@@ -223,7 +223,7 @@ const LanguagesPage = () => {
 				<Col span={24}>
 					<div className='content-body'>
 						<Spin spinning={languages?.isLoading}>
-							<CosmeticsFilter
+							<LanguagesFilter
 								total={languages?.data?.length}
 								onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
 								addButton={

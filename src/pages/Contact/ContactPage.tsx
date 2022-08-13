@@ -9,15 +9,16 @@ import { getSupportContact, getSupportContacts, getSupportContactsOptions } from
 import { RootState } from '../../reducers'
 
 // utils
-import { getCountryPrefix, getSupportContactCountryName, translateDayName } from '../../utils/helper'
+import { getCountryPrefix, getSupportContactCountryName, optionRenderWithImage, translateDayName } from '../../utils/helper'
 import { DAYS, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import i18n from '../../utils/i18n'
+import { LOCALES } from '../../components/LanguagePicker'
 
 // assets
 import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
 import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
-import { LOCALES } from '../../components/LanguagePicker'
+import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
 
 const NOTE_MAX_LENGTH = 150
 
@@ -104,10 +105,7 @@ const ContactPage: FC<Props> = () => {
 					>
 						{supportContacts?.options?.map((option) => (
 							<Option value={option.value} key={option.key}>
-								<div className='flex items-center'>
-									<img className='noti-flag w-6 mr-1 rounded' src={option.flag} alt={''} />
-									{option.label}
-								</div>
+								{optionRenderWithImage(option, <GlobeIcon />)}
 							</Option>
 						))}
 					</Select>

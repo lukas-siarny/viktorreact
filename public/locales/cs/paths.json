@@ -12,7 +12,7 @@
   "employees": "/employees",
   "employees/create": "/employees/create",
   "employees/{{employeeID}}": "/employees/{{employeeID}}",
-  "index": "/",
+  "index": "/index",
   "industries": "/industries",
   "industries/{{industryID}}": "/industries/{{industryID}}",
   "login": "/login",

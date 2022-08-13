@@ -115,12 +115,7 @@ export interface ISalonForm {
 		companyName: string | null
 		vatID: string | null
 	},
-	description: string | null
-	/* categoryIDs: [
-		number,
-	...number[]
-	],*/
-	categoryIDs: string[]
+	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
 	address: boolean | null
@@ -136,8 +131,8 @@ export interface ISalonForm {
 			streetNumber: string | null
 			latitude: number | null
 			longitude: number | null
-			description: string | null
-		};
+		}
+		locationNote: string | null
 		phones: {
 			phonePrefixCountryCode: string | null
 			phone: string | null

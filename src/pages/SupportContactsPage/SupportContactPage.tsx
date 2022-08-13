@@ -40,7 +40,7 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 
 type Props = {
 	computedMatch: IComputedMatch<{
-		supportContactID: number
+		supportContactID: string
 	}>
 }
 
@@ -67,7 +67,7 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const isLoading = supportContact.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving
 
-	const supportContactExists = supportContactID > 0
+	const supportContactExists = !!supportContactID
 
 	const [backUrl] = useBackUrl(t('paths:support-contacts'))
 

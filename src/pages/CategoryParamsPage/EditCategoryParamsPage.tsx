@@ -28,7 +28,7 @@ import { RootState } from '../../reducers'
 import useBackUrl from '../../hooks/useBackUrl'
 
 type Props = {
-	computedMatch: IComputedMatch<{ parameterID: number }>
+	computedMatch: IComputedMatch<{ parameterID: string }>
 }
 
 function EditCategoryParamsPage(props: Props) {

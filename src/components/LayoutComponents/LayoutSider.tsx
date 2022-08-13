@@ -42,7 +42,7 @@ const { Sider } = Layout
 export type LayoutSiderProps = {
 	page?: PAGE
 	showNavigation?: boolean
-	salonID?: number
+	salonID?: string
 	parentPath?: string
 }
 
@@ -191,6 +191,15 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
 									>
 										{t('loc:Detail salónu')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.INDUSTRIES}
+										key={PAGE.INDUSTRIES}
+										onClick={() => history.push(getPath(t('paths:industries')))}
+										icon={<CategoryIcon />} // fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES })}
+									>
+										{t('loc:Odvetvia')}
 									</Menu.Item>
 									<Menu.Item
 										eventKey={PAGE.SERVICES}

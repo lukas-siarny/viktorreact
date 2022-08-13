@@ -35,8 +35,8 @@ export interface IGetSupportContactsOptions {
 }
 
 export interface ISupportContactsTableData {
-	key: number
-	supportContactID: number
+	key: string
+	supportContactID: string
 	country: {
 		nameLocalizations: {
 			language: string
@@ -123,12 +123,12 @@ export const getSupportContacts =
 				return tableItem
 			})
 
-			const { options } = await dispatch(getSupportContactsOptions((i18n.language as LANGUAGE) || DEFAULT_LANGUAGE, data))
+			const supportContactOptions = await dispatch(getSupportContactsOptions((i18n.language as LANGUAGE) || DEFAULT_LANGUAGE, data))
 
 			payload = {
 				data,
 				tableData,
-				options
+				options: supportContactOptions?.options || []
 			}
 
 			dispatch({ type: SUPPORT_CONTACTS.SUPPORT_CONTACTS_DONE, payload })
@@ -142,7 +142,7 @@ export const getSupportContacts =
 	}
 
 export const getSupportContact =
-	(supportContactID?: number): ThunkResult<Promise<ISupportContactPayload>> =>
+	(supportContactID?: string): ThunkResult<Promise<ISupportContactPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISupportContactPayload
 

@@ -67,16 +67,6 @@ const SupportContactsFilter = (props: Props) => {
 		/>
 	)
 
-	/* const countryCodeOptionRender = (itemData: any) => {
-		const { value, label, flag } = itemData
-		return (
-			<div className='flex items-center'>
-				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
-				{label}
-			</div>
-		)
-	} */
-
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
 			<Filters
@@ -98,7 +88,7 @@ const SupportContactsFilter = (props: Props) => {
 					 <Col span={8}>
 						<Field
 							component={SelectField}
-							optionRender={countryCodeOptionRender}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 							name={'countryCode'}
 							placeholder={t('loc:Krajina')}
 							allowClear

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 // utils
 import { FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, checkFiltersSize } from '../../../utils/helper'
+import { checkFiltersSizeWithoutSearch } from '../../../utils/helper'
 
 // atoms
 import SelectField from '../../../atoms/SelectField'
@@ -28,14 +28,14 @@ type ComponentProps = {
 }
 
 interface IServicesFilter {
-	rootCategoryID: number
-	salonID: number
+	rootCategoryID: String
+	salonID: String
 }
 
 type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps
 
 const ServicesFilter = (props: Props) => {
-	const { handleSubmit, total, createService } = props
+	const { handleSubmit, createService } = props
 	const [t] = useTranslation()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SERVICES_FILTER)(state))
 	const categories = useSelector((state: RootState) => state.categories.categories)
@@ -45,8 +45,6 @@ const ServicesFilter = (props: Props) => {
 			{t('loc:Pridať službu')}
 		</Button>
 	)
-
-	console.log('categories', categories)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>

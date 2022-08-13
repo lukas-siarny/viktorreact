@@ -80,7 +80,12 @@ const ImgUploadField: FC<Props> = (props) => {
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = getImagesFormValues(info.fileList, imagesUrls.current)
 			// order application/['pdf'] file type to end of array
-			values.sort((a: any, b: any) => a.type.length - b.type.length)
+			values.sort((a: any, b: any) => {
+				if (!a.type || !b.type) {
+					return 0
+				}
+				return a.type.length - b.type.length
+			})
 			input.onChange(values)
 
 			// uploading process finished
@@ -156,6 +161,7 @@ const ImgUploadField: FC<Props> = (props) => {
 		// open application pdf
 		if (previewUrl?.type === 'application/pdf') {
 			window.open(previewUrl.url)
+			setPreviewUrl(null)
 		}
 	}
 

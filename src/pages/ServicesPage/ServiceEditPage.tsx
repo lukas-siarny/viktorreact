@@ -25,8 +25,8 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
 
 type Props = SalonSubPageProps & {
-	serviceID: number
-	salonID: number
+	serviceID: string
+	salonID: string
 }
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]

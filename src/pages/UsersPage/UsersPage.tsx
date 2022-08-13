@@ -41,7 +41,7 @@ const UsersPage = () => {
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'fullName:ASC'),
-		roleID: withDefault(NumberParam, undefined)
+		roleID: withDefault(StringParam, undefined)
 	})
 
 	useEffect(() => {

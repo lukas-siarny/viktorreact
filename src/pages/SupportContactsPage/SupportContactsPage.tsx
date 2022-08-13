@@ -17,7 +17,7 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, LANGUAGE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { history } from '../../utils/history'
 import i18n from '../../utils/i18n'
-import { getLinkWithEncodedBackUrl, getSupportContactCountryName, normalizeDirectionKeys, setOrder, sortTableData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { getLinkWithEncodedBackUrl, getSupportContactCountryName, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -95,7 +95,7 @@ const SupportContactsPage = () => {
 				compare: (a, b) => {
 					const aValue = getSupportContactCountryName(a?.country?.nameLocalizations, i18n.language as LANGUAGE) || a?.country?.code
 					const bValue = getSupportContactCountryName(b?.country?.nameLocalizations, i18n.language as LANGUAGE) || b?.country?.code
-					return sortTableData(aValue, bValue)
+					return sortData(aValue, bValue)
 				}
 			},
 			render: (value) => {

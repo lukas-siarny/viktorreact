@@ -19,7 +19,7 @@ import CosmeticsFilter from './components/CosmeticsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, setOrder, sortTableData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
@@ -36,8 +36,8 @@ const CosmeticsPage = () => {
 	const dispatch = useDispatch()
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
-	// 0 - represents new record
-	const [cosmeticID, setCosmeticID] = useState<number>(0)
+	// undefined - represents new record
+	const [cosmeticID, setCosmeticID] = useState<string | undefined>(undefined)
 
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 
@@ -104,7 +104,7 @@ const CosmeticsPage = () => {
 			)
 		}
 
-		setCosmeticID(cosmetic ? cosmetic.id : 0)
+		setCosmeticID(cosmetic ? cosmetic.id : undefined)
 		setVisibleForm(true)
 	}
 
@@ -126,13 +126,17 @@ const CosmeticsPage = () => {
 		}
 
 		try {
-			if (cosmeticID > 0) {
+			if (cosmeticID) {
 				await patchReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID }, body)
 			} else {
 				await postReq('/api/b2b/admin/enums/cosmetics/', null, body)
 			}
 			dispatch(getCosmetics())
 			changeFormVisibility()
+			// reset search in case of newly created entity
+			if (!cosmeticID && query.search) {
+				setQuery({ ...query, search: null })
+			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -141,7 +145,7 @@ const CosmeticsPage = () => {
 
 	const handleDelete = async () => {
 		try {
-			await deleteReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID })
+			await deleteReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID: cosmeticID || 'undefined' })
 			dispatch(getCosmetics())
 			changeFormVisibility()
 		} catch (error: any) {
@@ -159,7 +163,7 @@ const CosmeticsPage = () => {
 			render: (value) => <span className='base-regular'>{value}</span>,
 			sortOrder: setOrder(query.order, 'name'),
 			sorter: {
-				compare: (a, b) => sortTableData(a.name?.toUpperCase(), b.name?.toUpperCase())
+				compare: (a, b) => sortData(a.name, b.name)
 			}
 		},
 		{
@@ -174,10 +178,10 @@ const CosmeticsPage = () => {
 						fallback={record?.image?.original}
 						alt={record?.name}
 						preview={false}
-						className='cosmetics-logo'
+						className='table-preview-image cosmetics-logo'
 					/>
 				) : (
-					<div className={'cosmetics-logo'} />
+					<div className={'table-preview-image cosmetics-logo'} />
 				)
 		}
 	]
@@ -226,7 +230,6 @@ const CosmeticsPage = () => {
 										onRow={(record) => ({
 											onClick: () => changeFormVisibility(true, record)
 										})}
-										loading={cosmetics.isLoading}
 									/>
 								</div>
 								{visibleForm ? (

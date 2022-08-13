@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, GENDER, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { countryOptionRender, showErrorNotification } from '../../../utils/helper'
+import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 
 // types
 import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -25,6 +25,9 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 // reducers
 import { RootState } from '../../../reducers'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+
+// assets
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 type ComponentProps = {}
 
@@ -103,7 +106,7 @@ const CustomerForm: FC<Props> = (props) => {
 					</Row>
 					<Field
 						component={SelectField}
-						optionRender={countryOptionRender}
+						optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 						label={t('loc:Štát')}
 						placeholder={t('loc:Vyber krajinu')}
 						options={countries?.enumerationsOptions || []}

@@ -17,7 +17,7 @@ import CategoryParamsFilter from './components/CategoryParamsFilter'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, STRINGS, DEFAULT_LANGUAGE, FORM } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { withPermissions } from '../../utils/Permissions'
-import { setOrder, transformToLowerCaseWithoutAccent, formatDateByLocale, normalizeDirectionKeys, sortTableData, getLinkWithEncodedBackUrl } from '../../utils/helper'
+import { setOrder, transformToLowerCaseWithoutAccent, formatDateByLocale, normalizeDirectionKeys, sortData, getLinkWithEncodedBackUrl } from '../../utils/helper'
 
 // reducers
 import { getCategoryParameters } from '../../reducers/categoryParams/categoryParamsActions'
@@ -115,7 +115,7 @@ const CategoryParamsPage = () => {
 			ellipsis: true,
 			sortOrder: setOrder(query.order, 'name'),
 			sorter: {
-				compare: (a, b) => sortTableData(a.name?.toUpperCase(), b.name?.toUpperCase())
+				compare: (a, b) => sortData(a.name, b.name)
 			},
 			render: (value) => <span className='base-regular'>{value}</span>
 		},
@@ -133,7 +133,7 @@ const CategoryParamsPage = () => {
 			ellipsis: true,
 			sortOrder: setOrder(query.order, 'createdAt'),
 			sorter: {
-				compare: (a, b) => sortTableData(new Date(a.createdAt), new Date(b.createdAt))
+				compare: (a, b) => sortData(new Date(a.createdAt), new Date(b.createdAt))
 			},
 			render: (value) => formatDateByLocale(value)
 		}

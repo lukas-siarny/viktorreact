@@ -23,6 +23,7 @@ import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { patchReq } from '../../utils/request'
 import { flattenTree } from '../../utils/helper'
+import { history } from '../../utils/history'
 
 // types
 import { IBreadcrumbs, IIndustryForm, SalonSubPageProps, IComputedMatch } from '../../types/interfaces'
@@ -62,6 +63,18 @@ export const getServicesCategoryKeys = (array: any[], levelOfDepth = 0) => {
 		output = output.concat(getServicesCategoryKeys(item.category.children || [], levelOfDepth + 1))
 	})
 	return output
+}
+
+const getCategoryById = (category: any, serviceCategoryID: string) => {
+	let result = null
+	if (category?.category?.id === serviceCategoryID) {
+		return category
+	}
+	if (category?.category?.children) {
+		// eslint-disable-next-line no-return-assign
+		category.category.children.some((node: any) => (result = getCategoryById(node, serviceCategoryID)))
+	}
+	return result
 }
 
 const mapCategoriesForDataTree = (parentId: string | null, children: any[] | undefined, level = 0) => {
@@ -110,20 +123,16 @@ const IndustryPage = (props: Props) => {
 	const isLoadingTree = dataTree === null
 
 	useEffect(() => {
-		if (isEmpty(categories.data) || !categories.data) {
-			dispatch(getCategories())
-		}
-
-		if (categories.data && !isEmpty(categories.data) && dataTree === null) {
-			setDataTree(mapCategoriesForDataTree(null, rootCategory ? [rootCategory] : undefined))
-		}
-	}, [dispatch, categories.data, rootCategory, dataTree])
+		;(async () => {
+			const categoriesData = await dispatch(getCategories())
+			const root = categoriesData?.data?.find((category) => category.id === industryID)
+			setDataTree(mapCategoriesForDataTree(null, root ? [root] : undefined))
+		})()
+	}, [dispatch, industryID])
 
 	useEffect(() => {
-		if (isEmpty(services.data) || !services.data) {
-			dispatch(getServices({ salonID }))
-		}
-	}, [dispatch, salonID, services.data])
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
 
 	useEffect(() => {
 		const initialValues = {
@@ -153,7 +162,21 @@ const IndustryPage = (props: Props) => {
 				rootCategoryID: industryID,
 				categoryIDs
 			} as CategoriesPatch)
-			dispatch(getServices({ salonID }))
+			const updatedServicesData = await dispatch(getServices({ salonID }))
+
+			// redirect to service detail edit page in case it's first selected service in salon
+			const servicesKeys = getServicesCategoryKeys(services.data?.groupedServicesByCategory || [])
+			// check if there were any services saved before (servicesKeys) and if there are any new services to be saved (categoryIDs)
+			if (isEmpty(servicesKeys) && !isEmpty(categoryIDs)) {
+				// find rootCategory from updated service data
+				const updatedUserRootCategory = updatedServicesData.data?.groupedServicesByCategory.find((category) => category.category?.id === industryID)
+				// find service id in a rootCategory tree based on first selected service ID
+				const serviceID = getCategoryById(updatedUserRootCategory, categoryIDs[0])?.service?.id
+				// redirect
+				if (serviceID) {
+					history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID }))
+				}
+			}
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.log(e)
@@ -163,6 +186,10 @@ const IndustryPage = (props: Props) => {
 	const servicesLength = rootCategory ? flattenTree([rootCategory], (item, level) => ({ ...item, level })).filter((category) => category.level === 2).length : 0
 	const selectedServicesLength = getServiceIdsFromFormValues(formValues)?.length || 0
 
+	const areThereAnyServiceCategories = rootCategory?.children.some((secondLevelCategory) => secondLevelCategory.children?.length)
+
+	const loading = categories.isLoading || services.isLoading || isLoadingTree
+
 	return (
 		<>
 			<Row>
@@ -171,7 +198,7 @@ const IndustryPage = (props: Props) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body small'>
-						<Spin spinning={categories.isLoading || services.isLoading || submitting || isLoadingTree}>
+						<Spin spinning={loading || submitting}>
 							<h3 className={'mb-0 mt-0 flex items-center'}>
 								<ServiceIcon className={'text-notino-black mr-2'} />
 								{t('loc:Priradiť služby')}
@@ -183,12 +210,12 @@ const IndustryPage = (props: Props) => {
 								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
 								<span className={'label'}>{rootCategory?.name}</span>
 							</header>
-							{(rootCategory?.children.length || []) > 0 && !categories.isLoading ? (
-								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
-							) : (
+							{!loading && !areThereAnyServiceCategories ? (
 								<div className='h-100 w-full flex items-center justify-center'>
-									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:Na výber nie sú dostupné žiadne služby')} />
+									<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:V tomto odvetví nie sú dostupné na výber žiadne služby')} />
 								</div>
+							) : (
+								<IndustryForm onSubmit={handleSubmit} dataTree={dataTree} isLoadingTree={isLoadingTree} />
 							)}
 						</Spin>
 					</div>

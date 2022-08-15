@@ -2,20 +2,22 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { change, initialize } from 'redux-form'
 import { Action, compose, Dispatch } from 'redux'
+import { notification } from 'antd'
+import i18next from 'i18next'
 import { forEach, unionBy } from 'lodash'
 
 // components
-import { notification } from 'antd'
-import i18next from 'i18next'
 import ServiceForm from './components/ServiceForm'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getService } from '../../reducers/services/serviceActions'
 import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
+import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IServiceForm, SalonSubPageProps, ILoadingAndFailure } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 // utils
 import { patchReq } from '../../utils/request'
@@ -23,8 +25,6 @@ import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../uti
 import { decodePrice, encodePrice } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
-import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
-import { Paths } from '../../types/api'
 
 interface IParameterValue {
 	id: string | undefined
@@ -40,7 +40,6 @@ interface IParameterValue {
 
 type Props = SalonSubPageProps & {
 	serviceID: string
-	salonID: string
 }
 
 type ServiceEmployees = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']['employees']

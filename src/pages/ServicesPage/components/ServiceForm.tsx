@@ -67,8 +67,7 @@ const renderFromTo = (from: number | undefined | null, to: number | undefined | 
 }
 
 const validateParameterValuePriceAndDuration = (value: string, allValues: any, props: any, name: string) => {
-	const [pathToParameterValue] = name.split('.')
-	const key = name.split('.')[1]
+	const [pathToParameterValue, key] = name.split('.')
 	const parameterValueFormValues = get(allValues, pathToParameterValue)
 	if ((!parameterValueFormValues?.variablePrice && key === 'priceTo') || (!parameterValueFormValues?.variableDuration && key === 'durationTo')) {
 		return undefined

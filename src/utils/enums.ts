@@ -200,6 +200,11 @@ export enum PAGE {
 	INDUSTRY = 'INDUSTRY'
 }
 
+export enum PARAMETER_TYPE {
+	ENUM = 'ENUM',
+	TIME = 'TIME'
+}
+
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
 
 export const DEFAULT_DATE_INIT_FORMAT = 'YYYY-MM-DD'

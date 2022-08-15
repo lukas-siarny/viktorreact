@@ -150,15 +150,15 @@ export interface ISalonForm {
 }
 
 export interface IServiceForm {
+	id: number
 	durationFrom: number
 	durationTo: number
 	variableDuration: boolean
 	priceFrom: number
 	priceTo: number
 	variablePrice: boolean
-	categoryRoot: number
-	categoryFirstLevel: number
-	categorySecondLevel: number
+	useCategoryParameter: boolean
+	serviceCategoryParameter: any
 	employees: any
 }
 
@@ -306,6 +306,7 @@ export interface ILanguagePickerForm {
 }
 
 export interface IPrice {
+	currency?: string
 	exponent: number
 	significand: number
 }
@@ -317,12 +318,6 @@ export interface IUserAvatar {
 	key?: string | number
 
 }
-
-export interface IPrice {
-	exponent: number
-	significand: number
-}
-
 
 export interface IQueryParams {
 	page: number

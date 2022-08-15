@@ -23,8 +23,9 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICAT
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
-import { getLanguages } from '../../reducers/enumerations/enumerationActions'
+import { getCategories } from '../../reducers/categories/categoriesActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
+import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 
 // types
 import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
@@ -143,7 +144,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
 	useEffect(() => {
-		dispatch(getLanguages())
+		dispatch(getCategories())
+		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
 	}, [dispatch])
 

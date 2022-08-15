@@ -38,6 +38,9 @@ import EditCategoryParamsPage from '../pages/CategoryParamsPage/EditCategoryPara
 // Cosmetics
 import CosmeticsPage from '../pages/CosmeticsPage/CosmeticsPage'
 
+// Languages
+import LanguagesPage from '../pages/LanguagesPage/LanguagesPage'
+
 // Salons
 import SalonSubRoutes from './SalonSubRoutes'
 import SalonsPage from '../pages/SalonsPage/SalonsPage'
@@ -177,6 +180,15 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:cosmetics')}
 					layout={MainLayout}
 					page={PAGE.COSMETICS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:languages-in-salons')}
+					component={LanguagesPage}
+					translatePathKey={t('paths:languages-in-salons')}
+					layout={MainLayout}
+					page={PAGE.LANGUAGES}
 				/>
 				<AuthRoute
 					{...props}

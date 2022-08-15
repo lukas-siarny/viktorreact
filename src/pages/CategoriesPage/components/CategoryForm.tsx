@@ -28,15 +28,13 @@ import { RootState } from '../../../reducers'
 import Permissions from '../../../utils/Permissions'
 import SelectField from '../../../atoms/SelectField'
 
+// types
+import { NameLocalizationsItem } from '../../../types/interfaces'
+
 type ComponentProps = {
 	deleteCategory: any
 	createCategory: any
 	closeCategoryForm: any
-}
-
-type NameLocalizationsItem = {
-	language: string
-	value: string
 }
 
 export interface ICategoryForm {

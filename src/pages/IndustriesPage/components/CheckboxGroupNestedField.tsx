@@ -21,7 +21,7 @@ export type NestedMultiselectDataItem = {
 	children?: DataNode[]
 	level: number
 	index: number
-	id: number
+	id: string
 }[]
 
 const CheckboxGroupNestedField = (props: Props) => {
@@ -48,9 +48,8 @@ const CheckboxGroupNestedField = (props: Props) => {
 			selectable={false}
 			treeData={dataTree}
 			defaultExpandAll
-			// animacie su disabled, pretoze pri zatvarani a otvarani sposobju problemy so stylmi a performance
-			// styly, ktore su definovane cez react style proporety (v dataTree pre jednotlive nody) funguju ok, ale styly definovane v nasom cssku sa aplikuju az po dokonceni otvaracej / zatvaracej animacie
-			motion={null}
+			// ak budu animacie robit problemy tak sa daju vypnut, ale nie je to ofic zdokumentovana propa
+			// motion={null}
 		/>
 	)
 }

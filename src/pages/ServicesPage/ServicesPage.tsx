@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams } from 'use-query-params'
+import { StringParam, useQueryParams } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
@@ -27,6 +27,9 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 // types
 import { IBreadcrumbs, IUserAvatar, SalonSubPageProps, Columns } from '../../types/interfaces'
 
+// assets
+import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 interface IAdminUsersFilter {
@@ -42,7 +45,8 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const backUrl = getEncodedBackUrl()
 
 	useEffect(() => {
-		dispatch(getCategories(false))
+		dispatch(getCategories())
+		// test()
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
@@ -98,10 +102,22 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			ellipsis: true
 		},
 		{
-			title: t('loc:Zamestnanec'),
+			title: t('loc:Zamestnanci'),
 			dataIndex: 'employees',
 			key: 'employees',
 			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} /> : null)
+		},
+		{
+			title: t('loc:Vyplnenie služby'),
+			dataIndex: 'isComplete',
+			key: 'isComplete',
+			ellipsis: true,
+			render: (value) =>
+				value && (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} />
+					</div>
+				)
 		},
 		{
 			title: t('loc:Vytvorené'),

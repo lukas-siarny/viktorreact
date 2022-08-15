@@ -15,6 +15,7 @@
   "index": "/",
   "industries": "/industries",
   "industries/{{industryID}}": "/industries/{{industryID}}",
+  "languages-in-salons": "/languages-in-salons",
   "login": "/login",
   "my-account": "/my-account",
   "pending-invites": "/pending-invites",

@@ -19,8 +19,8 @@ import SelectField from '../../../atoms/SelectField'
 import PhoneArrayField from '../../../atoms/PhoneArrayField'
 
 // utils
-import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, showErrorNotification } from '../../../utils/helper'
-import { FORM, NEW_SALON_ID, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, langaugesOptionRender, showErrorNotification } from '../../../utils/helper'
+import { FORM, SALON_STATES, NEW_SALON_ID, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
 import { IIsPublishedVersionSameAsDraft, ISalonForm } from '../../../types/interfaces'
@@ -60,7 +60,7 @@ type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, change, noteModalControlButtons, salonID, disabledForm, deletedSalon = false, isPublishedVersionSameAsDraft, pendingPublication } = props
-	const languages = useSelector((state: RootState) => state.enumerationsStore.languages)
+	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
 
@@ -83,16 +83,6 @@ const SalonForm: FC<Props> = (props) => {
 		formValues?.state === SALON_STATES.NOT_PUBLISHED ||
 		formValues?.state === SALON_STATES.NOT_PUBLISHED_PENDING ||
 		formValues?.state === SALON_STATES.NOT_PUBLISHED_DECLINED
-
-	const langaugesOptionRender = (itemData: any) => {
-		const { value, label, flag } = itemData
-		return (
-			<div className='flex items-center'>
-				{flag ? <img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} /> : <div className={'noti-flag-fallback mr-1'} />}
-				{label}
-			</div>
-		)
-	}
 
 	const imagesFormField = (filedName: string, disabled: boolean) => (
 		<Field

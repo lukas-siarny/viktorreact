@@ -195,10 +195,10 @@ const CosmeticsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={cosmetics?.isLoading}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body'>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body'>
+						<Spin spinning={cosmetics?.isLoading}>
 							<CosmeticsFilter
 								total={cosmetics?.data?.length}
 								onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
@@ -245,10 +245,10 @@ const CosmeticsPage = () => {
 									</div>
 								) : undefined}
 							</div>
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+						</Spin>
+					</div>
+				</Col>
+			</Row>
 		</>
 	)
 }

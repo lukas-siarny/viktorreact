@@ -1,9 +1,10 @@
 import React, { MouseEventHandler, ReactNode, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import i18next from 'i18next'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Collapse, Divider, Form, Row, Spin, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
-import { isEmpty } from 'lodash'
+import { Button, Col, Collapse, Divider, Form, Row, Spin, Tag } from 'antd'
+import { isEmpty, get } from 'lodash'
 import cx from 'classnames'
 
 // atoms
@@ -20,8 +21,8 @@ import AvatarComponents from '../../../components/AvatarComponents'
 import { RootState } from '../../../reducers'
 
 // utils
-import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
-import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
+import { showErrorNotification, validationNumberMin } from '../../../utils/helper'
+import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, SALON_PERMISSION, STRINGS } from '../../../utils/enums'
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
@@ -36,6 +37,8 @@ import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.sv
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.svg'
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
+import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
+import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
 
 const { Panel } = Collapse
 
@@ -50,98 +53,139 @@ type ComponentProps = {
 
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
 
-export const renderListFields = (props: any) => {
+const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => {
+	if (from || to) {
+		return (
+			<div className={'flex items-center mr-3'}>
+				{icon}
+				{from}
+				{variable && to ? ` - ${to}` : undefined} {extra}
+			</div>
+		)
+	}
+	return undefined
+}
+
+const validateParameterValuePriceAndDuration = (value: string, allValues: any, props: any, name: string) => {
+	const [pathToParameterValue, key] = name.split('.')
+	const parameterValueFormValues = get(allValues, pathToParameterValue)
+	if ((!parameterValueFormValues?.variablePrice && key === 'priceTo') || (!parameterValueFormValues?.variableDuration && key === 'durationTo')) {
+		return undefined
+	}
+	if (parameterValueFormValues?.useParameter && !value) {
+		return i18next.t('loc:Toto pole je povinné')
+	}
+	return undefined
+}
+
+const renderParameterValues = (props: any) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
-	const { fields, salon } = props
+	const {
+		fields,
+		meta: { error, invalid },
+		salon,
+		showDuration
+	} = props
 
-	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => (
-		<div className={'flex items-center mr-3'}>
-			{icon}
-			{from}
-			{variable && to ? ` - ${to}` : undefined} {extra}
-		</div>
-	)
-
-	const genExtra = (index: number, field: any) => (
-		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
-			<div className={'flex'}>
-				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
-				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
+	const genExtra = (index: number, fieldData: any, field: any) => {
+		return (
+			<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
+				<div className={'flex'}>
+					{showDuration && renderFromTo(fieldData?.durationFrom, fieldData?.durationTo, fieldData?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
+					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, fieldData?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
+					<Field
+						className={'mb-0'}
+						component={SwitchField}
+						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
+						name={`${field}.useParameter`}
+						size={'middle'}
+					/>
+				</div>
 			</div>
-			<DeleteButton
-				onConfirm={() => {
-					fields.remove(index)
-				}}
-				smallIcon
-				size={'small'}
-				entityName={t('loc:službu')}
-				type={'default'}
-				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-				onlyIcon
-			/>
-		</div>
-	)
+		)
+	}
 
 	return (
 		<>
-			<Collapse className={'collapse-list'} bordered={false}>
+			{invalid && error && (
+				<div role='alert' className='ant-form-item-explain-error'>
+					{error}
+				</div>
+			)}
+			<Collapse className={cx('collapse-list', { 'error-border': invalid && error })} bordered={false}>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.variableDuration
 					const variablePrice = fieldData?.variablePrice
-					const category = fieldData?.category?.child ? showServiceCategory(fieldData?.category) : fieldData?.category?.name
+					const useParameter = fieldData?.useParameter
 					return (
 						<Panel
 							header={
 								<div className={'flex align-center'}>
 									<div className={'list-title leading-7'}>{fieldData?.name}</div>
-									<Tag className={'ml-5'}>{category}</Tag>
 								</div>
 							}
 							key={index}
-							extra={genExtra(index, fieldData)}
+							extra={genExtra(index, fieldData, field)}
+							collapsible={useParameter ? undefined : 'disabled'}
 						>
-							<Row gutter={8} align='middle'>
-								<Col span={8}>
-									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
-								</Col>
-								<Col span={variableDuration ? 8 : 16}>
-									<Field
-										component={InputNumberField}
-										label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
-										placeholder={t('loc:min')}
-										name={`${field}.employeeData.durationFrom`}
-										precision={0}
-										step={1}
-										maxChars={3}
-										size={'large'}
-										validate={[numberMin0]}
-										required
-									/>
-								</Col>
-
-								{variableDuration && (
-									<Col span={8}>
+							{showDuration && (
+								<Row gutter={8} align='top' justify='center'>
+									<Col className={'mt-5'} span={8}>
+										<Field
+											className={'mb-0'}
+											component={SwitchField}
+											label={t('loc:Variabilné trvanie')}
+											name={`${field}.variableDuration`}
+											size={'middle'}
+											disabled={!useParameter}
+										/>
+									</Col>
+									<Col span={variableDuration ? 8 : 16}>
 										<Field
 											component={InputNumberField}
-											label={t('loc:Trvanie do (minúty)')}
+											label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
 											placeholder={t('loc:min')}
-											name={`${field}.employeeData.durationTo`}
+											name={`${field}.durationFrom`}
 											precision={0}
 											step={1}
 											maxChars={3}
 											size={'large'}
-											validate={[numberMin0]}
+											validate={[numberMin0, validateParameterValuePriceAndDuration]}
+											disabled={!useParameter}
 											required
 										/>
 									</Col>
-								)}
-							</Row>
-							<Divider />
-							<Row gutter={8} align='middle'>
-								<Col span={8}>
-									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={`${field}.variablePrice`} size={'middle'} />
+									{variableDuration && (
+										<Col span={8}>
+											<Field
+												component={InputNumberField}
+												label={t('loc:Trvanie do (minúty)')}
+												placeholder={t('loc:min')}
+												name={`${field}.durationTo`}
+												precision={0}
+												step={1}
+												maxChars={3}
+												size={'large'}
+												validate={[numberMin0, validateParameterValuePriceAndDuration]}
+												disabled={!useParameter}
+												required
+											/>
+										</Col>
+									)}
+								</Row>
+							)}
+							<Row gutter={8} align='top' justify='center'>
+								<Col className={'mt-5'} span={8}>
+									<Field
+										className={'mb-0'}
+										component={SwitchField}
+										label={t('loc:Variabilná cena')}
+										name={`${field}.variablePrice`}
+										size={'middle'}
+										disabled={!useParameter}
+									/>
 								</Col>
 								<Col span={variablePrice ? 8 : 16}>
 									<Field
@@ -152,12 +196,13 @@ export const renderListFields = (props: any) => {
 												: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
 										}
 										placeholder={salon.data?.currency.symbol}
-										name={`${field}.employeeData.priceFrom`}
+										name={`${field}.priceFrom`}
 										precision={2}
 										step={1}
 										maxChars={5}
 										size={'large'}
-										validate={[numberMin0]}
+										validate={[numberMin0, validateParameterValuePriceAndDuration]}
+										disabled={!useParameter}
 										required
 									/>
 								</Col>
@@ -167,12 +212,13 @@ export const renderListFields = (props: any) => {
 											component={InputNumberField}
 											label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
 											placeholder={salon.data?.currency.symbol}
-											name={`${field}.employeeData.priceTo`}
+											name={`${field}.priceTo`}
 											precision={2}
 											step={1}
 											maxChars={5}
 											size={'large'}
-											validate={[numberMin0]}
+											validate={[numberMin0, validateParameterValuePriceAndDuration]}
+											disabled={!useParameter}
 											required
 										/>
 									</Col>
@@ -189,54 +235,96 @@ export const renderListFields = (props: any) => {
 export const renderEmployees = (props: any) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
-	const { fields } = props
+	const { fields, salon, showDuration } = props
 
-	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, icon: ReactNode) => {
-		if (from || to) {
-			return (
-				<div className={'flex items-center mr-3'}>
-					{icon}
-					{from}
-					{to ? ` - ${to}` : undefined}
-				</div>
-			)
-		}
-		return undefined
-	}
+	const genExtra = (index: number, field: any) => (
+		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
+			<div className={'flex'}>
+				{field?.serviceCategoryParameter && field?.serviceCategoryParameter?.length >= 1 ? (
+					<div className={'flex items-center justify-center mr-2'}>
+						<div className={'title mr-2'}>{field?.serviceCategoryParameter[0]?.name}</div>
+						{showDuration &&
+							renderFromTo(
+								field?.serviceCategoryParameter[0]?.durationFrom,
+								field?.serviceCategoryParameter[0]?.durationTo,
+								field?.serviceCategoryParameter[0]?.variableDuration,
+								<ClockIcon className={'mr-1'} />
+							)}
+						{renderFromTo(
+							field?.serviceCategoryParameter[0]?.priceFrom,
+							field?.serviceCategoryParameter[0]?.priceTo,
+							field?.serviceCategoryParameter[0]?.variablePrice,
+							<CouponIcon className={'mr-1'} />,
+							salon.data?.currency.symbol
+						)}
+						{field?.serviceCategoryParameter?.length > 1 && '...'}
+					</div>
+				) : (
+					<>
+						{showDuration && renderFromTo(field?.durationFrom, field?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
+						{renderFromTo(field?.priceFrom, field?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
+					</>
+				)}
+				<DeleteButton
+					onConfirm={() => {
+						fields.remove(index)
+					}}
+					smallIcon
+					size={'small'}
+					entityName={t('loc:zamestnanca')}
+					type={'default'}
+					onlyIcon
+				/>
+			</div>
+		</div>
+	)
 
 	return (
 		<>
-			<div className={'employee-list'}>
+			<Collapse className={'collapse-list'} bordered={false} accordion={true}>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
+					const collapsible = (fieldData?.durationFrom && fieldData?.priceFrom) || fieldData?.serviceCategoryParameter?.length > 1 ? undefined : 'disabled'
 					return (
-						<div className={'employee-list-item flex items-center justify-between'} key={index}>
-							<div className={'title flex items-center'}>
-								<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
-								{fieldData?.name}
-								{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
-								{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
-							</div>
-							<div className={'flex items-center'}>
-								<div className={'flex items-center'}>
-									{renderFromTo(fieldData?.employeeData?.durationFrom, fieldData?.employeeData?.durationTo, <ClockIcon className={'mr-1'} />)}
-									{renderFromTo(fieldData?.employeeData?.priceFrom, fieldData?.employeeData?.priceTo, <CouponIcon className={'mr-1'} />)}
+						<Panel
+							header={
+								<div className={'flex align-center'}>
+									<div className={'title flex items-center'}>
+										<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
+										{fieldData?.name}
+										{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
+										{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
+									</div>
 								</div>
-								<DeleteButton
-									onConfirm={() => {
-										fields.remove(index)
-									}}
-									smallIcon
-									size={'small'}
-									entityName={t('loc:službu')}
-									type={'default'}
-									onlyIcon
-								/>
-							</div>
-						</div>
+							}
+							key={index}
+							extra={genExtra(index, fieldData)}
+							collapsible={collapsible}
+						>
+							{fieldData?.serviceCategoryParameter?.length > 1 &&
+								fieldData?.serviceCategoryParameter?.map((parameterValue: any) => (
+									<Tag className={'my-1'}>
+										<div className={'title mr-2'}>{parameterValue?.name}</div>
+										{showDuration &&
+											renderFromTo(
+												parameterValue?.durationFrom,
+												parameterValue?.durationTo,
+												parameterValue?.variableDuration,
+												<ClockIcon className={'mr-1'} />
+											)}
+										{renderFromTo(
+											parameterValue?.priceFrom,
+											parameterValue?.priceTo,
+											parameterValue?.variablePrice,
+											<CouponIcon className={'mr-1'} />,
+											salon.data?.currency.symbol
+										)}
+									</Tag>
+								))}
+						</Panel>
 					)
 				})}
-			</div>
+			</Collapse>
 		</>
 	)
 }
@@ -246,7 +334,7 @@ const ServiceForm = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM].values)
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM]?.values)
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
@@ -285,83 +373,104 @@ const ServiceForm = (props: Props) => {
 	return (
 		<Spin spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-				<Row gutter={8} align='middle'>
-					<Col span={8}>
-						<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
-					</Col>
-					<Col span={variableDuration ? 8 : 16}>
-						<Field
-							component={InputNumberField}
-							label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
-							placeholder={t('loc:min')}
-							name='durationFrom'
-							precision={0}
-							step={1}
-							maxChars={3}
-							size={'large'}
-							validate={[numberMin0]}
-							required
+				<h3 className={'mb-0 mt-0 flex items-center'}>
+					<SettingIcon className={'text-notino-black mr-2'} />
+					{t('loc:Nastavenia')}
+				</h3>
+				<Divider className={'mb-3 mt-3'} />
+				<Field className={'mb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
+				{formValues?.useCategoryParameter ? (
+					<div className={'my-2'}>
+						<FieldArray
+							component={renderParameterValues}
+							name={'serviceCategoryParameter'}
+							salon={salon}
+							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 						/>
-					</Col>
+					</div>
+				) : (
+					<div className={'mt-2'}>
+						<Row gutter={8} align='top' justify='center'>
+							<Col className={'mt-5'} span={8}>
+								<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
+							</Col>
+							<Col span={variableDuration ? 8 : 16}>
+								<Field
+									component={InputNumberField}
+									label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
+									placeholder={t('loc:min')}
+									name='durationFrom'
+									precision={0}
+									step={1}
+									maxChars={3}
+									size={'large'}
+									validate={[numberMin0]}
+									required
+								/>
+							</Col>
 
-					{variableDuration && (
-						<Col span={8}>
-							<Field
-								component={InputNumberField}
-								label={t('loc:Trvanie do (minúty)')}
-								placeholder={t('loc:min')}
-								name='durationTo'
-								precision={0}
-								step={1}
-								maxChars={3}
-								size={'large'}
-								validate={[numberMin0]}
-								required
-							/>
-						</Col>
-					)}
-				</Row>
-
-				<Row gutter={8} align='middle'>
-					<Col span={8}>
-						<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
-					</Col>
-					<Col span={variablePrice ? 8 : 16}>
-						<Field
-							component={InputNumberField}
-							label={
-								variablePrice
-									? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
-									: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
-							}
-							placeholder={salon.data?.currency.symbol}
-							name='priceFrom'
-							precision={2}
-							step={1}
-							maxChars={5}
-							size={'large'}
-							validate={[numberMin0]}
-							required
-						/>
-					</Col>
-					{variablePrice && (
-						<Col span={8}>
-							<Field
-								component={InputNumberField}
-								label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
-								placeholder={salon.data?.currency.symbol}
-								name='priceTo'
-								precision={2}
-								step={1}
-								maxChars={5}
-								size={'large'}
-								validate={[numberMin0]}
-								required
-							/>
-						</Col>
-					)}
-				</Row>
-				<h3>{t('loc:Zoznam priradených zamestnancov')}</h3>
+							{variableDuration && (
+								<Col span={8}>
+									<Field
+										component={InputNumberField}
+										label={t('loc:Trvanie do (minúty)')}
+										placeholder={t('loc:min')}
+										name='durationTo'
+										precision={0}
+										step={1}
+										maxChars={3}
+										size={'large'}
+										validate={[numberMin0]}
+										required
+									/>
+								</Col>
+							)}
+						</Row>
+						<Row gutter={8} align='top' justify='center'>
+							<Col className={'mt-5'} span={8}>
+								<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+							</Col>
+							<Col span={variablePrice ? 8 : 16}>
+								<Field
+									component={InputNumberField}
+									label={
+										variablePrice
+											? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
+											: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
+									}
+									placeholder={salon.data?.currency.symbol}
+									name='priceFrom'
+									precision={2}
+									step={1}
+									maxChars={5}
+									size={'large'}
+									validate={[numberMin0]}
+									required
+								/>
+							</Col>
+							{variablePrice && (
+								<Col span={8}>
+									<Field
+										component={InputNumberField}
+										label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
+										placeholder={salon.data?.currency.symbol}
+										name='priceTo'
+										precision={2}
+										step={1}
+										maxChars={5}
+										size={'large'}
+										validate={[numberMin0]}
+										required
+									/>
+								</Col>
+							)}
+						</Row>{' '}
+					</div>
+				)}
+				<h3 className={'mb-0 mt-0 flex items-center'}>
+					<EmployeesIcon className={'text-notino-black mr-2'} />
+					{t('loc:Priradení zamestnanci')}
+				</h3>
 				<Divider className={'mb-3 mt-3'} />
 				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 					<Field
@@ -384,7 +493,7 @@ const ServiceForm = (props: Props) => {
 						{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
 					</Button>
 				</div>
-				<FieldArray component={renderEmployees} name={'employees'} />
+				<FieldArray component={renderEmployees} name={'employees'} salon={salon} showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME} />
 				<div className={'content-footer pt-0'} id={'content-footer-container'}>
 					<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
 						{serviceID ? (

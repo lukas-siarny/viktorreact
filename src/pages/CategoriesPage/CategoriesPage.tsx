@@ -45,15 +45,15 @@ const CategoriesPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body'>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body'>
+						<Spin spinning={isLoading}>
 							<CategoriesTree />
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+						</Spin>
+					</div>
+				</Col>
+			</Row>
 		</>
 	)
 }

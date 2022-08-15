@@ -1,6 +1,12 @@
 import React from 'react'
+
+// helpers
 import { optionRenderWithImage } from '../utils/helper'
+
+// atoms
 import SelectField, { Props as SelectProps } from './SelectField'
+
+// assets
 import { ReactComponent as PhoneIcon } from '../assets/icons/phone-2-icon.svg'
 
 type Props = SelectProps & {

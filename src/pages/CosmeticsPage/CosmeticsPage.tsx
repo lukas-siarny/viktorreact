@@ -7,9 +7,9 @@ import { initialize, reset } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
 import { StringParam, withDefault, useQueryParams } from 'use-query-params'
+import { SorterResult } from 'antd/lib/table/interface'
 
 // components
-import { SorterResult } from 'antd/lib/table/interface'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import CosmeticForm from './components/CosmeticForm'
@@ -23,13 +23,13 @@ import { normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithout
 
 // reducers
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
+import { RootState } from '../../reducers'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
 import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns } from '../../types/interfaces'
-import { RootState } from '../../reducers'
 
 const CosmeticsPage = () => {
 	const [t] = useTranslation()

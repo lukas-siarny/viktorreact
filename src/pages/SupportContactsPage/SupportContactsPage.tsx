@@ -5,9 +5,9 @@ import { compose } from 'redux'
 import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { Col, Row, TablePaginationConfig } from 'antd'
 import { initialize } from 'redux-form'
+import { SorterResult } from 'antd/lib/table/interface'
 
 // components
-import { SorterResult } from 'antd/lib/table/interface'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SupportContactsFilter, { ISupportContactsFilter } from './components/SupportContactsFilter'
@@ -21,12 +21,10 @@ import { getLinkWithEncodedBackUrl, getSupportContactCountryName, normalizeDirec
 
 // reducers
 import { RootState } from '../../reducers'
+import { getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
 
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
-
-// assets
-import { getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 

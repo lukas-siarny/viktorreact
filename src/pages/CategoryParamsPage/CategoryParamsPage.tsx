@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Button, TablePaginationConfig } from 'antd'
 import { compose } from 'redux'
 import { find, join } from 'lodash'
-
-// components
 import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { initialize } from 'redux-form'
 import { SorterResult } from 'antd/lib/table/interface'
+
+// components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import CategoryParamsFilter from './components/CategoryParamsFilter'
@@ -21,10 +21,10 @@ import { setOrder, transformToLowerCaseWithoutAccent, formatDateByLocale, normal
 
 // reducers
 import { getCategoryParameters } from '../../reducers/categoryParams/categoryParamsActions'
+import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
-import { RootState } from '../../reducers'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'

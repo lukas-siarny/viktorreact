@@ -20,7 +20,7 @@ import PhoneArrayField from '../../../atoms/PhoneArrayField'
 
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
-import { FORM, SALON_STATES, NEW_SALON_ID, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FORM, NEW_SALON_ID, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
 import { IIsPublishedVersionSameAsDraft, ISalonForm } from '../../../types/interfaces'
@@ -85,6 +85,9 @@ const SalonForm: FC<Props> = (props) => {
 		formValues?.state === SALON_STATES.NOT_PUBLISHED ||
 		formValues?.state === SALON_STATES.NOT_PUBLISHED_PENDING ||
 		formValues?.state === SALON_STATES.NOT_PUBLISHED_DECLINED
+
+	// both fields are visible - but both are in disabled state
+	const disabledComparsionFields = disabledForm || (!newSalon && !!pendingPublication)
 
 	const imagesFormField = (filedName: string, disabled: boolean) => (
 		<Field
@@ -185,7 +188,7 @@ const SalonForm: FC<Props> = (props) => {
 							newValue={formValues?.name || null}
 							equal={isPublishedVersionSameAsDraft?.isNameEqual}
 							oldFormField={nameFormField('publishedSalonData.name', true)}
-							newFormField={nameFormField('name', disabledForm || !!pendingPublication)}
+							newFormField={nameFormField('name', disabledComparsionFields)}
 							disableComparsion={disableComparsion}
 						/>
 						<Compare
@@ -202,7 +205,7 @@ const SalonForm: FC<Props> = (props) => {
 							)}
 							newFormField={aboutUsFirstFormField(
 								'aboutUsFirst',
-								disabledForm || !!pendingPublication,
+								disabledComparsionFields,
 								aboutUsFirstPlaceholder,
 								aboutUsFirstLabel,
 								VALIDATION_MAX_LENGTH.LENGTH_1000
@@ -223,7 +226,7 @@ const SalonForm: FC<Props> = (props) => {
 							)}
 							newFormField={aboutUsFirstFormField(
 								'aboutUsSecond',
-								disabledForm || !!pendingPublication,
+								disabledComparsionFields,
 								aboutUsSecondPlaceholder,
 								aboutUsSecondLabel,
 								VALIDATION_MAX_LENGTH.LENGTH_500
@@ -265,7 +268,7 @@ const SalonForm: FC<Props> = (props) => {
 							oldValue={formValues?.publishedSalonData?.logo}
 							equal={isPublishedVersionSameAsDraft?.isLogoEqual}
 							oldFormField={logoFormField('publishedSalonData.logo', true)}
-							newFormField={logoFormField('logo', disabledForm || !!pendingPublication)}
+							newFormField={logoFormField('logo', disabledComparsionFields)}
 							ellipsis
 							disableComparsion={disableComparsion}
 						/>
@@ -274,7 +277,7 @@ const SalonForm: FC<Props> = (props) => {
 							oldValue={formValues?.publishedSalonData?.gallery}
 							equal={isPublishedVersionSameAsDraft?.isGalleryEqual}
 							oldFormField={imagesFormField('publishedSalonData.gallery', true)}
-							newFormField={imagesFormField('gallery', disabledForm || !!pendingPublication)}
+							newFormField={imagesFormField('gallery', disabledComparsionFields)}
 							ellipsis
 							disableComparsion={disableComparsion}
 						/>
@@ -293,7 +296,7 @@ const SalonForm: FC<Props> = (props) => {
 							newValue={formValues?.phones || []}
 							equal={isPublishedVersionSameAsDraft?.isPhoneEqual}
 							oldFormField={phoneFormField('publishedSalonData.phones', true)}
-							newFormField={phoneFormField('phones', disabledForm || !!pendingPublication)}
+							newFormField={phoneFormField('phones', disabledComparsionFields)}
 							disableComparsion={disableComparsion}
 						/>
 						<Compare
@@ -302,7 +305,7 @@ const SalonForm: FC<Props> = (props) => {
 							newValue={formValues?.email || null}
 							equal={isPublishedVersionSameAsDraft?.isEmailEqual}
 							oldFormField={emailFormField('publishedSalonData.email', true)}
-							newFormField={emailFormField('email', disabledForm || !!pendingPublication)}
+							newFormField={emailFormField('email', disabledComparsionFields)}
 							disableComparsion={disableComparsion}
 						/>
 						<Field
@@ -317,7 +320,7 @@ const SalonForm: FC<Props> = (props) => {
 								country: formValues?.country
 							}}
 							changeFormFieldValue={change}
-							disabled={disabledForm || !!pendingPublication}
+							disabled={disabledComparsionFields}
 							name={'address'}
 						/>
 						{!isPublishedVersionSameAsDraft?.isAddressEqual && !disableComparsion && (
@@ -353,7 +356,7 @@ const SalonForm: FC<Props> = (props) => {
 							newValue={formValues?.description || null}
 							equal={isPublishedVersionSameAsDraft?.isAddressNoteEqual}
 							oldFormField={addressDescriptionFormFiled('publishedSalonData.locationNote', true)}
-							newFormField={addressDescriptionFormFiled('locationNote', disabledForm || !!pendingPublication)}
+							newFormField={addressDescriptionFormFiled('locationNote', disabledComparsionFields)}
 							disableComparsion={disableComparsion}
 						/>
 						<Field
@@ -510,7 +513,7 @@ const SalonForm: FC<Props> = (props) => {
 							oldValue={formValues?.publishedSalonData?.pricelists}
 							equal={isPublishedVersionSameAsDraft?.isPriceListsEqual}
 							oldFormField={priceListFormField('publishedSalonData.pricelists', true)}
-							newFormField={priceListFormField('pricelists', disabledForm || !!pendingPublication)}
+							newFormField={priceListFormField('pricelists', disabledComparsionFields)}
 							ellipsis
 							disableComparsion={disableComparsion}
 						/>

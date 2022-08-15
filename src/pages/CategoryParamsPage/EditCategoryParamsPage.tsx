@@ -24,6 +24,9 @@ import { history } from '../../utils/history'
 import { IBreadcrumbs, IComputedMatch, ICategoryParamForm } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type Props = {
 	computedMatch: IComputedMatch<{ parameterID: string }>
 }
@@ -35,6 +38,8 @@ function EditCategoryParamsPage(props: Props) {
 	const { parameterID } = props.computedMatch.params
 	const parameter = useSelector((state: RootState) => state.categoryParams.parameter)
 	const { data } = parameter
+
+	const [backUrl] = useBackUrl(t('paths:category-parameters'))
 
 	useEffect(() => {
 		dispatch(getCategoryParameter(parameterID))
@@ -102,7 +107,7 @@ function EditCategoryParamsPage(props: Props) {
 		items: [
 			{
 				name: t('loc:Zoznam parametrov kategórií'),
-				link: t('paths:category-parameters')
+				link: backUrl
 			},
 			{
 				name: t('loc:Vytvoriť parameter kategórie')

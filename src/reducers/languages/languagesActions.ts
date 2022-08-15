@@ -11,6 +11,7 @@ import { getReq } from '../../utils/request'
 import { ISelectOptionItem, ILanguage } from '../../types/interfaces'
 import i18n from '../../utils/i18n'
 import { DEFAULT_LANGUAGE } from '../../utils/enums'
+import { sortData } from '../../utils/helper'
 
 export type ILanguagesActions = IResetStore | IGetLanguages
 
@@ -37,17 +38,19 @@ export const getSalonLanguages = (): ThunkResult<Promise<ILanguagesPayload>> => 
 
 		const currentLng = i18n.language || DEFAULT_LANGUAGE
 
-		const enumerationsOptions: IEnumerationOptionItem[] = map(data.languages, (item) => {
+		const enumerationsOptions: ISelectOptionItem[] = map(data.languages, (item) => {
 			const countryTranslation = item.nameLocalizations.find((translation: any) => translation.language === currentLng)
-			const fallbackTranslation = item.nameLocalizations.find((translation) => translation.language === 'en')
+			const fallbackTranslation = item.nameLocalizations.find((translation) => translation.language === DEFAULT_LANGUAGE)
 
 			return {
 				key: `language_${item.id}`,
 				label: countryTranslation?.value || fallbackTranslation?.value || '-',
 				value: item.id,
-				flag: item.image?.resizedImages.thumbnail
+				extra: {
+					image: item.image?.resizedImages.thumbnail || item.image?.original
+				}
 			}
-		})
+		}).sort((a, b) => sortData(a.label, b.label))
 
 		payload = {
 			data: data.languages,

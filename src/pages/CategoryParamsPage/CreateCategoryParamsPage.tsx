@@ -19,9 +19,14 @@ import { history } from '../../utils/history'
 // types
 import { IBreadcrumbs, ICategoryParamForm } from '../../types/interfaces'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 const CreateCategoryParamsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+
+	const [backUrl] = useBackUrl(t('paths:category-parameters'))
 
 	useEffect(() => {
 		dispatch(
@@ -65,7 +70,7 @@ const CreateCategoryParamsPage = () => {
 		items: [
 			{
 				name: t('loc:Zoznam parametrov kategórií'),
-				link: t('paths:category-parameters')
+				link: backUrl
 			},
 			{
 				name: t('loc:Vytvoriť parameter kategórie')

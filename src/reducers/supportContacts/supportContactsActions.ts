@@ -86,7 +86,9 @@ export const getSupportContactsOptions =
 					key: item.id,
 					label: countryTranslation?.value || countryCode,
 					value: countryCode,
-					flag: item.country.flag
+					extra: {
+						image: item.country.flag
+					}
 				}
 			}) || []
 

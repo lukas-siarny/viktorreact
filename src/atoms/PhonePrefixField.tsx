@@ -1,5 +1,13 @@
 import React from 'react'
+
+// helpers
+import { optionRenderWithImage } from '../utils/helper'
+
+// atoms
 import SelectField, { Props as SelectProps } from './SelectField'
+
+// assets
+import { ReactComponent as PhoneIcon } from '../assets/icons/phone-2-icon.svg'
 
 type Props = SelectProps & {
 	flagField?: string // flag field name in itemData
@@ -21,20 +29,7 @@ type Props = SelectProps & {
 	}]
  */
 const PhonePrefixField = (props: Props) => {
-	const { flagField = 'flag', ...otherProps } = props
-
-	const optionRender = (itemData: any) => {
-		const { value, label } = itemData
-		const flag = itemData[flagField]
-		return (
-			<div className='noti-phone-prefix-render'>
-				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
-				{label}
-			</div>
-		)
-	}
-
-	return <SelectField optionRender={optionRender} {...otherProps} />
+	return <SelectField optionRender={(itemData: any) => optionRenderWithImage(itemData, <PhoneIcon />)} {...props} />
 }
 
 export default PhonePrefixField

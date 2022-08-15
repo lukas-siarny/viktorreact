@@ -12,6 +12,7 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 import { getReq } from '../../utils/request'
 import { Paths } from '../../types/api'
 import i18n from '../../utils/i18n'
+import { sortData } from '../../utils/helper'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 
@@ -58,7 +59,9 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			key: item.code,
 			label: item.phonePrefix,
 			value: item.code,
-			flag: item.flag
+			extra: {
+				image: item.flag
+			}
 		}))
 
 		const currentLng = i18n.language || DEFAULT_LANGUAGE
@@ -70,7 +73,9 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 				key: item.code,
 				label: countryTranslation?.value || item.code,
 				value: item.code,
-				flag: item.flag
+				extra: {
+					image: item.flag
+				}
 			}
 		})
 

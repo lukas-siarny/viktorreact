@@ -15,7 +15,7 @@ import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
+import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -41,8 +41,6 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const dispatch = useDispatch()
 	const services = useSelector((state: RootState) => state.service.services)
 	const { salonID, parentPath } = props
-
-	const backUrl = getEncodedBackUrl()
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -151,7 +149,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 									<ServicesFilter
 										createService={() => {
 											if (hasPermission) {
-												history.push(`${parentPath + t('paths:services/create')}?backUrl=${backUrl}`)
+												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:services/create')))
 											} else {
 												openForbiddenModal()
 											}
@@ -170,7 +168,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 								twoToneRows
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(`${parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID })}?backUrl=${backUrl}`)
+										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID })))
 									}
 								})}
 								pagination={false}

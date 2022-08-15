@@ -8,6 +8,7 @@ import { ISelectOptionItem, ICosmetic, ISelectable } from '../../types/interface
 
 // utils
 import { getReq } from '../../utils/request'
+import { sortData } from '../../utils/helper'
 
 export type ICosmeticsActions = IResetStore | IGetCosmetics
 
@@ -24,14 +25,16 @@ export const getCosmetics = (): ThunkResult<Promise<ICosmeticsPayload>> => async
 	try {
 		dispatch({ type: COSMETICS.COSMETICS_LOAD_START })
 		const { data } = await getReq('/api/b2b/admin/enums/cosmetics/', null)
-		const enumerationsOptions: ISelectOptionItem[] = data.cosmetics.map((cosmetic) => ({
-			key: `Cosmetic_${cosmetic.id}`,
-			label: cosmetic.name,
-			value: cosmetic.id,
-			extra: {
-				image: cosmetic.image
-			}
-		}))
+		const enumerationsOptions: ISelectOptionItem[] = data.cosmetics
+			.map((cosmetic) => ({
+				key: `Cosmetic_${cosmetic.id}`,
+				label: cosmetic.name,
+				value: cosmetic.id,
+				extra: {
+					image: cosmetic.image?.resizedImages?.thumbnaill || cosmetic.image?.original
+				}
+			}))
+			.sort((a, b) => sortData(a.label, b.label))
 
 		payload = { data: data?.cosmetics, enumerationsOptions }
 		dispatch({ type: COSMETICS.COSMETICS_LOAD_DONE, payload })

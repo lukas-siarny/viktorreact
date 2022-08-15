@@ -16,7 +16,7 @@ import PhoneArrayField from '../../../atoms/PhoneArrayField'
 import SelectField from '../../../atoms/SelectField'
 
 // utils
-import { showErrorNotification } from '../../../utils/helper'
+import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { ENUMERATIONS_KEYS, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
@@ -31,6 +31,7 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 type ComponentProps = {
 	disabledForm: boolean
@@ -56,16 +57,6 @@ const SupportContactForm: FC<Props> = (props) => {
 		}
 	})
 
-	const countryOptionRender = (itemData: any) => {
-		const { value, label, flag } = itemData
-		return (
-			<div className='flex items-center'>
-				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
-				{label}
-			</div>
-		)
-	}
-
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={36}>
@@ -78,7 +69,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 						<Field
 							component={SelectField}
-							optionRender={countryOptionRender}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 							label={t('loc:Krajina')}
 							placeholder={t('loc:Vyberte krajinu')}
 							options={countriesOptions || []}

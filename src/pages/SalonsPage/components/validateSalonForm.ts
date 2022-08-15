@@ -48,24 +48,20 @@ export default (values: ISalonForm) => {
 		)
 	}
 
-	if (values?.description && values.description.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
-		errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
+	if (values?.locationNote && values.locationNote.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
+		errors.locationNote = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_1000
 		})
 	}
 
 	if (values?.parkingNote && values.parkingNote.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
-		errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
+		errors.parkingNote = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_1000
 		})
 	}
 
 	if (!values?.email) {
 		errors.email = i18next.t('loc:Toto pole je povinné')
-	}
-
-	if (!values?.categoryIDs || isEmpty(values?.categoryIDs)) {
-		errors.categoryIDs = i18next.t('loc:Toto pole je povinné')
 	}
 
 	if (values?.email) {

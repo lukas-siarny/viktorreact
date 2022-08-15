@@ -119,7 +119,9 @@ export enum FORM {
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
 	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM',
 	INDUSTRIES = 'INDUSTRIES',
-	INDUSTRY = 'INDUSTRY'
+	INDUSTRY = 'INDUSTRY',
+	LANGUAGES = 'LANGUAGES',
+	LANGUAGES_FILTER = 'LANGUAGES_FILTER'
 }
 
 // System permissions
@@ -195,9 +197,15 @@ export enum PAGE {
 	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	COSMETICS = 'COSMETICS',
-	PENDING_INVITES = 'PENDING_INVITES',
+	LANGUAGES = 'LANGUAGES',
 	INDUSTRIES = 'INDUSTRIES',
-	INDUSTRY = 'INDUSTRY'
+	INDUSTRY = 'INDUSTRY',
+	PENDING_INVITES = 'PENDING_INVITES'
+}
+
+export enum PARAMETER_TYPE {
+	ENUM = 'ENUM',
+	TIME = 'TIME'
 }
 
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
@@ -221,8 +229,7 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	CURRENCIES = 'currencies',
-	LANGUAGES = 'languages'
+	CURRENCIES = 'currencies'
 }
 
 export const GOOGLE_MAPS_API_KEY = 'AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw'
@@ -420,9 +427,11 @@ export enum UPLOAD_IMG_CATEGORIES {
 	SALON_PRICELIST = 'SALON_PRICELIST',
 	EMPLOYEE = 'EMPLOYEE_IMAGE',
 	USER = 'USER_IMAGE',
-	CATEGORY = 'CATEGORY_IMAGE',
+	CATEGORY_IMAGE = 'CATEGORY_IMAGE',
+	CATEGORY_ICON = 'CATEGORY_ICON',
 	COSMETIC = 'COSMETIC_IMAGE',
-	CUSTOMER = 'CUSTOMER_IMAGE'
+	CUSTOMER = 'CUSTOMER_IMAGE',
+	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE'
 }
 
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
@@ -455,7 +464,8 @@ export enum SALON_ROLES {
 	ADMIN = 'ADMIN',
 	MANAGER = 'MANAGER',
 	RECEPTIONIST = 'RECEPTIONIST',
-	EMPLOEYEE = 'EMPLOEYEE',
+	EMPLOEYEE_1 = 'EMPLOEYEE_1',
+	EMPLOEYEE_2 = 'EMPLOEYEE_2',
 	EXTERNAL = 'EXTERNAL'
 }
 
@@ -465,16 +475,17 @@ export const SALON_ROLES_TRANSLATIONS = () => ({
 	[SALON_ROLES.ADMIN]: i18next.t('loc:Admin'),
 	[SALON_ROLES.MANAGER]: i18next.t('loc:Manažér'),
 	[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:Recepčný'),
-	[SALON_ROLES.EMPLOEYEE]: i18next.t('loc:Zamestnanec'),
+	[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:Zamestnanec 1'),
+	[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:Zamestnanec 2'),
 	[SALON_ROLES.EXTERNAL]: i18next.t('loc:Externista')
 })
 
-export const SALON_ROLES_AUTHORIZATIONS = () => [
+export const SALON_ROLES_PERMISSIONS = () => [
 	{
 		name: i18next.t('loc:Správa profilu salónu'),
 		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
 		extra: {
-			[SALON_ROLES.MANAGER]: i18next.t('loc:len editácia')
+			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava')
 		}
 	},
 	{
@@ -501,26 +512,28 @@ export const SALON_ROLES_AUTHORIZATIONS = () => [
 	},
 	{
 		name: i18next.t('loc:Správa zákazníkov salónu'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE],
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2],
 		extra: {
-			[SALON_ROLES.EMPLOEYEE]: i18next.t('loc:len vytvárať a editovať, nemôže mazať')
+			[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:len vytváranie a úprava'),
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len vytváranie a úprava')
 		}
 	},
 	{
 		name: i18next.t('loc:Správa online rezervácií'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE],
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2],
 		extra: {
 			[SALON_ROLES.ADMIN]: i18next.t('loc:len úprava a mazanie'),
 			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava a mazanie'),
 			[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:len úprava a mazanie'),
-			[SALON_ROLES.EMPLOEYEE]: i18next.t('loc:len úprava a mazanie, len svoje')
+			[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len úprava a mazanie, len svoje')
 		}
 	},
 	{
 		name: i18next.t('loc:Správa offline rezervácií'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE, SALON_ROLES.EXTERNAL],
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2, SALON_ROLES.EXTERNAL],
 		extra: {
-			[SALON_ROLES.EMPLOEYEE]: i18next.t('loc:len svoje'),
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len svoje'),
 			[SALON_ROLES.EXTERNAL]: i18next.t('loc:len svoje')
 		}
 	}

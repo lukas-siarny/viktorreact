@@ -17,15 +17,15 @@ import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS, NEW_SALON_ID } from '../../utils/enums'
+import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
-import { getLanguages } from '../../reducers/enumerations/enumerationActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
+import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 
 // types
 import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
@@ -145,7 +145,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(getCategories())
-		dispatch(getLanguages())
+		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
 	}, [dispatch])
 
@@ -196,8 +196,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				zipCode: salonData?.address?.zipCode || null,
 				country: salonData?.address?.countryCode || null,
 				streetNumber: salonData?.address?.streetNumber || null,
-				// TODO - remove description
-				description: '' || null,
+				locationNote: salonData?.locationNote || null,
 				parkingNote: salonData?.parkingNote || null,
 				companyContactPerson: {
 					email: salonData?.companyContactPerson?.email || null,
@@ -230,7 +229,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 							}
 					  ]
 					: null,
-				categoryIDs: map(salonData?.categories, (category) => category.id),
 				languageIDs: map(salonData?.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
 				cosmeticIDs: map(salonData?.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
 				address: !!salonData?.address || null,
@@ -252,10 +250,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						street: salonData?.publishedSalonData?.address?.street || null,
 						streetNumber: salonData?.publishedSalonData?.address?.streetNumber || null,
 						latitude: salonData?.publishedSalonData?.address?.latitude ?? null,
-						longitude: salonData?.publishedSalonData?.address?.longitude ?? null,
-						// TODO - remove description
-						description: '' || null
+						longitude: salonData?.publishedSalonData?.address?.longitude ?? null
 					},
+					locationNote: salonData?.publishedSalonData?.locationNote || null,
 					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
 					logo: salonData?.publishedSalonData?.logo
 						? [
@@ -319,7 +316,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				street: data.street,
 				streetNumber: data.streetNumber,
 				zipCode: data.zipCode,
-				description: data.description,
+				locationNote: data.locationNote,
 				phones,
 				email: data.email,
 				socialLinkFB: data.socialLinkFB,
@@ -333,7 +330,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
 				companyInfo: data.companyInfo,
-				categoryIDs: data.categoryIDs,
 				cosmeticIDs: data.cosmeticIDs,
 				languageIDs: data.languageIDs
 			}
@@ -341,7 +337,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			if (salonExists) {
 				// update existing salon
 				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
-				dispatch(selectSalon(salonID as any))
+				dispatch(selectSalon(salonID))
 			} else {
 				// create new salon
 				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
@@ -722,7 +718,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		// order of cases is important to show correct message
 		switch (true) {
-			case !salonID:
+			case salonID === NEW_SALON_ID:
 			case deletedSalon:
 				message = null
 				break

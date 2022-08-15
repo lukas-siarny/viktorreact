@@ -25,6 +25,7 @@ import { IIndustriesForm } from '../../../types/interfaces'
 
 // assets
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 type ComponentProps = {
 	selectedCategoryIDs?: string[]
@@ -54,7 +55,8 @@ const IndustriesForm: FC<Props> = (props) => {
 			extraAction: {
 				action: () => onShowMore(category.id),
 				label: `${t('loc:Priradiť služby')} (${selectedServices})`,
-				popconfirm: !pristine
+				popconfirm: !pristine,
+				icon: <ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
 			}
 		}
 	})
@@ -78,6 +80,7 @@ const IndustriesForm: FC<Props> = (props) => {
 								htmlType={'submit'}
 								className={'noti-btn m-regular w-52 xl:w-60'}
 								disabled={submitting || pristine}
+								loading={submitting}
 								onClick={(e) => {
 									if (hasPermission) {
 										submit(FORM.INDUSTRIES)

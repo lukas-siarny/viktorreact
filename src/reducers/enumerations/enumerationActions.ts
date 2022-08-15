@@ -12,6 +12,7 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 import { getReq } from '../../utils/request'
 import { Paths } from '../../types/api'
 import i18n from '../../utils/i18n'
+import { sortData } from '../../utils/helper'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 
@@ -58,7 +59,9 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 			key: item.code,
 			label: item.phonePrefix,
 			value: item.code,
-			flag: item.flag
+			extra: {
+				image: item.flag
+			}
 		}))
 
 		const currentLng = i18n.language || DEFAULT_LANGUAGE
@@ -70,7 +73,9 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 				key: item.code,
 				label: countryTranslation?.value || item.code,
 				value: item.code,
-				flag: item.flag
+				extra: {
+					image: item.flag
+				}
 			}
 		})
 
@@ -118,46 +123,6 @@ export const getCurrencies = (): ThunkResult<Promise<IEnumerationsPayload>> => a
 		// eslint-disable-next-line no-console
 		console.error(error)
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.CURRENCIES })
-	}
-	return payload
-}
-
-export const getLanguages = (): ThunkResult<Promise<IEnumerationsPayload>> => async (dispatch) => {
-	let payload: IEnumerationsPayload = {} as IEnumerationsPayload
-
-	try {
-		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.CURRENCIES })
-		const response = await getReq('/api/b2b/admin/enums/languages/', undefined, undefined, undefined, undefined, true)
-
-		const data: any[] = map(get(response, 'data.languages', []), (item, index) => ({
-			key: index + 1,
-			...item
-		}))
-
-		const currentLng = i18n.language || DEFAULT_LANGUAGE
-
-		const enumerationsOptions: ISelectOptionItem[] = map(data, (item) => {
-			const countryTranslation = item.nameLocalizations.find((translation: any) => translation.language === currentLng)
-
-			return {
-				key: `language_${item.id}`,
-				label: countryTranslation?.value || item.code,
-				value: item.id,
-				flag: item.flag
-			}
-		})
-
-		payload = {
-			data,
-			enumerationsOptions,
-			pagination: get(response, 'data.pagination')
-		}
-
-		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_DONE, enumType: ENUMERATIONS_KEYS.LANGUAGES, payload: { ...payload } })
-	} catch (error) {
-		// eslint-disable-next-line no-console
-		console.error(error)
-		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_FAIL, enumType: ENUMERATIONS_KEYS.LANGUAGES })
 	}
 	return payload
 }

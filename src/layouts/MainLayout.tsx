@@ -46,7 +46,9 @@ const MainLayout: FC<Props> = (props) => {
 					<Menu.Item
 						key={item.key}
 						className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
-						onClick={() => dispatch(selectSalon(item.value as string))}
+						onClick={() => {
+							history.push(t('paths:salons/{{salonID}}', { salonID: item.value }))
+						}}
 					>
 						<AvatarComponents src={item.logo} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5'} />
 						{item.label}

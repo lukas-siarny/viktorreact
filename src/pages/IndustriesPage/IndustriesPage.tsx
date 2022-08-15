@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Col, Row, Spin } from 'antd'
 import { compose } from 'redux'
 import { initialize, isSubmitting } from 'redux-form'
-import { isEmpty } from 'lodash'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
@@ -38,16 +37,12 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	const isCategoriesFromSubmitting = useSelector(isSubmitting(FORM.INDUSTRIES))
 
 	useEffect(() => {
-		if (isEmpty(categories.data) || !categories.data) {
-			dispatch(getCategories())
-		}
-	}, [dispatch, categories.data])
+		dispatch(getCategories())
+	}, [dispatch])
 
 	useEffect(() => {
-		if (isEmpty(services.data) || !services.data) {
-			dispatch(getServices({ salonID }))
-		}
-	}, [dispatch, salonID, services.data])
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [

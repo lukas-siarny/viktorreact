@@ -137,7 +137,7 @@ const CosmeticsPage = () => {
 					fallback={record?.image?.original}
 					alt={record?.name}
 					preview={false}
-					className='cosmetics-logo'
+					className='table-preview-image cosmetics-logo'
 				/>
 			)
 		},
@@ -159,10 +159,10 @@ const CosmeticsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={cosmetics?.isLoading}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body'>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body'>
+						<Spin spinning={cosmetics?.isLoading}>
 							<CosmeticsFilter
 								total={cosmetics?.data?.length}
 								onSubmit={(query: any) => setFilterQuery(query.search)}
@@ -209,10 +209,10 @@ const CosmeticsPage = () => {
 									</div>
 								) : undefined}
 							</div>
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+						</Spin>
+					</div>
+				</Col>
+			</Row>
 		</>
 	)
 }

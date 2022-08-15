@@ -66,6 +66,7 @@ import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
 import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
+import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -818,4 +819,29 @@ export const countryOptionRender = (itemData: any) => {
 			{label}
 		</div>
 	)
+}
+
+export const langaugesOptionRender = (itemData: any) => {
+	const { value, label, flag } = itemData
+	return (
+		<div className='flex items-center'>
+			{flag ? (
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			) : (
+				<div className={'noti-flag mr-1'}>
+					<LanguageIcon />
+				</div>
+			)}
+			{label}
+		</div>
+	)
+}
+
+export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { language: string; value: string | null }[]) => {
+	return nameLocalizations?.sort((a, b) => {
+		if (a.language === DEFAULT_LANGUAGE) {
+			return -1
+		}
+		return b.language === DEFAULT_LANGUAGE ? 1 : 0
+	})
 }

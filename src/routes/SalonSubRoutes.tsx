@@ -39,6 +39,9 @@ import CreateEmployeePage from '../pages/EmployeesPage/CreateEmployeePage'
 import IndustriesPage from '../pages/IndustriesPage/IndustriesPage'
 import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 
+// Specialist Contacts
+import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistContactsPage'
+
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
 }
@@ -193,6 +196,17 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.INDUSTRY}
+			/>
+			{/* Specialist contacts */}
+			<AuthRoute
+				exact
+				path={getPath(t('paths:specialist-contacts'))}
+				component={SpecialistContactsPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:specialist-contacts'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.SPECIALIST_CONTACTS}
 			/>
 		</Switch>
 	)

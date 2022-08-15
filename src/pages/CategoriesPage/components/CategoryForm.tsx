@@ -162,7 +162,7 @@ const CategoryForm: FC<Props> = (props) => {
 										label={t('loc:Obrázok')}
 										maxCount={1}
 										signUrl={URL_UPLOAD_IMAGES}
-										category={UPLOAD_IMG_CATEGORIES.CATEGORY}
+										category={UPLOAD_IMG_CATEGORIES.CATEGORY_IMAGE}
 										required
 									/>
 									<Field
@@ -172,7 +172,7 @@ const CategoryForm: FC<Props> = (props) => {
 										label={t('loc:Ikona')}
 										maxCount={1}
 										signUrl={URL_UPLOAD_IMAGES}
-										category={UPLOAD_IMG_CATEGORIES.CATEGORY}
+										category={UPLOAD_IMG_CATEGORIES.CATEGORY_ICON}
 										required
 									/>
 								</div>

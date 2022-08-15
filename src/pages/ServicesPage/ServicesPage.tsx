@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams } from 'use-query-params'
+import { StringParam, useQueryParams } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,7 +15,7 @@ import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
+import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -26,6 +26,9 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, IUserAvatar, SalonSubPageProps, Columns } from '../../types/interfaces'
+
+// assets
+import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -39,10 +42,9 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const { salonID, parentPath } = props
 
-	const backUrl = getEncodedBackUrl()
-
 	useEffect(() => {
-		dispatch(getCategories(false))
+		dispatch(getCategories())
+		// test()
 	}, [dispatch])
 
 	const [query, setQuery] = useQueryParams({
@@ -98,10 +100,22 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			ellipsis: true
 		},
 		{
-			title: t('loc:Zamestnanec'),
+			title: t('loc:Zamestnanci'),
 			dataIndex: 'employees',
 			key: 'employees',
 			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} /> : null)
+		},
+		{
+			title: t('loc:Vyplnenie služby'),
+			dataIndex: 'isComplete',
+			key: 'isComplete',
+			ellipsis: true,
+			render: (value) =>
+				value && (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} />
+					</div>
+				)
 		},
 		{
 			title: t('loc:Vytvorené'),
@@ -135,7 +149,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 									<ServicesFilter
 										createService={() => {
 											if (hasPermission) {
-												history.push(`${parentPath + t('paths:services/create')}?backUrl=${backUrl}`)
+												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:services/create')))
 											} else {
 												openForbiddenModal()
 											}
@@ -154,7 +168,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 								twoToneRows
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(`${parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID })}?backUrl=${backUrl}`)
+										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:services/{{serviceID}}', { serviceID: record.serviceID })))
 									}
 								})}
 								pagination={false}

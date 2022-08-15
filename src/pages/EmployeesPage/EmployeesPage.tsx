@@ -17,7 +17,7 @@ import UserAvatar from '../../components/AvatarComponents'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { getEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -41,8 +41,6 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]).enumerationsOptions
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
-
-	const backUrl = getEncodedBackUrl()
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -214,7 +212,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 									<EmployeesFilter
 										createEmployee={() => {
 											if (hasPermission) {
-												history.push(`${parentPath + t('paths:employees/create')}?backUrl=${backUrl}`)
+												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
 											} else {
 												openForbiddenModal()
 											}
@@ -234,7 +232,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {
-										history.push(`${parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })}?backUrl=${backUrl}`)
+										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
 									}
 								})}
 								useCustomPagination

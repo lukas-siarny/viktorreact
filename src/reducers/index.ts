@@ -19,6 +19,7 @@ import selectedSalonReducer from './selectedSalon/selectedSalonReducer'
 import supportContactsReducer from './supportContacts/supportContactsReducer'
 import cosmeticsReducer from './cosmetics/cosmeticsReducer'
 import categoryParamsReducer from './categoryParams/categoryParamsReducer'
+import languagesReducer from './languages/languagesReducer'
 import specialistContactsReducer from './specialistContacts/specialistContactsReducer'
 
 export const REDUCER_KEYS = {
@@ -35,7 +36,8 @@ export const REDUCER_KEYS = {
 	SUPPORT_CONTACTS: 'SUPPORT_CONTACTS',
 	SPECIALIST_CONTACTS: 'SPECIALIST_CONTACTS',
 	COSMETICS: 'COSMETICS',
-	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS'
+	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS',
+	LANGUAGES: 'LANGUAGES'
 }
 
 const rootReducer = combineReducers({
@@ -73,6 +75,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		categoryParamsReducer
+	),
+	languages: persistReducer(
+		{
+			key: REDUCER_KEYS.LANGUAGES,
+			storage: storageSession
+		},
+		languagesReducer
 	),
 	salons: persistReducer(
 		{

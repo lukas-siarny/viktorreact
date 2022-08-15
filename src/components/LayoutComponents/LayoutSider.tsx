@@ -20,6 +20,7 @@ import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.s
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
 import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
+import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24.svg'
 import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
 
@@ -150,6 +151,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											className={cx({ 'ant-menu-item-selected': page === PAGE.COSMETICS })}
 										>
 											{t('loc:Kozmetika')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+										<Menu.Item
+											eventKey={PAGE.LANGUAGES}
+											key={PAGE.LANGUAGES}
+											onClick={() => history.push(t('paths:languages-in-salons'))}
+											icon={<LanguagesIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.LANGUAGES })}
+										>
+											{t('loc:Jazyky')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>

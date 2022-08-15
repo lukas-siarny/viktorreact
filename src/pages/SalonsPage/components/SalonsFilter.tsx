@@ -20,10 +20,11 @@ import { ReactComponent as ClockIcon12 } from '../../../assets/icons/clock-12.sv
 import { ReactComponent as TrashIcon12 } from '../../../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../../../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../../../assets/icons/close-12.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 // utils
 import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
-import { getEncodedBackUrl, validationString } from '../../../utils/helper'
+import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
 
@@ -43,16 +44,6 @@ export interface ISalonsFilter {
 type Props = InjectedFormProps<ISalonsFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
-
-const countryCodeOptionRender = (itemData: any) => {
-	const { value, label, flag } = itemData
-	return (
-		<div className='flex items-center'>
-			<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
-			{label}
-		</div>
-	)
-}
 
 const statusOptionRender = (itemData: any) => {
 	const { value, label, className, icon } = itemData
@@ -148,7 +139,7 @@ const SalonsFilter = (props: Props) => {
 						<Button
 							onClick={() => {
 								if (hasPermission) {
-									history.push(`${t('paths:salons/create')}?backUrl=${getEncodedBackUrl()}`)
+									history.push(getLinkWithEncodedBackUrl(t('paths:salons/create')))
 								} else {
 									openForbiddenModal()
 								}
@@ -261,7 +252,7 @@ const SalonsFilter = (props: Props) => {
 						<Col span={8}>
 							<Field
 								component={SelectField}
-								optionRender={countryCodeOptionRender}
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 								name={'countryCode'}
 								placeholder={t('loc:Krajina')}
 								allowClear

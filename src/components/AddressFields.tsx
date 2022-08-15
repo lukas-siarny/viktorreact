@@ -13,13 +13,16 @@ import MapContainer from './MapContainer'
 
 // utils
 import { ENUMERATIONS_KEYS, MAP } from '../utils/enums'
-import { getGoogleMapUrl, parseAddressComponents, countryOptionRender, validationRequired } from '../utils/helper'
+import { getGoogleMapUrl, parseAddressComponents, validationRequired, optionRenderWithImage } from '../utils/helper'
 
 // atoms
 import LocationSearchInputField from '../atoms/LocationSearchInputField'
 import InputField from '../atoms/InputField'
 import SelectField from '../atoms/SelectField'
 import { RootState } from '../reducers'
+
+// assets
+import { ReactComponent as GlobeIcon } from '../assets/icons/globe-24.svg'
 
 /**
  * Define in props only variables required for form
@@ -243,7 +246,7 @@ const AddressFields = (props: Props) => {
 								</Row>
 								<Field
 									component={SelectField}
-									optionRender={countryOptionRender}
+									optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 									label={t('loc:Štát')}
 									placeholder={t('loc:Vyber krajinu')}
 									options={countries?.enumerationsOptions || []}
@@ -264,6 +267,7 @@ const AddressFields = (props: Props) => {
 												loadingElement={locationSearchElements.loadingElement}
 												containerElement={locationSearchElements.containerElement}
 												label={t('loc:Vyhľadať')}
+												required
 												onPlaceSelected={selectLocation}
 												type='search'
 												placeholder={t('loc:Vyhľadajte miesto na mape')}

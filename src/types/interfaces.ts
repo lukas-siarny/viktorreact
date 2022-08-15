@@ -115,12 +115,7 @@ export interface ISalonForm {
 		companyName: string | null
 		vatID: string | null
 	},
-	description: string | null
-	/* categoryIDs: [
-		number,
-	...number[]
-	],*/
-	categoryIDs: string[]
+	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
 	address: boolean | null
@@ -136,8 +131,8 @@ export interface ISalonForm {
 			streetNumber: string | null
 			latitude: number | null
 			longitude: number | null
-			description: string | null
-		};
+		}
+		locationNote: string | null
 		phones: {
 			phonePrefixCountryCode: string | null
 			phone: string | null
@@ -150,15 +145,15 @@ export interface ISalonForm {
 }
 
 export interface IServiceForm {
+	id: number
 	durationFrom: number
 	durationTo: number
 	variableDuration: boolean
 	priceFrom: number
 	priceTo: number
 	variablePrice: boolean
-	categoryRoot: number
-	categoryFirstLevel: number
-	categorySecondLevel: number
+	useCategoryParameter: boolean
+	serviceCategoryParameter: any
 	employees: any
 }
 
@@ -301,11 +296,17 @@ export interface ICosmeticForm {
 	image: any
 }
 
+export interface ILanguageForm {
+	image?: string
+	nameLocalizations: NameLocalizationsItem[]
+}
+
 export interface ILanguagePickerForm {
 	language: LANGUAGE
 }
 
 export interface IPrice {
+	currency?: string
 	exponent: number
 	significand: number
 }
@@ -317,12 +318,6 @@ export interface IUserAvatar {
 	key?: string | number
 
 }
-
-export interface IPrice {
-	exponent: number
-	significand: number
-}
-
 
 export interface IQueryParams {
 	page: number
@@ -398,6 +393,8 @@ export interface IDataUploadForm {
 
 export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0]
 
+export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
+
 export interface IIsPublishedVersionSameAsDraft {
 	isEqual: boolean
 	isNameEqual: boolean
@@ -437,4 +434,9 @@ export interface IIndustriesForm {
 
 export interface IIndustryForm {
 	categoryIDs: string[]
+}
+
+export type NameLocalizationsItem = {
+	language: string
+	value: string
 }

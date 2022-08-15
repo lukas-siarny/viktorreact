@@ -162,6 +162,7 @@ export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) =
 		} catch (error) {
 			// eslint-disable-next-line no-console
 			console.log(error)
+			dispatch(logOutUser())
 		}
 	}
 }

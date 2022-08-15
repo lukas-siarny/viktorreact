@@ -1124,13 +1124,13 @@ span.ant-tag
 	display: block
 	object-fit: scale-down
 	object-position: left center
-	.cosmetics-logo
+	padding: 8px 0
+	&.cosmetics-logo
 		width: 300px
-		height: 64px
-
-.languages-flag
-	width: 150px
-	height: 66px
+		height: 60px
+	&.languages-flag
+		width: 150px
+		height: 60px
 
 .mt-2-5
 	margin-top: 10px
@@ -1162,6 +1162,21 @@ span.ant-tag
 	background-color: $backgroundColor-notino-grayLight
 	width: 24px
 	height: 16px
+
+.option-render-image
+	margin-right: 8px
+	object-fit: scale-down
+	object-position: left center
+	border-radius: 4px
+
+	&.fallback-icon
+		display: flex
+		align-items: center
+		justify-content: center
+		background-color: $backgroundColor-notino-grayLighter
+		svg
+			width: 16px
+			height: 16px
 
 .address-field-address
 	&::before

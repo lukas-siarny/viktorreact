@@ -19,7 +19,7 @@ import SelectField from '../../../atoms/SelectField'
 import PhoneArrayField from '../../../atoms/PhoneArrayField'
 
 // utils
-import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, langaugesOptionRender, showErrorNotification } from '../../../utils/helper'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
@@ -45,6 +45,8 @@ import { ReactComponent as SocialPinterest } from '../../../assets/icons/social-
 import { ReactComponent as SocialYoutube } from '../../../assets/icons/social-youtube.svg'
 import { ReactComponent as SocialTikTok } from '../../../assets/icons/social-tiktok.svg'
 import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
+import { ReactComponent as CosmeticIcon } from '../../../assets/icons/cosmetic-icon-24.svg'
+import { ReactComponent as LanguagesIcon } from '../../../assets/icons/languages-24-icon.svg'
 
 type ComponentProps = {
 	disabledForm: boolean
@@ -244,8 +246,10 @@ const SalonForm: FC<Props> = (props) => {
 							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}
 							placeholder={t('loc:Vyberte jazyk')}
 							name={'languageIDs'}
-							optionRender={langaugesOptionRender}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <LanguagesIcon />)}
 							size={'large'}
+							showSearch
+							filterOption={true}
 							loading={languages.isLoading}
 							mode={'multiple'}
 							disabled={disabledForm}
@@ -257,6 +261,9 @@ const SalonForm: FC<Props> = (props) => {
 							label={t('loc:Kozmetika')}
 							placeholder={t('loc:Vyberte kozmetiku')}
 							name={'cosmeticIDs'}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CosmeticIcon />, 40)}
+							showSearch
+							filterOption={true}
 							size={'large'}
 							loading={cosmetics.isLoading}
 							mode={'multiple'}

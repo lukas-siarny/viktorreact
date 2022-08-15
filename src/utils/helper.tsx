@@ -37,6 +37,7 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
+import cx from 'classnames'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -98,7 +99,13 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	return decoded
 }
 
-export const getEncodedBackUrl = () => btoa(`${window.location.pathname}${window.location.search}`)
+export const getLinkWithEncodedBackUrl = (link: string) => {
+	if (!window.location.search) {
+		return link
+	}
+	const backUrl = btoa(`${window.location.pathname}${window.location.search}`)
+	return `${link}?backUrl=${backUrl}`
+}
 
 export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: string[]) => {
 	const pickQueryParams = pick(queryParams, Object.values(allowQueryParams))
@@ -811,11 +818,34 @@ export const transformToLowerCaseWithoutAccent = (source?: string): string =>
 				.replace(/\p{Diacritic}/gu, '')
 		: ''
 
-export const countryOptionRender = (itemData: any) => {
-	const { value, label, flag } = itemData
+export const sortData = (a?: any, b?: any) => {
+	if (!isNil(a) && !isNil(b)) {
+		const aValue = typeof a === 'string' ? transformToLowerCaseWithoutAccent(a) : a
+		const bValue = typeof b === 'string' ? transformToLowerCaseWithoutAccent(b) : b
+
+		if (aValue < bValue) {
+			return -1
+		}
+		if (aValue > bValue) {
+			return 1
+		}
+	}
+
+	return 0
+}
+
+export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 24, imageHeight = 24) => {
+	const { label, extra } = itemData
+	const style = { width: imageWidth, height: imageHeight }
 	return (
 		<div className='flex items-center'>
-			<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			{extra?.image ? (
+				<img className={'option-render-image'} style={style} src={extra.image} alt={label} />
+			) : (
+				<div className={'option-render-image fallback-icon'} style={style}>
+					{fallbackIcon}
+				</div>
+			)}
 			{label}
 		</div>
 	)

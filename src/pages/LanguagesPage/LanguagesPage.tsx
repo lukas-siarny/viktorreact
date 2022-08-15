@@ -21,7 +21,7 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, setOrder, sortNameLocalizationsWithDefaultLangFirst, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, sortData, sortNameLocalizationsWithDefaultLangFirst, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -134,7 +134,10 @@ const LanguagesPage = () => {
 			}
 			dispatch(getSalonLanguages())
 			changeFormVisibility()
-			setQuery({ ...query, search: null })
+			// reset search in case of newly created entity
+			if (!languageID && query.search) {
+				setQuery({ ...query, search: null })
+			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -173,23 +176,7 @@ const LanguagesPage = () => {
 			ellipsis: true,
 			sortOrder: setOrder(query.order, 'name'),
 			sorter: {
-				compare: (a, b) => {
-					const nameA = a.name?.toUpperCase()
-					const nameB = b.name?.toUpperCase()
-
-					if (!nameA || !nameB) {
-						return 0
-					}
-
-					if (nameA < nameB) {
-						return -1
-					}
-					if (nameA > nameB) {
-						return 1
-					}
-
-					return 0
-				}
+				compare: (a, b) => sortData(a.name, b.name)
 			}
 		},
 		{
@@ -209,7 +196,7 @@ const LanguagesPage = () => {
 						className='table-preview-image languages-flag'
 					/>
 				) : (
-					<div className={'languages-flag'} />
+					<div className={'table-preview-image languages-flag'} />
 				)
 		}
 	]

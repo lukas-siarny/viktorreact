@@ -3,15 +3,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { filter, forEach, get, map } from 'lodash'
+import { filter, forEach, get, map, isEmpty } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
-// redux
-import { getCategories } from '../../../reducers/categories/categoriesActions'
+// reducers
+import { getCategories, getCategory } from '../../../reducers/categories/categoriesActions'
 import { RootState } from '../../../reducers'
 
 // utils
@@ -55,43 +55,46 @@ const CategoriesTree = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const createCategoryHandler = useCallback(
-		(parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
-			setShowForm(true)
-			dispatch(
-				initialize(FORM.CATEGORY, {
-					parentId,
-					parentTitle,
-					childrenLength,
-					nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
-					level
-				})
-			)
-		},
-		[dispatch]
-	)
-
-	const updateCategoryHandler = useCallback(
-		(node) => {
-			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted, categoryParameterID } = node
-			setShowForm(true)
-			const formData = {
-				id,
-				name,
+	const openCategoryCreateDetail = (parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
+		setShowForm(true)
+		dispatch(
+			initialize(FORM.CATEGORY, {
 				parentId,
-				orderIndex: index,
+				parentTitle,
+				childrenLength,
+				nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
+				level
+			})
+		)
+	}
+
+	const openCategoryUpdateDetail = async (node: any) => {
+		const { id, parentId, nameLocalizations, level = 0, deletedAt, isParentDeleted } = node
+		setShowForm(true)
+		const { data } = await dispatch(getCategory(id))
+		let formData = {}
+		if (!isEmpty(data)) {
+			formData = {
+				id,
+				name: data?.name,
+				parentId,
+				orderIndex: data?.orderIndex,
 				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_LANGUAGE),
 				level,
-				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
+				image: data?.image?.original ? [{ url: data?.image?.original, uid: data?.image?.id }] : undefined,
 				deletedAt,
 				isParentDeleted,
-				categoryParameterID: categoryParameterID ? { label: categoryParameterID.name, value: categoryParameterID.id } : undefined
+				categoryParameterID: data?.categoryParameter
+					? {
+							label: data?.categoryParameter.name,
+							value: data?.categoryParameter.id
+					  }
+					: undefined
 			}
-			dispatch(initialize(FORM.CATEGORY, formData))
-			setLastOpenedNode(formData)
-		},
-		[dispatch]
-	)
+		}
+		dispatch(initialize(FORM.CATEGORY, formData))
+		setLastOpenedNode(formData)
+	}
 
 	const deleteCategoryHandler = useCallback(
 		async (id: string) => {
@@ -115,7 +118,7 @@ const CategoriesTree = () => {
 
 	const onCategoryClickHandler = (keys: any, e: any) => {
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
-		updateCategoryHandler(get(e, 'node'))
+		openCategoryUpdateDetail(get(e, 'node'))
 	}
 
 	const titleBuilder = (category: any) => {
@@ -347,7 +350,7 @@ const CategoriesTree = () => {
 						<CategoryForm
 							deleteCategory={deleteCategoryHandler}
 							onSubmit={handleSubmit}
-							createCategory={createCategoryHandler}
+							createCategory={openCategoryCreateDetail}
 							closeCategoryForm={closeOrOpenParentCategory}
 						/>
 					</div>

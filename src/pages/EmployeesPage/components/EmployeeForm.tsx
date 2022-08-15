@@ -3,6 +3,7 @@ import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Collapse, Tag } from 'antd'
 import { useSelector } from 'react-redux'
+import { isEmpty } from 'lodash'
 import cx from 'classnames'
 
 // utils
@@ -204,43 +205,46 @@ const EmployeeForm: FC<Props> = (props) => {
 	const { handleSubmit } = props
 
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as any
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'mx-9 w-full h-full block'} justify='center'>
-					<>
-						<h3 className={'mb-0 mt-3'}>{t('loc:Používateľský profil')}</h3>
-						<Divider className={'mb-3 mt-3'} />
-						<div className={'flex space-between w-full'}>
-							<div className={'w-1/5'}>
-								<Field
-									className={'m-0'}
-									component={ImgUploadField}
-									name={'user.image'}
-									label={t('loc:Avatar')}
-									signUrl={URL_UPLOAD_IMAGES}
-									category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
-									multiple={false}
-									maxCount={1}
-									disabled
-								/>
-							</div>
+					{!isEmpty(formValues?.user) && (
+						<>
+							<h3 className={'mb-0 mt-3'}>{t('loc:Používateľský profil')}</h3>
+							<Divider className={'mb-3 mt-3'} />
+							<div className={'flex space-between w-full'}>
+								<div className={'w-1/5'}>
+									<Field
+										className={'m-0'}
+										component={ImgUploadField}
+										name={'user.image'}
+										label={t('loc:Avatar')}
+										signUrl={URL_UPLOAD_IMAGES}
+										category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
+										multiple={false}
+										maxCount={1}
+										disabled
+									/>
+								</div>
 
-							<div className={'w-full'}>
-								<Field component={InputField} label={t('loc:Meno a Priezvisko')} name={'user.fullName'} size={'large'} disabled />
-								<Field component={InputField} label={t('loc:Email')} name={'user.email'} size={'large'} disabled />
-								<PhoneWithPrefixField
-									label={'Telefón'}
-									size={'large'}
-									prefixName={'user.phonePrefixCountryCode'}
-									phoneName={'user.phone'}
-									formName={FORM.EMPLOYEE}
-									disabled
-								/>
+								<div className={'w-full'}>
+									<Field component={InputField} label={t('loc:Meno a Priezvisko')} name={'user.fullName'} size={'large'} disabled />
+									<Field component={InputField} label={t('loc:Email')} name={'user.email'} size={'large'} disabled />
+									<PhoneWithPrefixField
+										label={'Telefón'}
+										size={'large'}
+										prefixName={'user.phonePrefixCountryCode'}
+										phoneName={'user.phone'}
+										formName={FORM.EMPLOYEE}
+										disabled
+									/>
+								</div>
 							</div>
-						</div>
-					</>
+						</>
+					)}
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>

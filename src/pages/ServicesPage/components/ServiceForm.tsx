@@ -1,13 +1,13 @@
 import React, { MouseEventHandler, ReactNode, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import i18next from 'i18next'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Collapse, Divider, Form, Row, Spin, Tag } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
+import { Button, Col, Collapse, Divider, Form, Row, Spin, Tag } from 'antd'
 import { isEmpty, get } from 'lodash'
 import cx from 'classnames'
 
 // atoms
-import i18next from 'i18next'
 import SelectField from '../../../atoms/SelectField'
 import validateServiceForm from './validateServiceForm'
 import InputNumberField from '../../../atoms/InputNumberField'

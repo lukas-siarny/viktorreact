@@ -10,8 +10,8 @@ import cx from 'classnames'
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
-// redux
-import { getCategories } from '../../../reducers/categories/categoriesActions'
+// reducers
+import { getCategories, getCategory } from '../../../reducers/categories/categoriesActions'
 import { RootState } from '../../../reducers'
 
 // utils
@@ -55,43 +55,45 @@ const CategoriesTree = () => {
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const createCategoryHandler = useCallback(
-		(parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
-			setShowForm(true)
-			dispatch(
-				initialize(FORM.CATEGORY, {
-					parentId,
-					parentTitle,
-					childrenLength,
-					nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
-					level
-				})
-			)
-		},
-		[dispatch]
-	)
-
-	const updateCategoryHandler = useCallback(
-		(node) => {
-			const { id, name, parentId, index, nameLocalizations, level = 0, image, deletedAt, isParentDeleted, categoryParameterID } = node
-			setShowForm(true)
-			const formData = {
-				id,
-				name,
+	const openCategoryCreateDetail = (parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
+		setShowForm(true)
+		dispatch(
+			initialize(FORM.CATEGORY, {
 				parentId,
-				orderIndex: index,
-				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_LANGUAGE),
+				parentTitle,
+				childrenLength,
+				nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
+				level
+			})
+		)
+	}
+
+	const openCategoryUpdateDetail = async (id: string, level = 0, deletedAt?: string, isParentDeleted?: boolean) => {
+		setShowForm(true)
+		const { data } = await dispatch(getCategory(id))
+		let formData = {}
+		if (data) {
+			formData = {
+				id,
+				name: data.name,
+				parentId: data.parentID,
+				orderIndex: data.orderIndex,
+				nameLocalizations: normalizeNameLocalizations(data.nameLocalizations, DEFAULT_LANGUAGE),
 				level,
-				image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
+				image: data?.image?.original ? [{ url: data?.image?.original, uid: data?.image?.id }] : undefined,
 				deletedAt,
 				isParentDeleted,
-				categoryParameterID: categoryParameterID ? { label: categoryParameterID.name, value: categoryParameterID.id } : undefined
+				categoryParameterID: data?.categoryParameter
+					? {
+							label: data?.categoryParameter.name,
+							value: data?.categoryParameter.id
+					  }
+					: undefined
 			}
-			dispatch(initialize(FORM.CATEGORY, formData))
-			setLastOpenedNode(formData)
-		},
-		[dispatch]
-	)
+		}
+		dispatch(initialize(FORM.CATEGORY, formData))
+		setLastOpenedNode(formData)
+	}
 
 	const deleteCategoryHandler = useCallback(
 		async (id: string) => {
@@ -115,7 +117,8 @@ const CategoriesTree = () => {
 
 	const onCategoryClickHandler = (keys: any, e: any) => {
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
-		updateCategoryHandler(get(e, 'node'))
+		const selectedNode = get(e, 'node')
+		openCategoryUpdateDetail(selectedNode?.id, selectedNode?.level, selectedNode?.deletedAt, selectedNode?.isParentDeleted)
 	}
 
 	const titleBuilder = (category: any) => {
@@ -284,6 +287,7 @@ const CategoriesTree = () => {
 
 			if (formData.id) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
+				openCategoryUpdateDetail(formData.id)
 			} else {
 				if (formData.parentId) {
 					body = {
@@ -291,7 +295,7 @@ const CategoriesTree = () => {
 						parentID: formData.parentId || undefined
 					}
 				}
-
+				// TODO - get category ID from BE to reload detail
 				await postReq('/api/b2b/admin/enums/categories/', null, body)
 			}
 			dispatch(getCategories())
@@ -347,7 +351,7 @@ const CategoriesTree = () => {
 						<CategoryForm
 							deleteCategory={deleteCategoryHandler}
 							onSubmit={handleSubmit}
-							createCategory={createCategoryHandler}
+							createCategory={openCategoryCreateDetail}
 							closeCategoryForm={closeOrOpenParentCategory}
 						/>
 					</div>

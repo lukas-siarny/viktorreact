@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm, FieldArray, isDirty } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Form, Row } from 'antd'
+import { Button, Col, Divider, Form, Row, Spin } from 'antd'
 import { useSelector } from 'react-redux'
 
 // assets
@@ -10,6 +10,7 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.sv
 // atoms
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
+import SelectField from '../../../atoms/SelectField'
 
 // components
 import Localizations from '../../../components/Localizations'
@@ -22,19 +23,18 @@ import validateCategoryFrom from './validateCategoryFrom'
 // utils
 import { validationString } from '../../../utils/helper'
 import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-
-// redux
-import { RootState } from '../../../reducers'
 import Permissions from '../../../utils/Permissions'
-import SelectField from '../../../atoms/SelectField'
+
+// reducers
+import { RootState } from '../../../reducers'
 
 // types
 import { NameLocalizationsItem } from '../../../types/interfaces'
 
 type ComponentProps = {
-	deleteCategory: any
-	createCategory: any
-	closeCategoryForm: any
+	deleteCategory: Function
+	createCategory: (parentId: string, parentTitle: string, childrenLength: number, level: number) => void
+	closeCategoryForm: (e?: React.MouseEvent<HTMLElement> | undefined) => void
 }
 
 export interface ICategoryForm {
@@ -60,6 +60,7 @@ const CategoryForm: FC<Props> = (props) => {
 
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
 	const categoriesParameters = useSelector((state: RootState) => state.categoryParams.parameters)
+	const category = useSelector((state: RootState) => state.categories.category)
 	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))
 
 	const renderFormTitle = () => {
@@ -101,116 +102,118 @@ const CategoryForm: FC<Props> = (props) => {
 	const localizationInputCss = values?.level === 0 ? 'w-2/3' : 'w-full'
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
-			<Col className={'flex'}>
-				<Row className={'w-full mx-9 h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3 relative pr-7'}>
-						{renderFormTitle()}
-						{isFormDirty ? (
-							<PopConfirmComponent
-								placement={'left'}
-								title={t('loc:Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?')}
-								onConfirm={closeCategoryForm}
-								okText={t('loc:Pokračovať')}
-								getPopupContainer={() => documentFooter}
-								allowedButton={
-									<Button className='absolute top-1 right-0 p-0 border-none shadow-none'>
-										<CloseIcon />
-									</Button>
+		<Spin spinning={category.isLoading || categoriesParameters.isLoading}>
+			<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+				<Col className={'flex'}>
+					<Row className={'w-full mx-9 h-full block'} justify='center'>
+						<h3 className={'mb-0 mt-3 relative pr-7'}>
+							{renderFormTitle()}
+							{isFormDirty ? (
+								<PopConfirmComponent
+									placement={'left'}
+									title={t('loc:Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?')}
+									onConfirm={closeCategoryForm}
+									okText={t('loc:Pokračovať')}
+									getPopupContainer={() => documentFooter}
+									allowedButton={
+										<Button className='absolute top-1 right-0 p-0 border-none shadow-none'>
+											<CloseIcon />
+										</Button>
+									}
+								/>
+							) : (
+								<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={closeCategoryForm}>
+									<CloseIcon />
+								</Button>
+							)}
+						</h3>
+						<Divider className={'mb-3 mt-3'} />
+						<Row justify={'space-between'} className={'w-full'}>
+							<FieldArray
+								key='nameLocalizations'
+								name='nameLocalizations'
+								component={Localizations}
+								placeholder={t('loc:Zadajte názov')}
+								horizontal
+								ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
+								customValidate={fixLength100}
+								className={localizationInputCss}
+								mainField={
+									<Field
+										className='mb-0'
+										component={InputField}
+										label={t('loc:Názov kategórie (EN)')}
+										placeholder={t('loc:Zadajte názov')}
+										key='nameLocalizations[0].value'
+										name='nameLocalizations[0].value'
+										required
+										validate={fixLength100}
+									/>
 								}
 							/>
-						) : (
-							<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={closeCategoryForm}>
-								<CloseIcon />
-							</Button>
-						)}
-					</h3>
-					<Divider className={'mb-3 mt-3'} />
-					<Row justify={'space-between'} className={'w-full'}>
-						<FieldArray
-							key='nameLocalizations'
-							name='nameLocalizations'
-							component={Localizations}
-							placeholder={t('loc:Zadajte názov')}
-							horizontal
-							ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
-							customValidate={fixLength100}
-							className={localizationInputCss}
-							mainField={
+							{values?.level === 0 ? (
+								<div className='w-1/4'>
+									<Field
+										className='w-full'
+										component={ImgUploadField}
+										name='image'
+										label={t('loc:Obrázok')}
+										maxCount={1}
+										signUrl={URL_UPLOAD_IMAGES}
+										category={UPLOAD_IMG_CATEGORIES.CATEGORY_IMAGE}
+										required
+									/>
+									<Field
+										className='w-full'
+										component={ImgUploadField}
+										name='icon'
+										label={t('loc:Ikona')}
+										maxCount={1}
+										signUrl={URL_UPLOAD_IMAGES}
+										category={UPLOAD_IMG_CATEGORIES.CATEGORY_ICON}
+										required
+									/>
+								</div>
+							) : undefined}
+							{values?.level === 2 ? (
 								<Field
-									className='mb-0'
-									component={InputField}
-									label={t('loc:Názov kategórie (EN)')}
-									placeholder={t('loc:Zadajte názov')}
-									key='nameLocalizations[0].value'
-									name='nameLocalizations[0].value'
-									required
-									validate={fixLength100}
+									className={'w-full'}
+									component={SelectField}
+									options={categoriesParameters.enumerationsOptions}
+									label={t('loc:Parameter')}
+									placeholder={t('loc:Vyberte parameter')}
+									name={'categoryParameterID'}
+									loading={categoriesParameters.isLoading}
+									allowClear
 								/>
-							}
-						/>
-						{values?.level === 0 ? (
-							<div className='w-1/4'>
-								<Field
-									className='w-full'
-									component={ImgUploadField}
-									name='image'
-									label={t('loc:Obrázok')}
-									maxCount={1}
-									signUrl={URL_UPLOAD_IMAGES}
-									category={UPLOAD_IMG_CATEGORIES.CATEGORY}
-									required
-								/>
-								<Field
-									className='w-full'
-									component={ImgUploadField}
-									name='icon'
-									label={t('loc:Ikona')}
-									maxCount={1}
-									signUrl={URL_UPLOAD_IMAGES}
-									category={UPLOAD_IMG_CATEGORIES.CATEGORY}
-									required
-								/>
-							</div>
-						) : undefined}
-						{values?.level === 2 ? (
-							<Field
-								className={'w-full'}
-								component={SelectField}
-								options={categoriesParameters.enumerationsOptions}
-								label={t('loc:Parameter')}
-								placeholder={t('loc:Vyberte parameter')}
-								name={'categoryParameterID'}
-								loading={categoriesParameters.isLoading}
-								allowClear
-							/>
-						) : undefined}
+							) : undefined}
+						</Row>
+						<div className={'flex justify-between flex-wrap gap-2'}>
+							{values?.id && !values?.deletedAt ? (
+								<Permissions allowed={permissions}>
+									<DeleteButton
+										onConfirm={() => deleteCategory(values?.id, false)}
+										entityName={''}
+										type={'default'}
+										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+									/>
+								</Permissions>
+							) : undefined}
+
+							{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
+
+							{!values?.deletedAt ? (
+								<Permissions allowed={permissions}>
+									<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+										{t('loc:Uložiť')}
+									</Button>
+								</Permissions>
+							) : undefined}
+						</div>
 					</Row>
-					<div className={'flex justify-between flex-wrap gap-2'}>
-						{values?.id && !values?.deletedAt ? (
-							<Permissions allowed={permissions}>
-								<DeleteButton
-									onConfirm={() => deleteCategory(values?.id, false)}
-									entityName={''}
-									type={'default'}
-									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-								/>
-							</Permissions>
-						) : undefined}
-
-						{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
-
-						{!values?.deletedAt ? (
-							<Permissions allowed={permissions}>
-								<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-									{t('loc:Uložiť')}
-								</Button>
-							</Permissions>
-						) : undefined}
-					</div>
-				</Row>
-			</Col>
-		</Form>
+				</Col>
+			</Form>
+		</Spin>
 	)
 }
 

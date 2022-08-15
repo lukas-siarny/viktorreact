@@ -506,7 +506,7 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
  * @param {number} price
  * @returns {{ exponent: number, significand: number }}
  */
-export const encodePrice = (price: number) => {
+export const encodePrice = (price: number): IPrice => {
 	const stringPrice = `${price}`
 
 	let exponent = 0

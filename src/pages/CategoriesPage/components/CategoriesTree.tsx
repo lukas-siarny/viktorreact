@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { filter, forEach, get, map, isEmpty } from 'lodash'
+import { filter, forEach, get, map } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 
@@ -68,18 +68,17 @@ const CategoriesTree = () => {
 		)
 	}
 
-	const openCategoryUpdateDetail = async (node: any) => {
-		const { id, parentId, nameLocalizations, level = 0, deletedAt, isParentDeleted } = node
+	const openCategoryUpdateDetail = async (id: string, level = 0, deletedAt?: string, isParentDeleted?: boolean) => {
 		setShowForm(true)
 		const { data } = await dispatch(getCategory(id))
 		let formData = {}
-		if (!isEmpty(data)) {
+		if (data) {
 			formData = {
 				id,
-				name: data?.name,
-				parentId,
-				orderIndex: data?.orderIndex,
-				nameLocalizations: normalizeNameLocalizations(nameLocalizations, DEFAULT_LANGUAGE),
+				name: data.name,
+				parentId: data.parentID,
+				orderIndex: data.orderIndex,
+				nameLocalizations: normalizeNameLocalizations(data.nameLocalizations, DEFAULT_LANGUAGE),
 				level,
 				image: data?.image?.original ? [{ url: data?.image?.original, uid: data?.image?.id }] : undefined,
 				deletedAt,
@@ -118,7 +117,8 @@ const CategoriesTree = () => {
 
 	const onCategoryClickHandler = (keys: any, e: any) => {
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
-		openCategoryUpdateDetail(get(e, 'node'))
+		const selectedNode = get(e, 'node')
+		openCategoryUpdateDetail(selectedNode?.id, selectedNode?.level, selectedNode?.deletedAt, selectedNode?.isParentDeleted)
 	}
 
 	const titleBuilder = (category: any) => {
@@ -287,6 +287,7 @@ const CategoriesTree = () => {
 
 			if (formData.id) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
+				openCategoryUpdateDetail(formData.id)
 			} else {
 				if (formData.parentId) {
 					body = {
@@ -294,7 +295,7 @@ const CategoriesTree = () => {
 						parentID: formData.parentId || undefined
 					}
 				}
-
+				// TODO - get category ID from BE to reload detail
 				await postReq('/api/b2b/admin/enums/categories/', null, body)
 			}
 			dispatch(getCategories())

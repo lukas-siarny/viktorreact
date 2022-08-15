@@ -836,3 +836,12 @@ export const langaugesOptionRender = (itemData: any) => {
 		</div>
 	)
 }
+
+export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { language: string; value: string | null }[]) => {
+	return nameLocalizations?.sort((a, b) => {
+		if (a.language === DEFAULT_LANGUAGE) {
+			return -1
+		}
+		return b.language === DEFAULT_LANGUAGE ? 1 : 0
+	})
+}

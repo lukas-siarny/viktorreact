@@ -28,7 +28,7 @@ export interface ILanguagesPayload {
 	enumerationsOptions: IEnumerationOptionItem[]
 }
 
-export const getLanguages = (): ThunkResult<Promise<ILanguagesPayload>> => async (dispatch) => {
+export const getSalonLanguages = (): ThunkResult<Promise<ILanguagesPayload>> => async (dispatch) => {
 	let payload: ILanguagesPayload = {} as ILanguagesPayload
 
 	try {

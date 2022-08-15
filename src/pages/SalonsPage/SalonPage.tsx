@@ -25,7 +25,7 @@ import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
-import { getLanguages } from '../../reducers/languages/languagesActions'
+import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 
 // types
 import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
@@ -145,7 +145,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		dispatch(getCategories())
-		dispatch(getLanguages())
+		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
 	}, [dispatch])
 

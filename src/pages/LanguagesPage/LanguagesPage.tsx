@@ -15,17 +15,17 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import LanguagesForm from './components/LanguagesForm'
 import LanguagesFilter from './components/LanguagesFilter'
-import { EMPTY_NAME_LOCALIZATIONS, sortNameLocalizationsWithDefaultLangFirst } from '../../components/LanguagePicker'
+import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 
 // utils
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, setOrder, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { normalizeDirectionKeys, setOrder, sortNameLocalizationsWithDefaultLangFirst, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getLanguages } from '../../reducers/languages/languagesActions'
+import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
@@ -62,7 +62,7 @@ const LanguagesPage = () => {
 	}
 
 	useEffect(() => {
-		dispatch(getLanguages())
+		dispatch(getSalonLanguages())
 		dispatch(
 			initialize(FORM.LANGUAGES_FILTER, {
 				search: query.search
@@ -132,7 +132,7 @@ const LanguagesPage = () => {
 			} else {
 				await postReq('/api/b2b/admin/enums/languages/', null, body as LanguagesPatch)
 			}
-			dispatch(getLanguages())
+			dispatch(getSalonLanguages())
 			changeFormVisibility()
 			setQuery({ ...query, search: null })
 		} catch (error: any) {
@@ -145,7 +145,7 @@ const LanguagesPage = () => {
 		if (languageID) {
 			try {
 				await deleteReq('/api/b2b/admin/enums/languages/{languageID}', { languageID })
-				dispatch(getLanguages())
+				dispatch(getSalonLanguages())
 				changeFormVisibility()
 			} catch (error: any) {
 				// eslint-disable-next-line no-console

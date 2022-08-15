@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Row, Select, Collapse, Spin, Result, Popover } from 'antd'
+import { Row, Select, Collapse, Spin, Result, Popover, Divider, Button } from 'antd'
 import { isEmpty } from 'lodash'
 
 // reducers
@@ -19,6 +19,8 @@ import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
 import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
 import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
+import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 const NOTE_MAX_LENGTH = 150
 
@@ -37,8 +39,30 @@ const ContactPage: FC<Props> = () => {
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [view, setView] = useState<'empty' | 'default' | 'not_found'>()
+	const [isNoteOpen, setIsNoteOpen] = useState(false)
 
 	const currentLng = i18n.language
+
+	const notePopoverRef = useRef<any | null>(null)
+
+	useEffect(() => {
+		const listener = (event: Event) => {
+			const popupEl = notePopoverRef.current?.popupRef?.current?.getElement()
+			const triggerEl = notePopoverRef.current?.triggerRef?.current
+			if (!popupEl || !triggerEl || popupEl.contains((event?.target as Node) || null) || triggerEl.contains((event?.target as Node) || null)) {
+				return
+			}
+
+			setIsNoteOpen(false)
+		}
+		document.addEventListener('mousedown', listener)
+		document.addEventListener('touchstart', listener)
+
+		return () => {
+			document.removeEventListener('mousedown', listener)
+			document.removeEventListener('touchstart', listener)
+		}
+	}, [])
 
 	const handleCountryChange = async (item: any) => {
 		await dispatch(getSupportContact(item.key))
@@ -171,18 +195,42 @@ const ContactPage: FC<Props> = () => {
 												</li>
 												{selectedContact?.note && (
 													<li className={'note-list-item'}>
-														<p className={'m-0 whitespace-pre-wrap'}>
+														<p className={'m-0 whitespace-pre-wrap break-all'}>
 															{selectedContact?.note.length > NOTE_MAX_LENGTH ? (
 																<>
-																	{`${selectedContact?.note.slice(0, NOTE_MAX_LENGTH)}…`}
+																	{`${selectedContact?.note.slice(0, NOTE_MAX_LENGTH)}… `}
 																	<Popover
-																		overlayClassName={'max-w-xs md:max-w-md'}
-																		content={<p className={'whitespace-pre-wrap m-0'}>{selectedContact?.note}</p>}
+																		overlayClassName={'w-full sm:max-w-md p-2'}
+																		ref={notePopoverRef}
+																		visible={isNoteOpen}
+																		content={
+																			<>
+																				<Row align={'middle'} justify={'space-between'}>
+																					<Row align={'middle'} className={'gap-1'}>
+																						<PencilIcon />
+																						<h4 className={'m-0'}>{t('loc:Poznámka')}</h4>
+																					</Row>
+																					<Button className={'p-0 border-none shadow-none'} onClick={() => setIsNoteOpen(false)}>
+																						<CloseIcon style={{ width: 16, height: 16 }} />
+																					</Button>
+																				</Row>
+																				<Divider className={'my-1'} />
+																				<p className={'whitespace-pre-wrap break-all m-0'}>{selectedContact?.note}</p>
+																			</>
+																		}
 																		trigger='click'
 																		arrowPointAtCenter
 																		overlayInnerStyle={{ borderRadius: 10 }}
 																	>
-																		<span className={'underline cursor-pointer'}>{t('loc:zobraziť viac')}</span>
+																		<button
+																			type={'button'}
+																			className={
+																				'underline cursor-pointer break-normal outline-none border-none bg-transparent p-0 noti-show-more-button'
+																			}
+																			onClick={() => setIsNoteOpen(true)}
+																		>
+																			{t('loc:zobraziť viac')}
+																		</button>
 																	</Popover>
 																</>
 															) : (

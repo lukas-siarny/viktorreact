@@ -450,3 +450,78 @@ export enum PARAMETERS_UNIT_TYPES {
 }
 
 export const NEW_SALON_ID = 'new_salon'
+
+export enum SALON_ROLES {
+	ADMIN = 'ADMIN',
+	MANAGER = 'MANAGER',
+	RECEPTIONIST = 'RECEPTIONIST',
+	EMPLOEYEE = 'EMPLOEYEE',
+	EXTERNAL = 'EXTERNAL'
+}
+
+export const SALON_ROLES_KEYS = Object.keys(SALON_ROLES)
+
+export const SALON_ROLES_TRANSLATIONS = () => ({
+	[SALON_ROLES.ADMIN]: i18next.t('loc:Admin'),
+	[SALON_ROLES.MANAGER]: i18next.t('loc:Manažér'),
+	[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:Recepčný'),
+	[SALON_ROLES.EMPLOEYEE]: i18next.t('loc:Zamestnanec'),
+	[SALON_ROLES.EXTERNAL]: i18next.t('loc:Externista')
+})
+
+export const SALON_ROLES_AUTHORIZATIONS = () => [
+	{
+		name: i18next.t('loc:Správa profilu salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {
+			[SALON_ROLES.MANAGER]: i18next.t('loc:len editácia')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa firemných a fakturačných údajov salónu'),
+		allowed: [SALON_ROLES.ADMIN],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa oprávnení zamesnancov'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {
+			[SALON_ROLES.MANAGER]: i18next.t('loc:okrem Admin')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa služieb salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa zamestnancov salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa zákazníkov salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE],
+		extra: {
+			[SALON_ROLES.EMPLOEYEE]: i18next.t('loc:len vytvárať a editovať, nemôže mazať')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa online rezervácií'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE],
+		extra: {
+			[SALON_ROLES.ADMIN]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.EMPLOEYEE]: i18next.t('loc:len úprava a mazanie, len svoje')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa offline rezervácií'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE, SALON_ROLES.EXTERNAL],
+		extra: {
+			[SALON_ROLES.EMPLOEYEE]: i18next.t('loc:len svoje'),
+			[SALON_ROLES.EXTERNAL]: i18next.t('loc:len svoje')
+		}
+	}
+]

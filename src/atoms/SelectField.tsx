@@ -67,6 +67,7 @@ export type Props = {
 	formName?: FORM
 	confirmSelection?: boolean
 	confirmModalExtraTitle?: string
+	customTooltip?: React.ReactNode
 } & WrappedFieldProps &
 	SelectProps<any> &
 	FormItemProps
@@ -300,7 +301,8 @@ const SelectField = (props: Props) => {
 		hasExtra,
 		formName,
 		confirmSelection,
-		confirmModalExtraTitle
+		confirmModalExtraTitle,
+		customTooltip
 	} = props
 
 	const dispatch = useDispatch()
@@ -509,6 +511,7 @@ const SelectField = (props: Props) => {
 			help={(meta?.touched || showErrorWhenUntouched) && !hideHelp && isString(meta?.error) ? meta?.error : undefined}
 			validateStatus={(meta?.touched || showErrorWhenUntouched) && meta?.error ? 'error' : undefined}
 		>
+			{customTooltip}
 			<Select
 				bordered={bordered}
 				style={{ backgroundColor }}

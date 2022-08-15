@@ -130,7 +130,7 @@ const ContactPage: FC<Props> = () => {
 					}
 					if (view === 'default') {
 						return (
-							<Collapse className={'noti-support-collapse mt-6'} bordered={false} defaultActiveKey={1} accordion>
+							<Collapse className={'noti-collapse noti-support-collapse mt-6'} bordered={false} defaultActiveKey={1} accordion expandIconPosition={'right'}>
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NumberParam, StringParam, useQueryParams } from 'use-query-params'
+import { StringParam, useQueryParams } from 'use-query-params'
 import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
@@ -14,20 +14,19 @@ import ServicesFilter from './components/ServicesFilter'
 import { AvatarGroup } from '../../components/AvatarComponents'
 
 // utils
-import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
-import { encodePrice, formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
+import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
+import { formatDateByLocale, getEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getService, getServices } from '../../reducers/services/serviceActions'
+import { getServices } from '../../reducers/services/serviceActions'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, IUserAvatar, SalonSubPageProps, Columns } from '../../types/interfaces'
-import { patchReq } from '../../utils/request'
-import { parseEmployeeCreateAndUpdate, parseParameterValuesCreateAndUpdate } from './ServiceEditPage'
+import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -42,16 +41,6 @@ const ServicesPage = (props: SalonSubPageProps) => {
 	const { salonID, parentPath } = props
 
 	const backUrl = getEncodedBackUrl()
-
-	/* const test = async () => {
-		// /api/b2b/admin/salons/{salonID}/services
-		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/services', { salonID: 1 }, { rootCategoryID: 1, categoryIDs: [68, 69, 81, 79] })
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
-		}
-	} */
 
 	useEffect(() => {
 		dispatch(getCategories(false))
@@ -111,10 +100,22 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			ellipsis: true
 		},
 		{
-			title: t('loc:Zamestnanec'),
+			title: t('loc:Zamestnanci'),
 			dataIndex: 'employees',
 			key: 'employees',
 			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} /> : null)
+		},
+		{
+			title: t('loc:Vyplnenie služby'),
+			dataIndex: 'isComplete',
+			key: 'isComplete',
+			ellipsis: true,
+			render: (value) =>
+				value && (
+					<div className={'flex justify-start'}>
+						<CircleCheckIcon width={20} height={20} />
+					</div>
+				)
 		},
 		{
 			title: t('loc:Vytvorené'),

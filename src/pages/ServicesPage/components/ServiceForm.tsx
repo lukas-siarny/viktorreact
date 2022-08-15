@@ -119,6 +119,7 @@ const renderParameterValues = (props: any) => {
 					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.variableDuration
 					const variablePrice = fieldData?.variablePrice
+					const useParameter = fieldData?.useParameter
 					return (
 						<Panel
 							header={
@@ -128,11 +129,19 @@ const renderParameterValues = (props: any) => {
 							}
 							key={index}
 							extra={genExtra(index, fieldData, field)}
+							collapsible={useParameter ? undefined : 'disabled'}
 						>
 							{showDuration && (
 								<Row gutter={8} align='top' justify='center'>
 									<Col className={'mt-5'} span={8}>
-										<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
+										<Field
+											className={'mb-0'}
+											component={SwitchField}
+											label={t('loc:Variabilné trvanie')}
+											name={`${field}.variableDuration`}
+											size={'middle'}
+											disabled={!useParameter}
+										/>
 									</Col>
 									<Col span={variableDuration ? 8 : 16}>
 										<Field
@@ -145,6 +154,7 @@ const renderParameterValues = (props: any) => {
 											maxChars={3}
 											size={'large'}
 											validate={[numberMin0, validateParameterValuePriceAndDuration]}
+											disabled={!useParameter}
 											required
 										/>
 									</Col>
@@ -160,6 +170,7 @@ const renderParameterValues = (props: any) => {
 												maxChars={3}
 												size={'large'}
 												validate={[numberMin0, validateParameterValuePriceAndDuration]}
+												disabled={!useParameter}
 												required
 											/>
 										</Col>
@@ -168,7 +179,14 @@ const renderParameterValues = (props: any) => {
 							)}
 							<Row gutter={8} align='top' justify='center'>
 								<Col className={'mt-5'} span={8}>
-									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={`${field}.variablePrice`} size={'middle'} />
+									<Field
+										className={'mb-0'}
+										component={SwitchField}
+										label={t('loc:Variabilná cena')}
+										name={`${field}.variablePrice`}
+										size={'middle'}
+										disabled={!useParameter}
+									/>
 								</Col>
 								<Col span={variablePrice ? 8 : 16}>
 									<Field
@@ -185,6 +203,7 @@ const renderParameterValues = (props: any) => {
 										maxChars={5}
 										size={'large'}
 										validate={[numberMin0, validateParameterValuePriceAndDuration]}
+										disabled={!useParameter}
 										required
 									/>
 								</Col>
@@ -200,6 +219,7 @@ const renderParameterValues = (props: any) => {
 											maxChars={5}
 											size={'large'}
 											validate={[numberMin0, validateParameterValuePriceAndDuration]}
+											disabled={!useParameter}
 											required
 										/>
 									</Col>

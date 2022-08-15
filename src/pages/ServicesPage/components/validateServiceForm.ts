@@ -31,7 +31,7 @@ const validateServiceForm = (values?: any) => {
 	}
 
 	if (values?.useCategoryParameter && isEmpty(values?.serviceCategoryParameter?.filter((value: any) => value.useParameter))) {
-		errors.serviceCategoryParameter = { _error: i18next.t('loc:Musíte zvoliť a nastaviť aspoň jedenu hodnotu parametra!') }
+		errors.serviceCategoryParameter = { _error: i18next.t('loc:Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!') }
 	}
 
 	return errors

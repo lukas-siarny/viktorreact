@@ -306,6 +306,7 @@ export interface ILanguagePickerForm {
 }
 
 export interface IPrice {
+	currency?: string
 	exponent: number
 	significand: number
 }
@@ -317,12 +318,6 @@ export interface IUserAvatar {
 	key?: string | number
 
 }
-
-export interface IPrice {
-	exponent: number
-	significand: number
-}
-
 
 export interface IQueryParams {
 	page: number

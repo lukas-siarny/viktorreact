@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react'
-import { forEach } from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { change, initialize } from 'redux-form'
 import { Action, compose, Dispatch } from 'redux'
+import { forEach, unionBy } from 'lodash'
 
 // components
 import { notification } from 'antd'
@@ -23,11 +23,12 @@ import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../uti
 import { decodePrice, encodePrice } from '../../utils/helper'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { history } from '../../utils/history'
-import { getCategory } from '../../reducers/categories/categoriesActions'
+import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
+import { Paths } from '../../types/api'
 
 interface IParameterValue {
-	id: number
-	name: string
+	id: string | undefined
+	name: string | undefined
 	durationFrom: number | null | undefined
 	durationTo: number | null | undefined
 	variableDuration: boolean
@@ -42,14 +43,19 @@ type Props = SalonSubPageProps & {
 	salonID: string
 }
 
+type ServiceEmployees = Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']['employees']
+type ServiceParameterValues = NonNullable<Paths.GetApiB2BAdminServicesServiceId.Responses.$200['service']['serviceCategoryParameter']>['values']
+type ServicePatch = Paths.PatchApiB2BAdminServicesServiceId.RequestBody
+type ServiceParameterValuesPatch = ServicePatch['categoryParameterValues']
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 export const parseEmployeeCreateAndUpdate = (employees: any[]): any => {
 	return employees?.map((employee: any) => employee?.id)
 }
 
-export const parseParameterValuesCreateAndUpdate = (values: any[]): any => {
-	const result: any[] = []
+export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): ServiceParameterValuesPatch => {
+	const result: ServiceParameterValuesPatch = []
 	values?.forEach((value: any) => {
 		if (value?.useParameter) {
 			result.push({
@@ -96,15 +102,16 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 	dispatch(change(FORM.SERVICE_FORM, 'employee', null))
 }
 
-const parseParameterValuesInit = (values: any): IParameterValue[] => {
-	return values?.map((value: any) => {
+const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryParameterValue[]) | undefined): IParameterValue[] => {
+	const result: IParameterValue[] = []
+	values?.forEach((value: any) => {
 		const durationFrom = value?.priceAndDurationData?.durationFrom
 		const durationTo = value?.priceAndDurationData?.durationTo
 		const priceFrom = decodePrice(value?.priceAndDurationData?.priceFrom)
 		const priceTo = decodePrice(value?.priceAndDurationData?.priceTo)
-		return {
-			id: value?.id,
-			name: value?.value,
+		result.push({
+			id: value?.categoryParameterValueID || value?.id,
+			name: value.value,
 			durationFrom,
 			durationTo,
 			variableDuration: !!value?.priceAndDurationData?.durationTo,
@@ -112,11 +119,12 @@ const parseParameterValuesInit = (values: any): IParameterValue[] => {
 			priceTo,
 			variablePrice: !!value?.priceAndDurationData?.priceTo,
 			useParameter: !!(durationFrom && priceFrom)
-		}
+		})
 	})
+	return result
 }
 
-const parseEmployeesInit = (employees: any[]) => {
+const parseEmployeesInit = (employees: ServiceEmployees) => {
 	return employees?.map((employee) => {
 		return {
 			id: employee?.id,
@@ -142,17 +150,18 @@ const ServiceEditPage = (props: Props) => {
 
 	const fetchData = async () => {
 		const { data } = await dispatch(getService(serviceID))
-		const categoryDetail = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
+		const { categoryParameterValues } = await dispatch(getCategory(data?.service?.category?.child?.child?.id))
 		if (!data?.service?.id) {
 			history.push('/404')
 		}
 		let initData: any
-		console.log('categoryDetail: ', categoryDetail)
 		if (data) {
+			// union parameter values form service and category detail based on categoryParameterValueID
+			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
 			initData = {
 				id: data.service.id,
 				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType,
-				serviceCategoryParameter: parseParameterValuesInit(data.service.serviceCategoryParameter?.values),
+				serviceCategoryParameter: parseParameterValuesInit(parameterValues),
 				durationFrom: data.service.priceAndDurationData.durationFrom,
 				durationTo: data.service.priceAndDurationData.durationTo,
 				variableDuration: !!data.service.priceAndDurationData.durationTo,
@@ -173,22 +182,22 @@ const ServiceEditPage = (props: Props) => {
 
 	const handleSubmit = async (values: IServiceForm) => {
 		try {
-			const reqData = {
+			const reqData: ServicePatch = {
 				useCategoryParameter: values.useCategoryParameter,
 				noteForPriceAndDuration: undefined,
 				// set null if useCategoryParameter is true
-				priceAndDurationData: values.useCategoryParameter
+				priceAndDurationData: (values.useCategoryParameter
 					? null
 					: {
 							durationFrom: values.durationFrom,
 							durationTo: values.variableDuration ? values.durationTo : undefined,
 							priceFrom: encodePrice(values.priceFrom),
 							priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined
-					  },
+					  }) as any,
 				categoryParameterValues: parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter),
 				employeeIDs: parseEmployeeCreateAndUpdate(values.employees)
 			}
-			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData as any, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			dispatch(getService(serviceID))
 		} catch (e) {
 			// eslint-disable-next-line no-console

@@ -24,8 +24,8 @@ interface IGetCategory {
 	payload: ICategoryPayload
 }
 
-interface ICategoryParameterValue {
-	id: string
+export interface ICategoryParameterValue {
+	categoryParameterValueID: string
 	name: string | null
 }
 
@@ -77,19 +77,18 @@ export const getCategories =
 	}
 
 export const getCategory =
-	(categoryID: number | undefined | null): ThunkResult<Promise<ICategoryPayload>> =>
+	(categoryID: string | undefined | null): ThunkResult<Promise<ICategoryPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICategoryPayload
 
 		try {
 			dispatch({ type: CATEGORY.CATEGORY_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID } as any)
-
 			payload = {
 				data: data?.category,
-				categoryParameterValues: data?.category?.categoryParameter?.values?.map((value) => {
-					return { id: value?.id, name: value?.valueLocalizations?.[1]?.value }
-				}) as any
+				categoryParameterValues: data?.category?.categoryParameter?.values?.map((parameterValue) => {
+					return { categoryParameterValueID: parameterValue?.id, name: parameterValue?.value }
+				}) as ICategoryParameterValue[]
 			}
 			dispatch({ type: CATEGORY.CATEGORY_LOAD_DONE, payload })
 		} catch (err) {

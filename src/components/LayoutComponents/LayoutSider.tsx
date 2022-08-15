@@ -6,7 +6,6 @@ import { Link, useLocation } from 'react-router-dom'
 import cx from 'classnames'
 
 // assets
-import MenuItem from 'antd/lib/menu/MenuItem'
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
 import { ReactComponent as HomeIcon } from '../../assets/icons/home-24-icon.svg'
 import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-24-icon.svg'
@@ -22,6 +21,7 @@ import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.sv
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
 import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
 import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
+import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -196,7 +196,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										eventKey={PAGE.INDUSTRIES}
 										key={PAGE.INDUSTRIES}
 										onClick={() => history.push(getPath(t('paths:industries')))}
-										icon={<CategoryIcon />} // fix style issue due wrapped item into <Permission> component
+										icon={<IndustiresIcon />}
+										// fix style issue due wrapped item into <Permission> component
 										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES })}
 									>
 										{t('loc:Odvetvia')}

@@ -14,6 +14,7 @@ import validateIndustryFrom from './validateIndustryFrom'
 
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION } from '../../../utils/enums'
+import { showErrorNotification } from '../../../utils/helper'
 
 // redux
 import Permissions from '../../../utils/Permissions'
@@ -45,6 +46,7 @@ const IndustryForm: FC<Props> = (props) => {
 								htmlType={'submit'}
 								className={'noti-btn m-regular w-52 xl:w-60'}
 								disabled={submitting || pristine}
+								loading={submitting || isLoadingTree}
 								onClick={(e) => {
 									if (hasPermission) {
 										submit(FORM.INDUSTRY)
@@ -69,7 +71,8 @@ const form = reduxForm<IIndustryForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
-	validate: validateIndustryFrom
+	validate: validateIndustryFrom,
+	onSubmitFail: showErrorNotification
 })(IndustryForm)
 
 export default form

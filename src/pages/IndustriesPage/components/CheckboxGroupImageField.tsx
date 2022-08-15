@@ -66,41 +66,45 @@ const CheckboxGroupImageField = (props: Props) => {
 				allowedButton={
 					<div>
 						<button type={'button'} disabled={option.extraAction.disabled || option.disabled}>
-							{option.extraAction.icon}
 							{option.extraAction.label}
+							{option.extraAction.icon}
 						</button>
 					</div>
 				}
 			/>
 		) : (
 			<button type={'button'} onClick={option.extraAction?.action} disabled={option.extraAction?.disabled || option.disabled}>
-				{option.extraAction?.icon}
 				{option.extraAction?.label}
+				{option.extraAction?.icon}
 			</button>
 		)
 	}, [])
 
 	return (
 		<>
-			<fieldset className={'checkbox-group-image-wrapper'}>
-				<legend className={cx({ required })}>{label}</legend>
-				{options?.map((option) => {
-					const checked = checkedValues.includes(option.value)
-					return (
-						<div className={cx('checkbox-with-image', { checked, disabled: option.disabled, error: errorMsg })} key={option.id}>
-							<label htmlFor={option.id}>
-								<input type='checkbox' name={input.name} id={option.id} checked={checked} onChange={() => onInputChange(option.value, checked)} />
-								<div className='inner-wrapper' style={{ backgroundImage: `url("${option.image}")` }}>
-									<span className={'checker'} />
-									<span className={'label'}>{option.label}</span>
-								</div>
-							</label>
-							{option.extraAction && getExtraActionButton(option)}
-						</div>
-					)
-				})}
+			<fieldset className={cx('checkbox-group-image-fieldset', { error: errorMsg, required })}>
+				<div className={'label-error-wrapper'}>
+					<legend className={cx({ required })}>{label}</legend>
+					{errorMsg && <span className={'ant-form-item-explain-error error-msg'}>{errorMsg}</span>}
+				</div>
+				<div className={cx('checkbox-group-image-wrapper', { error: errorMsg })}>
+					{options?.map((option) => {
+						const checked = checkedValues.includes(option.value)
+						return (
+							<div className={cx('checkbox-with-image', { checked, disabled: option.disabled })} key={option.id}>
+								<label htmlFor={option.id}>
+									<input type='checkbox' name={input.name} id={option.id} checked={checked} onChange={() => onInputChange(option.value, checked)} />
+									<div className='inner-wrapper' style={{ backgroundImage: `url("${option.image}")` }}>
+										<span className={'checker'} />
+										<span className={'label'}>{option.label}</span>
+									</div>
+								</label>
+								{option.extraAction && getExtraActionButton(option)}
+							</div>
+						)
+					})}
+				</div>
 			</fieldset>
-			{errorMsg && <span className={'ant-form-item-explain-error'}>{errorMsg}</span>}
 		</>
 	)
 }

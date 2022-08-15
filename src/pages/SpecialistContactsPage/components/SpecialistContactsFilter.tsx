@@ -17,26 +17,23 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
+import { ISpecialistContactFilter } from '../../../types/interfaces'
 
 type ComponentProps = {
 	total: number
 	addButton: React.ReactNode
 }
 
-interface ICosmeticsFilter {
-	search: string
-}
-
-type Props = InjectedFormProps<ICosmeticsFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISpecialistContactFilter, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
 const CosmeticsFilter = (props: Props) => {
 	const { handleSubmit, total, addButton } = props
 	const [t] = useTranslation()
-	const formValues = useSelector((state: RootState) => getFormValues(FORM.COSMETICS_FILTER)(state))
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.SPECIALIST_CONTACT_FILTER)(state))
 
-	// disable filter fields if count of cosmetics is less than 2
+	// disable filter fields if count of contacts is less than 2
 	const isFilterDisabled = useMemo(() => {
 		if (checkFiltersSize(formValues) > 0) return false
 		if (total > 1) return false
@@ -48,7 +45,7 @@ const CosmeticsFilter = (props: Props) => {
 			className={'h-10 p-0 m-0'}
 			component={InputField}
 			size={'large'}
-			placeholder={t('loc:Hľadať podľa názvu')}
+			placeholder={t('loc:Hľadať podľa krajiny')}
 			name='search'
 			fieldMode={FIELD_MODE.FILTER}
 			search

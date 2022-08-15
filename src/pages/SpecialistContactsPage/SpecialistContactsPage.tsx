@@ -1,32 +1,34 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin, Button, Divider, Image } from 'antd'
+import { Col, Row, Spin, Button, Divider, Image, TablePaginationConfig } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { initialize, reset } from 'redux-form'
-import { get } from 'lodash'
+import { get, map } from 'lodash'
 import cx from 'classnames'
+import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 
 // components
+import { SorterResult } from 'antd/lib/table/interface'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
-import CosmeticForm from './components/SpecialistContactsForm'
-import CosmeticsFilter from './components/SpecialistContactsFilter'
+import SpecialistContactForm from './components/SpecialistContactsForm'
+import SpecialistContactFilter from './components/SpecialistContactsFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { getPrefixCountryCode, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
-import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
+import { getSpecialistContacts } from '../../reducers/specialistContacts/specialistContactsActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 
 // types
-import { IBreadcrumbs, ICosmetic, ICosmeticForm, Columns } from '../../types/interfaces'
+import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactForm, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
 const SpecialistContactsPage = () => {
@@ -34,90 +36,131 @@ const SpecialistContactsPage = () => {
 	const dispatch = useDispatch()
 
 	const [visibleForm, setVisibleForm] = useState<boolean>(false)
-	const [filterQuery, setFilterQuery] = useState<string | undefined>(undefined)
-	// null - represents new record
-	const [cosmeticID, setCosmeticID] = useState<string | undefined>(undefined)
 
-	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
+	const [query, setQuery] = useQueryParams({
+		search: StringParam,
+		order: withDefault(StringParam, 'country:ASC')
+	})
+
+	// undefined - represents new record
+	const [specialistContactID, setSpecialistContactID] = useState<string | undefined>(undefined)
+
+	const specialistContacts = useSelector((state: RootState) => state.specialistContacts.specialistContacts)
+
+	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
+	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
+
+	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam kozmetiky')
+				name: t('loc:Zoznam špecialistov')
 			}
 		]
 	}
 
 	useEffect(() => {
-		dispatch(getCosmetics())
+		dispatch(getSpecialistContacts())
 	}, [dispatch])
 
+	useEffect(() => {
+		const prefixes: { [key: string]: string } = {}
+
+		phonePrefixes?.enumerationsOptions?.forEach((option) => {
+			prefixes[option.key] = option.label
+		})
+
+		setPrefixOptions(prefixes)
+	}, [phonePrefixes, dispatch])
+
+	// TODO: remove any when BE is done
 	const tableData = useMemo(() => {
-		if (!cosmetics || !cosmetics.data) {
+		if (!specialistContacts || !specialistContacts.data) {
 			return []
 		}
 
-		const source = filterQuery
-			? cosmetics.data.filter((cosmetic) => {
-					const name = transformToLowerCaseWithoutAccent(cosmetic.name)
-					const query = transformToLowerCaseWithoutAccent(filterQuery)
-					return name.includes(query)
+		const source = query.search
+			? specialistContacts.data.filter((specialist: any) => {
+					// filter by country
+					const country = transformToLowerCaseWithoutAccent(specialist.countryCode)
+					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
+					return country.includes(searchedValue)
 			  })
-			: cosmetics.data
+			: specialistContacts.data
 
 		// transform to table data
-		return source.map((cosmetic) => ({
-			...cosmetic,
-			key: cosmetic.id
+		return source.map((specialist: any) => ({
+			...specialist,
+			key: specialist.id
 		}))
-	}, [filterQuery, cosmetics])
+	}, [query.search, specialistContacts])
 
-	const changeFormVisibility = (show?: boolean, cosmetic?: ICosmetic) => {
+	const changeFormVisibility = (show?: boolean, specialist?: ISpecialistContact) => {
 		if (!show) {
 			setVisibleForm(false)
-			dispatch(reset(FORM.COSMETIC))
+			dispatch(initialize(FORM.SPECIALIST_CONTACT, { phonePrefixCountryCode }))
 			return
 		}
 
-		if (cosmetic) {
-			const { image } = cosmetic
-
+		if (specialist) {
 			dispatch(
-				initialize(FORM.COSMETIC, {
-					image: image?.original ? [{ url: image?.original, uid: image?.id }] : undefined,
-					name: cosmetic.name
+				initialize(FORM.SPECIALIST_CONTACT, {
+					email: specialist.email,
+					phone: specialist.phone,
+					phonePrefixCountryCode: specialist.phonePrefixCountryCode,
+					countryCode: specialist.countryCode
 				})
 			)
 		}
 
-		setCosmeticID(cosmetic ? cosmetic.id : undefined)
+		setSpecialistContactID(specialist ? specialist.id : undefined)
 		setVisibleForm(true)
 	}
 
-	const handleSubmit = async (formData: ICosmeticForm) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+		if (!(sorter instanceof Array)) {
+			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
+			const newQuery = {
+				...query,
+				order
+			}
+			setQuery(newQuery)
+		}
+	}
+
+	const handleSubmit = async (formData: ISpecialistContactForm) => {
 		const body = {
-			name: formData.name,
-			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
+			email: formData.email,
+			phone: formData.phone,
+			phonePrefixCountryCode: formData.phonePrefixCountryCode,
+			countryCode: formData.countryCode
 		}
 
+		// TODO: remove any when BE is done
 		try {
-			if (cosmeticID) {
-				await patchReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID }, body)
+			if (specialistContactID) {
+				await patchReq('/api/b2b/admin/enums/contacts/{contactID}' as any, { contactID: specialistContactID }, body)
 			} else {
-				await postReq('/api/b2b/admin/enums/cosmetics/', null, body)
+				await postReq('/api/b2b/admin/enums/contacts/' as any, null, body)
 			}
-			dispatch(getCosmetics())
+			dispatch(getSpecialistContacts())
 			changeFormVisibility()
+			// reset search in case of newly created entity
+			if (!specialistContactID && query.search) {
+				setQuery({ ...query, search: null })
+			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
 		}
 	}
 
+	// TODO: remove any when BE is done
 	const handleDelete = async () => {
 		try {
-			await deleteReq('/api/b2b/admin/enums/cosmetics/{cosmeticID}', { cosmeticID: cosmeticID || 'undefined' })
-			dispatch(getCosmetics())
+			await deleteReq('/api/b2b/admin/enums/contacts/{contactID}' as any, { contactID: specialistContactID })
+			dispatch(getSpecialistContacts())
 			changeFormVisibility()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -127,26 +170,33 @@ const SpecialistContactsPage = () => {
 
 	const columns: Columns = [
 		{
-			title: t('loc:Logo'),
-			dataIndex: 'image',
-			key: 'image',
-			render: (value, record) => (
-				<Image
-					src={record?.image?.resizedImages.thumbnail as string}
-					loading='lazy'
-					fallback={record?.image?.original}
-					alt={record?.name}
-					preview={false}
-					className='cosmetics-logo'
-				/>
-			)
+			title: t('loc:Krajina'),
+			dataIndex: 'countryCode',
+			key: 'countryCode',
+			sortOrder: setOrder(query.order, 'country'),
+			// TODO: change when BE is done
+			sorter: {
+				compare: (a, b) => sortData(a.countryCode, b.countryCode)
+			}
 		},
 		{
-			title: t('loc:Názov'),
-			dataIndex: 'name',
-			key: 'name',
+			title: t('loc:Telefón'),
+			dataIndex: 'phone',
+			key: 'phone',
 			ellipsis: true,
-			render: (value) => <span className='base-regular'>{value}</span>
+			sorter: false,
+			render: (value, record) => {
+				const source = value ? record : record.user
+
+				return <>{source?.phone && prefixOptions[source?.phonePrefixCountryCode] ? `${prefixOptions[source?.phonePrefixCountryCode]} ${source.phone}` : '-'}</>
+			}
+		},
+		{
+			title: t('loc:Email'),
+			dataIndex: 'email',
+			key: 'email',
+			ellipsis: true,
+			render: (value) => value || '-'
 		}
 	]
 
@@ -159,17 +209,17 @@ const SpecialistContactsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={cosmetics?.isLoading}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body'>
-							<CosmeticsFilter
-								total={cosmetics?.data?.length}
-								onSubmit={(query: any) => setFilterQuery(query.search)}
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body'>
+						<Spin spinning={specialistContacts?.isLoading}>
+							<SpecialistContactFilter
+								total={specialistContacts?.data?.length}
+								onSubmit={(values: ISpecialistContactFilter) => setQuery({ ...query, search: values.search })}
 								addButton={
 									<Button
 										onClick={() => {
-											dispatch(initialize(FORM.COSMETIC, {}))
+											dispatch(initialize(FORM.SPECIALIST_CONTACT, { phonePrefixCountryCode }))
 											changeFormVisibility(true)
 										}}
 										type='primary'
@@ -177,7 +227,7 @@ const SpecialistContactsPage = () => {
 										className={'noti-btn'}
 										icon={<PlusIcon />}
 									>
-										{STRINGS(t).addRecord(t('loc:kozmetiku'))}
+										{STRINGS(t).addRecord(t('loc:špecialistu'))}
 									</Button>
 								}
 							/>
@@ -186,6 +236,7 @@ const SpecialistContactsPage = () => {
 									<CustomTable
 										className='table-fixed'
 										columns={columns}
+										onChange={onChangeTable}
 										dataSource={tableData}
 										rowClassName={'clickable-row'}
 										twoToneRows
@@ -193,26 +244,25 @@ const SpecialistContactsPage = () => {
 										onRow={(record) => ({
 											onClick: () => changeFormVisibility(true, record)
 										})}
-										loading={cosmetics.isLoading}
+										loading={specialistContacts.isLoading}
 									/>
 								</div>
 								{visibleForm ? (
 									<div className={'w-6/12 flex justify-around items-start'}>
 										<Divider className={'h-full'} type={'vertical'} />
-										<CosmeticForm
+										<SpecialistContactForm
 											closeForm={changeFormVisibility}
-											cosmeticID={cosmeticID}
+											specialistContactID={specialistContactID}
 											onSubmit={handleSubmit}
 											onDelete={handleDelete}
-											usedBrands={cosmetics.data?.map((item) => item.name)}
 										/>
 									</div>
 								) : undefined}
 							</div>
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+						</Spin>
+					</div>
+				</Col>
+			</Row>
 		</>
 	)
 }

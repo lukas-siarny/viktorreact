@@ -238,6 +238,7 @@
   "Upraviť kozmetiku": "_NEPRELOZENE_",
   "Upraviť rolu": "_NEPRELOZENE_",
   "Upraviť {{entity}}": "_NEPRELOZENE_",
+  "Upraviť špecialistu": "_NEPRELOZENE_",
   "Ups niečo sa pokazilo": "_NEPRELOZENE_",
   "Ut": "_NEPRELOZENE_",
   "Utorok": "_NEPRELOZENE_",
@@ -297,6 +298,7 @@
   "Vytvoriť službu": "_NEPRELOZENE_",
   "Vytvoriť zamestnanca": "_NEPRELOZENE_",
   "Vytvoriť {{entity}}": "_NEPRELOZENE_",
+  "Vytvoriť špecialistu": "_NEPRELOZENE_",
   "Vyžiadať nový odkaz pre nastavenie hesla": "_NEPRELOZENE_",
   "Všetky": "_NEPRELOZENE_",
   "Webstránka": "_NEPRELOZENE_",
@@ -356,6 +358,7 @@
   "Zoznam zamestnancov": "_NEPRELOZENE_",
   "Zoznam zákazníkov": "_NEPRELOZENE_",
   "Zoznam čakajúcich pozvánok": "_NEPRELOZENE_",
+  "Zoznam špecialistov": "_NEPRELOZENE_",
   "Zrušiť": "_NEPRELOZENE_",
   "Zvolený dátum nesmie byť pred dátumom {{ compareDate }}": "_NEPRELOZENE_",
   "Zvoľte si krajinu": "_NEPRELOZENE_",
@@ -400,5 +403,6 @@
   "Štv": "_NEPRELOZENE_",
   "Štvrtok": "_NEPRELOZENE_",
   "Štát": "_NEPRELOZENE_",
+  "špecialistu": "_NEPRELOZENE_",
   "Žena": "_NEPRELOZENE_"
 }

@@ -238,6 +238,7 @@
   "Upraviť kozmetiku": "Adjust cosmetics",
   "Upraviť rolu": "Edit role",
   "Upraviť {{entity}}": "Edit {{entity}}",
+  "Upraviť špecialistu": "_NEPRELOZENE_",
   "Ups niečo sa pokazilo": "Oops something went wrong",
   "Ut": "Tue",
   "Utorok": "Tuesday",
@@ -297,6 +298,7 @@
   "Vytvoriť službu": "Create service",
   "Vytvoriť zamestnanca": "Create an employee",
   "Vytvoriť {{entity}}": "Create {{entity}}",
+  "Vytvoriť špecialistu": "_NEPRELOZENE_",
   "Vyžiadať nový odkaz pre nastavenie hesla": "Request a new link to set a password",
   "Všetky": "All",
   "Webstránka": "Webpage",
@@ -356,6 +358,7 @@
   "Zoznam zamestnancov": "List of employees",
   "Zoznam zákazníkov": "List of customers",
   "Zoznam čakajúcich pozvánok": "List of pending invites",
+  "Zoznam špecialistov": "_NEPRELOZENE_",
   "Zrušiť": "Cancel",
   "Zvolený dátum nesmie byť pred dátumom {{ compareDate }}": "The selected date must not be before the date {{ compareDate }}",
   "Zvoľte si krajinu": "Choose country",
@@ -400,5 +403,6 @@
   "Štv": "Thu",
   "Štvrtok": "Thursday",
   "Štát": "State",
+  "špecialistu": "_NEPRELOZENE_",
   "Žena": "Woman"
 }

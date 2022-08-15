@@ -8,8 +8,6 @@ import { SPECIALIST_CONTACTS, SPECIALIST_CONTACT } from './specialistContactsTyp
 export const initState = {
 	specialistContacts: {
 		data: null,
-		tableData: undefined,
-		options: [],
 		isLoading: false,
 		isFailure: false
 	} as ISpecialistContactsPayload & ILoadingAndFailure,

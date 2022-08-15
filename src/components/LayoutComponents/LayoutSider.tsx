@@ -23,6 +23,7 @@ import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon
 import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24.svg'
 import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
+import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -179,6 +180,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
 										<Menu.Item
+											eventKey={PAGE.SPECIALIST_CONTACTS}
+											key={PAGE.SPECIALIST_CONTACTS}
+											onClick={() => history.push(t('paths:specialist-contacts'))}
+											icon={<PhoneIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.SPECIALIST_CONTACTS })}
+										>
+											{t('loc:Špecialisti')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+										<Menu.Item
 											eventKey={PAGE.SALONS}
 											key={PAGE.SALONS}
 											onClick={() => history.push(t('paths:salons'))}
@@ -243,19 +256,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									>
 										{t('loc:Zamestnanci')}
 									</Menu.Item>
-									{/* TODO: ma to ist do admin sekcine alebo partner sekcie? pretoze podla permissnov to vie vytvarat aj partner */}
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
-										<Menu.Item
-											eventKey={PAGE.SPECIALIST_CONTACTS}
-											key={PAGE.SPECIALIST_CONTACTS}
-											onClick={() => history.push(getPath(t('paths:specialist-contacts')))}
-											icon={<HelpIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.SPECIALIST_CONTACTS })}
-										>
-											{t('loc:Špecialisti')}
-										</Menu.Item>
-									</Permissions>
 								</Permissions>
 							)}
 						</Menu>

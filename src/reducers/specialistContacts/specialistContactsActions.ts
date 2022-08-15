@@ -32,15 +32,47 @@ export interface ISpecialistContactPayload {
 	data: any | null
 }
 
+const contactsData = [
+	{
+		id: '1',
+		email: 'lukas.siarny@goodrequest.sk',
+		phonePrefixCountryCode: 'SK',
+		phone: '902111222',
+		countryCode: 'SK'
+	},
+	{
+		id: '2',
+		email: 'lukas.siarny@goodrequest.hu',
+		phonePrefixCountryCode: 'HU',
+		phone: '902111222',
+		countryCode: 'HU'
+	},
+	{
+		id: '3',
+		email: 'lukas.siarny@goodrequest.it',
+		phonePrefixCountryCode: 'IT',
+		phone: '902111222',
+		countryCode: 'IT'
+	}
+]
+
+const contactData = {
+	id: '1',
+	email: 'lukas.siarny@goodrequest.sk',
+	phonePrefixCountryCode: 'SK',
+	phone: '902111222',
+	countryCode: 'SK'
+}
+
 export const getSpecialistContacts = (): ThunkResult<Promise<ISpecialistContactsPayload>> => async (dispatch) => {
 	let payload = {} as ISpecialistContactsPayload
 	try {
 		dispatch({ type: SPECIALIST_CONTACTS.SPECIALIST_CONTACTS_START })
 		// TODO: remove any when BE is done
-		const { data } = await getReq('/api/b2b/admin/enums/contacts' as any, undefined)
+		// onst { data } = await getReq('/api/b2b/admin/enums/contacts' as any, undefined)
 
 		payload = {
-			data
+			data: contactsData
 		}
 
 		dispatch({ type: SPECIALIST_CONTACTS.SPECIALIST_CONTACTS_DONE, payload })
@@ -66,10 +98,10 @@ export const getSpecialistContact =
 		try {
 			dispatch({ type: SPECIALIST_CONTACT.SPECIALIST_CONTACT_START })
 			// TODO: remove any when BE is done
-			const { data } = await getReq('/api/b2b/admin/enums/contacts/{ContactID}' as any, { ContactID })
+			// const { data } = await getReq('/api/b2b/admin/enums/contacts/{ContactID}' as any, { ContactID })
 
 			payload = {
-				data
+				data: contactData
 			}
 			dispatch({ type: SPECIALIST_CONTACT.SPECIALIST_CONTACT_DONE, payload })
 		} catch (err) {

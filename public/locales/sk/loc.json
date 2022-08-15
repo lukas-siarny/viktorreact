@@ -238,6 +238,7 @@
   "Upraviť kozmetiku": "Upraviť kozmetiku",
   "Upraviť rolu": "Upraviť rolu",
   "Upraviť {{entity}}": "Upraviť {{entity}}",
+  "Upraviť špecialistu": "Upraviť špecialistu",
   "Ups niečo sa pokazilo": "Ups niečo sa pokazilo",
   "Ut": "Ut",
   "Utorok": "Utorok",
@@ -297,6 +298,7 @@
   "Vytvoriť službu": "Vytvoriť službu",
   "Vytvoriť zamestnanca": "Vytvoriť zamestnanca",
   "Vytvoriť {{entity}}": "Vytvoriť {{entity}}",
+  "Vytvoriť špecialistu": "Vytvoriť špecialistu",
   "Vyžiadať nový odkaz pre nastavenie hesla": "Vyžiadať nový odkaz pre nastavenie hesla",
   "Všetky": "Všetky",
   "Webstránka": "Webstránka",
@@ -356,6 +358,7 @@
   "Zoznam zamestnancov": "Zoznam zamestnancov",
   "Zoznam zákazníkov": "Zoznam zákazníkov",
   "Zoznam čakajúcich pozvánok": "Zoznam čakajúcich pozvánok",
+  "Zoznam špecialistov": "Zoznam špecialistov",
   "Zrušiť": "Zrušiť",
   "Zvolený dátum nesmie byť pred dátumom {{ compareDate }}": "Zvolený dátum nesmie byť pred dátumom {{ compareDate }}",
   "Zvoľte si krajinu": "Zvoľte si krajinu",
@@ -400,5 +403,6 @@
   "Štv": "Štv",
   "Štvrtok": "Štvrtok",
   "Štát": "Štát",
+  "špecialistu": "špecialistu",
   "Žena": "Žena"
 }

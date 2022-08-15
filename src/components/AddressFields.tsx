@@ -267,6 +267,7 @@ const AddressFields = (props: Props) => {
 												loadingElement={locationSearchElements.loadingElement}
 												containerElement={locationSearchElements.containerElement}
 												label={t('loc:Vyhľadať')}
+												required
 												onPlaceSelected={selectLocation}
 												type='search'
 												placeholder={t('loc:Vyhľadajte miesto na mape')}

@@ -62,7 +62,6 @@ type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, change, noteModalControlButtons, salonID, disabledForm, deletedSalon = false, isPublishedVersionSameAsDraft, pendingPublication } = props
-	const categories = useSelector((state: RootState) => state.categories.categories)
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
@@ -236,18 +235,6 @@ const SalonForm: FC<Props> = (props) => {
 						/>
 						<Field
 							component={SelectField}
-							options={categories.enumerationsOptions}
-							label={t('loc:Odvetvie')}
-							placeholder={t('loc:Vyberte odvetvie')}
-							name={'categoryIDs'}
-							size={'large'}
-							loading={categories.isLoading}
-							mode={'multiple'}
-							disabled={disabledForm}
-							required
-						/>
-						<Field
-							component={SelectField}
 							options={languages.enumerationsOptions}
 							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}
 							placeholder={t('loc:Vyberte jazyk')}
@@ -368,8 +355,8 @@ const SalonForm: FC<Props> = (props) => {
 							oldValue={formValues?.publishedSalonData?.address?.description || null}
 							newValue={formValues?.description || null}
 							equal={isPublishedVersionSameAsDraft?.isAddressNoteEqual}
-							oldFormField={addressDescriptionFormFiled('publishedSalonData.address.description', true)}
-							newFormField={addressDescriptionFormFiled('description', disabledComparsionFields)}
+							oldFormField={addressDescriptionFormFiled('publishedSalonData.locationNote', true)}
+							newFormField={addressDescriptionFormFiled('locationNote', disabledComparsionFields)}
 							disableComparsion={disableComparsion}
 						/>
 						<Field

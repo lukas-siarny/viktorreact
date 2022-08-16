@@ -22,7 +22,7 @@ import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
 import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
-const NOTE_MAX_LENGTH = 40
+const NOTE_MAX_LENGTH = 60
 
 type Props = {}
 
@@ -199,10 +199,10 @@ const ContactPage: FC<Props> = () => {
 												</li>
 												{selectedContact?.note && (
 													<li className={'note-list-item'}>
-														<p className={'m-0 whitespace-pre-wrap break-all'}>
-															{selectedContact?.note.length > NOTE_MAX_LENGTH ? (
+														<p className={'m-0 break-all'}>
+															{selectedContact.note.length > NOTE_MAX_LENGTH ? (
 																<>
-																	{`${selectedContact?.note.slice(0, NOTE_MAX_LENGTH)}… `}
+																	{`${selectedContact.note.slice(0, NOTE_MAX_LENGTH)}… `}
 																	<Popover
 																		overlayClassName={'w-full sm:max-w-md p-2'}
 																		ref={notePopoverRef}
@@ -238,7 +238,7 @@ const ContactPage: FC<Props> = () => {
 																	</Popover>
 																</>
 															) : (
-																selectedContact?.note
+																selectedContact.note
 															)}
 														</p>
 													</li>

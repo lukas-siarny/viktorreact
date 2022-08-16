@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 // utils
-import { FORM } from '../../../utils/enums'
+import { FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // atoms
 import SelectField from '../../../atoms/SelectField'
@@ -38,6 +38,7 @@ const RequestNewService = (props: Props) => {
 
 	return (
 		<Spin spinning={submitting}>
+			<p className={'base-regular my-4'}>{t('loc:Ak pre nejaké odvetvie chýba služba, ktorú chcete poskytovať, vyplňte formulár.')}</p>
 			<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 				<Row>
 					<Col span={24}>
@@ -55,9 +56,18 @@ const RequestNewService = (props: Props) => {
 						/>
 					</Col>
 				</Row>
-				<Row>
+				<Row className='mt-4'>
 					<Col span={24}>
-						<Field component={TextareaField} name={'description'} placeholder={t('loc:Zadajte popis')} label={t('loc:Popis')} required />
+						<Field
+							component={TextareaField}
+							name={'description'}
+							placeholder={t('loc:Zadajte popis')}
+							label={t('loc:Popis')}
+							required
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_3000}
+							showLettersCount
+							rows={8}
+						/>
 					</Col>
 				</Row>
 				<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>

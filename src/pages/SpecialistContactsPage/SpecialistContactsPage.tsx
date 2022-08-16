@@ -16,10 +16,10 @@ import SpecialistContactForm from './components/SpecialistContactsForm'
 import SpecialistContactFilter from './components/SpecialistContactsFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { getPrefixCountryCode, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { getPrefixCountryCode, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { getSpecialistContacts } from '../../reducers/specialistContacts/specialistContactsActions'
@@ -30,6 +30,7 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 // types
 import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactForm, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
+import i18n from '../../utils/i18n'
 
 const SpecialistContactsPage = () => {
 	const [t] = useTranslation()
@@ -171,12 +172,25 @@ const SpecialistContactsPage = () => {
 	const columns: Columns = [
 		{
 			title: t('loc:Krajina'),
-			dataIndex: 'countryCode',
-			key: 'countryCode',
+			dataIndex: 'country',
+			key: 'country',
 			sortOrder: setOrder(query.order, 'country'),
 			// TODO: change when BE is done
 			sorter: {
-				compare: (a, b) => sortData(a.countryCode, b.countryCode)
+				compare: (a, b) => {
+					const aValue = getCountryNameFromNameLocalizations(a?.country?.nameLocalizations, i18n.language as LANGUAGE) || a?.country?.code
+					const bValue = getCountryNameFromNameLocalizations(b?.country?.nameLocalizations, i18n.language as LANGUAGE) || b?.country?.code
+					return sortData(aValue, bValue)
+				}
+			},
+			render: (value) => {
+				const name = getCountryNameFromNameLocalizations(value.nameLocalizations, i18n.language as LANGUAGE) || value.code
+				return (
+					<div className={'flex items-center gap-2'}>
+						{value.flag && <img src={value.flag} alt={name} width={24} />}
+						<span className={'truncate inline-block'}>{name}</span>
+					</div>
+				)
 			}
 		},
 		{

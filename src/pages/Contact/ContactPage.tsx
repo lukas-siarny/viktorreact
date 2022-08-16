@@ -9,7 +9,7 @@ import { getSupportContact, getSupportContacts, getSupportContactsOptions } from
 import { RootState } from '../../reducers'
 
 // utils
-import { getCountryPrefix, getSupportContactCountryName, optionRenderWithImage, translateDayName } from '../../utils/helper'
+import { getCountryPrefix, getCountryNameFromNameLocalizations, optionRenderWithImage, translateDayName } from '../../utils/helper'
 import { DAYS, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import i18n from '../../utils/i18n'
 import { LOCALES } from '../../components/LanguagePicker'
@@ -190,7 +190,7 @@ const ContactPage: FC<Props> = () => {
 													)}
 													{selectedContact?.address?.zipCode} {selectedContact?.address?.city}
 													<br />
-													{getSupportContactCountryName(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
+													{getCountryNameFromNameLocalizations(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
 														selectedContact?.country.code}
 												</li>
 												{selectedContact?.note && (

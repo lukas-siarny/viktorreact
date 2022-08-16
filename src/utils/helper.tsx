@@ -732,7 +732,7 @@ export const getCountryPrefix = (countriesData: EnumerationData | null, countryC
 	return country?.phonePrefix
 }
 
-export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
+export const getCountryNameFromNameLocalizations = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
 	const countryTranslation = nameLocalizations?.find((translation) => translation.language === currentLng)
 	return countryTranslation?.value
 }

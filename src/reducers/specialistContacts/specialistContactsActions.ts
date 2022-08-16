@@ -38,21 +38,86 @@ const contactsData = [
 		email: 'lukas.siarny@goodrequest.sk',
 		phonePrefixCountryCode: 'SK',
 		phone: '902111222',
-		countryCode: 'SK'
+		country: {
+			code: 'SK',
+			name: 'Slovensko',
+			nameLocalizations: [
+				{
+					language: 'sk',
+					value: 'Slovensko'
+				},
+				{
+					language: 'cs',
+					value: 'Slovensko'
+				},
+				{
+					language: 'en',
+					value: 'Slovakia'
+				},
+				{
+					language: 'hu',
+					value: 'Szlovákia'
+				},
+				{
+					language: 'ro',
+					value: 'Slovacia'
+				},
+				{
+					language: 'bg',
+					value: 'Словакия'
+				},
+				{
+					language: 'it',
+					value: 'Slovacchia'
+				}
+			],
+			currencyCode: 'EUR',
+			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/SK.png',
+			phonePrefix: '421'
+		}
 	},
 	{
 		id: '2',
 		email: 'lukas.siarny@goodrequest.hu',
 		phonePrefixCountryCode: 'HU',
 		phone: '902111222',
-		countryCode: 'HU'
-	},
-	{
-		id: '3',
-		email: 'lukas.siarny@goodrequest.it',
-		phonePrefixCountryCode: 'IT',
-		phone: '902111222',
-		countryCode: 'IT'
+		country: {
+			code: 'HU',
+			name: 'Maďarsko',
+			nameLocalizations: [
+				{
+					language: 'sk',
+					value: 'Maďarsko sk'
+				},
+				{
+					language: 'cs',
+					value: 'Maďarsko cs'
+				},
+				{
+					language: 'en',
+					value: 'Maďarsko en'
+				},
+				{
+					language: 'hu',
+					value: 'Maďarsko hu'
+				},
+				{
+					language: 'ro',
+					value: 'Maďarsko ro'
+				},
+				{
+					language: 'bg',
+					value: 'Maďarsko bg'
+				},
+				{
+					language: 'it',
+					value: 'Maďarsko it'
+				}
+			],
+			currencyCode: 'EUR',
+			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/SK.png',
+			phonePrefix: '421'
+		}
 	}
 ]
 
@@ -61,7 +126,43 @@ const contactData = {
 	email: 'lukas.siarny@goodrequest.sk',
 	phonePrefixCountryCode: 'SK',
 	phone: '902111222',
-	countryCode: 'SK'
+	country: {
+		code: 'SK',
+		name: 'Slovensko',
+		nameLocalizations: [
+			{
+				language: 'sk',
+				value: 'Slovensko'
+			},
+			{
+				language: 'cs',
+				value: 'Slovensko'
+			},
+			{
+				language: 'en',
+				value: 'Slovakia'
+			},
+			{
+				language: 'hu',
+				value: 'Szlovákia'
+			},
+			{
+				language: 'ro',
+				value: 'Slovacia'
+			},
+			{
+				language: 'bg',
+				value: 'Словакия'
+			},
+			{
+				language: 'it',
+				value: 'Slovacchia'
+			}
+		],
+		currencyCode: 'EUR',
+		flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/SK.png',
+		phonePrefix: '421'
+	}
 }
 
 export const getSpecialistContacts = (): ThunkResult<Promise<ISpecialistContactsPayload>> => async (dispatch) => {

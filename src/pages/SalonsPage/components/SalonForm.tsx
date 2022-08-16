@@ -117,19 +117,12 @@ const SalonForm: FC<Props> = (props) => {
 		/>
 	)
 
-	const phoneFormField = (phoneFiledName: string, disabled: boolean) => <FieldArray component={PhoneArrayField} name={phoneFiledName} props={{ disabled, requied: false }} />
+	const phoneFormField = (phoneFiledName: string, disabled: boolean) => (
+		<FieldArray component={PhoneArrayField} name={phoneFiledName} props={{ disabled, requiedAtLeastOne: true }} />
+	)
 
 	const emailFormField = (filedName: string, disabled: boolean) => (
-		<Field
-			className={'w-full'}
-			component={InputField}
-			label={t('loc:Email')}
-			placeholder={t('loc:Zadajte email')}
-			name={filedName}
-			size={'large'}
-			disabled={disabled}
-			required
-		/>
+		<Field className={'w-full'} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={filedName} size={'large'} disabled={disabled} />
 	)
 
 	const nameFormField = (filedName: string, disabled: boolean) => (

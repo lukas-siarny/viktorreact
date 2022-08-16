@@ -3,7 +3,6 @@ import { IResetStore } from '../generalTypes'
 
 // types
 import { SYSTEM_ROLES, SALON_ROLES } from './rolesTypes'
-import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 
 // utils
@@ -23,7 +22,7 @@ interface IGetSalonRoles {
 }
 
 export interface IRolesPayload {
-	data: Paths.GetApiB2BAdminRolesSystemUser.Responses.$200 | null
+	data: ISelectOptionItem[] | null
 }
 
 export const getSystemRoles =

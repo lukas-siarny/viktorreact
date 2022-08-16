@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react'
 import { Modal, Collapse, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { Field } from 'redux-form'
 
 // enums
-import { Field } from 'redux-form'
 import { SALON_ROLES, SALON_ROLES_PERMISSIONS, SALON_ROLES_KEYS, SALON_ROLES_TRANSLATIONS } from '../utils/enums'
 
 // types
@@ -16,7 +16,7 @@ import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.sv
 import { ReactComponent as InfoIcon24 } from '../assets/icons/info-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../assets/icons/info-icon-16.svg'
 
-// components
+// atoms
 import SelectField from './SelectField'
 
 const { Panel } = Collapse
@@ -76,15 +76,15 @@ const SalonRolesField: FC<Props> = (props) => {
 							return (
 								<Panel key={salonRole} header={<h4 className={'text-base my-2'}>{SALON_ROLES_TRANSLATIONS()[salonRole as SALON_ROLES]}</h4>}>
 									<ul className={'list-none pl-0'}>
-										{SALON_ROLES_PERMISSIONS().map((authorization, index) => {
-											const isAllowed = authorization.allowed.includes(salonRole as SALON_ROLES)
-											const extra = (authorization.extra as any)[salonRole]
+										{SALON_ROLES_PERMISSIONS().map((permission, index) => {
+											const isAllowed = permission.allowed.includes(salonRole as SALON_ROLES)
+											const extra = (permission.extra as any)[salonRole]
 											const icon = isAllowed ? <CheckIcon /> : <CrossedIcon />
 											return (
 												<li key={index} className={'flex items-start gap-2'}>
 													<span className={'pt-1'}>{icon}</span>
 													<span>
-														{authorization.name} {extra && <i>{`(${extra})`}</i>}
+														{permission.name} {extra && <i>{`(${extra})`}</i>}
 													</span>
 												</li>
 											)

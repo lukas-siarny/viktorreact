@@ -36,7 +36,7 @@ const EditRoleForm: FC<Props> = (props) => {
 				<h3>{t('loc:Oprávnenie')}</h3>
 				<Divider className={'mb-3 mt-3'} />
 				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
-					<SalonRolesField options={(roles?.data as any) || []} name={'roleID'} loading={roles?.isLoading} className={'flex-1'} required />
+					<SalonRolesField options={roles?.data || []} name={'roleID'} loading={roles?.isLoading} className={'flex-1'} required />
 					<Permissions
 						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.USER_ROLE_EDIT]}
 						render={(hasPermission, { openForbiddenModal }) => (

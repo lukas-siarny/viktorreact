@@ -80,6 +80,7 @@
   "Meno": "_NEPRELOZENE_",
   "Meno a Priezvisko": "_NEPRELOZENE_",
   "Mesto": "_NEPRELOZENE_",
+  "Min. počet znakov je {{min}}": "_NEPRELOZENE_",
   "Moje konto": "_NEPRELOZENE_",
   "Možnosti platby": "_NEPRELOZENE_",
   "Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!": "_NEPRELOZENE_",
@@ -149,6 +150,7 @@
   "Pon - Pi rovnaké otváracie hodiny": "_NEPRELOZENE_",
   "Pondelok": "_NEPRELOZENE_",
   "Pondelok - Piatok": "_NEPRELOZENE_",
+  "Popis": "_NEPRELOZENE_",
   "Popisné číslo": "_NEPRELOZENE_",
   "Poslať kolegovi pozvánku": "_NEPRELOZENE_",
   "Potrebujete pomôcť?": "_NEPRELOZENE_",
@@ -164,6 +166,7 @@
   "Pozvánkový email": "_NEPRELOZENE_",
   "Počet znakov musí byť {{length}}": "_NEPRELOZENE_",
   "Požiadavka na spracovanie dát bola úspešne vytvorená.": "_NEPRELOZENE_",
+  "Požiadať o novú službu": "_NEPRELOZENE_",
   "Požiadať o schválenie": "_NEPRELOZENE_",
   "Pre prístup potvrďte základné údaje": "_NEPRELOZENE_",
   "Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje": "_NEPRELOZENE_",
@@ -318,6 +321,7 @@
   "Zadajte mesto": "_NEPRELOZENE_",
   "Zadajte minimálne {{min}}": "_NEPRELOZENE_",
   "Zadajte názov": "_NEPRELOZENE_",
+  "Zadajte popis": "_NEPRELOZENE_",
   "Zadajte poznámku": "_NEPRELOZENE_",
   "Zadajte poznámku k adrese, napr. \"3. poschodie vľavo\"": "_NEPRELOZENE_",
   "Zadajte poznámku k parkovaniu, napr. \"Parkovanie oproti budove.\"": "_NEPRELOZENE_",
@@ -399,5 +403,6 @@
   "Štv": "_NEPRELOZENE_",
   "Štvrtok": "_NEPRELOZENE_",
   "Štát": "_NEPRELOZENE_",
-  "Žena": "_NEPRELOZENE_"
+  "Žena": "_NEPRELOZENE_",
+  "Žiadosť o novú službu": "_NEPRELOZENE_"
 }

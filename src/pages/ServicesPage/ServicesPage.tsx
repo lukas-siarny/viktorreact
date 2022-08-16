@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { StringParam, useQueryParams } from 'use-query-params'
-import { Col, Row, Spin } from 'antd'
+import { Col, Modal, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
-import { initialize } from 'redux-form'
+import { initialize, reset } from 'redux-form'
 import { compose } from 'redux'
 
 // components
@@ -12,12 +12,14 @@ import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import ServicesFilter from './components/ServicesFilter'
 import { AvatarGroup } from '../../components/AvatarComponents'
+import RequestNewServiceForm, { IRequestNewServiceForm } from './components/RequestNewServiceForm'
 
 // utils
-import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT, NOTIFICATION_TYPE } from '../../utils/enums'
 import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, normalizeQueryParams } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
+import { postReq } from '../../utils/request'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -26,9 +28,11 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // types
 import { IBreadcrumbs, IUserAvatar, SalonSubPageProps, Columns } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 // assets
 import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -36,11 +40,16 @@ interface IAdminUsersFilter {
 	search: string
 }
 
+type ServiceCategorySuggestPost = Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody
+
 const ServicesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()
+	const { salonID, parentPath } = props
+
+	const [isVisible, setIsVisible] = useState<boolean>(false)
+
 	const dispatch = useDispatch()
 	const services = useSelector((state: RootState) => state.service.services)
-	const { salonID, parentPath } = props
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -55,10 +64,27 @@ const ServicesPage = (props: SalonSubPageProps) => {
 		dispatch(initialize(FORM.SERVICES_FILTER, { rootCategoryID: query.rootCategoryID }))
 		dispatch(
 			getServices({
-				salonID
+				salonID,
+				rootCategoryID: query.rootCategoryID || undefined
 			})
 		)
 	}, [dispatch, salonID, query.rootCategoryID])
+
+	const handleSubmitRequestNewService = async (data: IRequestNewServiceForm) => {
+		try {
+			const reqData: ServiceCategorySuggestPost = {
+				salonID,
+				rootCategoryID: data.rootCategoryID,
+				description: data.description
+			}
+			await postReq('/api/b2b/admin/services/category-service-suggest', {}, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			dispatch(reset(FORM.REQUEST_NEW_SERVICE_FORM))
+			setIsVisible(false)
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -154,7 +180,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 									<ServicesFilter
 										createService={() => {
 											if (hasPermission) {
-												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:services/create')))
+												setIsVisible(true)
 											} else {
 												openForbiddenModal()
 											}
@@ -178,6 +204,19 @@ const ServicesPage = (props: SalonSubPageProps) => {
 								})}
 								pagination={false}
 							/>
+							<Modal
+								key={'requestNewServiceModal'}
+								title={t('loc:Žiadosť o novú službu')}
+								visible={isVisible}
+								onCancel={() => {
+									dispatch(reset(FORM.REQUEST_NEW_SERVICE_FORM))
+									setIsVisible(false)
+								}}
+								footer={null}
+								closeIcon={<CloseIcon />}
+							>
+								<RequestNewServiceForm onSubmit={handleSubmitRequestNewService} />
+							</Modal>
 						</Spin>
 					</div>
 				</Col>

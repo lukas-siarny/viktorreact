@@ -80,6 +80,7 @@
   "Meno": "Meno",
   "Meno a Priezvisko": "Meno a Priezvisko",
   "Mesto": "Mesto",
+  "Min. počet znakov je {{min}}": "Min. počet znakov je {{min}}",
   "Moje konto": "Moje konto",
   "Možnosti platby": "Možnosti platby",
   "Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!": "Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!",
@@ -149,6 +150,7 @@
   "Pon - Pi rovnaké otváracie hodiny": "Pon - Pi rovnaké otváracie hodiny",
   "Pondelok": "Pondelok",
   "Pondelok - Piatok": "Pondelok - Piatok",
+  "Popis": "Popis",
   "Popisné číslo": "Popisné číslo",
   "Poslať kolegovi pozvánku": "Poslať kolegovi pozvánku",
   "Potrebujete pomôcť?": "Potrebujete pomôcť?",
@@ -164,6 +166,7 @@
   "Pozvánkový email": "Pozvánkový email",
   "Počet znakov musí byť {{length}}": "Počet znakov musí byť {{length}}",
   "Požiadavka na spracovanie dát bola úspešne vytvorená.": "Požiadavka na spracovanie dát bola úspešne vytvorená.",
+  "Požiadať o novú službu": "Požiadať o novú službu",
   "Požiadať o schválenie": "Požiadať o schválenie",
   "Pre prístup potvrďte základné údaje": "Pre prístup potvrďte základné údaje",
   "Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje": "Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje",
@@ -318,6 +321,7 @@
   "Zadajte mesto": "Zadajte mesto",
   "Zadajte minimálne {{min}}": "Zadajte minimálne {{min}}",
   "Zadajte názov": "Zadajte názov",
+  "Zadajte popis": "Zadajte popis",
   "Zadajte poznámku": "Zadajte poznámku",
   "Zadajte poznámku k adrese, napr. \"3. poschodie vľavo\"": "Zadajte poznámku k adrese, napr. \"3. poschodie vľavo\"",
   "Zadajte poznámku k parkovaniu, napr. \"Parkovanie oproti budove.\"": "Zadajte poznámku k parkovaniu, napr. \"Parkovanie oproti budove.\"",
@@ -399,5 +403,6 @@
   "Štv": "Štv",
   "Štvrtok": "Štvrtok",
   "Štát": "Štát",
-  "Žena": "Žena"
+  "Žena": "Žena",
+  "Žiadosť o novú službu": "Žiadosť o novú službu"
 }

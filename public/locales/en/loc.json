@@ -80,6 +80,7 @@
   "Meno": "Name",
   "Meno a Priezvisko": "Name and surname",
   "Mesto": "City",
+  "Min. počet znakov je {{min}}": "Min. number of characters is {{min}}",
   "Moje konto": "My account",
   "Možnosti platby": "Payment options",
   "Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!": "You must select and set at least one parameter value!",
@@ -149,6 +150,7 @@
   "Pon - Pi rovnaké otváracie hodiny": "Mon - Fri same opening hours",
   "Pondelok": "Monday",
   "Pondelok - Piatok": "Monday-Friday",
+  "Popis": "Description",
   "Popisné číslo": "Descriptive number",
   "Poslať kolegovi pozvánku": "Send an invitation to a colleague",
   "Potrebujete pomôcť?": "Need help?",
@@ -164,6 +166,7 @@
   "Pozvánkový email": "Invite email",
   "Počet znakov musí byť {{length}}": "Number of characters must be {{length}}",
   "Požiadavka na spracovanie dát bola úspešne vytvorená.": "Request to process the data was successfully created.",
+  "Požiadať o novú službu": "Request a new service",
   "Požiadať o schválenie": "Request approval",
   "Pre prístup potvrďte základné údaje": "Confirm basic data for access",
   "Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje": "Salon publication requires filled the following data",
@@ -318,6 +321,7 @@
   "Zadajte mesto": "Enter city",
   "Zadajte minimálne {{min}}": "Enter a minimum {{min}}",
   "Zadajte názov": "Enter title",
+  "Zadajte popis": "Enter a description",
   "Zadajte poznámku": "Enter note",
   "Zadajte poznámku k adrese, napr. \"3. poschodie vľavo\"": "Enter a note for the address e.g. \"3rd floor on the left side\"",
   "Zadajte poznámku k parkovaniu, napr. \"Parkovanie oproti budove.\"": "Enter a note for the parking e.g. \"3rd floor on the left side\"",
@@ -399,5 +403,6 @@
   "Štv": "Thu",
   "Štvrtok": "Thursday",
   "Štát": "State",
-  "Žena": "Woman"
+  "Žena": "Woman",
+  "Žiadosť o novú službu": "Request new service"
 }

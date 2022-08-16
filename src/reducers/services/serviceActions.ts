@@ -40,6 +40,7 @@ interface ServicesTableData {
 }
 
 export interface IGetServicesQueryParams {
+	rootCategoryID?: string
 	salonID: string
 }
 

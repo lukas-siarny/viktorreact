@@ -22,7 +22,7 @@ import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
 import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
-const NOTE_MAX_LENGTH = 150
+const NOTE_MAX_LENGTH = 40
 
 type Props = {}
 
@@ -152,7 +152,7 @@ const ContactPage: FC<Props> = () => {
 					}
 					if (view === 'default') {
 						return (
-							<Collapse className={'noti-support-collapse mt-6'} bordered={false} defaultActiveKey={1} accordion>
+							<Collapse className={'noti-support-collapse mt-3'} bordered={false} defaultActiveKey={1} accordion>
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>
@@ -182,16 +182,20 @@ const ContactPage: FC<Props> = () => {
 										<div className={'contact-col'}>
 											<ul className={'noti-support-contact-list'}>
 												<li className={'address-list-item'}>
-													{selectedContact?.address?.street && (
-														<>
-															{selectedContact.address.street} {selectedContact?.address?.streetNumber}
-															<br />
-														</>
-													)}
-													{selectedContact?.address?.zipCode} {selectedContact?.address?.city}
-													<br />
-													{getSupportContactCountryName(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
-														selectedContact?.country.code}
+													<div className={'flex flex-col'}>
+														{selectedContact?.address?.street && (
+															<div>
+																<span className={'break-all mr-1'}>{selectedContact.address.street.trim()}</span>
+																{selectedContact?.address?.streetNumber?.trim()}
+															</div>
+														)}
+														<div>
+															{selectedContact?.address?.zipCode && <span className={'mr-1'}>{selectedContact?.address?.zipCode?.trim()}</span>}
+															<span className={'break-all'}>{selectedContact?.address?.city?.trim()}</span>
+														</div>
+														{getSupportContactCountryName(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
+															selectedContact?.country.code}
+													</div>
 												</li>
 												{selectedContact?.note && (
 													<li className={'note-list-item'}>

@@ -19,6 +19,7 @@ import selectedSalonReducer from './selectedSalon/selectedSalonReducer'
 import supportContactReducer from './supportContacts/supportContactReducer'
 import cosmeticsReducer from './cosmetics/cosmeticsReducer'
 import categoryParamsReducer from './categoryParams/categoryParamsReducer'
+import languagesReducer from './languages/languagesReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -33,7 +34,8 @@ export const REDUCER_KEYS = {
 	SELECTED_SALON: 'SELECTED_SALON',
 	SUPPORT_CONTACTS: 'SUPPORT_CONTACTS',
 	COSMETICS: 'COSMETICS',
-	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS'
+	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS',
+	LANGUAGES: 'LANGUAGES'
 }
 
 const rootReducer = combineReducers({
@@ -71,6 +73,13 @@ const rootReducer = combineReducers({
 			storage: storageSession
 		},
 		categoryParamsReducer
+	),
+	languages: persistReducer(
+		{
+			key: REDUCER_KEYS.LANGUAGES,
+			storage: storageSession
+		},
+		languagesReducer
 	),
 	salons: persistReducer(
 		{

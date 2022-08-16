@@ -10,12 +10,13 @@ export const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalo
 	const isLogoEqual = isEqual(salonData?.data?.logo || null, salonData?.data?.publishedSalonData?.logo || null)
 	const isGalleryEqual = isEqual(salonData?.data?.images || [], salonData?.data?.publishedSalonData?.images || [])
 	const isAddressEqual = isEqual(salonData?.data?.address || null, salonData?.data?.publishedSalonData?.address || null)
+	const isAddressNoteEqual = (salonData?.data?.locationNote || null) === (salonData?.data?.publishedSalonData?.locationNote || null)
 	const isAboutUsFirstEqual = (salonData?.data?.aboutUsFirst || null) === (salonData?.data?.publishedSalonData?.aboutUsFirst || null)
 	const isAboutUsSecondEqual = (salonData?.data?.aboutUsSecond || null) === (salonData?.data?.publishedSalonData?.aboutUsSecond || null)
 	const isEmailEqual = (salonData?.data?.email || null) === (salonData?.data?.publishedSalonData?.email || null)
 	const isPhoneEqual = isEqual(salonData?.data?.phones, salonData?.data?.publishedSalonData?.phones)
 
-	return isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual
+	return isNameEqual && isLogoEqual && isGalleryEqual && isAddressEqual && isAboutUsFirstEqual && isAboutUsSecondEqual && isPhoneEqual && isEmailEqual && isAddressNoteEqual
 }
 
 export const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPublishedVersionSameAsDraft => {
@@ -43,7 +44,7 @@ export const getIsPublishedVersionSameAsDraft = (formValues: ISalonForm): IIsPub
 	const isLogoEqual = isEqual(formValues?.logo || null, formValues?.publishedSalonData?.logo || null)
 	const isGalleryEqual = isEqual(formValues?.gallery || [], formValues?.publishedSalonData?.gallery || [])
 	const isAddressEqual = isEqual(addressDraft, addressPublished)
-	const isAddressNoteEqual = (formValues?.description || null) === (formValues?.publishedSalonData?.address?.description || null)
+	const isAddressNoteEqual = (formValues?.locationNote || null) === (formValues?.publishedSalonData?.locationNote || null)
 	const isAboutUsFirstEqual = (formValues?.aboutUsFirst || null) === (formValues?.publishedSalonData?.aboutUsFirst || null)
 	const isAboutUsSecondEqual = (formValues?.aboutUsSecond || null) === (formValues?.publishedSalonData?.aboutUsSecond || null)
 	const isPhoneEqual = isEqual(formValues?.phones, formValues?.publishedSalonData?.phones)

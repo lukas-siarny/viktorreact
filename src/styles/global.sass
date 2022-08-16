@@ -963,7 +963,6 @@ span.ant-tag
 .employee-list
 	.employee-list-item
 		background-color: $backgroundColor-trueGray-50
-		margin-bottom: 10px
 		border-radius: 8px
 		padding: 12px 16px
 		.title
@@ -1121,12 +1120,17 @@ span.ant-tag
 	&.info
 		background: $backgroundColor-blue-100
 
-.cosmetics-logo
+.table-preview-image
 	display: block
-	width: 300px
-	height: 64px
 	object-fit: scale-down
 	object-position: left center
+	padding: 8px 0
+	&.cosmetics-logo
+		width: 300px
+		height: 60px
+	&.languages-flag
+		width: 150px
+		height: 60px
 
 .mt-2-5
 	margin-top: 10px
@@ -1159,6 +1163,21 @@ span.ant-tag
 	width: 24px
 	height: 16px
 
+.option-render-image
+	margin-right: 8px
+	object-fit: scale-down
+	object-position: left center
+	border-radius: 4px
+
+	&.fallback-icon
+		display: flex
+		align-items: center
+		justify-content: center
+		background-color: $backgroundColor-notino-grayLighter
+		svg
+			width: 16px
+			height: 16px
+
 .address-field-address
 	&::before
 		content: ''
@@ -1169,8 +1188,16 @@ span.ant-tag
 		background-size: contain
 		flex: 0 0 auto
 
+.noti-languages-localizations
+	min-width: 180px
+
+
 .main-background
 	background: $background-gradient
+
+span.ant-tag .title
+	font-weight: bold
+	color: $backgroundColor-notino-pink
 
 @keyframes opacityAnimation
 	0%
@@ -1513,3 +1540,8 @@ span.ant-tag
 						&.ant-tree-treenode-checkbox-checked
 							background: $backgroundColor-trueGray-200
 
+.noti-show-more-button
+	&:hover,
+	&:focus-visible
+		color: $textColor-notino-pink
+		transition: 300ms ease

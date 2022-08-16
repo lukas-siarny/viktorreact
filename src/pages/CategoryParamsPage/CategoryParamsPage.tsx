@@ -1,9 +1,12 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Col, Row, Button } from 'antd'
+import { Col, Row, Button, TablePaginationConfig } from 'antd'
 import { compose } from 'redux'
 import { find, join } from 'lodash'
+import { StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { initialize } from 'redux-form'
+import { SorterResult } from 'antd/lib/table/interface'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -11,17 +14,17 @@ import CustomTable from '../../components/CustomTable'
 import CategoryParamsFilter from './components/CategoryParamsFilter'
 
 // utils
-import { PERMISSION, ROW_GUTTER_X_DEFAULT, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
+import { PERMISSION, ROW_GUTTER_X_DEFAULT, STRINGS, DEFAULT_LANGUAGE, FORM } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { withPermissions } from '../../utils/Permissions'
-import { transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { setOrder, transformToLowerCaseWithoutAccent, formatDateByLocale, normalizeDirectionKeys, sortData, getLinkWithEncodedBackUrl } from '../../utils/helper'
 
 // reducers
 import { getCategoryParameters } from '../../reducers/categoryParams/categoryParamsActions'
+import { RootState } from '../../reducers'
 
 // types
 import { IBreadcrumbs, Columns } from '../../types/interfaces'
-import { RootState } from '../../reducers'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
@@ -30,24 +33,46 @@ const CategoryParamsPage = () => {
 	const { t, i18n } = useTranslation()
 	const dispatch = useDispatch()
 
-	const [filterQuery, setFilterQuery] = useState<string | undefined>(undefined)
-
 	const parameters = useSelector((state: RootState) => state.categoryParams.parameters)
+
+	const [query, setQuery] = useQueryParams({
+		search: StringParam,
+		order: withDefault(StringParam, 'name:ASC')
+	})
 
 	useEffect(() => {
 		dispatch(getCategoryParameters())
 	}, [dispatch])
+
+	useEffect(() => {
+		dispatch(
+			initialize(FORM.COSMETICS_FILTER, {
+				search: query.search
+			})
+		)
+	}, [dispatch, query.search])
+
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+		if (!(sorter instanceof Array)) {
+			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
+			const newQuery = {
+				...query,
+				order
+			}
+			setQuery(newQuery)
+		}
+	}
 
 	const tableData = useMemo(() => {
 		if (!parameters || !parameters.data) {
 			return []
 		}
 
-		const source = filterQuery
+		const source = query.search
 			? parameters.data.filter((parameter) => {
 					const name = transformToLowerCaseWithoutAccent(parameter.name)
-					const query = transformToLowerCaseWithoutAccent(filterQuery)
-					return name.includes(query)
+					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
+					return name.includes(searchedValue)
 			  })
 			: parameters.data
 
@@ -71,7 +96,7 @@ const CategoryParamsPage = () => {
 				values: join(values, ', ')
 			}
 		})
-	}, [filterQuery, parameters, i18n])
+	}, [query.search, parameters, i18n])
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -88,6 +113,10 @@ const CategoryParamsPage = () => {
 			key: 'name',
 			width: '20%',
 			ellipsis: true,
+			sortOrder: setOrder(query.order, 'name'),
+			sorter: {
+				compare: (a, b) => sortData(a.name, b.name)
+			},
 			render: (value) => <span className='base-regular'>{value}</span>
 		},
 		{
@@ -96,6 +125,17 @@ const CategoryParamsPage = () => {
 			key: 'values',
 			ellipsis: true,
 			render: (value) => <span className='base-regular'>{value}</span>
+		},
+		{
+			title: t('loc:Vytvorené'),
+			dataIndex: 'createdAt',
+			key: 'createdAt',
+			ellipsis: true,
+			sortOrder: setOrder(query.order, 'createdAt'),
+			sorter: {
+				compare: (a, b) => sortData(new Date(a.createdAt), new Date(b.createdAt))
+			},
+			render: (value) => formatDateByLocale(value)
 		}
 	]
 
@@ -109,10 +149,12 @@ const CategoryParamsPage = () => {
 					<div className='content-body'>
 						<CategoryParamsFilter
 							total={parameters?.data?.length}
-							onSubmit={(query: any) => setFilterQuery(query.search)}
+							onSubmit={(values: any) => setQuery({ ...query, search: values.search })}
 							addButton={
 								<Button
-									onClick={() => history.push(t('paths:category-parameters/create'))}
+									onClick={() => {
+										history.push(getLinkWithEncodedBackUrl(t('paths:category-parameters/create')))
+									}}
 									type='primary'
 									htmlType='button'
 									className={'noti-btn'}
@@ -128,10 +170,11 @@ const CategoryParamsPage = () => {
 								columns={columns}
 								dataSource={tableData}
 								rowClassName={'clickable-row'}
+								onChange={onChangeTable}
 								twoToneRows
 								pagination={false}
 								onRow={(record) => ({
-									onClick: () => history.push(t('paths:category-parameters/{{parameterID}}', { parameterID: record.id }))
+									onClick: () => history.push(getLinkWithEncodedBackUrl(t('paths:category-parameters/{{parameterID}}', { parameterID: record.id })))
 								})}
 								loading={parameters.isLoading}
 							/>

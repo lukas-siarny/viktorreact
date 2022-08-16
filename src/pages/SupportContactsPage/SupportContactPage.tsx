@@ -33,6 +33,9 @@ import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
@@ -67,6 +70,8 @@ const SupportContactPage: FC<Props> = (props) => {
 	const isLoading = supportContact.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving
 
 	const supportContactExists = !!supportContactID
+
+	const [backUrl] = useBackUrl(t('paths:support-contacts'))
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -229,7 +234,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		items: [
 			{
 				name: t('loc:Zoznam podporných centier'),
-				link: t('paths:support-contacts')
+				link: backUrl
 			},
 			breadcrumbDetailItem
 		]

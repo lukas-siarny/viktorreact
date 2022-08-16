@@ -37,6 +37,7 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
+import cx from 'classnames'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -66,6 +67,7 @@ import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
 import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
+import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -97,7 +99,13 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	return decoded
 }
 
-export const getEncodedBackUrl = () => btoa(`${window.location.pathname}${window.location.search}`)
+export const getLinkWithEncodedBackUrl = (link: string) => {
+	if (!window.location.search) {
+		return link
+	}
+	const backUrl = btoa(`${window.location.pathname}${window.location.search}`)
+	return `${link}?backUrl=${backUrl}`
+}
 
 export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: string[]) => {
 	const pickQueryParams = pick(queryParams, Object.values(allowQueryParams))
@@ -505,7 +513,7 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
  * @param {number} price
  * @returns {{ exponent: number, significand: number }}
  */
-export const encodePrice = (price: number) => {
+export const encodePrice = (price: number): IPrice => {
 	const stringPrice = `${price}`
 
 	let exponent = 0
@@ -810,12 +818,60 @@ export const transformToLowerCaseWithoutAccent = (source?: string): string =>
 				.replace(/\p{Diacritic}/gu, '')
 		: ''
 
-export const countryOptionRender = (itemData: any) => {
-	const { value, label, flag } = itemData
+export const sortData = (a?: any, b?: any) => {
+	if (!isNil(a) && !isNil(b)) {
+		const aValue = typeof a === 'string' ? transformToLowerCaseWithoutAccent(a) : a
+		const bValue = typeof b === 'string' ? transformToLowerCaseWithoutAccent(b) : b
+
+		if (aValue < bValue) {
+			return -1
+		}
+		if (aValue > bValue) {
+			return 1
+		}
+	}
+
+	return 0
+}
+
+export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 24, imageHeight = 24) => {
+	const { label, extra } = itemData
+	const style = { width: imageWidth, height: imageHeight }
 	return (
 		<div className='flex items-center'>
-			<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			{extra?.image ? (
+				<img className={'option-render-image'} style={style} src={extra.image} alt={label} />
+			) : (
+				<div className={'option-render-image fallback-icon'} style={style}>
+					{fallbackIcon}
+				</div>
+			)}
 			{label}
 		</div>
 	)
+}
+
+export const langaugesOptionRender = (itemData: any) => {
+	const { value, label, flag } = itemData
+	return (
+		<div className='flex items-center'>
+			{flag ? (
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			) : (
+				<div className={'noti-flag mr-1'}>
+					<LanguageIcon />
+				</div>
+			)}
+			{label}
+		</div>
+	)
+}
+
+export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { language: string; value: string | null }[]) => {
+	return nameLocalizations?.sort((a, b) => {
+		if (a.language === DEFAULT_LANGUAGE) {
+			return -1
+		}
+		return b.language === DEFAULT_LANGUAGE ? 1 : 0
+	})
 }

@@ -21,9 +21,10 @@ import InviteForm from './components/InviteForm'
 
 // types
 import { IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 // reducers
-import { RootState } from '../../reducers'
+import { getSalonRoles } from '../../reducers/roles/rolesActions'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -64,6 +65,10 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 		dispatch(initialize(FORM.EMPLOYEE, { phonePrefixCountryCode }))
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salonID])
+
+	useEffect(() => {
+		dispatch(getSalonRoles(true, salonID))
+	}, [dispatch, salonID])
 
 	const createEmployee = async (formData: IEmployeeForm) => {
 		try {

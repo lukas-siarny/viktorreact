@@ -1,8 +1,8 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { Field, reduxForm, InjectedFormProps } from 'redux-form'
-import { Form, Button } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -19,7 +19,6 @@ import validateInviteFrom from './validateInviteFrom'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getSalonRoles } from '../../../reducers/roles/rolesActions'
 
 type ComponentProps = {}
 
@@ -27,14 +26,9 @@ type Props = InjectedFormProps<IInviteEmployeeForm, ComponentProps> & ComponentP
 
 const InviteForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting } = props
-	const dispatch = useDispatch()
+	const { handleSubmit } = props
 
 	const roles = useSelector((state: RootState) => state.roles.salonRoles)
-
-	useEffect(() => {
-		dispatch(getSalonRoles())
-	}, [dispatch])
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>

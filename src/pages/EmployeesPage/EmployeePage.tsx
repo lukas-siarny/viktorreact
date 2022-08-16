@@ -29,12 +29,14 @@ import { decodePrice, encodePrice } from '../../utils/helper'
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
 import { IServicesPayload } from '../../reducers/services/serviceActions'
+import { getSalonRoles } from '../../reducers/roles/rolesActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
@@ -166,12 +168,13 @@ const EmployeePage = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
+	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
 
 	const emploeyeeExists = !!employee?.data?.employee?.id
 
-	const isLoading = employee.isLoading || services.isLoading || isRemoving
+	const isLoading = employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
 
 	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
 
@@ -186,6 +189,10 @@ const EmployeePage = (props: Props) => {
 		fetchEmployeeData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
+
+	useEffect(() => {
+		dispatch(getSalonRoles(true, salonID, currentAuthUser.data))
+	}, [dispatch, salonID, currentAuthUser.data])
 
 	useEffect(() => {
 		if (employee.data?.employee) {
@@ -327,6 +334,7 @@ const EmployeePage = (props: Props) => {
 				}
 			)
 			dispatch(getEmployee(employeeID))
+			await dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

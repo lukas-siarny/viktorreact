@@ -55,30 +55,27 @@ const CustomerPage = (props: Props) => {
 		if (!data?.customer?.id) {
 			history.push('/404')
 		}
+		dispatch(
+			initialize(FORM.CUSTOMER, {
+				...data?.customer,
+				zipCode: data?.customer.address.zipCode,
+				city: data?.customer.address.city,
+				street: data?.customer.address.street,
+				streetNumber: data?.customer.address.streetNumber,
+				countryCode: data?.customer.address.countryCode,
+				salonID: data?.customer.salon.id,
+				gallery: map(data?.customer?.galleryImages, (image) => ({ url: image?.original, thumbnail: image?.resizedImages?.thumbnail, uid: image?.id })),
+				avatar: data?.customer?.profileImage
+					? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
+					: null
+			})
+		)
 	}
 
 	useEffect(() => {
 		fetchCustomerData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, customerID])
-
-	useEffect(() => {
-		dispatch(
-			initialize(FORM.CUSTOMER, {
-				...customer.data?.customer,
-				zipCode: customer.data?.customer.address.zipCode,
-				city: customer.data?.customer.address.city,
-				street: customer.data?.customer.address.street,
-				streetNumber: customer.data?.customer.address.streetNumber,
-				countryCode: customer.data?.customer.address.countryCode,
-				salonID: customer.data?.customer.salon.id,
-				gallery: map(customer?.data?.customer?.galleryImages, (image) => ({ url: image?.resizedImages?.thumbnail, uid: image?.id })),
-				avatar: customer?.data?.customer?.profileImage
-					? [{ url: customer?.data?.customer?.profileImage?.resizedImages?.thumbnail, uid: customer?.data?.customer?.profileImage?.id }]
-					: null
-			})
-		)
-	}, [dispatch, customer])
 
 	// View
 	const breadcrumbs: IBreadcrumbs = {
@@ -118,7 +115,7 @@ const CustomerPage = (props: Props) => {
 					phonePrefixCountryCode: data.phonePrefixCountryCode,
 					galleryImageIDs:
 						((data?.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody['galleryImageIDs']) || null,
-					profileImageID: data?.avatar?.[0]?.id || null
+					profileImageID: (data?.avatar?.[0]?.id ?? data?.avatar?.[0]?.uid) || null
 				}
 			)
 			dispatch(getCustomer(customerID))

@@ -40,6 +40,12 @@ export default (values: ISalonForm) => {
 		})
 
 		errors.phones = phonesErrors
+	} else {
+		errors.phones = [
+			{
+				phone: i18next.t('loc:Toto pole je povinné')
+			}
+		]
 	}
 
 	if (!(values?.zipCode && values?.city && values?.street && values?.streetNumber && values?.latitude && values?.longitude && values?.country)) {
@@ -60,10 +66,6 @@ export default (values: ISalonForm) => {
 		})
 	}
 
-	if (!values?.email) {
-		errors.email = i18next.t('loc:Toto pole je povinné')
-	}
-
 	if (values?.email) {
 		if (values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
 			errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
@@ -72,12 +74,6 @@ export default (values: ISalonForm) => {
 		} else if (!isEmail(values?.email)) {
 			errors.email = i18next.t('loc:Email nie je platný')
 		}
-	}
-
-	if (values?.email && values.email?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-		errors.email = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_20
-		})
 	}
 
 	if (values?.aboutUsFirst && values.aboutUsFirst?.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {

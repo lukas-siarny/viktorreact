@@ -786,6 +786,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
 									{salon?.data?.openingHoursNote ? (
 										<>
+											<div className='w-full'>{salon.data.openingHoursNote.note}</div>
 											<Button
 												type={'primary'}
 												block

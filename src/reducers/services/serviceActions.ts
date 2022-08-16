@@ -63,29 +63,32 @@ export const getServices =
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
-			const [categories] = data.groupedServicesByCategory
+			const categories = data.groupedServicesByCategory
 			const tableData: ServicesTableData[] = []
-			categories?.category?.children?.forEach((secondCategory) => {
-				secondCategory?.category?.children?.forEach((thirdCategory) => {
-					const rangePriceAndDurationData = thirdCategory?.service?.rangePriceAndDurationData
-					tableData.push({
-						key: thirdCategory?.category?.id,
-						serviceID: thirdCategory?.service?.id,
-						name: thirdCategory?.category?.name || '-',
-						categoryFirst: categories?.category?.name || '-',
-						categorySecond: secondCategory?.category?.name || '-',
-						employees: thirdCategory?.service?.employees?.map((employee) => ({
-							src: employee.image?.resizedImages?.thumbnail,
-							fallBackSrc: employee.image?.original,
-							alt: `${employee.firstName} ${employee.lastName}`,
-							text: `${employee.firstName} ${employee.lastName}`,
-							key: employee.id
-						})),
-						price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo)),
-						duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo)
+			categories?.forEach((parentCategory) => {
+				parentCategory?.category?.children?.forEach((secondCategory) => {
+					secondCategory?.category?.children?.forEach((thirdCategory) => {
+						const rangePriceAndDurationData = thirdCategory?.service?.rangePriceAndDurationData
+						tableData.push({
+							key: thirdCategory?.category?.id,
+							serviceID: thirdCategory?.service?.id,
+							name: thirdCategory?.category?.name || '-',
+							categoryFirst: parentCategory?.category?.name || '-',
+							categorySecond: secondCategory?.category?.name || '-',
+							employees: thirdCategory?.service?.employees?.map((employee) => ({
+								src: employee.image?.resizedImages?.thumbnail,
+								fallBackSrc: employee.image?.original,
+								alt: `${employee.firstName} ${employee.lastName}`,
+								text: `${employee.firstName} ${employee.lastName}`,
+								key: employee.id
+							})),
+							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo)),
+							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo)
+						})
 					})
 				})
 			})
+
 			const servicesOptions = [{ key: '', label: '', value: '' }]
 			/* const servicesOptions = data.services.map((service) => {
 				return { label: service.category.child?.child?.name || `${service.id}`, value: service.id, key: `${service.id}-key` }

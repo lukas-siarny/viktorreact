@@ -103,7 +103,12 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			title: t('loc:Zamestnanci'),
 			dataIndex: 'employees',
 			key: 'employees',
-			render: (value: IUserAvatar[]) => (value ? <AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} /> : null)
+			render: (value: IUserAvatar[]) =>
+				value ? (
+					<div className={'w-full h-full flex items-center'}>
+						<AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} />{' '}
+					</div>
+				) : null
 		},
 		{
 			title: t('loc:Vyplnenie služby'),

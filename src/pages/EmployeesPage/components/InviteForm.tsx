@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-
-// assets
 import SalonRolesField from '../../../atoms/SalonRolesField'
 
 // interfaces

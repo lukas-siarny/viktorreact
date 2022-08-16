@@ -1,15 +1,16 @@
 import React, { FC, useEffect } from 'react'
 import { Field, reduxForm, InjectedFormProps } from 'redux-form'
-import { Form, Button } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
+import SalonRolesField from '../../../atoms/SalonRolesField'
 
 // interfaces
 import { IInviteEmployeeForm } from '../../../types/interfaces'
+import { RootState } from '../../../reducers'
 
 // utils
 import { FORM } from '../../../utils/enums'
@@ -18,7 +19,6 @@ import { FORM } from '../../../utils/enums'
 import validateInviteFrom from './validateInviteFrom'
 
 // reducers
-import { RootState } from '../../../reducers'
 import { getSalonRoles } from '../../../reducers/roles/rolesActions'
 
 type ComponentProps = {}
@@ -27,7 +27,7 @@ type Props = InjectedFormProps<IInviteEmployeeForm, ComponentProps> & ComponentP
 
 const InviteForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting } = props
+	const { handleSubmit } = props
 	const dispatch = useDispatch()
 
 	const roles = useSelector((state: RootState) => state.roles.salonRoles)
@@ -37,20 +37,13 @@ const InviteForm: FC<Props> = (props) => {
 	}, [dispatch])
 
 	return (
-		<Form layout='vertical' onSubmitCapture={handleSubmit}>
-			<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
-			<Field
-				component={SelectField}
-				options={roles?.data}
-				label={t('loc:Rola')}
-				placeholder={t('loc:Vyberte rolu')}
-				name={'roleID'}
-				size={'large'}
-				loading={roles?.isLoading}
-				required
-			/>
-			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
-		</Form>
+		<>
+			<Form layout='vertical' onSubmitCapture={handleSubmit}>
+				<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
+				<SalonRolesField options={roles?.data || []} name={'roleID'} loading={roles?.isLoading} required />
+				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
+			</Form>
+		</>
 	)
 }
 

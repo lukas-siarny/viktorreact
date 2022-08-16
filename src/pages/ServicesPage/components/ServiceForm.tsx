@@ -336,13 +336,13 @@ const ServiceForm = (props: Props) => {
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM]?.values)
 	const employees = useSelector((state: RootState) => state.employees.employees)
-	const serviceLoading = useSelector((state: RootState) => state.service.service.isLoading) // update
-	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading) // update
+	const service = useSelector((state: RootState) => state.service.service)
+	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 
-	const isLoading = serviceLoading || categoriesLoading || isRemoving || salon.isLoading
+	const isLoading = service.isLoading || categoriesLoading || isRemoving || salon.isLoading
 	const submitting = false
 
 	const variableDuration = formValues?.variableDuration
@@ -373,6 +373,7 @@ const ServiceForm = (props: Props) => {
 	return (
 		<Spin spinning={isLoading}>
 			<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+				{`${service.data?.service?.category?.name} > ${service.data?.service?.category?.child?.name} > ${service.data?.service?.category?.child?.child?.name}`}
 				<h3 className={'mb-0 mt-0 flex items-center'}>
 					<SettingIcon className={'text-notino-black mr-2'} />
 					{t('loc:Nastavenia')}

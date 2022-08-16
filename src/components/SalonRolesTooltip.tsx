@@ -39,7 +39,7 @@ const SalonRolesTooltip: FC<Props> = (props) => {
 		>
 			<>
 				<p className={'text-notino-grayDark max-w-md'}>
-					{t('loc: Spravovanie znamená tvorbu, upravovanie a mazanie vybraných údajov a informácii (ak nie je v zátvorke definované inak).')}
+					{t('loc:Spravovanie znamená tvorbu, upravovanie a mazanie vybraných údajov a informácii (ak nie je v zátvorke definované inak).')}
 				</p>
 				<Collapse className={'noti-collapse m-0'} bordered={false} defaultActiveKey={SALON_ROLES_KEYS} ghost expandIconPosition={'right'}>
 					{SALON_ROLES_KEYS.map((salonRole) => {

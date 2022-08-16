@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Field, reduxForm, InjectedFormProps } from 'redux-form'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
 
-// components
-import SalonRolesTooltip from '../../../components/SalonRolesTooltip'
+// assets
+import SalonRolesField from '../../../atoms/SalonRolesField'
 
 // interfaces
 import { IInviteEmployeeForm } from '../../../types/interfaces'
+import { RootState } from '../../../reducers'
 
 // utils
 import { FORM } from '../../../utils/enums'
@@ -21,11 +21,7 @@ import { FORM } from '../../../utils/enums'
 import validateInviteFrom from './validateInviteFrom'
 
 // reducers
-import { RootState } from '../../../reducers'
 import { getSalonRoles } from '../../../reducers/roles/rolesActions'
-
-// assets
-import { ReactComponent as InfoIcon16 } from '../../../assets/icons/info-icon-16.svg'
 
 type ComponentProps = {}
 
@@ -35,8 +31,6 @@ const InviteForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit } = props
 	const dispatch = useDispatch()
-
-	const [visibleRolesTooltip, setVisibleRolesTooltip] = useState(false)
 
 	const roles = useSelector((state: RootState) => state.roles.salonRoles)
 
@@ -48,23 +42,9 @@ const InviteForm: FC<Props> = (props) => {
 		<>
 			<Form layout='vertical' onSubmitCapture={handleSubmit}>
 				<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
-				<Field
-					component={SelectField}
-					options={roles?.data}
-					label={
-						<>
-							{t('loc:Rola')} <InfoIcon16 style={{ marginBottom: 2 }} className={'ml-1 cursor-pointer'} onClick={() => setVisibleRolesTooltip(true)} />
-						</>
-					}
-					placeholder={t('loc:Vyberte rolu')}
-					name={'roleID'}
-					size={'large'}
-					loading={roles?.isLoading}
-					required
-				/>
+				<SalonRolesField options={(roles?.data as any) || []} name={'roleID'} loading={roles?.isLoading} required />
 				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
 			</Form>
-			<SalonRolesTooltip visible={visibleRolesTooltip} onCancel={() => setVisibleRolesTooltip(false)} />
 		</>
 	)
 }

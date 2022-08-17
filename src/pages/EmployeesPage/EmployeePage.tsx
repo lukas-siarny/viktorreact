@@ -16,21 +16,12 @@ import InviteForm from './components/InviteForm'
 import EditRoleForm from './components/EditRoleForm'
 
 // types
-import {
-	IBreadcrumbs,
-	IComputedMatch,
-	IEditEmployeeRoleForm,
-	IEmployeeForm,
-	IInviteEmployeeForm,
-	ILoadingAndFailure,
-	ISelectOptionItem,
-	SalonSubPageProps
-} from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { ADMIN_PERMISSIONS, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
 import { decodePrice, encodePrice, filterSalonRolesByPermission, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
@@ -39,13 +30,13 @@ import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
 import { IServicesPayload } from '../../reducers/services/serviceActions'
 import { getSalonRoles } from '../../reducers/roles/rolesActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import { getCurrentUser, IAuthUserPayload, IUserPayload } from '../../reducers/users/userActions'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>

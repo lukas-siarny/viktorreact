@@ -21,10 +21,10 @@ import InviteForm from './components/InviteForm'
 
 // types
 import { IBreadcrumbs, IEmployeeForm, IInviteEmployeeForm, SalonSubPageProps } from '../../types/interfaces'
-import { RootState } from '../../reducers'
 
 // reducers
 import { getSalonRoles } from '../../reducers/roles/rolesActions'
+import { RootState } from '../../reducers'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'

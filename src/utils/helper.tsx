@@ -58,9 +58,11 @@ import {
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX,
-	NOTIFICATION_TYPE
+	NOTIFICATION_TYPE,
+	ADMIN_PERMISSIONS,
+	SALON_PERMISSION
 } from './enums'
-import { IPrice, IStructuredAddress } from '../types/interfaces'
+import { IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
@@ -72,6 +74,8 @@ import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+import { IAuthUserPayload } from '../reducers/users/userActions'
+import { IEmployeePayload } from '../reducers/employees/employeesActions'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -892,4 +896,65 @@ export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: an
 	} else {
 		dispatch(submit(form))
 	}
+}
+
+export const hasAuthUserPermissionToEditRole = (salonID?: string, authUser?: IAuthUserPayload['data'], employee?: IEmployeePayload['data'], salonRoles?: ISelectOptionItem[]) => {
+	if (!salonID || !authUser || !employee || !salonRoles) {
+		return false
+	}
+
+	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
+		return true
+	}
+	if (authUser.id === employee?.employee?.user?.id) {
+		// salon user can't edit his own role
+		return false
+	}
+
+	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
+	if (authUserSalonRole) {
+		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+		if (authUserRoleIndex === 0) {
+			// is salon admin - has all permissions
+			return true
+		}
+
+		const employeeRole = employee.employee?.role
+		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+		// it's not possible to edit admin role	if auth user is not admin
+		if (employeeRoleIndex === 0) {
+			return false
+		}
+		// it's possible to edit role only if you have permission to edit
+		return !!authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)
+	}
+	return false
+}
+
+export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthUserPayload['data'], salonRoles?: ISelectOptionItem[]) => {
+	if (!salonID || !authUser || !salonRoles) {
+		return salonRoles
+	}
+
+	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
+		// they automatically see all options
+		return salonRoles
+	}
+	// other salon roles can assign only options that they have permission on
+	const authUserSalonRole = authUser?.salons?.find((salon) => salon.id === salonID)?.role
+	if (authUserSalonRole) {
+		const highestUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+		if (highestUserRoleIndex === 0) {
+			// is admin - has permission to asign all roles
+			return salonRoles
+		}
+		// lower roles can assign all roles execpt admin
+		const authUserDisabledRolesOptions = salonRoles.slice(0, 1).map((option) => ({ ...option, disabled: true }))
+		const authUserAllowedRolesOptions = salonRoles.slice(1)
+		return [...authUserDisabledRolesOptions, ...authUserAllowedRolesOptions]
+	}
+
+	return salonRoles
 }

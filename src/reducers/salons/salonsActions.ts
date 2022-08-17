@@ -3,7 +3,7 @@ import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS } from './salonsTypes'
+import { SALON, SALONS, SUGGESTED_SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
@@ -13,7 +13,7 @@ import { getReq } from '../../utils/request'
 import { SALON_FILTER_STATES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons
 
 interface IGetSalons {
 	type: SALONS
@@ -37,6 +37,15 @@ export interface IGetSalon {
 
 export interface ISalonPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 | null
+}
+
+export interface IGetSuggestedSalons {
+	type: SUGGESTED_SALONS
+	payload: ISuggestedSalonsPayload
+}
+
+export interface ISuggestedSalonsPayload {
+	data: Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200 | null
 }
 
 export interface ISalonsPayload extends ISearchable<Paths.GetApiB2BAdminSalons.Responses.$200> {}
@@ -100,6 +109,26 @@ export const getSalon =
 
 		return payload
 	}
+
+export const getSuggestedSalons = (): ThunkResult<Promise<ISuggestedSalonsPayload>> => async (dispatch) => {
+	let payload = {} as ISuggestedSalonsPayload
+	try {
+		dispatch({ type: SUGGESTED_SALONS.SUGGESTED_SALONS_LOAD_START })
+		const { data } = await getReq('/api/b2b/admin/salons/basic-suggestion', undefined)
+
+		payload = {
+			data
+		}
+
+		dispatch({ type: SUGGESTED_SALONS.SUGGESTED_SALONS_LOAD_DONE, payload })
+	} catch (err) {
+		dispatch({ type: SUGGESTED_SALONS.SUGGESTED_SALONS_LOAD_FAIL })
+		// eslint-disable-next-line no-console
+		console.error(err)
+	}
+
+	return payload
+}
 
 export const emptySalon = (): ThunkResult<Promise<void>> => async (dispatch) => {
 	dispatch({ type: SALON.SALON_LOAD_DONE, payload: { data: null } })

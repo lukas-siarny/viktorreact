@@ -47,6 +47,8 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import { getSuggestedSalons } from '../../reducers/salons/salonsActions'
+import SalonSuggestionsModal from './components/SalonSuggestionsModal'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
@@ -78,6 +80,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
+	const salonSuggestions = useSelector((state: RootState) => state.salons.suggestedSalons)
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
@@ -97,6 +100,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
+	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser])
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
 
@@ -148,6 +152,12 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
 	}, [dispatch])
+
+	useEffect(() => {
+		if (salonID === NEW_SALON_ID && isPartner) {
+			dispatch(getSuggestedSalons())
+		}
+	}, [salonID, dispatch, isPartner])
 
 	const updateOnlyOpeningHours = useRef(false)
 
@@ -841,6 +851,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
 			</Modal>
+			<SalonSuggestionsModal />
 		</>
 	)
 }

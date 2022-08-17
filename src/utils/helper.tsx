@@ -33,11 +33,13 @@ import {
 } from 'lodash'
 import { notification, Tag } from 'antd'
 import slugify from 'slugify'
+import { submit, SubmissionError } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
-import cx from 'classnames'
+// eslint-disable-next-line import/no-cycle
+import showNotifications from './tsxHelpers'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -55,7 +57,8 @@ import {
 	EN_DATE_WITHOUT_TIME_FORMAT,
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
-	DEFAULT_PHONE_PREFIX
+	DEFAULT_PHONE_PREFIX,
+	NOTIFICATION_TYPE
 } from './enums'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -875,4 +878,18 @@ export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { 
 		}
 		return b.language === DEFAULT_LANGUAGE ? 1 : 0
 	})
+}
+
+export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
+	const { form } = props
+
+	if (values && values[IMAGE_UPLOADING_PROP]) {
+		const error = i18next.t('loc:Prebieha nahrávanie')
+		showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
+		throw new SubmissionError({
+			[IMAGE_UPLOADING_PROP]: error
+		})
+	} else {
+		dispatch(submit(form))
+	}
 }

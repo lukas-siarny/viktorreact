@@ -63,6 +63,9 @@ const LanguagesPage = () => {
 
 	useEffect(() => {
 		dispatch(getSalonLanguages())
+	}, [dispatch])
+
+	useEffect(() => {
 		dispatch(
 			initialize(FORM.LANGUAGES_FILTER, {
 				search: query.search
@@ -123,7 +126,7 @@ const LanguagesPage = () => {
 
 	const handleSubmit = async (formData: ILanguageForm) => {
 		const body = {
-			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid'),
+			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid') || null,
 			nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value)
 		}
 		try {

@@ -93,7 +93,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte ulicu')}
 								name={'street'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_75}
 								disabled={disabledForm}
 							/>
 							<Field
@@ -103,7 +103,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte číslo')}
 								name={'streetNumber'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 								disabled={disabledForm}
 							/>
 						</Row>
@@ -115,7 +115,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte mesto')}
 								name={'city'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_100}
 								disabled={disabledForm}
 							/>
 							<Field
@@ -125,7 +125,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte smerovacie číslo')}
 								name={'zipCode'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 								disabled={disabledForm}
 							/>
 						</Row>

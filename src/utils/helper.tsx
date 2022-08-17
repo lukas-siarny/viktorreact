@@ -51,6 +51,7 @@ import {
 	DAY,
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT,
+	EN_DATE_WITHOUT_TIME_FORMAT,
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX,
@@ -139,13 +140,13 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
  *
  * Returns formatted date by location
  */
-export const formatDateByLocale = (date: string | Date | undefined | Dayjs) => {
+export const formatDateByLocale = (date: string | Date | undefined | Dayjs, skipTime?: boolean) => {
 	const locale = i18next.language || DEFAULT_LANGUAGE
 
 	if (locale === LANGUAGE.SK || locale === LANGUAGE.CZ) {
-		return dayjs(date).format(DEFAULT_DATE_WITH_TIME_FORMAT)
+		return dayjs(date).format(skipTime ? DEFAULT_DATE_FORMAT : DEFAULT_DATE_WITH_TIME_FORMAT)
 	}
-	return dayjs(date).format(EN_DATE_WITH_TIME_FORMAT)
+	return dayjs(date).format(skipTime ? EN_DATE_WITHOUT_TIME_FORMAT : EN_DATE_WITH_TIME_FORMAT)
 }
 
 /**

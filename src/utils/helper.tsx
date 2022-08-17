@@ -37,7 +37,6 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
-import cx from 'classnames'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -54,9 +53,11 @@ import {
 	EN_DATE_WITH_TIME_FORMAT,
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
-	DEFAULT_PHONE_PREFIX
+	DEFAULT_PHONE_PREFIX,
+	ADMIN_PERMISSIONS,
+	SALON_PERMISSION
 } from './enums'
-import { IPrice, IStructuredAddress } from '../types/interfaces'
+import { IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
@@ -68,6 +69,9 @@ import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+import { IAuthUserPayload } from '../reducers/users/userActions'
+import { IEmployeePayload } from '../reducers/employees/employeesActions'
+import { SalonRole } from '../reducers/roles/rolesActions'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -874,4 +878,58 @@ export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { 
 		}
 		return b.language === DEFAULT_LANGUAGE ? 1 : 0
 	})
+}
+
+export const hasAuthUserPermissionToEditRole = (salonID?: string, authUser?: IAuthUserPayload['data'], employee?: IEmployeePayload['data'], salonRoles?: ISelectOptionItem[]) => {
+	if (!salonID || !authUser || !employee || !salonRoles) {
+		return false
+	}
+
+	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
+		return true
+	}
+	// other salon roles have permission to edit only users with lower salon roles then theirs
+	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
+	if (authUserSalonRole) {
+		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+		if (authUserRoleIndex === 0) {
+			// highest salon role can edit all other users
+			return true
+		}
+		// check if currentAuthUser role index is lower than employee i want to edit (lower index === higher in salonRoles hierarchy)
+		const employeeRole = employee.employee?.role
+		const userRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+
+		if (authUserRoleIndex <= userRoleIndex) {
+			return true
+		}
+	}
+	return false
+}
+
+export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthUserPayload['data'], salonRoles?: ISelectOptionItem[]) => {
+	if (!salonID || !authUser || !salonRoles) {
+		return salonRoles
+	}
+
+	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
+		// they automatically see all options
+		return salonRoles
+	}
+	// other salon roles can see only options they have permission to assign them
+	const currentUserSalonRole = authUser?.salons?.find((salon) => salon.id === salonID)?.role
+	if (currentUserSalonRole) {
+		const highestUserRoleIndex = salonRoles.findIndex((role) => role?.value === currentUserSalonRole?.id)
+		if (highestUserRoleIndex === 0) {
+			// highest salon role has all permissions
+			return salonRoles
+		}
+		const currentUserDisabledRolesOptions = salonRoles.slice(0, highestUserRoleIndex).map((option) => ({ ...option, disabled: true }))
+		const currentUserAllowedRolesOptions = salonRoles.slice(highestUserRoleIndex)
+		return [...currentUserDisabledRolesOptions, ...currentUserAllowedRolesOptions]
+	}
+
+	return salonRoles
 }

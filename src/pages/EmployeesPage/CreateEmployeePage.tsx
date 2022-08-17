@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { compose } from 'redux'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
@@ -11,7 +11,7 @@ import { withPermissions } from '../../utils/Permissions'
 import { PERMISSION, SALON_PERMISSION, FORM, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import { getPrefixCountryCode } from '../../utils/helper'
+import { filterSalonRolesByPermission, getPrefixCountryCode } from '../../utils/helper'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -43,8 +43,15 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	const isInviteFormPristine = useSelector(isPristine(FORM.INVITE_EMPLOYEE))
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const services = useSelector((state: RootState) => state.service.services)
+	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
+	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
 
-	const { isLoading } = services
+	const filteredSalonRolesByPermission = useMemo(
+		() => filterSalonRolesByPermission(salonID, currentAuthUser?.data, salonRoles?.data || undefined),
+		[salonID, currentAuthUser?.data, salonRoles?.data]
+	)
+
+	const isLoading = services?.isLoading || currentAuthUser?.isLoading || salonRoles?.isLoading
 
 	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
 
@@ -67,8 +74,8 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 	}, [salonID])
 
 	useEffect(() => {
-		dispatch(getSalonRoles(true, salonID))
-	}, [dispatch, salonID])
+		dispatch(getSalonRoles())
+	}, [dispatch])
 
 	const createEmployee = async (formData: IEmployeeForm) => {
 		try {
@@ -128,7 +135,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 			<Spin spinning={isLoading}>
 				<h2 className={'content-body-width-small'}>{t('loc:Poslať kolegovi pozvánku')}</h2>
 				<div className='content-body small mt-2 mb-8 without-content-footer'>
-					<InviteForm onSubmit={inviteEmployee} />
+					<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
 					<Row justify={'center'}>
 						<Button
 							onClick={() => {

@@ -9,7 +9,7 @@ import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
 // interfaces
-import { IInviteEmployeeForm } from '../../../types/interfaces'
+import { IInviteEmployeeForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
 import { FORM } from '../../../utils/enums'
@@ -20,13 +20,15 @@ import validateInviteFrom from './validateInviteFrom'
 // reducers
 import { RootState } from '../../../reducers'
 
-type ComponentProps = {}
+type ComponentProps = {
+	salonRolesOptions?: ISelectOptionItem[]
+}
 
 type Props = InjectedFormProps<IInviteEmployeeForm, ComponentProps> & ComponentProps
 
 const InviteForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit } = props
+	const { handleSubmit, salonRolesOptions } = props
 
 	const roles = useSelector((state: RootState) => state.roles.salonRoles)
 
@@ -35,7 +37,7 @@ const InviteForm: FC<Props> = (props) => {
 			<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
 			<Field
 				component={SelectField}
-				options={roles?.data}
+				options={salonRolesOptions}
 				label={t('loc:Rola')}
 				placeholder={t('loc:Vyberte rolu')}
 				name={'roleID'}

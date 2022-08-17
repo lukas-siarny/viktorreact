@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
@@ -16,14 +16,23 @@ import InviteForm from './components/InviteForm'
 import EditRoleForm from './components/EditRoleForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
+import {
+	IBreadcrumbs,
+	IComputedMatch,
+	IEditEmployeeRoleForm,
+	IEmployeeForm,
+	IInviteEmployeeForm,
+	ILoadingAndFailure,
+	ISelectOptionItem,
+	SalonSubPageProps
+} from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { ADMIN_PERMISSIONS, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { decodePrice, encodePrice } from '../../utils/helper'
+import { decodePrice, encodePrice, filterSalonRolesByPermission, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -36,7 +45,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import { getCurrentUser } from '../../reducers/users/userActions'
+import { getCurrentUser, IAuthUserPayload, IUserPayload } from '../../reducers/users/userActions'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
@@ -169,6 +178,12 @@ const EmployeePage = (props: Props) => {
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
 	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
+	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
+
+	const filteredSalonRolesByPermission = useMemo(
+		() => filterSalonRolesByPermission(salonID, currentAuthUser?.data, salonRoles?.data || undefined),
+		[salonID, currentAuthUser?.data, salonRoles?.data]
+	)
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
 
@@ -191,8 +206,8 @@ const EmployeePage = (props: Props) => {
 	}, [employeeID])
 
 	useEffect(() => {
-		dispatch(getSalonRoles(true, salonID, currentAuthUser.data))
-	}, [dispatch, salonID, currentAuthUser.data])
+		dispatch(getSalonRoles())
+	}, [dispatch, salonID])
 
 	useEffect(() => {
 		if (employee.data?.employee) {
@@ -354,7 +369,11 @@ const EmployeePage = (props: Props) => {
 			<Spin spinning={isLoading}>
 				{formValues?.hasActiveAccount && (
 					<div className='content-body small mt-2 mb-8'>
-						<EditRoleForm onSubmit={editEmployeeRole} />
+						<EditRoleForm
+							onSubmit={editEmployeeRole}
+							salonRolesOptions={filteredSalonRolesByPermission}
+							hasPermissionToEdit={hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)}
+						/>
 					</div>
 				)}
 				<div className='content-body small mt-2 mb-8'>
@@ -439,7 +458,7 @@ const EmployeePage = (props: Props) => {
 								closeIcon={<CloseIcon />}
 								width={394}
 							>
-								<InviteForm onSubmit={inviteEmployee} />
+								<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
 								<Button
 									className='noti-btn'
 									onClick={() => {

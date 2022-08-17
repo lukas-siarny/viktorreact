@@ -920,16 +920,16 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 		return salonRoles
 	}
 	// other salon roles can see only options they have permission to assign them
-	const currentUserSalonRole = authUser?.salons?.find((salon) => salon.id === salonID)?.role
-	if (currentUserSalonRole) {
-		const highestUserRoleIndex = salonRoles.findIndex((role) => role?.value === currentUserSalonRole?.id)
+	const authUserSalonRole = authUser?.salons?.find((salon) => salon.id === salonID)?.role
+	if (authUserSalonRole) {
+		const highestUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
 		if (highestUserRoleIndex === 0) {
 			// highest salon role has all permissions
 			return salonRoles
 		}
-		const currentUserDisabledRolesOptions = salonRoles.slice(0, highestUserRoleIndex).map((option) => ({ ...option, disabled: true }))
-		const currentUserAllowedRolesOptions = salonRoles.slice(highestUserRoleIndex)
-		return [...currentUserDisabledRolesOptions, ...currentUserAllowedRolesOptions]
+		const authUserDisabledRolesOptions = salonRoles.slice(0, highestUserRoleIndex).map((option) => ({ ...option, disabled: true }))
+		const authUserAllowedRolesOptions = salonRoles.slice(highestUserRoleIndex)
+		return [...authUserDisabledRolesOptions, ...authUserAllowedRolesOptions]
 	}
 
 	return salonRoles

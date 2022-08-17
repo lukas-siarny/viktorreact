@@ -340,7 +340,7 @@ const EmployeePage = (props: Props) => {
 				}
 			)
 			dispatch(getEmployee(employeeID))
-			await dispatch(getCurrentUser())
+			dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

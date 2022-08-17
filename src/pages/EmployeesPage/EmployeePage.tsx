@@ -202,21 +202,19 @@ const EmployeePage = (props: Props) => {
 
 	useEffect(() => {
 		if (employee.data?.employee) {
-			const user = employee.data.employee.user
+			const { user } = employee.data.employee
+
+			const userData = user
 				? {
-						fullName: `${
-							employee.data.employee.user?.firstName || employee.data.employee.user?.lastName
-								? `${employee.data.employee.user?.firstName} ${employee.data.employee.user?.lastName}`.trim()
-								: '-'
-						}`,
-						email: employee.data.employee.user?.email,
-						phonePrefixCountryCode: employee.data.employee.user?.phonePrefixCountryCode,
-						phone: employee.data.employee.user?.phone,
+						fullName: `${user.firstName || user.lastName ? `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() : '-'}`,
+						email: user.email,
+						phonePrefixCountryCode: user.phonePrefixCountryCode,
+						phone: user.phone,
 						image: [
 							{
-								url: employee.data.employee.user?.image?.original,
-								thumbUrl: employee.data.employee.user?.image?.resizedImages?.thumbnail,
-								uid: employee.data.employee.user?.image?.id
+								url: user.image?.original,
+								thumbUrl: user.image?.resizedImages?.thumbnail,
+								uid: user.image?.id
 							}
 						]
 				  }
@@ -237,7 +235,7 @@ const EmployeePage = (props: Props) => {
 					services: /* checkAndParseServices(employee.data?.employee?.services) */ [],
 					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id },
 					roleID: employee.data?.employee?.role?.id,
-					user
+					user: userData
 				})
 			)
 		}

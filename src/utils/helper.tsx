@@ -890,21 +890,27 @@ export const hasAuthUserPermissionToEditRole = (salonID?: string, authUser?: IAu
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
 		return true
 	}
-	// other salon roles have permission to edit only users with lower salon roles then theirs
+	if (authUser.id === employee?.employee?.user?.id) {
+		// salon user can't edit his own role
+		return false
+	}
+
 	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
 	if (authUserSalonRole) {
 		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
 		if (authUserRoleIndex === 0) {
-			// highest salon role can edit all other users
+			// is salon admin - has all permissions
 			return true
 		}
-		// check if currentAuthUser role index is lower than employee i want to edit (lower index === higher in salonRoles hierarchy)
-		const employeeRole = employee.employee?.role
-		const userRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
 
-		if (authUserRoleIndex <= userRoleIndex) {
-			return true
+		const employeeRole = employee.employee?.role
+		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+		// it's not possible to edit admin role	if auth user is not admin
+		if (employeeRoleIndex === 0) {
+			return false
 		}
+		// it's possible to edit role only if you have permission to edit
+		return !!authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)
 	}
 	return false
 }
@@ -919,16 +925,17 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 		// they automatically see all options
 		return salonRoles
 	}
-	// other salon roles can see only options they have permission to assign them
+	// other salon roles can assign only options that they have permission on
 	const authUserSalonRole = authUser?.salons?.find((salon) => salon.id === salonID)?.role
 	if (authUserSalonRole) {
 		const highestUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
 		if (highestUserRoleIndex === 0) {
-			// highest salon role has all permissions
+			// is admin - has permission to asign all roles
 			return salonRoles
 		}
-		const authUserDisabledRolesOptions = salonRoles.slice(0, highestUserRoleIndex).map((option) => ({ ...option, disabled: true }))
-		const authUserAllowedRolesOptions = salonRoles.slice(highestUserRoleIndex)
+		// lower roles can assign all roles execpt admin
+		const authUserDisabledRolesOptions = salonRoles.slice(0, 1).map((option) => ({ ...option, disabled: true }))
+		const authUserAllowedRolesOptions = salonRoles.slice(1)
 		return [...authUserDisabledRolesOptions, ...authUserAllowedRolesOptions]
 	}
 

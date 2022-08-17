@@ -357,17 +357,20 @@ const EmployeePage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				{formValues?.hasActiveAccount && (
-					<div className='content-body small mt-2 mb-8'>
+
+			{formValues?.hasActiveAccount && (
+				<div className='content-body small mt-2 mb-8'>
+					<Spin spinning={isLoading}>
 						<EditRoleForm
 							onSubmit={editEmployeeRole}
 							salonRolesOptions={filteredSalonRolesByPermission}
 							hasPermissionToEdit={hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)}
 						/>
-					</div>
-				)}
-				<div className='content-body small mt-2 mb-8'>
+					</Spin>
+				</div>
+			)}
+			<div className='content-body small mt-2 mb-8'>
+				<Spin spinning={isLoading}>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 					<div className={'content-footer pt-0'}>
 						<Row
@@ -467,8 +470,8 @@ const EmployeePage = (props: Props) => {
 							</Modal>
 						</Row>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

@@ -83,9 +83,9 @@ const CategoryParamsPage = () => {
 					// value doesn't require translations
 					if (value.value) return value.value
 					// value in current language
-					const translatedValue = (find(value.valueLocalizations, { language: i18n.language }) as any).value
+					const translatedValue = find(value.valueLocalizations, { language: i18n.language })
 
-					if (translatedValue) return translatedValue
+					if (translatedValue) return (translatedValue as any).value
 					// fallback - DEFAULT_LANGUAGE
 					return (find(value.valueLocalizations, { language: DEFAULT_LANGUAGE }) as any).value
 				}) || []

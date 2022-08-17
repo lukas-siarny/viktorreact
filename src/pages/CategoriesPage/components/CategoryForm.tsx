@@ -102,7 +102,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const localizationInputCss = values?.level === 0 ? 'w-2/3' : 'w-full'
 
 	return (
-		<Spin spinning={category.isLoading || categoriesParameters.isLoading}>
+		<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
 			<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
 				<Col className={'flex'}>
 					<Row className={'w-full mx-9 h-full block'} justify='center'>
@@ -150,6 +150,7 @@ const CategoryForm: FC<Props> = (props) => {
 										validate={fixLength100}
 									/>
 								}
+								noSpace
 							/>
 							{values?.level === 0 ? (
 								<div className='w-1/4'>

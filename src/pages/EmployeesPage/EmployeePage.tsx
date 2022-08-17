@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
@@ -23,12 +23,14 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { decodePrice, encodePrice } from '../../utils/helper'
+import { decodePrice, encodePrice, filterSalonRolesByPermission, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
 import { IServicesPayload } from '../../reducers/services/serviceActions'
+import { getSalonRoles } from '../../reducers/roles/rolesActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -166,12 +168,19 @@ const EmployeePage = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
+	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
+	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
+
+	const filteredSalonRolesByPermission = useMemo(
+		() => filterSalonRolesByPermission(salonID, currentAuthUser?.data, salonRoles?.data || undefined),
+		[salonID, currentAuthUser?.data, salonRoles?.data]
+	)
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
 
 	const emploeyeeExists = !!employee?.data?.employee?.id
 
-	const isLoading = employee.isLoading || services.isLoading || isRemoving
+	const isLoading = employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
 
 	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
 
@@ -186,6 +195,10 @@ const EmployeePage = (props: Props) => {
 		fetchEmployeeData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
+
+	useEffect(() => {
+		dispatch(getSalonRoles())
+	}, [dispatch, salonID])
 
 	useEffect(() => {
 		if (employee.data?.employee) {
@@ -327,6 +340,7 @@ const EmployeePage = (props: Props) => {
 				}
 			)
 			dispatch(getEmployee(employeeID))
+			dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -343,13 +357,20 @@ const EmployeePage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				{formValues?.hasActiveAccount && (
-					<div className='content-body small mt-2 mb-8'>
-						<EditRoleForm onSubmit={editEmployeeRole} />
-					</div>
-				)}
+
+			{formValues?.hasActiveAccount && (
 				<div className='content-body small mt-2 mb-8'>
+					<Spin spinning={isLoading}>
+						<EditRoleForm
+							onSubmit={editEmployeeRole}
+							salonRolesOptions={filteredSalonRolesByPermission}
+							hasPermissionToEdit={hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)}
+						/>
+					</Spin>
+				</div>
+			)}
+			<div className='content-body small mt-2 mb-8'>
+				<Spin spinning={isLoading}>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 					<div className={'content-footer pt-0'}>
 						<Row
@@ -431,7 +452,7 @@ const EmployeePage = (props: Props) => {
 								closeIcon={<CloseIcon />}
 								width={394}
 							>
-								<InviteForm onSubmit={inviteEmployee} />
+								<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
 								<Button
 									className='noti-btn'
 									onClick={() => {
@@ -449,8 +470,8 @@ const EmployeePage = (props: Props) => {
 							</Modal>
 						</Row>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

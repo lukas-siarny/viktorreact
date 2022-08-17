@@ -52,7 +52,7 @@ const EditRoleForm: FC<Props> = (props) => {
 									size={'large'}
 									loading={roles?.isLoading}
 									className={'flex-1'}
-									readOnly={!hasPermission || !hasPermissionToEdit}
+									disabled={!hasPermission || !hasPermissionToEdit}
 									required
 								/>
 								<Button

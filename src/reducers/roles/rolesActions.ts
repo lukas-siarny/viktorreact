@@ -5,6 +5,7 @@ import { IResetStore } from '../generalTypes'
 import { SYSTEM_ROLES, SALON_ROLES } from './rolesTypes'
 import { ThunkResult } from '../index'
 import { ISelectOptionItem } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 // utils
 import { getReq } from '../../utils/request'

@@ -134,23 +134,27 @@ export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => asyn
 	return payload
 }
 
-export const logOutUser = (): ThunkResult<Promise<void>> => async (dispatch) => {
-	try {
-		await postReq('/api/b2b/admin/auth/logout', null, undefined, undefined, false)
-	} catch (error) {
-		// eslint-disable-next-line no-console
-		console.log(error)
-	} finally {
-		clearAccessToken()
-		clearRefreshToken()
+export const logOutUser =
+	(skipRedirect?: boolean): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			await postReq('/api/b2b/admin/auth/logout', null, undefined, undefined, false)
+		} catch (error) {
+			// eslint-disable-next-line no-console
+			console.log(error)
+		} finally {
+			clearAccessToken()
+			clearRefreshToken()
 
-		dispatch({
-			type: RESET_STORE
-		})
+			dispatch({
+				type: RESET_STORE
+			})
 
-		history.push(i18next.t('paths:login'))
+			if (!skipRedirect) {
+				history.push(i18next.t('paths:login'))
+			}
+		}
 	}
-}
 
 export const refreshToken = (): ThunkResult<Promise<void>> => async (dispatch) => {
 	if (isLoggedIn() && hasRefreshToken()) {

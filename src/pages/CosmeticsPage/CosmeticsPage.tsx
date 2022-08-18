@@ -122,7 +122,7 @@ const CosmeticsPage = () => {
 	const handleSubmit = async (formData: ICosmeticForm) => {
 		const body = {
 			name: formData.name,
-			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid')
+			imageID: get(formData, 'image[0].id') || get(formData, 'image[0].uid') || null
 		}
 
 		try {

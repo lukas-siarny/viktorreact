@@ -33,11 +33,13 @@ import {
 } from 'lodash'
 import { notification, Tag } from 'antd'
 import slugify from 'slugify'
+import { submit, SubmissionError } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
-import cx from 'classnames'
+// eslint-disable-next-line import/no-cycle
+import showNotifications from './tsxHelpers'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -52,11 +54,15 @@ import {
 	DAY,
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT,
+	EN_DATE_WITHOUT_TIME_FORMAT,
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
-	DEFAULT_PHONE_PREFIX
+	DEFAULT_PHONE_PREFIX,
+	NOTIFICATION_TYPE,
+	ADMIN_PERMISSIONS,
+	SALON_PERMISSION
 } from './enums'
-import { IPrice, IStructuredAddress } from '../types/interfaces'
+import { IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
@@ -68,6 +74,8 @@ import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
 import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
 import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+import { IAuthUserPayload } from '../reducers/users/userActions'
+import { IEmployeePayload } from '../reducers/employees/employeesActions'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -135,13 +143,13 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
  *
  * Returns formatted date by location
  */
-export const formatDateByLocale = (date: string | Date | undefined | Dayjs) => {
+export const formatDateByLocale = (date: string | Date | undefined | Dayjs, skipTime?: boolean) => {
 	const locale = i18next.language || DEFAULT_LANGUAGE
 
 	if (locale === LANGUAGE.SK || locale === LANGUAGE.CZ) {
-		return dayjs(date).format(DEFAULT_DATE_WITH_TIME_FORMAT)
+		return dayjs(date).format(skipTime ? DEFAULT_DATE_FORMAT : DEFAULT_DATE_WITH_TIME_FORMAT)
 	}
-	return dayjs(date).format(EN_DATE_WITH_TIME_FORMAT)
+	return dayjs(date).format(skipTime ? EN_DATE_WITHOUT_TIME_FORMAT : EN_DATE_WITH_TIME_FORMAT)
 }
 
 /**
@@ -874,4 +882,79 @@ export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { 
 		}
 		return b.language === DEFAULT_LANGUAGE ? 1 : 0
 	})
+}
+
+export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
+	const { form } = props
+
+	if (values && values[IMAGE_UPLOADING_PROP]) {
+		const error = i18next.t('loc:Prebieha nahrávanie')
+		showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
+		throw new SubmissionError({
+			[IMAGE_UPLOADING_PROP]: error
+		})
+	} else {
+		dispatch(submit(form))
+	}
+}
+
+export const hasAuthUserPermissionToEditRole = (salonID?: string, authUser?: IAuthUserPayload['data'], employee?: IEmployeePayload['data'], salonRoles?: ISelectOptionItem[]) => {
+	if (!salonID || !authUser || !employee || !salonRoles) {
+		return false
+	}
+
+	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
+		return true
+	}
+	if (authUser.id === employee?.employee?.user?.id) {
+		// salon user can't edit his own role
+		return false
+	}
+
+	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
+	if (authUserSalonRole) {
+		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+		if (authUserRoleIndex === 0) {
+			// is salon admin - has all permissions
+			return true
+		}
+
+		const employeeRole = employee.employee?.role
+		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+		// it's not possible to edit admin role	if auth user is not admin
+		if (employeeRoleIndex === 0) {
+			return false
+		}
+		// it's possible to edit role only if you have permission to edit
+		return !!authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)
+	}
+	return false
+}
+
+export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthUserPayload['data'], salonRoles?: ISelectOptionItem[]) => {
+	if (!salonID || !authUser || !salonRoles) {
+		return salonRoles
+	}
+
+	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
+		// they automatically see all options
+		return salonRoles
+	}
+	// other salon roles can assign only options that they have permission on
+	const authUserSalonRole = authUser?.salons?.find((salon) => salon.id === salonID)?.role
+	if (authUserSalonRole) {
+		const highestUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+		if (highestUserRoleIndex === 0) {
+			// is admin - has permission to asign all roles
+			return salonRoles
+		}
+		// lower roles can assign all roles execpt admin
+		const authUserDisabledRolesOptions = salonRoles.slice(0, 1).map((option) => ({ ...option, disabled: true }))
+		const authUserAllowedRolesOptions = salonRoles.slice(1)
+		return [...authUserDisabledRolesOptions, ...authUserAllowedRolesOptions]
+	}
+
+	return salonRoles
 }

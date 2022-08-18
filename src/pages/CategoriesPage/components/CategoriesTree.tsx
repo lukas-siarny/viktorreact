@@ -80,9 +80,10 @@ const CategoriesTree = () => {
 				orderIndex: data.orderIndex,
 				nameLocalizations: normalizeNameLocalizations(data.nameLocalizations, DEFAULT_LANGUAGE),
 				level,
-				image: data?.image?.original ? [{ url: data?.image?.original, uid: data?.image?.id }] : undefined,
+				image: data?.image?.original ? [{ url: data?.image?.original, thumbUrl: data?.image?.resizedImages?.thumbnail, uid: data?.image?.id }] : undefined,
 				deletedAt,
 				isParentDeleted,
+				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.image?.id }] : undefined,
 				categoryParameterID: data?.categoryParameter
 					? {
 							label: data?.categoryParameter.name,

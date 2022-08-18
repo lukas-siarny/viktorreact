@@ -121,7 +121,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 				return (
 					<>
 						<UserAvatar className='mr-2-5 w-7 h-7' src={source?.image?.resizedImages?.thumbnail} fallBackSrc={source?.image?.original} />
-						{source?.firstName || source?.lastName ? `${source?.firstName} ${source?.lastName}`.trim() : '-'}
+						{source?.firstName || source?.lastName ? `${source?.firstName ?? ''} ${source?.lastName ?? ''}`.trim() : '-'}
 					</>
 				)
 			}

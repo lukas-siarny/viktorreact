@@ -4,7 +4,7 @@ import type {
   UnknownParamsObject,
   OperationResponse,
   AxiosRequestConfig,
-} from 'openapi-client-axios';
+} from 'openapi-client-axios'; 
 
 declare namespace Paths {
     namespace DeleteApiB2BAdminCustomersCustomerId {
@@ -2419,6 +2419,7 @@ declare namespace Paths {
                         name?: string;
                         values: {
                             id: string; // uuid
+                            categoryParameterValueID: string; // uuid
                             value?: string;
                             priceAndDurationData: {
                                 durationFrom?: number;
@@ -2488,6 +2489,7 @@ declare namespace Paths {
                             name?: string;
                             values: {
                                 id: string; // uuid
+                                categoryParameterValueID: string; // uuid
                                 value?: string;
                                 priceAndDurationData: {
                                     durationFrom?: number;
@@ -4897,6 +4899,7 @@ declare namespace Paths {
                         name?: string;
                         values: {
                             id: string; // uuid
+                            categoryParameterValueID: string; // uuid
                             value?: string;
                             priceAndDurationData: {
                                 durationFrom?: number;
@@ -4966,6 +4969,7 @@ declare namespace Paths {
                             name?: string;
                             values: {
                                 id: string; // uuid
+                                categoryParameterValueID: string; // uuid
                                 value?: string;
                                 priceAndDurationData: {
                                     durationFrom?: number;
@@ -23971,6 +23975,7 @@ declare namespace Paths {
                         name?: string;
                         values: {
                             id: string; // uuid
+                            categoryParameterValueID: string; // uuid
                             value?: string;
                             priceAndDurationData: {
                                 durationFrom?: number;
@@ -24040,6 +24045,7 @@ declare namespace Paths {
                             name?: string;
                             values: {
                                 id: string; // uuid
+                                categoryParameterValueID: string; // uuid
                                 value?: string;
                                 priceAndDurationData: {
                                     durationFrom?: number;
@@ -38514,6 +38520,7 @@ declare namespace Paths {
                         name?: string;
                         values: {
                             id: string; // uuid
+                            categoryParameterValueID: string; // uuid
                             value?: string;
                             priceAndDurationData: {
                                 durationFrom?: number;
@@ -38583,6 +38590,7 @@ declare namespace Paths {
                             name?: string;
                             values: {
                                 id: string; // uuid
+                                categoryParameterValueID: string; // uuid
                                 value?: string;
                                 priceAndDurationData: {
                                     durationFrom?: number;
@@ -48902,7 +48910,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthRefreshToken'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthRefreshToken.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
   /**
    * postApiB2BAdminAuthLogout - PERMISSION: NO
@@ -48910,7 +48918,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthLogout'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthLogout.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
   /**
    * postApiB2BAdminAuthForgotPassword - PERMISSION: NO
@@ -48918,7 +48926,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthForgotPassword'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthForgotPassword.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
   /**
    * postApiB2BAdminAuthResetPassword - PERMISSION: NO
@@ -48926,7 +48934,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthResetPassword'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthResetPassword.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   /**
    * patchApiB2BAdminAuthChangePassword - PERMISSION: NO
@@ -48934,7 +48942,7 @@ export interface OperationMethods {
   'patchApiB2BAdminAuthChangePassword'(
     parameters?: Parameters<Paths.PatchApiB2BAdminAuthChangePassword.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
   /**
    * getApiB2BAdminUsersUserId - PERMISSION: NO
@@ -48942,7 +48950,7 @@ export interface OperationMethods {
   'getApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
   /**
    * patchApiB2BAdminUsersUserId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]
@@ -48950,7 +48958,7 @@ export interface OperationMethods {
   'patchApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
   /**
    * deleteApiB2BAdminUsersUserId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]
@@ -48958,7 +48966,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminUsersUserId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   /**
    * postApiB2BAdminUsersRegistration - PERMISSION: NO
@@ -48966,7 +48974,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersRegistration'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsersRegistration.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
   /**
    * postApiB2BAdminUsersActivation - PERMISSION: NO
@@ -48974,7 +48982,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersActivation'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsersActivation.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
   /**
    * postApiB2BAdminUsersActivationResend - PERMISSION: NO
@@ -48982,7 +48990,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsersActivationResend'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsersActivationResend.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   /**
    * getApiB2BAdminEnumsCategories - PERMISSION: NO
@@ -48990,7 +48998,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCategories'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategories.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
   /**
    * postApiB2BAdminEnumsCategories - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -48998,7 +49006,7 @@ export interface OperationMethods {
   'postApiB2BAdminEnumsCategories'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
   /**
    * getApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: NO
@@ -49006,7 +49014,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
    * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49014,7 +49022,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
    * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49022,7 +49030,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminEnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   /**
    * getApiB2BAdminEnumsCosmetics - PERMISSION: NO
@@ -49030,7 +49038,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCosmetics'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCosmetics.QueryParameters & Paths.GetApiB2BAdminEnumsCosmetics.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200>
   /**
    * postApiB2BAdminEnumsCosmetics - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49038,7 +49046,7 @@ export interface OperationMethods {
   'postApiB2BAdminEnumsCosmetics'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsCosmetics.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminEnumsCosmetics.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEnumsCosmetics.Responses.$200>
   /**
    * getApiB2BAdminEnumsCosmeticsCosmeticId - PERMISSION: NO
@@ -49046,7 +49054,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCosmeticsCosmeticId'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.GetApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
   /**
    * patchApiB2BAdminEnumsCosmeticsCosmeticId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49054,7 +49062,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEnumsCosmeticsCosmeticId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
   /**
    * deleteApiB2BAdminEnumsCosmeticsCosmeticId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49062,7 +49070,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminEnumsCosmeticsCosmeticId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
   /**
    * getApiB2BAdminEnumsLanguages - PERMISSION: NO
@@ -49070,7 +49078,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsLanguages'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsLanguages.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsLanguages.Responses.$200>
   /**
    * postApiB2BAdminEnumsLanguages - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49078,7 +49086,7 @@ export interface OperationMethods {
   'postApiB2BAdminEnumsLanguages'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsLanguages.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminEnumsLanguages.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEnumsLanguages.Responses.$200>
   /**
    * getApiB2BAdminEnumsLanguagesLanguageId - PERMISSION: NO
@@ -49086,7 +49094,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsLanguagesLanguageId'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.GetApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
   /**
    * patchApiB2BAdminEnumsLanguagesLanguageId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49094,7 +49102,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEnumsLanguagesLanguageId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
   /**
    * deleteApiB2BAdminEnumsLanguagesLanguageId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49102,7 +49110,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminEnumsLanguagesLanguageId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
   /**
    * getApiB2BAdminEnumsSupportContacts - PERMISSION: NO
@@ -49110,7 +49118,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsSupportContacts'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsSupportContacts.QueryParameters & Paths.GetApiB2BAdminEnumsSupportContacts.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsSupportContacts.Responses.$200>
   /**
    * postApiB2BAdminEnumsSupportContacts - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49118,7 +49126,7 @@ export interface OperationMethods {
   'postApiB2BAdminEnumsSupportContacts'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsSupportContacts.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminEnumsSupportContacts.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEnumsSupportContacts.Responses.$200>
   /**
    * getApiB2BAdminEnumsSupportContactsSupportContactId - PERMISSION: NO
@@ -49126,7 +49134,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsSupportContactsSupportContactId'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
   /**
    * patchApiB2BAdminEnumsSupportContactsSupportContactId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49134,7 +49142,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEnumsSupportContactsSupportContactId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
   /**
    * deleteApiB2BAdminEnumsSupportContactsSupportContactId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49142,7 +49150,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminEnumsSupportContactsSupportContactId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
   /**
    * getApiB2BAdminEnumsCategoryParameters - PERMISSION: NO
@@ -49150,7 +49158,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCategoryParameters'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoryParameters.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200>
   /**
    * postApiB2BAdminEnumsCategoryParameters - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49158,7 +49166,7 @@ export interface OperationMethods {
   'postApiB2BAdminEnumsCategoryParameters'(
     parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategoryParameters.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminEnumsCategoryParameters.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEnumsCategoryParameters.Responses.$200>
   /**
    * getApiB2BAdminEnumsCategoryParametersCategoryParameterId - PERMISSION: NO
@@ -49166,7 +49174,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCategoryParametersCategoryParameterId'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
   /**
    * patchApiB2BAdminEnumsCategoryParametersCategoryParameterId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49174,7 +49182,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEnumsCategoryParametersCategoryParameterId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
   /**
    * deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -49182,7 +49190,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
   /**
    * getApiB2BAdminEnumsCountries - PERMISSION: NO
@@ -49190,7 +49198,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCountries'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCountries.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
   /**
    * getApiB2BAdminEnumsCurrencies - PERMISSION: NO
@@ -49198,7 +49206,7 @@ export interface OperationMethods {
   'getApiB2BAdminEnumsCurrencies'(
     parameters?: Parameters<Paths.GetApiB2BAdminEnumsCurrencies.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   /**
    * postApiB2BV1AuthLogin - PERMISSION: NO
@@ -49206,7 +49214,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthLogin'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthLogin.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
   /**
    * postApiB2BV1AuthRefreshToken - PERMISSION: NO
@@ -49214,7 +49222,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthRefreshToken'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthRefreshToken.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
   /**
    * postApiB2BV1AuthLogout - PERMISSION: NO
@@ -49222,7 +49230,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthLogout'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthLogout.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
   /**
    * postApiB2BV1AuthForgotPassword - PERMISSION: NO
@@ -49230,7 +49238,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthForgotPassword'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthForgotPassword.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
   /**
    * postApiB2BV1AuthResetPassword - PERMISSION: NO
@@ -49238,7 +49246,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthResetPassword'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthResetPassword.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
   /**
    * patchApiB2BV1AuthChangePassword - PERMISSION: NO
@@ -49246,7 +49254,7 @@ export interface OperationMethods {
   'patchApiB2BV1AuthChangePassword'(
     parameters?: Parameters<Paths.PatchApiB2BV1AuthChangePassword.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1AuthChangePassword.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
   /**
    * getApiB2BV1UsersUserId - PERMISSION: NO
@@ -49254,7 +49262,7 @@ export interface OperationMethods {
   'getApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
   /**
    * patchApiB2BV1UsersUserId - PERMISSION: NO
@@ -49262,7 +49270,7 @@ export interface OperationMethods {
   'patchApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
   /**
    * deleteApiB2BV1UsersUserId - PERMISSION: NO
@@ -49270,7 +49278,7 @@ export interface OperationMethods {
   'deleteApiB2BV1UsersUserId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
   /**
    * postApiB2BV1UsersRegistration - PERMISSION: NO
@@ -49278,7 +49286,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersRegistration'(
     parameters?: Parameters<Paths.PostApiB2BV1UsersRegistration.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
   /**
    * postApiB2BV1UsersActivation - PERMISSION: NO
@@ -49286,7 +49294,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersActivation'(
     parameters?: Parameters<Paths.PostApiB2BV1UsersActivation.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
   /**
    * postApiB2BV1UsersActivationResend - PERMISSION: NO
@@ -49294,7 +49302,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersActivationResend'(
     parameters?: Parameters<Paths.PostApiB2BV1UsersActivationResend.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   /**
    * getApiB2BV1EnumsCategories - PERMISSION: NO
@@ -49302,7 +49310,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCategories'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCategories.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
   /**
    * getApiB2BV1EnumsCategoriesCategoryId - PERMISSION: NO
@@ -49310,7 +49318,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BV1EnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
   /**
    * getApiB2BV1EnumsCosmetics - PERMISSION: NO
@@ -49318,7 +49326,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCosmetics'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCosmetics.QueryParameters & Paths.GetApiB2BV1EnumsCosmetics.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCosmetics.Responses.$200>
   /**
    * getApiB2BV1EnumsCosmeticsCosmeticId - PERMISSION: NO
@@ -49326,7 +49334,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCosmeticsCosmeticId'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCosmeticsCosmeticId.PathParameters & Paths.GetApiB2BV1EnumsCosmeticsCosmeticId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCosmeticsCosmeticId.Responses.$200>
   /**
    * getApiB2BV1EnumsLanguages - PERMISSION: NO
@@ -49334,7 +49342,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsLanguages'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsLanguages.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsLanguages.Responses.$200>
   /**
    * getApiB2BV1EnumsLanguagesLanguageId - PERMISSION: NO
@@ -49342,7 +49350,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsLanguagesLanguageId'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsLanguagesLanguageId.PathParameters & Paths.GetApiB2BV1EnumsLanguagesLanguageId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsLanguagesLanguageId.Responses.$200>
   /**
    * getApiB2BV1EnumsSupportContacts - PERMISSION: NO
@@ -49350,7 +49358,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsSupportContacts'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsSupportContacts.QueryParameters & Paths.GetApiB2BV1EnumsSupportContacts.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsSupportContacts.Responses.$200>
   /**
    * getApiB2BV1EnumsCountries - PERMISSION: NO
@@ -49358,7 +49366,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCountries'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCountries.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
   /**
    * getApiB2BV1EnumsCurrencies - PERMISSION: NO
@@ -49366,7 +49374,7 @@ export interface OperationMethods {
   'getApiB2BV1EnumsCurrencies'(
     parameters?: Parameters<Paths.GetApiB2BV1EnumsCurrencies.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   /**
    * postApiB2BV1PushNotificationsSubscribe - PERMISSION: NO
@@ -49374,7 +49382,7 @@ export interface OperationMethods {
   'postApiB2BV1PushNotificationsSubscribe'(
     parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
   /**
    * deleteApiB2BV1PushNotificationsUnsubscribeDeviceId - PERMISSION: NO
@@ -49382,7 +49390,7 @@ export interface OperationMethods {
   'deleteApiB2BV1PushNotificationsUnsubscribeDeviceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
   /**
    * getApiB2CV1Salons - PERMISSION: NO
@@ -49390,7 +49398,7 @@ export interface OperationMethods {
   'getApiB2CV1Salons'(
     parameters?: Parameters<Paths.GetApiB2CV1Salons.QueryParameters & Paths.GetApiB2CV1Salons.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1Salons.Responses.$200>
   /**
    * getApiB2CV1SalonsMap - PERMISSION: NO
@@ -49398,7 +49406,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsMap'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsMap.QueryParameters & Paths.GetApiB2CV1SalonsMap.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsMap.Responses.$200>
   /**
    * getApiB2CV1SalonsDashboard - PERMISSION: NO
@@ -49406,7 +49414,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsDashboard'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsDashboard.QueryParameters & Paths.GetApiB2CV1SalonsDashboard.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsDashboard.Responses.$200>
   /**
    * getApiB2CV1SalonsFilter - PERMISSION: NO
@@ -49414,7 +49422,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsFilter'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsFilter.QueryParameters & Paths.GetApiB2CV1SalonsFilter.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsFilter.Responses.$200>
   /**
    * getApiB2CV1SalonsFilterCitiesPlaceId - PERMISSION: NO
@@ -49422,7 +49430,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsFilterCitiesPlaceId'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.PathParameters & Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.Responses.$200>
   /**
    * getApiB2CV1SalonsSalonId - PERMISSION: NO
@@ -49430,7 +49438,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsSalonId'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonId.PathParameters & Paths.GetApiB2CV1SalonsSalonId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonId.Responses.$200>
   /**
    * getApiB2CV1SalonsSalonIdServices - PERMISSION: NO
@@ -49438,7 +49446,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsSalonIdServices'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdServices.PathParameters & Paths.GetApiB2CV1SalonsSalonIdServices.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdServices.Responses.$200>
   /**
    * getApiB2CV1SalonsSalonIdEmployees - PERMISSION: NO
@@ -49446,7 +49454,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsSalonIdEmployees'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdEmployees.Responses.$200>
   /**
    * getApiB2CV1SalonsSalonIdTravelData - PERMISSION: NO
@@ -49454,7 +49462,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsSalonIdTravelData'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdTravelData.PathParameters & Paths.GetApiB2CV1SalonsSalonIdTravelData.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdTravelData.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdTravelData.Responses.$200>
   /**
    * getApiB2CV1SalonsSalonIdUserRating - PERMISSION: NO
@@ -49462,7 +49470,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsSalonIdUserRating'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdUserRating.Responses.$200>
   /**
    * getApiB2CV1SalonsSalonIdLike - PERMISSION: NO
@@ -49470,7 +49478,7 @@ export interface OperationMethods {
   'getApiB2CV1SalonsSalonIdLike'(
     parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdLike.PathParameters & Paths.GetApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdLike.Responses.$200>
   /**
    * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
@@ -49478,7 +49486,7 @@ export interface OperationMethods {
   'patchApiB2CV1SalonsSalonIdLike'(
     parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdLike.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
     data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
   /**
    * patchApiB2CV1SalonsSalonIdRate - PERMISSION: NO
@@ -49486,7 +49494,7 @@ export interface OperationMethods {
   'patchApiB2CV1SalonsSalonIdRate'(
     parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdRate.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdRate.HeaderParameters> | null,
     data?: Paths.PatchApiB2CV1SalonsSalonIdRate.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdRate.Responses.$200>
   /**
    * getApiB2CV1EnumsCategories - PERMISSION: NO
@@ -49494,7 +49502,7 @@ export interface OperationMethods {
   'getApiB2CV1EnumsCategories'(
     parameters?: Parameters<Paths.GetApiB2CV1EnumsCategories.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsCategories.Responses.$200>
   /**
    * getApiB2CV1EnumsCategoriesCategoryId - PERMISSION: NO
@@ -49502,7 +49510,7 @@ export interface OperationMethods {
   'getApiB2CV1EnumsCategoriesCategoryId'(
     parameters?: Parameters<Paths.GetApiB2CV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2CV1EnumsCategoriesCategoryId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsCategoriesCategoryId.Responses.$200>
   /**
    * getApiB2CV1EnumsCosmetics - PERMISSION: NO
@@ -49510,7 +49518,7 @@ export interface OperationMethods {
   'getApiB2CV1EnumsCosmetics'(
     parameters?: Parameters<Paths.GetApiB2CV1EnumsCosmetics.QueryParameters & Paths.GetApiB2CV1EnumsCosmetics.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsCosmetics.Responses.$200>
   /**
    * getApiB2CV1EnumsCosmeticsCosmeticId - PERMISSION: NO
@@ -49518,7 +49526,7 @@ export interface OperationMethods {
   'getApiB2CV1EnumsCosmeticsCosmeticId'(
     parameters?: Parameters<Paths.GetApiB2CV1EnumsCosmeticsCosmeticId.PathParameters & Paths.GetApiB2CV1EnumsCosmeticsCosmeticId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsCosmeticsCosmeticId.Responses.$200>
   /**
    * getApiB2CV1EnumsLanguages - PERMISSION: NO
@@ -49526,7 +49534,7 @@ export interface OperationMethods {
   'getApiB2CV1EnumsLanguages'(
     parameters?: Parameters<Paths.GetApiB2CV1EnumsLanguages.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsLanguages.Responses.$200>
   /**
    * getApiB2CV1EnumsLanguagesLanguageId - PERMISSION: NO
@@ -49534,7 +49542,7 @@ export interface OperationMethods {
   'getApiB2CV1EnumsLanguagesLanguageId'(
     parameters?: Parameters<Paths.GetApiB2CV1EnumsLanguagesLanguageId.PathParameters & Paths.GetApiB2CV1EnumsLanguagesLanguageId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   /**
    * getApiPgsyncSalonsSalonIdRangePriceAndDurationData - PERMISSION: NO
@@ -49542,7 +49550,7 @@ export interface OperationMethods {
   'getApiPgsyncSalonsSalonIdRangePriceAndDurationData'(
     parameters?: Parameters<Paths.GetApiPgsyncSalonsSalonIdRangePriceAndDurationData.PathParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiPgsyncSalonsSalonIdRangePriceAndDurationData.Responses.$200>
   /**
    * postApiB2BAdminAuthLogin - PERMISSION: NO
@@ -49550,7 +49558,7 @@ export interface OperationMethods {
   'postApiB2BAdminAuthLogin'(
     parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
   /**
    * getApiB2BAdminUsers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]
@@ -49558,7 +49566,7 @@ export interface OperationMethods {
   'getApiB2BAdminUsers'(
     parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
   /**
    * postApiB2BAdminUsers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]
@@ -49566,7 +49574,7 @@ export interface OperationMethods {
   'postApiB2BAdminUsers'(
     parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminUsers.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
   /**
    * getApiB2BAdminUsersUserIdPendingEmployeeInvites - PERMISSION: NO
@@ -49574,7 +49582,7 @@ export interface OperationMethods {
   'getApiB2BAdminUsersUserIdPendingEmployeeInvites'(
     parameters?: Parameters<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200>
   /**
    * getApiB2BAdminRolesSystemUser - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]
@@ -49582,7 +49590,7 @@ export interface OperationMethods {
   'getApiB2BAdminRolesSystemUser'(
     parameters?: Parameters<Paths.GetApiB2BAdminRolesSystemUser.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminRolesSystemUser.Responses.$200>
   /**
    * getApiB2BAdminRolesSalon - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49590,7 +49598,7 @@ export interface OperationMethods {
   'getApiB2BAdminRolesSalon'(
     parameters?: Parameters<Paths.GetApiB2BAdminRolesSalon.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminRolesSalon.Responses.$200>
   /**
    * postApiB2BAdminFilesSignUrls - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, USER_BROWSING, USER_CREATE, USER_EDIT, USER_DELETE, ENUM_EDIT, LOGIN_AS_PARTNER]
@@ -49598,7 +49606,7 @@ export interface OperationMethods {
   'postApiB2BAdminFilesSignUrls'(
     parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
   /**
    * getApiB2BAdminSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49606,7 +49614,7 @@ export interface OperationMethods {
   'getApiB2BAdminSalons'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
   /**
    * postApiB2BAdminSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49614,7 +49622,7 @@ export interface OperationMethods {
   'postApiB2BAdminSalons'(
     parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminSalons.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
   /**
    * getApiB2BAdminSalonsBasic - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49622,7 +49630,7 @@ export interface OperationMethods {
   'getApiB2BAdminSalonsBasic'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasic.QueryParameters & Paths.GetApiB2BAdminSalonsBasic.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsBasic.Responses.$200>
   /**
    * getApiB2BAdminSalonsBasicSuggestion - PERMISSION: [PARTNER]
@@ -49630,7 +49638,7 @@ export interface OperationMethods {
   'getApiB2BAdminSalonsBasicSuggestion'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasicSuggestion.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200>
   /**
    * getApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49638,7 +49646,7 @@ export interface OperationMethods {
   'getApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -49646,7 +49654,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
   /**
    * deleteApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_DELETE]
@@ -49654,7 +49662,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminSalonsSalonId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   /**
    * getApiB2BAdminSalonsSalonIdBasic - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49662,7 +49670,7 @@ export interface OperationMethods {
   'getApiB2BAdminSalonsSalonIdBasic'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdBasic.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdBasic.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdBasic.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdBasicSuggestion - PERMISSION: [PARTNER]
@@ -49670,7 +49678,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdBasicSuggestion'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -49678,7 +49686,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdOpenHoursNote'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdInvoice - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_BILLING_UPDATE]
@@ -49686,7 +49694,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdInvoice'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdInvoice.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdInvoice.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdCategories - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -49694,7 +49702,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdCategories'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCategories.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCategories.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdRequestPublication - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -49702,7 +49710,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdRequestPublication'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdResolvePublication - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]
@@ -49710,7 +49718,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdResolvePublication'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdUnpublish - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -49718,7 +49726,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdUnpublish'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite - PERMISSION: [PARTNER]
@@ -49726,7 +49734,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]
@@ -49734,7 +49742,7 @@ export interface OperationMethods {
   'patchApiB2BAdminSalonsSalonIdServices'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdServices.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdServices.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdServices.Responses.$200>
   /**
    * getApiB2BAdminServices - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49742,7 +49750,7 @@ export interface OperationMethods {
   'getApiB2BAdminServices'(
     parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
   /**
    * getApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49750,7 +49758,7 @@ export interface OperationMethods {
   'getApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
   /**
    * patchApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
@@ -49758,7 +49766,7 @@ export interface OperationMethods {
   'patchApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
   /**
    * deleteApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
@@ -49766,7 +49774,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   /**
    * postApiB2BAdminServicesCategoryServiceSuggest - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
@@ -49774,7 +49782,7 @@ export interface OperationMethods {
   'postApiB2BAdminServicesCategoryServiceSuggest'(
     parameters?: Parameters<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.Responses.$200>
   /**
    * getApiB2BAdminCustomers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49782,7 +49790,7 @@ export interface OperationMethods {
   'getApiB2BAdminCustomers'(
     parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
   /**
    * postApiB2BAdminCustomers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_CREATE]
@@ -49790,7 +49798,7 @@ export interface OperationMethods {
   'postApiB2BAdminCustomers'(
     parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminCustomers.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
   /**
    * getApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49798,7 +49806,7 @@ export interface OperationMethods {
   'getApiB2BAdminCustomersCustomerId'(
     parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
    * patchApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_UPDATE]
@@ -49806,7 +49814,7 @@ export interface OperationMethods {
   'patchApiB2BAdminCustomersCustomerId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
    * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_DELETE]
@@ -49814,7 +49822,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminCustomersCustomerId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
   /**
    * getApiB2BAdminEmployees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49822,7 +49830,7 @@ export interface OperationMethods {
   'getApiB2BAdminEmployees'(
     parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
   /**
    * postApiB2BAdminEmployees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
@@ -49830,7 +49838,7 @@ export interface OperationMethods {
   'postApiB2BAdminEmployees'(
     parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminEmployees.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
   /**
    * getApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -49838,7 +49846,7 @@ export interface OperationMethods {
   'getApiB2BAdminEmployeesEmployeeId'(
     parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
   /**
    * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_UPDATE]
@@ -49846,7 +49854,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEmployeesEmployeeId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
   /**
    * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_DELETE]
@@ -49854,7 +49862,7 @@ export interface OperationMethods {
   'deleteApiB2BAdminEmployeesEmployeeId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
   /**
    * postApiB2BAdminEmployeesInvite - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
@@ -49862,7 +49870,7 @@ export interface OperationMethods {
   'postApiB2BAdminEmployeesInvite'(
     parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
   /**
    * patchApiB2BAdminEmployeesEmployeeIdRole - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
@@ -49870,7 +49878,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEmployeesEmployeeIdRole'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
   /**
    * patchApiB2BAdminEmployeesEmployeeIdServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
@@ -49878,7 +49886,7 @@ export interface OperationMethods {
   'patchApiB2BAdminEmployeesEmployeeIdServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.Responses.$200>
   /**
    * postApiB2BAdminImportsSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]
@@ -49886,7 +49894,7 @@ export interface OperationMethods {
   'postApiB2BAdminImportsSalons'(
     parameters?: Parameters<Paths.PostApiB2BAdminImportsSalons.HeaderParameters> | null,
     data?: Paths.PostApiB2BAdminImportsSalons.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
   /**
    * postApiB2BV1AuthLoginAsPartner - PERMISSION: [NOTINO_ADMIN, LOGIN_AS_PARTNER]
@@ -49894,7 +49902,7 @@ export interface OperationMethods {
   'postApiB2BV1AuthLoginAsPartner'(
     parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
   /**
    * getApiB2BV1UsersPartners - PERMISSION: [NOTINO_ADMIN, LOGIN_AS_PARTNER]
@@ -49902,7 +49910,7 @@ export interface OperationMethods {
   'getApiB2BV1UsersPartners'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
   /**
    * getApiB2BV1UsersUserIdPendingEmployeeInvites - PERMISSION: NO
@@ -49910,7 +49918,7 @@ export interface OperationMethods {
   'getApiB2BV1UsersUserIdPendingEmployeeInvites'(
     parameters?: Parameters<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
   /**
    * postApiB2BV1UsersInvite - PERMISSION: [PARTNER]
@@ -49918,7 +49926,7 @@ export interface OperationMethods {
   'postApiB2BV1UsersInvite'(
     parameters?: Parameters<Paths.PostApiB2BV1UsersInvite.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1UsersInvite.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1UsersInvite.Responses.$200>
   /**
    * postApiB2BV1FilesSignUrls - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, USER_BROWSING, USER_CREATE, USER_EDIT, USER_DELETE, ENUM_EDIT, LOGIN_AS_PARTNER]
@@ -49926,7 +49934,7 @@ export interface OperationMethods {
   'postApiB2BV1FilesSignUrls'(
     parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
   /**
    * getApiB2BV1Salons - PERMISSION: [PARTNER]
@@ -49934,7 +49942,7 @@ export interface OperationMethods {
   'getApiB2BV1Salons'(
     parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
   /**
    * postApiB2BV1Salons - PERMISSION: [PARTNER]
@@ -49942,7 +49950,7 @@ export interface OperationMethods {
   'postApiB2BV1Salons'(
     parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1Salons.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
   /**
    * getApiB2BV1SalonsBasic - PERMISSION: [PARTNER]
@@ -49950,7 +49958,7 @@ export interface OperationMethods {
   'getApiB2BV1SalonsBasic'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsBasic.QueryParameters & Paths.GetApiB2BV1SalonsBasic.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsBasic.Responses.$200>
   /**
    * getApiB2BV1SalonsPreview - PERMISSION: [PARTNER]
@@ -49958,7 +49966,7 @@ export interface OperationMethods {
   'getApiB2BV1SalonsPreview'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
   /**
    * getApiB2BV1SalonsBasicSuggestion - PERMISSION: [PARTNER]
@@ -49966,7 +49974,7 @@ export interface OperationMethods {
   'getApiB2BV1SalonsBasicSuggestion'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsBasicSuggestion.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsBasicSuggestion.Responses.$200>
   /**
    * getApiB2BV1SalonsSalonId - PERMISSION: [PARTNER]
@@ -49974,7 +49982,7 @@ export interface OperationMethods {
   'getApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -49982,7 +49990,7 @@ export interface OperationMethods {
   'patchApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
   /**
    * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_DELETE]
@@ -49990,7 +49998,7 @@ export interface OperationMethods {
   'deleteApiB2BV1SalonsSalonId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
   /**
    * getApiB2BV1SalonsSalonIdBasic - PERMISSION: [PARTNER]
@@ -49998,7 +50006,7 @@ export interface OperationMethods {
   'getApiB2BV1SalonsSalonIdBasic'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdBasic.PathParameters & Paths.GetApiB2BV1SalonsSalonIdBasic.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdBasic.Responses.$200>
   /**
    * getApiB2BV1SalonsSalonIdDashboard - PERMISSION: [PARTNER]
@@ -50006,7 +50014,7 @@ export interface OperationMethods {
   'getApiB2BV1SalonsSalonIdDashboard'(
     parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BV1SalonsSalonIdDashboard.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdInvoice - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_BILLING_UPDATE]
@@ -50014,7 +50022,7 @@ export interface OperationMethods {
   'patchApiB2BV1SalonsSalonIdInvoice'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdInvoice.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonIdInvoice.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdCategories - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -50022,7 +50030,7 @@ export interface OperationMethods {
   'patchApiB2BV1SalonsSalonIdCategories'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCategories.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonIdCategories.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCategories.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdRequestPublication - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -50030,7 +50038,7 @@ export interface OperationMethods {
   'patchApiB2BV1SalonsSalonIdRequestPublication'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdUnpublish - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -50038,7 +50046,7 @@ export interface OperationMethods {
   'patchApiB2BV1SalonsSalonIdUnpublish'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdUnpublish.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonIdUnpublish.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite - PERMISSION: [PARTNER]
@@ -50046,7 +50054,7 @@ export interface OperationMethods {
   'patchApiB2BV1SalonsSalonIdAcceptEmployeeInvite'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdServices - PERMISSION: [PARTNER, PARTNER_ADMIN, SERVICE_CREATE, SERVICE_DELETE]
@@ -50054,7 +50062,7 @@ export interface OperationMethods {
   'patchApiB2BV1SalonsSalonIdServices'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdServices.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdServices.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
   /**
    * patchApiB2BV1SalonsSalonIdBasicSuggestion - PERMISSION: [PARTNER]
@@ -50062,7 +50070,7 @@ export interface OperationMethods {
   'patchApiB2BV1SalonsSalonIdBasicSuggestion'(
     parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.Responses.$200>
   /**
    * getApiB2BV1Services - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -50070,7 +50078,7 @@ export interface OperationMethods {
   'getApiB2BV1Services'(
     parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
   /**
    * getApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -50078,7 +50086,7 @@ export interface OperationMethods {
   'getApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
   /**
    * patchApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
@@ -50086,7 +50094,7 @@ export interface OperationMethods {
   'patchApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
   /**
    * deleteApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
@@ -50094,7 +50102,7 @@ export interface OperationMethods {
   'deleteApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   /**
    * postApiB2BV1ServicesCategoryServiceSuggest - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
@@ -50102,7 +50110,7 @@ export interface OperationMethods {
   'postApiB2BV1ServicesCategoryServiceSuggest'(
     parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1ServicesCategoryServiceSuggest.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.Responses.$200>
   /**
    * getApiB2BV1Customers - PERMISSION: [PARTNER]
@@ -50110,7 +50118,7 @@ export interface OperationMethods {
   'getApiB2BV1Customers'(
     parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
   /**
    * postApiB2BV1Customers - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_CREATE]
@@ -50118,7 +50126,7 @@ export interface OperationMethods {
   'postApiB2BV1Customers'(
     parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1Customers.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1Customers.Responses.$200>
   /**
    * getApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER]
@@ -50126,7 +50134,7 @@ export interface OperationMethods {
   'getApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
   /**
    * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_UPDATE]
@@ -50134,7 +50142,7 @@ export interface OperationMethods {
   'patchApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1CustomersCustomerId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
   /**
    * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_DELETE]
@@ -50142,7 +50150,7 @@ export interface OperationMethods {
   'deleteApiB2BV1CustomersCustomerId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
   /**
    * getApiB2BV1Employees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -50150,7 +50158,7 @@ export interface OperationMethods {
   'getApiB2BV1Employees'(
     parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
   /**
    * postApiB2BV1Employees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
@@ -50158,7 +50166,7 @@ export interface OperationMethods {
   'postApiB2BV1Employees'(
     parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1Employees.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1Employees.Responses.$200>
   /**
    * getApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -50166,7 +50174,7 @@ export interface OperationMethods {
   'getApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
    * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_UPDATE]
@@ -50174,7 +50182,7 @@ export interface OperationMethods {
   'patchApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1EmployeesEmployeeId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
    * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_DELETE]
@@ -50182,7 +50190,7 @@ export interface OperationMethods {
   'deleteApiB2BV1EmployeesEmployeeId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
   /**
    * postApiB2BV1EmployeesInvite - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
@@ -50190,7 +50198,7 @@ export interface OperationMethods {
   'postApiB2BV1EmployeesInvite'(
     parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
     data?: Paths.PostApiB2BV1EmployeesInvite.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
   /**
    * patchApiB2BV1EmployeesEmployeeIdRole - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
@@ -50198,7 +50206,7 @@ export interface OperationMethods {
   'patchApiB2BV1EmployeesEmployeeIdRole'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdRole.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1EmployeesEmployeeIdRole.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
   /**
    * patchApiB2BV1EmployeesEmployeeIdServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, USER_ROLE_EDIT]
@@ -50206,7 +50214,7 @@ export interface OperationMethods {
   'patchApiB2BV1EmployeesEmployeeIdServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
     data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.RequestBody,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.Responses.$200>
   /**
    * getApiB2BV1RolesSalon - PERMISSION: [PARTNER]
@@ -50214,7 +50222,7 @@ export interface OperationMethods {
   'getApiB2BV1RolesSalon'(
     parameters?: Parameters<Paths.GetApiB2BV1RolesSalon.HeaderParameters> | null,
     data?: any,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1RolesSalon.Responses.$200>
 }
 
@@ -50226,7 +50234,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthRefreshToken.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthRefreshToken.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthRefreshToken.Responses.$200>
   }
   ['/api/b2b/admin/auth/logout']: {
@@ -50236,7 +50244,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthLogout.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthLogout.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthLogout.Responses.$200>
   }
   ['/api/b2b/admin/auth/forgot-password']: {
@@ -50246,7 +50254,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthForgotPassword.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthForgotPassword.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthForgotPassword.Responses.$200>
   }
   ['/api/b2b/admin/auth/reset-password']: {
@@ -50256,7 +50264,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthResetPassword.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthResetPassword.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthResetPassword.Responses.$200>
   }
   ['/api/b2b/admin/auth/change-password']: {
@@ -50266,7 +50274,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminAuthChangePassword.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminAuthChangePassword.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminAuthChangePassword.Responses.$200>
   }
   ['/api/b2b/admin/users/{userID}']: {
@@ -50276,7 +50284,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminUsersUserId.PathParameters & Paths.GetApiB2BAdminUsersUserId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserId.Responses.$200>
     /**
      * patchApiB2BAdminUsersUserId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_EDIT]
@@ -50284,7 +50292,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserId.PathParameters & Paths.PatchApiB2BAdminUsersUserId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminUsersUserId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminUsersUserId.Responses.$200>
     /**
      * deleteApiB2BAdminUsersUserId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_DELETE]
@@ -50292,7 +50300,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminUsersUserId.PathParameters & Paths.DeleteApiB2BAdminUsersUserId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminUsersUserId.Responses.$200>
   }
   ['/api/b2b/admin/users/registration']: {
@@ -50302,7 +50310,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsersRegistration.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminUsersRegistration.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsersRegistration.Responses.$200>
   }
   ['/api/b2b/admin/users/activation']: {
@@ -50312,7 +50320,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsersActivation.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminUsersActivation.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivation.Responses.$200>
   }
   ['/api/b2b/admin/users/activation-resend']: {
@@ -50322,7 +50330,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsersActivationResend.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminUsersActivationResend.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsersActivationResend.Responses.$200>
   }
   ['/api/b2b/admin/enums/categories/']: {
@@ -50332,7 +50340,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategories.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategories.Responses.$200>
     /**
      * postApiB2BAdminEnumsCategories - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50340,7 +50348,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategories.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminEnumsCategories.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEnumsCategories.Responses.$200>
   }
   ['/api/b2b/admin/enums/categories/{categoryID}']: {
@@ -50350,7 +50358,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
      * patchApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50358,7 +50366,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
     /**
      * deleteApiB2BAdminEnumsCategoriesCategoryId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50366,7 +50374,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoriesCategoryId.Responses.$200>
   }
   ['/api/b2b/admin/enums/cosmetics/']: {
@@ -50376,7 +50384,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCosmetics.QueryParameters & Paths.GetApiB2BAdminEnumsCosmetics.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200>
     /**
      * postApiB2BAdminEnumsCosmetics - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50384,7 +50392,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsCosmetics.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminEnumsCosmetics.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEnumsCosmetics.Responses.$200>
   }
   ['/api/b2b/admin/enums/cosmetics/{cosmeticID}']: {
@@ -50394,7 +50402,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.GetApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
     /**
      * patchApiB2BAdminEnumsCosmeticsCosmeticId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50402,7 +50410,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
     /**
      * deleteApiB2BAdminEnumsCosmeticsCosmeticId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50410,7 +50418,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.PathParameters & Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCosmeticsCosmeticId.Responses.$200>
   }
   ['/api/b2b/admin/enums/languages/']: {
@@ -50420,7 +50428,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsLanguages.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsLanguages.Responses.$200>
     /**
      * postApiB2BAdminEnumsLanguages - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50428,7 +50436,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsLanguages.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminEnumsLanguages.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEnumsLanguages.Responses.$200>
   }
   ['/api/b2b/admin/enums/languages/{languageID}']: {
@@ -50438,7 +50446,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.GetApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
     /**
      * patchApiB2BAdminEnumsLanguagesLanguageId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50446,7 +50454,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
     /**
      * deleteApiB2BAdminEnumsLanguagesLanguageId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50454,7 +50462,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.PathParameters & Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsLanguagesLanguageId.Responses.$200>
   }
   ['/api/b2b/admin/enums/support-contacts/']: {
@@ -50464,7 +50472,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsSupportContacts.QueryParameters & Paths.GetApiB2BAdminEnumsSupportContacts.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsSupportContacts.Responses.$200>
     /**
      * postApiB2BAdminEnumsSupportContacts - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50472,7 +50480,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsSupportContacts.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminEnumsSupportContacts.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEnumsSupportContacts.Responses.$200>
   }
   ['/api/b2b/admin/enums/support-contacts/{supportContactID}']: {
@@ -50482,7 +50490,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
     /**
      * patchApiB2BAdminEnumsSupportContactsSupportContactId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50490,7 +50498,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
     /**
      * deleteApiB2BAdminEnumsSupportContactsSupportContactId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50498,7 +50506,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.PathParameters & Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsSupportContactsSupportContactId.Responses.$200>
   }
   ['/api/b2b/admin/enums/category-parameters/']: {
@@ -50508,7 +50516,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoryParameters.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoryParameters.Responses.$200>
     /**
      * postApiB2BAdminEnumsCategoryParameters - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50516,7 +50524,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEnumsCategoryParameters.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminEnumsCategoryParameters.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEnumsCategoryParameters.Responses.$200>
   }
   ['/api/b2b/admin/enums/category-parameters/{categoryParameterID}']: {
@@ -50526,7 +50534,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
     /**
      * patchApiB2BAdminEnumsCategoryParametersCategoryParameterId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50534,7 +50542,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
     /**
      * deleteApiB2BAdminEnumsCategoryParametersCategoryParameterId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
@@ -50542,7 +50550,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.PathParameters & Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsCategoryParametersCategoryParameterId.Responses.$200>
   }
   ['/api/b2b/admin/enums/countries']: {
@@ -50552,7 +50560,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCountries.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
   }
   ['/api/b2b/admin/enums/currencies']: {
@@ -50562,7 +50570,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEnumsCurrencies.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200>
   }
   ['/api/b2b/v1/auth/login']: {
@@ -50572,7 +50580,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthLogin.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthLogin.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthLogin.Responses.$200>
   }
   ['/api/b2b/v1/auth/refresh-token']: {
@@ -50582,7 +50590,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthRefreshToken.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthRefreshToken.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthRefreshToken.Responses.$200>
   }
   ['/api/b2b/v1/auth/logout']: {
@@ -50592,7 +50600,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthLogout.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthLogout.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthLogout.Responses.$200>
   }
   ['/api/b2b/v1/auth/forgot-password']: {
@@ -50602,7 +50610,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthForgotPassword.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthForgotPassword.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthForgotPassword.Responses.$200>
   }
   ['/api/b2b/v1/auth/reset-password']: {
@@ -50612,7 +50620,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthResetPassword.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthResetPassword.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthResetPassword.Responses.$200>
   }
   ['/api/b2b/v1/auth/change-password']: {
@@ -50622,7 +50630,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1AuthChangePassword.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1AuthChangePassword.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1AuthChangePassword.Responses.$200>
   }
   ['/api/b2b/v1/users/{userID}']: {
@@ -50632,7 +50640,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersUserId.PathParameters & Paths.GetApiB2BV1UsersUserId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersUserId.Responses.$200>
     /**
      * patchApiB2BV1UsersUserId - PERMISSION: NO
@@ -50640,7 +50648,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1UsersUserId.PathParameters & Paths.PatchApiB2BV1UsersUserId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1UsersUserId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1UsersUserId.Responses.$200>
     /**
      * deleteApiB2BV1UsersUserId - PERMISSION: NO
@@ -50648,7 +50656,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1UsersUserId.PathParameters & Paths.DeleteApiB2BV1UsersUserId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1UsersUserId.Responses.$200>
   }
   ['/api/b2b/v1/users/registration']: {
@@ -50658,7 +50666,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1UsersRegistration.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1UsersRegistration.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersRegistration.Responses.$200>
   }
   ['/api/b2b/v1/users/activation']: {
@@ -50668,7 +50676,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1UsersActivation.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1UsersActivation.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersActivation.Responses.$200>
   }
   ['/api/b2b/v1/users/activation-resend']: {
@@ -50678,7 +50686,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1UsersActivationResend.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1UsersActivationResend.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersActivationResend.Responses.$200>
   }
   ['/api/b2b/v1/enums/categories/']: {
@@ -50688,7 +50696,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCategories.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCategories.Responses.$200>
   }
   ['/api/b2b/v1/enums/categories/{categoryID}']: {
@@ -50698,7 +50706,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2BV1EnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCategoriesCategoryId.Responses.$200>
   }
   ['/api/b2b/v1/enums/cosmetics/']: {
@@ -50708,7 +50716,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCosmetics.QueryParameters & Paths.GetApiB2BV1EnumsCosmetics.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCosmetics.Responses.$200>
   }
   ['/api/b2b/v1/enums/cosmetics/{cosmeticID}']: {
@@ -50718,7 +50726,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCosmeticsCosmeticId.PathParameters & Paths.GetApiB2BV1EnumsCosmeticsCosmeticId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCosmeticsCosmeticId.Responses.$200>
   }
   ['/api/b2b/v1/enums/languages/']: {
@@ -50728,7 +50736,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsLanguages.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsLanguages.Responses.$200>
   }
   ['/api/b2b/v1/enums/languages/{languageID}']: {
@@ -50738,7 +50746,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsLanguagesLanguageId.PathParameters & Paths.GetApiB2BV1EnumsLanguagesLanguageId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsLanguagesLanguageId.Responses.$200>
   }
   ['/api/b2b/v1/enums/support-contacts/']: {
@@ -50748,7 +50756,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsSupportContacts.QueryParameters & Paths.GetApiB2BV1EnumsSupportContacts.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsSupportContacts.Responses.$200>
   }
   ['/api/b2b/v1/enums/countries']: {
@@ -50758,7 +50766,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCountries.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
   }
   ['/api/b2b/v1/enums/currencies']: {
@@ -50768,7 +50776,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EnumsCurrencies.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   }
   ['/api/b2b/v1/push-notifications/subscribe']: {
@@ -50778,7 +50786,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
   }
   ['/api/b2b/v1/push-notifications/unsubscribe/{deviceID}']: {
@@ -50788,7 +50796,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
   }
   ['/api/b2c/v1/salons/']: {
@@ -50798,7 +50806,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1Salons.QueryParameters & Paths.GetApiB2CV1Salons.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1Salons.Responses.$200>
   }
   ['/api/b2c/v1/salons/map']: {
@@ -50808,7 +50816,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsMap.QueryParameters & Paths.GetApiB2CV1SalonsMap.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsMap.Responses.$200>
   }
   ['/api/b2c/v1/salons/dashboard']: {
@@ -50818,7 +50826,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsDashboard.QueryParameters & Paths.GetApiB2CV1SalonsDashboard.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsDashboard.Responses.$200>
   }
   ['/api/b2c/v1/salons/filter']: {
@@ -50828,7 +50836,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsFilter.QueryParameters & Paths.GetApiB2CV1SalonsFilter.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsFilter.Responses.$200>
   }
   ['/api/b2c/v1/salons/filter/cities/{placeID}']: {
@@ -50838,7 +50846,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.PathParameters & Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsFilterCitiesPlaceId.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}']: {
@@ -50848,7 +50856,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonId.PathParameters & Paths.GetApiB2CV1SalonsSalonId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonId.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/services']: {
@@ -50858,7 +50866,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdServices.PathParameters & Paths.GetApiB2CV1SalonsSalonIdServices.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdServices.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/employees']: {
@@ -50868,7 +50876,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdEmployees.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdEmployees.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/travel-data']: {
@@ -50878,7 +50886,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdTravelData.PathParameters & Paths.GetApiB2CV1SalonsSalonIdTravelData.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdTravelData.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdTravelData.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/user-rating']: {
@@ -50888,7 +50896,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdUserRating.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/like']: {
@@ -50898,7 +50906,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdLike.PathParameters & Paths.GetApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdLike.Responses.$200>
     /**
      * patchApiB2CV1SalonsSalonIdLike - PERMISSION: NO
@@ -50906,7 +50914,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdLike.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdLike.HeaderParameters> | null,
       data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/rate']: {
@@ -50916,7 +50924,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2CV1SalonsSalonIdRate.PathParameters & Paths.PatchApiB2CV1SalonsSalonIdRate.HeaderParameters> | null,
       data?: Paths.PatchApiB2CV1SalonsSalonIdRate.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdRate.Responses.$200>
   }
   ['/api/b2c/v1/enums/categories/']: {
@@ -50926,7 +50934,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1EnumsCategories.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsCategories.Responses.$200>
   }
   ['/api/b2c/v1/enums/categories/{categoryID}']: {
@@ -50936,7 +50944,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1EnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2CV1EnumsCategoriesCategoryId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsCategoriesCategoryId.Responses.$200>
   }
   ['/api/b2c/v1/enums/cosmetics/']: {
@@ -50946,7 +50954,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1EnumsCosmetics.QueryParameters & Paths.GetApiB2CV1EnumsCosmetics.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsCosmetics.Responses.$200>
   }
   ['/api/b2c/v1/enums/cosmetics/{cosmeticID}']: {
@@ -50956,7 +50964,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1EnumsCosmeticsCosmeticId.PathParameters & Paths.GetApiB2CV1EnumsCosmeticsCosmeticId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsCosmeticsCosmeticId.Responses.$200>
   }
   ['/api/b2c/v1/enums/languages/']: {
@@ -50966,7 +50974,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1EnumsLanguages.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsLanguages.Responses.$200>
   }
   ['/api/b2c/v1/enums/languages/{languageID}']: {
@@ -50976,7 +50984,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2CV1EnumsLanguagesLanguageId.PathParameters & Paths.GetApiB2CV1EnumsLanguagesLanguageId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   }
   ['/api/pgsync/salons/{salonID}/range-price-and-duration-data']: {
@@ -50986,7 +50994,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiPgsyncSalonsSalonIdRangePriceAndDurationData.PathParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiPgsyncSalonsSalonIdRangePriceAndDurationData.Responses.$200>
   }
   ['/api/b2b/admin/auth/login']: {
@@ -50996,7 +51004,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
   }
   ['/api/b2b/admin/users/']: {
@@ -51006,7 +51014,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminUsers.QueryParameters & Paths.GetApiB2BAdminUsers.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsers.Responses.$200>
     /**
      * postApiB2BAdminUsers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]
@@ -51014,7 +51022,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminUsers.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminUsers.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
   }
   ['/api/b2b/admin/users/{userID}/pending-employee-invites']: {
@@ -51024,7 +51032,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200>
   }
   ['/api/b2b/admin/roles/system-user']: {
@@ -51034,7 +51042,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminRolesSystemUser.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminRolesSystemUser.Responses.$200>
   }
   ['/api/b2b/admin/roles/salon']: {
@@ -51044,7 +51052,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminRolesSalon.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminRolesSalon.Responses.$200>
   }
   ['/api/b2b/admin/files/sign-urls']: {
@@ -51054,7 +51062,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminFilesSignUrls.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
   }
   ['/api/b2b/admin/salons/']: {
@@ -51064,7 +51072,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalons.QueryParameters & Paths.GetApiB2BAdminSalons.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalons.Responses.$200>
     /**
      * postApiB2BAdminSalons - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
@@ -51072,7 +51080,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminSalons.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminSalons.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminSalons.Responses.$200>
   }
   ['/api/b2b/admin/salons/basic']: {
@@ -51082,7 +51090,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasic.QueryParameters & Paths.GetApiB2BAdminSalonsBasic.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsBasic.Responses.$200>
   }
   ['/api/b2b/admin/salons/basic-suggestion']: {
@@ -51092,7 +51100,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsBasicSuggestion.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}']: {
@@ -51102,7 +51110,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonId.PathParameters & Paths.GetApiB2BAdminSalonsSalonId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonId.Responses.$200>
     /**
      * patchApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -51110,7 +51118,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonId.Responses.$200>
     /**
      * deleteApiB2BAdminSalonsSalonId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_DELETE]
@@ -51118,7 +51126,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonId.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/basic']: {
@@ -51128,7 +51136,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdBasic.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdBasic.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdBasic.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/basic-suggestion']: {
@@ -51138,7 +51146,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
@@ -51148,7 +51156,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdOpenHoursNote.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/invoice']: {
@@ -51158,7 +51166,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdInvoice.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdInvoice.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdInvoice.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/categories']: {
@@ -51168,7 +51176,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCategories.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCategories.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/request-publication']: {
@@ -51178,7 +51186,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdRequestPublication.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/resolve-publication']: {
@@ -51188,7 +51196,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdResolvePublication.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/unpublish']: {
@@ -51198,7 +51206,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdUnpublish.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/accept-employee-invite']: {
@@ -51208,7 +51216,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/services']: {
@@ -51218,7 +51226,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdServices.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdServices.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdServices.Responses.$200>
   }
   ['/api/b2b/admin/services/']: {
@@ -51228,7 +51236,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminServices.QueryParameters & Paths.GetApiB2BAdminServices.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminServices.Responses.$200>
   }
   ['/api/b2b/admin/services/{serviceID}']: {
@@ -51238,7 +51246,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminServicesServiceId.PathParameters & Paths.GetApiB2BAdminServicesServiceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminServicesServiceId.Responses.$200>
     /**
      * patchApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
@@ -51246,7 +51254,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminServicesServiceId.PathParameters & Paths.PatchApiB2BAdminServicesServiceId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminServicesServiceId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminServicesServiceId.Responses.$200>
     /**
      * deleteApiB2BAdminServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
@@ -51254,7 +51262,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminServicesServiceId.PathParameters & Paths.DeleteApiB2BAdminServicesServiceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminServicesServiceId.Responses.$200>
   }
   ['/api/b2b/admin/services/category-service-suggest']: {
@@ -51264,7 +51272,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminServicesCategoryServiceSuggest.Responses.$200>
   }
   ['/api/b2b/admin/customers/']: {
@@ -51274,7 +51282,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminCustomers.QueryParameters & Paths.GetApiB2BAdminCustomers.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminCustomers.Responses.$200>
     /**
      * postApiB2BAdminCustomers - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_CREATE]
@@ -51282,7 +51290,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminCustomers.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminCustomers.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminCustomers.Responses.$200>
   }
   ['/api/b2b/admin/customers/{customerID}']: {
@@ -51292,7 +51300,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminCustomersCustomerId.PathParameters & Paths.GetApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminCustomersCustomerId.Responses.$200>
     /**
      * patchApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_UPDATE]
@@ -51300,7 +51308,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminCustomersCustomerId.PathParameters & Paths.PatchApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminCustomersCustomerId.Responses.$200>
     /**
      * deleteApiB2BAdminCustomersCustomerId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, CUSTOMER_DELETE]
@@ -51308,7 +51316,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminCustomersCustomerId.PathParameters & Paths.DeleteApiB2BAdminCustomersCustomerId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminCustomersCustomerId.Responses.$200>
   }
   ['/api/b2b/admin/employees/']: {
@@ -51318,7 +51326,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEmployees.QueryParameters & Paths.GetApiB2BAdminEmployees.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEmployees.Responses.$200>
     /**
      * postApiB2BAdminEmployees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
@@ -51326,7 +51334,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEmployees.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminEmployees.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEmployees.Responses.$200>
   }
   ['/api/b2b/admin/employees/{employeeID}']: {
@@ -51336,7 +51344,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.GetApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200>
     /**
      * patchApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_UPDATE]
@@ -51344,7 +51352,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEmployeesEmployeeId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeId.Responses.$200>
     /**
      * deleteApiB2BAdminEmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_DELETE]
@@ -51352,7 +51360,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminEmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BAdminEmployeesEmployeeId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEmployeesEmployeeId.Responses.$200>
   }
   ['/api/b2b/admin/employees/invite']: {
@@ -51362,7 +51370,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminEmployeesInvite.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminEmployeesInvite.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminEmployeesInvite.Responses.$200>
   }
   ['/api/b2b/admin/employees/{employeeID}/role']: {
@@ -51372,7 +51380,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdRole.Responses.$200>
   }
   ['/api/b2b/admin/employees/{employeeID}/services/{serviceID}']: {
@@ -51382,7 +51390,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminEmployeesEmployeeIdServicesServiceId.Responses.$200>
   }
   ['/api/b2b/admin/imports/salons']: {
@@ -51392,7 +51400,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminImportsSalons.HeaderParameters> | null,
       data?: Paths.PostApiB2BAdminImportsSalons.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminImportsSalons.Responses.$200>
   }
   ['/api/b2b/v1/auth/login-as-partner']: {
@@ -51402,7 +51410,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
   }
   ['/api/b2b/v1/users/partners']: {
@@ -51412,7 +51420,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersPartners.QueryParameters & Paths.GetApiB2BV1UsersPartners.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersPartners.Responses.$200>
   }
   ['/api/b2b/v1/users/{userID}/pending-employee-invites']: {
@@ -51422,7 +51430,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.PathParameters & Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
   }
   ['/api/b2b/v1/users/invite']: {
@@ -51432,7 +51440,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1UsersInvite.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1UsersInvite.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1UsersInvite.Responses.$200>
   }
   ['/api/b2b/v1/files/sign-urls']: {
@@ -51442,7 +51450,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1FilesSignUrls.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1FilesSignUrls.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1FilesSignUrls.Responses.$200>
   }
   ['/api/b2b/v1/salons/']: {
@@ -51452,7 +51460,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Salons.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Salons.Responses.$200>
     /**
      * postApiB2BV1Salons - PERMISSION: [PARTNER]
@@ -51460,7 +51468,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Salons.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1Salons.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1Salons.Responses.$200>
   }
   ['/api/b2b/v1/salons/basic']: {
@@ -51470,7 +51478,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsBasic.QueryParameters & Paths.GetApiB2BV1SalonsBasic.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsBasic.Responses.$200>
   }
   ['/api/b2b/v1/salons/preview']: {
@@ -51480,7 +51488,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsPreview.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsPreview.Responses.$200>
   }
   ['/api/b2b/v1/salons/basic-suggestion']: {
@@ -51490,7 +51498,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsBasicSuggestion.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsBasicSuggestion.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}']: {
@@ -51500,7 +51508,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonId.PathParameters & Paths.GetApiB2BV1SalonsSalonId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonId.Responses.$200>
     /**
      * patchApiB2BV1SalonsSalonId - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_UPDATE]
@@ -51508,7 +51516,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonId.PathParameters & Paths.PatchApiB2BV1SalonsSalonId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonId.Responses.$200>
     /**
      * deleteApiB2BV1SalonsSalonId - PERMISSION: [PARTNER, PARTNER_ADMIN, SALON_DELETE]
@@ -51516,7 +51524,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1SalonsSalonId.PathParameters & Paths.DeleteApiB2BV1SalonsSalonId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1SalonsSalonId.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/basic']: {
@@ -51526,7 +51534,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdBasic.PathParameters & Paths.GetApiB2BV1SalonsSalonIdBasic.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdBasic.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/dashboard']: {
@@ -51536,7 +51544,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1SalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BV1SalonsSalonIdDashboard.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/invoice']: {
@@ -51546,7 +51554,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdInvoice.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdInvoice.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonIdInvoice.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdInvoice.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/categories']: {
@@ -51556,7 +51564,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdCategories.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdCategories.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonIdCategories.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdCategories.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/request-publication']: {
@@ -51566,7 +51574,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdRequestPublication.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/unpublish']: {
@@ -51576,7 +51584,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdUnpublish.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonIdUnpublish.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdUnpublish.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/accept-employee-invite']: {
@@ -51586,7 +51594,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdAcceptEmployeeInvite.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/services']: {
@@ -51596,7 +51604,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdServices.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdServices.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonIdServices.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdServices.Responses.$200>
   }
   ['/api/b2b/v1/salons/{salonID}/basic-suggestion']: {
@@ -51606,7 +51614,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.PathParameters & Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdBasicSuggestion.Responses.$200>
   }
   ['/api/b2b/v1/services/']: {
@@ -51616,7 +51624,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
   }
   ['/api/b2b/v1/services/{serviceID}']: {
@@ -51626,7 +51634,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
     /**
      * patchApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_UPDATE]
@@ -51634,7 +51642,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1ServicesServiceId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
     /**
      * deleteApiB2BV1ServicesServiceId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SERVICE_DELETE]
@@ -51642,7 +51650,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   }
   ['/api/b2b/v1/services/category-service-suggest']: {
@@ -51652,7 +51660,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1ServicesCategoryServiceSuggest.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.Responses.$200>
   }
   ['/api/b2b/v1/customers/']: {
@@ -51662,7 +51670,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Customers.QueryParameters & Paths.GetApiB2BV1Customers.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Customers.Responses.$200>
     /**
      * postApiB2BV1Customers - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_CREATE]
@@ -51670,7 +51678,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Customers.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1Customers.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1Customers.Responses.$200>
   }
   ['/api/b2b/v1/customers/{customerID}']: {
@@ -51680,7 +51688,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1CustomersCustomerId.PathParameters & Paths.GetApiB2BV1CustomersCustomerId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1CustomersCustomerId.Responses.$200>
     /**
      * patchApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_UPDATE]
@@ -51688,7 +51696,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1CustomersCustomerId.PathParameters & Paths.PatchApiB2BV1CustomersCustomerId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1CustomersCustomerId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1CustomersCustomerId.Responses.$200>
     /**
      * deleteApiB2BV1CustomersCustomerId - PERMISSION: [PARTNER, PARTNER_ADMIN, CUSTOMER_DELETE]
@@ -51696,7 +51704,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1CustomersCustomerId.PathParameters & Paths.DeleteApiB2BV1CustomersCustomerId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1CustomersCustomerId.Responses.$200>
   }
   ['/api/b2b/v1/employees/']: {
@@ -51706,7 +51714,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Employees.QueryParameters & Paths.GetApiB2BV1Employees.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1Employees.Responses.$200>
     /**
      * postApiB2BV1Employees - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_CREATE]
@@ -51714,7 +51722,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1Employees.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1Employees.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1Employees.Responses.$200>
   }
   ['/api/b2b/v1/employees/{employeeID}']: {
@@ -51724,7 +51732,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1EmployeesEmployeeId.PathParameters & Paths.GetApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EmployeesEmployeeId.Responses.$200>
     /**
      * patchApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_UPDATE]
@@ -51732,7 +51740,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1EmployeesEmployeeId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeId.Responses.$200>
     /**
      * deleteApiB2BV1EmployeesEmployeeId - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, EMPLOYEE_DELETE]
@@ -51740,7 +51748,7 @@ export interface PathsDictionary {
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1EmployeesEmployeeId.PathParameters & Paths.DeleteApiB2BV1EmployeesEmployeeId.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1EmployeesEmployeeId.Responses.$200>
   }
   ['/api/b2b/v1/employees/invite']: {
@@ -51750,7 +51758,7 @@ export interface PathsDictionary {
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1EmployeesInvite.HeaderParameters> | null,
       data?: Paths.PostApiB2BV1EmployeesInvite.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1EmployeesInvite.Responses.$200>
   }
   ['/api/b2b/v1/employees/{employeeID}/role']: {
@@ -51760,7 +51768,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdRole.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1EmployeesEmployeeIdRole.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdRole.Responses.$200>
   }
   ['/api/b2b/v1/employees/{employeeID}/services/{serviceID}']: {
@@ -51770,7 +51778,7 @@ export interface PathsDictionary {
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.PathParameters & Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.HeaderParameters> | null,
       data?: Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.RequestBody,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1EmployeesEmployeeIdServicesServiceId.Responses.$200>
   }
   ['/api/b2b/v1/roles/salon']: {
@@ -51780,7 +51788,7 @@ export interface PathsDictionary {
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1RolesSalon.HeaderParameters> | null,
       data?: any,
-      config?: AxiosRequestConfig
+      config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1RolesSalon.Responses.$200>
   }
 }

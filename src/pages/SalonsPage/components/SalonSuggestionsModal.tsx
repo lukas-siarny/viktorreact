@@ -15,6 +15,7 @@ import { getCurrentUser } from '../../../reducers/users/userActions'
 import { getSuggestedSalons } from '../../../reducers/salons/salonsActions'
 import { history } from '../../../utils/history'
 import { getCountryPrefix } from '../../../utils/helper'
+import { selectSalon } from '../../../reducers/selectedSalon/selectedSalonActions'
 
 type Props = {
 	visible: boolean
@@ -112,7 +113,8 @@ const SalonSuggestionsModal = (props: Props) => {
 			setIsSubmitting(true)
 			await patchReq('/api/b2b/admin/salons/{salonID}/basic-suggestion', { salonID }, { suggestionHash, accept }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			if (accept) {
-				// await dispatch(getCurrentUser())
+				await dispatch(getCurrentUser())
+				await dispatch(selectSalon(salonID))
 				history.push(t('paths:salons/{{salonID}}', { salonID }))
 			} else {
 				const { data } = await dispatch(getSuggestedSalons())
@@ -154,7 +156,7 @@ const SalonSuggestionsModal = (props: Props) => {
 							} = salon
 							const country = countryCode
 							return (
-								<div className={'card'}>
+								<div className={'card'} key={salon.id}>
 									<div className={'card-content'}>
 										<h3 className={'title'}>{salon.name}</h3>
 										<ul className={'salon-info-list'}>

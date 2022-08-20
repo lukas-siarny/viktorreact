@@ -34,7 +34,7 @@ import { Paths } from '../../types/api'
 import { deleteReq, getReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { formatLongQueryString, getPrefixCountryCode } from '../../utils/helper'
+import { getPrefixCountryCode, formatDateByLocale, formatLongQueryString } from '../../utils/helper'
 import { createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
 import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
@@ -716,6 +716,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
 									{salon?.data?.openingHoursNote ? (
 										<>
+											<div className='w-full'>
+												<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
+												<p className='mb-2'>
+													{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
+													{' - '}
+													{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
+												</p>
+												<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
+											</div>
 											<Button
 												type={'primary'}
 												block

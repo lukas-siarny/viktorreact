@@ -1,16 +1,15 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { Field, reduxForm, InjectedFormProps } from 'redux-form'
 import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SalonRolesField from '../../../atoms/SalonRolesField'
+import SelectField from '../../../atoms/SelectField'
 
 // interfaces
-import { IInviteEmployeeForm } from '../../../types/interfaces'
-import { RootState } from '../../../reducers'
+import { IInviteEmployeeForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
 import { FORM } from '../../../utils/enums'
@@ -19,31 +18,35 @@ import { FORM } from '../../../utils/enums'
 import validateInviteFrom from './validateInviteFrom'
 
 // reducers
-import { getSalonRoles } from '../../../reducers/roles/rolesActions'
+import { RootState } from '../../../reducers'
 
-type ComponentProps = {}
+type ComponentProps = {
+	salonRolesOptions?: ISelectOptionItem[]
+}
 
 type Props = InjectedFormProps<IInviteEmployeeForm, ComponentProps> & ComponentProps
 
 const InviteForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit } = props
-	const dispatch = useDispatch()
+	const { handleSubmit, salonRolesOptions } = props
 
 	const roles = useSelector((state: RootState) => state.roles.salonRoles)
 
-	useEffect(() => {
-		dispatch(getSalonRoles())
-	}, [dispatch])
-
 	return (
-		<>
-			<Form layout='vertical' onSubmitCapture={handleSubmit}>
-				<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
-				<SalonRolesField options={roles?.data || []} name={'roleID'} loading={roles?.isLoading} required />
-				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
-			</Form>
-		</>
+		<Form layout='vertical' onSubmitCapture={handleSubmit}>
+			<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
+			<Field
+				component={SelectField}
+				options={salonRolesOptions}
+				label={t('loc:Rola')}
+				placeholder={t('loc:Vyberte rolu')}
+				name={'roleID'}
+				size={'large'}
+				loading={roles?.isLoading}
+				required
+			/>
+			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
+		</Form>
 	)
 }
 

@@ -3,7 +3,7 @@ import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS, SUGGESTED_SALONS } from './salonsTypes'
+import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
@@ -13,7 +13,7 @@ import { getReq } from '../../utils/request'
 import { SALON_FILTER_STATES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon
 
 interface IGetSalons {
 	type: SALONS
@@ -35,6 +35,11 @@ export interface IGetSalon {
 	payload: ISalonPayload
 }
 
+export interface IGeBasictSalon {
+	type: BASIC_SALON
+	payload: IBasicSalonPayload
+}
+
 export interface ISalonPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 | null
 }
@@ -46,6 +51,12 @@ export interface IGetSuggestedSalons {
 
 export interface ISuggestedSalonsPayload {
 	data: Paths.GetApiB2BAdminSalonsBasicSuggestion.Responses.$200 | null
+}
+
+export type IBasicSalon = Paths.GetApiB2BV1SalonsSalonIdBasic.Responses.$200['salon']
+
+export interface IBasicSalonPayload {
+	data: Paths.GetApiB2BV1SalonsSalonIdBasic.Responses.$200 | null
 }
 
 export interface ISalonsPayload extends ISearchable<Paths.GetApiB2BAdminSalons.Responses.$200> {}
@@ -129,6 +140,26 @@ export const getSuggestedSalons = (): ThunkResult<Promise<ISuggestedSalonsPayloa
 
 	return payload
 }
+
+export const getBasicSalon =
+	(salonID: string): ThunkResult<Promise<IBasicSalonPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IBasicSalonPayload
+		try {
+			dispatch({ type: BASIC_SALON.BASIC_SALON_LOAD_START })
+			const { data } = await getReq('/api/b2b/v1/salons/{salonID}/basic', { salonID })
+			payload = {
+				data
+			}
+			dispatch({ type: BASIC_SALON.BASIC_SALON_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: BASIC_SALON.BASIC_SALON_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
 
 export const emptySalon = (): ThunkResult<Promise<void>> => async (dispatch) => {
 	dispatch({ type: SALON.SALON_LOAD_DONE, payload: { data: null } })

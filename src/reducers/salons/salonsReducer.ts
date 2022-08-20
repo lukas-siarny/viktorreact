@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SALON, SALONS, SUGGESTED_SALONS } from './salonsTypes'
-import { ISalonPayload, ISalonsActions, ISalonsPayload, ISuggestedSalonsPayload } from './salonsActions'
+import { BASIC_SALON, SALON, SALONS, SUGGESTED_SALONS } from './salonsTypes'
+import { IBasicSalonPayload, ISalonPayload, ISalonsActions, ISalonsPayload, ISuggestedSalonsPayload } from './salonsActions'
 
 export const initState = {
 	salons: {
@@ -19,7 +19,12 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as ISuggestedSalonsPayload & ILoadingAndFailure
+	} as ISuggestedSalonsPayload & ILoadingAndFailure,
+	basicSalon: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IBasicSalonPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -97,6 +102,31 @@ export default (state = initState, action: ISalonsActions) => {
 				...state,
 				suggestedSalons: {
 					...initState.suggestedSalons,
+					data: action.payload.data
+				}
+			}
+		// Basic Salon
+		case BASIC_SALON.BASIC_SALON_LOAD_START:
+			return {
+				...state,
+				basicSalon: {
+					...state.basicSalon,
+					isLoading: true
+				}
+			}
+		case BASIC_SALON.BASIC_SALON_LOAD_FAIL:
+			return {
+				...state,
+				basicSalon: {
+					...initState.basicSalon,
+					isFailure: true
+				}
+			}
+		case BASIC_SALON.BASIC_SALON_LOAD_DONE:
+			return {
+				...state,
+				basicSalon: {
+					...initState.basicSalon,
 					data: action.payload.data
 				}
 			}

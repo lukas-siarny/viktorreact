@@ -54,7 +54,8 @@ import {
 	EN_DATE_WITH_TIME_FORMAT,
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
-	DEFAULT_PHONE_PREFIX
+	DEFAULT_PHONE_PREFIX,
+	QUERY_LIMIT
 } from './enums'
 import { IPrice, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -874,4 +875,13 @@ export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { 
 		}
 		return b.language === DEFAULT_LANGUAGE ? 1 : 0
 	})
+}
+
+export const formatLongQueryString = (search: string, limit?: number) => {
+	const maxQueryLimit = limit || QUERY_LIMIT.MAX_255
+	let formattedSearch = search
+	if (search.length > maxQueryLimit) {
+		formattedSearch = search.slice(0, maxQueryLimit)
+	}
+	return formattedSearch
 }

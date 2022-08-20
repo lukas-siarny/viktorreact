@@ -73,3 +73,18 @@
 		display: flex
 		align-items: center
 
+
+.noti-custom-autocomplete-dropdown-item
+	// je potrebne vynegovat selected a active styly
+	&.ant-select-item-option-active,
+	&.ant-select-item-option-selected
+		color: $textColor-notino-grayDarker !important
+		background: transparent !important
+	// treba nastavit nove styly, ktore by mali byt totozne ako selected styly
+	// tato classa sa nastavuje custom logikou a neodpoveda logike, ktorou nastavuje selected classy Antd AutoComplete komponent, preto sa robi takato obkluka
+	&.noti-custom-autocomplete-dropdown-item-selected
+		color: $textColor-notino-white !important
+		background: $backgroundColor-notino-black !important
+	&:hover
+		color: $textColor-notino-white !important
+		background: $backgroundColor-notino-black !important

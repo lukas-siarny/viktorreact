@@ -1560,8 +1560,6 @@ span.ant-tag .title
 		display: flex
 		gap: 16px
 		flex-wrap: wrap
-		// grid-template-columns: repeat(auto-fill, minmax(250px, 300px))
-		// grid-gap: 16px
 		.card
 			width: 350px
 			background: $backgroundColor-notino-white
@@ -1615,7 +1613,6 @@ span.ant-tag .title
 						border-radius: 8px
 						padding: 8px
 						&::before
-							// filter: brightness(0) saturate(100%) invert(52%) sepia(0%) saturate(806%) hue-rotate(212deg) brightness(97%) contrast(88%)
 							background: url("../assets/icons/location-16.svg") no-repeat center center
 	@media (max-width: 850px)
 		.cards-wrapper
@@ -1623,3 +1620,38 @@ span.ant-tag .title
 			.card
 				width: 100%
 
+.noti-salon-search-option
+	&:not(:last-child)
+		padding: 8px 16px
+		border-bottom: 1px solid $backgroundColor-notino-gray
+
+	.noti-salon-search-option-render
+		.label
+			display: inline-block
+			font-size: 14px
+			font-weight: 500
+			white-space: nowrap
+			overflow: hidden
+			text-overflow: ellipsis
+			max-width: 100%
+			min-width: 0
+		.address
+			display: flex
+			align-items: flex-start
+			gap: 8px
+			line-height: 150%
+			font-size: 12px
+			color: $textColor-notino-grayDark
+			white-space: nowrap
+			overflow: hidden
+			text-overflow: ellipsis
+			max-width: 100%
+			min-width: 0
+			&::before
+				content: ''
+				display: block
+				width: 16px
+				height: 16px
+				margin-top: 2px
+				flex: 0 0 auto
+				background: url("../assets/icons/location-gray-16.svg") no-repeat center center

@@ -4,6 +4,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
 import { PaginationProps } from 'antd'
+import { Path } from 'typescript'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -69,8 +70,10 @@ export interface IUserAccountForm {
 export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 
 export interface ISalonForm {
+	salonNameFromSelect: boolean
 	id: string | null
 	name: string | null
+	nameSelect: { key: string, label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
 	aboutUsSecond: string | null

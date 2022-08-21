@@ -1,19 +1,20 @@
-import React, { FC, useCallback, useMemo } from 'react'
+import React, { FC, useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Button } from 'antd'
+import { useSelector } from 'react-redux'
 
 // utils
-import { isEmpty } from 'lodash'
-import { useSelector } from 'react-redux'
 import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
+import SelectField from '../../../atoms/SelectField'
 
 // components
 import DeleteButton from '../../../components/DeleteButton'
+import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
@@ -21,9 +22,9 @@ import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 // types
 import { ISpecialistContactForm } from '../../../types/interfaces'
-import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import { RootState } from '../../../reducers'
-import SelectField from '../../../atoms/SelectField'
+
+// validate
 import validateSpecialistContactForm from './validateSpecialistContactForm'
 
 type ComponentProps = {

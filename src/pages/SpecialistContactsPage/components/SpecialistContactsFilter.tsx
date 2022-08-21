@@ -17,6 +17,8 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
+
+// types
 import { ISpecialistContactFilter } from '../../../types/interfaces'
 
 type ComponentProps = {

@@ -1,7 +1,11 @@
 import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
+
+// enums
 import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+
+// types
 import { ISpecialistContactForm } from '../../../types/interfaces'
 
 export default (values: ISpecialistContactForm) => {

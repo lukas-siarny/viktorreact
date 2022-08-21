@@ -7,9 +7,9 @@ import { initialize } from 'redux-form'
 import { map } from 'lodash'
 import cx from 'classnames'
 import { StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { SorterResult } from 'antd/lib/table/interface'
 
 // components
-import { SorterResult } from 'antd/lib/table/interface'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import CustomTable from '../../components/CustomTable'
 import SpecialistContactForm from './components/SpecialistContactsForm'
@@ -20,6 +20,7 @@ import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, ENUMERATIONS_KEYS, LAN
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { getPrefixCountryCode, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import i18n from '../../utils/i18n'
 
 // reducers
 import { getSpecialistContacts } from '../../reducers/specialistContacts/specialistContactsActions'
@@ -30,7 +31,6 @@ import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
 // types
 import { IBreadcrumbs, Columns, ISpecialistContact, ISpecialistContactForm, ISpecialistContactFilter } from '../../types/interfaces'
 import { RootState } from '../../reducers'
-import i18n from '../../utils/i18n'
 
 const SpecialistContactsPage = () => {
 	const [t] = useTranslation()

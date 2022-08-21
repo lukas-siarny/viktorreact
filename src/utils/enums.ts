@@ -108,6 +108,7 @@ export enum FORM {
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
 	ADMIN_UPDATE_USER = 'ADMIN_UPDATE_USER',
 	SERVICE_FORM = 'SERVICE_FORM',
+	REQUEST_NEW_SERVICE_FORM = 'REQUEST_NEW_SERVICE_FORM',
 	CUSTOMERS_FILTER = 'CUSTOMERS_FILTER',
 	SERVICES_FILTER = 'SERVICES_FILTER',
 	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE',
@@ -222,6 +223,8 @@ export const DEFAULT_DATE_FORMAT = 'DD.MM.YYYY'
 export const DEFAULT_DATE_WITH_TIME_FORMAT = 'DD.MM.YYYY HH:mm'
 
 export const EN_DATE_WITH_TIME_FORMAT = 'MMM DD YYYY HH:mm'
+
+export const EN_DATE_WITHOUT_TIME_FORMAT = 'DD.MM.YYYY'
 
 export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 
@@ -403,15 +406,18 @@ export enum GENDER {
 }
 
 export enum VALIDATION_MAX_LENGTH {
+	LENGTH_3000 = 3000,
 	LENGTH_1000 = 1000,
 	LENGTH_500 = 500,
 	LENGTH_255 = 255,
 	LENGTH_100 = 100,
+	LENGTH_75 = 75,
 	LENGTH_60 = 60,
 	LENGTH_50 = 50,
 	LENGTH_30 = 30,
 	LENGTH_20 = 20,
-	LENGTH_10 = 10
+	LENGTH_10 = 10,
+	LENGTH_5 = 5
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
@@ -462,3 +468,82 @@ export enum PARAMETERS_UNIT_TYPES {
 }
 
 export const NEW_SALON_ID = 'new_salon'
+
+export enum SALON_ROLES {
+	ADMIN = 'ADMIN',
+	MANAGER = 'MANAGER',
+	RECEPTIONIST = 'RECEPTIONIST',
+	EMPLOEYEE_1 = 'EMPLOEYEE_1',
+	EMPLOEYEE_2 = 'EMPLOEYEE_2',
+	EXTERNAL = 'EXTERNAL'
+}
+
+export const SALON_ROLES_KEYS = Object.keys(SALON_ROLES)
+
+export const SALON_ROLES_TRANSLATIONS = () => ({
+	[SALON_ROLES.ADMIN]: i18next.t('loc:Admin'),
+	[SALON_ROLES.MANAGER]: i18next.t('loc:Manažér'),
+	[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:Recepčný'),
+	[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:Zamestnanec 1'),
+	[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:Zamestnanec 2'),
+	[SALON_ROLES.EXTERNAL]: i18next.t('loc:Externista')
+})
+
+export const SALON_ROLES_PERMISSIONS = () => [
+	{
+		name: i18next.t('loc:Správa profilu salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {
+			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa firemných a fakturačných údajov salónu'),
+		allowed: [SALON_ROLES.ADMIN],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa oprávnení zamesnancov'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {
+			[SALON_ROLES.MANAGER]: i18next.t('loc:okrem Admin')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa služieb salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa zamestnancov salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa zákazníkov salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2],
+		extra: {
+			[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:len vytváranie a úprava'),
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len vytváranie a úprava')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa online rezervácií'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2],
+		extra: {
+			[SALON_ROLES.ADMIN]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len úprava a mazanie, len svoje')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa offline rezervácií'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2, SALON_ROLES.EXTERNAL],
+		extra: {
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len svoje'),
+			[SALON_ROLES.EXTERNAL]: i18next.t('loc:len svoje')
+		}
+	}
+]

@@ -42,7 +42,8 @@ export default (state = initState, action: ISpecialistsContactsActions) => {
 				...state,
 				specialistContacts: {
 					...initState.specialistContacts,
-					data: action.payload.data
+					data: action.payload.data,
+					options: action.payload.options
 				}
 			}
 		case SPECIALIST_CONTACT.SPECIALIST_CONTACT_START:

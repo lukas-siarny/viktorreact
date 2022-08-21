@@ -1,15 +1,15 @@
-import React, { FC, useEffect } from 'react'
+import React, { FC } from 'react'
 import { Field, reduxForm, InjectedFormProps } from 'redux-form'
-import { Form, Button } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 
 // interfaces
-import { IInviteEmployeeForm } from '../../../types/interfaces'
+import { IInviteEmployeeForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // utils
 import { FORM } from '../../../utils/enums'
@@ -19,29 +19,25 @@ import validateInviteFrom from './validateInviteFrom'
 
 // reducers
 import { RootState } from '../../../reducers'
-import { getSalonRoles } from '../../../reducers/roles/rolesActions'
 
-type ComponentProps = {}
+type ComponentProps = {
+	salonRolesOptions?: ISelectOptionItem[]
+}
 
 type Props = InjectedFormProps<IInviteEmployeeForm, ComponentProps> & ComponentProps
 
 const InviteForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting } = props
-	const dispatch = useDispatch()
+	const { handleSubmit, salonRolesOptions } = props
 
 	const roles = useSelector((state: RootState) => state.roles.salonRoles)
-
-	useEffect(() => {
-		dispatch(getSalonRoles())
-	}, [dispatch])
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
 			<Field
 				component={SelectField}
-				options={roles?.data}
+				options={salonRolesOptions}
 				label={t('loc:Rola')}
 				placeholder={t('loc:Vyberte rolu')}
 				name={'roleID'}

@@ -29,7 +29,7 @@ const NoteForm: FC<Props> = (props) => {
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<Row>
 				<Col span={24}>
-					<Field component={TextareaField} name={'note'} placeholder={fieldPlaceholderText} label={'Poznámka'} />
+					<Field component={TextareaField} name={'note'} placeholder={fieldPlaceholderText} label={t('loc:Poznámka')} />
 				</Col>
 			</Row>
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>

@@ -44,7 +44,7 @@ const SupportContactsFilter = (props: Props) => {
 	const [visibleModal, setVisibleModal] = useState(false)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SUPPORT_CONTACTS_FILTER)(state))
 
-	const hasEveryCountrySupportContact = supportContacts?.data?.supportContacts?.length === countries?.data?.length
+	const hasEveryCountrySupportContact = (supportContacts?.data?.supportContacts?.length || 0) >= (countries?.data?.length || 0)
 
 	// disable filter fields if count of cosmetics is less than 2
 	const isFilterDisabled = useMemo(() => {
@@ -102,19 +102,17 @@ const SupportContactsFilter = (props: Props) => {
 					</Col>
 				</Row>
 			</Filters> */}
-			{visibleModal && (
-				<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
-					<Result
-						status='warning'
-						title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}
-						extra={
-							<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
-								{t('loc:Zatvoriť')}
-							</Button>
-						}
-					/>
-				</Modal>
-			)}
+			<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
+				<Result
+					status='warning'
+					title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}
+					extra={
+						<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
+							{t('loc:Zatvoriť')}
+						</Button>
+					}
+				/>
+			</Modal>
 		</Form>
 	)
 }

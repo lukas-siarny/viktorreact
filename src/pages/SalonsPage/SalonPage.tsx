@@ -35,7 +35,7 @@ import { Paths } from '../../types/api'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode } from '../../utils/helper'
+import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
 import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
 import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft } from './components/salonVersionsUtils'
 
@@ -44,9 +44,11 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import SpecialistModal from './components/SpecialistModal'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
@@ -72,6 +74,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
+	const [specialistModalVisible, setSpecialistModalVisible] = useState(false)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -99,6 +102,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
+
+	const isNewSalon = salonID === NEW_SALON_ID
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -718,7 +723,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		// order of cases is important to show correct message
 		switch (true) {
-			case salonID === NEW_SALON_ID:
+			case isNewSalon:
 			case deletedSalon:
 				message = null
 				break
@@ -743,7 +748,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		return null
-	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t, salon.data?.state])
+	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, isNewSalon, t, salon.data?.state])
 
 	const declinedSalonMessage = useMemo(
 		() => (
@@ -786,6 +791,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 								<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
 									{salon?.data?.openingHoursNote ? (
 										<>
+											<div className='w-full'>
+												<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
+												<p className='mb-2'>
+													{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
+													{' - '}
+													{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
+												</p>
+												<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
+											</div>
 											<Button
 												type={'primary'}
 												block
@@ -841,6 +855,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
 			</Modal>
+			{specialistModalVisible && <SpecialistModal visible onCancel={() => setSpecialistModalVisible(false)} />}
+			{isNewSalon && (
+				<button type={'button'} className={cx('noti-specialist-button', { 'is-active': specialistModalVisible })} onClick={() => setSpecialistModalVisible(true)}>
+					<PhoneIcon />
+					<span>{t('loc:Notino Špecialista')}</span>
+				</button>
+			)}
 		</>
 	)
 }

@@ -6,6 +6,9 @@ import { Field } from 'redux-form'
 import DateRangePickerField, { Props as DateProps } from '../../atoms/DateRangePickerField'
 import TextareaField from '../../atoms/TextareaField'
 
+// utils
+import { VALIDATION_MAX_LENGTH } from '../../utils/enums'
+
 type Props = {
 	size?: string
 	name?: string
@@ -27,7 +30,15 @@ const OpenHoursNoteFields = (props: Props) => {
 			</Row>
 			<Row>
 				<Col span={24}>
-					<Field component={TextareaField} name={`${name}.note`} placeholder={textAreaPlaceholder} label={textAreaLabel} size={size} />
+					<Field
+						component={TextareaField}
+						name={`${name}.note`}
+						placeholder={textAreaPlaceholder}
+						label={textAreaLabel}
+						size={size}
+						maxLength={VALIDATION_MAX_LENGTH.LENGTH_100}
+						showLettersCount
+					/>
 				</Col>
 			</Row>
 		</>

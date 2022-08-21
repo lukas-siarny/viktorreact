@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC, useCallback, useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Button } from 'antd'
@@ -24,6 +24,7 @@ import { ISpecialistContactForm } from '../../../types/interfaces'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import { RootState } from '../../../reducers'
 import SelectField from '../../../atoms/SelectField'
+import validateSpecialistContactForm from './validateSpecialistContactForm'
 
 type ComponentProps = {
 	specialistContactID?: string
@@ -39,16 +40,19 @@ const SpecialistContactForm: FC<Props> = (props) => {
 	const { handleSubmit, specialistContactID, closeForm, onDelete, submitting, pristine, disabledForm } = props
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+	const specialistContacts = useSelector((state: RootState) => state.specialistContacts.specialistContacts)
 
-	// povolime jeden support contact pre jednu krajinu alebo viacej ?
-	/* const countriesOptions = countries?.enumerationsOptions?.map((country) => {
-		const alreadyExists = supportContacts?.data?.supportContacts?.find((supportCountry) => supportCountry.country.code === (country.value as string))
+	const countriesOptions = useMemo(() => {
+		const selectedSpecialistContact = specialistContactID ? specialistContacts.data?.find((specialistContact) => specialistContact.id === specialistContactID) : undefined
+		return countries?.enumerationsOptions?.map((country) => {
+			const alreadyExists = specialistContacts.data?.find((specialistContact) => specialistContact.country.code === (country.value as string))
 
-		return {
-			...country,
-			disabled: country?.value !== formValues?.countryCode && !!alreadyExists
-		}
-	}) */
+			return {
+				...country,
+				disabled: country?.value !== selectedSpecialistContact?.country.code && !!alreadyExists
+			}
+		})
+	}, [countries?.enumerationsOptions, specialistContacts.data, specialistContactID])
 
 	return (
 		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
@@ -66,7 +70,7 @@ const SpecialistContactForm: FC<Props> = (props) => {
 						optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 						label={t('loc:Krajina')}
 						placeholder={t('loc:Vyberte krajinu')}
-						options={countries.enumerationsOptions}
+						options={countriesOptions}
 						name={'countryCode'}
 						size={'large'}
 						loading={countries?.isLoading}
@@ -109,6 +113,7 @@ const form = reduxForm<ISpecialistContactForm, ComponentProps>({
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,
+	validate: validateSpecialistContactForm,
 	onSubmitFail: showErrorNotification
 })(SpecialistContactForm)
 

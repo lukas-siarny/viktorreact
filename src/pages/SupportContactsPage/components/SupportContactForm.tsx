@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Space } from 'antd'
@@ -46,16 +46,18 @@ const SupportContactForm: FC<Props> = (props) => {
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
-	const formValues = useSelector((state: RootState) => state.form[FORM.SUPPORT_CONTACT]?.values)
+	const supportContact = useSelector((state: RootState) => state.supportContacts.supportContact)
 
-	const countriesOptions = countries?.enumerationsOptions?.map((country) => {
-		const alreadyExists = supportContacts?.data?.supportContacts?.find((supportCountry) => supportCountry.country.code === (country.value as string))
+	const countriesOptions = useMemo(() => {
+		return countries?.enumerationsOptions?.map((country) => {
+			const alreadyExists = supportContacts?.data?.supportContacts?.find((supportCountry) => supportCountry.country.code === (country.value as string))
 
-		return {
-			...country,
-			disabled: country?.value !== formValues?.countryCode && !!alreadyExists
-		}
-	})
+			return {
+				...country,
+				disabled: country?.value !== supportContact?.data?.supportContact?.country.code && !!alreadyExists
+			}
+		})
+	}, [supportContact?.data?.supportContact?.country.code, countries?.enumerationsOptions, supportContacts?.data?.supportContacts])
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -93,7 +95,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte ulicu')}
 								name={'street'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_75}
 								disabled={disabledForm}
 							/>
 							<Field
@@ -103,7 +105,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte číslo')}
 								name={'streetNumber'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 								disabled={disabledForm}
 							/>
 						</Row>
@@ -115,7 +117,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte mesto')}
 								name={'city'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_100}
 								disabled={disabledForm}
 							/>
 							<Field
@@ -125,7 +127,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte smerovacie číslo')}
 								name={'zipCode'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 								disabled={disabledForm}
 							/>
 						</Row>

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Col, Row, Spin, Button, Divider, Image, TablePaginationConfig } from 'antd'
+import { Col, Row, Spin, Button, Divider, TablePaginationConfig, Result, Modal } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { initialize, reset } from 'redux-form'
-import { get, map } from 'lodash'
+import { initialize } from 'redux-form'
+import { map } from 'lodash'
 import cx from 'classnames'
 import { StringParam, useQueryParams, withDefault } from 'use-query-params'
 
@@ -45,13 +45,16 @@ const SpecialistContactsPage = () => {
 
 	// undefined - represents new record
 	const [specialistContactID, setSpecialistContactID] = useState<string | undefined>(undefined)
+	const [visibleRestrictionModal, setVisibleRestrictionModal] = useState(false)
 
 	const specialistContacts = useSelector((state: RootState) => state.specialistContacts.specialistContacts)
+	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
+	const hasEveryCountrySpecialistContact = (specialistContacts?.data?.length || 0) >= (countries?.data?.length || 0)
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -75,23 +78,25 @@ const SpecialistContactsPage = () => {
 		setPrefixOptions(prefixes)
 	}, [phonePrefixes, dispatch])
 
-	// TODO: remove any when BE is done
 	const tableData = useMemo(() => {
 		if (!specialistContacts || !specialistContacts.data) {
 			return []
 		}
 
+		// TODO: filter by country
 		const source = query.search
-			? specialistContacts.data.filter((specialist: any) => {
+			? specialistContacts.data.filter((specialist) => {
 					// filter by country
-					const country = transformToLowerCaseWithoutAccent(specialist.countryCode)
+					const countryName = transformToLowerCaseWithoutAccent(
+						getCountryNameFromNameLocalizations(specialist.country?.nameLocalizations, i18n.language as LANGUAGE) || specialist.country?.code
+					)
 					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
-					return country.includes(searchedValue)
+					return countryName.includes(searchedValue)
 			  })
 			: specialistContacts.data
 
 		// transform to table data
-		return source.map((specialist: any) => ({
+		return source?.map((specialist) => ({
 			...specialist,
 			key: specialist.id
 		}))
@@ -110,7 +115,7 @@ const SpecialistContactsPage = () => {
 					email: specialist.email,
 					phone: specialist.phone,
 					phonePrefixCountryCode: specialist.phonePrefixCountryCode,
-					countryCode: specialist.countryCode
+					countryCode: specialist.country.code
 				})
 			)
 		}
@@ -138,12 +143,11 @@ const SpecialistContactsPage = () => {
 			countryCode: formData.countryCode
 		}
 
-		// TODO: remove any when BE is done
 		try {
 			if (specialistContactID) {
-				await patchReq('/api/b2b/admin/enums/contacts/{contactID}' as any, { contactID: specialistContactID }, body)
+				await patchReq('/api/b2b/admin/enums/contacts/{contactID}', { contactID: specialistContactID }, body)
 			} else {
-				await postReq('/api/b2b/admin/enums/contacts/' as any, null, body)
+				await postReq('/api/b2b/admin/enums/contacts/', null, body)
 			}
 			dispatch(getSpecialistContacts())
 			changeFormVisibility()
@@ -156,11 +160,12 @@ const SpecialistContactsPage = () => {
 			console.error(error.message)
 		}
 	}
-
-	// TODO: remove any when BE is done
 	const handleDelete = async () => {
+		if (!specialistContactID) {
+			return
+		}
 		try {
-			await deleteReq('/api/b2b/admin/enums/contacts/{contactID}' as any, { contactID: specialistContactID })
+			await deleteReq('/api/b2b/admin/enums/contacts/{contactID}', { contactID: specialistContactID })
 			dispatch(getSpecialistContacts())
 			changeFormVisibility()
 		} catch (error: any) {
@@ -175,7 +180,6 @@ const SpecialistContactsPage = () => {
 			dataIndex: 'country',
 			key: 'country',
 			sortOrder: setOrder(query.order, 'country'),
-			// TODO: change when BE is done
 			sorter: {
 				compare: (a, b) => {
 					const aValue = getCountryNameFromNameLocalizations(a?.country?.nameLocalizations, i18n.language as LANGUAGE) || a?.country?.code
@@ -230,11 +234,16 @@ const SpecialistContactsPage = () => {
 							<SpecialistContactFilter
 								total={specialistContacts?.data?.length}
 								onSubmit={(values: ISpecialistContactFilter) => setQuery({ ...query, search: values.search })}
+								specialistContactID={specialistContactID}
 								addButton={
 									<Button
 										onClick={() => {
-											dispatch(initialize(FORM.SPECIALIST_CONTACT, { phonePrefixCountryCode }))
-											changeFormVisibility(true)
+											if (hasEveryCountrySpecialistContact) {
+												setVisibleRestrictionModal(true)
+											} else {
+												dispatch(initialize(FORM.SPECIALIST_CONTACT, { phonePrefixCountryCode }))
+												changeFormVisibility(true)
+											}
 										}}
 										type='primary'
 										htmlType='button'
@@ -277,6 +286,23 @@ const SpecialistContactsPage = () => {
 					</div>
 				</Col>
 			</Row>
+			<Modal
+				title={t('loc:Upozornenie')}
+				visible={visibleRestrictionModal}
+				getContainer={() => document.body}
+				onCancel={() => setVisibleRestrictionModal(false)}
+				footer={null}
+			>
+				<Result
+					status='warning'
+					title={t('loc:Ďalšieho špecialistu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jedného.')}
+					extra={
+						<Button className={'noti-btn'} onClick={() => setVisibleRestrictionModal(false)} type='primary'>
+							{t('loc:Zatvoriť')}
+						</Button>
+					}
+				/>
+			</Modal>
 		</>
 	)
 }

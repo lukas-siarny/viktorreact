@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // components
 import ServiceEditPage from './ServiceEditPage'
@@ -15,6 +15,7 @@ import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import { RootState } from '../../reducers'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
@@ -28,11 +29,22 @@ const ServicePage = (props: Props) => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 
+	const service = useSelector((state: RootState) => state.service.service)
 	const [backUrl] = useBackUrl(parentPath + t('paths:services'))
 
 	useEffect(() => {
 		dispatch(getCategories())
 	}, [dispatch])
+
+	const renderBredCrumbLastLabel = () => {
+		if (serviceID) {
+			if (service?.data?.service?.category?.child?.child?.name) {
+				return `${t('loc:Detail služby')} - ${service?.data?.service?.category?.child?.child?.name}`
+			}
+			return t('loc:Detail služby')
+		}
+		return t('loc:Vytvoriť službu')
+	}
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
@@ -41,7 +53,7 @@ const ServicePage = (props: Props) => {
 				link: backUrl
 			},
 			{
-				name: serviceID ? t('loc:Detail služby') : t('loc:Vytvoriť službu')
+				name: renderBredCrumbLastLabel()
 			}
 		]
 	}

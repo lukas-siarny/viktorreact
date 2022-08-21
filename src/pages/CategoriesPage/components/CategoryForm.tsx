@@ -21,7 +21,7 @@ import PopConfirmComponent from '../../../components/PopConfirmComponent'
 import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
-import { validationString } from '../../../utils/helper'
+import { validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
@@ -102,8 +102,8 @@ const CategoryForm: FC<Props> = (props) => {
 	const localizationInputCss = values?.level === 0 ? 'w-2/3' : 'w-full'
 
 	return (
-		<Spin spinning={category.isLoading || categoriesParameters.isLoading}>
-			<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
+			<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 				<Col className={'flex'}>
 					<Row className={'w-full mx-9 h-full block'} justify='center'>
 						<h3 className={'mb-0 mt-3 relative pr-7'}>
@@ -150,6 +150,7 @@ const CategoryForm: FC<Props> = (props) => {
 										validate={fixLength100}
 									/>
 								}
+								noSpace
 							/>
 							{values?.level === 0 ? (
 								<div className='w-1/4'>

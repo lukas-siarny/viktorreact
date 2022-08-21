@@ -9,6 +9,8 @@ import { SPECIALIST_CONTACTS, SPECIALIST_CONTACT } from './specialistContactsTyp
 
 // types
 import { Paths } from '../../types/api'
+import { ISelectOptionItem } from '../../types/interfaces'
+import i18n from '../../utils/i18n'
 
 export type ISpecialistsContactsActions = IResetStore | IGetSpecialistContacts | IGetSpecialistContact
 
@@ -22,158 +24,35 @@ export interface IGetSpecialistContact {
 	payload: ISpecialistContactPayload
 }
 
-// TODO: remove any when BE is done
 export interface ISpecialistContactsPayload {
-	data: any | null
+	data: Paths.GetApiB2BAdminEnumsContacts.Responses.$200['contacts'] | null
+	options: ISelectOptionItem[]
 }
 
-// TODO: remove any when BE is done
 export interface ISpecialistContactPayload {
-	data: any | null
+	data: Paths.GetApiB2BAdminEnumsContactsContactId.Responses.$200['contact'] | null
 }
-
-const contactsData = [
-	{
-		id: '1',
-		email: 'lukas.siarny@goodrequest.sk',
-		phonePrefixCountryCode: 'SK',
-		phone: '902111222',
-		country: {
-			code: 'SK',
-			name: 'Slovensko',
-			nameLocalizations: [
-				{
-					language: 'sk',
-					value: 'Slovensko'
-				},
-				{
-					language: 'cs',
-					value: 'Slovensko'
-				},
-				{
-					language: 'en',
-					value: 'Slovakia'
-				},
-				{
-					language: 'hu',
-					value: 'Szlovákia'
-				},
-				{
-					language: 'ro',
-					value: 'Slovacia'
-				},
-				{
-					language: 'bg',
-					value: 'Словакия'
-				},
-				{
-					language: 'it',
-					value: 'Slovacchia'
-				}
-			],
-			currencyCode: 'EUR',
-			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/SK.png',
-			phonePrefix: '421'
-		}
-	},
-	{
-		id: '2',
-		email: 'lukas.siarny@goodrequest.hu',
-		phonePrefixCountryCode: 'HU',
-		phone: '902111222',
-		country: {
-			code: 'HU',
-			name: 'Maďarsko',
-			nameLocalizations: [
-				{
-					language: 'sk',
-					value: 'Maďarsko sk'
-				},
-				{
-					language: 'cs',
-					value: 'Maďarsko cs'
-				},
-				{
-					language: 'en',
-					value: 'Maďarsko en'
-				},
-				{
-					language: 'hu',
-					value: 'Maďarsko hu'
-				},
-				{
-					language: 'ro',
-					value: 'Maďarsko ro'
-				},
-				{
-					language: 'bg',
-					value: 'Maďarsko bg'
-				},
-				{
-					language: 'it',
-					value: 'Maďarsko it'
-				}
-			],
-			currencyCode: 'EUR',
-			flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/SK.png',
-			phonePrefix: '421'
-		}
-	}
-]
-
-const contactData = {
-	id: '1',
-	email: 'lukas.siarny@goodrequest.sk',
-	phonePrefixCountryCode: 'SK',
-	phone: '902111222',
-	country: {
-		code: 'SK',
-		name: 'Slovensko',
-		nameLocalizations: [
-			{
-				language: 'sk',
-				value: 'Slovensko'
-			},
-			{
-				language: 'cs',
-				value: 'Slovensko'
-			},
-			{
-				language: 'en',
-				value: 'Slovakia'
-			},
-			{
-				language: 'hu',
-				value: 'Szlovákia'
-			},
-			{
-				language: 'ro',
-				value: 'Slovacia'
-			},
-			{
-				language: 'bg',
-				value: 'Словакия'
-			},
-			{
-				language: 'it',
-				value: 'Slovacchia'
-			}
-		],
-		currencyCode: 'EUR',
-		flag: 'https://d1pfrdq2i86yn4.cloudfront.net/flags/sm/SK.png',
-		phonePrefix: '421'
-	}
-}
-
 export const getSpecialistContacts = (): ThunkResult<Promise<ISpecialistContactsPayload>> => async (dispatch) => {
 	let payload = {} as ISpecialistContactsPayload
 	try {
 		dispatch({ type: SPECIALIST_CONTACTS.SPECIALIST_CONTACTS_START })
-		// TODO: remove any when BE is done
-		// onst { data } = await getReq('/api/b2b/admin/enums/contacts' as any, undefined)
+		const { data } = await getReq('/api/b2b/admin/enums/contacts/', undefined)
+
+		const options: ISelectOptionItem[] =
+			data?.contacts?.map((item: any) => {
+				return {
+					key: item.id,
+					label: item.country.name || item.country.code,
+					value: item.id,
+					extra: {
+						image: item.country.flag
+					}
+				}
+			}) || []
 
 		payload = {
-			data: contactsData
+			data: data.contacts,
+			options
 		}
 
 		dispatch({ type: SPECIALIST_CONTACTS.SPECIALIST_CONTACTS_DONE, payload })
@@ -187,22 +66,21 @@ export const getSpecialistContacts = (): ThunkResult<Promise<ISpecialistContacts
 }
 
 export const getSpecialistContact =
-	(ContactID?: string): ThunkResult<Promise<ISpecialistContactPayload>> =>
+	(contactID?: string): ThunkResult<Promise<ISpecialistContactPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISpecialistContactPayload
 
-		if (!ContactID) {
+		if (!contactID) {
 			dispatch({ type: SPECIALIST_CONTACT.SPECIALIST_CONTACT_DONE, payload })
 			return payload
 		}
 
 		try {
 			dispatch({ type: SPECIALIST_CONTACT.SPECIALIST_CONTACT_START })
-			// TODO: remove any when BE is done
-			// const { data } = await getReq('/api/b2b/admin/enums/contacts/{ContactID}' as any, { ContactID })
+			const { data } = await getReq('/api/b2b/admin/enums/contacts/{contactID}', { contactID })
 
 			payload = {
-				data: contactData
+				data: data.contact
 			}
 			dispatch({ type: SPECIALIST_CONTACT.SPECIALIST_CONTACT_DONE, payload })
 		} catch (err) {

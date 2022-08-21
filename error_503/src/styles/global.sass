@@ -1,0 +1,23 @@
+@use 'sass:math'
+@import 'tailwind-variables'
+@import 'variables'
+@import 'button'
+@import 'typography'
+
+*, input, textarea, button
+	font-family: '#{$font-family}', #{$font-family-sans-serif} !important
+	font-feature-settings: normal!important
+	font-variant: normal!important
+
+html
+	scroll-behavior: smooth
+
+html, body
+	height: 100%
+	width: 100%
+	margin: 0
+
+body, .ant-layout
+	color: $textColor-black
+	background: $backgroundColor-notino-grayLighter
+	font-size: initial

@@ -48,6 +48,8 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import { getSalonHistory } from '../../reducers/salons/salonsActions'
+import TabsComponent from '../../components/TabsComponent'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
@@ -72,12 +74,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
+	const [tabKey, setTabKey] = useState<string>('salon_detail')
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
@@ -151,6 +155,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		dispatch(getCategories())
 		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
+		dispatch(getSalonHistory({ dateFrom: '2022-08-16T10:28:00.124Z', dateTo: '2022-08-22T13:18:00.124Z', salonID, page: 1 }))
 	}, [dispatch])
 
 	const updateOnlyOpeningHours = useRef(false)
@@ -159,7 +164,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		const defaultContactPerson = {
 			phonePrefixCountryCode
 		}
-
+		console.log(salonHistory)
 		if (updateOnlyOpeningHours.current) {
 			if (salon?.isLoading) return
 			dispatch(
@@ -737,6 +742,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		[t, salon?.data?.publicationDeclineReason]
 	)
 
+	const onTabChange = (selectedTabKey: string) => {
+		setTabKey(selectedTabKey)
+	}
+
 	const approvalButtonDisabled = !get(salon, 'hasAllRequiredSalonApprovalData') || deletedSalon || submitting || salon.isLoading
 
 	return (
@@ -744,70 +753,99 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				<div className='content-body mt-2'>
-					{renderContentHeader()}
-					{declinedSalon && declinedSalonMessage}
-					{infoMessage}
-					<SalonForm
-						onSubmit={handleSubmit}
-						salonID={salonID}
-						disabledForm={deletedSalon}
-						deletedSalon={deletedSalon}
-						pendingPublication={!!pendingPublication}
-						isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
-						noteModalControlButtons={
-							salonExists && (
-								<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
-									{salon?.data?.openingHoursNote ? (
-										<>
-											<div className='w-full'>
-												<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
-												<p className='mb-2'>
-													{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
-													{' - '}
-													{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
-												</p>
-												<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
-											</div>
-											<Button
-												type={'primary'}
-												block
-												size={'middle'}
-												className={'noti-btn m-regular w-12/25 xl:w-1/3'}
-												onClick={() => setVisible(true)}
-												disabled={deletedSalon}
-											>
-												{STRINGS(t).edit(t('loc:poznámku'))}
-											</Button>
-											<DeleteButton
-												className={'ml-2 w-12/25 xl:w-1/3'}
-												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-												onConfirm={deleteOpenHoursNote}
-												entityName={t('loc:poznámku')}
-												disabled={deletedSalon}
-											/>
-										</>
-									) : (
-										<Button
-											type={'primary'}
-											block
-											size={'middle'}
-											className={'noti-btn m-regular w-1/3'}
-											onClick={() => setVisible(true)}
-											disabled={deletedSalon}
-										>
-											{STRINGS(t).addRecord(t('loc:poznámku'))}
-										</Button>
+			<TabsComponent
+				className={'box-tab'}
+				activeKey={tabKey}
+				onChange={onTabChange}
+				tabsContent={[
+					{
+						tabKey: 'salon_detail',
+						tab: <>{t('loc:Detail salónu')}</>,
+						tabPaneContent: (
+							<Spin spinning={isLoading}>
+								<div className='content-body mt-2'>
+									{renderContentHeader()}
+									{declinedSalon && declinedSalonMessage}
+									{infoMessage}
+									<SalonForm
+										onSubmit={handleSubmit}
+										salonID={salonID}
+										disabledForm={deletedSalon}
+										deletedSalon={deletedSalon}
+										pendingPublication={!!pendingPublication}
+										isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
+										noteModalControlButtons={
+											salonExists && (
+												<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
+													{salon?.data?.openingHoursNote ? (
+														<>
+															<div className='w-full'>
+																<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
+																<p className='mb-2'>
+																	{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
+																	{' - '}
+																	{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
+																</p>
+																<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
+															</div>
+															<Button
+																type={'primary'}
+																block
+																size={'middle'}
+																className={'noti-btn m-regular w-12/25 xl:w-1/3'}
+																onClick={() => setVisible(true)}
+																disabled={deletedSalon}
+															>
+																{STRINGS(t).edit(t('loc:poznámku'))}
+															</Button>
+															<DeleteButton
+																className={'ml-2 w-12/25 xl:w-1/3'}
+																getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+																onConfirm={deleteOpenHoursNote}
+																entityName={t('loc:poznámku')}
+																disabled={deletedSalon}
+															/>
+														</>
+													) : (
+														<Button
+															type={'primary'}
+															block
+															size={'middle'}
+															className={'noti-btn m-regular w-1/3'}
+															onClick={() => setVisible(true)}
+															disabled={deletedSalon}
+														>
+															{STRINGS(t).addRecord(t('loc:poznámku'))}
+														</Button>
+													)}
+												</Row>
+											)
+										}
+									/>
+									{salonExists && (
+										<OpenHoursNoteModal
+											visible={visible}
+											salonID={salonID}
+											openingHoursNote={salon?.data?.openingHoursNote}
+											onClose={onOpenHoursNoteModalClose}
+										/>
 									)}
-								</Row>
-							)
-						}
-					/>
-					{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
-					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
-				</div>
-			</Spin>
+									<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
+								</div>
+							</Spin>
+						)
+					},
+					{
+						tabKey: 'salon_history',
+						tab: <>{t('loc:História salónu')}</>,
+						tabPaneContent: (
+							<Spin spinning={isLoading}>
+								<></>
+							</Spin>
+						)
+					}
+				]}
+			/>
 			<Modal
 				key={`${modalConfig.visible}`}
 				title={modalConfig.title}

@@ -23,7 +23,7 @@ const SalonApprovalModal = (props: Props) => {
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	return (
-		<Modal centered visible={visible} onCancel={onCancel} footer={null} closable={false} className={'py-4'}>
+		<Modal centered visible={visible} onCancel={onCancel} footer={null} closable={false} className={'py-4'} forceRender>
 			<div className={'noti-approval-modal-content'}>
 				<header>
 					<button type={'button'} onClick={onCancel}>

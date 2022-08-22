@@ -3,7 +3,7 @@ import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS } from './salonsTypes'
+import { SALON, SALON_HISTORY, SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
@@ -13,11 +13,16 @@ import { getReq } from '../../utils/request'
 import { SALON_FILTER_STATES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSalonHistory
 
 interface IGetSalons {
 	type: SALONS
 	payload: ISalonsPayload
+}
+
+interface IGetSalonHistory {
+	type: SALON_HISTORY
+	payload: ISalonHistoryPayload
 }
 
 export interface IGetSalonsQueryParams extends IQueryParams {
@@ -30,6 +35,12 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 	createType?: string | null
 }
 
+export interface IGetSalonsHistoryQueryParams extends IQueryParams {
+	dateFrom: string
+	dateTo: string
+	salonID: string
+}
+
 export interface IGetSalon {
 	type: SALON
 	payload: ISalonPayload
@@ -37,6 +48,10 @@ export interface IGetSalon {
 
 export interface ISalonPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 | null
+}
+
+export interface ISalonHistoryPayload {
+	data: Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200 | null
 }
 
 export interface ISalonsPayload extends ISearchable<Paths.GetApiB2BAdminSalons.Responses.$200> {}
@@ -104,3 +119,23 @@ export const getSalon =
 export const emptySalon = (): ThunkResult<Promise<void>> => async (dispatch) => {
 	dispatch({ type: SALON.SALON_LOAD_DONE, payload: { data: null } })
 }
+
+export const getSalonHistory =
+	(queryParams: IGetSalonsHistoryQueryParams): ThunkResult<Promise<ISalonHistoryPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ISalonHistoryPayload
+		try {
+			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/history', { ...normalizeQueryParams(queryParams) } as any)
+			payload = {
+				data
+			}
+			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}

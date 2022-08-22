@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SALON, SALONS } from './salonsTypes'
-import { ISalonPayload, ISalonsActions, ISalonsPayload } from './salonsActions'
+import { SALON, SALONS, SALON_HISTORY } from './salonsTypes'
+import { ISalonHistoryPayload, ISalonPayload, ISalonsActions, ISalonsPayload } from './salonsActions'
 
 export const initState = {
 	salons: {
@@ -14,7 +14,12 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as ISalonPayload & ILoadingAndFailure
+	} as ISalonPayload & ILoadingAndFailure,
+	salonHistory: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ISalonHistoryPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -67,6 +72,31 @@ export default (state = initState, action: ISalonsActions) => {
 				...state,
 				salon: {
 					...initState.salon,
+					data: action.payload.data
+				}
+			}
+		// Salon history
+		case SALON_HISTORY.SALON_HISTORY_LOAD_START:
+			return {
+				...state,
+				salonHistory: {
+					...state.salonHistory,
+					isLoading: true
+				}
+			}
+		case SALON_HISTORY.SALON_HISTORY_LOAD_FAIL:
+			return {
+				...state,
+				salonHistory: {
+					...initState.salonHistory,
+					isFailure: true
+				}
+			}
+		case SALON_HISTORY.SALON_HISTORY_LOAD_DONE:
+			return {
+				...state,
+				salonHistory: {
+					...initState.salonHistory,
 					data: action.payload.data
 				}
 			}

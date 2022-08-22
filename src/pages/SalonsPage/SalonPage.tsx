@@ -27,7 +27,7 @@ import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
+import { CategoriesPatch, IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -98,10 +98,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
 
+	const isNewSalon = salonID === NEW_SALON_ID
+
 	// show salons searchbox with basic salon suggestions instead of text field for name input
-	const showBasicSalonsSearchBox = salonID === NEW_SALON_ID && isPartner
+	const showBasicSalonsSearchBox = isNewSalon && isPartner
 
 	useEffect(() => {
+		if (isNewSalon) {
+			return
+		}
 		if (sameOpenHoursOverWeekFormValue) {
 			if (openOverWeekendFormValue) {
 				// set switch same open hours over week with weekend
@@ -142,7 +147,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
+	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue, isNewSalon])
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -220,7 +225,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				parkingNote: data.parkingNote,
 				payByCard: !!data.payByCard,
 				otherPaymentMethods: data.otherPaymentMethods,
-				companyContactPerson: data.companyContactPerson,
+				companyContactPerson: {
+					...data.companyContactPerson,
+					phonePrefixCountryCode: data.companyContactPerson?.phone ? data.companyContactPerson.phonePrefixCountryCode : undefined
+				},
 				companyInfo: data.companyInfo,
 				cosmeticIDs: data.cosmeticIDs,
 				languageIDs: data.languageIDs
@@ -229,6 +237,18 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			if (salonExists) {
 				// update existing salon
 				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
+				if (showBasicSalonsSearchBox) {
+					if (data?.categoryIDs && !isEmpty(data?.categoryIDs) && data.categoryIDs.length < 100) {
+						await patchReq(
+							'/api/b2b/admin/salons/{salonID}/categories',
+							{ salonID },
+							{
+								categoryIDs: data?.categoryIDs as unknown as CategoriesPatch['categoryIDs']
+							}
+						)
+					}
+				}
+
 				dispatch(selectSalon(salonID))
 			} else {
 				// create new salon

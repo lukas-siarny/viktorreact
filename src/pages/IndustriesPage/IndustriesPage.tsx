@@ -22,10 +22,7 @@ import { history } from '../../utils/history'
 import { patchReq } from '../../utils/request'
 
 // types
-import { IBreadcrumbs, IIndustriesForm, SalonSubPageProps } from '../../types/interfaces'
-import { Paths } from '../../types/api'
-
-type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody
+import { CategoriesPatch, IBreadcrumbs, IIndustriesForm, SalonSubPageProps } from '../../types/interfaces'
 
 const IndustriesPage = (props: SalonSubPageProps) => {
 	const [t] = useTranslation()

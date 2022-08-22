@@ -95,6 +95,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 	// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
 	// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
 	// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
+
 	const initialData: ISalonForm = {
 		salonNameFromSelect,
 		id: salonData.id || null,
@@ -107,6 +108,8 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 				value: salonData.id || null
 			} || null,
 		email: salonData.email || null,
+		// categoryIDs for basic salon
+		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
 		payByCard: !!salonData.payByCard,
 		otherPaymentMethods: salonData.otherPaymentMethods || null,
 		aboutUsFirst: salonData.aboutUsFirst || null,
@@ -201,6 +204,8 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 					: getPhoneDefaultValue(phonePrefixCountryCode)
 		}
 	}
+
+	console.log(initialData)
 
 	return initialData
 }

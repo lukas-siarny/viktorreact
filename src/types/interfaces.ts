@@ -94,6 +94,7 @@ export interface ISalonForm {
 	phones: { phonePrefixCountryCode: string | null, phone: string | null }[]
 	email: string | null
 	socialLinkFB: string | null
+	categoryIDs: [string, ...string[] ] | null
 	socialLinkInstagram: string | null
 	socialLinkWebPage: string | null
 	socialLinkYoutube: string | null
@@ -443,3 +444,5 @@ export type NameLocalizationsItem = {
 	language: string
 	value: string
 }
+
+export type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody

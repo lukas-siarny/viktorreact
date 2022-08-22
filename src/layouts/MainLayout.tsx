@@ -127,7 +127,7 @@ const MainLayout: FC<Props> = (props) => {
 												history.push(t('paths:salons'))
 											}}
 											icon={<BackIcon className={'text-notino-black'} />}
-											className={'noti-btn h-8 text-notino-black self-center'}
+											className={'noti-btn h-8 text-notino-black self-center bg-yellow-400'}
 											type={'default'}
 											size={'small'}
 										>

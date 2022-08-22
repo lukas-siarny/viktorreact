@@ -162,11 +162,11 @@ const ContactPage: FC<Props> = () => {
 									}
 									key={1}
 								>
-									<Row className={'contact-row'}>
+									<div className={'contact-row'}>
 										<div className={'contact-col pr-2'}>
 											<ul className={'noti-contact-list'}>
 												{selectedContact?.emails?.map((email, index) => (
-													<li key={index} className={'email-list-item'}>
+													<li key={index} className={'email-list-item break-all'}>
 														{email}
 													</li>
 												))}
@@ -245,7 +245,7 @@ const ContactPage: FC<Props> = () => {
 												)}
 											</ul>
 										</div>
-									</Row>
+									</div>
 								</Panel>
 								<Panel
 									header={

@@ -226,8 +226,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				},
 				companyInfo: data.companyInfo,
 				cosmeticIDs: data.cosmeticIDs,
-				languageIDs: data.languageIDs,
-				payByCash: true
+				languageIDs: data.languageIDs
 			}
 
 			if (salonExists) {

@@ -6,7 +6,12 @@ import Error503Page from './pages/Error503Page'
 
 const App: FC = () => {
 	return (
-		<Suspense fallback={<Spin size={'large'} />}>
+		<Suspense fallback={
+			<div className={'suspense-loading-spinner'}>
+				<Spin size={'large'} />
+			</div>
+			}
+		>
 			<I18nextProvider i18n={i18n}>
 				<Error503Page />
 			</I18nextProvider>

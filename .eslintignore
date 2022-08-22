@@ -2,3 +2,4 @@ src/styles/main.css
 src/styles/tailwind-variables.sass
 build/
 src/types/
+error_503/

@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Alert, Button, Modal, Row, Spin, Tooltip, notification } from 'antd'
+import { Alert, Button, Modal, Row, Spin, notification } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
@@ -15,6 +15,7 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
+import SalonApprovalModal from './components/SalonApprovalModal'
 
 // enums
 import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
@@ -37,7 +38,7 @@ import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
 import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
-import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft } from './components/salonVersionsUtils'
+import { getIsPublishedVersionSameAsDraft } from './components/salonVersionsUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -72,6 +73,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
+	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -99,6 +101,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
+
+	const isNewSalon = salonID === NEW_SALON_ID
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -571,49 +575,18 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const requestApprovalButton = (className = '') => {
-		const approvalButtonDisabled = submitting || deletedSalon || !isFormPristine
-		const approvalButtonInitiallyDisabled = isFormPristine && getIsInitialPublishedVersionSameAsDraft(salon)
-
-		let tooltipMessage: string | null = null
-
-		if (approvalButtonInitiallyDisabled) {
-			tooltipMessage = t('loc:V salóne nie sú žiadne zmeny, ktoré by bolo potrebné schváliť.')
-		} else if (approvalButtonDisabled) tooltipMessage = t('loc:Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')
-
-		// Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
 		return (
-			<Permissions
-				allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
-				render={(hasPermission, { openForbiddenModal }) =>
-					salonExists &&
-					!pendingPublication && (
-						<Tooltip title={tooltipMessage}>
-							<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled || approvalButtonInitiallyDisabled })}>
-								<Button
-									type={'dashed'}
-									block
-									size={'middle'}
-									className={cx('noti-btn m-regular', className, {
-										'pointer-events-none': approvalButtonDisabled || approvalButtonInitiallyDisabled
-									})}
-									disabled={approvalButtonDisabled || approvalButtonInitiallyDisabled}
-									onClick={(e) => {
-										if (hasPermission) {
-											sendConfirmationRequest()
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									loading={submitting}
-								>
-									{t('loc:Požiadať o schválenie')}
-								</Button>
-							</span>
-						</Tooltip>
-					)
-				}
-			/>
+			<Button
+				type={'dashed'}
+				block
+				size={'middle'}
+				className={cx('noti-btn m-regular', className)}
+				disabled={submitting || deletedSalon}
+				onClick={() => setApprovalModalVisible(true)}
+				loading={submitting}
+			>
+				{t('loc:Požiadať o schválenie')}
+			</Button>
 		)
 	}
 
@@ -764,6 +737,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		[t, salon?.data?.publicationDeclineReason]
 	)
 
+	const approvalButtonDisabled = !get(salon, 'hasAllRequiredSalonApprovalData') || deletedSalon || submitting || salon.isLoading
+
 	return (
 		<>
 			<Row>
@@ -850,6 +825,37 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
 			</Modal>
+			{salonID && !isNewSalon && (
+				<SalonApprovalModal
+					visible={approvalModalVisible}
+					onCancel={() => setApprovalModalVisible(false)}
+					parentPath={`${t('paths:salons')}/${salonID}/`}
+					submitButton={
+						<Permissions
+							allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									type={'primary'}
+									block
+									size={'large'}
+									className={'noti-btn m-regular'}
+									disabled={approvalButtonDisabled}
+									onClick={(e) => {
+										if (hasPermission) {
+											sendConfirmationRequest()
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+								>
+									{t('loc:Požiadať o schválenie')}
+								</Button>
+							)}
+						/>
+					}
+				/>
+			)}
 		</>
 	)
 }

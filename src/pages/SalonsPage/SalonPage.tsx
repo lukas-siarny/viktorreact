@@ -22,7 +22,6 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICAT
 // reducers
 import { RootState } from '../../reducers'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
-import { getCategories } from '../../reducers/categories/categoriesActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
 
@@ -150,7 +149,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue, isNewSalon])
 
 	useEffect(() => {
-		dispatch(getCategories())
 		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
 	}, [dispatch])
@@ -231,17 +229,24 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				},
 				companyInfo: data.companyInfo,
 				cosmeticIDs: data.cosmeticIDs,
-				languageIDs: data.languageIDs
+				languageIDs: data.languageIDs,
+				payByCash: true
 			}
 
 			if (salonExists) {
 				// update existing salon
 				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
+				dispatch(selectSalon(salonID))
+			} else {
+				// create new salon
+				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
+
+				// save categories in case of salon data were loaded from basic salon data and has categories assigned
 				if (showBasicSalonsSearchBox) {
 					if (data?.categoryIDs && !isEmpty(data?.categoryIDs) && data.categoryIDs.length < 100) {
 						await patchReq(
 							'/api/b2b/admin/salons/{salonID}/categories',
-							{ salonID },
+							{ salonID: result.data.salon.id },
 							{
 								categoryIDs: data?.categoryIDs as unknown as CategoriesPatch['categoryIDs']
 							}
@@ -249,10 +254,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					}
 				}
 
-				dispatch(selectSalon(salonID))
-			} else {
-				// create new salon
-				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
 				if (result?.data?.salon?.id) {
 					// load new salon for current user
 					await dispatch(getCurrentUser())

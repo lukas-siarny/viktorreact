@@ -491,6 +491,26 @@ const SalonForm: FC<Props> = (props) => {
 							{t('loc:Možnosti platby')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
+						<Row justify={'space-between'}>
+							<Field
+								className={'w-12/25'}
+								component={SwitchField}
+								label={t('loc:Platba v hotovosti')}
+								name={'payByCash'}
+								size={'middle'}
+								disabled={disabledForm}
+								required
+							/>
+							<Field
+								className={'w-12/25'}
+								component={SwitchField}
+								label={t('loc:Platba kartou')}
+								name={'payByCard'}
+								size={'middle'}
+								disabled={disabledForm}
+								required
+							/>
+						</Row>
 						<Field
 							component={InputField}
 							label={t('loc:Iné spôsoby platby')}
@@ -499,8 +519,9 @@ const SalonForm: FC<Props> = (props) => {
 							placeholder={t('loc:Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...')}
 							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
+							className={'mb-6'}
 						/>
-						<Field className={'mb-6'} component={SwitchField} label={t('loc:Platba kartou')} name={'payByCard'} size={'middle'} disabled={disabledForm} required />
+
 						<Compare
 							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
 							oldValue={formValues?.publishedSalonData?.pricelists}

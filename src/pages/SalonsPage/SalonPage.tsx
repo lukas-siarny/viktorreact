@@ -55,8 +55,6 @@ const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	}
 ]
 
-type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
-
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
@@ -180,6 +178,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				name: salonData?.name || null,
 				email: salonData?.email || null,
 				payByCard: !!salonData?.payByCard,
+				payByCash: !!salonData?.payByCash,
 				otherPaymentMethods: salonData?.otherPaymentMethods || null,
 				aboutUsFirst: salonData?.aboutUsFirst || null,
 				aboutUsSecond: salonData?.aboutUsSecond || null,
@@ -283,6 +282,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					sameOpenHoursOverWeek: true,
 					openingHours: initOpeningHours(undefined, true, false),
 					payByCard: false,
+					payByCash: true,
 					companyContactPerson: defaultContactPerson,
 					phones: getPhoneDefaultValue(phonePrefixCountryCode)
 				})
@@ -327,6 +327,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				socialLinkPinterest: data.socialLinkPinterest,
 				parkingNote: data.parkingNote,
 				payByCard: !!data.payByCard,
+				payByCash: !!data.payByCash,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: data.companyContactPerson,
 				companyInfo: data.companyInfo,

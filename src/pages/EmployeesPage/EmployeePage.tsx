@@ -266,7 +266,7 @@ const EmployeePage = (props: Props) => {
 			/* const serviceData = parseServicesForCreateAndUpdate(data?.services)
 			await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData) */
 			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
-			dispatch(getEmployee(employeeID))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -282,7 +282,7 @@ const EmployeePage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/employees/{employeeID}', { employeeID })
-			history.push(parentPath + t('paths:employees'))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -318,7 +318,7 @@ const EmployeePage = (props: Props) => {
 					roleID: formData?.roleID
 				}
 			)
-			dispatch(getEmployee(employeeID))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

@@ -49,9 +49,9 @@ const ServicePage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:services')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={backUrl} />
 			</Row>
-			<div className='content-body small mt-2'>{serviceID && <ServiceEditPage serviceID={serviceID} salonID={salonID} parentPath={parentPath} />}</div>
+			<div className='content-body small mt-2'>{serviceID && <ServiceEditPage serviceID={serviceID} salonID={salonID} parentPath={backUrl} />}</div>
 		</>
 	)
 }

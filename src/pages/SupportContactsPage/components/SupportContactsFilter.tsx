@@ -44,7 +44,7 @@ const SupportContactsFilter = (props: Props) => {
 	const [visibleModal, setVisibleModal] = useState(false)
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SUPPORT_CONTACTS_FILTER)(state))
 
-	const hasEveryCountrySupportContact = (supportContacts?.data?.supportContacts?.length || 0) >= (countries?.data?.length || 0)
+	const hasEveryCountrySupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact) => contact.country.code === country.code))
 
 	// disable filter fields if count of cosmetics is less than 2
 	const isFilterDisabled = useMemo(() => {

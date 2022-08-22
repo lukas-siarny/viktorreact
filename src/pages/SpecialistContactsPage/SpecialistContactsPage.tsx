@@ -54,7 +54,7 @@ const SpecialistContactsPage = () => {
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
 	const [prefixOptions, setPrefixOptions] = useState<{ [key: string]: string }>({})
-	const hasEveryCountrySpecialistContact = (specialistContacts?.data?.length || 0) >= (countries?.data?.length || 0)
+	const hasEveryCountrySpecialistContact = !countries?.data?.some((country) => !specialistContacts?.data?.find((contact) => contact.country.code === country.code))
 
 	const breadcrumbs: IBreadcrumbs = {
 		items: [

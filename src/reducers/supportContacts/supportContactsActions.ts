@@ -72,14 +72,13 @@ export const getSupportContactsOptions =
 		let payload = {} as ISupportContactOptionsPayload
 
 		const options: ISelectOptionItem[] =
-			data?.supportContacts?.map((item: any) => {
-				const countryCode = item.country.code
+			data?.supportContacts?.map((item) => {
 				const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === currentLng)
 
 				return {
 					key: item.id,
-					label: countryTranslation?.value || countryCode,
-					value: countryCode,
+					label: countryTranslation?.value || item.country.code,
+					value: item.id,
 					extra: {
 						image: item.country.flag
 					}

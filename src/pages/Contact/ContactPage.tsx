@@ -121,7 +121,7 @@ const ContactPage: FC<Props> = () => {
 					<Select
 						id={'noti-country-select'}
 						onChange={handleCountryChange}
-						value={selectedContact?.country.code}
+						value={selectedContact?.id}
 						className={'noti-select-input w-full'}
 						size={'large'}
 						dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}

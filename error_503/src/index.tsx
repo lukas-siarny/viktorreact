@@ -1,6 +1,6 @@
 import React from 'react'
 import { ConfigProvider } from 'antd'
-import { createRoot } from 'react-dom/client'
+import { render } from 'react-dom'
 
 import EN from 'antd/es/locale/en_GB'
 
@@ -11,9 +11,9 @@ import 'antd/dist/antd.min.css'
 
 import App from './App'
 
-const root = createRoot(document.body.querySelector('#root') as HTMLElement)
-root.render(
+const app = (
 	<ConfigProvider locale={EN}>
 		<App />
 	</ConfigProvider>
 )
+render(app, document.getElementById('root'))

@@ -1,6 +1,6 @@
 import i18n from 'i18next'
 import Backend from 'i18next-chained-backend'
-import XHR from 'i18next-http-backend'
+import XHR from 'i18next-xhr-backend'
 import LocalStorageBackend from 'i18next-localstorage-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'

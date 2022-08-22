@@ -10,7 +10,6 @@ const Error503Page = () => {
 	const size = useMedia(['(max-width: 744px)', '(max-width: 1280px)'], [RESOLUTIONS.SM, RESOLUTIONS.MD], RESOLUTIONS.XL)
 
 	const handleRedirect = () => {
-		// TODO toto ma pochopitelne neredirectne na notino ale zostane to tu.
 		window.location.replace('/')
 	}
 

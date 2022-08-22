@@ -24,16 +24,10 @@ export default (values: ISalonForm) => {
 		}
 
 		if (values?.nameSelect?.label && values?.nameSelect?.label?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-			errors.name = i18next.t('loc:Max. počet znakov je {{max}}', {
+			errors.nameSelect = i18next.t('loc:Max. počet znakov je {{max}}', {
 				max: VALIDATION_MAX_LENGTH.LENGTH_255
 			})
 		}
-	}
-
-	if (values?.name && values.name?.length > VALIDATION_MAX_LENGTH.LENGTH_255) {
-		errors.name = i18next.t('loc:Max. počet znakov je {{max}}', {
-			max: VALIDATION_MAX_LENGTH.LENGTH_255
-		})
 	}
 
 	const filledPhoneInputs = values?.phones?.filter((phone: any) => phone.phone)
@@ -66,7 +60,7 @@ export default (values: ISalonForm) => {
 		]
 	}
 
-	if (!(values?.zipCode && values?.city && values?.street && values?.streetNumber /* && values?.latitude && values?.longitude */ && values?.country)) {
+	if (!(values?.zipCode && values?.city && values?.street && values?.streetNumber && values?.latitude && values?.longitude && values?.country)) {
 		errors.address = i18next.t(
 			'loc:Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica (s číslom!), PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.'
 		)

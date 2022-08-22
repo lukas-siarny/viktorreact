@@ -15,6 +15,7 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
+import SalonSuggestionsModal from './components/SalonSuggestionsModal'
 
 // enums
 import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
@@ -24,6 +25,8 @@ import { RootState } from '../../reducers'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
+import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
 import { CategoriesPatch, IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
@@ -45,9 +48,6 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsActions'
-import SalonSuggestionsModal from './components/SalonSuggestionsModal'
-import { getCurrentUser } from '../../reducers/users/userActions'
 
 type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
@@ -103,9 +103,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const showBasicSalonsSearchBox = isNewSalon && isPartner
 
 	useEffect(() => {
-		if (isNewSalon) {
-			return
-		}
 		if (sameOpenHoursOverWeekFormValue) {
 			if (openOverWeekendFormValue) {
 				// set switch same open hours over week with weekend
@@ -146,7 +143,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue, isNewSalon])
+	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
 	useEffect(() => {
 		dispatch(getSalonLanguages())

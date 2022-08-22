@@ -9,89 +9,19 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.sv
 
 // reducers
 import { RootState } from '../../../reducers'
-import { patchReq } from '../../../utils/request'
-import { ENUMERATIONS_KEYS, NOTIFICATION_TYPE } from '../../../utils/enums'
 import { getCurrentUser } from '../../../reducers/users/userActions'
 import { getSuggestedSalons } from '../../../reducers/salons/salonsActions'
+import { selectSalon } from '../../../reducers/selectedSalon/selectedSalonActions'
+
+// utils
 import { history } from '../../../utils/history'
 import { getCountryPrefix } from '../../../utils/helper'
-import { selectSalon } from '../../../reducers/selectedSalon/selectedSalonActions'
+import { patchReq } from '../../../utils/request'
+import { ENUMERATIONS_KEYS, NOTIFICATION_TYPE } from '../../../utils/enums'
 
 type Props = {
 	visible: boolean
 	setVisible: (visible: boolean) => void
-}
-
-const mocupData = {
-	data: {
-		salons: [
-			{
-				id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-				suggestionHash: 'string',
-				name: 'Salon 4',
-				email: 'test.confirmed_partneruser@goodrequest.com',
-				phones: [
-					{
-						phonePrefixCountryCode: 'SK',
-						phone: '900 222 555'
-					}
-				],
-				address: {
-					countryCode: 'SK',
-					zipCode: '101 00',
-					city: 'Žilina',
-					street: 'Framborská',
-					streetNumber: '58'
-				}
-			},
-			{
-				id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-				suggestionHash: 'string',
-				name: 'Salon 3 s nejakym dlhsim nazvom, ktory moze ist aj na dva riadky',
-				email: 'lukas.siarny@goodrequest.com',
-				phones: [
-					{
-						phonePrefixCountryCode: 'SK',
-						phone: '900 222 555'
-					},
-					{
-						phonePrefixCountryCode: 'SK',
-						phone: '900 222 555'
-					}
-				],
-				address: {
-					countryCode: 'SK',
-					zipCode: '101 00',
-					city: 'Žilina',
-					street: 'Framborská',
-					streetNumber: '58'
-				}
-			},
-			{
-				id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-				suggestionHash: 'string',
-				name: 'Salon 5 strende dlhy nazov',
-				email: 'lukas.siarny@goodrequest.com',
-				phones: [
-					{
-						phonePrefixCountryCode: 'SK',
-						phone: '900 222 555'
-					},
-					{
-						phonePrefixCountryCode: 'SK',
-						phone: '900 222 555'
-					}
-				],
-				address: {
-					countryCode: 'SK',
-					zipCode: '101 00',
-					city: 'Žilina',
-					street: 'Framborská',
-					streetNumber: '58'
-				}
-			}
-		]
-	}
 }
 
 const SalonSuggestionsModal = (props: Props) => {
@@ -201,7 +131,6 @@ const SalonSuggestionsModal = (props: Props) => {
 											type='primary'
 											htmlType='submit'
 											disabled={isSubmitting}
-											loading={isSubmitting}
 										>
 											{t('loc:Áno, toto je môj salón')}
 										</Button>
@@ -213,7 +142,6 @@ const SalonSuggestionsModal = (props: Props) => {
 											type={'dashed'}
 											htmlType='submit'
 											disabled={isSubmitting}
-											loading={isSubmitting}
 										>
 											{t('loc:Nie, toto je nedorozumenie')}
 										</Button>

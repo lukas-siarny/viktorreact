@@ -31,7 +31,7 @@ export const getCosmetics = (): ThunkResult<Promise<ICosmeticsPayload>> => async
 				label: cosmetic.name,
 				value: cosmetic.id,
 				extra: {
-					image: cosmetic.image?.resizedImages?.thumbnaill || cosmetic.image?.original
+					image: cosmetic.image?.resizedImages?.thumbnail || cosmetic.image?.original
 				}
 			}))
 			.sort((a, b) => sortData(a.label, b.label))

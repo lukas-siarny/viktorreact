@@ -62,17 +62,7 @@ const SalonApprovalModal = (props: Props) => {
 								</span>
 							</Link>
 						</li>
-						<li className={'req-list-item progress'}>
-							<div className='flex-1'>
-								<div className={'text'}>
-									<span className={'label'}>{t('loc:vyplniť čo najviac relevantných dát o salóne')}</span>
-									<span className={'percentage'}>{`${salon?.data?.fillingProgressSalon || 0} %`}</span>
-								</div>
-								<div className={'progress-bar'}>
-									<span style={{ width: `${salon?.data?.fillingProgressSalon || 0}%` }} />
-								</div>
-							</div>
-						</li>
+						<li className={'req-list-item progress'}>{t('loc:vyplniť čo najviac relevantných dát o salóne')}</li>
 					</ul>
 					<h2>{t('loc:Čo sa bude diať ďalej?')}</h2>
 					<ul className={'what-next mb-0'}>

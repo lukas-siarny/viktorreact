@@ -1638,7 +1638,8 @@ span.ant-tag .title
 
 				&.req-list-item-link
 					transition: 300ms ease
-					&:hover
+					&:hover,
+					&:focus-visible
 						background: $backgroundColor-notino-grayLight
 						color: $textColor-notino-pink
 						.arrow-icon
@@ -1685,30 +1686,6 @@ span.ant-tag .title
 					&::before
 						background-image: url("../assets/icons/industries.svg")
 				&.progress
-					overflow: hidden
-					padding-right: 8px
-					.progress-bar
-						background: $textColor-notino-gray
-						width: 100%
-						height: 6px
-						border-radius: 4px
-						overflow: hidden
-						margin-top: 8px
-
-						span
-							display: block
-							background: $textColor-notino-pink
-							height: 100%
-					.text
-						position: relative
-						width: 100%
-						flex: 1
-						display: flex
-						justify-content: space-between
-						.percentage
-							font-weight: 700
-							padding-left: 16px
-
 					&::before
 						background-image: url("../assets/icons/profile-icon.svg")
 

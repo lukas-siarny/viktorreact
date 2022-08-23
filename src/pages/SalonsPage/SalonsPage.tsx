@@ -17,13 +17,21 @@ import TabsComponent from '../../components/TabsComponent'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES } from '../../utils/enums'
-import { formatDateByLocale, getLinkWithEncodedBackUrl, getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import {
+	formatDateByLocale,
+	getLinkWithEncodedBackUrl,
+	getSalonTagChanges,
+	getSalonTagCreateType,
+	getSalonTagPublished,
+	normalizeDirectionKeys,
+	setOrder
+} from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
 
 // reducers
-import { getSalons } from '../../reducers/salons/salonsActions'
+import { emptySalons, getSalons } from '../../reducers/salons/salonsActions'
 import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
 import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
@@ -32,7 +40,6 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 
 // assets
-import { ReactComponent as CircleCheckIcon } from '../../assets/icons/check-circle-icon.svg'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
@@ -62,13 +69,15 @@ const SalonsPage = () => {
 		categoryFirstLevelIDs: ArrayParam,
 		statuses_all: withDefault(BooleanParam, false),
 		statuses_published: ArrayParam,
-		statuses_deleted: ArrayParam,
+		salonState: withDefault(StringParam, 'active'),
 		statuses_changes: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:DESC'),
 		countryCode: StringParam,
-		createType: StringParam
+		createType: StringParam,
+		lastUpdatedAtFrom: StringParam,
+		lastUpdatedAtTo: StringParam
 	})
 
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
@@ -79,13 +88,23 @@ const SalonsPage = () => {
 				search: query.search,
 				statuses_all: query.statuses_all,
 				statuses_published: query.statuses_published,
-				statuses_deleted: query.statuses_deleted,
 				statuses_changes: query.statuses_changes,
 				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
 				countryCode: query.countryCode,
-				createType: query.createType
+				createType: query.createType,
+				dateFromTo: {
+					dateFrom: query.lastUpdatedAtFrom,
+					dateTo: query.lastUpdatedAtTo
+				}
 			})
 		)
+
+		if (query.salonState === 'active') {
+			setTabKey('active')
+		} else if (query.salonState === 'deleted') {
+			setTabKey('deleted')
+		}
+
 		dispatch(
 			getSalons({
 				page: query.page,
@@ -96,9 +115,11 @@ const SalonsPage = () => {
 				statuses_all: query.statuses_all,
 				statuses_published: query.statuses_published,
 				statuses_changes: query.statuses_changes,
-				statuses_deleted: query.statuses_deleted,
+				salonState: query.salonState,
 				countryCode: query.countryCode,
-				createType: query.createType
+				createType: query.createType,
+				lastUpdatedAtFrom: query.lastUpdatedAtFrom,
+				lastUpdatedAtTo: query.lastUpdatedAtTo
 			})
 		)
 	}, [
@@ -110,10 +131,12 @@ const SalonsPage = () => {
 		query.categoryFirstLevelIDs,
 		query.statuses_all,
 		query.statuses_published,
-		query.statuses_deleted,
+		query.salonState,
 		query.statuses_changes,
 		query.countryCode,
-		query.createType
+		query.createType,
+		query.lastUpdatedAtFrom,
+		query.lastUpdatedAtTo
 	])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
@@ -137,9 +160,12 @@ const SalonsPage = () => {
 	}
 
 	const handleSubmit = (values: ISalonsFilter) => {
+		const { dateFromTo, ...restValues } = values
 		const newQuery = {
 			...query,
-			...values,
+			...restValues,
+			lastUpdatedAtFrom: dateFromTo?.dateFrom,
+			lastUpdatedAtTo: dateFromTo?.dateTo,
 			page: 1
 		}
 		setQuery(newQuery)
@@ -180,96 +206,102 @@ const SalonsPage = () => {
 		: undefined
 
 	const onTabChange = (selectedTabKey: string) => {
+		dispatch(emptySalons())
 		setTabKey(selectedTabKey as TabKeys)
+		setQuery({ ...query, salonState: selectedTabKey })
 	}
 
-	const tableColumns: { [key: string]: Columns[0] } = useMemo(
+	const tableColumns: { [key: string]: (props?: Columns[0]) => Columns[0] } = useMemo(
 		() => ({
-			name: {
+			name: (props) => ({
 				title: t('loc:Názov'),
 				dataIndex: 'name',
 				key: 'name',
 				ellipsis: true,
 				sorter: true,
 				width: '15%',
-				sortOrder: setOrder(query.order, 'name')
-			},
-			address: {
+				sortOrder: setOrder(query.order, 'name'),
+				...props
+			}),
+			address: (props) => ({
 				title: t('loc:Adresa'),
 				dataIndex: 'address',
 				key: 'address',
 				ellipsis: true,
 				sorter: false,
 				width: '20%',
-				render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
-			},
-			categories: {
+				render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>,
+				...props
+			}),
+			categories: (props) => ({
 				title: t('loc:Odvetvie'),
 				dataIndex: 'categories',
 				key: 'categories',
 				ellipsis: true,
 				sorter: false,
 				width: '10%',
-				render: (value) => (value?.length > 0 ? value[0].name : '-')
-			},
-			createType: {
+				render: (value) => (value?.length > 0 ? value[0].name : '-'),
+				...props
+			}),
+			createType: (props) => ({
 				title: t('loc:Úroveň salónu'),
 				dataIndex: 'createType',
 				key: 'createType',
 				ellipsis: true,
 				sorter: false,
-				width: '6%',
-				render: (value) =>
-					value === SALON_CREATE_TYPES.BASIC && (
-						<div className={'flex justify-start'}>
-							<CircleCheckIcon width={20} height={20} />
-						</div>
-					)
-			},
-			createdAt: {
+				width: '10%',
+				render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
+				...props
+			}),
+			createdAt: (props) => ({
 				title: t('loc:Vytvorený'),
 				dataIndex: 'createdAt',
 				key: 'createdAt',
 				ellipsis: true,
 				sorter: true,
 				sortOrder: setOrder(query.order, 'createdAt'),
-				render: (value) => formatDateByLocale(value)
-			},
-			updatedAt: {
+				render: (value) => formatDateByLocale(value),
+				...props
+			}),
+			lastUpdatedAt: (props) => ({
 				title: t('loc:Upravený'),
 				dataIndex: 'lastUpdatedAt',
 				key: 'lastUpdatedAt',
 				ellipsis: true,
 				sorter: false,
 				width: '10%',
-				render: (value) => formatDateByLocale(value)
-			},
-			deletedAt: {
+				render: (value) => formatDateByLocale(value),
+				...props
+			}),
+			deletedAt: (props) => ({
 				title: t('loc:Vymazaný'),
 				dataIndex: 'deletedAt',
 				key: 'deletedAt',
 				ellipsis: true,
 				sorter: false,
 				width: '10%',
-				render: (value) => formatDateByLocale(value)
-			},
-			isPublished: {
+				render: (value) => formatDateByLocale(value),
+				...props
+			}),
+			isPublished: (props) => ({
 				title: t('loc:Publikovaný'),
 				key: 'isPublished',
 				ellipsis: true,
 				sorter: false,
 				width: '10%',
-				render: (_value, record) => getSalonTagPublished(record.state)
-			},
-			changes: {
+				render: (_value, record) => getSalonTagPublished(record.state),
+				...props
+			}),
+			changes: (props) => ({
 				title: t('loc:Zmeny'),
 				key: 'changes',
 				ellipsis: true,
 				sorter: false,
 				width: '10%',
-				render: (_value, record) => getSalonTagChanges(record.state)
-			},
-			fillingProgress: {
+				render: (_value, record) => getSalonTagChanges(record.state),
+				...props
+			}),
+			fillingProgress: (props) => ({
 				title: t('loc:Vyplnenie profilu'),
 				dataIndex: 'fillingProgressSalon',
 				key: 'fillingProgress',
@@ -281,8 +313,9 @@ const SalonsPage = () => {
 						<span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>
 						<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
 					</Row>
-				)
-			}
+				),
+				...props
+			})
 		}),
 		[query.order, t]
 	)
@@ -292,24 +325,32 @@ const SalonsPage = () => {
 
 		if (selectedTabKey === 'active') {
 			columns = [
-				tableColumns.name,
-				tableColumns.address,
-				tableColumns.categories,
-				tableColumns.isPublished,
-				tableColumns.changes,
-				tableColumns.createType,
-				tableColumns.fillingProgress,
-				tableColumns.createdAt
+				tableColumns.name(),
+				tableColumns.address(),
+				tableColumns.categories(),
+				tableColumns.isPublished(),
+				tableColumns.changes(),
+				tableColumns.createType(),
+				tableColumns.fillingProgress(),
+				tableColumns.lastUpdatedAt(),
+				tableColumns.createdAt()
 			]
 		} else if (selectedTabKey === 'deleted') {
-			columns = [tableColumns.name, tableColumns.address, tableColumns.categories, tableColumns.deletedAt, tableColumns.createType, tableColumns.createdAt]
+			columns = [
+				tableColumns.name({ width: '20%' }),
+				tableColumns.address({ width: '16%' }),
+				tableColumns.categories({ width: '16%' }),
+				tableColumns.deletedAt({ width: '16%' }),
+				tableColumns.createType({ width: '16%' }),
+				tableColumns.createdAt({ width: '16%' })
+			]
 		}
 
 		return (
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<div className='content-body'>
-						<Spin spinning={salons?.isLoading}>
+					<Spin spinning={salons?.isLoading}>
+						<div className='content-body'>
 							<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
 							<CustomTable
 								className='table-fixed'
@@ -333,8 +374,8 @@ const SalonsPage = () => {
 									}
 								})}
 							/>
-						</Spin>
-					</div>
+						</div>
+					</Spin>
 				</Col>
 			</Row>
 		)

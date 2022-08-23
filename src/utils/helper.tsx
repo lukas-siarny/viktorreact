@@ -60,7 +60,8 @@ import {
 	DEFAULT_PHONE_PREFIX,
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
-	SALON_PERMISSION
+	SALON_PERMISSION,
+	SALON_CREATE_TYPES
 } from './enums'
 import { IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -812,6 +813,27 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
 		default:
 			return null
 	}
+}
+
+export const getSalonTagCreateType = (salonStatus?: SALON_STATES, createType?: SALON_CREATE_TYPES) => {
+	if (salonStatus && createType) {
+		if (salonStatus === SALON_STATES.PUBLISHED && createType === SALON_CREATE_TYPES.NON_BASIC) {
+			return (
+				<Tag icon={<CheckIcon12 />} className={'noti-tag premium-salon'}>
+					{i18next.t('loc:PREMIUM')}
+				</Tag>
+			)
+		}
+
+		if (createType === SALON_CREATE_TYPES.BASIC) {
+			return (
+				<Tag icon={<CheckIcon12 />} className={'noti-tag basic-salon'}>
+					{i18next.t('loc:BASIC')}
+				</Tag>
+			)
+		}
+	}
+	return null
 }
 /**
  * Remove accent and transform to lower case

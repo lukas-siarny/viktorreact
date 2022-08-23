@@ -4,6 +4,7 @@ import { Button, Col, Divider, Form, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, filter, isEmpty, isNil, size } from 'lodash'
 import cx from 'classnames'
+import dayjs from 'dayjs'
 
 // components
 import { useSelector } from 'react-redux'
@@ -23,7 +24,7 @@ import { ReactComponent as CloseIcon12 } from '../../../assets/icons/close-12.sv
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
 import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
@@ -32,6 +33,8 @@ import { history } from '../../../utils/history'
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 import SwitchField from '../../../atoms/SwitchField'
+import DateRangePickerField from '../../../atoms/DateRangePickerField'
+import { getSalonFilterRanges, intervals } from './salonUtils'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void
@@ -39,6 +42,16 @@ type ComponentProps = {
 
 export interface ISalonsFilter {
 	search: string
+	dateFromTo: {
+		dateFrom: string
+		dateTo: string
+	}
+	statuses_all: boolean
+	statuses_published: string[]
+	statuses_changes: string[]
+	categoryFirstLevelIDs: string[]
+	countryCode: string
+	createType: string
 }
 
 type Props = InjectedFormProps<ISalonsFilter, ComponentProps> & ComponentProps
@@ -60,6 +73,9 @@ export const checkSalonFiltersSize = (formValues: any) =>
 			if (typeof value === 'boolean') {
 				return value
 			}
+			if (key === 'dateFromTo' && !value?.dateFrom && !value?.dateTo) {
+				return false
+			}
 			return (!isNil(value) || !isEmpty(value)) && key !== 'search' && key !== 'statuses_all'
 		})
 	)
@@ -71,14 +87,6 @@ const SalonsFilter = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
-
-	const createTypesOptions = useMemo(
-		() => [
-			{ label: t('loc:Importovaný'), value: SALON_CREATE_TYPES.BASIC, key: SALON_CREATE_TYPES.BASIC },
-			{ label: t('loc:Štandartný'), value: SALON_CREATE_TYPES.NON_BASIC, key: SALON_CREATE_TYPES.NON_BASIC }
-		],
-		[t]
-	)
 
 	const publishedOptions = useMemo(
 		() => [
@@ -102,10 +110,10 @@ const SalonsFilter = (props: Props) => {
 		[t]
 	)
 
-	const createTypeOptions = useMemo(
+	const createTypesOptions = useMemo(
 		() => [
-			{ label: t('loc:BASIC'), value: SALON_CREATE_TYPES.BASIC, key: SALON_CREATE_TYPES.BASIC, icon: <TrashIcon12 />, className: 'danger' },
-			{ label: t('loc:PREMIUM'), value: SALON_CREATE_TYPES.NON_BASIC, key: SALON_CREATE_TYPES.NON_BASIC, icon: <TrashCrossedIcon12 />, className: 'info' }
+			{ label: t('loc:BASIC'), value: SALON_FILTER_CREATE_TYPES.BASIC, key: SALON_FILTER_CREATE_TYPES.BASIC, icon: <TrashIcon12 />, className: 'basic-salon' },
+			{ label: t('loc:PREMIUM'), value: SALON_FILTER_CREATE_TYPES.PREMIUM, key: SALON_FILTER_CREATE_TYPES.PREMIUM, icon: <TrashCrossedIcon12 />, className: 'premium-salon' }
 		],
 		[t]
 	)
@@ -226,7 +234,7 @@ const SalonsFilter = (props: Props) => {
 									size={'large'}
 									filterOptions
 									onDidMountSearch
-									options={createTypeOptions}
+									options={createTypesOptions}
 									optionRender={statusOptionRender}
 								/>
 							</Col>
@@ -266,14 +274,17 @@ const SalonsFilter = (props: Props) => {
 						</Col>
 						<Col span={8}>
 							<Field
-								component={SelectField}
-								name={'createType'}
-								placeholder={t('loc:Úroveň salónu')}
+								className={'w-full'}
+								rangePickerClassName={'w-full'}
+								component={DateRangePickerField}
+								showTime
+								disableFuture
+								placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
 								allowClear
-								size={'middle'}
-								filterOptions
-								onDidMountSearch
-								options={createTypesOptions}
+								name={'dateFromTo'}
+								ranges={getSalonFilterRanges(intervals)}
+								dropdownAlign={{ points: ['tr', 'br'] }}
+								allowEmpty={[false, false]}
 							/>
 						</Col>
 					</Row>

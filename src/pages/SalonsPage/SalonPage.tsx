@@ -18,7 +18,7 @@ import validateSalonFormForPublication from './components/validateSalonFormForPu
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
 import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
-import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft } from './components/salonVersionsUtils'
+import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft } from './components/salonUtils'
 
 // enums
 import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'

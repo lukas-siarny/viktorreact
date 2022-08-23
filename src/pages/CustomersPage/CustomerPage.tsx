@@ -118,7 +118,8 @@ const CustomerPage = (props: Props) => {
 					profileImageID: (data?.avatar?.[0]?.id ?? data?.avatar?.[0]?.uid) || null
 				}
 			)
-			dispatch(getCustomer(customerID))
+
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

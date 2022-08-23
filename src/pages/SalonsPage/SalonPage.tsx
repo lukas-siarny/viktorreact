@@ -106,7 +106,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
-	const isPartner = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.PARTNER]), [authUser])
+	const isPartner = !isAdmin
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
 
@@ -232,6 +232,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				socialLinkPinterest: data.socialLinkPinterest,
 				parkingNote: data.parkingNote,
 				payByCard: !!data.payByCard,
+				payByCash: !!data.payByCash,
 				otherPaymentMethods: data.otherPaymentMethods,
 				companyContactPerson: {
 					...data.companyContactPerson,

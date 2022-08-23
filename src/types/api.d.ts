@@ -1294,6 +1294,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type Language = string | null;
+        }
+        export interface QueryParameters {
+            language?: Parameters.Language;
         }
         namespace Responses {
             export interface $200 {
@@ -2088,7 +2092,10 @@ declare namespace Paths {
                 salon: {
                     id: string; // uuid
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
+                    isPublished: boolean;
+                    createType: "NON_BASIC" | "BASIC";
                     publicationDeclineReason?: string;
+                    hasAllRequiredSalonApprovalData: boolean;
                     name?: string;
                     aboutUsFirst?: string;
                     aboutUsSecond?: string;
@@ -2435,6 +2442,8 @@ declare namespace Paths {
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     categories: {
                         id: string; // uuid
@@ -3603,6 +3612,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type Language = string | null;
+        }
+        export interface QueryParameters {
+            language?: Parameters.Language;
         }
         namespace Responses {
             export interface $200 {
@@ -4842,7 +4855,10 @@ declare namespace Paths {
             export interface $200 {
                 salon: {
                     id: string; // uuid
+                    isPublished: boolean;
+                    createType: "NON_BASIC" | "BASIC";
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
+                    hasAllRequiredSalonApprovalData: boolean;
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
                     rating?: number; // float
@@ -5265,6 +5281,8 @@ declare namespace Paths {
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     categories: {
                         id: string; // uuid
@@ -16078,55 +16096,6 @@ declare namespace Paths {
                 string?,
                 string?
             ];
-            companyContactPerson: {
-                /**
-                 * example:
-                 * test_notino@goodrequest.com
-                 */
-                email: string; // email
-                /**
-                 * example:
-                 * Janko
-                 */
-                firstName?: string | null;
-                /**
-                 * example:
-                 * Hráško
-                 */
-                lastName?: string | null;
-                /**
-                 * example:
-                 * SK
-                 */
-                phonePrefixCountryCode: string;
-                /**
-                 * example:
-                 * 906047188
-                 */
-                phone: string; // ^\d+$
-            };
-            companyInfo?: {
-                /**
-                 * example:
-                 * 01234567
-                 */
-                businessID?: string | null;
-                /**
-                 * example:
-                 * 2012345678
-                 */
-                taxID?: string | null;
-                /**
-                 * example:
-                 * SK2012345678
-                 */
-                vatID?: string | null;
-                /**
-                 * example:
-                 * Company
-                 */
-                companyName?: string | null;
-            };
             cosmeticIDs?: [
                 string?,
                 string?,
@@ -16411,32 +16380,81 @@ declare namespace Paths {
             salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
-            companyInvoiceAddress: {
+            companyInvoiceAddress?: {
                 /**
                  * example:
                  * SK
                  */
-                countryCode: string;
+                countryCode?: string | null;
                 /**
                  * example:
                  * 010 01
                  */
-                zipCode: string;
+                zipCode?: string | null;
                 /**
                  * example:
                  * Žilina
                  */
-                city: string;
+                city?: string | null;
                 /**
                  * example:
                  * Framborska 58
                  */
-                street: string;
+                street?: string | null;
                 /**
                  * example:
                  * 1
                  */
-                streetNumber?: string;
+                streetNumber?: string | null;
+            };
+            companyContactPerson?: {
+                /**
+                 * example:
+                 * test_notino@goodrequest.com
+                 */
+                email?: string | null; // email
+                /**
+                 * example:
+                 * Janko
+                 */
+                firstName?: string | null;
+                /**
+                 * example:
+                 * Hráško
+                 */
+                lastName?: string | null;
+                /**
+                 * example:
+                 * SK
+                 */
+                phonePrefixCountryCode?: string | null;
+                /**
+                 * example:
+                 * 906047188
+                 */
+                phone?: string | null; // ^\d+$
+            };
+            companyInfo?: {
+                /**
+                 * example:
+                 * 01234567
+                 */
+                businessID?: string | null;
+                /**
+                 * example:
+                 * 2012345678
+                 */
+                taxID?: string | null;
+                /**
+                 * example:
+                 * SK2012345678
+                 */
+                vatID?: string | null;
+                /**
+                 * example:
+                 * Company
+                 */
+                companyName?: string | null;
             };
         }
         namespace Responses {
@@ -29990,55 +30008,6 @@ declare namespace Paths {
                  */
                 otherPaymentMethods?: string | null;
             } | null;
-            companyContactPersonSegment?: {
-                /**
-                 * example:
-                 * test_notino@goodrequest.com
-                 */
-                email: string; // email
-                /**
-                 * example:
-                 * Janko
-                 */
-                firstName?: string | null;
-                /**
-                 * example:
-                 * Hráško
-                 */
-                lastName?: string | null;
-                /**
-                 * example:
-                 * SK
-                 */
-                phonePrefixCountryCode: string;
-                /**
-                 * example:
-                 * 906047188
-                 */
-                phone: string; // ^\d+$
-            };
-            companyInfoSegment?: {
-                /**
-                 * example:
-                 * 01234567
-                 */
-                businessID?: string | null;
-                /**
-                 * example:
-                 * 2012345678
-                 */
-                taxID?: string | null;
-                /**
-                 * example:
-                 * SK2012345678
-                 */
-                vatID?: string | null;
-                /**
-                 * example:
-                 * Company
-                 */
-                companyName?: string | null;
-            };
             pricelistSegment?: {
                 pricelistIDs?: string /* uuid */[];
             };
@@ -30085,7 +30054,10 @@ declare namespace Paths {
             export interface $200 {
                 salon: {
                     id: string; // uuid
+                    isPublished: boolean;
+                    createType: "NON_BASIC" | "BASIC";
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
+                    hasAllRequiredSalonApprovalData: boolean;
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
                     rating?: number; // float
@@ -30712,39 +30684,91 @@ declare namespace Paths {
             salonID: Parameters.SalonID /* uuid */;
         }
         export interface RequestBody {
-            companyInvoiceAddressSegment: {
+            companyInvoiceAddressSegment?: {
                 /**
                  * example:
                  * SK
                  */
-                countryCode: string;
+                countryCode?: string | null;
                 /**
                  * example:
                  * 010 01
                  */
-                zipCode: string;
+                zipCode?: string | null;
                 /**
                  * example:
                  * Žilina
                  */
-                city: string;
+                city?: string | null;
                 /**
                  * example:
                  * Framborska 58
                  */
-                street: string;
+                street?: string | null;
                 /**
                  * example:
                  * 1
                  */
-                streetNumber?: string;
+                streetNumber?: string | null;
+            };
+            companyContactPersonSegment?: {
+                /**
+                 * example:
+                 * test_notino@goodrequest.com
+                 */
+                email?: string | null; // email
+                /**
+                 * example:
+                 * Janko
+                 */
+                firstName?: string | null;
+                /**
+                 * example:
+                 * Hráško
+                 */
+                lastName?: string | null;
+                /**
+                 * example:
+                 * SK
+                 */
+                phonePrefixCountryCode?: string | null;
+                /**
+                 * example:
+                 * 906047188
+                 */
+                phone?: string | null; // ^\d+$
+            };
+            companyInfoSegment?: {
+                /**
+                 * example:
+                 * 01234567
+                 */
+                businessID?: string | null;
+                /**
+                 * example:
+                 * 2012345678
+                 */
+                taxID?: string | null;
+                /**
+                 * example:
+                 * SK2012345678
+                 */
+                vatID?: string | null;
+                /**
+                 * example:
+                 * Company
+                 */
+                companyName?: string | null;
             };
         }
         namespace Responses {
             export interface $200 {
                 salon: {
                     id: string; // uuid
+                    isPublished: boolean;
+                    createType: "NON_BASIC" | "BASIC";
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
+                    hasAllRequiredSalonApprovalData: boolean;
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
                     rating?: number; // float
@@ -49203,7 +49227,10 @@ declare namespace Paths {
             export interface $200 {
                 salon: {
                     id: string; // uuid
+                    isPublished: boolean;
+                    createType: "NON_BASIC" | "BASIC";
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
+                    hasAllRequiredSalonApprovalData: boolean;
                     publicationDeclineReason?: string;
                     fillingProgressSalon: number;
                     rating?: number; // float
@@ -50195,7 +50222,7 @@ export interface OperationMethods {
    * getApiB2BAdminEnumsContacts - PERMISSION: NO
    */
   'getApiB2BAdminEnumsContacts'(
-    parameters?: Parameters<Paths.GetApiB2BAdminEnumsContacts.HeaderParameters> | null,
+    parameters?: Parameters<Paths.GetApiB2BAdminEnumsContacts.QueryParameters & Paths.GetApiB2BAdminEnumsContacts.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminEnumsContacts.Responses.$200>
@@ -50395,7 +50422,7 @@ export interface OperationMethods {
    * getApiB2BV1EnumsContacts - PERMISSION: NO
    */
   'getApiB2BV1EnumsContacts'(
-    parameters?: Parameters<Paths.GetApiB2BV1EnumsContacts.HeaderParameters> | null,
+    parameters?: Parameters<Paths.GetApiB2BV1EnumsContacts.QueryParameters & Paths.GetApiB2BV1EnumsContacts.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsContacts.Responses.$200>
@@ -51621,7 +51648,7 @@ export interface PathsDictionary {
      * getApiB2BAdminEnumsContacts - PERMISSION: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2BAdminEnumsContacts.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2BAdminEnumsContacts.QueryParameters & Paths.GetApiB2BAdminEnumsContacts.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsContacts.Responses.$200>
@@ -51861,7 +51888,7 @@ export interface PathsDictionary {
      * getApiB2BV1EnumsContacts - PERMISSION: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2BV1EnumsContacts.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2BV1EnumsContacts.QueryParameters & Paths.GetApiB2BV1EnumsContacts.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsContacts.Responses.$200>

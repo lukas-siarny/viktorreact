@@ -111,6 +111,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		// categoryIDs for basic salon
 		categoryIDs: (isEmpty(!salonData?.categories) ? salonData?.categories.map((category) => category.id) : null) as ISalonForm['categoryIDs'],
 		payByCard: !!salonData.payByCard,
+		payByCash: !!salonData?.payByCash,
 		otherPaymentMethods: salonData.otherPaymentMethods || null,
 		aboutUsFirst: salonData.aboutUsFirst || null,
 		aboutUsSecond: salonData.aboutUsSecond || null,
@@ -205,8 +206,6 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		}
 	}
 
-	console.log(initialData)
-
 	return initialData
 }
 
@@ -217,6 +216,7 @@ export const initEmptySalonFormData = (phonePrefixCountryCode: string, salonName
 		sameOpenHoursOverWeek: true,
 		openingHours: initOpeningHours(undefined, true, false),
 		payByCard: false,
+		payByCash: true,
 		companyContactPerson: {
 			phonePrefixCountryCode
 		},

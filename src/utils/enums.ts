@@ -324,7 +324,8 @@ export enum SALON_STATES {
 
 export enum SALON_CREATE_TYPES {
 	BASIC = 'BASIC',
-	NON_BASIC = 'NON_BASIC'
+	NON_BASIC = 'NON_BASIC',
+	PREMIUM = 'PREMIUM'
 }
 
 export enum PAGE_VIEW {

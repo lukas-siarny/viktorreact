@@ -102,10 +102,10 @@ const SalonsFilter = (props: Props) => {
 		[t]
 	)
 
-	const deletedOptions = useMemo(
+	const createTypeOptions = useMemo(
 		() => [
-			{ label: t('loc:Vymazaný'), value: SALON_FILTER_STATES.DELETED, key: SALON_FILTER_STATES.DELETED, icon: <TrashIcon12 />, className: 'danger' },
-			{ label: t('loc:Nevymazaný'), value: SALON_FILTER_STATES.NOT_DELETED, key: SALON_FILTER_STATES.NOT_DELETED, icon: <TrashCrossedIcon12 />, className: 'info' }
+			{ label: t('loc:BASIC'), value: SALON_CREATE_TYPES.BASIC, key: SALON_CREATE_TYPES.BASIC, icon: <TrashIcon12 />, className: 'danger' },
+			{ label: t('loc:PREMIUM'), value: SALON_CREATE_TYPES.NON_BASIC, key: SALON_CREATE_TYPES.NON_BASIC, icon: <TrashCrossedIcon12 />, className: 'info' }
 		],
 		[t]
 	)
@@ -219,14 +219,14 @@ const SalonsFilter = (props: Props) => {
 							<Col span={8}>
 								<Field
 									component={SelectField}
-									name={'statuses_deleted'}
-									placeholder={t('loc:Vymazaný')}
+									name={'createType'}
+									placeholder={t('loc:Úroveň salónu')}
 									className={'statuses-filter-select'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
-									options={deletedOptions}
+									options={createTypeOptions}
 									optionRender={statusOptionRender}
 								/>
 							</Col>
@@ -268,7 +268,7 @@ const SalonsFilter = (props: Props) => {
 							<Field
 								component={SelectField}
 								name={'createType'}
-								placeholder={t('loc:Typ vytvorenia')}
+								placeholder={t('loc:Úroveň salónu')}
 								allowClear
 								size={'middle'}
 								filterOptions

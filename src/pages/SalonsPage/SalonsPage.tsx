@@ -48,11 +48,7 @@ const SalonsPage = () => {
 
 	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
 	const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error' | undefined>(undefined)
-	const [tabKey, setTabKey] = useState<TabKeys>('active')
-	const [tableConfig, setTableConfig] = useState<{ columns: Columns; source: any }>({
-		columns: [],
-		source: []
-	})
+	const [tabKey, setTabKey] = useState<TabKeys | undefined>()
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
 
@@ -187,8 +183,8 @@ const SalonsPage = () => {
 		setTabKey(selectedTabKey as TabKeys)
 	}
 
-	const getTabContent = (selectedTabKey: 'active' | 'deleted') => {
-		const tableColumns: { [key: string]: Columns[0] } = {
+	const tableColumns: { [key: string]: Columns[0] } = useMemo(
+		() => ({
 			name: {
 				title: t('loc:Názov'),
 				dataIndex: 'name',
@@ -217,7 +213,7 @@ const SalonsPage = () => {
 				render: (value) => (value?.length > 0 ? value[0].name : '-')
 			},
 			createType: {
-				title: t('loc:Importovaný'),
+				title: t('loc:Úroveň salónu'),
 				dataIndex: 'createType',
 				key: 'createType',
 				ellipsis: true,
@@ -241,8 +237,8 @@ const SalonsPage = () => {
 			},
 			updatedAt: {
 				title: t('loc:Upravený'),
-				dataIndex: 'updatedAt',
-				key: 'updatedAt',
+				dataIndex: 'lastUpdatedAt',
+				key: 'lastUpdatedAt',
 				ellipsis: true,
 				sorter: false,
 				width: '10%',
@@ -287,23 +283,26 @@ const SalonsPage = () => {
 					</Row>
 				)
 			}
-		}
+		}),
+		[query.order, t]
+	)
 
+	const getTabContent = (selectedTabKey: 'active' | 'deleted') => {
 		let columns: Columns = []
 
 		if (selectedTabKey === 'active') {
-			columns = [tableColumns.name, tableColumns.address, tableColumns.categories, tableColumns.deletedAt, tableColumns.creteType, tableColumns.createdAt]
-		} else if (selectedTabKey === 'deleted') {
 			columns = [
 				tableColumns.name,
 				tableColumns.address,
 				tableColumns.categories,
 				tableColumns.isPublished,
 				tableColumns.changes,
-				tableColumns.creteType,
+				tableColumns.createType,
 				tableColumns.fillingProgress,
 				tableColumns.createdAt
 			]
+		} else if (selectedTabKey === 'deleted') {
+			columns = [tableColumns.name, tableColumns.address, tableColumns.categories, tableColumns.deletedAt, tableColumns.createType, tableColumns.createdAt]
 		}
 
 		return (
@@ -312,10 +311,10 @@ const SalonsPage = () => {
 					<div className='content-body'>
 						<Spin spinning={salons?.isLoading}>
 							<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
-							{/* <CustomTable
+							<CustomTable
 								className='table-fixed'
 								onChange={onChangeTable}
-								columns={columns}
+								columns={columns || []}
 								dataSource={salons?.data?.salons}
 								scroll={{ x: 1000 }}
 								rowClassName={'clickable-row'}
@@ -333,7 +332,7 @@ const SalonsPage = () => {
 										history.push(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.id })))
 									}
 								})}
-							/> */}
+							/>
 						</Spin>
 					</div>
 				</Col>

@@ -1,56 +1,35 @@
 import i18n from 'i18next'
-import Backend from 'i18next-chained-backend'
-import XHR from 'i18next-xhr-backend'
-import LocalStorageBackend from 'i18next-localstorage-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
 
-import { APP_LANGUAGE, DEFAULT_APP_LANGUAGE, NAMESPACE } from './enums'
+import { APP_LANGUAGE, DEFAULT_APP_LANGUAGE } from './enums'
 
-i18n.use(Backend)
-	.use(initReactI18next)
+i18n.use(initReactI18next)
 	.use(LanguageDetector)
 	.init({
-		backend: {
-			backendOptions: [
-				{
-					expirationTime: process.env.NODE_ENV === 'development' ? 0 : 0, // 7*24*60*60*1000 // 1 week
-					prefix: 'i18next_res_'
-				},
-				{
-					loadPath: '/locales/{{lng}}/{{ns}}.json',
-					queryStringParams: { v: process.env.REACT_APP_VERSION }
-				}
-			],
-			backends: [
-				LocalStorageBackend, // primary
-				XHR // fallback
-			]
+		resources: {
+			bg: { loc: require('../locales/bg/loc.json') },
+			cs: { loc: require('../locales/cs/loc.json') },
+			en: { loc: require('../locales/en/loc.json') },
+			hu: { loc: require('../locales/hu/loc.json') },
+			it: { loc: require('../locales/it/loc.json') },
+			ro: { loc: require('../locales/ro/loc.json') },
+			sk: { loc: require('../locales/sk/loc.json') }
 		},
-		// resources: {
-		// 	bg: { translation: require('../locales/bg/loc.json') },
-		// 	cs: { translation: require('../locales/cs/loc.json') },
-		// 	en: { translation: require('../locales/en/loc.json') },
-		// 	hu: { translation: require('../locales/hu/loc.json') },
-		// 	it: { translation:require('../locales/it/loc.json') },
-		// 	ro: { translation:require('../locales/ro/loc.json') },
-		// 	sk: { translation:require('../locales/sk/loc.json') }
-		// },
 		debug: process.env.NODE_ENV === 'development',
 		detection: {
 			order: ['querystring', 'localStorage', 'path', 'navigator'],
 			lookupFromPathIndex: 0,
 			lookupQuerystring: 'lang'
 		},
-		defaultNS: 'keep-empty',
+		defaultNS: 'loc',
 		fallbackLng: DEFAULT_APP_LANGUAGE,
 		interpolation: {
 			escapeValue: false
 		},
 		load: 'languageOnly',
-		// load: 'all',
 		supportedLngs: Object.values(APP_LANGUAGE),
-		ns: Object.values(NAMESPACE),
+		ns: ['loc'],
 		nsSeparator: ':',
 		keySeparator: '|',
 		react: {

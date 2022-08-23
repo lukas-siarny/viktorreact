@@ -14,16 +14,11 @@ module.exports = {
 		removeUnusedKeys: true,
 		lngs: ['sk', 'cs', 'en', 'hu', 'bg', 'ro', 'it'],
 		ns: [
-			'paths',
 			'loc'
 		],
 		defaultLng: 'sk',
-		defaultNs: 'keep-empty',
-		defaultValue(lng, ns, key) {
-			if (ns === 'paths') {
-				return `/${key}`
-			}
-
+		defaultNs: 'loc',
+		defaultValue(lng, key) {
 			if (lng === 'sk') {
 				return key
 			}
@@ -31,10 +26,8 @@ module.exports = {
 			return '_NEPRELOZENE_'
 		},
 		resource: {
-			loadPath: 'public/locales/{{lng}}/{{ns}}.json',
-			savePath: 'public/locales/{{lng}}/{{ns}}.json',
-			// loadPath: './src/locales/{{lng}}/{{ns}}.json',
-			// savePath: './src/locales/{{lng}}/{{ns}}.json',
+			loadPath: './src/locales/{{lng}}/{{ns}}.json',
+			savePath: './src/locales/{{lng}}/{{ns}}.json',
 			jsonIndent: 2,
 			lineEnding: '\n'
 		},

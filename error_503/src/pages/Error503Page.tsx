@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import useMedia from '../hooks/useMedia'
 import { RESOLUTIONS } from '../utils/enums'
 import { ReactComponent as ErrorImage } from '../assets/images/Error-503-image.svg'
-// import i18next from 'i18next'
 
 const Error503Page = () => {
 	const [t] = useTranslation()

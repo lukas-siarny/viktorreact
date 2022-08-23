@@ -10,11 +10,6 @@ export enum APP_LANGUAGE {
 
 export const DEFAULT_APP_LANGUAGE = APP_LANGUAGE.EN
 
-export enum NAMESPACE {
-	LOC = 'loc',
-	PATHS = 'paths'
-}
-
 export enum RESOLUTIONS {
 	SM = 'SM',
 	MD = 'MD',

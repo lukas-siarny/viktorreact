@@ -10,7 +10,6 @@ import { SPECIALIST_CONTACTS, SPECIALIST_CONTACT } from './specialistContactsTyp
 // types
 import { Paths } from '../../types/api'
 import { ISelectOptionItem } from '../../types/interfaces'
-import i18n from '../../utils/i18n'
 
 export type ISpecialistsContactsActions = IResetStore | IGetSpecialistContacts | IGetSpecialistContact
 

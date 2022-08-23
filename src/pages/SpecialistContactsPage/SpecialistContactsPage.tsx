@@ -82,11 +82,8 @@ const SpecialistContactsPage = () => {
 		if (!specialistContacts || !specialistContacts.data) {
 			return []
 		}
-
-		// TODO: filter by country
 		const source = query.search
 			? specialistContacts.data.filter((specialist) => {
-					// filter by country
 					const countryName = transformToLowerCaseWithoutAccent(
 						getCountryNameFromNameLocalizations(specialist.country?.nameLocalizations, i18n.language as LANGUAGE) || specialist.country?.code
 					)

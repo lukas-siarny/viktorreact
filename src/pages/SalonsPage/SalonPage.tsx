@@ -15,6 +15,7 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
+import SpecialistModal from './components/SpecialistModal'
 
 // enums
 import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
@@ -48,7 +49,6 @@ import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import SpecialistModal from './components/SpecialistModal'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{

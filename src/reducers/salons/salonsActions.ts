@@ -3,7 +3,7 @@ import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON } from './salonsTypes'
+import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
@@ -13,7 +13,7 @@ import { getReq } from '../../utils/request'
 import { SALON_FILTER_STATES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons
 
 interface IGetSalons {
 	type: SALONS
@@ -55,11 +55,18 @@ export interface ISuggestedSalonsPayload {
 
 export type IBasicSalon = Paths.GetApiB2BV1SalonsSalonIdBasic.Responses.$200['salon']
 
+interface IGetBasicSalons {
+	type: BASIC_SALONS
+	payload: IBasicSalonsPayload
+}
+
 export interface IBasicSalonPayload {
 	data: Paths.GetApiB2BV1SalonsSalonIdBasic.Responses.$200 | null
 }
 
 export interface ISalonsPayload extends ISearchable<Paths.GetApiB2BAdminSalons.Responses.$200> {}
+
+export interface IBasicSalonsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsBasic.Responses.$200> {}
 
 export const getSalons =
 	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
@@ -140,6 +147,39 @@ export const getSuggestedSalons = (): ThunkResult<Promise<ISuggestedSalonsPayloa
 
 	return payload
 }
+
+export const getBasicSalons =
+	(queryParams: IQueryParams): ThunkResult<Promise<IBasicSalonsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IBasicSalonsPayload
+		try {
+			dispatch({ type: BASIC_SALONS.BASIC_SALONS_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/salons/basic', { ...normalizeQueryParams(queryParams) } as any)
+
+			const options = data.salons.map((item) => ({
+				key: item.id,
+				value: item.id,
+				label: item.name || '-',
+				className: 'noti-salon-search-option',
+				extra: {
+					salon: item
+				}
+			}))
+
+			payload = {
+				data,
+				options
+			}
+
+			dispatch({ type: BASIC_SALONS.BASIC_SALONS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: BASIC_SALONS.BASIC_SALONS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
 
 export const getBasicSalon =
 	(salonID: string): ThunkResult<Promise<IBasicSalonPayload>> =>

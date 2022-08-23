@@ -4,6 +4,7 @@ import { change, FormAction, WrappedFieldProps } from 'redux-form'
 import { useDispatch } from 'react-redux'
 import cx from 'classnames'
 import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, some, take } from 'lodash'
+import i18next from 'i18next'
 
 // ant
 import { Button, Divider, Empty, Form, Popconfirm, Select, Spin } from 'antd'
@@ -135,10 +136,9 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 
 	return (
 		<Spin
-			style={{ margin: '10px', justifyContent: 'flex-start' }}
 			indicator={<LoadingIcon className={'loading-spinner text-notino-black'} />}
-			className={'flex-center text-notino-black'}
-			tip={'Načítavam...'}
+			className={'justify-start flex-center text-notino-black m-2-5'}
+			tip={i18next.t('loc:Načítavam...')}
 			spinning={fetching}
 		>
 			{menu}
@@ -451,7 +451,7 @@ const SelectField = (props: Props) => {
 		// check if all input values are loaded
 		const values = isArray(input.value) ? new Set([...input.value]) : new Set([input.value])
 		some(selectState.data, (item) => {
-			if (values.has(item.value)) values.delete(item.value)
+			values.delete(item.value)
 			if (values.size === 0) return true
 			return false
 		})

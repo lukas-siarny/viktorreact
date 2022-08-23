@@ -59,7 +59,8 @@ export enum FILTER_ENTITY {
 	EMPLOYEE = 'EMPLOYEE',
 	SALON = 'SALON',
 	SERVICE = 'SERVICE',
-	USER = 'USER'
+	USER = 'USER',
+	BASIC_SALON = 'BASIC_SALON'
 }
 
 export enum TABS_TYPE {

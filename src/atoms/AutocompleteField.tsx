@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { FormAction, WrappedFieldProps } from 'redux-form'
 import cx from 'classnames'
 import { debounce, get, isArray, isEmpty, isString, map, some } from 'lodash'
+import i18next from 'i18next'
 
 // ant
 import { AutoComplete, AutoCompleteProps, Button, Divider, Empty, Form, Popconfirm, Spin } from 'antd'
@@ -117,10 +118,9 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 
 	return (
 		<Spin
-			style={{ margin: '10px', justifyContent: 'flex-start' }}
 			indicator={<LoadingIcon className={'loading-spinner text-notino-black'} />}
-			className={'flex-center text-notino-black'}
-			tip={'Načítavam...'}
+			className={'justify-start flex-center text-notino-black m-2-5'}
+			tip={i18next.t('loc:Načítavam...')}
 			spinning={fetching}
 		>
 			{menu}
@@ -370,7 +370,7 @@ const AutocompleteField = (props: Props) => {
 		// check if all input values are loaded
 		const values = isArray(input.value) ? new Set([...input.value]) : new Set([input.value])
 		some(selectState.data, (item) => {
-			if (values.has(item.value)) values.delete(item.value)
+			values.delete(item.value)
 			if (values.size === 0) return true
 			return false
 		})

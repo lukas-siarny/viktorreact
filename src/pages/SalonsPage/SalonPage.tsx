@@ -18,7 +18,19 @@ import validateSalonFormForPublication from './components/validateSalonFormForPu
 import SalonSuggestionsModal from './components/SalonSuggestionsModal'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
+import {
+	DAY,
+	ENUMERATIONS_KEYS,
+	FILTER_ENTITY,
+	FORM,
+	MONDAY_TO_FRIDAY,
+	NEW_SALON_ID,
+	NOTIFICATION_TYPE,
+	PERMISSION,
+	SALON_PERMISSION,
+	SALON_STATES,
+	STRINGS
+} from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -33,12 +45,13 @@ import { CategoriesPatch, IBreadcrumbs, INoteForm, INoteModal, ISalonForm, Openi
 import { Paths } from '../../types/api'
 
 // utils
-import { deleteReq, getReq, patchReq, postReq } from '../../utils/request'
+import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode, formatDateByLocale, formatLongQueryString } from '../../utils/helper'
+import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
 import { createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
 import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
+import searchWrapper from '../../utils/filters'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -403,27 +416,12 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const searchSalons = useCallback(async (search: string, page: number) => {
-		try {
-			const { data } = await getReq('/api/b2b/admin/salons/basic', {
-				search: formatLongQueryString(search),
-				page
-			})
-
-			const selectOptions = data.salons.map((item) => ({
-				key: item.id,
-				value: item.id,
-				label: item.name,
-				className: 'noti-salon-search-option',
-				extra: {
-					salon: item
-				}
-			}))
-			return { pagination: data.pagination, data: selectOptions }
-		} catch (e) {
-			return { pagination: null, data: [] }
-		}
-	}, [])
+	const searchSalons = useCallback(
+		async (search: string, page: number) => {
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.BASIC_SALON)
+		},
+		[dispatch]
+	)
 
 	const loadBasicSalon = useCallback(
 		async (id: string) => {

@@ -13,6 +13,7 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 import SalonsImportForm from './components/SalonsImportForm'
 import UploadSuccess from './components/UploadSuccess'
+import TabsComponent from '../../components/TabsComponent'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
@@ -36,6 +37,8 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
+type TabKeys = 'active' | 'deleted'
+
 const SalonsPage = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -45,6 +48,11 @@ const SalonsPage = () => {
 
 	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
 	const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error' | undefined>(undefined)
+	const [tabKey, setTabKey] = useState<TabKeys>('active')
+	const [tableConfig, setTableConfig] = useState<{ columns: Columns; source: any }>({
+		columns: [],
+		source: []
+	})
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
 
@@ -164,98 +172,6 @@ const SalonsPage = () => {
 		reset(FORM.SALON_IMPORTS_FORM)
 	}
 
-	const columns: Columns = [
-		{
-			title: t('loc:Názov'),
-			dataIndex: 'name',
-			key: 'name',
-			ellipsis: true,
-			sorter: true,
-			width: '15%',
-			sortOrder: setOrder(query.order, 'name')
-		},
-		{
-			title: t('loc:Adresa'),
-			dataIndex: 'address',
-			key: 'address',
-			ellipsis: true,
-			sorter: false,
-			width: '20%',
-			render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
-		},
-		{
-			title: t('loc:Odvetvie'),
-			dataIndex: 'categories',
-			key: 'categories',
-			ellipsis: true,
-			sorter: false,
-			width: '10%',
-			render: (value) => (value?.length > 0 ? value[0].name : '-')
-		},
-		{
-			title: t('loc:Publikovaný'),
-			key: 'isPublished',
-			ellipsis: true,
-			sorter: false,
-			width: '10%',
-			render: (_value, record) => getSalonTagPublished(record.state)
-		},
-		{
-			title: t('loc:Zmeny'),
-			key: 'changes',
-			ellipsis: true,
-			sorter: false,
-			width: '10%',
-			render: (_value, record) => getSalonTagChanges(record.state)
-		},
-		{
-			title: t('loc:Vymazaný'),
-			dataIndex: 'deletedAt',
-			key: 'deletedAt',
-			ellipsis: true,
-			sorter: false,
-			width: '10%',
-			render: (deleted) => getSalonTagDeleted(deleted, true)
-		},
-		{
-			title: t('loc:Importovaný'),
-			dataIndex: 'createType',
-			key: 'createType',
-			ellipsis: true,
-			sorter: false,
-			width: '6%',
-			render: (value) =>
-				value === SALON_CREATE_TYPES.BASIC && (
-					<div className={'flex justify-start'}>
-						<CircleCheckIcon width={20} height={20} />
-					</div>
-				)
-		},
-		{
-			title: t('loc:Vyplnenie profilu'),
-			dataIndex: 'fillingProgressSalon',
-			key: 'fillingProgress',
-			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'fillingProgress'),
-			render: (value) => (
-				<Row className={'gap-2'} wrap={false}>
-					<span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>
-					<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
-				</Row>
-			)
-		},
-		{
-			title: t('loc:Vytvorené'),
-			dataIndex: 'createdAt',
-			key: 'createdAt',
-			ellipsis: true,
-			sorter: true,
-			sortOrder: setOrder(query.order, 'createdAt'),
-			render: (value) => formatDateByLocale(value)
-		}
-	]
-
 	// View
 	const breadcrumbs: IBreadcrumbs | undefined = isAdmin
 		? {
@@ -267,17 +183,136 @@ const SalonsPage = () => {
 		  }
 		: undefined
 
-	return (
-		<>
-			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
-			</Row>
+	const onTabChange = (selectedTabKey: string) => {
+		setTabKey(selectedTabKey as TabKeys)
+	}
+
+	const getTabContent = (selectedTabKey: 'active' | 'deleted') => {
+		const tableColumns: { [key: string]: Columns[0] } = {
+			name: {
+				title: t('loc:Názov'),
+				dataIndex: 'name',
+				key: 'name',
+				ellipsis: true,
+				sorter: true,
+				width: '15%',
+				sortOrder: setOrder(query.order, 'name')
+			},
+			address: {
+				title: t('loc:Adresa'),
+				dataIndex: 'address',
+				key: 'address',
+				ellipsis: true,
+				sorter: false,
+				width: '20%',
+				render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>
+			},
+			categories: {
+				title: t('loc:Odvetvie'),
+				dataIndex: 'categories',
+				key: 'categories',
+				ellipsis: true,
+				sorter: false,
+				width: '10%',
+				render: (value) => (value?.length > 0 ? value[0].name : '-')
+			},
+			createType: {
+				title: t('loc:Importovaný'),
+				dataIndex: 'createType',
+				key: 'createType',
+				ellipsis: true,
+				sorter: false,
+				width: '6%',
+				render: (value) =>
+					value === SALON_CREATE_TYPES.BASIC && (
+						<div className={'flex justify-start'}>
+							<CircleCheckIcon width={20} height={20} />
+						</div>
+					)
+			},
+			createdAt: {
+				title: t('loc:Vytvorený'),
+				dataIndex: 'createdAt',
+				key: 'createdAt',
+				ellipsis: true,
+				sorter: true,
+				sortOrder: setOrder(query.order, 'createdAt'),
+				render: (value) => formatDateByLocale(value)
+			},
+			updatedAt: {
+				title: t('loc:Upravený'),
+				dataIndex: 'updatedAt',
+				key: 'updatedAt',
+				ellipsis: true,
+				sorter: false,
+				width: '10%',
+				render: (value) => formatDateByLocale(value)
+			},
+			deletedAt: {
+				title: t('loc:Vymazaný'),
+				dataIndex: 'deletedAt',
+				key: 'deletedAt',
+				ellipsis: true,
+				sorter: false,
+				width: '10%',
+				render: (value) => formatDateByLocale(value)
+			},
+			isPublished: {
+				title: t('loc:Publikovaný'),
+				key: 'isPublished',
+				ellipsis: true,
+				sorter: false,
+				width: '10%',
+				render: (_value, record) => getSalonTagPublished(record.state)
+			},
+			changes: {
+				title: t('loc:Zmeny'),
+				key: 'changes',
+				ellipsis: true,
+				sorter: false,
+				width: '10%',
+				render: (_value, record) => getSalonTagChanges(record.state)
+			},
+			fillingProgress: {
+				title: t('loc:Vyplnenie profilu'),
+				dataIndex: 'fillingProgressSalon',
+				key: 'fillingProgress',
+				ellipsis: true,
+				sorter: true,
+				sortOrder: setOrder(query.order, 'fillingProgress'),
+				render: (value) => (
+					<Row className={'gap-2'} wrap={false}>
+						<span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>
+						<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
+					</Row>
+				)
+			}
+		}
+
+		let columns: Columns = []
+
+		if (selectedTabKey === 'active') {
+			columns = [tableColumns.name, tableColumns.address, tableColumns.categories, tableColumns.deletedAt, tableColumns.creteType, tableColumns.createdAt]
+		} else if (selectedTabKey === 'deleted') {
+			columns = [
+				tableColumns.name,
+				tableColumns.address,
+				tableColumns.categories,
+				tableColumns.isPublished,
+				tableColumns.changes,
+				tableColumns.creteType,
+				tableColumns.fillingProgress,
+				tableColumns.createdAt
+			]
+		}
+
+		return (
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
 						<Spin spinning={salons?.isLoading}>
 							<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
-							<CustomTable
+							{/* <CustomTable
 								className='table-fixed'
 								onChange={onChangeTable}
 								columns={columns}
@@ -298,11 +333,32 @@ const SalonsPage = () => {
 										history.push(getLinkWithEncodedBackUrl(t('paths:salons/{{salonID}}', { salonID: record.id })))
 									}
 								})}
-							/>
+							/> */}
 						</Spin>
 					</div>
 				</Col>
 			</Row>
+		)
+	}
+
+	const tabContent = [
+		{
+			tabKey: 'active',
+			tab: <>{t('loc:Aktívne salóny')}</>,
+			tabPaneContent: getTabContent('active')
+		},
+		{
+			tabKey: 'deleted',
+			tab: <>{t('loc:Vymazané salóny')}</>,
+			tabPaneContent: getTabContent('deleted')
+		}
+	]
+	return (
+		<>
+			<Row>
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
+			</Row>
+			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} tabsContent={tabContent} />
 			<Modal
 				className='rounded-fields'
 				title={t('loc:Importovať salóny')}

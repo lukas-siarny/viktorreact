@@ -197,7 +197,7 @@ const ServiceEditPage = (props: Props) => {
 				employeeIDs: parseEmployeeCreateAndUpdate(values.employees)
 			}
 			await patchReq('/api/b2b/admin/services/{serviceID}', { serviceID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			dispatch(getService(serviceID))
+			history.push(parentPath)
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -208,7 +208,7 @@ const ServiceEditPage = (props: Props) => {
 			allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_UPDATE]}
 			render={(hasPermission, { openForbiddenModal }) => (
 				<ServiceForm
-					parentPath={parentPath}
+					backUrl={parentPath}
 					addEmployee={() => addEmployee(employees, form, dispatch)}
 					onSubmit={(formData: IServiceForm) => {
 						if (hasPermission) {

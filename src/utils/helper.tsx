@@ -958,3 +958,16 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 
 	return salonRoles
 }
+
+/**
+ * Split array into two arrays by condition.
+ * Example: splitArrayByCondition([1, 2, 5, 2, 9], (item) => item > 2) => [[5, 9], [1, 2, 2]]
+ */
+export const splitArrayByCondition = (source: any[], condition: (item: any) => boolean): any[][] => {
+	return source.reduce(
+		([pass, fail], item) => {
+			return condition(item) ? [[...pass, item], fail] : [pass, [...fail, item]]
+		},
+		[[], []]
+	)
+}

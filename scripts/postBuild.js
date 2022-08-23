@@ -3,11 +3,16 @@ const fs = require('fs')
 
 symlinkDir('./node_modules', './error_503/node_modules')
 
-if (fs.existsSync('./error_503/tailwind.config.js')) {
-	fs.unlinkSync('./error_503/tailwind.config.js')
+try {
+	fs.unlinkSync(__dirname + "/../error_503/tailwind.config.js")
+} catch {
+	console.log('no taiwild.config.js to delete')
 }
-if (fs.existsSync('./error_503/gulpfile.js')) {
-	fs.unlinkSync('./error_503/gulpfile.js')
+
+try {
+	fs.unlinkSync(__dirname + "/../error_503/gulpfile.js")
+} catch {
+	console.log('no gulpfile.js to delete')
 }
 
 fs.symlink(__dirname + "/../tailwind.config.js",

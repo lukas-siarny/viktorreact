@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import useMedia from '../hooks/useMedia'
 import { RESOLUTIONS } from '../utils/enums'
 import { ReactComponent as ErrorImage } from '../assets/images/Error-503-image.svg'
+// import i18next from 'i18next'
 
 const Error503Page = () => {
 	const [t] = useTranslation()
@@ -27,11 +28,11 @@ const Error503Page = () => {
 						<span className={'heading-2 mt-4'}>
 							{t('loc:Ooops...')}
 						</span>
-						<span className={'m-regular mt-3 max-w-sm'} style={{ fontSize: '16px', lineHeight: '18.8px' }}>
-							{t(`loc:Sorry, we're under maintance! hang on till we get the error fixed. You may also refresh the page or try again later.`)}
+						<span className={'mt-3 max-w-sm text-base'}>
+							{t('loc:Prepáčte, prebieha údržba! počkajte, kým chybu neopravíme. Môžete tiež obnoviť stránku alebo to skúsiť znova neskôr.')}
 						</span>
 						<Button type={'primary'} className={'noti-btn m-regular mt-4'} onClick={handleRedirect}>
-							{t('loc:Refresh')}
+							{t('loc:Obnoviť')}
 						</Button>
 					</div>
 				)
@@ -47,11 +48,11 @@ const Error503Page = () => {
 						<span className={'heading-2 mt-6'}>
 							{t('loc:Ooops...')}
 						</span>
-						<span className={'m-regular mt-3 max-w-md'} style={{ fontSize: '16px', lineHeight: '18.8px' }}>
-							{t(`loc:Sorry, we're under maintance! hang on till we get the error fixed. You may also refresh the page or try again later.`)}
+						<span className={'mt-3 max-w-md text-base'}>
+							{t(`loc:Prepáčte, prebieha údržba! počkajte, kým chybu neopravíme. Môžete tiež obnoviť stránku alebo to skúsiť znova neskôr.`)}
 						</span>
 						<Button type={'primary'} className={'noti-btn m-regular mt-4'} onClick={handleRedirect}>
-							{t('loc:Refresh')}
+							{t('loc:Obnoviť')}
 						</Button>
 					</div>
 				)
@@ -69,11 +70,11 @@ const Error503Page = () => {
 								<span className={'heading-2 mt-8'}>
 									{t('loc:Ooops...')}
 								</span>
-								<span className={'m-regular mt-3'} style={{ maxWidth: '460px', fontSize: '16px', lineHeight: '19px' }}>
-									{t(`loc:Sorry, we're under maintance! hang on till we get the error fixed. You may also refresh the page or try again later.`)}
+								<span className={'mt-3 text-base'} style={{ maxWidth: '460px'}}>
+									{t(`loc:Prepáčte, prebieha údržba! počkajte, kým chybu neopravíme. Môžete tiež obnoviť stránku alebo to skúsiť znova neskôr.`)}
 								</span>
 								<Button type={'primary'} className={'noti-btn m-regular mt-4'} onClick={handleRedirect}>
-									{t('loc:Refresh')}
+									{t('loc:Obnoviť')}
 								</Button>
 							</div>
 						</div>

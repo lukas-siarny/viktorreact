@@ -27,6 +27,15 @@ i18n.use(Backend)
 				XHR // fallback
 			]
 		},
+		// resources: {
+		// 	bg: { translation: require('../locales/bg/loc.json') },
+		// 	cs: { translation: require('../locales/cs/loc.json') },
+		// 	en: { translation: require('../locales/en/loc.json') },
+		// 	hu: { translation: require('../locales/hu/loc.json') },
+		// 	it: { translation:require('../locales/it/loc.json') },
+		// 	ro: { translation:require('../locales/ro/loc.json') },
+		// 	sk: { translation:require('../locales/sk/loc.json') }
+		// },
 		debug: process.env.NODE_ENV === 'development',
 		detection: {
 			order: ['querystring', 'localStorage', 'path', 'navigator'],
@@ -39,6 +48,7 @@ i18n.use(Backend)
 			escapeValue: false
 		},
 		load: 'languageOnly',
+		// load: 'all',
 		supportedLngs: Object.values(APP_LANGUAGE),
 		ns: Object.values(NAMESPACE),
 		nsSeparator: ':',

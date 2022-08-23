@@ -15,7 +15,7 @@
     "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true npm-run-all -p build:tailwind rebuild:sass",
 	"copy-modules": "node scripts/postBuild.js",
     "copy-build": "node scripts/copyErrorBuild.js",
-    "postbuild": "cross-env npm run copy-modules && npm --prefix ./error_503 run build && npm run copy-build",
+    "postbuild": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true npm run copy-modules && npm --prefix ./error_503 run build && npm run copy-build",
     "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired build",
     "lint": "eslint src --color --ext .js --ext .ts --ext .jsx --ext .tsx",
     "release": "npm run build && npm run sentry",

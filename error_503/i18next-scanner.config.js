@@ -33,6 +33,8 @@ module.exports = {
 		resource: {
 			loadPath: 'public/locales/{{lng}}/{{ns}}.json',
 			savePath: 'public/locales/{{lng}}/{{ns}}.json',
+			// loadPath: './src/locales/{{lng}}/{{ns}}.json',
+			// savePath: './src/locales/{{lng}}/{{ns}}.json',
 			jsonIndent: 2,
 			lineEnding: '\n'
 		},

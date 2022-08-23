@@ -15,6 +15,10 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
+import TabsComponent from '../../components/TabsComponent'
+import SalonHistory from './components/SalonHistory'
+import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft } from './components/salonVersionsUtils'
 
 // enums
 import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
@@ -36,8 +40,6 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
-import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
-import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft } from './components/salonVersionsUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -47,8 +49,6 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import { getSalonHistory } from '../../reducers/salons/salonsActions'
-import TabsComponent from '../../components/TabsComponent'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
@@ -56,8 +56,6 @@ const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 		phone: null
 	}
 ]
-
-type SalonPatch = Paths.PatchApiB2BAdminSalonsSalonId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -79,7 +77,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 
@@ -151,7 +148,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		dispatch(getCategories())
 		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
-		dispatch(getSalonHistory({ dateFrom: '2022-08-16T10:28:00.124Z', dateTo: '2022-08-22T13:18:00.124Z', salonID, page: 1 }))
 	}, [dispatch])
 
 	const updateOnlyOpeningHours = useRef(false)
@@ -160,7 +156,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		const defaultContactPerson = {
 			phonePrefixCountryCode
 		}
-		console.log(salonHistory)
 		if (updateOnlyOpeningHours.current) {
 			if (salon?.isLoading) return
 			dispatch(
@@ -864,9 +859,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						tabKey: 'salon_history',
 						tab: <>{t('loc:História salónu')}</>,
 						tabPaneContent: (
-							<Spin spinning={isLoading}>
-								<></>
-							</Spin>
+							<div className='content-body mt-2'>
+								<SalonHistory salonID={salonID} />
+							</div>
 						)
 					}
 				]}

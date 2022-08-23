@@ -97,6 +97,7 @@ export interface ISalonForm {
 	socialLinkTikTok: string | null
 	socialLinkPinterest: string | null
 	payByCard: boolean
+	payByCash: boolean
 	otherPaymentMethods: string | null
 	logo: any | null
 	gallery: any | null

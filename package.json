@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -101,6 +101,7 @@
     "use-query-params": "1.2.3"
   },
   "devDependencies": {
+    "@goodrequest/antd-form-fields": "0.0.1",
     "@goodrequest/eslint-config-typescript-react": "1.1.1",
     "@storybook/addon-actions": "6.4.22",
     "@storybook/addon-essentials": "6.4.22",
@@ -127,7 +128,6 @@
     "@types/redux-form": "8.3.3",
     "@types/redux-logger": "3.0.9",
     "@types/sortablejs": "1.10.7",
-    "@goodrequest/antd-form-fields": "0.0.1",
     "cypress": "9.6.0",
     "cypress-file-upload": "5.0.8",
     "cypress-localstorage-commands": "1.7.0",

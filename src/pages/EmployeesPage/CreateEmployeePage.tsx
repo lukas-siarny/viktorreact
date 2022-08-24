@@ -97,10 +97,8 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				}
 			}
 
-			const { data } = await postReq('/api/b2b/admin/employees/', {}, reqBody)
-			if (data?.employee?.id) {
-				history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: data?.employee?.id }))
-			}
+			await postReq('/api/b2b/admin/employees/', {}, reqBody)
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -120,7 +118,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 					roleID: formData?.roleID
 				}
 			)
-			history.push(parentPath + t('paths:employees'))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

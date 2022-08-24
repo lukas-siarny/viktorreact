@@ -14,7 +14,7 @@ import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 
 // utils
 import { uploadImage } from '../utils/request'
-import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam } from '../utils/helper'
+import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
 import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
 
@@ -79,14 +79,13 @@ const ImgUploadField: FC<Props> = (props) => {
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = getImagesFormValues(info.fileList, imagesUrls.current)
+
 			// order application/['pdf'] file type to end of array
-			values.sort((a: any, b: any) => {
-				if (!a.type || !b.type) {
-					return 0
-				}
-				return a.type.length - b.type.length
-			})
-			input.onChange(values)
+			const splitted = splitArrayByCondition(values, (item: any) => item.type !== 'application/pdf')
+			const sorted = [...splitted[0], ...splitted[1]]
+
+			setImages(splitted[0])
+			input.onChange(sorted)
 
 			// uploading process finished
 			dispatch(change(form, IMAGE_UPLOADING_PROP, false))

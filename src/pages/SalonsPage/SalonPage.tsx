@@ -170,7 +170,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
-		dispatch(getSalonHistory({ dateFrom: '2022-08-16T10:28:00.124Z', dateTo: '2022-08-22T13:18:00.124Z', salonID, page: 1 }))
 	}, [dispatch])
 
 	useEffect(() => {

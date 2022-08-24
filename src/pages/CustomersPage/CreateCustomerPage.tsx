@@ -81,8 +81,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				phonePrefixCountryCode: formData.phonePrefixCountryCode
 			})
 
-			const customerID = get(data, 'customer.id')
-			history.push(parentPath + (customerID ? t('paths:customers/{{customerID}}', { customerID }) : t('paths:customers')))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

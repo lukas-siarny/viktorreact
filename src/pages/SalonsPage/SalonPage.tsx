@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip, notification } from 'antd'
@@ -16,24 +16,37 @@ import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
+import SalonSuggestionsModal from './components/SalonSuggestionsModal'
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
-import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
-import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft } from './components/salonVersionsUtils'
+import { createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NEW_SALON_ID, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS } from '../../utils/enums'
+import {
+	DAY,
+	ENUMERATIONS_KEYS,
+	FILTER_ENTITY,
+	FORM,
+	MONDAY_TO_FRIDAY,
+	NEW_SALON_ID,
+	NOTIFICATION_TYPE,
+	PERMISSION,
+	SALON_PERMISSION,
+	SALON_STATES,
+	STRINGS
+} from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getCurrentUser } from '../../reducers/users/userActions'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
-import { getCategories } from '../../reducers/categories/categoriesActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
+import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
+import { CategoriesPatch, IBreadcrumbs, INoteForm, INoteModal, ISalonForm, OpeningHours, SalonSubPageProps } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -41,6 +54,7 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
+import searchWrapper from '../../utils/filters'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -50,13 +64,6 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-
-const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
-	{
-		phonePrefixCountryCode,
-		phone: null
-	}
-]
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -79,12 +86,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [visible, setVisible] = useState<boolean>(false)
 	const [tabKey, setTabKey] = useState<string>(TAB_KEYS.SALON_DETAIL)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
+	const [suggestionsModalVisible, setSuggestionsModalVisible] = useState(false)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
+	const basicSalon = useSelector((state: RootState) => state.salons.basicSalon)
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
@@ -93,7 +102,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
-	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest
+	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest || basicSalon.isLoading
 	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
 	const pendingPublication = salon.data && pendingStates.includes(salon.data.state)
 	const isPublishedVersionSameAsDraft = getIsPublishedVersionSameAsDraft(formValues as ISalonForm)
@@ -104,8 +113,14 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
+	const isPartner = !isAdmin
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
+
+	const isNewSalon = salonID === NEW_SALON_ID
+
+	// show salons searchbox with basic salon suggestions instead of text field for name input
+	const showBasicSalonsSuggestions = isNewSalon && isPartner
 
 	const [query, setQuery] = useQueryParams({
 		history: BooleanParam
@@ -155,17 +170,24 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 
 	useEffect(() => {
-		dispatch(getCategories())
 		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
 	}, [dispatch])
 
+	useEffect(() => {
+		if (showBasicSalonsSuggestions) {
+			;(async () => {
+				const { data } = await dispatch(getSuggestedSalons())
+				if ((data?.salons?.length || 0) > 0) {
+					setSuggestionsModalVisible(true)
+				}
+			})()
+		}
+	}, [dispatch, showBasicSalonsSuggestions])
+
 	const updateOnlyOpeningHours = useRef(false)
 
 	const initData = async (salonData: ISalonPayloadData | null) => {
-		const defaultContactPerson = {
-			phonePrefixCountryCode
-		}
 		if (updateOnlyOpeningHours.current) {
 			if (salon?.isLoading) return
 			dispatch(
@@ -177,126 +199,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			)
 			updateOnlyOpeningHours.current = false
 		} else if (!isEmpty(salonData) && salonExists) {
-			// init data for existing salon
-			const openOverWeekend: boolean = checkWeekend(salonData?.openingHours)
-			const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData?.openingHours)
-			const openingHours: OpeningHours = initOpeningHours(salonData?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
-			// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
-			// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
-			// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
-			const initialData: ISalonForm = {
-				id: salonData?.id || null,
-				state: salonData?.state as SALON_STATES,
-				name: salonData?.name || null,
-				email: salonData?.email || null,
-				payByCard: !!salonData?.payByCard,
-				otherPaymentMethods: salonData?.otherPaymentMethods || null,
-				aboutUsFirst: salonData?.aboutUsFirst || null,
-				aboutUsSecond: salonData?.aboutUsSecond || null,
-				openOverWeekend,
-				sameOpenHoursOverWeek,
-				openingHours,
-				note: salonData?.openingHoursNote?.note || null,
-				noteFrom: salonData?.openingHoursNote?.validFrom || null,
-				noteTo: salonData?.openingHoursNote?.validTo || null,
-				latitude: salonData?.address?.latitude ?? null,
-				longitude: salonData?.address?.longitude ?? null,
-				city: salonData?.address?.city || null,
-				street: salonData?.address?.street || null,
-				zipCode: salonData?.address?.zipCode || null,
-				country: salonData?.address?.countryCode || null,
-				streetNumber: salonData?.address?.streetNumber || null,
-				locationNote: salonData?.locationNote || null,
-				parkingNote: salonData?.parkingNote || null,
-				companyContactPerson: {
-					email: salonData?.companyContactPerson?.email || null,
-					firstName: salonData?.companyContactPerson?.firstName || null,
-					lastName: salonData?.companyContactPerson?.lastName || null,
-					phonePrefixCountryCode: salonData?.companyContactPerson?.phonePrefixCountryCode || defaultContactPerson.phonePrefixCountryCode,
-					phone: salonData?.companyContactPerson?.phone || null
-				},
-				companyInfo: {
-					taxID: salonData?.companyInfo?.taxID || null,
-					businessID: salonData?.companyInfo?.businessID || null,
-					companyName: salonData?.companyInfo?.companyName || null,
-					vatID: salonData?.companyInfo?.vatID || null
-				},
-				phones:
-					salonData?.phones && !isEmpty(salonData?.phones)
-						? salonData.phones.map((phone) => ({
-								phonePrefixCountryCode: phone.phonePrefixCountryCode || null,
-								phone: phone.phone || null
-						  }))
-						: getPhoneDefaultValue(phonePrefixCountryCode),
-				gallery: map(salonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
-				pricelists: map(salonData?.pricelists, (file) => ({ url: file?.original, uid: file?.id })),
-				logo: salonData?.logo?.id
-					? [
-							{
-								uid: salonData?.logo?.id,
-								url: salonData?.logo?.original,
-								thumbUrl: salonData.logo?.resizedImages?.thumbnail
-							}
-					  ]
-					: null,
-				languageIDs: map(salonData?.languages, (lng) => lng?.id).filter((lng) => lng !== undefined) as string[],
-				cosmeticIDs: map(salonData?.cosmetics, (cosmetic) => cosmetic?.id).filter((cosmetic) => cosmetic !== undefined) as string[],
-				address: !!salonData?.address || null,
-				socialLinkWebPage: salonData?.socialLinkWebPage || null,
-				socialLinkFB: salonData?.socialLinkFB || null,
-				socialLinkInstagram: salonData?.socialLinkInstagram || null,
-				socialLinkYoutube: salonData?.socialLinkYoutube || null,
-				socialLinkTikTok: salonData?.socialLinkTikTok || null,
-				socialLinkPinterest: salonData?.socialLinkPinterest || null,
-				publishedSalonData: {
-					name: salonData?.publishedSalonData?.name || null,
-					aboutUsFirst: salonData?.publishedSalonData?.aboutUsFirst || null,
-					aboutUsSecond: salonData?.publishedSalonData?.aboutUsSecond || null,
-					email: salonData?.publishedSalonData?.email || null,
-					address: {
-						countryCode: salonData?.publishedSalonData?.address?.countryCode || null,
-						zipCode: salonData?.publishedSalonData?.address?.zipCode || null,
-						city: salonData?.publishedSalonData?.address?.city || null,
-						street: salonData?.publishedSalonData?.address?.street || null,
-						streetNumber: salonData?.publishedSalonData?.address?.streetNumber || null,
-						latitude: salonData?.publishedSalonData?.address?.latitude ?? null,
-						longitude: salonData?.publishedSalonData?.address?.longitude ?? null
-					},
-					locationNote: salonData?.publishedSalonData?.locationNote || null,
-					gallery: map(salonData?.publishedSalonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
-					logo: salonData?.publishedSalonData?.logo
-						? [
-								{
-									uid: salonData.publishedSalonData.logo.id,
-									url: salonData.publishedSalonData.logo.original,
-									thumbUrl: salonData.publishedSalonData.logo?.resizedImages?.thumbnail
-								}
-						  ]
-						: null,
-					pricelists: map(salonData?.publishedSalonData?.pricelists, (file) => ({ url: file?.original, uid: file?.id })),
-					phones:
-						salonData?.publishedSalonData?.phones && !isEmpty(salonData?.publishedSalonData?.phones)
-							? salonData.publishedSalonData.phones.map((phone) => ({
-									phonePrefixCountryCode: phone.phonePrefixCountryCode || null,
-									phone: phone.phone || null
-							  }))
-							: getPhoneDefaultValue(phonePrefixCountryCode)
-				}
-			}
-
-			dispatch(initialize(FORM.SALON, initialData))
+			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode)))
 		} else if (!salon?.isLoading) {
 			// init data for new "creating process" salon
-			dispatch(
-				initialize(FORM.SALON, {
-					openOverWeekend: false,
-					sameOpenHoursOverWeek: true,
-					openingHours: initOpeningHours(undefined, true, false),
-					payByCard: false,
-					companyContactPerson: defaultContactPerson,
-					phones: getPhoneDefaultValue(phonePrefixCountryCode)
-				})
-			)
+			dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode), showBasicSalonsSuggestions))
 		}
 	}
 
@@ -322,7 +228,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			const salonData = {
 				imageIDs: (data.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 				logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
-				name: data.name,
+				name: data.salonNameFromSelect ? data.nameSelect?.label : data.name,
 				openingHours: openingHours || [],
 				aboutUsFirst: data.aboutUsFirst,
 				aboutUsSecond: data.aboutUsSecond,
@@ -344,8 +250,12 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				socialLinkPinterest: data.socialLinkPinterest,
 				parkingNote: data.parkingNote,
 				payByCard: !!data.payByCard,
+				payByCash: !!data.payByCash,
 				otherPaymentMethods: data.otherPaymentMethods,
-				companyContactPerson: data.companyContactPerson,
+				companyContactPerson: {
+					...data.companyContactPerson,
+					phonePrefixCountryCode: data.companyContactPerson?.phone ? data.companyContactPerson.phonePrefixCountryCode : undefined
+				},
 				companyInfo: data.companyInfo,
 				cosmeticIDs: data.cosmeticIDs,
 				languageIDs: data.languageIDs
@@ -358,6 +268,20 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			} else {
 				// create new salon
 				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
+
+				// save categories in case of salon data were loaded from basic salon data and has categories assigned
+				if (showBasicSalonsSuggestions) {
+					if (data?.categoryIDs && !isEmpty(data?.categoryIDs) && data.categoryIDs.length < 100) {
+						await patchReq(
+							'/api/b2b/admin/salons/{salonID}/categories',
+							{ salonID: result.data.salon.id },
+							{
+								categoryIDs: data?.categoryIDs as unknown as CategoriesPatch['categoryIDs']
+							}
+						)
+					}
+				}
+
 				if (result?.data?.salon?.id) {
 					// load new salon for current user
 					await dispatch(getCurrentUser())
@@ -510,6 +434,25 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setIsSendingConfRequest(false)
 		}
 	}
+
+	const searchSalons = useCallback(
+		async (search: string, page: number) => {
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.BASIC_SALON)
+		},
+		[dispatch]
+	)
+
+	const loadBasicSalon = useCallback(
+		async (id: string) => {
+			const { data } = await dispatch(getBasicSalon(id))
+			dispatch(initialize(FORM.SALON, initSalonFormData(data?.salon as SalonInitType, phonePrefixCountryCode, true)))
+		},
+		[dispatch, phonePrefixCountryCode]
+	)
+
+	const clearSalonForm = useCallback(() => {
+		dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode, true)))
+	}, [dispatch, phonePrefixCountryCode])
 
 	const onOpenHoursNoteModalClose = () => {
 		updateOnlyOpeningHours.current = true
@@ -792,8 +735,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const salonForm = (
-		<Spin spinning={isLoading}>
-			<div className='content-body mt-2'>
+		<div className='content-body mt-2'>
+			<Spin spinning={isLoading}>
 				{renderContentHeader()}
 				{declinedSalon && declinedSalonMessage}
 				{infoMessage}
@@ -804,6 +747,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					deletedSalon={deletedSalon}
 					pendingPublication={!!pendingPublication}
 					isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
+					showBasicSalonsSuggestions={showBasicSalonsSuggestions}
+					loadBasicSalon={loadBasicSalon}
+					clearSalonForm={clearSalonForm}
+					searchSalons={searchSalons}
 					noteModalControlButtons={
 						salonExists && (
 							<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
@@ -847,8 +794,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				/>
 				{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
 				<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
-			</div>
-		</Spin>
+			</Spin>
+		</div>
 	)
 
 	return (
@@ -898,6 +845,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
 			</Modal>
+			<SalonSuggestionsModal visible={suggestionsModalVisible} setVisible={setSuggestionsModalVisible} />
 		</>
 	)
 }

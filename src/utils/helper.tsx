@@ -58,6 +58,7 @@ import {
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX,
+	QUERY_LIMIT,
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION
@@ -884,6 +885,15 @@ export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { 
 	})
 }
 
+export const formatLongQueryString = (search: string, limit?: number) => {
+	const maxQueryLimit = limit || QUERY_LIMIT.MAX_255
+	let formattedSearch = search
+	if (search.length > maxQueryLimit) {
+		formattedSearch = search.slice(0, maxQueryLimit)
+	}
+	return formattedSearch
+}
+
 export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
 	const { form } = props
 
@@ -957,4 +967,17 @@ export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthU
 	}
 
 	return salonRoles
+}
+
+/**
+ * Split array into two arrays by condition.
+ * Example: splitArrayByCondition([1, 2, 5, 2, 9], (item) => item > 2) => [[5, 9], [1, 2, 2]]
+ */
+export const splitArrayByCondition = (source: any[], condition: (item: any) => boolean): any[][] => {
+	return source.reduce(
+		([pass, fail], item) => {
+			return condition(item) ? [[...pass, item], fail] : [pass, [...fail, item]]
+		},
+		[[], []]
+	)
 }

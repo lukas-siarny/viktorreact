@@ -83,6 +83,7 @@ const SalonsPage = () => {
 	})
 
 	const resetQuery = (selectedTabKey: string) => {
+		// reset query when switching between tabs
 		setQuery({
 			search: undefined,
 			categoryFirstLevelIDs: undefined,
@@ -126,12 +127,7 @@ const SalonsPage = () => {
 				initialize(FORM.SALONS_FILTER_DELETED, {
 					search: query.search,
 					categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-					countryCode: query.countryCode,
-					createType: query.createType,
-					dateFromTo: {
-						dateFrom: query.lastUpdatedAtFrom,
-						dateTo: query.lastUpdatedAtTo
-					}
+					countryCode: query.countryCode
 				})
 			)
 		}
@@ -190,13 +186,22 @@ const SalonsPage = () => {
 		setQuery(newQuery)
 	}
 
-	const handleSubmit = (values: ISalonsFilterActive & ISalonsFilterDeleted) => {
+	const handleSubmitActive = (values: ISalonsFilterActive) => {
 		const { dateFromTo, ...restValues } = values
 		const newQuery = {
 			...query,
 			...restValues,
 			lastUpdatedAtFrom: dateFromTo?.dateFrom,
 			lastUpdatedAtTo: dateFromTo?.dateTo,
+			page: 1
+		}
+		setQuery(newQuery)
+	}
+
+	const handleSubmitDeleted = (values: ISalonsFilterDeleted) => {
+		const newQuery = {
+			...query,
+			...values,
 			page: 1
 		}
 		setQuery(newQuery)
@@ -369,7 +374,7 @@ const SalonsPage = () => {
 				tableColumns.lastUpdatedAt(),
 				tableColumns.createdAt()
 			]
-			filters = <SalonsFilterActive onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
+			filters = <SalonsFilterActive onSubmit={handleSubmitActive} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
 		} else if (selectedTabKey === 'deleted') {
 			columns = [
 				tableColumns.name({ width: '20%' }),
@@ -379,7 +384,7 @@ const SalonsPage = () => {
 				tableColumns.createType({ width: '16%' }),
 				tableColumns.createdAt({ width: '16%' })
 			]
-			filters = <SalonsFilterDeleted onSubmit={handleSubmit} />
+			filters = <SalonsFilterDeleted onSubmit={handleSubmitDeleted} />
 		}
 
 		return (

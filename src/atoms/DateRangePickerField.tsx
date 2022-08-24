@@ -59,8 +59,6 @@ const DateRangePickerField = (props: Props) => {
 		}
 	}
 
-	const now = dayjs()
-
 	const value: any = []
 	forEach(input?.value, (val) => {
 		if (val && dayjs(val).isValid()) {
@@ -94,6 +92,7 @@ const DateRangePickerField = (props: Props) => {
 	const disabledDateWrap = useCallback(
 		(currentDate: Dayjs) => {
 			let disable = false
+			const now = dayjs()
 			if (disabledDate) {
 				disable = disabledDate(currentDate)
 			} else if (disableFuture) {
@@ -105,7 +104,7 @@ const DateRangePickerField = (props: Props) => {
 			// TODO: validacia na vsetko isBefore datumu ktory bol prvy zvoleny TP-2111
 			return disable
 		},
-		[disableFuture, disablePast, disabledDate, now]
+		[disableFuture, disablePast, disabledDate]
 	)
 
 	return (

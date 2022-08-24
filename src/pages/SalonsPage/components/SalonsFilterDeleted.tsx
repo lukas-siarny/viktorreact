@@ -30,12 +30,8 @@ type ComponentProps = {
 
 export interface ISalonsFilterDeleted {
 	search: string
-	dateFromTo: {
-		dateFrom: string
-		dateTo: string
-	}
 	countryCode: string
-	createType: string
+	categoryFirstLevelIDs: string[]
 }
 
 type Props = InjectedFormProps<ISalonsFilterDeleted, ComponentProps> & ComponentProps

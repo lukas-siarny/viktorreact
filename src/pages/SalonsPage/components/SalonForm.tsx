@@ -61,7 +61,7 @@ type ComponentProps = {
 	loadBasicSalon: (id: string) => void
 	clearSalonForm: () => void
 	searchSalons: (search: string, page: number) => void
-	showBasicSalonsSearchBox?: boolean
+	showBasicSalonsSuggestions?: boolean
 }
 
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
@@ -107,7 +107,7 @@ const SalonForm: FC<Props> = (props) => {
 		loadBasicSalon,
 		clearSalonForm,
 		searchSalons,
-		showBasicSalonsSearchBox
+		showBasicSalonsSuggestions
 	} = props
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
@@ -223,7 +223,7 @@ const SalonForm: FC<Props> = (props) => {
 							</Row>
 						</Row>
 						<Divider className={'mb-3 mt-3'} />
-						{showBasicSalonsSearchBox ? (
+						{showBasicSalonsSuggestions ? (
 							<Field
 								component={AutocompleteField}
 								label={t('loc:Názov')}

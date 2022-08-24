@@ -113,7 +113,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isNewSalon = salonID === NEW_SALON_ID
 
 	// show salons searchbox with basic salon suggestions instead of text field for name input
-	const showBasicSalonsSearchBox = isNewSalon && isPartner
+	const showBasicSalonsSuggestions = isNewSalon && isPartner
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -164,7 +164,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch])
 
 	useEffect(() => {
-		if (salonID === NEW_SALON_ID && isPartner) {
+		if (showBasicSalonsSuggestions) {
 			;(async () => {
 				const { data } = await dispatch(getSuggestedSalons())
 				if ((data?.salons?.length || 0) > 0) {
@@ -172,7 +172,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				}
 			})()
 		}
-	}, [salonID, dispatch, isPartner])
+	}, [dispatch, showBasicSalonsSuggestions])
 
 	const updateOnlyOpeningHours = useRef(false)
 
@@ -191,7 +191,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode)))
 		} else if (!salon?.isLoading) {
 			// init data for new "creating process" salon
-			dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode), showBasicSalonsSearchBox))
+			dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode), showBasicSalonsSuggestions))
 		}
 	}
 
@@ -252,7 +252,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				const result = await postReq('/api/b2b/admin/salons/', undefined, salonData as any)
 
 				// save categories in case of salon data were loaded from basic salon data and has categories assigned
-				if (showBasicSalonsSearchBox) {
+				if (showBasicSalonsSuggestions) {
 					if (data?.categoryIDs && !isEmpty(data?.categoryIDs) && data.categoryIDs.length < 100) {
 						await patchReq(
 							'/api/b2b/admin/salons/{salonID}/categories',
@@ -723,7 +723,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						deletedSalon={deletedSalon}
 						pendingPublication={!!pendingPublication}
 						isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
-						showBasicSalonsSearchBox={showBasicSalonsSearchBox}
+						showBasicSalonsSuggestions={showBasicSalonsSuggestions}
 						loadBasicSalon={loadBasicSalon}
 						clearSalonForm={clearSalonForm}
 						searchSalons={searchSalons}

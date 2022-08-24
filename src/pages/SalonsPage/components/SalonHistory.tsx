@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Row, Pagination, Spin, List, Divider } from 'antd'
 import cx from 'classnames'
 import { NumberParam, useQueryParams, withDefault, StringParam } from 'use-query-params'
-import { isEmpty } from 'lodash'
 
 // components
 import { initialize } from 'redux-form'
+import i18next from 'i18next'
+import dayjs from 'dayjs'
 import SalonHistoryFilter, { ISalonHistoryFilter } from './SalonHistoryFilter'
 import CompareComponent from '../../../components/CompareComponent'
 
@@ -18,7 +19,7 @@ import { getSalonHistory } from '../../../reducers/salons/salonsActions'
 import { RootState } from '../../../reducers'
 
 // utils
-import { FORM, INTERVALS, SALON_HISTORY_OPERATIONS } from '../../../utils/enums'
+import { FORM, SALON_HISTORY_OPERATIONS } from '../../../utils/enums'
 import { formatDateByLocale } from '../../../utils/helper'
 
 // assets
@@ -26,6 +27,7 @@ import { ReactComponent as CheckIcon } from '../../../assets/icons/check-12.svg'
 import { ReactComponent as ResetIcon } from '../../../assets/icons/reset-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ValueAndUnit } from './salonVersionsUtils'
 
 const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => {
 	switch (operation) {
@@ -45,13 +47,13 @@ const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => 
 const SalonHistory: FC<SalonSubPageProps> = (props) => {
 	const dispatch = useDispatch()
 	const { salonID } = props
+	const now = dayjs()
 
 	const [query, setQuery] = useQueryParams({
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		dateFrom: withDefault(StringParam, ''),
-		dateTo: withDefault(StringParam, ''),
-		interval: withDefault(StringParam, INTERVALS.HOURS_48)
+		dateFrom: withDefault(StringParam, now.subtract(1, 'week').toISOString()),
+		dateTo: withDefault(StringParam, now.toISOString())
 	})
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
@@ -63,15 +65,14 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 				dateFromTo: {
 					dateFrom: query.dateFrom,
 					dateTo: query.dateTo
-				},
-				interval: query.interval
+				}
 			})
 		)
 	}
 
 	useEffect(() => {
 		fetchData()
-	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo, query.interval])
+	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo])
 
 	const renderValues = (oldValues: any, newValues: any) => {
 		let values: any = {}
@@ -106,7 +107,6 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 		const newQuery = {
 			...query,
 			...values.dateFromTo,
-			interval: values.interval,
 			page: 1
 		}
 		setQuery(newQuery)

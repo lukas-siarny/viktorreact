@@ -58,6 +58,7 @@ import {
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX,
+	QUERY_LIMIT,
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION
@@ -882,6 +883,15 @@ export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { 
 		}
 		return b.language === DEFAULT_LANGUAGE ? 1 : 0
 	})
+}
+
+export const formatLongQueryString = (search: string, limit?: number) => {
+	const maxQueryLimit = limit || QUERY_LIMIT.MAX_255
+	let formattedSearch = search
+	if (search.length > maxQueryLimit) {
+		formattedSearch = search.slice(0, maxQueryLimit)
+	}
+	return formattedSearch
 }
 
 export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {

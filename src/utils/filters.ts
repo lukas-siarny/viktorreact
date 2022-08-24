@@ -4,7 +4,7 @@ import { IQueryParams, ISearchable, ISelectOptionItem } from '../types/interface
 import { FILTER_ENTITY } from './enums'
 
 // reducers
-import { getSalons } from '../reducers/salons/salonsActions'
+import { getSalons, getBasicSalons } from '../reducers/salons/salonsActions'
 import { getUsers } from '../reducers/users/userActions'
 import { getEmployees } from '../reducers/employees/employeesActions'
 
@@ -16,9 +16,11 @@ const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResul
 		case FILTER_ENTITY.SALON:
 			return getSalons
 
+		case FILTER_ENTITY.BASIC_SALON:
+			return getBasicSalons
+
 		case FILTER_ENTITY.USER:
 			return getUsers
-
 		default:
 			throw new Error(`Unsupported entity type for filtering:${type}`)
 	}

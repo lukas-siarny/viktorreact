@@ -5,6 +5,8 @@ import { Col, Divider, Form, Row, Space } from 'antd'
 import { useSelector } from 'react-redux'
 
 // components
+import { isEmpty } from 'lodash'
+import i18next from 'i18next'
 import OpeningHours from '../../../components/OpeningHours/OpeningHours'
 import AddressFields, { AddressLayout } from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
@@ -17,13 +19,14 @@ import TextareaField from '../../../atoms/TextareaField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 import SelectField from '../../../atoms/SelectField'
 import PhoneArrayField from '../../../atoms/PhoneArrayField'
+import AutocompleteField from '../../../atoms/AutocompleteField'
 
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { FORM, NEW_SALON_ID, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
-import { IIsPublishedVersionSameAsDraft, ISalonForm } from '../../../types/interfaces'
+import { IIsPublishedVersionSameAsDraft, ISalonForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // validate
 import validateSalonForm from './validateSalonForm'
@@ -55,13 +58,57 @@ type ComponentProps = {
 	deletedSalon?: boolean
 	pendingPublication?: boolean
 	isPublishedVersionSameAsDraft?: IIsPublishedVersionSameAsDraft
+	loadBasicSalon: (id: string) => void
+	clearSalonForm: () => void
+	searchSalons: (search: string, page: number) => void
+	showBasicSalonsSuggestions?: boolean
 }
 
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
 
+export const optionRenderSalonSearch = (itemData: any) => {
+	const { label, extra } = itemData
+	const address = extra?.salon?.address
+
+	return (
+		<div className='noti-salon-search-option-render'>
+			<span className={'label'}>{label}</span>
+			<div className={'address'}>
+				{!isEmpty(address) ? (
+					<>
+						{address?.street && (
+							<>
+								{address?.street} {address?.streetNumber}
+							</>
+						)}
+						{(address?.zipCode || address?.city) && ', '}
+						{address?.zipCode} {address?.city}
+						{`, ${address?.countryCode}`}
+					</>
+				) : (
+					<i>{i18next.t('loc:Adresa salónu nie je známa')}</i>
+				)}
+			</div>
+		</div>
+	)
+}
+
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, noteModalControlButtons, salonID, disabledForm, deletedSalon = false, isPublishedVersionSameAsDraft, pendingPublication } = props
+	const {
+		handleSubmit,
+		change,
+		noteModalControlButtons,
+		salonID,
+		disabledForm,
+		deletedSalon = false,
+		isPublishedVersionSameAsDraft,
+		pendingPublication,
+		loadBasicSalon,
+		clearSalonForm,
+		searchSalons,
+		showBasicSalonsSuggestions
+	} = props
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
@@ -70,6 +117,7 @@ const SalonForm: FC<Props> = (props) => {
 	const aboutUsFirstLabel = t('loc:O nás')
 	const aboutUsSecondPlaceholder = t('loc:Zadajte doplňujúce informácie o salóne')
 	const aboutUsSecondLabel = t('loc:Doplňujúci popis')
+
 	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string, maxLength: number) => {
 		return (
 			<Field component={TextareaField} label={label} name={filedName} size={'large'} placeholder={placeholder} disabled={disabled} maxLength={maxLength} showLettersCount />
@@ -175,15 +223,37 @@ const SalonForm: FC<Props> = (props) => {
 							</Row>
 						</Row>
 						<Divider className={'mb-3 mt-3'} />
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.name || null}
-							newValue={formValues?.name || null}
-							equal={isPublishedVersionSameAsDraft?.isNameEqual}
-							oldFormField={nameFormField('publishedSalonData.name', true)}
-							newFormField={nameFormField('name', disabledComparsionFields)}
-							disableComparsion={disableComparsion}
-						/>
+						{showBasicSalonsSuggestions ? (
+							<Field
+								component={AutocompleteField}
+								label={t('loc:Názov')}
+								placeholder={t('loc:Vyhľadajte salón podľa názvu alebo zadajte vlastný')}
+								name={'nameSelect'}
+								filterOption={false}
+								showSearch
+								onDidMountSearch
+								required
+								size={'large'}
+								optionRender={optionRenderSalonSearch}
+								allowClear
+								hasExtra
+								labelInValue
+								onSearch={searchSalons}
+								onSelect={(_value: string | ISelectOptionItem, option: ISelectOptionItem) => loadBasicSalon(option?.extra.salon.id)}
+								onClear={clearSalonForm}
+								allowInfinityScroll
+							/>
+						) : (
+							<Compare
+								// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
+								oldValue={formValues?.publishedSalonData?.name || null}
+								newValue={formValues?.name || null}
+								equal={isPublishedVersionSameAsDraft?.isNameEqual}
+								oldFormField={nameFormField('publishedSalonData.name', true)}
+								newFormField={nameFormField('name', disabledComparsionFields)}
+								disableComparsion={disableComparsion}
+							/>
+						)}
 						<Compare
 							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
 							oldValue={formValues?.publishedSalonData?.aboutUsFirst || null}

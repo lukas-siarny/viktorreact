@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Alert, Button, Modal, Row, Spin, Tooltip, notification } from 'antd'
+import { Alert, Button, Modal, Row, Spin, notification } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
@@ -19,8 +19,7 @@ import validateSalonFormForPublication from './components/validateSalonFormForPu
 import SalonSuggestionsModal from './components/SalonSuggestionsModal'
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
-import { createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
-import { getIsInitialPublishedVersionSameAsDraft, getIsPublishedVersionSameAsDraft, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
+import SalonApprovalModal from './components/SalonApprovalModal'
 
 // enums
 import {
@@ -43,7 +42,7 @@ import { RootState } from '../../reducers'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
-import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsActions'
+import { getBasicSalon, getSalonHistory, getSuggestedSalons } from '../../reducers/salons/salonsActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
@@ -55,7 +54,8 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
-import searchWrapper from '../../utils/filters'
+import { createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import { getIsPublishedVersionSameAsDraft, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -65,6 +65,7 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import searchWrapper from '../../utils/filters'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -83,6 +84,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [tabKey, setTabKey] = useState<TAB_KEYS>(TAB_KEYS.SALON_DETAIL)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 	const [suggestionsModalVisible, setSuggestionsModalVisible] = useState(false)
+	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -168,6 +170,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		dispatch(getSalonLanguages())
 		dispatch(getCosmetics())
+		dispatch(getSalonHistory({ dateFrom: '2022-08-16T10:28:00.124Z', dateTo: '2022-08-22T13:18:00.124Z', salonID, page: 1 }))
 	}, [dispatch])
 
 	useEffect(() => {
@@ -541,49 +544,18 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const requestApprovalButton = (className = '') => {
-		const approvalButtonDisabled = submitting || deletedSalon || !isFormPristine
-		const approvalButtonInitiallyDisabled = isFormPristine && getIsInitialPublishedVersionSameAsDraft(salon)
-
-		let tooltipMessage: string | null = null
-
-		if (approvalButtonInitiallyDisabled) {
-			tooltipMessage = t('loc:V salóne nie sú žiadne zmeny, ktoré by bolo potrebné schváliť.')
-		} else if (approvalButtonDisabled) tooltipMessage = t('loc:Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')
-
-		// Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
 		return (
-			<Permissions
-				allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
-				render={(hasPermission, { openForbiddenModal }) =>
-					salonExists &&
-					!pendingPublication && (
-						<Tooltip title={tooltipMessage}>
-							<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled || approvalButtonInitiallyDisabled })}>
-								<Button
-									type={'dashed'}
-									block
-									size={'middle'}
-									className={cx('noti-btn m-regular', className, {
-										'pointer-events-none': approvalButtonDisabled || approvalButtonInitiallyDisabled
-									})}
-									disabled={approvalButtonDisabled || approvalButtonInitiallyDisabled}
-									onClick={(e) => {
-										if (hasPermission) {
-											sendConfirmationRequest()
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-									loading={submitting}
-								>
-									{t('loc:Požiadať o schválenie')}
-								</Button>
-							</span>
-						</Tooltip>
-					)
-				}
-			/>
+			<Button
+				type={'dashed'}
+				block
+				size={'middle'}
+				className={cx('noti-btn m-regular', className)}
+				disabled={submitting || deletedSalon}
+				onClick={() => setApprovalModalVisible(true)}
+				loading={submitting}
+			>
+				{t('loc:Požiadať o schválenie')}
+			</Button>
 		)
 	}
 
@@ -688,7 +660,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		// order of cases is important to show correct message
 		switch (true) {
-			case salonID === NEW_SALON_ID:
+			case isNewSalon:
 			case deletedSalon:
 				message = null
 				break
@@ -713,7 +685,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		return null
-	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t, salon.data?.state])
+	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, t, salon.data?.state, isNewSalon])
 
 	const declinedSalonMessage = useMemo(
 		() => (
@@ -744,68 +716,128 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		setTabKey(selectedTabKey as TAB_KEYS)
 	}
 
+	const approvalButtonDisabled = !get(salon, 'hasAllRequiredSalonApprovalData') || deletedSalon || submitting || salon.isLoading
+
 	const salonForm = (
-		<div className='content-body mt-2'>
-			<Spin spinning={isLoading}>
-				{renderContentHeader()}
-				{declinedSalon && declinedSalonMessage}
-				{infoMessage}
-				<SalonForm
-					onSubmit={handleSubmit}
-					salonID={salonID}
-					disabledForm={deletedSalon}
-					deletedSalon={deletedSalon}
-					pendingPublication={!!pendingPublication}
-					isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
-					showBasicSalonsSuggestions={showBasicSalonsSuggestions}
-					loadBasicSalon={loadBasicSalon}
-					clearSalonForm={clearSalonForm}
-					searchSalons={searchSalons}
-					noteModalControlButtons={
-						salonExists && (
-							<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
-								{salon?.data?.openingHoursNote ? (
-									<>
-										<div className='w-full'>
-											<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
-											<p className='mb-2'>
-												{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
-												{' - '}
-												{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
-											</p>
-											<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
-										</div>
+		<>
+			<div className='content-body mt-2'>
+				<Spin spinning={isLoading}>
+					{renderContentHeader()}
+					{declinedSalon && declinedSalonMessage}
+					{infoMessage}
+					<SalonForm
+						onSubmit={handleSubmit}
+						salonID={salonID}
+						disabledForm={deletedSalon}
+						deletedSalon={deletedSalon}
+						pendingPublication={!!pendingPublication}
+						isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
+						showBasicSalonsSuggestions={showBasicSalonsSuggestions}
+						loadBasicSalon={loadBasicSalon}
+						clearSalonForm={clearSalonForm}
+						searchSalons={searchSalons}
+						noteModalControlButtons={
+							salonExists && (
+								<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
+									{salon?.data?.openingHoursNote ? (
+										<>
+											<div className='w-full'>
+												<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
+												<p className='mb-2'>
+													{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
+													{' - '}
+													{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
+												</p>
+												<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
+											</div>
+											<Button
+												type={'primary'}
+												block
+												size={'middle'}
+												className={'noti-btn m-regular w-12/25 xl:w-1/3'}
+												onClick={() => setVisible(true)}
+												disabled={deletedSalon}
+											>
+												{STRINGS(t).edit(t('loc:poznámku'))}
+											</Button>
+											<DeleteButton
+												className={'ml-2 w-12/25 xl:w-1/3'}
+												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+												onConfirm={deleteOpenHoursNote}
+												entityName={t('loc:poznámku')}
+												disabled={deletedSalon}
+											/>
+										</>
+									) : (
 										<Button
 											type={'primary'}
 											block
 											size={'middle'}
-											className={'noti-btn m-regular w-12/25 xl:w-1/3'}
+											className={'noti-btn m-regular w-1/3'}
 											onClick={() => setVisible(true)}
 											disabled={deletedSalon}
 										>
-											{STRINGS(t).edit(t('loc:poznámku'))}
+											{STRINGS(t).addRecord(t('loc:poznámku'))}
 										</Button>
-										<DeleteButton
-											className={'ml-2 w-12/25 xl:w-1/3'}
-											getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-											onConfirm={deleteOpenHoursNote}
-											entityName={t('loc:poznámku')}
-											disabled={deletedSalon}
-										/>
-									</>
-								) : (
-									<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-1/3'} onClick={() => setVisible(true)} disabled={deletedSalon}>
-										{STRINGS(t).addRecord(t('loc:poznámku'))}
-									</Button>
-								)}
-							</Row>
-						)
+									)}
+								</Row>
+							)
+						}
+					/>
+					{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
+					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
+				</Spin>
+			</div>
+			<Modal
+				key={`${modalConfig.visible}`}
+				title={modalConfig.title}
+				visible={modalConfig.visible}
+				onCancel={() =>
+					setModalConfig({
+						title: '',
+						fieldPlaceholderText: '',
+						visible: false,
+						onSubmit: undefined
+					})
+				}
+				footer={null}
+				closeIcon={<CloseIcon />}
+			>
+				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
+			</Modal>
+			<SalonSuggestionsModal visible={suggestionsModalVisible} setVisible={setSuggestionsModalVisible} />
+			{salonID && !isNewSalon && (
+				<SalonApprovalModal
+					visible={approvalModalVisible}
+					onCancel={() => setApprovalModalVisible(false)}
+					parentPath={`${t('paths:salons')}/${salonID}/`}
+					submitButton={
+						<Permissions
+							allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
+							render={(hasPermission, { openForbiddenModal }) => (
+								<Button
+									type={'primary'}
+									block
+									size={'large'}
+									className={'noti-btn m-regular'}
+									disabled={approvalButtonDisabled}
+									onClick={(e) => {
+										if (hasPermission) {
+											sendConfirmationRequest()
+										} else {
+											e.preventDefault()
+											openForbiddenModal()
+										}
+									}}
+								>
+									{t('loc:Požiadať o schválenie')}
+								</Button>
+							)}
+						/>
 					}
 				/>
-				{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
-				<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
-			</Spin>
-		</div>
+			)}
+		</>
 	)
 
 	return (
@@ -838,24 +870,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			) : (
 				salonForm
 			)}
-			<Modal
-				key={`${modalConfig.visible}`}
-				title={modalConfig.title}
-				visible={modalConfig.visible}
-				onCancel={() =>
-					setModalConfig({
-						title: '',
-						fieldPlaceholderText: '',
-						visible: false,
-						onSubmit: undefined
-					})
-				}
-				footer={null}
-				closeIcon={<CloseIcon />}
-			>
-				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
-			</Modal>
-			<SalonSuggestionsModal visible={suggestionsModalVisible} setVisible={setSuggestionsModalVisible} />
 		</>
 	)
 }

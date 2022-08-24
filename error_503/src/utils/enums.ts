@@ -1,11 +1,7 @@
 export enum APP_LANGUAGE {
 	SK = 'sk',
 	CZ = 'cs',
-	EN = 'en',
-	HU = 'hu',
-	RO = 'ro',
-	BG = 'bg',
-	IT = 'it'
+	EN = 'en'
 }
 
 export const DEFAULT_APP_LANGUAGE = APP_LANGUAGE.EN

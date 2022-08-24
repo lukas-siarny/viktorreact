@@ -18,7 +18,11 @@ export enum NAMESPACE {
 export enum LANGUAGE {
 	SK = 'sk',
 	CZ = 'cs',
-	EN = 'en'
+	EN = 'en',
+	HU = 'hu',
+	RO = 'ro',
+	BG = 'bg',
+	IT = 'it'
 }
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes

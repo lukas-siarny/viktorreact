@@ -15,25 +15,21 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
-import { ReactComponent as CheckIcon12 } from '../../../assets/icons/check-12.svg'
-import { ReactComponent as ClockIcon12 } from '../../../assets/icons/clock-12.svg'
-import { ReactComponent as TrashIcon12 } from '../../../assets/icons/trash-12.svg'
-import { ReactComponent as TrashCrossedIcon12 } from '../../../assets/icons/trash-crossed-12.svg'
-import { ReactComponent as CloseIcon12 } from '../../../assets/icons/close-12.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 // utils
 import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
 import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
+import { getSalonFilterRanges, intervals } from './salonUtils'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 import SwitchField from '../../../atoms/SwitchField'
 import DateRangePickerField from '../../../atoms/DateRangePickerField'
-import { getSalonFilterRanges, intervals } from './salonUtils'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void
@@ -58,10 +54,10 @@ type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentP
 const fixLength100 = validationString(100)
 
 const statusOptionRender = (itemData: any) => {
-	const { value, label, className, icon } = itemData
+	const { value, label, tagClassName } = itemData
 	return (
-		<Tag key={value} icon={icon} className={cx('noti-tag', className)}>
-			{label}
+		<Tag key={value} className={cx('noti-tag', tagClassName)}>
+			<span>{label}</span>
 		</Tag>
 	)
 }
@@ -89,8 +85,8 @@ const SalonsFilterActive = (props: Props) => {
 
 	const publishedOptions = useMemo(
 		() => [
-			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, icon: <CheckIcon12 />, className: 'success' },
-			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, icon: <CloseIcon12 /> }
+			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, tagClassName: 'bg-status-published' },
+			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, tagClassName: 'bg-status-notPublished' }
 		],
 		[t]
 	)
@@ -101,18 +97,17 @@ const SalonsFilterActive = (props: Props) => {
 				label: t('loc:Na schválenie'),
 				value: SALON_FILTER_STATES.PENDING_PUBLICATION,
 				key: SALON_FILTER_STATES.PENDING_PUBLICATION,
-				icon: <ClockIcon12 />,
-				className: 'warning'
+				tagClassName: 'bg-status-pending'
 			},
-			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, icon: <CloseIcon12 />, className: 'danger' }
+			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, tagClassName: 'bg-status-declined' }
 		],
 		[t]
 	)
 
 	const createTypesOptions = useMemo(
 		() => [
-			{ label: t('loc:BASIC'), value: SALON_FILTER_CREATE_TYPES.BASIC, key: SALON_FILTER_CREATE_TYPES.BASIC, icon: <TrashIcon12 />, className: 'basic-salon' },
-			{ label: t('loc:PREMIUM'), value: SALON_FILTER_CREATE_TYPES.PREMIUM, key: SALON_FILTER_CREATE_TYPES.PREMIUM, icon: <TrashCrossedIcon12 />, className: 'premium-salon' }
+			{ label: t('loc:BASIC'), value: SALON_FILTER_CREATE_TYPES.BASIC, key: SALON_FILTER_CREATE_TYPES.BASIC, tagClassName: 'bg-status-basic' },
+			{ label: t('loc:PREMIUM'), value: SALON_FILTER_CREATE_TYPES.PREMIUM, key: SALON_FILTER_CREATE_TYPES.PREMIUM, tagClassName: 'bg-status-premium' }
 		],
 		[t]
 	)
@@ -253,6 +248,7 @@ const SalonsFilterActive = (props: Props) => {
 								size={'middle'}
 								filterOptions
 								onDidMountSearch
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
 								options={categories?.enumerationsOptions}
 								loading={categories?.isLoading}
 								disabled={categories?.isLoading}

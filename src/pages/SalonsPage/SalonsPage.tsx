@@ -44,7 +44,7 @@ import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
-const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
+const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
 type TabKeys = 'active' | 'deleted'
 
@@ -81,6 +81,24 @@ const SalonsPage = () => {
 		lastUpdatedAtFrom: StringParam,
 		lastUpdatedAtTo: StringParam
 	})
+
+	const resetQuery = (selectedTabKey: string) => {
+		setQuery({
+			search: undefined,
+			categoryFirstLevelIDs: undefined,
+			statuses_all: undefined,
+			statuses_published: undefined,
+			statuses_changes: undefined,
+			limit: undefined,
+			page: 1,
+			order: 'createdAt:DESC',
+			countryCode: undefined,
+			createType: undefined,
+			lastUpdatedAtFrom: undefined,
+			lastUpdatedAtTo: undefined,
+			salonState: selectedTabKey
+		})
+	}
 
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
@@ -221,21 +239,7 @@ const SalonsPage = () => {
 	const onTabChange = (selectedTabKey: string) => {
 		dispatch(emptySalons())
 		setTabKey(selectedTabKey as TabKeys)
-		setQuery({
-			search: null,
-			categoryFirstLevelIDs: null,
-			statuses_all: false,
-			statuses_published: null,
-			statuses_changes: null,
-			limit: null,
-			page: 1,
-			order: 'createdAt:DESC',
-			countryCode: null,
-			createType: null,
-			lastUpdatedAtFrom: null,
-			lastUpdatedAtTo: null,
-			salonState: selectedTabKey
-		})
+		resetQuery(selectedTabKey)
 	}
 
 	// define columns for both tables - active and deleted

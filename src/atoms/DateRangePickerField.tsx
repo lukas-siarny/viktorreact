@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { DatePicker, Form } from 'antd'
 import { WrappedFieldProps } from 'redux-form'
 import { RangePickerProps } from 'antd/es/date-picker'
@@ -40,7 +40,6 @@ const DateRangePickerField = (props: Props) => {
 		disableFuture,
 		disablePast,
 		disabledDate,
-		disabledTime,
 		itemRef,
 		required,
 		meta,
@@ -98,45 +97,16 @@ const DateRangePickerField = (props: Props) => {
 			if (disabledDate) {
 				disable = disabledDate(currentDate)
 			} else if (disableFuture) {
-				disable = currentDate && currentDate > (showTime ? now : now.endOf('day'))
+				disable = currentDate && currentDate > now.endOf('day')
 			} else if (disablePast) {
-				disable = currentDate && currentDate < (showTime ? now : dayjs().startOf('day'))
+				disable = currentDate && currentDate < now.startOf('day')
 			}
 			// TODO: validacia na range 2 mesiace podla prveho datumu ktory bol zvoleny TP-2111
 			// TODO: validacia na vsetko isBefore datumu ktory bol prvy zvoleny TP-2111
 			return disable
 		},
-		[disableFuture, disablePast, disabledDate, showTime, now]
+		[disableFuture, disablePast, disabledDate, now]
 	)
-
-	const range = (start: number, end: number) => {
-		const result = []
-		// eslint-disable-next-line no-plusplus
-		for (let i = start; i < end; i++) {
-			result.push(i)
-		}
-		return result
-	}
-
-	const disabledTimeWrap: RangePickerProps['disabledTime'] = (_, type): any => {
-		let timeDisabled
-		if (disabledTime) {
-			timeDisabled = disabledTime(_, type)
-		} else if (disableFuture) {
-			if (type === 'start') {
-				timeDisabled = {
-					disabledHours: () => range(0, 60).splice(4, 20),
-					disabledMinutes: () => range(30, 60)
-				}
-			} else {
-				timeDisabled = {
-					disabledHours: () => range(0, 60).splice(20, 4),
-					disabledMinutes: () => range(0, 31)
-				}
-			}
-		}
-		return timeDisabled
-	}
 
 	return (
 		<Form.Item
@@ -163,7 +133,6 @@ const DateRangePickerField = (props: Props) => {
 					separator={separator || <SeparatorIcon />}
 					open={open}
 					disabledDate={disabledDateWrap}
-					disabledTime={disabledTimeWrap}
 					dropdownClassName={dropdownClassName}
 					renderExtraFooter={renderExtraFooter}
 					getPopupContainer={getPopupContainer || ((node) => node)}

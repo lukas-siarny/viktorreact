@@ -195,10 +195,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			)
 			updateOnlyOpeningHours.current = false
 		} else if (!isEmpty(salonData) && salonExists) {
-			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode)))
+			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode, showBasicSalonsSuggestions)))
 		} else if (!salon?.isLoading) {
 			// init data for new "creating process" salon
-			dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode), showBasicSalonsSuggestions))
+			dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode, showBasicSalonsSuggestions)))
 		}
 	}
 
@@ -213,9 +213,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		initData(salon.data)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salon])
+	}, [salon, showBasicSalonsSuggestions])
 
 	const handleSubmit = async (data: ISalonForm) => {
+		console.log(data)
 		try {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
@@ -325,7 +326,20 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			history.push(t('paths:salons'))
+			if (isAdmin) {
+				history.push(t('paths:salons'))
+			} else {
+				// check if there are any other salons assigned to user and redircet user to first of them
+				const { data } = await dispatch(getCurrentUser())
+				const salonToRedirect = (data?.salons || [])[0]
+				if (salonToRedirect) {
+					history.push(`${t('paths:salons')}/${salonToRedirect.id}`)
+				} else {
+					// otherwise redirect user to dashboard
+					await dispatch(selectSalon())
+					history.push(t('paths:index'))
+				}
+			}
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

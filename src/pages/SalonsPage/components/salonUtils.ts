@@ -1,4 +1,6 @@
 import { isEmpty, isEqual, map } from 'lodash'
+import i18next from 'i18next'
+import dayjs from 'dayjs'
 
 // types
 import { IIsPublishedVersionSameAsDraft, ISalonForm, OpeningHours } from '../../../types/interfaces'
@@ -10,8 +12,6 @@ import { SALON_STATES } from '../../../utils/enums'
 
 // components
 import { checkSameOpeningHours, checkWeekend, initOpeningHours, orderDaysInWeek } from '../../../components/OpeningHours/OpeninhHoursUtils'
-import i18next from 'i18next'
-import dayjs from 'dayjs'
 
 export const getIsInitialPublishedVersionSameAsDraft = (salonData: ISelectedSalonPayload) => {
 	// compare all fields that needs to be approved

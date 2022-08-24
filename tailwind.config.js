@@ -41,6 +41,14 @@ module.exports = {
 				redDark: '#6C0A0A',
 				success: '#008700'
 			},
+			status: {
+				premium: colors.blue[700],
+				basic: colors.blue[200],
+				declined: colors.red[200],
+				pending: colors.yellow[200],
+				notPublished: colors.trueGray[200],
+				published: colors.green[200]
+			},
 			// Tailwind colors
 			black: colors.black,
 			white: colors.white,

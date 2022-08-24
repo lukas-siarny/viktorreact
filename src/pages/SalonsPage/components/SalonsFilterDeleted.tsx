@@ -1,10 +1,8 @@
 import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Divider, Form, Row, Tag } from 'antd'
+import { Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, filter, isEmpty, isNil, size } from 'lodash'
-import cx from 'classnames'
-import dayjs from 'dayjs'
 
 // components
 import { useSelector } from 'react-redux'
@@ -15,16 +13,15 @@ import { RootState } from '../../../reducers'
 
 // assets
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 // utils
 import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { optionRenderWithImage, validationString } from '../../../utils/helper'
-import { getSalonFilterRanges, intervals } from './salonUtils'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
-import DateRangePickerField from '../../../atoms/DateRangePickerField'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void
@@ -54,7 +51,7 @@ export const checkSalonFiltersSize = (formValues: any) =>
 			if (key === 'dateFromTo' && !value?.dateFrom && !value?.dateTo) {
 				return false
 			}
-			return (!isNil(value) || !isEmpty(value)) && key !== 'search' && key !== 'statuses_all'
+			return (!isNil(value) || !isEmpty(value)) && key !== 'search'
 		})
 	)
 
@@ -96,6 +93,7 @@ const SalonsFilterDeleted = (props: Props) => {
 							size={'middle'}
 							filterOptions
 							onDidMountSearch
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
 							options={categories?.enumerationsOptions}
 							loading={categories?.isLoading}
 							disabled={categories?.isLoading}
@@ -123,7 +121,7 @@ const SalonsFilterDeleted = (props: Props) => {
 }
 
 const form = reduxForm({
-	form: FORM.SALONS_FILTER,
+	form: FORM.SALONS_FILTER_DELETED,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	onChange: debounce((_values, _dispatch, { submit, anyTouched }) => {

@@ -8,12 +8,8 @@ i18n.use(initReactI18next)
 	.use(LanguageDetector)
 	.init({
 		resources: {
-			bg: { loc: require('../locales/bg/loc.json') },
 			cs: { loc: require('../locales/cs/loc.json') },
 			en: { loc: require('../locales/en/loc.json') },
-			hu: { loc: require('../locales/hu/loc.json') },
-			it: { loc: require('../locales/it/loc.json') },
-			ro: { loc: require('../locales/ro/loc.json') },
 			sk: { loc: require('../locales/sk/loc.json') }
 		},
 		debug: process.env.NODE_ENV === 'development',

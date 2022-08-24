@@ -8,6 +8,7 @@ import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, reset } from 'redux-form'
 
 // components
+import { isEmpty } from 'lodash'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
@@ -211,6 +212,7 @@ const SalonsPage = () => {
 		setQuery({ ...query, salonState: selectedTabKey })
 	}
 
+	// define columns for both tables - active and deleted
 	const tableColumns: { [key: string]: (props?: Columns[0]) => Columns[0] } = useMemo(
 		() => ({
 			name: (props) => ({
@@ -221,6 +223,7 @@ const SalonsPage = () => {
 				sorter: true,
 				width: '15%',
 				sortOrder: setOrder(query.order, 'name'),
+				render: (value) => value || '-',
 				...props
 			}),
 			address: (props) => ({
@@ -230,7 +233,7 @@ const SalonsPage = () => {
 				ellipsis: true,
 				sorter: false,
 				width: '20%',
-				render: (value) => <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</>,
+				render: (value) => (!isEmpty(value) ? <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</> : '-'),
 				...props
 			}),
 			categories: (props) => ({
@@ -260,7 +263,7 @@ const SalonsPage = () => {
 				ellipsis: true,
 				sorter: true,
 				sortOrder: setOrder(query.order, 'createdAt'),
-				render: (value) => formatDateByLocale(value),
+				render: (value) => (value ? formatDateByLocale(value) : '-'),
 				...props
 			}),
 			lastUpdatedAt: (props) => ({
@@ -270,7 +273,7 @@ const SalonsPage = () => {
 				ellipsis: true,
 				sorter: false,
 				width: '10%',
-				render: (value) => formatDateByLocale(value),
+				render: (value) => (value ? formatDateByLocale(value) : '-'),
 				...props
 			}),
 			deletedAt: (props) => ({
@@ -280,7 +283,7 @@ const SalonsPage = () => {
 				ellipsis: true,
 				sorter: false,
 				width: '10%',
-				render: (value) => formatDateByLocale(value),
+				render: (value) => (value ? formatDateByLocale(value) : '-'),
 				...props
 			}),
 			isPublished: (props) => ({

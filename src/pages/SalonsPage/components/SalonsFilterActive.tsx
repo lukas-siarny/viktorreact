@@ -40,7 +40,7 @@ type ComponentProps = {
 	openSalonImportsModal: () => void
 }
 
-export interface ISalonsFilter {
+export interface ISalonsFilterActive {
 	search: string
 	dateFromTo: {
 		dateFrom: string
@@ -54,7 +54,7 @@ export interface ISalonsFilter {
 	createType: string
 }
 
-type Props = InjectedFormProps<ISalonsFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
@@ -80,11 +80,11 @@ export const checkSalonFiltersSize = (formValues: any) =>
 		})
 	)
 
-const SalonsFilter = (props: Props) => {
+const SalonsFilterActive = (props: Props) => {
 	const { handleSubmit, openSalonImportsModal } = props
 	const [t] = useTranslation()
 
-	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
+	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
@@ -191,6 +191,7 @@ const SalonsFilter = (props: Props) => {
 							<span className={'font-bold text-xs mb-1'}>{t('loc:Stavy')}</span>
 						</Col>
 					</Row>
+
 					<Row gutter={ROW_GUTTER_X_DEFAULT} wrap={false}>
 						<Col span={3} className={'statuses-filter-all-col'}>
 							<Field component={SwitchField} name={'statuses_all'} size={'middle'} label={t('loc:Všetky')} />
@@ -241,6 +242,7 @@ const SalonsFilter = (props: Props) => {
 						</Row>
 					</Row>
 					<Divider className={'mt-0 mb-4'} />
+
 					<Row gutter={ROW_GUTTER_X_DEFAULT}>
 						<Col span={8}>
 							<Field
@@ -295,7 +297,7 @@ const SalonsFilter = (props: Props) => {
 }
 
 const form = reduxForm({
-	form: FORM.SALONS_FILTER,
+	form: FORM.SALONS_FILTER_ACITVE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	onChange: debounce((_values, _dispatch, { submit, anyTouched }) => {
@@ -304,6 +306,6 @@ const form = reduxForm({
 		}
 	}, 300),
 	destroyOnUnmount: true
-})(SalonsFilter)
+})(SalonsFilterActive)
 
 export default form

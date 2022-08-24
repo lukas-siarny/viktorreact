@@ -11,7 +11,6 @@ import { initialize, reset } from 'redux-form'
 import { isEmpty } from 'lodash'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import SalonsFilter, { ISalonsFilter } from './components/SalonsFilter'
 import SalonsImportForm from './components/SalonsImportForm'
 import UploadSuccess from './components/UploadSuccess'
 import TabsComponent from '../../components/TabsComponent'
@@ -42,6 +41,8 @@ import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import SalonsFilterActive, { ISalonsFilterActive } from './components/SalonsFilterActive'
+import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/SalonsFilterDeleted'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -84,26 +85,37 @@ const SalonsPage = () => {
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
-		dispatch(
-			initialize(FORM.SALONS_FILTER, {
-				search: query.search,
-				statuses_all: query.statuses_all,
-				statuses_published: query.statuses_published,
-				statuses_changes: query.statuses_changes,
-				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-				countryCode: query.countryCode,
-				createType: query.createType,
-				dateFromTo: {
-					dateFrom: query.lastUpdatedAtFrom,
-					dateTo: query.lastUpdatedAtTo
-				}
-			})
-		)
-
 		if (query.salonState === 'active') {
 			setTabKey('active')
+			dispatch(
+				initialize(FORM.SALONS_FILTER_ACITVE, {
+					search: query.search,
+					statuses_all: query.statuses_all,
+					statuses_published: query.statuses_published,
+					statuses_changes: query.statuses_changes,
+					categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+					countryCode: query.countryCode,
+					createType: query.createType,
+					dateFromTo: {
+						dateFrom: query.lastUpdatedAtFrom,
+						dateTo: query.lastUpdatedAtTo
+					}
+				})
+			)
 		} else if (query.salonState === 'deleted') {
 			setTabKey('deleted')
+			dispatch(
+				initialize(FORM.SALONS_FILTER_DELETED, {
+					search: query.search,
+					categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+					countryCode: query.countryCode,
+					createType: query.createType,
+					dateFromTo: {
+						dateFrom: query.lastUpdatedAtFrom,
+						dateTo: query.lastUpdatedAtTo
+					}
+				})
+			)
 		}
 
 		dispatch(
@@ -160,7 +172,7 @@ const SalonsPage = () => {
 		setQuery(newQuery)
 	}
 
-	const handleSubmit = (values: ISalonsFilter) => {
+	const handleSubmit = (values: ISalonsFilterActive & ISalonsFilterDeleted) => {
 		const { dateFromTo, ...restValues } = values
 		const newQuery = {
 			...query,
@@ -209,7 +221,21 @@ const SalonsPage = () => {
 	const onTabChange = (selectedTabKey: string) => {
 		dispatch(emptySalons())
 		setTabKey(selectedTabKey as TabKeys)
-		setQuery({ ...query, salonState: selectedTabKey })
+		setQuery({
+			search: null,
+			categoryFirstLevelIDs: null,
+			statuses_all: false,
+			statuses_published: null,
+			statuses_changes: null,
+			limit: null,
+			page: 1,
+			order: 'createdAt:DESC',
+			countryCode: null,
+			createType: null,
+			lastUpdatedAtFrom: null,
+			lastUpdatedAtTo: null,
+			salonState: selectedTabKey
+		})
 	}
 
 	// define columns for both tables - active and deleted
@@ -325,6 +351,7 @@ const SalonsPage = () => {
 
 	const getTabContent = (selectedTabKey: 'active' | 'deleted') => {
 		let columns: Columns = []
+		let filters: React.ReactNode = null
 
 		if (selectedTabKey === 'active') {
 			columns = [
@@ -338,6 +365,7 @@ const SalonsPage = () => {
 				tableColumns.lastUpdatedAt(),
 				tableColumns.createdAt()
 			]
+			filters = <SalonsFilterActive onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
 		} else if (selectedTabKey === 'deleted') {
 			columns = [
 				tableColumns.name({ width: '20%' }),
@@ -347,6 +375,7 @@ const SalonsPage = () => {
 				tableColumns.createType({ width: '16%' }),
 				tableColumns.createdAt({ width: '16%' })
 			]
+			filters = <SalonsFilterDeleted onSubmit={handleSubmit} />
 		}
 
 		return (
@@ -354,7 +383,7 @@ const SalonsPage = () => {
 				<Col span={24}>
 					<Spin spinning={salons?.isLoading}>
 						<div className='content-body'>
-							<SalonsFilter onSubmit={handleSubmit} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
+							{filters}
 							<CustomTable
 								className='table-fixed'
 								onChange={onChangeTable}
@@ -401,7 +430,7 @@ const SalonsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} tabsContent={tabContent} />
+			<TabsComponent className={'box-tab'} activeKey={tabKey} onChange={onTabChange} tabsContent={tabContent} destroyInactiveTabPane />
 			<Modal
 				className='rounded-fields'
 				title={t('loc:Importovať salóny')}

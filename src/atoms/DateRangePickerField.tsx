@@ -40,6 +40,7 @@ const DateRangePickerField = (props: Props) => {
 		disableFuture,
 		disablePast,
 		disabledDate,
+		disabledTime,
 		itemRef,
 		required,
 		meta,
@@ -58,6 +59,8 @@ const DateRangePickerField = (props: Props) => {
 			input.onFocus(e)
 		}
 	}
+
+	const now = dayjs()
 
 	const value: any = []
 	forEach(input?.value, (val) => {
@@ -91,7 +94,6 @@ const DateRangePickerField = (props: Props) => {
 
 	const disabledDateWrap = useCallback(
 		(currentDate: Dayjs) => {
-			const now = dayjs()
 			let disable = false
 			if (disabledDate) {
 				disable = disabledDate(currentDate)
@@ -104,8 +106,37 @@ const DateRangePickerField = (props: Props) => {
 			// TODO: validacia na vsetko isBefore datumu ktory bol prvy zvoleny TP-2111
 			return disable
 		},
-		[disableFuture, disablePast, disabledDate, showTime]
+		[disableFuture, disablePast, disabledDate, showTime, now]
 	)
+
+	const range = (start: number, end: number) => {
+		const result = []
+		// eslint-disable-next-line no-plusplus
+		for (let i = start; i < end; i++) {
+			result.push(i)
+		}
+		return result
+	}
+
+	const disabledTimeWrap: RangePickerProps['disabledTime'] = (_, type): any => {
+		let timeDisabled
+		if (disabledTime) {
+			timeDisabled = disabledTime(_, type)
+		} else if (disableFuture) {
+			if (type === 'start') {
+				timeDisabled = {
+					disabledHours: () => range(0, 60).splice(4, 20),
+					disabledMinutes: () => range(30, 60)
+				}
+			} else {
+				timeDisabled = {
+					disabledHours: () => range(0, 60).splice(20, 4),
+					disabledMinutes: () => range(0, 31)
+				}
+			}
+		}
+		return timeDisabled
+	}
 
 	return (
 		<Form.Item
@@ -132,6 +163,7 @@ const DateRangePickerField = (props: Props) => {
 					separator={separator || <SeparatorIcon />}
 					open={open}
 					disabledDate={disabledDateWrap}
+					disabledTime={disabledTimeWrap}
 					dropdownClassName={dropdownClassName}
 					renderExtraFooter={renderExtraFooter}
 					getPopupContainer={getPopupContainer || ((node) => node)}

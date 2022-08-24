@@ -331,8 +331,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				payByCard: !!data.payByCard,
 				payByCash: !!data.payByCash,
 				otherPaymentMethods: data.otherPaymentMethods,
-				companyContactPerson: data.companyContactPerson,
-				companyInfo: data.companyInfo,
+				// TODO: nezabudnut odkomentovat
+				// companyContactPerson: data.companyContactPerson,
+				// companyInfo: data.companyInfo,
 				cosmeticIDs: data.cosmeticIDs,
 				languageIDs: data.languageIDs
 			}

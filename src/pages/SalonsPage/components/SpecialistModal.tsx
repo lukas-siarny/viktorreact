@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Modal, Result, Select, Spin } from 'antd'
+import { Empty, Modal, Select, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
@@ -78,8 +78,8 @@ const SpecialistModal = (props: Props) => {
 	const specialistContent = () => {
 		if (view === 'empty') {
 			return (
-				<div className={'empty'}>
-					<Result status='500' subTitle={<span className={'not-found-msg mt-4'}>{t('loc:Ľutujeme, momentálne nie sú k dispozící žiadni špecialisti.')}</span>} />
+				<div className={'w-full justify-center px-4'}>
+					<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t('loc:Ľutujeme, momentálne nie sú k dispozící žiadni špecialisti.')} />
 				</div>
 			)
 		}

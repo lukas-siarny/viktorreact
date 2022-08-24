@@ -1701,14 +1701,18 @@ span.ant-tag .title
 		display: inline-blcok
 		white-space: nowrap
 		overflow: hidden
-		margin-left: 60px
-		margin-right: 60px
+		margin-left: 45px
+		margin-right: 45px
 		text-align: center
+		width: 100%
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
 
 	&:hover,
 	&:focus-visible,
 	&.is-active
-		width: 300px
+		width: 350px
 
 .noti-specialist-modal
 	.noti-specialist-modal-content
@@ -1783,16 +1787,3 @@ span.ant-tag .title
 
 			.not-found-msg
 				color: $textColor-notino-grayDark
-
-			.empty
-				.ant-result
-					padding: 16px
-					.ant-result-icon
-						width: 130px
-						height: 130px
-						position: relative
-						svg
-							transform: scale(0.5)
-							position: absolute
-							top: -80px
-							left: -50%

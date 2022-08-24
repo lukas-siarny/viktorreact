@@ -5,6 +5,7 @@ import { Alert, Button, Modal, Row, Spin, Tooltip, notification } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
+import { BooleanParam, useQueryParams } from 'use-query-params'
 import cx from 'classnames'
 
 // components
@@ -61,6 +62,11 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
 
+enum TAB_KEYS {
+	SALON_DETAIL = 'SALON_DETAIL',
+	SALON_HISTORY = 'SALON_HISTORY'
+}
+
 const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -71,7 +77,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
-	const [tabKey, setTabKey] = useState<string>('salon_detail')
+	const [tabKey, setTabKey] = useState<string>(TAB_KEYS.SALON_DETAIL)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
@@ -100,6 +106,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
+
+	const [query, setQuery] = useQueryParams({
+		history: BooleanParam
+	})
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -290,6 +300,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
+	// change tab based on query
+	useEffect(() => {
+		if (query.history) {
+			setTabKey(TAB_KEYS.SALON_HISTORY)
+		}
+	}, [query.history])
+
 	// init forms
 	useEffect(() => {
 		initData(salon.data)
@@ -360,7 +377,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const breadcrumbDetailItem = salonExists
 		? {
-				name: t('loc:Detail salónu'),
+				name: tabKey === TAB_KEYS.SALON_DETAIL ? t('loc:Detail salónu') : t('loc:História salónu'),
 				titleName: get(salon, 'data.name')
 		  }
 		: {
@@ -765,107 +782,105 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const onTabChange = (selectedTabKey: string) => {
+		// set query for history tab
+		const newQuery = {
+			...query,
+			history: selectedTabKey === TAB_KEYS.SALON_HISTORY
+		}
+		setQuery(newQuery)
 		setTabKey(selectedTabKey)
 	}
+
+	const salonForm = (
+		<Spin spinning={isLoading}>
+			<div className='content-body mt-2'>
+				{renderContentHeader()}
+				{declinedSalon && declinedSalonMessage}
+				{infoMessage}
+				<SalonForm
+					onSubmit={handleSubmit}
+					salonID={salonID}
+					disabledForm={deletedSalon}
+					deletedSalon={deletedSalon}
+					pendingPublication={!!pendingPublication}
+					isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
+					noteModalControlButtons={
+						salonExists && (
+							<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
+								{salon?.data?.openingHoursNote ? (
+									<>
+										<div className='w-full'>
+											<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
+											<p className='mb-2'>
+												{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
+												{' - '}
+												{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
+											</p>
+											<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
+										</div>
+										<Button
+											type={'primary'}
+											block
+											size={'middle'}
+											className={'noti-btn m-regular w-12/25 xl:w-1/3'}
+											onClick={() => setVisible(true)}
+											disabled={deletedSalon}
+										>
+											{STRINGS(t).edit(t('loc:poznámku'))}
+										</Button>
+										<DeleteButton
+											className={'ml-2 w-12/25 xl:w-1/3'}
+											getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+											onConfirm={deleteOpenHoursNote}
+											entityName={t('loc:poznámku')}
+											disabled={deletedSalon}
+										/>
+									</>
+								) : (
+									<Button type={'primary'} block size={'middle'} className={'noti-btn m-regular w-1/3'} onClick={() => setVisible(true)} disabled={deletedSalon}>
+										{STRINGS(t).addRecord(t('loc:poznámku'))}
+									</Button>
+								)}
+							</Row>
+						)
+					}
+				/>
+				{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
+				<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
+			</div>
+		</Spin>
+	)
 
 	return (
 		<>
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<TabsComponent
-				className={'box-tab'}
-				activeKey={tabKey}
-				onChange={onTabChange}
-				tabsContent={[
-					{
-						tabKey: 'salon_detail',
-						tab: <>{t('loc:Detail salónu')}</>,
-						tabPaneContent: (
-							<Spin spinning={isLoading}>
+			{isAdmin ? (
+				<TabsComponent
+					className={'box-tab'}
+					activeKey={tabKey}
+					onChange={onTabChange}
+					tabsContent={[
+						{
+							tabKey: TAB_KEYS.SALON_DETAIL,
+							tab: <>{t('loc:Detail salónu')}</>,
+							tabPaneContent: salonForm
+						},
+						{
+							tabKey: TAB_KEYS.SALON_HISTORY,
+							tab: <>{t('loc:História salónu')}</>,
+							tabPaneContent: (
 								<div className='content-body mt-2'>
-									{renderContentHeader()}
-									{declinedSalon && declinedSalonMessage}
-									{infoMessage}
-									<SalonForm
-										onSubmit={handleSubmit}
-										salonID={salonID}
-										disabledForm={deletedSalon}
-										deletedSalon={deletedSalon}
-										pendingPublication={!!pendingPublication}
-										isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
-										noteModalControlButtons={
-											salonExists && (
-												<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
-													{salon?.data?.openingHoursNote ? (
-														<>
-															<div className='w-full'>
-																<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
-																<p className='mb-2'>
-																	{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
-																	{' - '}
-																	{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
-																</p>
-																<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
-															</div>
-															<Button
-																type={'primary'}
-																block
-																size={'middle'}
-																className={'noti-btn m-regular w-12/25 xl:w-1/3'}
-																onClick={() => setVisible(true)}
-																disabled={deletedSalon}
-															>
-																{STRINGS(t).edit(t('loc:poznámku'))}
-															</Button>
-															<DeleteButton
-																className={'ml-2 w-12/25 xl:w-1/3'}
-																getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-																onConfirm={deleteOpenHoursNote}
-																entityName={t('loc:poznámku')}
-																disabled={deletedSalon}
-															/>
-														</>
-													) : (
-														<Button
-															type={'primary'}
-															block
-															size={'middle'}
-															className={'noti-btn m-regular w-1/3'}
-															onClick={() => setVisible(true)}
-															disabled={deletedSalon}
-														>
-															{STRINGS(t).addRecord(t('loc:poznámku'))}
-														</Button>
-													)}
-												</Row>
-											)
-										}
-									/>
-									{salonExists && (
-										<OpenHoursNoteModal
-											visible={visible}
-											salonID={salonID}
-											openingHoursNote={salon?.data?.openingHoursNote}
-											onClose={onOpenHoursNoteModalClose}
-										/>
-									)}
-									<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
+									<SalonHistory salonID={salonID} />
 								</div>
-							</Spin>
-						)
-					},
-					{
-						tabKey: 'salon_history',
-						tab: <>{t('loc:História salónu')}</>,
-						tabPaneContent: (
-							<div className='content-body mt-2'>
-								<SalonHistory salonID={salonID} />
-							</div>
-						)
-					}
-				]}
-			/>
+							)
+						}
+					]}
+				/>
+			) : (
+				salonForm
+			)}
 			<Modal
 				key={`${modalConfig.visible}`}
 				title={modalConfig.title}

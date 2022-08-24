@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Row, Pagination, Spin, List, Divider } from 'antd'
 import cx from 'classnames'
 import { NumberParam, useQueryParams, withDefault, StringParam } from 'use-query-params'
+import { isEmpty } from 'lodash'
 
 // components
 import { initialize } from 'redux-form'
@@ -56,8 +57,7 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
 
 	const fetchData = async () => {
-		const { data } = await dispatch(getSalonHistory({ dateFrom: query.dateFrom, dateTo: query.dateTo, salonID, page: query.page, limit: query.limit }))
-		console.log(data?.salonHistory)
+		dispatch(getSalonHistory({ dateFrom: query.dateFrom, dateTo: query.dateTo, salonID, page: query.page, limit: query.limit }))
 		dispatch(
 			initialize(FORM.SALON_HISTORY_FILTER, {
 				dateFromTo: {
@@ -84,7 +84,7 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 		return (
 			<>
 				{Object.keys(values)?.map((key: string) => {
-					if (typeof values?.[key] === 'object') {
+					if (typeof values?.[key] === 'object' && key !== 'fileID') {
 						return <CompareComponent valueKey={key} oldValue={JSON.stringify(oldValues?.[key])} newValue={JSON.stringify(newValues?.[key])} />
 					}
 					return <CompareComponent valueKey={key} oldValue={oldValues?.[key]} newValue={newValues?.[key]} />
@@ -112,37 +112,6 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 		setQuery(newQuery)
 	}
 
-	/*
-	<Timeline mode={'left'}>
-					{salonHistory.data?.salonHistory.map((history) => (
-						<Timeline.Item
-							dot={setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
-							label={
-								<>
-									<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>{' '}
-									{renderValues(history.oldValue, history.operation as SALON_HISTORY_OPERATIONS, true)}
-								</>
-							}
-						>
-							<div className={'flex items-center'}>
-								<h4
-									className={cx('m-0 p-0 history-text-action', {
-										warning: history.operation === SALON_HISTORY_OPERATIONS.UPDATE,
-										danger: history.operation === SALON_HISTORY_OPERATIONS.DELETE,
-										info: history.operation === SALON_HISTORY_OPERATIONS.RESTORE,
-										success: history.operation === SALON_HISTORY_OPERATIONS.INSERT
-									})}
-								>
-									{history.operation}
-								</h4>{' '}
-								<div className={'ml-2 font-bold'}>{history.userEmail}</div>
-							</div>
-							{renderValues(history.newValue, history.operation as SALON_HISTORY_OPERATIONS)}
-						</Timeline.Item>
-					))}
-				</Timeline>
-	*/
-
 	return (
 		<>
 			<div className={'content-header block'}>
@@ -155,9 +124,7 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 							<div className={'w-full'}>
 								<Divider className={'mb-1 mt-1'}>
 									<div className={'flex items-center justify-center'}>
-										<div>
-											<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
-										</div>
+										<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
 										{setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
 										<div className={'flex items-center'}>
 											<h4
@@ -190,7 +157,7 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 							onChange={onChangePagination}
 							total={salonHistory.data?.pagination.totalCount}
 							showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-							pageSize={salonHistory.data?.pagination.limit}
+							pageSize={salonHistory.data?.pagination.limit || 0}
 							current={salonHistory.data?.pagination.page}
 							showSizeChanger
 							pageSizeOptions={[25, 50, 100, 1000]}

@@ -6,7 +6,6 @@ import { NumberParam, useQueryParams, withDefault, StringParam } from 'use-query
 
 // components
 import { initialize } from 'redux-form'
-import i18next from 'i18next'
 import dayjs from 'dayjs'
 import SalonHistoryFilter, { ISalonHistoryFilter } from './SalonHistoryFilter'
 import CompareComponent from '../../../components/CompareComponent'
@@ -27,7 +26,6 @@ import { ReactComponent as CheckIcon } from '../../../assets/icons/check-12.svg'
 import { ReactComponent as ResetIcon } from '../../../assets/icons/reset-icon.svg'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
-import { ValueAndUnit } from './salonVersionsUtils'
 
 const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => {
 	switch (operation) {
@@ -72,6 +70,7 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 
 	useEffect(() => {
 		fetchData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo])
 
 	const renderValues = (oldValues: any, newValues: any) => {

@@ -235,7 +235,7 @@ const SalonForm: FC<Props> = (props) => {
 								required
 								size={'large'}
 								optionRender={optionRenderSalonSearch}
-								allowClear={true}
+								allowClear
 								hasExtra
 								labelInValue
 								onSearch={searchSalons}

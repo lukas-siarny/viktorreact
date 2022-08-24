@@ -180,7 +180,6 @@ export enum TOKEN_AUDIENCE {
 }
 
 export enum PAGE {
-	SALON = 'SALON',
 	SALONS = 'SALONS',
 	ENUMERATIONS = 'ENUMERATIONS',
 	CATEGORIES = 'CATEGORIES',
@@ -310,6 +309,7 @@ export enum SALON_FILTER_STATES {
 	NOT_DELETED = 'NOT_DELETED',
 	PENDING_PUBLICATION = 'PENDING_PUBLICATION',
 	DECLINED = 'DECLINED',
+	PREMIUM = 'PREMIUM',
 	ALL = 'ALL'
 }
 
@@ -545,14 +545,13 @@ export const SALON_ROLES_PERMISSIONS = () => [
 	}
 ]
 
-const getSalonFilterPathByStatus = (filterState: SALON_FILTER_STATES) => `${i18next.t('paths:salons')}?statuses_published=${filterState}`
-
-export const FILTER_PATHS = {
+export const FILTER_PATHS = () => ({
 	SALONS: {
-		[SALON_FILTER_STATES.PUBLISHED]: getSalonFilterPathByStatus(SALON_FILTER_STATES.PUBLISHED),
-		[SALON_FILTER_STATES.NOT_PUBLISHED]: getSalonFilterPathByStatus(SALON_FILTER_STATES.NOT_PUBLISHED),
-		[SALON_FILTER_STATES.DECLINED]: getSalonFilterPathByStatus(SALON_FILTER_STATES.DECLINED),
-		[SALON_FILTER_STATES.PENDING_PUBLICATION]: getSalonFilterPathByStatus(SALON_FILTER_STATES.PENDING_PUBLICATION),
-		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.BASIC}`
+		[SALON_FILTER_STATES.PUBLISHED]: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
+		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
+		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
+		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.BASIC}`,
+		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
 	}
-}
+})

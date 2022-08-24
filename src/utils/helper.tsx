@@ -756,13 +756,13 @@ export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
 		case SALON_STATES.PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (
-				<Tag icon={<CheckIcon12 />} className={'noti-tag success'}>
+				<Tag icon={<CheckIcon12 />} className={'noti-tag bg-status-published'}>
 					{i18next.t('loc:Publikovaný')}
 				</Tag>
 			)
 		default:
 			return (
-				<Tag icon={<CloseIcon12 />} className={'noti-tag'}>
+				<Tag icon={<CloseIcon12 />} className={'noti-tag bg-status-notPublished'}>
 					{i18next.t('loc:Nepublikovaný')}
 				</Tag>
 			)
@@ -798,14 +798,14 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
 		case SALON_STATES.NOT_PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_PENDING:
 			return (
-				<Tag icon={<ClockIcon12 />} className={'noti-tag warning'}>
+				<Tag icon={<ClockIcon12 />} className={'noti-tag bg-status-pending'}>
 					{i18next.t('loc:Na schválenie')}
 				</Tag>
 			)
 		case SALON_STATES.NOT_PUBLISHED_DECLINED:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (
-				<Tag icon={<CloseIcon12 />} className={'noti-tag danger'}>
+				<Tag icon={<CloseIcon12 />} className={'noti-tag bg-status-declined'}>
 					{i18next.t('loc:Zamietnuté')}
 				</Tag>
 			)

@@ -82,8 +82,14 @@ const SalonsFilter = (props: Props) => {
 
 	const publishedOptions = useMemo(
 		() => [
-			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, icon: <CheckIcon12 />, className: 'success' },
-			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, icon: <CloseIcon12 /> }
+			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, icon: <CheckIcon12 />, className: 'bg-status-published' },
+			{
+				label: t('loc:Nepublikovaný'),
+				value: SALON_FILTER_STATES.NOT_PUBLISHED,
+				key: SALON_FILTER_STATES.NOT_PUBLISHED,
+				icon: <CloseIcon12 />,
+				className: 'bg-status-notPublished'
+			}
 		],
 		[t]
 	)
@@ -95,9 +101,9 @@ const SalonsFilter = (props: Props) => {
 				value: SALON_FILTER_STATES.PENDING_PUBLICATION,
 				key: SALON_FILTER_STATES.PENDING_PUBLICATION,
 				icon: <ClockIcon12 />,
-				className: 'warning'
+				className: 'bg-status-pending'
 			},
-			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, icon: <CloseIcon12 />, className: 'danger' }
+			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, icon: <CloseIcon12 />, className: 'bg-status-declined' }
 		],
 		[t]
 	)

@@ -1,12 +1,12 @@
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, PropsWithChildren, ReactNode, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Pagination, Spin, List, Divider } from 'antd'
+import { Divider, List, Pagination, Row, Spin } from 'antd'
 import cx from 'classnames'
-import { NumberParam, useQueryParams, withDefault, StringParam } from 'use-query-params'
-
-// components
+import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
+
+// components
 import SalonHistoryFilter, { ISalonHistoryFilter } from './SalonHistoryFilter'
 import CompareComponent from '../../../components/CompareComponent'
 
@@ -18,7 +18,7 @@ import { getSalonHistory } from '../../../reducers/salons/salonsActions'
 import { RootState } from '../../../reducers'
 
 // utils
-import { FORM, SALON_HISTORY_OPERATIONS } from '../../../utils/enums'
+import { FORM, SALON_HISTORY_OPERATIONS, TAB_KEYS } from '../../../utils/enums'
 import { formatDateByLocale } from '../../../utils/helper'
 
 // assets
@@ -42,9 +42,13 @@ const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => 
 	}
 }
 
-const SalonHistory: FC<SalonSubPageProps> = (props) => {
+type ComponentProps = {
+	tabKey: TAB_KEYS
+} & PropsWithChildren<SalonSubPageProps>
+
+const SalonHistory: FC<ComponentProps> = (props) => {
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, tabKey } = props
 	const now = dayjs()
 
 	const [query, setQuery] = useQueryParams({
@@ -67,6 +71,14 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 			})
 		)
 	}
+
+	useEffect(() => {
+		//  fetch data when click on history tab
+		if (tabKey === TAB_KEYS.SALON_HISTORY) {
+			fetchData()
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [tabKey])
 
 	useEffect(() => {
 		fetchData()

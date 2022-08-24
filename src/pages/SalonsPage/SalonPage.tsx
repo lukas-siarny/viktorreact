@@ -34,7 +34,8 @@ import {
 	PERMISSION,
 	SALON_PERMISSION,
 	SALON_STATES,
-	STRINGS
+	STRINGS,
+	TAB_KEYS
 } from '../../utils/enums'
 
 // reducers
@@ -69,11 +70,6 @@ const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOT
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
 
-enum TAB_KEYS {
-	SALON_DETAIL = 'SALON_DETAIL',
-	SALON_HISTORY = 'SALON_HISTORY'
-}
-
 const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -84,7 +80,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const [visible, setVisible] = useState<boolean>(false)
-	const [tabKey, setTabKey] = useState<string>(TAB_KEYS.SALON_DETAIL)
+	const [tabKey, setTabKey] = useState<TAB_KEYS>(TAB_KEYS.SALON_DETAIL)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 	const [suggestionsModalVisible, setSuggestionsModalVisible] = useState(false)
 
@@ -731,7 +727,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			history: selectedTabKey === TAB_KEYS.SALON_HISTORY
 		}
 		setQuery(newQuery)
-		setTabKey(selectedTabKey)
+		setTabKey(selectedTabKey as TAB_KEYS)
 	}
 
 	const salonForm = (
@@ -819,7 +815,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 							tab: <>{t('loc:História salónu')}</>,
 							tabPaneContent: (
 								<div className='content-body mt-2'>
-									<SalonHistory salonID={salonID} />
+									<SalonHistory salonID={salonID} tabKey={tabKey} />
 								</div>
 							)
 						}

@@ -223,7 +223,7 @@ const SalonsFilterActive = (props: Props) => {
 								<Field
 									component={SelectField}
 									name={'createType'}
-									placeholder={t('loc:Úroveň salónu')}
+									placeholder={t('loc:Typ salónu')}
 									className={'statuses-filter-select'}
 									allowClear
 									size={'large'}

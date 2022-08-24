@@ -277,7 +277,7 @@ const SalonsPage = () => {
 				...props
 			}),
 			createType: (props) => ({
-				title: t('loc:Úroveň salónu'),
+				title: t('loc:Typ salónu'),
 				dataIndex: 'createType',
 				key: 'createType',
 				ellipsis: true,

@@ -12,7 +12,10 @@
   "scripts": {
     "start": "cross-env npm-run-all -p start-watch translate-watch build:tailwind",
     "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
-    "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true  npm-run-all -p build:tailwind rebuild:sass",
+    "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true npm-run-all -p build:tailwind rebuild:sass",
+	"copy-modules": "node scripts/postBuild.js",
+    "copy-build": "node scripts/copyErrorBuild.js",
+    "postbuild": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true npm run copy-modules && npm --prefix ./error_503 run build && npm run copy-build",
     "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired build",
     "lint": "eslint src --color --ext .js --ext .ts --ext .jsx --ext .tsx",
     "release": "npm run build && npm run sentry",
@@ -96,11 +99,13 @@
     "regenerator-runtime": "0.13.9",
     "sass": "1.50.1",
     "slugify": "1.6.5",
+    "symlink-dir": "5.0.1",
     "tailwindcss": "2.2.19",
     "tailwindcss-export-config": "2.3.0",
     "use-query-params": "1.2.3"
   },
   "devDependencies": {
+    "@goodrequest/antd-form-fields": "0.0.1",
     "@goodrequest/eslint-config-typescript-react": "1.1.1",
     "@storybook/addon-actions": "6.4.22",
     "@storybook/addon-essentials": "6.4.22",
@@ -127,7 +132,6 @@
     "@types/redux-form": "8.3.3",
     "@types/redux-logger": "3.0.9",
     "@types/sortablejs": "1.10.7",
-    "@goodrequest/antd-form-fields": "0.0.1",
     "cypress": "9.6.0",
     "cypress-file-upload": "5.0.8",
     "cypress-localstorage-commands": "1.7.0",

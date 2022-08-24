@@ -14,6 +14,8 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import SalonsImportForm from './components/SalonsImportForm'
 import UploadSuccess from './components/UploadSuccess'
 import TabsComponent from '../../components/TabsComponent'
+import SalonsFilterActive, { ISalonsFilterActive } from './components/SalonsFilterActive'
+import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/SalonsFilterDeleted'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
@@ -41,8 +43,6 @@ import { IBreadcrumbs, IDataUploadForm, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import SalonsFilterActive, { ISalonsFilterActive } from './components/SalonsFilterActive'
-import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/SalonsFilterDeleted'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 

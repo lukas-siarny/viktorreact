@@ -59,7 +59,8 @@ export enum FILTER_ENTITY {
 	EMPLOYEE = 'EMPLOYEE',
 	SALON = 'SALON',
 	SERVICE = 'SERVICE',
-	USER = 'USER'
+	USER = 'USER',
+	BASIC_SALON = 'BASIC_SALON'
 }
 
 export enum TABS_TYPE {
@@ -182,10 +183,9 @@ export enum TOKEN_AUDIENCE {
 	INVITATION = 'INVITATION'
 }
 
-export enum INTERVALS {
-	HOURS_24 = 'HOURS_24',
-	HOURS_48 = 'HOURS_48',
-	WEEK_1 = 'WEEK_1'
+export enum TAB_KEYS {
+	SALON_DETAIL = 'SALON_DETAIL',
+	SALON_HISTORY = 'SALON_HISTORY'
 }
 
 export enum PAGE {

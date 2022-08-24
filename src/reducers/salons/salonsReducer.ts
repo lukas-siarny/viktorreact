@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { SALON, SALONS, SALON_HISTORY } from './salonsTypes'
-import { ISalonHistoryPayload, ISalonPayload, ISalonsActions, ISalonsPayload } from './salonsActions'
+import { BASIC_SALON, BASIC_SALONS, SALON, SALONS, SUGGESTED_SALONS, SALON_HISTORY } from './salonsTypes'
+import { IBasicSalonPayload, IBasicSalonsPayload, ISalonPayload, ISalonsActions, ISalonsPayload, ISuggestedSalonsPayload, ISalonHistoryPayload } from './salonsActions'
 
 export const initState = {
 	salons: {
@@ -15,6 +15,21 @@ export const initState = {
 		isLoading: false,
 		isFailure: false
 	} as ISalonPayload & ILoadingAndFailure,
+	suggestedSalons: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ISuggestedSalonsPayload & ILoadingAndFailure,
+	basicSalons: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IBasicSalonsPayload & ILoadingAndFailure,
+	basicSalon: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as IBasicSalonPayload & ILoadingAndFailure,
 	salonHistory: {
 		data: null,
 		isLoading: false,
@@ -72,6 +87,81 @@ export default (state = initState, action: ISalonsActions) => {
 				...state,
 				salon: {
 					...initState.salon,
+					data: action.payload.data
+				}
+			}
+		// Suggested salons
+		case SUGGESTED_SALONS.SUGGESTED_SALONS_LOAD_START:
+			return {
+				...state,
+				suggestedSalons: {
+					...state.suggestedSalons,
+					isLoading: true
+				}
+			}
+		case SUGGESTED_SALONS.SUGGESTED_SALONS_LOAD_FAIL:
+			return {
+				...state,
+				suggestedSalons: {
+					...initState.suggestedSalons,
+					isFailure: true
+				}
+			}
+		case SUGGESTED_SALONS.SUGGESTED_SALONS_LOAD_DONE:
+			return {
+				...state,
+				suggestedSalons: {
+					...initState.suggestedSalons,
+					data: action.payload.data
+				}
+			}
+		// Basic salons
+		case BASIC_SALONS.BASIC_SALONS_LOAD_START:
+			return {
+				...state,
+				basicSalons: {
+					...state.basicSalons,
+					isLoading: true
+				}
+			}
+		case BASIC_SALONS.BASIC_SALONS_LOAD_FAIL:
+			return {
+				...state,
+				basicSalons: {
+					...initState.basicSalons,
+					isFailure: true
+				}
+			}
+		case BASIC_SALONS.BASIC_SALONS_LOAD_DONE:
+			return {
+				...state,
+				basicSalons: {
+					...initState.basicSalons,
+					data: action.payload.data
+				}
+			}
+		// Basic salon
+		case BASIC_SALON.BASIC_SALON_LOAD_START:
+			return {
+				...state,
+				basicSalon: {
+					...state.basicSalon,
+					isLoading: true
+				}
+			}
+		case BASIC_SALON.BASIC_SALON_LOAD_FAIL:
+			return {
+				...state,
+				basicSalon: {
+					...initState.basicSalon,
+					isFailure: true
+				}
+			}
+		case BASIC_SALON.BASIC_SALON_LOAD_DONE:
+			return {
+				...state,
+				basicSalon: {
+					...initState.basicSalon,
 					data: action.payload.data
 				}
 			}

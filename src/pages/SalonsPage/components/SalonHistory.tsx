@@ -1,11 +1,12 @@
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, PropsWithChildren, ReactNode, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Row, Pagination, Spin, List, Divider } from 'antd'
+import { Divider, List, Pagination, Row, Spin } from 'antd'
 import cx from 'classnames'
-import { NumberParam, useQueryParams, withDefault, StringParam } from 'use-query-params'
+import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
+import { initialize } from 'redux-form'
+import dayjs from 'dayjs'
 
 // components
-import { initialize } from 'redux-form'
 import SalonHistoryFilter, { ISalonHistoryFilter } from './SalonHistoryFilter'
 import CompareComponent from '../../../components/CompareComponent'
 
@@ -17,7 +18,7 @@ import { getSalonHistory } from '../../../reducers/salons/salonsActions'
 import { RootState } from '../../../reducers'
 
 // utils
-import { FORM, INTERVALS, SALON_HISTORY_OPERATIONS } from '../../../utils/enums'
+import { FORM, SALON_HISTORY_OPERATIONS, TAB_KEYS } from '../../../utils/enums'
 import { formatDateByLocale } from '../../../utils/helper'
 
 // assets
@@ -41,37 +42,48 @@ const setIcon = (operation: SALON_HISTORY_OPERATIONS): undefined | ReactNode => 
 	}
 }
 
-const SalonHistory: FC<SalonSubPageProps> = (props) => {
+type ComponentProps = {
+	tabKey: TAB_KEYS
+} & PropsWithChildren<SalonSubPageProps>
+
+const SalonHistory: FC<ComponentProps> = (props) => {
 	const dispatch = useDispatch()
-	const { salonID } = props
+	const { salonID, tabKey } = props
+	const now = dayjs()
 
 	const [query, setQuery] = useQueryParams({
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		dateFrom: withDefault(StringParam, ''),
-		dateTo: withDefault(StringParam, ''),
-		interval: withDefault(StringParam, INTERVALS.HOURS_48)
+		dateFrom: withDefault(StringParam, now.subtract(1, 'week').toISOString()),
+		dateTo: withDefault(StringParam, now.toISOString())
 	})
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)
 
 	const fetchData = async () => {
-		const { data } = await dispatch(getSalonHistory({ dateFrom: query.dateFrom, dateTo: query.dateTo, salonID, page: query.page, limit: query.limit }))
-		console.log(data?.salonHistory)
+		dispatch(getSalonHistory({ dateFrom: query.dateFrom, dateTo: query.dateTo, salonID, page: query.page, limit: query.limit }))
 		dispatch(
 			initialize(FORM.SALON_HISTORY_FILTER, {
 				dateFromTo: {
 					dateFrom: query.dateFrom,
 					dateTo: query.dateTo
-				},
-				interval: query.interval
+				}
 			})
 		)
 	}
 
 	useEffect(() => {
+		//  fetch data when click on history tab
+		if (tabKey === TAB_KEYS.SALON_HISTORY) {
+			fetchData()
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [tabKey])
+
+	useEffect(() => {
 		fetchData()
-	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo, query.interval])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo])
 
 	const renderValues = (oldValues: any, newValues: any) => {
 		let values: any = {}
@@ -84,7 +96,7 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 		return (
 			<>
 				{Object.keys(values)?.map((key: string) => {
-					if (typeof values?.[key] === 'object') {
+					if (typeof values?.[key] === 'object' && key !== 'fileID') {
 						return <CompareComponent valueKey={key} oldValue={JSON.stringify(oldValues?.[key])} newValue={JSON.stringify(newValues?.[key])} />
 					}
 					return <CompareComponent valueKey={key} oldValue={oldValues?.[key]} newValue={newValues?.[key]} />
@@ -106,42 +118,10 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 		const newQuery = {
 			...query,
 			...values.dateFromTo,
-			interval: values.interval,
 			page: 1
 		}
 		setQuery(newQuery)
 	}
-
-	/*
-	<Timeline mode={'left'}>
-					{salonHistory.data?.salonHistory.map((history) => (
-						<Timeline.Item
-							dot={setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
-							label={
-								<>
-									<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>{' '}
-									{renderValues(history.oldValue, history.operation as SALON_HISTORY_OPERATIONS, true)}
-								</>
-							}
-						>
-							<div className={'flex items-center'}>
-								<h4
-									className={cx('m-0 p-0 history-text-action', {
-										warning: history.operation === SALON_HISTORY_OPERATIONS.UPDATE,
-										danger: history.operation === SALON_HISTORY_OPERATIONS.DELETE,
-										info: history.operation === SALON_HISTORY_OPERATIONS.RESTORE,
-										success: history.operation === SALON_HISTORY_OPERATIONS.INSERT
-									})}
-								>
-									{history.operation}
-								</h4>{' '}
-								<div className={'ml-2 font-bold'}>{history.userEmail}</div>
-							</div>
-							{renderValues(history.newValue, history.operation as SALON_HISTORY_OPERATIONS)}
-						</Timeline.Item>
-					))}
-				</Timeline>
-	*/
 
 	return (
 		<>
@@ -155,9 +135,7 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 							<div className={'w-full'}>
 								<Divider className={'mb-1 mt-1'}>
 									<div className={'flex items-center justify-center'}>
-										<div>
-											<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
-										</div>
+										<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
 										{setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
 										<div className={'flex items-center'}>
 											<h4
@@ -190,7 +168,7 @@ const SalonHistory: FC<SalonSubPageProps> = (props) => {
 							onChange={onChangePagination}
 							total={salonHistory.data?.pagination.totalCount}
 							showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-							pageSize={salonHistory.data?.pagination.limit}
+							pageSize={salonHistory.data?.pagination.limit || 0}
 							current={salonHistory.data?.pagination.page}
 							showSizeChanger
 							pageSizeOptions={[25, 50, 100, 1000]}

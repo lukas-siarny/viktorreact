@@ -18,7 +18,7 @@ import { getSalonHistory } from '../../../reducers/salons/salonsActions'
 import { RootState } from '../../../reducers'
 
 // utils
-import { FORM, SALON_HISTORY_OPERATIONS, TAB_KEYS } from '../../../utils/enums'
+import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, TAB_KEYS } from '../../../utils/enums'
 import { formatDateByLocale } from '../../../utils/helper'
 
 // assets
@@ -133,16 +133,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 										<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
 										{setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
 										<div className={'flex items-center'}>
-											<h4
-												className={cx('m-0 p-0 history-text-action', {
-													warning: history.operation === SALON_HISTORY_OPERATIONS.UPDATE,
-													danger: history.operation === SALON_HISTORY_OPERATIONS.DELETE,
-													info: history.operation === SALON_HISTORY_OPERATIONS.RESTORE,
-													success: history.operation === SALON_HISTORY_OPERATIONS.INSERT
-												})}
-											>
-												{history.operation}
-											</h4>{' '}
+											<h4 className={`m-0 p-0 history-text-action ${SALON_HISTORY_OPERATIONS_COLORS?.[history.operation]}`}>{history.operation}</h4>{' '}
 											<div className={'ml-2 font-bold'}>{history.userEmail}</div>
 										</div>
 									</div>

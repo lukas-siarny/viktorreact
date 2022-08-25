@@ -504,6 +504,13 @@ export enum SALON_HISTORY_OPERATIONS {
 	RESTORE = 'RESTORE'
 }
 
+export enum SALON_HISTORY_OPERATIONS_COLORS {
+	INSERT = 'success',
+	UPDATE = 'warning',
+	DELETE = 'danger',
+	RESTORE = 'info'
+}
+
 export const SALON_ROLES_KEYS = Object.keys(SALON_ROLES)
 
 export const SALON_ROLES_TRANSLATIONS = () => ({

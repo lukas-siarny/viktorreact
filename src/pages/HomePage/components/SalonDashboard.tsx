@@ -17,7 +17,7 @@ const SalonDashboard: FC = (props) => {
 		<>
 			{selectedSalon?.data ? (
 				<>
-					<h3 className='mt-4'>{t('loc:Pripravujeme prehľad pre salón - {{name}}', { name: selectedSalon.data.name })}</h3>
+					<h3 className='mt-4 text-center'>{t('loc:Pripravujeme prehľad pre salón - {{name}}', { name: selectedSalon.data.name })}</h3>
 					<div className={'dashboard-image'} />
 				</>
 			) : (

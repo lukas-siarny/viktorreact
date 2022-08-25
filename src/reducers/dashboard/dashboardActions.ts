@@ -22,8 +22,10 @@ interface IGetPartnerDashboard {
 	payload: unknown
 }
 
+export type INotinoDashboard = Paths.GetApiB2BAdminNotinoDashboard.Responses.$200['counts']
+
 export interface INotinoDashboardPayload {
-	data: Paths.GetApiB2BAdminNotinoDashboard.Responses.$200['counts'] | null
+	data: INotinoDashboard | null
 }
 
 export const getNotinoDashboard = (): ThunkResult<Promise<INotinoDashboardPayload>> => async (dispatch) => {

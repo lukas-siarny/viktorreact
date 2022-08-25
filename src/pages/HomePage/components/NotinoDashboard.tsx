@@ -1,5 +1,5 @@
 import React, { FC, useMemo, useEffect } from 'react'
-import { Spin, Row, Col } from 'antd'
+import { Spin, Row, Col, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
@@ -11,9 +11,10 @@ import SalonDashboard from './SalonDashboard'
 
 // redux
 import { RootState } from '../../../reducers'
-import { getNotinoDashboard } from '../../../reducers/dashboard/dashboardActions'
+import { getNotinoDashboard, INotinoDashboard } from '../../../reducers/dashboard/dashboardActions'
 
 // assets
+import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
@@ -35,6 +36,7 @@ interface DashboardData {
 	graphData: {
 		premiumVsBasic: any[]
 		salonStates: any[]
+		noSalons?: boolean
 	}
 }
 
@@ -69,7 +71,7 @@ const doughnutOptions = (clickHandlers: any[]) => {
 
 const graphContent = (label: string, source?: any[]) => {
 	return (
-		<Col span={11} className='shadow-notino py-4 px-6 h-60'>
+		<Col xxl={11} xs={24} className='shadow-notino py-4 px-6 h-60'>
 			<div className='heading-3'>{label}</div>
 			{source && (
 				<div className='flex flex-wrap justify-between w-full'>
@@ -124,6 +126,12 @@ const NotinoDashboard: FC<Props> = () => {
 	}, [dispatch])
 
 	const dashboardData: DashboardData = useMemo(() => {
+		const emptyGraphData = {
+			premiumVsBasic: [],
+			salonStates: [],
+			noSalons: true
+		}
+
 		if (notino.data) {
 			const alertData: AlertData[] = [
 				{
@@ -167,6 +175,20 @@ const NotinoDashboard: FC<Props> = () => {
 					onClick: () => history.push(t('paths:salons')) // TODO week ago
 				}
 			]
+
+			const graphProperties = ['basicSalons', 'nonBasicSalons', 'declinedSalons', 'pendingSalons', 'unpublishedSalons']
+			let sum = 0
+
+			graphProperties.forEach((property: string) => {
+				sum += notino.data ? notino.data[property as keyof INotinoDashboard] : 0
+			})
+
+			if (sum === 0) {
+				return {
+					alertData,
+					graphData: emptyGraphData
+				}
+			}
 
 			// colors are defined in tailwind.config -> colors -> status
 			const graphData = {
@@ -214,10 +236,7 @@ const NotinoDashboard: FC<Props> = () => {
 
 		return {
 			alertData: [],
-			graphData: {
-				premiumVsBasic: [],
-				salonStates: []
-			}
+			graphData: emptyGraphData
 		} as DashboardData
 	}, [notino, t])
 
@@ -225,7 +244,7 @@ const NotinoDashboard: FC<Props> = () => {
 	return (
 		<SalonDashboard>
 			<div className='content-body medium'>
-				<Spin spinning={notino?.isLoading}>
+				<Spin spinning={notino?.isLoading || !notino.data}>
 					<div className='flex flex-wrap justify-between w-full'>
 						{dashboardData.alertData.map((item: AlertData, index: number) => (
 							<button
@@ -246,10 +265,21 @@ const NotinoDashboard: FC<Props> = () => {
 						))}
 					</div>
 
-					<Row justify={'space-between'} className='mt-8 ml-4'>
-						{graphContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic)}
-						{graphContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates)}
-					</Row>
+					{dashboardData.graphData.noSalons ? (
+						<div className='flex add-button justify-center items-center mt-16'>
+							<div className='m-auto text-center'>
+								<h1 className='text-5xl font-bold'>{t('loc:Začnite vytvorením salónu')}</h1>
+								<Button onClick={() => history.push(t('paths:salons/create'))} type='primary' htmlType='button' className={'noti-btn'} icon={<PlusIcon />}>
+									{t('loc:Pridať salón')}
+								</Button>
+							</div>
+						</div>
+					) : (
+						<Row justify={'space-between'} className='mt-8 ml-4 flex-wrap'>
+							{graphContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic)}
+							{graphContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates)}
+						</Row>
+					)}
 				</Spin>
 			</div>
 		</SalonDashboard>

@@ -5,9 +5,10 @@ import { RangePickerProps } from 'antd/es/date-picker'
 import { forEach, isEmpty } from 'lodash'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import dayjs, { Dayjs } from 'dayjs'
+import cx from 'classnames'
 import { ReactComponent as SeparatorIcon } from '../assets/icons/datepicker-separator-icon.svg'
 
-import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_INIT_FORMAT } from '../utils/enums'
+import { DEFAULT_DATE_FORMAT, DEFAULT_DATE_INIT_FORMAT, DEFAULT_DATE_WITH_TIME_FORMAT } from '../utils/enums'
 import { formFieldID } from '../utils/helper'
 
 export type Props = WrappedFieldProps &
@@ -16,17 +17,20 @@ export type Props = WrappedFieldProps &
 		disableFuture?: boolean // for disable startDate from past
 		disablePast?: boolean // for disable startDate from past
 		itemRef?: any
+		rangePickerClassName?: string
+		showTime?: boolean
 	}
 
 const { RangePicker } = DatePicker
 
 const DateRangePickerField = (props: Props) => {
 	const {
+		allowEmpty,
 		renderExtraFooter,
 		input,
 		placeholder,
 		label,
-		format = DEFAULT_DATE_FORMAT,
+		format,
 		open,
 		getPopupContainer,
 		style,
@@ -40,7 +44,13 @@ const DateRangePickerField = (props: Props) => {
 		required,
 		meta,
 		size,
-		disabled
+		disabled,
+		className,
+		ranges,
+		rangePickerClassName,
+		showTime,
+		dropdownAlign,
+		locale
 	} = props
 
 	const onFocus = (e: any) => {
@@ -59,27 +69,36 @@ const DateRangePickerField = (props: Props) => {
 	const onChange = useCallback(
 		(vals: any) => {
 			if (!isEmpty(vals)) {
-				const formattedValues = {
-					dateFrom: vals[0].format(DEFAULT_DATE_INIT_FORMAT),
-					dateTo: vals[1].format(DEFAULT_DATE_INIT_FORMAT)
+				let formattedValues
+				if (showTime) {
+					formattedValues = {
+						dateFrom: vals[0].toISOString(),
+						dateTo: vals[1].toISOString()
+					}
+				} else {
+					formattedValues = {
+						dateFrom: vals[0].format(DEFAULT_DATE_INIT_FORMAT),
+						dateTo: vals[1].format(DEFAULT_DATE_INIT_FORMAT)
+					}
 				}
 				input.onChange(formattedValues)
 			} else {
 				input.onChange(null)
 			}
 		},
-		[input]
+		[input, showTime]
 	)
 
 	const disabledDateWrap = useCallback(
 		(currentDate: Dayjs) => {
 			let disable = false
+			const now = dayjs()
 			if (disabledDate) {
 				disable = disabledDate(currentDate)
 			} else if (disableFuture) {
-				disable = currentDate && currentDate > dayjs().endOf('day')
+				disable = currentDate && currentDate > now.endOf('day')
 			} else if (disablePast) {
-				disable = currentDate && currentDate < dayjs().startOf('day')
+				disable = currentDate && currentDate < now.startOf('day')
 			}
 			// TODO: validacia na range 2 mesiace podla prveho datumu ktory bol zvoleny TP-2111
 			// TODO: validacia na vsetko isBefore datumu ktory bol prvy zvoleny TP-2111
@@ -89,14 +108,24 @@ const DateRangePickerField = (props: Props) => {
 	)
 
 	return (
-		<Form.Item style={style} label={label} required={required} help={meta?.touched && meta?.error} validateStatus={meta?.error && meta?.touched ? 'error' : undefined}>
+		<Form.Item
+			className={className}
+			style={style}
+			label={label}
+			required={required}
+			help={meta?.touched && meta?.error}
+			validateStatus={meta?.error && meta?.touched ? 'error' : undefined}
+		>
 			<div id={formFieldID(meta?.form, input?.name)}>
 				<RangePicker
 					ref={itemRef}
-					className={'noti-date-picker'}
+					allowEmpty={allowEmpty}
+					className={cx('noti-date-picker', rangePickerClassName)}
 					value={value}
+					dropdownAlign={dropdownAlign}
 					onChange={onChange}
-					format={format}
+					showTime={showTime}
+					format={format || (showTime ? DEFAULT_DATE_WITH_TIME_FORMAT : DEFAULT_DATE_FORMAT)}
 					onFocus={onFocus}
 					placeholder={placeholder}
 					suffixIcon={suffixIcon}
@@ -108,6 +137,8 @@ const DateRangePickerField = (props: Props) => {
 					getPopupContainer={getPopupContainer || ((node) => node)}
 					size={size}
 					disabled={disabled}
+					ranges={ranges}
+					locale={locale}
 				/>
 			</div>
 		</Form.Item>

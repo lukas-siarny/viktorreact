@@ -8,9 +8,8 @@ import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 import i18next from 'i18next'
 import OpeningHours from '../../../components/OpeningHours/OpeningHours'
-import AddressFields, { AddressLayout } from '../../../components/AddressFields'
+import AddressFields from '../../../components/AddressFields'
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
-import Compare from '../../../components/Compare'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -23,10 +22,10 @@ import AutocompleteField from '../../../atoms/AutocompleteField'
 
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
-import { FORM, NEW_SALON_ID, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
-import { IIsPublishedVersionSameAsDraft, ISalonForm, ISelectOptionItem } from '../../../types/interfaces'
+import { ISalonForm, ISelectOptionItem } from '../../../types/interfaces'
 
 // validate
 import validateSalonForm from './validateSalonForm'
@@ -53,11 +52,8 @@ import { ReactComponent as LanguagesIcon } from '../../../assets/icons/languages
 
 type ComponentProps = {
 	disabledForm: boolean
-	salonID?: string
 	noteModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
-	pendingPublication?: boolean
-	isPublishedVersionSameAsDraft?: IIsPublishedVersionSameAsDraft
 	loadBasicSalon: (id: string) => void
 	clearSalonForm: () => void
 	searchSalons: (search: string, page: number) => void
@@ -95,116 +91,10 @@ export const optionRenderSalonSearch = (itemData: any) => {
 
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const {
-		handleSubmit,
-		change,
-		noteModalControlButtons,
-		salonID,
-		disabledForm,
-		deletedSalon = false,
-		isPublishedVersionSameAsDraft,
-		pendingPublication,
-		loadBasicSalon,
-		clearSalonForm,
-		searchSalons,
-		showBasicSalonsSuggestions
-	} = props
+	const { handleSubmit, change, noteModalControlButtons, disabledForm, loadBasicSalon, clearSalonForm, searchSalons, showBasicSalonsSuggestions } = props
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
-
-	const aboutUsFirstPlaceholder = t('loc:Zadajte základné informácie o salóne')
-	const aboutUsFirstLabel = t('loc:O nás')
-	const aboutUsSecondPlaceholder = t('loc:Zadajte doplňujúce informácie o salóne')
-	const aboutUsSecondLabel = t('loc:Doplňujúci popis')
-
-	const aboutUsFirstFormField = (filedName: string, disabled: boolean, placeholder: string, label: string, maxLength: number) => {
-		return (
-			<Field component={TextareaField} label={label} name={filedName} size={'large'} placeholder={placeholder} disabled={disabled} maxLength={maxLength} showLettersCount />
-		)
-	}
-
-	const newSalon = salonID === NEW_SALON_ID
-
-	// comparsion is turend off at all - always visible only one field
-	const disableComparsion =
-		newSalon ||
-		deletedSalon ||
-		formValues?.state === SALON_STATES.NOT_PUBLISHED ||
-		formValues?.state === SALON_STATES.NOT_PUBLISHED_PENDING ||
-		formValues?.state === SALON_STATES.NOT_PUBLISHED_DECLINED
-
-	// both fields are visible - but both are in disabled state
-	const disabledComparsionFields = disabledForm || (!newSalon && !!pendingPublication)
-
-	const imagesFormField = (filedName: string, disabled: boolean) => (
-		<Field
-			className={'m-0'}
-			uploaderClassName={'overflow-x-auto'}
-			component={ImgUploadField}
-			name={filedName}
-			label={t('loc:Fotogaléria')}
-			signUrl={URL_UPLOAD_IMAGES}
-			multiple
-			maxCount={10}
-			category={UPLOAD_IMG_CATEGORIES.SALON}
-			disabled={disabled}
-		/>
-	)
-
-	const logoFormField = (filedName: string, disabled: boolean) => (
-		<Field
-			component={ImgUploadField}
-			name={filedName}
-			label={t('loc:Logo')}
-			signUrl={URL_UPLOAD_IMAGES}
-			multiple={false}
-			maxCount={1}
-			category={UPLOAD_IMG_CATEGORIES.SALON}
-			disabled={disabled}
-		/>
-	)
-
-	const phoneFormField = (phoneFiledName: string, disabled: boolean) => (
-		<FieldArray component={PhoneArrayField} name={phoneFiledName} props={{ disabled, requiedAtLeastOne: true }} />
-	)
-
-	const emailFormField = (filedName: string, disabled: boolean) => (
-		<Field className={'w-full'} component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={filedName} size={'large'} disabled={disabled} />
-	)
-
-	const nameFormField = (filedName: string, disabled: boolean) => (
-		<Field component={InputField} label={t('loc:Názov')} placeholder={t('loc:Zadajte názov')} name={filedName} size={'large'} disabled={disabled} required />
-	)
-
-	const addressDescriptionFormFiled = (filedName: string, disabled: boolean) => (
-		<Field
-			component={TextareaField}
-			label={t('loc:Poznámka k adrese')}
-			name={filedName}
-			size={'large'}
-			placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie vľavo"')}
-			disabled={disabled}
-			maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
-			showLettersCount
-		/>
-	)
-
-	const priceListFormField = (filedName: string, disabled: boolean) => (
-		<Field
-			className={'m-0'}
-			uploaderClassName={'overflow-x-auto'}
-			component={ImgUploadField}
-			name={filedName}
-			label={t('loc:Cenníky')}
-			signUrl={URL_UPLOAD_IMAGES}
-			multiple
-			maxCount={10}
-			category={UPLOAD_IMG_CATEGORIES.SALON_PRICELIST}
-			disabled={disabled}
-			accept={'image/jpeg,image/png,application/pdf'}
-		/>
-	)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -244,57 +134,35 @@ const SalonForm: FC<Props> = (props) => {
 								allowInfinityScroll
 							/>
 						) : (
-							<Compare
-								// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-								oldValue={formValues?.publishedSalonData?.name || null}
-								newValue={formValues?.name || null}
-								equal={isPublishedVersionSameAsDraft?.isNameEqual}
-								oldFormField={nameFormField('publishedSalonData.name', true)}
-								newFormField={nameFormField('name', disabledComparsionFields)}
-								disableComparsion={disableComparsion}
+							<Field
+								component={InputField}
+								label={t('loc:Názov')}
+								placeholder={t('loc:Zadajte názov')}
+								name={'name'}
+								size={'large'}
+								disabled={disabledForm}
+								required
 							/>
 						)}
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.aboutUsFirst || null}
-							newValue={formValues?.aboutUsFirst || null}
-							equal={isPublishedVersionSameAsDraft?.isAboutUsFirstEqual}
-							oldFormField={aboutUsFirstFormField(
-								'publishedSalonData.aboutUsFirst',
-								true,
-								aboutUsFirstPlaceholder,
-								aboutUsFirstLabel,
-								VALIDATION_MAX_LENGTH.LENGTH_1000
-							)}
-							newFormField={aboutUsFirstFormField(
-								'aboutUsFirst',
-								disabledComparsionFields,
-								aboutUsFirstPlaceholder,
-								aboutUsFirstLabel,
-								VALIDATION_MAX_LENGTH.LENGTH_1000
-							)}
-							disableComparsion={disableComparsion}
+						<Field
+							component={TextareaField}
+							label={t('loc:O nás')}
+							name={'aboutUsFirst'}
+							size={'large'}
+							placeholder={t('loc:Zadajte základné informácie o salóne')}
+							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+							showLettersCount
 						/>
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.aboutUsSecond || null}
-							newValue={formValues?.aboutUsSecond || null}
-							equal={isPublishedVersionSameAsDraft?.isAboutUsSecondEqual}
-							oldFormField={aboutUsFirstFormField(
-								'publishedSalonData.aboutUsSecond',
-								true,
-								aboutUsSecondPlaceholder,
-								aboutUsSecondLabel,
-								VALIDATION_MAX_LENGTH.LENGTH_500
-							)}
-							newFormField={aboutUsFirstFormField(
-								'aboutUsSecond',
-								disabledComparsionFields,
-								aboutUsSecondPlaceholder,
-								aboutUsSecondLabel,
-								VALIDATION_MAX_LENGTH.LENGTH_500
-							)}
-							disableComparsion={disableComparsion}
+						<Field
+							component={TextareaField}
+							label={t('loc:Doplňujúci popis')}
+							name={'aboutUsSecond'}
+							size={'large'}
+							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
+							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
+							showLettersCount
 						/>
 						<Field
 							component={SelectField}
@@ -326,23 +194,27 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							allowClear
 						/>
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.logo}
-							equal={isPublishedVersionSameAsDraft?.isLogoEqual}
-							oldFormField={logoFormField('publishedSalonData.logo', true)}
-							newFormField={logoFormField('logo', disabledComparsionFields)}
-							ellipsis
-							disableComparsion={disableComparsion}
+						<Field
+							component={ImgUploadField}
+							name={'logo'}
+							label={t('loc:Logo')}
+							signUrl={URL_UPLOAD_IMAGES}
+							multiple={false}
+							maxCount={1}
+							category={UPLOAD_IMG_CATEGORIES.SALON}
+							disableComparsion={disabledForm}
 						/>
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.gallery}
-							equal={isPublishedVersionSameAsDraft?.isGalleryEqual}
-							oldFormField={imagesFormField('publishedSalonData.gallery', true)}
-							newFormField={imagesFormField('gallery', disabledComparsionFields)}
-							ellipsis
-							disableComparsion={disableComparsion}
+						<Field
+							className={'m-0'}
+							uploaderClassName={'overflow-x-auto'}
+							component={ImgUploadField}
+							name={'gallery'}
+							label={t('loc:Fotogaléria')}
+							signUrl={URL_UPLOAD_IMAGES}
+							multiple
+							maxCount={10}
+							category={UPLOAD_IMG_CATEGORIES.SALON}
+							disableComparsion={disabledForm}
 						/>
 					</Col>
 				</Row>
@@ -353,23 +225,15 @@ const SalonForm: FC<Props> = (props) => {
 							{t('loc:Kontaktné údaje')}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.phones || []}
-							newValue={formValues?.phones || []}
-							equal={isPublishedVersionSameAsDraft?.isPhoneEqual}
-							oldFormField={phoneFormField('publishedSalonData.phones', true)}
-							newFormField={phoneFormField('phones', disabledComparsionFields)}
-							disableComparsion={disableComparsion}
-						/>
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.email || null}
-							newValue={formValues?.email || null}
-							equal={isPublishedVersionSameAsDraft?.isEmailEqual}
-							oldFormField={emailFormField('publishedSalonData.email', true)}
-							newFormField={emailFormField('email', disabledComparsionFields)}
-							disableComparsion={disableComparsion}
+						<FieldArray component={PhoneArrayField} name={'phones'} props={{ disabled: disabledForm, requiedAtLeastOne: true }} />
+						<Field
+							className={'w-full'}
+							component={InputField}
+							label={t('loc:Email')}
+							placeholder={t('loc:Zadajte email')}
+							name={'email'}
+							size={'large'}
+							disabled={disabledForm}
 						/>
 						<Field
 							component={AddressFields}
@@ -383,44 +247,18 @@ const SalonForm: FC<Props> = (props) => {
 								country: formValues?.country
 							}}
 							changeFormFieldValue={change}
-							disabled={disabledComparsionFields}
+							disabled={disabledForm}
 							name={'address'}
 						/>
-						{!isPublishedVersionSameAsDraft?.isAddressEqual && !disableComparsion && (
-							<Compare
-								// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-								oldValue={formValues?.publishedSalonData?.address}
-								equal={isPublishedVersionSameAsDraft?.isAddressEqual}
-								oldFormField={AddressLayout(
-									{
-										street: formValues?.publishedSalonData?.address?.street,
-										streetNumber: formValues?.publishedSalonData?.address?.streetNumber,
-										city: formValues?.publishedSalonData?.address?.city,
-										zipCode: formValues?.publishedSalonData?.address?.zipCode,
-										country: formValues?.publishedSalonData?.address?.countryCode
-									},
-									'p-2'
-								)}
-								newFormField={AddressLayout(
-									{
-										street: formValues?.street,
-										streetNumber: formValues?.streetNumber,
-										city: formValues?.city,
-										zipCode: formValues?.zipCode,
-										country: formValues?.country
-									},
-									'p-2'
-								)}
-							/>
-						)}
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.address?.description || null}
-							newValue={formValues?.description || null}
-							equal={isPublishedVersionSameAsDraft?.isAddressNoteEqual}
-							oldFormField={addressDescriptionFormFiled('publishedSalonData.locationNote', true)}
-							newFormField={addressDescriptionFormFiled('locationNote', disabledComparsionFields)}
-							disableComparsion={disableComparsion}
+						<Field
+							component={TextareaField}
+							label={t('loc:Poznámka k adrese')}
+							name={'locationNote'}
+							size={'large'}
+							placeholder={t('loc:Zadajte poznámku k adrese, napr. "3. poschodie vľavo"')}
+							disabled={disabledForm}
+							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+							showLettersCount
 						/>
 						<Field
 							component={TextareaField}
@@ -591,15 +429,18 @@ const SalonForm: FC<Props> = (props) => {
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
 							className={'mb-6'}
 						/>
-
-						<Compare
-							// oldValue and newValue needs to be the same as in isPublishedVersionSameAsDraft comparsion function
-							oldValue={formValues?.publishedSalonData?.pricelists}
-							equal={isPublishedVersionSameAsDraft?.isPriceListsEqual}
-							oldFormField={priceListFormField('publishedSalonData.pricelists', true)}
-							newFormField={priceListFormField('pricelists', disabledComparsionFields)}
-							ellipsis
-							disableComparsion={disableComparsion}
+						<Field
+							className={'m-0'}
+							uploaderClassName={'overflow-x-auto'}
+							component={ImgUploadField}
+							name={'pricelists'}
+							label={t('loc:Cenníky')}
+							signUrl={URL_UPLOAD_IMAGES}
+							multiple
+							maxCount={10}
+							category={UPLOAD_IMG_CATEGORIES.SALON_PRICELIST}
+							disabled={disabledForm}
+							accept={'image/jpeg,image/png,application/pdf'}
 						/>
 					</Col>
 				</Row>

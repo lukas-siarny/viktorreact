@@ -61,7 +61,8 @@ import {
 	QUERY_LIMIT,
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
-	SALON_PERMISSION
+	SALON_PERMISSION,
+	SALON_CREATE_TYPES
 } from './enums'
 import { IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -69,11 +70,6 @@ import { phoneRegEx } from './regex'
 import { Paths } from '../types/api'
 import { EnumerationData } from '../reducers/enumerations/enumerationActions'
 
-import { ReactComponent as CheckIcon12 } from '../assets/icons/check-12.svg'
-import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
-import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
-import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
-import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 import { IAuthUserPayload } from '../reducers/users/userActions'
 import { IEmployeePayload } from '../reducers/employees/employeesActions'
@@ -757,14 +753,14 @@ export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
 		case SALON_STATES.PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (
-				<Tag icon={<CheckIcon12 />} className={'noti-tag bg-status-published'}>
-					{i18next.t('loc:Publikovaný')}
+				<Tag className={'noti-tag success'}>
+					<span>{i18next.t('loc:Publikovaný')}</span>
 				</Tag>
 			)
 		default:
 			return (
-				<Tag icon={<CloseIcon12 />} className={'noti-tag bg-status-notPublished'}>
-					{i18next.t('loc:Nepublikovaný')}
+				<Tag className={'noti-tag'}>
+					<span>{i18next.t('loc:Nepublikovaný')}</span>
 				</Tag>
 			)
 	}
@@ -773,8 +769,8 @@ export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
 export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false) => {
 	if (deleted) {
 		return (
-			<Tag icon={<TrashIcon12 />} className={'noti-tag danger'}>
-				{i18next.t('loc:Vymazaný')}
+			<Tag className={'noti-tag danger'}>
+				<span>{i18next.t('loc:Vymazaný')}</span>
 			</Tag>
 		)
 	}
@@ -784,8 +780,8 @@ export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false)
 	}
 
 	return (
-		<Tag icon={<TrashCrossedIcon12 />} className={'noti-tag info'}>
-			{i18next.t('loc:Nevymazaný')}
+		<Tag className={'noti-tag info'}>
+			<span>{i18next.t('loc:Nevymazaný')}</span>
 		</Tag>
 	)
 }
@@ -799,20 +795,41 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
 		case SALON_STATES.NOT_PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_PENDING:
 			return (
-				<Tag icon={<ClockIcon12 />} className={'noti-tag bg-status-pending'}>
-					{i18next.t('loc:Na schválenie')}
+				<Tag className={'noti-tag bg-status-pending'}>
+					<span>{i18next.t('loc:Na schválenie')}</span>
 				</Tag>
 			)
 		case SALON_STATES.NOT_PUBLISHED_DECLINED:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (
-				<Tag icon={<CloseIcon12 />} className={'noti-tag bg-status-declined'}>
-					{i18next.t('loc:Zamietnuté')}
+				<Tag className={'noti-tag bg-status-declined'}>
+					<span>{i18next.t('loc:Zamietnuté')}</span>
 				</Tag>
 			)
 		default:
 			return null
 	}
+}
+
+export const getSalonTagCreateType = (salonStatus?: SALON_STATES, createType?: SALON_CREATE_TYPES) => {
+	if (salonStatus && createType) {
+		if (salonStatus === SALON_STATES.PUBLISHED && createType === SALON_CREATE_TYPES.NON_BASIC) {
+			return (
+				<Tag className={'noti-tag bg-status-premium text-color-white'}>
+					<span>{i18next.t('loc:PREMIUM')}</span>
+				</Tag>
+			)
+		}
+
+		if (createType === SALON_CREATE_TYPES.BASIC) {
+			return (
+				<Tag className={'noti-tag bg-status-basic'}>
+					<span>{i18next.t('loc:BASIC')}</span>
+				</Tag>
+			)
+		}
+	}
+	return null
 }
 /**
  * Remove accent and transform to lower case

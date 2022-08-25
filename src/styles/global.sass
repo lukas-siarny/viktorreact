@@ -1111,14 +1111,11 @@ span.ant-tag
 		white-space: nowrap
 		overflow: hidden
 		text-overflow: ellipsis
-	&.success
-		background: $backgroundColor-green-200
-	&.warning
-		background: $backgroundColor-yellow-200
+	&.bg-status-premium
+		span
+			color: $textColor-notino-white
 	&.danger
 		background: $backgroundColor-red-200
-	&.info
-		background: $backgroundColor-blue-100
 
 .table-preview-image
 	display: block
@@ -1792,3 +1789,171 @@ span.ant-tag .title
 
 			.not-found-msg
 				color: $textColor-notino-grayDark
+
+.ant-tabs.ant-tabs-top.box-tab
+	position: relative
+	overflow: unset
+	display: unset
+
+svg.history-icon
+	&.success path
+		stroke: $backgroundColor-green-500
+	&.warning path
+		stroke: $backgroundColor-yellow-300
+	&.danger path
+		fill: $backgroundColor-red-500
+	&.info path
+		stroke: $backgroundColor-blue-500
+
+.history-text-action
+	&.success
+		color: $backgroundColor-green-500
+	&.warning
+		color: $backgroundColor-yellow-300
+	&.danger
+		color: $backgroundColor-red-500
+	&.info
+		color: $backgroundColor-blue-500
+
+li.ant-list-item:hover
+	background: transparent
+
+.noti-approval-modal-content
+	header
+		border-top-left-radius: 20px
+		border-top-right-radius: 20px
+		margin: -24px -24px 0 -24px
+		width: calc(100% + 48px)
+		height: 200px
+		background: linear-gradient(180deg, rgba(18, 18, 18, 0) 60.17%, rgba(18, 18, 18, 0.85) 85.49%), url('../assets/images/salon-photo.png') center center no-repeat
+		background-size: cover
+		position: relative
+		display: flex
+		flex-direction: column
+		justify-content: flex-end
+		padding: 16px 24px
+
+		h1
+			margin: 0
+			font-size: 32px
+			font-weight: 700
+			color: $textColor-notino-white
+			line-height: 120%
+			text-aligin: left
+			display: flex
+			flex-wrap: wrap
+			gap: 6px
+
+			span
+				color: $textColor-notino-pink
+
+		button
+			position: absolute
+			right: 16px
+			top: 16px
+			width: 32px
+			height: 32px
+			border-radius: 50%
+			display: flex
+			justify-content: center
+			align-items: center
+			cursor: pointer
+			border: none
+			outline: none
+			background-color: $backgroundColor-notino-grayLighter
+			transition: 300ms ease
+
+			svg
+				width: 16px
+				height: 16px
+
+			&:hover,
+			&:focus-visible
+				opacity: 0.8
+				box-shadow: $btn-shadow-hover-default
+
+	h2
+		font-size: 20px
+		margin-top: 24px
+
+	main
+		margin-top: 24px
+		color: $textColor-notino-grayDark
+
+		strong
+			font-weight: 700
+			color: $textColor-notino-black
+
+		.requirements
+			padding-left: 0
+			list-style: none
+
+			li:not(:last-of-type)
+				margin-bottom: 8px
+
+			.req-list-item
+				padding: 8px 32px 8px 8px
+				border-radius: 8px
+				color: $textColor-notino-black
+				display: flex
+				background: $backgroundColor-notino-grayLighter
+				align-items: flex-start
+				gap: 8px
+				position: relative
+
+				&.req-list-item-link
+					transition: 300ms ease
+					&:hover,
+					&:focus-visible
+						background: $backgroundColor-notino-grayLight
+						color: $textColor-notino-pink
+						.arrow-icon
+							svg
+								filter: brightness(0) saturate(100%) invert(18%) sepia(56%) saturate(6696%) hue-rotate(318deg) brightness(78%) contrast(128%)
+
+				.arrow-icon
+					width: 16px
+					height: 16px
+					position: absolute
+					right: 8px
+					top: 50%
+					transform: translateY(-50%)
+					svg
+						transition: filter 300ms ease
+						filter: brightness(0) saturate(100%) invert(0%) sepia(97%) saturate(18%) hue-rotate(265deg) brightness(95%) contrast(104%)
+
+				&::before
+					position: relative
+					content: ''
+					width: 16px
+					height: 16px
+					margin-top: 4px
+					background: center center no-repeat
+					background-size: contain
+					flex: 0 0 auto
+					z-index: 2
+
+				&.employee
+					&::before
+						width: 20px
+						height: 20px
+						background-image: url("../assets/icons/employees.svg")
+				&.name
+					&::before
+						background-image: url("../assets/icons/pencil-icon-16.svg")
+				&.phone
+					&::before
+						background-image: url("../assets/icons/phone-icon-16.svg")
+				&.address
+					&::before
+						background-image: url("../assets/icons/location-16.svg")
+				&.industry
+					&::before
+						background-image: url("../assets/icons/industries.svg")
+				&.progress
+					&::before
+						background-image: url("../assets/icons/profile-icon.svg")
+
+		.what-next
+			padding-left: 16px
+			margin-bottom: 24px

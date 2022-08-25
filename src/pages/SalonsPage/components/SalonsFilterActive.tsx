@@ -3,10 +3,10 @@ import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Form, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, filter, isEmpty, isNil, size } from 'lodash'
+import { useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // components
-import { useSelector } from 'react-redux'
 import Filters from '../../../components/Filters'
 
 // reducers
@@ -15,41 +15,49 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
-import { ReactComponent as CheckIcon12 } from '../../../assets/icons/check-12.svg'
-import { ReactComponent as ClockIcon12 } from '../../../assets/icons/clock-12.svg'
-import { ReactComponent as TrashIcon12 } from '../../../assets/icons/trash-12.svg'
-import { ReactComponent as TrashCrossedIcon12 } from '../../../assets/icons/trash-crossed-12.svg'
-import { ReactComponent as CloseIcon12 } from '../../../assets/icons/close-12.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
 import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
+import { getSalonFilterRanges, intervals } from './salonUtils'
 
 // atoms
 import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
 import SwitchField from '../../../atoms/SwitchField'
+import DateRangePickerField from '../../../atoms/DateRangePickerField'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void
 }
 
-export interface ISalonsFilter {
+export interface ISalonsFilterActive {
 	search: string
+	dateFromTo: {
+		dateFrom: string
+		dateTo: string
+	}
+	statuses_all: boolean
+	statuses_published: string[]
+	statuses_changes: string[]
+	categoryFirstLevelIDs: string[]
+	countryCode: string
+	createType: string
 }
 
-type Props = InjectedFormProps<ISalonsFilter, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ISalonsFilterActive, ComponentProps> & ComponentProps
 
 const fixLength100 = validationString(100)
 
 const statusOptionRender = (itemData: any) => {
-	const { value, label, className, icon } = itemData
+	const { value, label, tagClassName } = itemData
 	return (
-		<Tag key={value} icon={icon} className={cx('noti-tag', className)}>
-			{label}
+		<Tag key={value} className={cx('noti-tag', tagClassName)}>
+			<span>{label}</span>
 		</Tag>
 	)
 }
@@ -60,36 +68,25 @@ export const checkSalonFiltersSize = (formValues: any) =>
 			if (typeof value === 'boolean') {
 				return value
 			}
+			if (key === 'dateFromTo' && !value?.dateFrom && !value?.dateTo) {
+				return false
+			}
 			return (!isNil(value) || !isEmpty(value)) && key !== 'search' && key !== 'statuses_all'
 		})
 	)
 
-const SalonsFilter = (props: Props) => {
+const SalonsFilterActive = (props: Props) => {
 	const { handleSubmit, openSalonImportsModal } = props
 	const [t] = useTranslation()
 
-	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER])
+	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
-	const createTypesOptions = useMemo(
-		() => [
-			{ label: t('loc:Importovaný'), value: SALON_CREATE_TYPES.BASIC, key: SALON_CREATE_TYPES.BASIC },
-			{ label: t('loc:Štandartný'), value: SALON_CREATE_TYPES.NON_BASIC, key: SALON_CREATE_TYPES.NON_BASIC }
-		],
-		[t]
-	)
-
 	const publishedOptions = useMemo(
 		() => [
-			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, icon: <CheckIcon12 />, className: 'bg-status-published' },
-			{
-				label: t('loc:Nepublikovaný'),
-				value: SALON_FILTER_STATES.NOT_PUBLISHED,
-				key: SALON_FILTER_STATES.NOT_PUBLISHED,
-				icon: <CloseIcon12 />,
-				className: 'bg-status-notPublished'
-			}
+			{ label: t('loc:Publikovaný'), value: SALON_FILTER_STATES.PUBLISHED, key: SALON_FILTER_STATES.PUBLISHED, tagClassName: 'bg-status-published' },
+			{ label: t('loc:Nepublikovaný'), value: SALON_FILTER_STATES.NOT_PUBLISHED, key: SALON_FILTER_STATES.NOT_PUBLISHED, tagClassName: 'bg-status-notPublished' }
 		],
 		[t]
 	)
@@ -100,18 +97,17 @@ const SalonsFilter = (props: Props) => {
 				label: t('loc:Na schválenie'),
 				value: SALON_FILTER_STATES.PENDING_PUBLICATION,
 				key: SALON_FILTER_STATES.PENDING_PUBLICATION,
-				icon: <ClockIcon12 />,
-				className: 'bg-status-pending'
+				tagClassName: 'bg-status-pending'
 			},
-			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, icon: <CloseIcon12 />, className: 'bg-status-declined' }
+			{ label: t('loc:Zamietnuté'), value: SALON_FILTER_STATES.DECLINED, key: SALON_FILTER_STATES.DECLINED, tagClassName: 'bg-status-declined' }
 		],
 		[t]
 	)
 
-	const deletedOptions = useMemo(
+	const createTypesOptions = useMemo(
 		() => [
-			{ label: t('loc:Vymazaný'), value: SALON_FILTER_STATES.DELETED, key: SALON_FILTER_STATES.DELETED, icon: <TrashIcon12 />, className: 'danger' },
-			{ label: t('loc:Nevymazaný'), value: SALON_FILTER_STATES.NOT_DELETED, key: SALON_FILTER_STATES.NOT_DELETED, icon: <TrashCrossedIcon12 />, className: 'info' }
+			{ label: t('loc:BASIC'), value: SALON_FILTER_CREATE_TYPES.BASIC, key: SALON_FILTER_CREATE_TYPES.BASIC, tagClassName: 'bg-status-basic' },
+			{ label: t('loc:PREMIUM'), value: SALON_FILTER_CREATE_TYPES.PREMIUM, key: SALON_FILTER_CREATE_TYPES.PREMIUM, tagClassName: 'bg-status-premium' }
 		],
 		[t]
 	)
@@ -189,6 +185,7 @@ const SalonsFilter = (props: Props) => {
 							<span className={'font-bold text-xs mb-1'}>{t('loc:Stavy')}</span>
 						</Col>
 					</Row>
+
 					<Row gutter={ROW_GUTTER_X_DEFAULT} wrap={false}>
 						<Col span={3} className={'statuses-filter-all-col'}>
 							<Field component={SwitchField} name={'statuses_all'} size={'middle'} label={t('loc:Všetky')} />
@@ -225,20 +222,21 @@ const SalonsFilter = (props: Props) => {
 							<Col span={8}>
 								<Field
 									component={SelectField}
-									name={'statuses_deleted'}
-									placeholder={t('loc:Vymazaný')}
+									name={'createType'}
+									placeholder={t('loc:Typ salónu')}
 									className={'statuses-filter-select'}
 									allowClear
 									size={'large'}
 									filterOptions
 									onDidMountSearch
-									options={deletedOptions}
+									options={createTypesOptions}
 									optionRender={statusOptionRender}
 								/>
 							</Col>
 						</Row>
 					</Row>
 					<Divider className={'mt-0 mb-4'} />
+
 					<Row gutter={ROW_GUTTER_X_DEFAULT}>
 						<Col span={8}>
 							<Field
@@ -250,6 +248,7 @@ const SalonsFilter = (props: Props) => {
 								size={'middle'}
 								filterOptions
 								onDidMountSearch
+								optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
 								options={categories?.enumerationsOptions}
 								loading={categories?.isLoading}
 								disabled={categories?.isLoading}
@@ -272,14 +271,17 @@ const SalonsFilter = (props: Props) => {
 						</Col>
 						<Col span={8}>
 							<Field
-								component={SelectField}
-								name={'createType'}
-								placeholder={t('loc:Typ vytvorenia')}
+								className={'w-full'}
+								rangePickerClassName={'w-full'}
+								component={DateRangePickerField}
+								showTime
+								disableFuture
+								placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
 								allowClear
-								size={'middle'}
-								filterOptions
-								onDidMountSearch
-								options={createTypesOptions}
+								name={'dateFromTo'}
+								ranges={getSalonFilterRanges(intervals)}
+								dropdownAlign={{ points: ['tr', 'br'] }}
+								allowEmpty={[false, false]}
 							/>
 						</Col>
 					</Row>
@@ -290,7 +292,7 @@ const SalonsFilter = (props: Props) => {
 }
 
 const form = reduxForm({
-	form: FORM.SALONS_FILTER,
+	form: FORM.SALONS_FILTER_ACITVE,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	onChange: debounce((_values, _dispatch, { submit, anyTouched }) => {
@@ -299,6 +301,6 @@ const form = reduxForm({
 		}
 	}, 300),
 	destroyOnUnmount: true
-})(SalonsFilter)
+})(SalonsFilterActive)
 
 export default form

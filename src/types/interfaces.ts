@@ -197,6 +197,23 @@ export interface IActivationForm {
 	code: string
 }
 
+export interface IBillingForm {
+	countryCode?: string
+	zipCode?: string
+	city?: string
+	street?: string
+	streetNumber?: string
+	email?: string
+	firstName?: string
+	lastName?: string
+	phonePrefixCountryCode?: string
+	phone?: string
+	businessID?: string
+	taxID?: string
+	vatID?: string
+	companyName?: string
+}
+
 export interface IJwtPayload {
 	aud: string
 	exp: number

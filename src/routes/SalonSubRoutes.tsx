@@ -39,6 +39,9 @@ import CreateEmployeePage from '../pages/EmployeesPage/CreateEmployeePage'
 import IndustriesPage from '../pages/IndustriesPage/IndustriesPage'
 import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 
+// Billing info
+import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
+
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
 }
@@ -193,6 +196,17 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.INDUSTRY}
+			/>
+			{/* Billing info */}
+			<AuthRoute
+				exact
+				path={getPath(t('paths:billing-info'))}
+				component={BillingInfoPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:billing-info'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.BILLING_INFO}
 			/>
 		</Switch>
 	)

@@ -51,6 +51,9 @@ import SupportContactsPage from '../pages/SupportContactsPage/SupportContactsPag
 import SupportContactPage from '../pages/SupportContactsPage/SupportContactPage'
 import ContactPage from '../pages/Contact/ContactPage'
 
+// Specialist contacts
+import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistContactsPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403
@@ -209,6 +212,15 @@ const Routes: FC = (props) => {
 					component={SupportContactPage}
 					layout={MainLayout}
 					page={PAGE.SUPPORT_CONTACT}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:specialist-contacts')}
+					component={SpecialistContactsPage}
+					translatePathKey={t('paths:specialist-contacts')}
+					layout={MainLayout}
+					page={PAGE.SPECIALIST_CONTACTS}
 				/>
 				{/* NOTE: add all private routes before this declaration */}
 				<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />

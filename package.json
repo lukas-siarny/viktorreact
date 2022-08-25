@@ -12,7 +12,10 @@
   "scripts": {
     "start": "cross-env npm-run-all -p start-watch translate-watch build:tailwind",
     "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
-    "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true  npm-run-all -p build:tailwind rebuild:sass",
+    "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true npm-run-all -p build:tailwind rebuild:sass",
+	"copy-modules": "node scripts/postBuild.js",
+    "copy-build": "node scripts/copyErrorBuild.js",
+    "postbuild": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true npm run copy-modules && npm --prefix ./error_503 run build && npm run copy-build",
     "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired build",
     "lint": "eslint src --color --ext .js --ext .ts --ext .jsx --ext .tsx",
     "release": "npm run build && npm run sentry",
@@ -98,6 +101,7 @@
     "regenerator-runtime": "0.13.9",
     "sass": "1.50.1",
     "slugify": "1.6.5",
+    "symlink-dir": "5.0.1",
     "tailwindcss": "2.2.19",
     "tailwindcss-export-config": "2.3.0",
     "use-query-params": "1.2.3"

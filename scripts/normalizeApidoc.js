@@ -17,5 +17,4 @@ forEach(res, (value, key) => {
     }
   }
 })
-
 fs.writeFileSync(path.join(process.cwd(), 'apidoc', 'apidoc-normalize.json'), JSON.stringify(data))

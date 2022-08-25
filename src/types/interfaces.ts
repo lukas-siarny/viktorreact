@@ -4,6 +4,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
 import { Paths } from './api'
 import { PaginationProps } from 'antd'
+import { Path } from 'typescript'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -24,6 +25,7 @@ export interface ISelectOptionItem {
 	disabled?: boolean
 	hardSelected?: boolean
 	extra?: any
+	className?: string
 	level?: number
 }
 
@@ -69,8 +71,10 @@ export interface IUserAccountForm {
 export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 
 export interface ISalonForm {
+	salonNameFromSelect: boolean
 	id: string | null
 	name: string | null
+	nameSelect: { key: string, label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
 	aboutUsSecond: string | null
@@ -91,6 +95,7 @@ export interface ISalonForm {
 	phones: { phonePrefixCountryCode: string | null, phone: string | null }[]
 	email: string | null
 	socialLinkFB: string | null
+	categoryIDs: [string, ...string[] ] | null
 	socialLinkInstagram: string | null
 	socialLinkWebPage: string | null
 	socialLinkYoutube: string | null
@@ -297,6 +302,17 @@ export interface ICosmeticForm {
 	image: any
 }
 
+export interface ISpecialistContactForm {
+	email?: string
+	phone: string
+	phonePrefixCountryCode: string
+	countryCode: string
+}
+
+export interface ISpecialistContactFilter {
+	search: string
+}
+
 export interface ILanguageForm {
 	image?: string
 	nameLocalizations: NameLocalizationsItem[]
@@ -396,6 +412,9 @@ export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosme
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
 
+// TODO: change any when BE is done
+export type ISpecialistContact = any /* Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0] */
+
 export interface IIsPublishedVersionSameAsDraft {
 	isEqual: boolean
 	isNameEqual: boolean
@@ -441,3 +460,5 @@ export type NameLocalizationsItem = {
 	language: string
 	value: string
 }
+
+export type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody

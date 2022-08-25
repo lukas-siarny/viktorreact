@@ -16,11 +16,12 @@ import salonsReducer from './salons/salonsReducer'
 import customerReducer from './customers/customerReducer'
 import employeesReducer from './employees/employeesReducer'
 import selectedSalonReducer from './selectedSalon/selectedSalonReducer'
-import supportContactReducer from './supportContacts/supportContactReducer'
+import supportContactsReducer from './supportContacts/supportContactsReducer'
 import cosmeticsReducer from './cosmetics/cosmeticsReducer'
 import categoryParamsReducer from './categoryParams/categoryParamsReducer'
 import languagesReducer from './languages/languagesReducer'
 import dashboardReducer from './dashboard/dashboardReducer'
+import specialistContactsReducer from './specialistContacts/specialistContactsReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -34,6 +35,7 @@ export const REDUCER_KEYS = {
 	EMPLOYEES: 'EMPLOYEES',
 	SELECTED_SALON: 'SELECTED_SALON',
 	SUPPORT_CONTACTS: 'SUPPORT_CONTACTS',
+	SPECIALIST_CONTACTS: 'SPECIALIST_CONTACTS',
 	COSMETICS: 'COSMETICS',
 	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS',
 	LANGUAGES: 'LANGUAGES',
@@ -95,7 +97,14 @@ const rootReducer = combineReducers({
 			key: REDUCER_KEYS.SUPPORT_CONTACTS,
 			storage: storageSession
 		},
-		supportContactReducer
+		supportContactsReducer
+	),
+	specialistContacts: persistReducer(
+		{
+			key: REDUCER_KEYS.SPECIALIST_CONTACTS,
+			storage: storageSession
+		},
+		specialistContactsReducer
 	),
 	form: persistReducer(
 		{

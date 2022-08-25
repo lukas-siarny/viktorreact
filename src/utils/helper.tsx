@@ -58,6 +58,7 @@ import {
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX,
+	QUERY_LIMIT,
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION
@@ -740,7 +741,7 @@ export const getCountryPrefix = (countriesData: EnumerationData | null, countryC
 	return country?.phonePrefix
 }
 
-export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
+export const getCountryNameFromNameLocalizations = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
 	const countryTranslation = nameLocalizations?.find((translation) => translation.language === currentLng)
 	return countryTranslation?.value
 }
@@ -875,13 +876,13 @@ export const langaugesOptionRender = (itemData: any) => {
 	)
 }
 
-export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { language: string; value: string | null }[]) => {
-	return nameLocalizations?.sort((a, b) => {
-		if (a.language === DEFAULT_LANGUAGE) {
-			return -1
-		}
-		return b.language === DEFAULT_LANGUAGE ? 1 : 0
-	})
+export const formatLongQueryString = (search: string, limit?: number) => {
+	const maxQueryLimit = limit || QUERY_LIMIT.MAX_255
+	let formattedSearch = search
+	if (search.length > maxQueryLimit) {
+		formattedSearch = search.slice(0, maxQueryLimit)
+	}
+	return formattedSearch
 }
 
 export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {

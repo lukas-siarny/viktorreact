@@ -51,7 +51,7 @@ const PublicLayout = (props: Props) => {
 											onClick={() => history.push(location?.state?.from || t('paths:index'))}
 											type={'primary'}
 											size={'small'}
-											className={'noti-btn absolute bottom-0 mb-0 left-0 w-20'}
+											className={'noti-btn absolute bottom-0 mb-0 left-0 noti-public-back-btn'}
 											icon={<BackButtonIcon />}
 										>
 											{t('loc:Späť')}
@@ -78,7 +78,7 @@ const PublicLayout = (props: Props) => {
 										<Button
 											onClick={() => history.push(location?.state?.from || t('paths:index'))}
 											type={'primary'}
-											className={'mb-2 noti-btn absolute bottom-5 left-5'}
+											className={'mb-2 noti-btn absolute bottom-5 left-5 noti-public-back-btn'}
 											icon={<BackButtonIcon />}
 										>
 											{t('loc:Späť')}
@@ -106,7 +106,7 @@ const PublicLayout = (props: Props) => {
 										<Button
 											onClick={() => history.push(location?.state?.from || t('paths:index'))}
 											type={'primary'}
-											className={'mb-2 noti-btn absolute bottom-5 left-5'}
+											className={'mb-2 noti-btn absolute bottom-5 left-5 noti-public-back-btn'}
 											icon={<BackButtonIcon />}
 										>
 											{t('loc:Späť')}

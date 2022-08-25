@@ -71,11 +71,11 @@ const doughnutOptions = (clickHandlers: any[]) => {
 
 const graphContent = (label: string, source?: any[]) => {
 	return (
-		<Col xxl={11} xs={24} className='shadow-notino py-4 px-6 h-60'>
+		<Col xl={11} xs={24} className='shadow-notino py-4 px-6 h-60'>
 			<div className='heading-3'>{label}</div>
 			{source && (
-				<div className='flex flex-wrap justify-between w-full'>
-					<div className='h-44 w-52 flex items-center'>
+				<div className='flex flex-wrap justify-between w-full h-full'>
+					<div className='h-44 w-2/5 3xl:w-12/25 flex items-center'>
 						<Doughnut
 							data={{
 								labels: source.map((item: any) => item.label),
@@ -89,7 +89,7 @@ const graphContent = (label: string, source?: any[]) => {
 							options={doughnutOptions(source)}
 						/>
 					</div>
-					<div className='h-auto w-52 flex items-center'>
+					<div className='h-auto w-3/5 3xl:w-1/2 flex items-center'>
 						<div className='w-full'>
 							{source.map((item: any) => (
 								<Row justify={'space-between'} className='w-full h-6 cursor-pointer mb-4' onClick={item.onClick}>
@@ -249,7 +249,7 @@ const NotinoDashboard: FC<Props> = () => {
 						{dashboardData.alertData.map((item: AlertData, index: number) => (
 							<button
 								type='button'
-								className='cursor-pointer shadow-notino h-52 w-48 ml-4 relative grid place-items-center text-center bg-notino-white border-0'
+								className='cursor-pointer shadow-notino h-52 w-48 ml-4 mb-4 relative grid place-items-center text-center bg-notino-white border-0'
 								key={`alert_item_${index}`}
 								onClick={item.onClick}
 							>

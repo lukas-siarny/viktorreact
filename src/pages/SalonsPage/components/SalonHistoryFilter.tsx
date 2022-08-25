@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 // utils
 import { FORM } from '../../../utils/enums'
-import { getSalonFilterRanges, intervals } from './salonVersionsUtils'
+import { getSalonFilterRanges, intervals } from './salonUtils'
 
 // atoms
 import DateRangePickerField from '../../../atoms/DateRangePickerField'

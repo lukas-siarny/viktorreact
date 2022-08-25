@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { DatePicker, Form } from 'antd'
 import { WrappedFieldProps } from 'redux-form'
 import { RangePickerProps } from 'antd/es/date-picker'
@@ -91,20 +91,20 @@ const DateRangePickerField = (props: Props) => {
 
 	const disabledDateWrap = useCallback(
 		(currentDate: Dayjs) => {
-			const now = dayjs()
 			let disable = false
+			const now = dayjs()
 			if (disabledDate) {
 				disable = disabledDate(currentDate)
 			} else if (disableFuture) {
-				disable = currentDate && currentDate > (showTime ? now : now.endOf('day'))
+				disable = currentDate && currentDate > now.endOf('day')
 			} else if (disablePast) {
-				disable = currentDate && currentDate < (showTime ? now : dayjs().startOf('day'))
+				disable = currentDate && currentDate < now.startOf('day')
 			}
 			// TODO: validacia na range 2 mesiace podla prveho datumu ktory bol zvoleny TP-2111
 			// TODO: validacia na vsetko isBefore datumu ktory bol prvy zvoleny TP-2111
 			return disable
 		},
-		[disableFuture, disablePast, disabledDate, showTime]
+		[disableFuture, disablePast, disabledDate]
 	)
 
 	return (

@@ -1,0 +1,73 @@
+{
+  "name": "project_template_tailwind",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "^16.13.0"
+  },
+  "scripts": {
+    "start": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true npm-run-all -p start-watch translate-watch build:tailwind",
+    "start-watch": "cross-env REACT_APP_VERSION=$npm_package_version react-app-rewired start",
+    "prebuild": "cross-env NODE_ENV=production npm-run-all -p build:tailwind rebuild:sass",
+    "build": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true NODE_ENV=production REACT_APP_VERSION=$npm_package_version react-app-rewired build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "translate-scan": "i18next-scanner 'src/**/*.{js,jsx,ts,tsx}'",
+    "translate-watch": "npm run translate-scan && gulp watch",
+    "rebuild:sass": "npm rebuild node-sass",
+    "export-tailwind-config": "tailwindcss-export-config --config=tailwind.config.js --destination=src/styles/tailwind-variables --flat=true --format=sass --quoted-keys=true",
+    "build:tailwind": "npm run export-tailwind-config && tailwind build src/styles/tailwind.css -o src/styles/main.css",
+    "preinstall": "npm install --package-lock-only --ignore-scripts && npx npm-force-resolutions"
+  },
+  "dependencies": {
+    "antd": "4.18.2",
+    "antd-dayjs-webpack-plugin": "1.0.6",
+    "autoprefixer": "10.4.4",
+    "babel-plugin-import": "1.13.5",
+    "classnames": "2.3.1",
+    "customize-cra": "1.0.0",
+    "gulp": "4.0.2",
+    "i18next": "21.6.16",
+    "i18next-browser-languagedetector": "6.1.4",
+    "i18next-scanner": "3.1.0",
+    "less": "4.1.2",
+    "less-loader": "7.3.0",
+    "npm-run-all": "4.1.5",
+    "postcss": "8.4.12",
+    "qs": "6.10.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-i18next": "11.16.7",
+    "react-router-dom": "5.3.0",
+    "react-scripts": "4.0.3",
+    "sass": "1.50.1",
+    "tailwindcss": "2.2.19",
+    "tailwindcss-export-config": "2.3.0"
+  },
+  "devDependencies": {
+    "@types/classnames": "2.3.1",
+    "@types/qs": "6.9.7",
+    "@types/react": "17.0.34",
+    "@types/react-dom": "17.0.11",
+    "@types/react-i18next": "8.1.0",
+    "cross-env": "7.0.3",
+    "postcss-loader": "3.0.0",
+    "react-app-rewired": "2.2.1",
+    "typescript": "4.4.4"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "resolutions": {
+    "react-error-overlay": "6.0.9"
+  }
+}

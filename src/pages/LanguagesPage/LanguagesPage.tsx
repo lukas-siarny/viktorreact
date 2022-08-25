@@ -21,7 +21,7 @@ import { EMPTY_NAME_LOCALIZATIONS } from '../../components/LanguagePicker'
 import { PERMISSION, ROW_GUTTER_X_DEFAULT, FORM, STRINGS, DEFAULT_LANGUAGE } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { normalizeDirectionKeys, setOrder, sortData, sortNameLocalizationsWithDefaultLangFirst, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { normalizeDirectionKeys, normalizeNameLocalizations, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -109,7 +109,7 @@ const LanguagesPage = () => {
 			dispatch(
 				initialize(FORM.LANGUAGES, {
 					image: lang.image?.original ? [{ url: lang.image?.original, uid: lang.image?.id }] : undefined,
-					nameLocalizations: sortNameLocalizationsWithDefaultLangFirst(lang.nameLocalizations)
+					nameLocalizations: normalizeNameLocalizations(lang.nameLocalizations)
 				})
 			)
 		} else {

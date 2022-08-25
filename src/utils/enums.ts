@@ -187,6 +187,11 @@ export enum TAB_KEYS {
 	SALON_HISTORY = 'SALON_HISTORY'
 }
 
+export enum SALON_CREATE_TYPE {
+	NON_BASIC = 'NON_BASIC',
+	BASIC = 'BASIC'
+}
+
 export enum PAGE {
 	SALON = 'SALON',
 	SALONS = 'SALONS',

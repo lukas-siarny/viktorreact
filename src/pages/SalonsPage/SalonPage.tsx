@@ -20,6 +20,8 @@ import SalonSuggestionsModal from './components/SalonSuggestionsModal'
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/SalonApprovalModal'
+import { createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import { initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
 // enums
 import {
@@ -31,6 +33,7 @@ import {
 	NEW_SALON_ID,
 	NOTIFICATION_TYPE,
 	PERMISSION,
+	SALON_CREATE_TYPE,
 	SALON_PERMISSION,
 	SALON_STATES,
 	STRINGS,
@@ -42,7 +45,7 @@ import { RootState } from '../../reducers'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
-import { getBasicSalon, getSalonHistory, getSuggestedSalons } from '../../reducers/salons/salonsActions'
+import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
@@ -54,8 +57,7 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
-import { createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
-import { getIsPublishedVersionSameAsDraft, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
+import searchWrapper from '../../utils/filters'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
@@ -65,7 +67,6 @@ import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circ
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import searchWrapper from '../../utils/filters'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -95,30 +96,31 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
-	const salonExists = !!salonID && salonID === salon.data?.id
-	const deletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null) && salonExists
 
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
+	// if salon have ID and is same as loaded
+	const isSalonExists = !!salonID && salonID === salon.data?.id
+	// if salon is deleted
+	const isDeletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null) && !isSalonExists
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest || basicSalon.isLoading
-	const hasSalonPublishedVersion = !!salon.data?.publishedSalonData
-	const pendingPublication = salon.data && pendingStates.includes(salon.data.state)
-	const isPublishedVersionSameAsDraft = getIsPublishedVersionSameAsDraft(formValues as ISalonForm)
+	const isPendingPublication = (salon.data && pendingStates.includes(salon.data.state)) || false
+	const isPublished = salon.data?.isPublished
+	const isBasic = salon.data?.createType === SALON_CREATE_TYPE.BASIC
 
 	// check permissions for submit in case of create or update salon
-	const submitPermissions = salonExists ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
+	const submitPermissions = isSalonExists ? [SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE] : permissions
 	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 
 	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
-	const isPartner = !isAdmin
 
 	const [backUrl] = useBackUrl(t('paths:salons'))
 
 	const isNewSalon = salonID === NEW_SALON_ID
 
 	// show salons searchbox with basic salon suggestions instead of text field for name input
-	const showBasicSalonsSuggestions = isNewSalon && isPartner
+	const showBasicSalonsSuggestions = isNewSalon && !isAdmin
 
 	const [query, setQuery] = useQueryParams({
 		history: BooleanParam
@@ -196,7 +198,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				})
 			)
 			updateOnlyOpeningHours.current = false
-		} else if (!isEmpty(salonData) && salonExists) {
+		} else if (!isEmpty(salonData) && isSalonExists) {
 			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode, showBasicSalonsSuggestions)))
 		} else if (!salon?.isLoading) {
 			// init data for new "creating process" salon
@@ -218,7 +220,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [salon, showBasicSalonsSuggestions])
 
 	const handleSubmit = async (data: ISalonForm) => {
-		console.log(data)
 		try {
 			setSubmitting(true)
 			const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
@@ -251,16 +252,17 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				payByCard: !!data.payByCard,
 				payByCash: !!data.payByCash,
 				otherPaymentMethods: data.otherPaymentMethods,
-				companyContactPerson: {
+				// TODO - remove
+				/* companyContactPerson: {
 					...data.companyContactPerson,
 					phonePrefixCountryCode: data.companyContactPerson?.phone ? data.companyContactPerson.phonePrefixCountryCode : undefined
 				},
-				companyInfo: data.companyInfo,
+				companyInfo: data.companyInfo, */
 				cosmeticIDs: data.cosmeticIDs,
 				languageIDs: data.languageIDs
 			}
 
-			if (salonExists) {
+			if (isSalonExists) {
 				// update existing salon
 				await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, salonData as any)
 				dispatch(selectSalon(salonID))
@@ -298,7 +300,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const breadcrumbDetailItem = salonExists
+	const breadcrumbDetailItem = isSalonExists
 		? {
 				name: tabKey === TAB_KEYS.SALON_DETAIL ? t('loc:Detail salónu') : t('loc:História salónu'),
 				titleName: get(salon, 'data.name')
@@ -490,7 +492,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 							openForbiddenModal()
 						}
 					}}
-					disabled={submitting || deletedSalon || isFormPristine}
+					// if is salon pending approval and user is not Admin
+					disabled={submitting || isDeletedSalon || isFormPristine || (!isPublished && isPendingPublication && !isAdmin)}
 					loading={submitting}
 				>
 					{t('loc:Uložiť')}
@@ -507,7 +510,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			entityName={t('loc:salón')}
 			type={'default'}
 			getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-			disabled={deletedSalon}
+			disabled={isDeletedSalon}
 		/>
 	)
 
@@ -533,7 +536,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 							openForbiddenModal()
 						}
 					}}
-					disabled={submitting || deletedSalon}
+					disabled={submitting || isDeletedSalon}
 					loading={submitting}
 				>
 					{t('loc:Skryť salón')}
@@ -549,7 +552,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				block
 				size={'middle'}
 				className={cx('noti-btn m-regular', className)}
-				disabled={submitting || deletedSalon}
+				disabled={submitting || isDeletedSalon}
 				onClick={() => setApprovalModalVisible(true)}
 				loading={submitting}
 			>
@@ -558,41 +561,30 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		)
 	}
 
+	// render buttons on footer based on salon statuses
 	const renderContentFooter = () => {
 		switch (true) {
-			// create salon page
-			case !salonExists:
+			// for create salon page
+			case !isSalonExists:
 				return (
 					<Row className={'w-full'} justify={'center'}>
 						{submitButton('w-52 xl:w-60 mt-2-5')}
 					</Row>
 				)
-			// has published version
-			case hasSalonPublishedVersion && !pendingPublication:
+			// published and not basic
+			case isPublished && !isBasic:
 				return (
 					<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
 						<Row className={'gap-2 flex-row-reverse justify-end'}>
-							{hideSalonButton('w-52 lg:w-60 mt-2-5')}
+							{/* if is admin show hide button */}
+							{isAdmin && hideSalonButton('w-52 lg:w-60 mt-2-5')}
 							{deleteButton('w-52 lg:w-60 mt-2-5')}
 						</Row>
-						<Row className={'gap-2 md:justify-end'}>
-							{requestApprovalButton('w-52 lg:w-60 mt-2-5')}
-							{submitButton('w-52 lg:w-60 mt-2-5')}
-						</Row>
+						<Row className={'gap-2 md:justify-end'}>{submitButton('w-52 lg:w-60 mt-2-5')}</Row>
 					</Row>
 				)
-			case hasSalonPublishedVersion && pendingPublication:
-				return (
-					<Row className={'w-full gap-2'}>
-						<Row className={'gap-2 flex-1'}>
-							{deleteButton('w-48 lg:w-60 mt-2-5')}
-							{hideSalonButton('w-48 lg:w-60 mt-2-5')}
-						</Row>
-						{submitButton('w-48 lg:w-60 mt-2-5')}
-					</Row>
-				)
-			// doesn't have published version
-			case !hasSalonPublishedVersion && !pendingPublication:
+			// unpublished or published and not pending publication
+			case (!isPublished || isPublished) && !isPendingPublication:
 				return (
 					<Row className={'w-full gap-2 flex-col sm:flex-nowrap sm:flex-row'}>
 						{deleteButton('w-48 lg:w-60 mt-2-5')}
@@ -602,7 +594,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						</Row>
 					</Row>
 				)
-			case !hasSalonPublishedVersion && pendingPublication:
+			// unpublished and pending approval
+			case !isPublished && isPendingPublication:
 				return (
 					<Row className={'w-full gap-2'} justify={'space-between'}>
 						{deleteButton('mt-2-5 w-52 xl:w-60')}
@@ -615,8 +608,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const renderContentHeader = () =>
-		pendingPublication &&
-		salonExists && (
+		isPendingPublication &&
+		isSalonExists && (
 			<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
 				<div className={'content-header warning'}>
 					<Row justify={'space-between'} className={'w-full'}>
@@ -659,21 +652,21 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		// order of cases is important to show correct message
 		switch (true) {
-			case isNewSalon:
-			case deletedSalon:
+			case salonID === NEW_SALON_ID:
+			case isDeletedSalon:
 				message = null
 				break
-			case !isFormPristine && !pendingPublication:
+			case !isFormPristine && !isPendingPublication && !isPublished:
 				message = t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')
 				break
 			case salon.data?.state === SALON_STATES.NOT_PUBLISHED || salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED:
 				message = t('loc:Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.')
 				break
-			case !isPublishedVersionSameAsDraft?.isEqual && !pendingPublication:
+			case !isPublished && !isPendingPublication:
 				message = t('loc:V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.')
 				break
-			case pendingPublication:
-				message = t('loc:Salón čaká na schválenie zmien. Údaje, ktoré podliehajú schvaľovaniu, po túto dobu nie je možné editovať.')
+			case isPendingPublication:
+				message = t('loc:Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.')
 				break
 			default:
 				message = null
@@ -684,7 +677,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		return null
-	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, t, salon.data?.state, isNewSalon])
+	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, salonID, t, salon.data?.state])
 
 	const declinedSalonMessage = useMemo(
 		() => (
@@ -715,7 +708,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		setTabKey(selectedTabKey as TAB_KEYS)
 	}
 
-	const approvalButtonDisabled = !get(salon, 'hasAllRequiredSalonApprovalData') || deletedSalon || submitting || salon.isLoading
+	const approvalButtonDisabled = !get(salon, 'hasAllRequiredSalonApprovalData') || isDeletedSalon || submitting || salon.isLoading
 
 	const salonForm = (
 		<>
@@ -726,17 +719,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					{infoMessage}
 					<SalonForm
 						onSubmit={handleSubmit}
-						salonID={salonID}
-						disabledForm={deletedSalon}
-						deletedSalon={deletedSalon}
-						pendingPublication={!!pendingPublication}
-						isPublishedVersionSameAsDraft={isPublishedVersionSameAsDraft}
+						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
+						disabledForm={isDeletedSalon || (isPendingPublication && !isAdmin)}
+						deletedSalon={isDeletedSalon}
 						showBasicSalonsSuggestions={showBasicSalonsSuggestions}
 						loadBasicSalon={loadBasicSalon}
 						clearSalonForm={clearSalonForm}
 						searchSalons={searchSalons}
 						noteModalControlButtons={
-							salonExists && (
+							isSalonExists && (
 								<Row className={'flex justify-start w-full xl:w-1/2 mt-4'}>
 									{salon?.data?.openingHoursNote ? (
 										<>
@@ -755,7 +746,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 												size={'middle'}
 												className={'noti-btn m-regular w-12/25 xl:w-1/3'}
 												onClick={() => setVisible(true)}
-												disabled={deletedSalon}
+												disabled={isDeletedSalon}
 											>
 												{STRINGS(t).edit(t('loc:poznámku'))}
 											</Button>
@@ -764,7 +755,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 												onConfirm={deleteOpenHoursNote}
 												entityName={t('loc:poznámku')}
-												disabled={deletedSalon}
+												disabled={isDeletedSalon}
 											/>
 										</>
 									) : (
@@ -774,7 +765,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 											size={'middle'}
 											className={'noti-btn m-regular w-1/3'}
 											onClick={() => setVisible(true)}
-											disabled={deletedSalon}
+											disabled={isDeletedSalon}
 										>
 											{STRINGS(t).addRecord(t('loc:poznámku'))}
 										</Button>
@@ -783,7 +774,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 							)
 						}
 					/>
-					{salonExists && <OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />}
+					{isSalonExists && (
+						<OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
+					)}
 					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
 				</Spin>
 			</div>
@@ -844,7 +837,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			{isAdmin ? (
+			{isAdmin && !isNewSalon ? (
 				<TabsComponent
 					className={'box-tab'}
 					activeKey={tabKey}

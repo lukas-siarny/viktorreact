@@ -401,20 +401,6 @@ export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosme
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
 
-export interface IIsPublishedVersionSameAsDraft {
-	isEqual: boolean
-	isNameEqual: boolean
-	isLogoEqual: boolean
-	isGalleryEqual: boolean
-	isAddressEqual: boolean
-	isAddressNoteEqual: boolean
-	isAboutUsFirstEqual: boolean
-	isAboutUsSecondEqual: boolean
-	isPhoneEqual: boolean
-	isEmailEqual: boolean
-	isPriceListsEqual: boolean
-}
-
 export interface IPagination extends PaginationProps {
 	pageSizeOptions?: number[]
 }

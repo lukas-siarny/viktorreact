@@ -78,12 +78,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 			fetchData()
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [tabKey])
-
-	useEffect(() => {
-		fetchData()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo])
+	}, [dispatch, query.page, query.limit, query.dateFrom, query.dateTo, tabKey])
 
 	const renderValues = (oldValues: any, newValues: any) => {
 		let values: any = {}
@@ -131,7 +126,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 			<Spin spinning={salonHistory.isLoading}>
 				{salonHistory.data?.salonHistory.map((history) => (
 					<>
-						<List.Item key={history.id}>
+						<List.Item key={history.id} className={'salon-history-list'}>
 							<div className={'w-full'}>
 								<Divider className={'mb-1 mt-1'}>
 									<div className={'flex items-center justify-center'}>

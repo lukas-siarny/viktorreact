@@ -1,6 +1,6 @@
 import React from 'react'
 import cx from 'classnames'
-import { Typography, Image } from 'antd'
+import { Typography, Image, Row, Col } from 'antd'
 
 // assets
 import { ReactComponent as StepArrow } from '../assets/icons/step-arrow-icon.svg'
@@ -36,23 +36,34 @@ const CompareComponent = (props: Props) => {
 	return (
 		<>
 			{!isSame && (
-				<div className={'mb-2'}>
-					<div className={'font-bold'}>{valueKey}</div>
-					<div className={'flex items-center'}>
-						<Typography.Text ellipsis={ellipsis} className={cx('rounded bg-gray-50 p-2 w-full h-full text-gray-900')}>
-							{valueKey === 'fileID' ? renderImages(oldValue || '') : oldValue ?? ' --- '}
-						</Typography.Text>
+				<div className={'mb-0-5 w-full'}>
+					<div className={'flex items-center w-full'}>
+						<div className={'flex items-center w-1/2'}>
+							<Row className={'w-full'}>
+								<Col className={'flex items-center'} span={8}>
+									<div className={'font-bold'}>{valueKey}</div>
+								</Col>
+								<Col span={16}>
+									{' '}
+									<Typography.Text ellipsis={ellipsis} className={cx('flex items-center rounded bg-gray-50 px-2 py-0-5 w-full h-full text-gray-900')}>
+										{valueKey === 'fileID' ? renderImages(oldValue || '') : oldValue ?? ' --- '}
+									</Typography.Text>
+								</Col>
+							</Row>
+						</div>
 						<StepArrow className={'text-notino-black w-24'} />
-						<Typography.Text
-							ellipsis={ellipsis}
-							className={cx('rounded w-full', {
-								'bg-yellow-100 p-2': !isSame && oldValue && newValue,
-								'bg-green-100 p-2': !oldValue && newValue,
-								'bg-red-100 p-2': oldValue && !newValue
-							})}
-						>
-							{valueKey === 'fileID' ? renderImages(newValue || '') : newValue ?? ' --- '}
-						</Typography.Text>
+						<div className={'flex items-center w-1/2'}>
+							<Typography.Text
+								ellipsis={ellipsis}
+								className={cx('flex items-center rounded w-full px-2 py-0-5', {
+									'bg-yellow-100': !isSame && oldValue && newValue,
+									'bg-green-100': !oldValue && newValue,
+									'bg-red-100': oldValue && !newValue
+								})}
+							>
+								{valueKey === 'fileID' ? renderImages(newValue || '') : newValue ?? ' --- '}
+							</Typography.Text>
+						</div>
 					</div>
 				</div>
 			)}

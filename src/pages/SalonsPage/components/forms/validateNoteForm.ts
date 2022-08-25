@@ -1,6 +1,6 @@
 import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
-import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 
 export default (values: any) => {
 	const errors: FormErrors<any> = {}

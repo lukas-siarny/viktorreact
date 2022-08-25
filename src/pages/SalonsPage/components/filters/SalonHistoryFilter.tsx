@@ -5,11 +5,11 @@ import { debounce } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { FORM } from '../../../utils/enums'
-import { getSalonFilterRanges } from '../../../utils/helper'
+import { FORM } from '../../../../utils/enums'
+import { getSalonFilterRanges } from '../../../../utils/helper'
 
 // atoms
-import DateRangePickerField from '../../../atoms/DateRangePickerField'
+import DateRangePickerField from '../../../../atoms/DateRangePickerField'
 
 type ComponentProps = {
 	clearIntervalQuery: Function

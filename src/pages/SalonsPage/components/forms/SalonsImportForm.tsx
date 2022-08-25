@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { Button, Form } from 'antd'
 
 // atoms
-import FileUploadField from '../../../atoms/FileUploadField'
+import FileUploadField from '../../../../atoms/FileUploadField'
 
 // utils
-import { showErrorNotification, validationRequired } from '../../../utils/helper'
-import { FORM } from '../../../utils/enums'
+import { showErrorNotification, validationRequired } from '../../../../utils/helper'
+import { FORM } from '../../../../utils/enums'
 
 // types
-import { IDataUploadForm } from '../../../types/interfaces'
+import { IDataUploadForm } from '../../../../types/interfaces'
 
 type ComponentProps = {
 	disabledForm?: boolean

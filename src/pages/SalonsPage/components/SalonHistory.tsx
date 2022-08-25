@@ -7,7 +7,7 @@ import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
 
 // components
-import SalonHistoryFilter, { ISalonHistoryFilter } from './SalonHistoryFilter'
+import SalonHistoryFilter, { ISalonHistoryFilter } from './filters/SalonHistoryFilter'
 import CompareComponent from '../../../components/CompareComponent'
 
 // types

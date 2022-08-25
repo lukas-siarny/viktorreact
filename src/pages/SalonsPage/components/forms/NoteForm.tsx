@@ -7,13 +7,13 @@ import { useTranslation } from 'react-i18next'
 import validateNoteForm from './validateNoteForm'
 
 // utils
-import { FORM } from '../../../utils/enums'
+import { FORM } from '../../../../utils/enums'
 
 // validate
-import TextareaField from '../../../atoms/TextareaField'
+import TextareaField from '../../../../atoms/TextareaField'
 
 // types
-import { INoteForm } from '../../../types/interfaces'
+import { INoteForm } from '../../../../types/interfaces'
 
 type ComponentProps = {
 	fieldPlaceholderText?: string

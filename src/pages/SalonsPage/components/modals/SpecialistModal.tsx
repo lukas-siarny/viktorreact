@@ -5,20 +5,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
 
 // reducers
-import { getSpecialistContact, getSpecialistContacts } from '../../../reducers/specialistContacts/specialistContactsActions'
+import { getSpecialistContact, getSpecialistContacts } from '../../../../reducers/specialistContacts/specialistContactsActions'
 
 // types
-import { RootState } from '../../../reducers'
-import { LOCALES } from '../../../components/LanguagePicker'
+import { RootState } from '../../../../reducers'
+import { LOCALES } from '../../../../components/LanguagePicker'
 
 // utils
-import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../../utils/enums'
-import i18n from '../../../utils/i18n'
-import { getCountryPrefix, optionRenderWithImage } from '../../../utils/helper'
+import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../../../utils/enums'
+import i18n from '../../../../utils/i18n'
+import { getCountryPrefix, optionRenderWithImage } from '../../../../utils/helper'
 
 type Props = {
 	visible: boolean
@@ -100,7 +100,7 @@ const SpecialistModal = (props: Props) => {
 					dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
 					getPopupContainer={() => document.querySelector('.noti-specialist-contact-wrapper') as HTMLElement}
 				>
-					{specialistContacts?.options?.map((option) => (
+					{specialistContacts?.options?.map((option: any) => (
 						<Option value={option.value} key={option.key}>
 							{optionRenderWithImage(option, <GlobeIcon />)}
 						</Option>

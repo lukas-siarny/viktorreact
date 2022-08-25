@@ -1,6 +1,6 @@
 import i18next from 'i18next'
 import { isEmpty } from 'lodash'
-import { ISalonForm } from '../../../types/interfaces'
+import { ISalonForm } from '../../../../types/interfaces'
 
 export default (values: ISalonForm) => {
 	const requiedFields: string[] = []

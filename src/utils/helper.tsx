@@ -876,15 +876,6 @@ export const langaugesOptionRender = (itemData: any) => {
 	)
 }
 
-export const sortNameLocalizationsWithDefaultLangFirst = (nameLocalizations?: { language: string; value: string | null }[]) => {
-	return nameLocalizations?.sort((a, b) => {
-		if (a.language === DEFAULT_LANGUAGE) {
-			return -1
-		}
-		return b.language === DEFAULT_LANGUAGE ? 1 : 0
-	})
-}
-
 export const formatLongQueryString = (search: string, limit?: number) => {
 	const maxQueryLimit = limit || QUERY_LIMIT.MAX_255
 	let formattedSearch = search

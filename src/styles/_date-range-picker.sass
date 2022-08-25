@@ -32,3 +32,29 @@
 		.ant-picker-content
 			.ant-picker-cell-in-range.ant-picker-cell-in-view
 				color: $textColor-white
+	.ant-picker-footer
+		border-bottom: none
+		.ant-tag
+			background-color: $backgroundColor-notino-white
+			color: $textColor-notino-black
+			border-radius: 4px
+			&:hover,
+			&:focus-visible
+				box-shadow: $btn-shadow-hover-default
+		.ant-btn.ant-btn-primary,
+		.ant-btn.ant-btn-primary:disabled
+			background-color: $backgroundColor-notino-black
+			color: $textColor-notino-white
+			border-radius: 4px
+			border: none
+			outline: none
+			height: 32px
+			padding: 0 12px
+			&:disabled
+				opacity: 0.4
+			&:not(:disabled)
+				&:hover,
+				&:focus-visible
+					box-shadow: $btn-shadow-hover-default
+
+

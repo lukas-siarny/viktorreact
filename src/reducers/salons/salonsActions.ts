@@ -3,31 +3,44 @@ import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS } from './salonsTypes'
+import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_FILTER_STATES } from '../../utils/enums'
+import { SALON_FILTER_STATES, SALON_FILTER_CREATE_TYPES, SALON_CREATE_TYPES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons | IGetSalonHistory
 
 interface IGetSalons {
 	type: SALONS
 	payload: ISalonsPayload
 }
 
+interface IGetSalonHistory {
+	type: SALON_HISTORY
+	payload: ISalonHistoryPayload
+}
+
 export interface IGetSalonsQueryParams extends IQueryParams {
 	categoryFirstLevelIDs?: (string | null)[] | null
 	statuses_all?: boolean | null
 	statuses_published?: (string | null)[] | SALON_FILTER_STATES[] | null
-	statuses_deleted?: (string | null)[] | SALON_FILTER_STATES[] | null
+	salonState?: string | null
 	statuses_changes?: (string | null)[] | SALON_FILTER_STATES[] | null
 	countryCode?: string | null
 	createType?: string | null
+	lastUpdatedAtFrom?: string | null
+	lastUpdatedAtTo?: string | null
+}
+
+export interface IGetSalonsHistoryQueryParams extends IQueryParams {
+	dateFrom: string
+	dateTo: string
+	salonID: string
 }
 
 export interface IGetSalon {
@@ -42,6 +55,10 @@ export interface IGeBasictSalon {
 
 export interface ISalonPayload {
 	data: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200 | null
+}
+
+export interface ISalonHistoryPayload {
+	data: Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200 | null
 }
 
 export interface IGetSuggestedSalons {
@@ -72,21 +89,41 @@ export const getSalons =
 	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsPayload
-		try {
-			const editedQueryParams = {
-				...queryParams,
-				statuses: [
-					...(queryParams.statuses_all ? [SALON_FILTER_STATES.ALL] : []),
-					...(queryParams.statuses_published || []),
-					...(queryParams.statuses_changes || []),
-					...(queryParams.statuses_deleted || [])
-				]
-			}
-			delete editedQueryParams.statuses_all
-			delete editedQueryParams.statuses_published
-			delete editedQueryParams.statuses_deleted
-			delete editedQueryParams.statuses_changes
 
+		let statuses: any[] = []
+		let createType
+
+		if (queryParams.salonState === 'active') {
+			statuses = [SALON_FILTER_STATES.NOT_DELETED]
+		}
+
+		if (queryParams.salonState === 'deleted') {
+			statuses = [SALON_FILTER_STATES.DELETED]
+		}
+
+		if (!queryParams.statuses_all) {
+			statuses = [...statuses, ...(queryParams.statuses_published || []), ...(queryParams.statuses_changes || [])]
+
+			if (queryParams.createType === SALON_FILTER_CREATE_TYPES.BASIC) {
+				createType = SALON_CREATE_TYPES.BASIC
+			} else if (queryParams.createType === SALON_FILTER_CREATE_TYPES.PREMIUM) {
+				createType = SALON_CREATE_TYPES.NON_BASIC
+				statuses = [...statuses, SALON_FILTER_STATES.PUBLISHED]
+			}
+		}
+
+		const editedQueryParams = {
+			...queryParams,
+			createType,
+			statuses: [...new Set(statuses)]
+		}
+
+		delete editedQueryParams.statuses_all
+		delete editedQueryParams.statuses_published
+		delete editedQueryParams.statuses_changes
+		delete editedQueryParams.salonState
+
+		try {
 			dispatch({ type: SALONS.SALONS_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/salons/', { ...normalizeQueryParams(editedQueryParams) } as any)
 			const salonsOptions = map(data.salons, (salon) => {
@@ -107,6 +144,10 @@ export const getSalons =
 
 		return payload
 	}
+
+export const emptySalons = (): ThunkResult<Promise<void>> => async (dispatch) => {
+	dispatch({ type: SALONS.SALONS_LOAD_DONE, payload: { data: null, options: [] } })
+}
 
 export const getSalon =
 	(salonID: string): ThunkResult<Promise<ISalonPayload>> =>
@@ -204,3 +245,23 @@ export const getBasicSalon =
 export const emptySalon = (): ThunkResult<Promise<void>> => async (dispatch) => {
 	dispatch({ type: SALON.SALON_LOAD_DONE, payload: { data: null } })
 }
+
+export const getSalonHistory =
+	(queryParams: IGetSalonsHistoryQueryParams): ThunkResult<Promise<ISalonHistoryPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ISalonHistoryPayload
+		try {
+			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/history', { ...normalizeQueryParams(queryParams) } as any)
+			payload = {
+				data
+			}
+			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}

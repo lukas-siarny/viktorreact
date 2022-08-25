@@ -17,7 +17,7 @@ import { getNotinoDashboard } from '../../../reducers/dashboard/dashboardActions
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { FILTER_PATHS, SALON_FILTER_STATES, SALON_CREATE_TYPES, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { FILTER_PATHS, SALON_FILTER_STATES, SALON_CREATE_TYPES } from '../../../utils/enums'
 import { history } from '../../../utils/history'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
@@ -38,6 +38,81 @@ interface DashboardData {
 	}
 }
 
+const doughnutOptions = (clickHandlers: any[]) => {
+	return {
+		responsive: true,
+		aspectRatio: 1.5,
+		cutout: '60%',
+		plugins: {
+			legend: {
+				position: 'right',
+				align: 'center',
+				labels: {
+					color: '#000',
+					font: {
+						weight: '100'
+					}
+				},
+				display: false
+			}
+		},
+		onClick(_event: any, elements: any) {
+			const { index } = elements[0]
+			clickHandlers[index].onClick()
+		},
+		onHover: (event: any, activeEvents: any[]) => {
+			// eslint-disable-next-line no-param-reassign
+			;(event?.native?.target as HTMLElement).style.cursor = activeEvents?.length > 0 ? 'pointer' : 'auto'
+		}
+	} as any
+}
+
+const graphContent = (label: string, source?: any[]) => {
+	return (
+		<Col span={11} className='shadow-notino py-4 px-6 h-60'>
+			<div className='heading-3'>{label}</div>
+			{source && (
+				<div className='flex flex-wrap justify-between w-full'>
+					<div className='h-44 w-52 flex items-center'>
+						<Doughnut
+							data={{
+								labels: source.map((item: any) => item.label),
+								datasets: [
+									{
+										data: source.map((item: any) => item.data),
+										backgroundColor: source.map((item: any) => item.background)
+									}
+								]
+							}}
+							options={doughnutOptions(source)}
+						/>
+					</div>
+					<div className='h-auto w-52 flex items-center'>
+						<div className='w-full'>
+							{source.map((item: any) => (
+								<Row justify={'space-between'} className='w-full h-6 cursor-pointer mb-4' onClick={item.onClick}>
+									<Col span={3}>
+										<div className='h-6 w-6 rounded-full' style={{ backgroundColor: item.background }} />
+									</Col>
+									<Col span={6} className='flex items-center justify-center'>
+										<span className='base-semibold'>{item.data}</span>
+									</Col>
+									<Col span={12} className='flex items-center'>
+										<span className='s-semibold'>{item.label}</span>
+									</Col>
+									<Col span={3} className='flex items-center text-right'>
+										<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
+									</Col>
+								</Row>
+							))}
+						</div>
+					</div>
+				</div>
+			)}
+		</Col>
+	)
+}
+
 const NotinoDashboard: FC<Props> = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -48,7 +123,7 @@ const NotinoDashboard: FC<Props> = () => {
 		dispatch(getNotinoDashboard())
 	}, [dispatch])
 
-	const data: DashboardData = useMemo(() => {
+	const dashboardData: DashboardData = useMemo(() => {
 		if (notino.data) {
 			const alertData: AlertData[] = [
 				{
@@ -99,13 +174,13 @@ const NotinoDashboard: FC<Props> = () => {
 					{
 						data: notino.data.basicSalons,
 						background: colors.blue[200],
-						filterPath: FILTER_PATHS().SALONS[SALON_CREATE_TYPES.BASIC],
+						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_CREATE_TYPES.BASIC]),
 						label: t('loc:BASIC salóny')
 					},
 					{
 						data: notino.data.nonBasicSalons, // TODO blocked by NOT-1930
 						background: colors.blue[700],
-						filterPath: FILTER_PATHS().SALONS[SALON_FILTER_STATES.PREMIUM],
+						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PREMIUM]),
 						label: t('loc:PREMIUM salóny')
 					}
 				],
@@ -113,19 +188,19 @@ const NotinoDashboard: FC<Props> = () => {
 					{
 						data: notino.data.declinedSalons,
 						background: colors.red[200],
-						filterPath: FILTER_PATHS().SALONS[SALON_FILTER_STATES.DECLINED],
+						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.DECLINED]),
 						label: t('loc:Zamietnuté')
 					},
 					{
 						data: notino.data.pendingSalons,
 						background: colors.yellow[200],
-						filterPath: FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION],
+						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PENDING_PUBLICATION]),
 						label: t('loc:Na schválenie')
 					},
 					{
 						data: notino.data.unpublishedSalons,
 						background: colors.trueGray[200],
-						filterPath: FILTER_PATHS().SALONS[SALON_FILTER_STATES.NOT_PUBLISHED],
+						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.NOT_PUBLISHED]),
 						label: t('loc:Nepublikované')
 					}
 				]
@@ -149,20 +224,20 @@ const NotinoDashboard: FC<Props> = () => {
 	// if salon is not selected, show global (Notino) dashboard content
 	return (
 		<SalonDashboard>
-			<div className='content-body'>
+			<div className='content-body medium'>
 				<Spin spinning={notino?.isLoading}>
-					<div className='flex flex-wrap'>
-						{data.alertData.map((item: AlertData, index: number) => (
+					<div className='flex flex-wrap justify-between w-full'>
+						{dashboardData.alertData.map((item: AlertData, index: number) => (
 							<button
 								type='button'
-								className='cursor-pointer shadow-notino h-48 w-44 ml-4 relative grid place-items-center text-center bg-notino-white border-0'
+								className='cursor-pointer shadow-notino h-52 w-48 ml-4 relative grid place-items-center text-center bg-notino-white border-0'
 								key={`alert_item_${index}`}
 								onClick={item.onClick}
 							>
 								<div className='w-16 h-16 rounded-full flex justify-center items-center bg-yellow-200 absolute top-8'>
 									<span className='heading-3'>{item.count}</span>
 								</div>
-								<span className='xs-semibold absolute bottom-12 pb-4'>{item.label}</span>
+								<span className='s-semibold absolute top-24 pt-4 px-2'>{item.label}</span>
 								<div className='flex justify-around items-center absolute bottom-0 w-full h-12 bg-yellow-200'>
 									<span className='heading-4'>{t('loc:Zobraziť')}</span>
 									<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
@@ -171,84 +246,10 @@ const NotinoDashboard: FC<Props> = () => {
 						))}
 					</div>
 
-					{/* <Row justify={'space-between'} gutter={ROW_GUTTER_X_DEFAULT}>
-						<Col span={12}>
-							<h3>{t('loc:Premium vs. Basic salóny')}</h3>
-							{data.graphData.premiumVsBasic && <Doughnut data={{
-								labels: data.graphDatapremiumVsBasic.map((item: any) => item.label),
-								datasets: [
-
-								]
-							}} />}
-						</Col>
-						<Col span={12}>
-							<Row gutter={ROW_GUTTER_X_DEFAULT} justify={'end'} align={'middle'}>
-								{children && (
-									<Col>
-										<Badge count={activeFilters} style={{ top: '8px', right: '10px', background: '#DC0069' }}>
-											<Button
-												onClick={onClick}
-												htmlType='button'
-												type='link'
-												className={'mr-2 w-full h-full flex items-center'}
-												disabled={disableFilter}
-												icon={<FilterIcon className={'text-gray-600 hover:text-gray-900'} />}
-											/>
-										</Badge>
-									</Col>
-								)}
-								<Col>{customContent}</Col>
-							</Row>
-						</Col>
+					<Row justify={'space-between'} className='mt-8 ml-4'>
+						{graphContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic)}
+						{graphContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates)}
 					</Row>
-					<div className='max-w-5xl max-h-3xl mt-8 ml-4 bg-status-pending'>
-						<h3>Počet salónov k dnešnému dňu</h3>
-						<Bar
-							data={{
-								labels: [t('loc:BASIC'), t('loc:PREMIUM'), t('loc:Čakajúce na schválenie'), t('loc:Zamietnuté'), t('loc:Nepublikované')],
-								datasets: [
-									{
-										data: source.map((item) => item.data),
-										backgroundColor: source.map((item) => item.background),
-										borderColor: source.map((item) => item.border),
-										borderWidth: 2
-									}
-								]
-							}}
-							options={{
-								responsive: true,
-								plugins: {
-									legend: {
-										display: false
-									}
-								},
-								scales: {
-									x: {
-										grid: {
-											display: false,
-											drawBorder: false
-										},
-										ticks: {
-											font: {
-												family: 'Public Sans',
-												size: 16,
-												weight: 'bold'
-											},
-											color: '#000'
-										}
-									}
-								},
-								onClick(_event, elements) {
-									const { index } = elements[0]
-									history.push(source[index])
-								},
-								onHover: (event, activeEvents) => {
-									// eslint-disable-next-line no-param-reassign
-									;(event?.native?.target as HTMLElement).style.cursor = activeEvents?.length > 0 ? 'pointer' : 'auto'
-								}
-							}}
-						/>
-					</div> */}
 				</Spin>
 			</div>
 		</SalonDashboard>

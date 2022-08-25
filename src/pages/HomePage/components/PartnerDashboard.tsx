@@ -1,7 +1,7 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
 import { Button } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 // components
@@ -12,6 +12,7 @@ import { history } from '../../../utils/history'
 
 // redux
 import { RootState } from '../../../reducers'
+import { getCurrentUser, getPendingInvites } from '../../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
@@ -20,11 +21,22 @@ type Props = {}
 
 const PartnerDashboard: FC<Props> = () => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
+
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data)
+	const pendingInvites = useSelector((state: RootState) => state.user.pendingInvites)
+	const currentUser = useSelector((state: RootState) => state.user.authUser)
+
+	useEffect(() => {
+		if (currentUser.data?.id) {
+			dispatch(getPendingInvites(currentUser.data?.id))
+		}
+	}, [dispatch, currentUser.data?.id])
 
 	return (
 		<div className='partner-dashboard h-full'>
 			{/* list of invites here */}
+			{/* if salon is not selected and salon options are empty, display Create salon button */}
 			<SalonDashboard>
 				{isEmpty(salonOptions) && (
 					<div className='flex add-button justify-center items-center'>

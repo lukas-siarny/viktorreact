@@ -258,7 +258,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 	}
 
-	const hasEveryCountrSupportContact = supportContacts?.data?.supportContacts?.length === countries.data?.length
+	const hasEveryCountrSupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact) => contact.country.code === country.code))
 
 	return (
 		<>
@@ -280,7 +280,7 @@ const SupportContactPage: FC<Props> = (props) => {
 							}
 							showIcon
 							type={'warning'}
-							className={'mb-4'}
+							className={'noti-alert mb-4'}
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />

@@ -17,6 +17,7 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
 import SalonSuggestionsModal from './components/SalonSuggestionsModal'
+import SpecialistModal from './components/SpecialistModal'
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/SalonApprovalModal'
@@ -64,6 +65,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -85,6 +87,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [tabKey, setTabKey] = useState<TAB_KEYS>(TAB_KEYS.SALON_DETAIL)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 	const [suggestionsModalVisible, setSuggestionsModalVisible] = useState(false)
+	const [specialistModalVisible, setSpecialistModalVisible] = useState(false)
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
@@ -652,7 +655,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		// order of cases is important to show correct message
 		switch (true) {
-			case salonID === NEW_SALON_ID:
+			case isNewSalon:
 			case isDeletedSalon:
 				message = null
 				break
@@ -677,7 +680,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		return null
-	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, salonID, t, salon.data?.state])
+	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, salonID, t, isNewSalon, salon.data?.state])
 
 	const declinedSalonMessage = useMemo(
 		() => (
@@ -828,6 +831,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						/>
 					}
 				/>
+			)}
+			{specialistModalVisible && <SpecialistModal visible onCancel={() => setSpecialistModalVisible(false)} />}
+			{isNewSalon && (
+				<button type={'button'} className={cx('noti-specialist-button', { 'is-active': specialistModalVisible })} onClick={() => setSpecialistModalVisible(true)}>
+					<PhoneIcon />
+					<span>{t('loc:Notino Špecialista')}</span>
+				</button>
 			)}
 		</>
 	)

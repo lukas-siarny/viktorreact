@@ -9,7 +9,7 @@ import { getSupportContact, getSupportContacts, getSupportContactsOptions } from
 import { RootState } from '../../reducers'
 
 // utils
-import { getCountryPrefix, getSupportContactCountryName, optionRenderWithImage, translateDayName } from '../../utils/helper'
+import { getCountryPrefix, getCountryNameFromNameLocalizations, optionRenderWithImage, translateDayName } from '../../utils/helper'
 import { DAYS, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import i18n from '../../utils/i18n'
 import { LOCALES } from '../../components/LanguagePicker'
@@ -121,7 +121,7 @@ const ContactPage: FC<Props> = () => {
 					<Select
 						id={'noti-country-select'}
 						onChange={handleCountryChange}
-						value={selectedContact?.country.code}
+						value={selectedContact?.id}
 						className={'noti-select-input w-full'}
 						size={'large'}
 						dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
@@ -152,7 +152,7 @@ const ContactPage: FC<Props> = () => {
 					}
 					if (view === 'default') {
 						return (
-							<Collapse className={'noti-support-collapse mt-3'} bordered={false} defaultActiveKey={1} accordion>
+							<Collapse className={'noti-collapse noti-support-collapse mt-3'} bordered={false} defaultActiveKey={1} accordion expandIconPosition={'right'}>
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>
@@ -162,11 +162,11 @@ const ContactPage: FC<Props> = () => {
 									}
 									key={1}
 								>
-									<Row className={'contact-row'}>
+									<div className={'contact-row'}>
 										<div className={'contact-col pr-2'}>
-											<ul className={'noti-support-contact-list'}>
+											<ul className={'noti-contact-list'}>
 												{selectedContact?.emails?.map((email, index) => (
-													<li key={index} className={'email-list-item'}>
+													<li key={index} className={'email-list-item break-all'}>
 														{email}
 													</li>
 												))}
@@ -180,7 +180,7 @@ const ContactPage: FC<Props> = () => {
 											</ul>
 										</div>
 										<div className={'contact-col'}>
-											<ul className={'noti-support-contact-list'}>
+											<ul className={'noti-contact-list'}>
 												<li className={'address-list-item'}>
 													<div className={'flex flex-col'}>
 														{selectedContact?.address?.street && (
@@ -193,7 +193,7 @@ const ContactPage: FC<Props> = () => {
 															{selectedContact?.address?.zipCode && <span className={'mr-1'}>{selectedContact?.address?.zipCode?.trim()}</span>}
 															<span className={'break-all'}>{selectedContact?.address?.city?.trim()}</span>
 														</div>
-														{getSupportContactCountryName(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
+														{getCountryNameFromNameLocalizations(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
 															selectedContact?.country.code}
 													</div>
 												</li>
@@ -245,7 +245,7 @@ const ContactPage: FC<Props> = () => {
 												)}
 											</ul>
 										</div>
-									</Row>
+									</div>
 								</Panel>
 								<Panel
 									header={

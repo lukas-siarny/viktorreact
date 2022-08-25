@@ -976,8 +976,9 @@ span.ant-tag
 	max-width: 640px
 	padding: 0 56px
 	.contact-row
+		display: flex
 		.contact-col
-			flex: 50%
+			width: 49%
 	.ant-spin-nested-loading > div > .ant-spin
 		max-height: 100%
 	@media (max-width: 1280px)
@@ -986,10 +987,14 @@ span.ant-tag
 	@media (max-width: 744px)
 		max-width: 100%
 		padding: 0 0 64px 0
+		.contact-row
+			flex-direction: column
+			.contact-col
+				width: 100%
 		.ant-select
 			max-width: 100% !important
 
-.noti-support-contact-list
+.noti-contact-list
 	list-style: none
 	padding-left: 0
 	li
@@ -1661,3 +1666,124 @@ span.ant-tag .title
 				margin-top: 2px
 				flex: 0 0 auto
 				background: url("../assets/icons/location-gray-16.svg") no-repeat center center
+
+.noti-specialist-button
+	position: fixed
+	bottom: 70px
+	right: 16px
+	background: $backgroundColor-notino-pink
+	border-radius: 999px
+	border: none
+	outline: none
+	height: 60px
+	color: $textColor-notino-white
+	cursor: pointer
+	z-index: 888
+	display: flex
+	align-items: center
+	justify-content: center
+	width: 60px
+	overflow: hidden
+	transition: width 50ms ease-in-out, box-shadow 50ms ease-in-out
+	padding: 0
+	box-shadow: $btn-shadow-hover-default
+
+	svg
+		width: 24px
+		height: 24px
+		flex: 0 0 auto
+		position: absolute
+		left: 16px
+		top: 18px
+		filter: invert(97%) sepia(10%) saturate(3%) hue-rotate(56deg) brightness(114%) contrast(100%)
+
+	span
+		display: inline-blcok
+		white-space: nowrap
+		overflow: hidden
+		margin-left: 45px
+		margin-right: 45px
+		text-align: center
+		width: 100%
+		white-space: nowrap
+		overflow: hidden
+		text-overflow: ellipsis
+
+	&:hover,
+	&:focus-visible,
+	&.is-active
+		width: 350px
+
+.noti-specialist-modal
+	.noti-specialist-modal-content
+		header
+			border-top-left-radius: 20px
+			border-top-right-radius: 20px
+			margin: -24px -24px 0 -24px
+			width: calc(100% + 48px)
+			height: 270px
+			background: linear-gradient(180deg, rgba(18, 18, 18, 0) 60.17%, rgba(18, 18, 18, 0.85) 85.49%), url('../assets/images/notino-specialist.jpg') center center no-repeat
+			background-size: cover
+			position: relative
+			display: flex
+			flex-direction: column
+			justify-content: flex-end
+			padding: 16px 24px
+
+			h1
+				margin: 0
+				font-size: 32px
+				font-weight: 700
+				color: $textColor-notino-white
+				line-height: 120%
+
+			button
+				position: absolute
+				right: 16px
+				top: 16px
+				width: 32px
+				height: 32px
+				border-radius: 50%
+				display: flex
+				justify-content: center
+				align-items: center
+				cursor: pointer
+				border: none
+				outline: none
+				background-color: $backgroundColor-notino-grayLighter
+				transition: 300ms ease
+
+				svg
+					width: 16px
+					height: 16px
+
+				&:hover,
+				&:focus-visible
+					opacity: 0.8
+					box-shadow: $btn-shadow-hover-default
+
+		main
+			padding-top: 16px
+			display: flex
+			flex-direction: column
+			gap: 16px
+
+			p
+				padding: 0
+				margin: 0
+			ul.what-you-get-list
+				padding-left: 24px
+				margin-bottom: 0
+
+			h2
+				font-size: 18px
+				margin-bottom: 0
+
+			.noti-specialist-contact-wrapper
+				padding: 16px
+				background: $backgroundColor-notino-grayLighter
+				border-radius: 8px
+				min-height: 160px
+
+			.not-found-msg
+				color: $textColor-notino-grayDark

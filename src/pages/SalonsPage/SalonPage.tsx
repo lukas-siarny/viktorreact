@@ -16,6 +16,7 @@ import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/NoteForm'
 import validateSalonFormForPublication from './components/validateSalonFormForPublication'
 import SalonSuggestionsModal from './components/SalonSuggestionsModal'
+import SpecialistModal from './components/SpecialistModal'
 
 // enums
 import {
@@ -58,6 +59,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -80,6 +82,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [visible, setVisible] = useState<boolean>(false)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 	const [suggestionsModalVisible, setSuggestionsModalVisible] = useState(false)
+	const [specialistModalVisible, setSpecialistModalVisible] = useState(false)
 
 	const authUser = useSelector((state: RootState) => state.user.authUser)
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
@@ -660,7 +663,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 		// order of cases is important to show correct message
 		switch (true) {
-			case salonID === NEW_SALON_ID:
+			case isNewSalon:
 			case deletedSalon:
 				message = null
 				break
@@ -685,7 +688,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		return null
-	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, salonID, t, salon.data?.state])
+	}, [pendingPublication, isFormPristine, isPublishedVersionSameAsDraft?.isEqual, deletedSalon, isNewSalon, t, salon.data?.state])
 
 	const declinedSalonMessage = useMemo(
 		() => (
@@ -797,6 +800,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
 			</Modal>
 			<SalonSuggestionsModal visible={suggestionsModalVisible} setVisible={setSuggestionsModalVisible} />
+			{specialistModalVisible && <SpecialistModal visible onCancel={() => setSpecialistModalVisible(false)} />}
+			{isNewSalon && (
+				<button type={'button'} className={cx('noti-specialist-button', { 'is-active': specialistModalVisible })} onClick={() => setSpecialistModalVisible(true)}>
+					<PhoneIcon />
+					<span>{t('loc:Notino Špecialista')}</span>
+				</button>
+			)}
 		</>
 	)
 }

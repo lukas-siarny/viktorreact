@@ -302,6 +302,17 @@ export interface ICosmeticForm {
 	image: any
 }
 
+export interface ISpecialistContactForm {
+	email?: string
+	phone: string
+	phonePrefixCountryCode: string
+	countryCode: string
+}
+
+export interface ISpecialistContactFilter {
+	search: string
+}
+
 export interface ILanguageForm {
 	image?: string
 	nameLocalizations: NameLocalizationsItem[]
@@ -400,6 +411,9 @@ export interface IDataUploadForm {
 export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0]
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
+
+// TODO: change any when BE is done
+export type ISpecialistContact = any /* Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0] */
 
 export interface IIsPublishedVersionSameAsDraft {
 	isEqual: boolean

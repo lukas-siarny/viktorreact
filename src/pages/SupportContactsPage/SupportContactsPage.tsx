@@ -17,7 +17,7 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, LANGUAGE, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { history } from '../../utils/history'
 import i18n from '../../utils/i18n'
-import { getLinkWithEncodedBackUrl, getSupportContactCountryName, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
+import { getLinkWithEncodedBackUrl, getCountryNameFromNameLocalizations, normalizeDirectionKeys, setOrder, sortData, transformToLowerCaseWithoutAccent } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -74,7 +74,7 @@ const SupportContactsPage = () => {
 		return query.search
 			? supportContacts.tableData.filter((country) => {
 					const countryName = transformToLowerCaseWithoutAccent(
-						getSupportContactCountryName(country.country?.nameLocalizations, i18n.language as LANGUAGE) || country.country?.code
+						getCountryNameFromNameLocalizations(country.country?.nameLocalizations, i18n.language as LANGUAGE) || country.country?.code
 					)
 					const searchedValue = transformToLowerCaseWithoutAccent(query.search || undefined)
 					return countryName.includes(searchedValue)
@@ -91,13 +91,13 @@ const SupportContactsPage = () => {
 			sortOrder: setOrder(query.order, 'country'),
 			sorter: {
 				compare: (a, b) => {
-					const aValue = getSupportContactCountryName(a?.country?.nameLocalizations, i18n.language as LANGUAGE) || a?.country?.code
-					const bValue = getSupportContactCountryName(b?.country?.nameLocalizations, i18n.language as LANGUAGE) || b?.country?.code
+					const aValue = getCountryNameFromNameLocalizations(a?.country?.nameLocalizations, i18n.language as LANGUAGE) || a?.country?.code
+					const bValue = getCountryNameFromNameLocalizations(b?.country?.nameLocalizations, i18n.language as LANGUAGE) || b?.country?.code
 					return sortData(aValue, bValue)
 				}
 			},
 			render: (value) => {
-				const name = getSupportContactCountryName(value.nameLocalizations, i18n.language as LANGUAGE) || value.code
+				const name = getCountryNameFromNameLocalizations(value.nameLocalizations, i18n.language as LANGUAGE) || value.code
 				return (
 					<div className={'flex items-center gap-2'}>
 						{value.flag && <img src={value.flag} alt={name} width={24} />}

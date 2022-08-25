@@ -223,7 +223,7 @@
   "Registrovať sa": "Register now",
   "Registrácia": "Registration",
   "Rola": "Role",
-  "Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.": "_NEPRELOZENE_",
+  "Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.": "There are changes waiting to be approved. Data cannot be edited during this time.",
   "Salóny": "Salons",
   "Schvalovací proces": "Approval process",
   "Schválenie": "Approval",

@@ -334,7 +334,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			if (isAdmin) {
-				history.push(t('paths:salons'))
+				history.push(backUrl)
 			} else {
 				// check if there are any other salons assigned to user and redircet user to first of them
 				const { data } = await dispatch(getCurrentUser())

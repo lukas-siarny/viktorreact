@@ -46,7 +46,11 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
-type TabKeys = 'active' | 'deleted'
+enum TAB_KEYS {
+	ACTIVE = 'active',
+	DELETED = 'deleted',
+	MISTAKES = 'mistakes'
+}
 
 const SalonsPage = () => {
 	const [t] = useTranslation()
@@ -57,7 +61,7 @@ const SalonsPage = () => {
 
 	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
 	const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error' | undefined>(undefined)
-	const [tabKey, setTabKey] = useState<TabKeys | undefined>()
+	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
 
@@ -71,7 +75,7 @@ const SalonsPage = () => {
 		categoryFirstLevelIDs: ArrayParam,
 		statuses_all: withDefault(BooleanParam, false),
 		statuses_published: ArrayParam,
-		salonState: withDefault(StringParam, 'active'),
+		salonState: withDefault(StringParam, TAB_KEYS.ACTIVE),
 		statuses_changes: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
@@ -104,8 +108,8 @@ const SalonsPage = () => {
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
-		if (query.salonState === 'active') {
-			setTabKey('active')
+		if (query.salonState === TAB_KEYS.ACTIVE) {
+			setTabKey(TAB_KEYS.ACTIVE)
 			dispatch(
 				initialize(FORM.SALONS_FILTER_ACITVE, {
 					search: query.search,
@@ -121,8 +125,8 @@ const SalonsPage = () => {
 					}
 				})
 			)
-		} else if (query.salonState === 'deleted') {
-			setTabKey('deleted')
+		} else if (query.salonState === TAB_KEYS.DELETED) {
+			setTabKey(TAB_KEYS.DELETED)
 			dispatch(
 				initialize(FORM.SALONS_FILTER_DELETED, {
 					search: query.search,
@@ -243,7 +247,7 @@ const SalonsPage = () => {
 
 	const onTabChange = (selectedTabKey: string) => {
 		dispatch(emptySalons())
-		setTabKey(selectedTabKey as TabKeys)
+		setTabKey(selectedTabKey as TAB_KEYS)
 		resetQuery(selectedTabKey)
 	}
 
@@ -287,7 +291,7 @@ const SalonsPage = () => {
 				key: 'createType',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
+				width: '8%',
 				render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
 				...props
 			}),
@@ -358,11 +362,11 @@ const SalonsPage = () => {
 		[query.order, t]
 	)
 
-	const getTabContent = (selectedTabKey: 'active' | 'deleted') => {
+	const getTabContent = (selectedTabKey: TAB_KEYS.ACTIVE | TAB_KEYS.DELETED) => {
 		let columns: Columns = []
 		let filters: React.ReactNode = null
 
-		if (selectedTabKey === 'active') {
+		if (selectedTabKey === TAB_KEYS.ACTIVE) {
 			columns = [
 				tableColumns.name(),
 				tableColumns.address(),
@@ -375,13 +379,13 @@ const SalonsPage = () => {
 				tableColumns.createdAt()
 			]
 			filters = <SalonsFilterActive onSubmit={handleSubmitActive} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
-		} else if (selectedTabKey === 'deleted') {
+		} else if (selectedTabKey === TAB_KEYS.DELETED) {
 			columns = [
 				tableColumns.name({ width: '20%' }),
 				tableColumns.address({ width: '16%' }),
 				tableColumns.categories({ width: '16%' }),
 				tableColumns.deletedAt({ width: '16%' }),
-				tableColumns.createType({ width: '16%' }),
+				tableColumns.fillingProgress({ width: '16%' }),
 				tableColumns.createdAt({ width: '16%' })
 			]
 			filters = <SalonsFilterDeleted onSubmit={handleSubmitDeleted} />
@@ -424,14 +428,14 @@ const SalonsPage = () => {
 
 	const tabContent = [
 		{
-			tabKey: 'active',
+			tabKey: TAB_KEYS.ACTIVE,
 			tab: <>{t('loc:Aktívne salóny')}</>,
-			tabPaneContent: getTabContent('active')
+			tabPaneContent: getTabContent(TAB_KEYS.ACTIVE)
 		},
 		{
-			tabKey: 'deleted',
+			tabKey: TAB_KEYS.DELETED,
 			tab: <>{t('loc:Vymazané salóny')}</>,
-			tabPaneContent: getTabContent('deleted')
+			tabPaneContent: getTabContent(TAB_KEYS.DELETED)
 		}
 	]
 	return (

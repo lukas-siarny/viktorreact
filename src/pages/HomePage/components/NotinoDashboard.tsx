@@ -3,6 +3,7 @@ import { Spin, Row, Col, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
+import dayjs from 'dayjs'
 import { Doughnut } from 'react-chartjs-2'
 import colors from 'tailwindcss/colors'
 
@@ -18,8 +19,9 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { FILTER_PATHS, SALON_FILTER_STATES, SALON_CREATE_TYPES } from '../../../utils/enums'
+import { FILTER_PATHS, SALON_FILTER_STATES, SALON_CREATE_TYPES, DEFAULT_DATE_TIME_OPTIONS, DATE_TIME_RANGE } from '../../../utils/enums'
 import { history } from '../../../utils/history'
+import { getSalonFilterRanges } from '../../../utils/helper'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -115,6 +117,37 @@ const graphContent = (label: string, source?: any[]) => {
 	)
 }
 
+const getFilterRanges = () => {
+	// get dateTime range for every option: DATE_TIME_RANGE.LAST_DAY, DATE_TIME_RANGE.LAST_TWO_DAYS, DATE_TIME_RANGE.LAST_WEEK
+	const ranges = getSalonFilterRanges()
+
+	/**
+	 * Access to DayJS objects by property 'name' defined in IDateTimeFilterOption
+	 * every value has array with 2 items of DayJS objects, where:
+	 * 	- at index 0 is FROM
+	 * 	- at index 1 is TO
+	 * Then set DayJS ranges (from - to) as follow:
+	 * index 0 - LAST_DAY
+	 * index 1 - LAST_TWO_DAYS
+	 * index 2 - LAST_WEEK
+	 */
+
+	return [
+		{
+			from: dayjs(ranges[DEFAULT_DATE_TIME_OPTIONS()[DATE_TIME_RANGE.LAST_DAY].name][0]).toISOString(),
+			to: dayjs(ranges[DEFAULT_DATE_TIME_OPTIONS()[DATE_TIME_RANGE.LAST_DAY].name][1]).toISOString()
+		},
+		{
+			from: dayjs(ranges[DEFAULT_DATE_TIME_OPTIONS()[DATE_TIME_RANGE.LAST_TWO_DAYS].name][0]).toISOString(),
+			to: dayjs(ranges[DEFAULT_DATE_TIME_OPTIONS()[DATE_TIME_RANGE.LAST_TWO_DAYS].name][1]).toISOString()
+		},
+		{
+			from: dayjs(ranges[DEFAULT_DATE_TIME_OPTIONS()[DATE_TIME_RANGE.LAST_WEEK].name][0]).toISOString(),
+			to: dayjs(ranges[DEFAULT_DATE_TIME_OPTIONS()[DATE_TIME_RANGE.LAST_WEEK].name][1]).toISOString()
+		}
+	]
+}
+
 const NotinoDashboard: FC<Props> = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -133,6 +166,8 @@ const NotinoDashboard: FC<Props> = () => {
 		}
 
 		if (notino.data) {
+			const ranges = getFilterRanges()
+
 			const alertData: AlertData[] = [
 				{
 					label: t('loc:Salóny čakajúce na schválenie'),
@@ -152,7 +187,7 @@ const NotinoDashboard: FC<Props> = () => {
 						</span>
 					),
 					count: notino.data.lastUpdateOneDayAgo,
-					onClick: () => history.push(t('paths:salons')) // TODO 24h ago
+					onClick: () => history.push(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.publishedChanges) // 24h ago
 				},
 				{
 					label: (
@@ -162,7 +197,7 @@ const NotinoDashboard: FC<Props> = () => {
 						</span>
 					),
 					count: notino.data.lastUpdateTwoDaysAgo,
-					onClick: () => history.push(t('paths:salons')) // TODO 48h ago
+					onClick: () => history.push(FILTER_PATHS(ranges[1].from, ranges[1].to).SALONS.publishedChanges) // 48h ago
 				},
 				{
 					label: (
@@ -172,7 +207,7 @@ const NotinoDashboard: FC<Props> = () => {
 						</span>
 					),
 					count: notino.data.lastUpdateSevenDaysAgo,
-					onClick: () => history.push(t('paths:salons')) // TODO week ago
+					onClick: () => history.push(FILTER_PATHS(ranges[2].from, ranges[2].to).SALONS.publishedChanges) // week ago
 				}
 			]
 

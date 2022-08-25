@@ -448,3 +448,9 @@ export type NameLocalizationsItem = {
 }
 
 export type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.RequestBody
+
+export interface IDateTimeFilterOption {
+	value: number
+	unit: 'hour' | 'week'
+	name: string
+}

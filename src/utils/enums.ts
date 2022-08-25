@@ -4,7 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICurrency } from '../types/interfaces'
+import { ICurrency, IDateTimeFilterOption } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -522,6 +522,20 @@ export const SALON_ROLES_TRANSLATIONS = () => ({
 	[SALON_ROLES.EXTERNAL]: i18next.t('loc:Externista')
 })
 
+export enum DATE_TIME_RANGE {
+	LAST_DAY = 'LAST_DAY',
+	LAST_TWO_DAYS = 'LAST_TWO_DAYS',
+	LAST_WEEK = 'LAST_WEEK'
+}
+
+export const DEFAULT_DATE_TIME_OPTIONS = (): { [key: string]: IDateTimeFilterOption } => {
+	return {
+		[DATE_TIME_RANGE.LAST_DAY]: { name: i18next.t('loc:24 hodín'), value: 24, unit: 'hour' },
+		[DATE_TIME_RANGE.LAST_TWO_DAYS]: { name: i18next.t('loc:48 hodín'), value: 48, unit: 'hour' },
+		[DATE_TIME_RANGE.LAST_WEEK]: { name: i18next.t('loc:Týždeň'), value: 1, unit: 'week' }
+	}
+}
+
 export const SALON_ROLES_PERMISSIONS = () => [
 	{
 		name: i18next.t('loc:Správa profilu salónu'),
@@ -581,13 +595,14 @@ export const SALON_ROLES_PERMISSIONS = () => [
 	}
 ]
 
-export const FILTER_PATHS = () => ({
+export const FILTER_PATHS = (from?: string, to?: string) => ({
 	SALONS: {
 		[SALON_FILTER_STATES.PUBLISHED]: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
 		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
 		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.BASIC}`,
-		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
+		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		publishedChanges: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.PUBLISHED}&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`
 	}
 })

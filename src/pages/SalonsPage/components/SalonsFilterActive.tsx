@@ -20,10 +20,9 @@ import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories
 
 // utils
 import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString } from '../../../utils/helper'
+import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges } from '../../../utils/helper'
 import Permissions from '../../../utils/Permissions'
 import { history } from '../../../utils/history'
-import { getSalonFilterRanges, intervals } from './salonUtils'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -279,7 +278,7 @@ const SalonsFilterActive = (props: Props) => {
 								placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
 								allowClear
 								name={'dateFromTo'}
-								ranges={getSalonFilterRanges(intervals)}
+								ranges={getSalonFilterRanges()}
 								dropdownAlign={{ points: ['tr', 'br'] }}
 								allowEmpty={[false, false]}
 							/>

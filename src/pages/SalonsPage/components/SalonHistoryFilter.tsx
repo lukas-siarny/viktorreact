@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 // utils
 import { FORM } from '../../../utils/enums'
-import { getSalonFilterRanges, intervals } from './salonUtils'
+import { getSalonFilterRanges } from '../../../utils/helper'
 
 // atoms
 import DateRangePickerField from '../../../atoms/DateRangePickerField'
@@ -40,7 +40,7 @@ const SalonHistoryFilter = (props: Props) => {
 					placeholder={[t('loc:Od'), t('loc:Do')]}
 					allowClear
 					name={'dateFromTo'}
-					ranges={getSalonFilterRanges(intervals)}
+					ranges={getSalonFilterRanges()}
 					dropdownAlign={{ points: ['tr', 'br'] }}
 					allowEmpty={[false, false]}
 				/>

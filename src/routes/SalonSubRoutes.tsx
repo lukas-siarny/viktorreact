@@ -63,6 +63,9 @@ const SalonSubRoutes: FC = () => {
 	const getPath = useCallback((pathSuffix: string) => `${path}${pathSuffix}`, [path])
 
 	useEffect(() => {
+		if (currentUser.isLoading) {
+			return
+		}
 		if (currentUser.data) {
 			// Only SUPER_ADMIN, ADMIN or PARTNER with assigned salon
 			if (

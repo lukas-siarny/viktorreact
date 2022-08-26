@@ -17,6 +17,9 @@ import Permissions from '../../../utils/Permissions'
 // validate
 import validateEditRoleFrom from './validateEditRoleFrom'
 
+// assets
+import { ReactComponent as KeyIcon } from '../../../assets/icons/key.svg'
+
 // reducers
 import { RootState } from '../../../reducers'
 
@@ -36,7 +39,10 @@ const EditRoleForm: FC<Props> = (props) => {
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<div className={'mx-9'}>
-				<h3>{t('loc:Oprávnenie')}</h3>
+				<h3 className={'mb-0 mt-0 flex items-center'}>
+					<KeyIcon className={'text-notino-black mr-2'} />
+					{t('loc:Oprávnenie')}
+				</h3>
 				<Divider className={'mb-3 mt-3'} />
 				<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
 					<Permissions

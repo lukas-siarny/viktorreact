@@ -48,7 +48,6 @@ import {
 	INVALID_DATE_FORMAT,
 	MSG_TYPE,
 	DEFAULT_LANGUAGE,
-	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER,
 	MONDAY_TO_FRIDAY,
 	DAY,
@@ -426,7 +425,7 @@ export const getGoogleMapUrl = (): string => {
 	// query params for google API
 	const base = 'https://maps.googleapis.com/maps/api/'
 	// TODO read Google Map API key from .env file
-	const key = `key=${GOOGLE_MAPS_API_KEY}`
+	const key = `key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
 	const language = `language=${i18next.language.toLowerCase()}`
 
 	return `${base}js?${key}&libraries=places&${language}`

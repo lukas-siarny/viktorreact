@@ -32,6 +32,9 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
+import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 
 const { Panel } = Collapse
 
@@ -213,7 +216,10 @@ const EmployeeForm: FC<Props> = (props) => {
 				<Row className={'mx-9 w-full h-full block'} justify='center'>
 					{!isEmpty(formValues?.user) && (
 						<>
-							<h3 className={'mb-0 mt-3'}>{t('loc:Používateľský profil')}</h3>
+							<h3 className={'mb-0 mt-0 flex items-center'}>
+								<UserIcon className={'text-notino-black mr-2'} />
+								{t('loc:Používateľský profil')}
+							</h3>
 							<Divider className={'mb-3 mt-3'} />
 							<div className={'flex space-between w-full'}>
 								<div className={'w-1/5'}>
@@ -245,7 +251,9 @@ const EmployeeForm: FC<Props> = (props) => {
 							</div>
 						</>
 					)}
-					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
+					<h3 className={'mb-0 mt-0 flex items-center'}>
+						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
+					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>
 						<div className={'w-1/5'}>
@@ -275,9 +283,12 @@ const EmployeeForm: FC<Props> = (props) => {
 						phoneName={'phone'}
 						formName={FORM.EMPLOYEE}
 					/>
-					<h3>{t('loc:Zoznam priradených služieb')}</h3>
+					{/* TODO - refactor assigned services
+					<h3 className={'mb-0 mt-0 flex items-center'}>
+						<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}
+					</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<FieldArray component={renderListFields} name={'services'} salon={salon} />
+					<FieldArray component={renderListFields} name={'services'} salon={salon} /> */}
 				</Row>
 			</Col>
 		</Form>

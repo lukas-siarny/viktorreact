@@ -11,6 +11,7 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.sv
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 import SelectField from '../../../atoms/SelectField'
+import TextareaField from '../../../atoms/TextareaField'
 
 // components
 import Localizations from '../../../components/Localizations'
@@ -22,7 +23,7 @@ import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
 import { validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
-import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 
 // reducers
@@ -44,11 +45,13 @@ export interface ICategoryForm {
 	parentId: string
 	childrenLength: number
 	nameLocalizations: NameLocalizationsItem[]
+	descriptionLocalizations: NameLocalizationsItem[]
 	image: any
 	categoryParameterID: string
 }
 
-const fixLength100 = validationString(100)
+const fixLength100 = validationString(VALIDATION_MAX_LENGTH.LENGTH_100)
+const fixLength1500 = validationString(VALIDATION_MAX_LENGTH.LENGTH_1500)
 
 type Props = InjectedFormProps<ICategoryForm, ComponentProps> & ComponentProps
 
@@ -59,6 +62,7 @@ const CategoryForm: FC<Props> = (props) => {
 	const { handleSubmit, submitting, deleteCategory, createCategory, closeCategoryForm, pristine } = props
 
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY].values)
+	console.log(values)
 	const categoriesParameters = useSelector((state: RootState) => state.categoryParams.parameters)
 	const category = useSelector((state: RootState) => state.categories.category)
 	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))
@@ -177,16 +181,43 @@ const CategoryForm: FC<Props> = (props) => {
 								</div>
 							) : undefined}
 							{values?.level === 2 ? (
-								<Field
-									className={'w-full'}
-									component={SelectField}
-									options={categoriesParameters.enumerationsOptions}
-									label={t('loc:Parameter')}
-									placeholder={t('loc:Vyberte parameter')}
-									name={'categoryParameterID'}
-									loading={categoriesParameters.isLoading}
-									allowClear
-								/>
+								<>
+									<Field
+										className={'w-full'}
+										component={SelectField}
+										options={categoriesParameters.enumerationsOptions}
+										label={t('loc:Parameter')}
+										placeholder={t('loc:Vyberte parameter')}
+										name={'categoryParameterID'}
+										loading={categoriesParameters.isLoading}
+										allowClear
+									/>
+									<FieldArray
+										key='descriptionLocalizations'
+										name='descriptionLocalizations'
+										component={Localizations}
+										placeholder={t('loc:Zadajte názov')}
+										horizontal
+										fieldComponent={TextareaField}
+										ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
+										customValidate={fixLength1500}
+										customRows={4}
+										className={localizationInputCss}
+										mainField={
+											<Field
+												className='mb-0'
+												component={TextareaField}
+												label={t('loc:Popis kategórie (EN)')}
+												placeholder={t('loc:Zadajte popis')}
+												key='descriptionLocalizations[0].value'
+												name='descriptionLocalizations[0].value'
+												maxLength={VALIDATION_MAX_LENGTH.LENGTH_1500}
+												rows={4}
+											/>
+										}
+										noSpace
+									/>
+								</>
 							) : undefined}
 						</Row>
 						<div className={'flex justify-between flex-wrap gap-2'}>

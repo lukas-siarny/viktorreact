@@ -432,6 +432,6 @@ export type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdCategories.Requ
 
 export interface IDateTimeFilterOption {
 	value: number
-	unit: 'hour' | 'week'
+	unit: 'day' | 'week'
 	name: string
 }

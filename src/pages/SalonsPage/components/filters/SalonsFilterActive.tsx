@@ -273,7 +273,6 @@ const SalonsFilterActive = (props: Props) => {
 								className={'w-full'}
 								rangePickerClassName={'w-full'}
 								component={DateRangePickerField}
-								showTime
 								disableFuture
 								placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
 								allowClear

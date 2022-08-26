@@ -35,7 +35,6 @@ const SalonHistoryFilter = (props: Props) => {
 					className={'m-0'}
 					rangePickerClassName={'w-full'}
 					component={DateRangePickerField}
-					showTime
 					disableFuture
 					placeholder={[t('loc:Od'), t('loc:Do')]}
 					allowClear

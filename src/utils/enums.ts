@@ -532,8 +532,8 @@ export enum DATE_TIME_RANGE {
 
 export const DEFAULT_DATE_TIME_OPTIONS = (): { [key: string]: IDateTimeFilterOption } => {
 	return {
-		[DATE_TIME_RANGE.LAST_DAY]: { name: i18next.t('loc:24 hodín'), value: 24, unit: 'hour' },
-		[DATE_TIME_RANGE.LAST_TWO_DAYS]: { name: i18next.t('loc:48 hodín'), value: 48, unit: 'hour' },
+		[DATE_TIME_RANGE.LAST_DAY]: { name: i18next.t('loc:24 hodín'), value: 1, unit: 'day' },
+		[DATE_TIME_RANGE.LAST_TWO_DAYS]: { name: i18next.t('loc:48 hodín'), value: 2, unit: 'day' },
 		[DATE_TIME_RANGE.LAST_WEEK]: { name: i18next.t('loc:Týždeň'), value: 1, unit: 'week' }
 	}
 }

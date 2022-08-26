@@ -102,6 +102,7 @@ const PartnerDashboard: FC<Props> = () => {
 								loading={pendingInvites?.isLoading || currentUser?.isLoading || submitting}
 								twoToneRows
 								pagination={false}
+								rowKey={(record) => record.salon?.id}
 							/>
 						</div>
 					</Col>

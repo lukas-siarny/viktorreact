@@ -174,6 +174,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 								dataSource={customers?.data?.customers}
 								rowClassName={'clickable-row'}
 								twoToneRows
+								rowKey='id'
 								scroll={{ x: 800 }}
 								onRow={(record) => ({
 									onClick: () => {

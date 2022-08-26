@@ -77,6 +77,7 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 	// go through selected employees
 	forEach(selectedEmployeeIDs, (employeeId) => {
 		const employeeData = employees?.data?.employees?.find((employee: any) => employee?.id === employeeId)
+
 		if (form?.values?.employees?.find((employee: any) => employee?.id === employeeId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
@@ -85,7 +86,10 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 		} else if (employeeData) {
 			updatedEmployees.push({
 				id: employeeData?.id,
-				name: `${employeeData?.firstName} ${employeeData?.lastName}`
+				name: employeeData?.firstName && employeeData?.lastName ? `${employeeData?.firstName} ${employeeData?.lastName}` : employeeData?.id,
+				hasActiveAccount: employeeData?.hasActiveAccount,
+				inviteEmail: employeeData?.inviteEmail,
+				image: employeeData?.image
 			})
 		}
 	})
@@ -110,7 +114,7 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 		const priceTo = decodePrice(value?.priceAndDurationData?.priceTo)
 		result.push({
 			id: value?.categoryParameterValueID || value?.id,
-			name: value.value,
+			name: value.value || value.name,
 			durationFrom,
 			durationTo,
 			variableDuration: !!value?.priceAndDurationData?.durationTo,

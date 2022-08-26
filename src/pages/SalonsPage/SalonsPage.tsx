@@ -418,6 +418,7 @@ const SalonsPage = () => {
 								columns={columns || []}
 								dataSource={salons?.data?.salons}
 								scroll={{ x: 1000 }}
+								rowKey='id'
 								rowClassName={'clickable-row'}
 								twoToneRows
 								useCustomPagination

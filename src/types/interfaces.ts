@@ -112,29 +112,6 @@ export interface ISalonForm {
 	cosmeticIDs: string[]
 	languageIDs: string[]
 	address: boolean | null
-	publishedSalonData: {
-		name: string | null
-		aboutUsFirst: string | null
-		aboutUsSecond: string | null
-		address: {
-			countryCode: string | null
-			zipCode: string | null
-			city: string | null
-			street: string | null
-			streetNumber: string | null
-			latitude: number | null
-			longitude: number | null
-		}
-		locationNote: string | null
-		phones: {
-			phonePrefixCountryCode: string | null
-			phone: string | null
-		}[]
-		email: string | null
-		logo: any
-		gallery: any
-		pricelists: any
-	}
 }
 
 export interface IServiceForm {

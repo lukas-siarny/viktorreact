@@ -83,7 +83,7 @@ const CategoriesTree = () => {
 				image: data?.image?.original ? [{ url: data?.image?.original, thumbUrl: data?.image?.resizedImages?.thumbnail, uid: data?.image?.id }] : undefined,
 				deletedAt,
 				isParentDeleted,
-				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.image?.id }] : undefined,
+				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.icon?.id }] : undefined,
 				categoryParameterID: data?.categoryParameter?.id
 			}
 		}

@@ -95,41 +95,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		socialLinkInstagram: salonData.socialLinkInstagram || null,
 		socialLinkYoutube: salonData.socialLinkYoutube || null,
 		socialLinkTikTok: salonData.socialLinkTikTok || null,
-		socialLinkPinterest: salonData.socialLinkPinterest || null,
-		publishedSalonData: {
-			name: salonData.publishedSalonData?.name || null,
-			aboutUsFirst: salonData.publishedSalonData?.aboutUsFirst || null,
-			aboutUsSecond: salonData.publishedSalonData?.aboutUsSecond || null,
-			email: salonData.publishedSalonData?.email || null,
-			address: {
-				countryCode: salonData.publishedSalonData?.address?.countryCode || null,
-				zipCode: salonData.publishedSalonData?.address?.zipCode || null,
-				city: salonData.publishedSalonData?.address?.city || null,
-				street: salonData.publishedSalonData?.address?.street || null,
-				streetNumber: salonData.publishedSalonData?.address?.streetNumber || null,
-				latitude: salonData.publishedSalonData?.address?.latitude ?? null,
-				longitude: salonData.publishedSalonData?.address?.longitude ?? null
-			},
-			locationNote: salonData.publishedSalonData?.locationNote || null,
-			gallery: map(salonData.publishedSalonData?.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
-			logo: salonData.publishedSalonData?.logo
-				? [
-						{
-							uid: salonData.publishedSalonData.logo.id,
-							url: salonData.publishedSalonData.logo.original,
-							thumbUrl: salonData.publishedSalonData.logo?.resizedImages?.thumbnail
-						}
-				  ]
-				: null,
-			pricelists: map(salonData.publishedSalonData?.pricelists, (file) => ({ url: file?.original, uid: file?.id })),
-			phones:
-				salonData.publishedSalonData?.phones && !isEmpty(salonData.publishedSalonData?.phones)
-					? salonData.publishedSalonData.phones.map((phone) => ({
-							phonePrefixCountryCode: phone.phonePrefixCountryCode || null,
-							phone: phone.phone || null
-					  }))
-					: getPhoneDefaultValue(phonePrefixCountryCode)
-		}
+		socialLinkPinterest: salonData.socialLinkPinterest || null
 	}
 
 	return initialData

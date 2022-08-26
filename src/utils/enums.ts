@@ -128,7 +128,8 @@ export enum FORM {
 	LANGUAGES_FILTER = 'LANGUAGES_FILTER',
 	SPECIALIST_CONTACT = 'SPECIALIST_CONTACT',
 	SPECIALIST_CONTACT_FILTER = 'SPECIALIST_CONTACT_FILTER',
-	SALON_BILLING_INFO = 'SALON_BILLING_INFO'
+	SALON_BILLING_INFO = 'SALON_BILLING_INFO',
+	FILTER_REJECTED_SUGGESTIONS = 'FILTER_REJECTED_SUGGESTIONS'
 }
 
 // System permissions
@@ -606,6 +607,7 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
 		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.BASIC}`,
 		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
-		publishedChanges: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.PUBLISHED}&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`
+		publishedChanges: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.PUBLISHED}&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
+		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`
 	}
 })

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { map } from 'lodash'
+import { map, isEmpty } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
@@ -13,7 +13,7 @@ import { getReq } from '../../utils/request'
 import { SALON_FILTER_STATES, SALON_FILTER_CREATE_TYPES, SALON_CREATE_TYPES } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
-export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons | IGetSalonHistory
+export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
 
 interface IGetSalons {
 	type: SALONS
@@ -23,15 +23,6 @@ interface IGetSalons {
 interface IGetSalonHistory {
 	type: SALON_HISTORY
 	payload: ISalonHistoryPayload
-}
-
-interface IRejectedSuggestionsPayload {
-	data: Paths.
-}
-
-interface IGetRejectedSuggestions {
-	type: REJECTED_SUGGESTIONS,
-	payload: 
 }
 
 export interface IGetSalonsQueryParams extends IQueryParams {
@@ -93,6 +84,28 @@ export interface IBasicSalonPayload {
 export interface ISalonsPayload extends ISearchable<Paths.GetApiB2BAdminSalons.Responses.$200> {}
 
 export interface IBasicSalonsPayload extends ISearchable<Paths.GetApiB2BAdminSalonsBasic.Responses.$200> {}
+
+export interface IRejectedSuggestionsPayload {
+	data: Paths.GetApiB2BAdminSalonsRejectedSuggestions.Responses.$200 | null
+	tableData?: IRejectedSuggestionsTableData[]
+}
+
+interface IRejectedSuggestionsTableData {
+	key: string
+	salonID: string
+	address: string
+	salonMail: string
+	salonName: string
+	userID: string
+	userLastName: string
+	userPhone: string
+	userEmail: string
+}
+
+interface IGetRejectedSuggestions {
+	type: REJECTED_SUGGESTIONS
+	payload: IRejectedSuggestionsPayload
+}
 
 export const getSalons =
 	(queryParams: IGetSalonsQueryParams): ThunkResult<Promise<ISalonsPayload>> =>
@@ -268,6 +281,43 @@ export const getSalonHistory =
 			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: SALON_HISTORY.SALON_HISTORY_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getRejectedSuggestions =
+	(queryParams: IQueryParams): ThunkResult<Promise<IRejectedSuggestionsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IRejectedSuggestionsPayload
+
+		try {
+			dispatch({ type: REJECTED_SUGGESTIONS.REJECTED_SUGGESTIONS_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/salons/rejected-suggestions', { ...normalizeQueryParams(queryParams) } as any)
+			const tableData: IRejectedSuggestionsTableData[] = data.salons.map((suggestion: any) => {
+				const { address } = suggestion.salon
+				const formattedAddress = `${address?.city}${address?.street ? `, ${address.street}` : ''}`
+				return {
+					key: suggestion.salon.id,
+					salonID: suggestion.salon.id,
+					salonName: suggestion.salon.name ?? '-',
+					salonMail: suggestion.salon.email ?? '-',
+					address: isEmpty(formattedAddress) ? '-' : formattedAddress,
+					userID: suggestion.user.id,
+					userLastName: suggestion.user.fullName ?? '-',
+					userPhone: suggestion.user.phone ?? '-',
+					userEmail: suggestion.user.email ?? '-'
+				}
+			})
+			payload = {
+				data,
+				tableData
+			}
+			dispatch({ type: REJECTED_SUGGESTIONS.REJECTED_SUGGESTIONS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: REJECTED_SUGGESTIONS.REJECTED_SUGGESTIONS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

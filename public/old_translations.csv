@@ -1,0 +1,532 @@
+Keys; cs ; en ; sk 
+--loc--
+  Muž; _NEPRELOZENE_; Man;  Muž
+  Vytvoriť; _NEPRELOZENE_; Create;  Vytvoriť
+ 24 hodín; _NEPRELOZENE_; 24 hours; 24 hodín
+ 48 hodín; _NEPRELOZENE_; 48 hours; 48 hodín
+ Admin; _NEPRELOZENE_; Admin; Admin
+ Adresa; _NEPRELOZENE_; Address; Adresa
+ Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica (s číslom!), PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.; _NEPRELOZENE_; The address is not complete. Make sure it is filled in - City, Street (with number!), ZIP code and Country. You can refine the address in the search or directly on the map.; Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica (s číslom!), PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.
+ Adresa salónu nie je známa; _NEPRELOZENE_; Salon address is unknown; Adresa salónu nie je známa
+ Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.; _NEPRELOZENE_; It is necessary to request an approval for salon to be published.; Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.
+ Ak pre nejaké odvetvie chýba služba, ktorú chcete poskytovať, vyplňte formulár.; _NEPRELOZENE_; If the service you want to provide is missing for an industry, fill out the form.; Ak pre nejaké odvetvie chýba služba, ktorú chcete poskytovať, vyplňte formulár.
+ Aktivovať; _NEPRELOZENE_; Activate; Aktivovať
+ Aktívne salóny; _NEPRELOZENE_; Active salons; Aktívne salóny
+ Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...; _NEPRELOZENE_; What payment methods do you accept, e.g. cash, vouchers, cryptocurrencies,...; Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...
+ Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak; _NEPRELOZENE_; At least 8 characters, 1 number, 1 uppercase, 1 lowercase and 1 special character; Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak
+ Avatar; _NEPRELOZENE_; Avatar; Avatar
+ BASIC; _NEPRELOZENE_; BASIC; BASIC
+ BASIC salóny; _NEPRELOZENE_; BASIC salons; BASIC salóny
+ BASIC salóny, systémom omylom navrhnuté na spárovanie; _NEPRELOZENE_; BASIC salons mistakenly suggested for pairing; BASIC salóny, systémom omylom navrhnuté na spárovanie
+ Bez udania dôvodu.; _NEPRELOZENE_; No exlpanation was provided.; Bez udania dôvodu.
+ Boli ste automaticky odhlásený; _NEPRELOZENE_; You have been automatically logged out; Boli ste automaticky odhlásený
+ Boli ste pozvaný do salónu; _NEPRELOZENE_; You have been invited to the salon; Boli ste pozvaný do salónu
+ Cena; _NEPRELOZENE_; Price; Cena
+ Cena ({{symbol}}); _NEPRELOZENE_; Price ({{symbol}}; Cena ({{symbol}})
+ Cena do ({{symbol}}); _NEPRELOZENE_; Price to ({{symbol}}); Cena do ({{symbol}})
+ Cena od ({{symbol}}); _NEPRELOZENE_; Price from ({{symbol}}); Cena od ({{symbol}})
+ Cenníky; _NEPRELOZENE_; Price lists; Cenníky
+ Chyba; _NEPRELOZENE_; Error; Chyba
+ Chyba pripojenia k serveru; _NEPRELOZENE_; Error connecting to server; Chyba pripojenia k serveru
+ Chybne vyplnený formulár; _NEPRELOZENE_; Incorrectly filled out form; Chybne vyplnený formulár
+ Chybný rozsah; _NEPRELOZENE_; Invalid range; Chybný rozsah
+ Chybný rozsah dátumov; _NEPRELOZENE_; Invalid date range; Chybný rozsah dátumov
+ DIČ; _NEPRELOZENE_; TIN; DIČ
+ Detail podpory; _NEPRELOZENE_; Support detail; Detail podpory
+ Detail používateľa; _NEPRELOZENE_; User detail; Detail používateľa
+ Detail salónu; _NEPRELOZENE_; Salon detail; Detail salónu
+ Detail služby; _NEPRELOZENE_; Service detail; Detail služby
+ Detail zamestnanca; _NEPRELOZENE_; Employee detail; Detail zamestnanca
+ Detail zákazníka; _NEPRELOZENE_; Customer detail; Detail zákazníka
+ Do; _NEPRELOZENE_; To; Do
+ Doplňujúci popis; _NEPRELOZENE_; Additional description; Doplňujúci popis
+ Dátum; _NEPRELOZENE_; Date; Dátum
+ Dátum nesmie byť v minulosti; _NEPRELOZENE_; The date must not be in the past; Dátum nesmie byť v minulosti
+ Dôvod zamietnutia; _NEPRELOZENE_; Reason for rejection; Dôvod zamietnutia
+ Email; _NEPRELOZENE_; Email; Email
+ Email nie je k dispozícii; _NEPRELOZENE_; No emial address was provided; Email nie je k dispozícii
+ Email nie je platný; _NEPRELOZENE_; Invalid email; Email nie je platný
+ Emailové adresy; _NEPRELOZENE_; Email addresses; Emailové adresy
+ Externista; _NEPRELOZENE_; External; Externista
+ Ešte nemáte účet?; _NEPRELOZENE_; Don't have an account yet?; Ešte nemáte účet?
+ Facebook; _NEPRELOZENE_; Facebook; Facebook
+ Fakturačná adresa; _NEPRELOZENE_; Invoice address; Fakturačná adresa
+ Fakturačné údaje; _NEPRELOZENE_; Billing info; Fakturačné údaje
+ Firemné údaje; _NEPRELOZENE_; Company data; Firemné údaje
+ Fotogaléria; _NEPRELOZENE_; Photogallery; Fotogaléria
+ Google mapa je aktuálne nedostupná.; _NEPRELOZENE_; Google map is currently unavailable.; Google mapa je aktuálne nedostupná.
+ Heslo; _NEPRELOZENE_; Password; Heslo
+ Heslá sa nezhodujú; _NEPRELOZENE_; Passwords do not match; Heslá sa nezhodujú
+ História salónu; _NEPRELOZENE_; History of the salon; História salónu
+ Hlavná stránka; _NEPRELOZENE_; Main page; Hlavná stránka
+ Hodnota (EN); _NEPRELOZENE_; Value (EN); Hodnota (EN)
+ Hodnoty; _NEPRELOZENE_; Values; Hodnoty
+ Hodnoty (min); _NEPRELOZENE_; Value (in minutes); Hodnoty (min)
+ Hodnoty sú uvedené v minútach; _NEPRELOZENE_; Values are given in minutes; Hodnoty sú uvedené v minútach
+ Hľadať podľa krajiny; _NEPRELOZENE_; Search by country; Hľadať podľa krajiny
+ Hľadať podľa meno, e-mail; _NEPRELOZENE_; Search by name, email; Hľadať podľa meno, e-mail
+ Hľadať podľa meno, e-mail, tel. číslo; _NEPRELOZENE_; Search by name, email, phone number; Hľadať podľa meno, e-mail, tel. číslo
+ Hľadať podľa názvu; _NEPRELOZENE_; Search by title; Hľadať podľa názvu
+ Hľadať podľa názvu alebo adresy; _NEPRELOZENE_; Search by title or address; Hľadať podľa názvu alebo adresy
+ Ikona; _NEPRELOZENE_; Icon; Ikona
+ Import dát; _NEPRELOZENE_; Data import; Import dát
+ Importovať; _NEPRELOZENE_; Import; Importovať
+ Importovať salóny; _NEPRELOZENE_; Import salon; Importovať salóny
+ Importovať ďalšie; _NEPRELOZENE_; Import another; Importovať ďalšie
+ Info; _NEPRELOZENE_; Info; Info
+ Instagram; _NEPRELOZENE_; Instagram; Instagram
+ Iné spôsoby platby; _NEPRELOZENE_; Other payment methods; Iné spôsoby platby
+ IČ DPH; _NEPRELOZENE_; VAT registration number; IČ DPH
+ IČO; _NEPRELOZENE_; Company registration number; IČO
+ Jazyk; _NEPRELOZENE_; Language; Jazyk
+ Jazyky; _NEPRELOZENE_; Languages; Jazyky
+ Jazyky, ktorými sa dá v salóne dohovoriť; _NEPRELOZENE_; Languages you speak; Jazyky, ktorými sa dá v salóne dohovoriť
+ Kategória; _NEPRELOZENE_; Category; Kategória
+ Kategória služby; _NEPRELOZENE_; Category of service; Kategória služby
+ Kategórie; _NEPRELOZENE_; Categories; Kategórie
+ Kontaktná osoba; _NEPRELOZENE_; Contact person; Kontaktná osoba
+ Kontaktné údaje; _NEPRELOZENE_; Contact details; Kontaktné údaje
+ Kontaktovať Špecialistu; _NEPRELOZENE_; Contact Specialist; Kontaktovať Špecialistu
+ Kozmetika; _NEPRELOZENE_; Cosmetics; Kozmetika
+ Kozmetika so zadaným názvom už existuje; _NEPRELOZENE_; Cosmetics with the specified name already exist; Kozmetika so zadaným názvom už existuje
+ Krajina; _NEPRELOZENE_; Country; Krajina
+ Krajiny; _NEPRELOZENE_; Countries; Krajiny
+ Logo; _NEPRELOZENE_; Logo; Logo
+ Manažér; _NEPRELOZENE_; Manager; Manažér
+ Marketingové účely; _NEPRELOZENE_; Marketing purposes; Marketingové účely
+ Max. počet znakov je {{max}}; _NEPRELOZENE_; Max. number of characters is {{max}}; Max. počet znakov je {{max}}
+ Meno; _NEPRELOZENE_; Name; Meno
+ Meno a Priezvisko; _NEPRELOZENE_; Name and surname; Meno a Priezvisko
+ Mesto; _NEPRELOZENE_; City; Mesto
+ Min. počet znakov je {{min}}; _NEPRELOZENE_; Min. number of characters is {{min}}; Min. počet znakov je {{min}}
+ Moje konto; _NEPRELOZENE_; My account; Moje konto
+ Možnosti platby; _NEPRELOZENE_; Payment options; Možnosti platby
+ Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!; _NEPRELOZENE_; You must select and set at least one parameter value!; Musíte zvoliť a nastaviť aspoň jednu hodnotu parametra!
+ Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?; _NEPRELOZENE_; You have unsaved changes to the form. Would you like to continue?; Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?
+ Môj profil; _NEPRELOZENE_; My profile; Môj profil
+ Na schválenie; _NEPRELOZENE_; For approval; Na schválenie
+ Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás; _NEPRELOZENE_; You do not have sufficient permissions for the page you are trying to view.If you think you should have access, please contact us; Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás
+ Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.; _NEPRELOZENE_; We will send a password reset link to your address. Please enter your address.; Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.
+ Na základe vašich kontantkých informácií sme v našej datábaze našli sálony, ktoré by mohli patriť vám; _NEPRELOZENE_; Based on your contact information, we found salons in our database that could belong to you; Na základe vašich kontantkých informácií sme v našej datábaze našli sálony, ktoré by mohli patriť vám
+ Nahrajte maximálne {{maxCount}} súborov; _NEPRELOZENE_; Upload a maximum of {{maxCount}} files; Nahrajte maximálne {{maxCount}} súborov
+ Nahrať; _NEPRELOZENE_; Upload; Nahrať
+ Naozaj chcete odstrániť {{entity}} ?; _NEPRELOZENE_; Do you really want to remove {{entity}} ?; Naozaj chcete odstrániť {{entity}} ?
+ Nastavenia; _NEPRELOZENE_; Settings; Nastavenia
+ Nastavenie hesla; _NEPRELOZENE_; Password setting; Nastavenie hesla
+ Nastaviť heslo; _NEPRELOZENE_; Set password; Nastaviť heslo
+ Navrhované salóny; _NEPRELOZENE_; Suggested salons; Navrhované salóny
+ Načítavam...; _NEPRELOZENE_; Loading...; Načítavam...
+ Našim zákazníkom chceme priniesť najlepší salón lokátor na trhu. Preto pri schvaľovaní kontrolujeme kvalitu obsahu, pravdivosť a aktuálnosť informácii. Taktiež chceme chrániť vás, majiteľov salónov, pred podvodníkmi a zneužitím informácií.; _NEPRELOZENE_; We want to bring our customers the best salon locator on the market. Therefore, when approving, we check the quality of the content, the truthfulness and up-to-dateness of the information. We also want to protect you, salon owners, from fraudsters and misuse of information.; Našim zákazníkom chceme priniesť najlepší salón lokátor na trhu. Preto pri schvaľovaní kontrolujeme kvalitu obsahu, pravdivosť a aktuálnosť informácii. Taktiež chceme chrániť vás, majiteľov salónov, pred podvodníkmi a zneužitím informácií.
+ Ne; _NEPRELOZENE_; Sun; Ne
+ Nedeľa; _NEPRELOZENE_; Sunday; Nedeľa
+ Nepublikované; _NEPRELOZENE_; Unpublished; Nepublikované
+ Nepublikovaný; _NEPRELOZENE_; Unpublished; Nepublikovaný
+ Nesprávny formát emailovej adresy; _NEPRELOZENE_; Wrong email address format; Nesprávny formát emailovej adresy
+ Nespárované; _NEPRELOZENE_; Unpaired; Nespárované
+ Nevadí, radi vám s tým pomôžeme. Ak využijete naše služby, získate; _NEPRELOZENE_; No problem, we'll be happy to help you. If you use our services, you will get; Nevadí, radi vám s tým pomôžeme. Ak využijete naše služby, získate
+ Neviete vyplniť svoj profil salónu? Nedarí sa vám spraviť pekné fotky?; _NEPRELOZENE_; Can't fill out your salon profile? Can't take nice photos?; Neviete vyplniť svoj profil salónu? Nedarí sa vám spraviť pekné fotky?
+ Nevymazaný; _NEPRELOZENE_; Undeleted; Nevymazaný
+ Nie je validná IP; _NEPRELOZENE_; Invalid IP address; Nie je validná IP
+ Nie je validná číselná hodnota; _NEPRELOZENE_; Not a valid numerical value; Nie je validná číselná hodnota
+ Nie, toto je nedorozumenie; _NEPRELOZENE_; No, this is a misunderstanding; Nie, toto je nedorozumenie
+ Notino Špecialista; _NEPRELOZENE_; Notino Specialist; Notino Špecialista
+ Nový používateľ; _NEPRELOZENE_; New user; Nový používateľ
+ Názov; _NEPRELOZENE_; Name; Názov
+ Názov (EN); _NEPRELOZENE_; Name (EN); Názov (EN)
+ Názov jazyka (EN); _NEPRELOZENE_; Language name (EN); Názov jazyka (EN)
+ Názov kategórie (EN); _NEPRELOZENE_; Category name (EN); Názov kategórie (EN)
+ Názov musí byť vyplnení pre aspoň jeden jazyk; _NEPRELOZENE_; Name must be filled in for at least one language; Názov musí byť vyplnení pre aspoň jeden jazyk
+ O nás; _NEPRELOZENE_; About us; O nás
+ O výsledku vás budeme informovať emailom; _NEPRELOZENE_; You will be informed about the result by email; O výsledku vás budeme informovať emailom
+ Obchodnými podmienkami; _NEPRELOZENE_; Terms and Conditions; Obchodnými podmienkami
+ Obrázok; _NEPRELOZENE_; Image; Obrázok
+ Od; _NEPRELOZENE_; From; Od
+ Odhlásiť; _NEPRELOZENE_; Logout; Odhlásiť
+ Odkaz na Facebook; _NEPRELOZENE_; Link to Facebook; Odkaz na Facebook
+ Odkaz na Instagram; _NEPRELOZENE_; Link to Instagram; Odkaz na Instagram
+ Odkaz na Pinterest; _NEPRELOZENE_; Link to Pinterest; Odkaz na Pinterest
+ Odkaz na TikTok; _NEPRELOZENE_; Link to TikTok; Odkaz na TikTok
+ Odkaz na Youtube; _NEPRELOZENE_; Link to Youtube; Odkaz na Youtube
+ Odkaz na webovú stránku salóna; _NEPRELOZENE_; Link to the salon website; Odkaz na webovú stránku salóna
+ Odoslať; _NEPRELOZENE_; Send; Odoslať
+ Odoslať email; _NEPRELOZENE_; Send email; Odoslať email
+ Odstrániť {{entity}}; _NEPRELOZENE_; Remove {{entity}}; Odstrániť {{entity}}
+ Odvetvia; _NEPRELOZENE_; Industries; Odvetvia
+ Odvetvie; _NEPRELOZENE_; Industry; Odvetvie
+ Oprávnenie; _NEPRELOZENE_; Permissions; Oprávnenie
+ Osobné údaje; _NEPRELOZENE_; Personal data; Osobné údaje
+ Otvorené cez víkend; _NEPRELOZENE_; Open at the weekend; Otvorené cez víkend
+ Otváracie hodiny; _NEPRELOZENE_; Open hours; Otváracie hodiny
+ PREMIUM; _NEPRELOZENE_; PREMIUM; PREMIUM
+ PREMIUM salóny; _NEPRELOZENE_; PREMIUM salons; PREMIUM salóny
+ PSČ; _NEPRELOZENE_; ZIP CODE; PSČ
+ Parameter; _NEPRELOZENE_; Parameter; Parameter
+ Parametre; _NEPRELOZENE_; Parameters; Parametre
+ Pia; _NEPRELOZENE_; Fri; Pia
+ Piatok; _NEPRELOZENE_; Friday; Piatok
+ Pinterest; _NEPRELOZENE_; Pinterest; Pinterest
+ Platba kartou; _NEPRELOZENE_; Card payment; Platba kartou
+ Platba v hotovosti; _NEPRELOZENE_; Cash payment; Platba v hotovosti
+ Po; _NEPRELOZENE_; Mon; Po
+ Po - Pia; _NEPRELOZENE_; Mon-Fri; Po - Pia
+ Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.; _NEPRELOZENE_; After processing, we will send you an import summary report to your email address.; Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.
+ Podpora; _NEPRELOZENE_; Support; Podpora
+ Podpora nebola nájdená; _NEPRELOZENE_; Support not found; Podpora nebola nájdená
+ Pohlavie; _NEPRELOZENE_; Gender; Pohlavie
+ Pokračovať; _NEPRELOZENE_; Continue; Pokračovať
+ Položku; _NEPRELOZENE_; Item; Položku
+ Pomoc a podpora; _NEPRELOZENE_; Help and support; Pomoc a podpora
+ Pon - Pi rovnaké otváracie hodiny; _NEPRELOZENE_; Mon - Fri same opening hours; Pon - Pi rovnaké otváracie hodiny
+ Pondelok; _NEPRELOZENE_; Monday; Pondelok
+ Pondelok - Piatok; _NEPRELOZENE_; Monday-Friday; Pondelok - Piatok
+ Popis; _NEPRELOZENE_; Description; Popis
+ Popisné číslo; _NEPRELOZENE_; Descriptive number; Popisné číslo
+ Poslať kolegovi pozvánku; _NEPRELOZENE_; Send an invitation to a colleague; Poslať kolegovi pozvánku
+ Potrebujete pomôcť?; _NEPRELOZENE_; Need help?; Potrebujete pomôcť?
+ Potvrdiť; _NEPRELOZENE_; Confirm; Potvrdiť
+ Použiť parameter; _NEPRELOZENE_; Use parameter; Použiť parameter
+ Používatelia; _NEPRELOZENE_; Users; Používatelia
+ Používateľovi chýbajú oprávnenia na akciu; _NEPRELOZENE_; User is missing permissions for an action; Používateľovi chýbajú oprávnenia na akciu
+ Používateľský profil; _NEPRELOZENE_; User profile; Používateľský profil
+ Poznámka; _NEPRELOZENE_; Note; Poznámka
+ Poznámka k adrese; _NEPRELOZENE_; Note to address; Poznámka k adrese
+ Poznámka k parkovaniu; _NEPRELOZENE_; Note to parking; Poznámka k parkovaniu
+ Poznámka pre otváracie hodiny; _NEPRELOZENE_; Note for opening hours; Poznámka pre otváracie hodiny
+ Pozvať do tímu; _NEPRELOZENE_; Invite to team; Pozvať do tímu
+ Pozvánkový email; _NEPRELOZENE_; Invite email; Pozvánkový email
+ Počas schvaľovania; _NEPRELOZENE_; during approval; Počas schvaľovania
+ Počet znakov musí byť {{length}}; _NEPRELOZENE_; Number of characters must be {{length}}; Počet znakov musí byť {{length}}
+ Požiadavka na spracovanie dát bola úspešne vytvorená.; _NEPRELOZENE_; Request to process the data was successfully created.; Požiadavka na spracovanie dát bola úspešne vytvorená.
+ Požiadať o novú službu; _NEPRELOZENE_; Request a new service; Požiadať o novú službu
+ Požiadať o schválenie; _NEPRELOZENE_; Request approval; Požiadať o schválenie
+ Pre prístup potvrďte základné údaje; _NEPRELOZENE_; Confirm basic data for access; Pre prístup potvrďte základné údaje
+ Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje; _NEPRELOZENE_; Salon publication requires filled the following data; Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje
+ Pre túto akciu nemáte dostatočné oprávnenia.; _NEPRELOZENE_; You do not have sufficient credentials for this action.; Pre túto akciu nemáte dostatočné oprávnenia.
+ Prebieha nahrávanie; _NEPRELOZENE_; Uploading...; Prebieha nahrávanie
+ Pred schválením je potrebné; _NEPRELOZENE_; It is necessary before approval; Pred schválením je potrebné
+ Prehľad; _NEPRELOZENE_; Overview; Prehľad
+ Premium vs. Basic salóny; _NEPRELOZENE_; Premium vs. Basic salons; Premium vs. Basic salóny
+ Prečo salóny schvaľujeme?; _NEPRELOZENE_; Why do we approve salons?; Prečo salóny schvaľujeme?
+ Pridať hodnotu; _NEPRELOZENE_; Add value; Pridať hodnotu
+ Pridať interval; _NEPRELOZENE_; Add interval; Pridať interval
+ Pridať kategóriu; _NEPRELOZENE_; Add category; Pridať kategóriu
+ Pridať podporu; _NEPRELOZENE_; Add support; Pridať podporu
+ Pridať používateľa; _NEPRELOZENE_; Add user; Pridať používateľa
+ Pridať salón; _NEPRELOZENE_; Add salon; Pridať salón
+ Pridať telefón; _NEPRELOZENE_; Add phone number; Pridať telefón
+ Pridať zamestnanca; _NEPRELOZENE_; Add employee; Pridať zamestnanca
+ Pridať zamestnancov; _NEPRELOZENE_; Add employees; Pridať zamestnancov
+ Pridať zákazníka; _NEPRELOZENE_; Add customer; Pridať zákazníka
+ Pridať {{entity}}; _NEPRELOZENE_; Add {{entity}}; Pridať {{entity}}
+ Priezvisko; _NEPRELOZENE_; Last name; Priezvisko
+ Prihlásenie; _NEPRELOZENE_; Login; Prihlásenie
+ Prihlásiť sa; _NEPRELOZENE_; Sign in; Prihlásiť sa
+ Prijať pozvánku; _NEPRELOZENE_; Accept invite; Prijať pozvánku
+ Pripravujeme prehľad pre salón - {{name}}; _NEPRELOZENE_; We are preparing overview for salon - {{name}}; Pripravujeme prehľad pre salón - {{name}}
+ Priradení zamestnanci; _NEPRELOZENE_; Assigned employees; Priradení zamestnanci
+ Priradiť služby; _NEPRELOZENE_; Assign services; Priradiť služby
+ Priradiť {{entity}}; _NEPRELOZENE_; Assign {{entity}}; Priradiť {{entity}}
+ Publikovaný; _NEPRELOZENE_; Published; Publikovaný
+ Recepčný; _NEPRELOZENE_; Receptionist; Recepčný
+ Registrovať; _NEPRELOZENE_; Register; Registrovať
+ Registrovať sa; _NEPRELOZENE_; Register now; Registrovať sa
+ Registrácia; _NEPRELOZENE_; Registration; Registrácia
+ Rola; _NEPRELOZENE_; Role; Rola
+ Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.; _NEPRELOZENE_; There are changes waiting to be approved. Data cannot be edited during this time.; Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.
+ Salóny; _NEPRELOZENE_; Salons; Salóny
+ Salóny čakajúce na schválenie; _NEPRELOZENE_; Salons pending for approval; Salóny čakajúce na schválenie
+ Schvalovací proces; _NEPRELOZENE_; Approval process; Schvalovací proces
+ Schválenie; _NEPRELOZENE_; Approval; Schválenie
+ Schválený salón bude zverejnený zákazníkom Notino aplikácie; _NEPRELOZENE_; The approved salon will be published to customers of the Notino application; Schválený salón bude zverejnený zákazníkom Notino aplikácie
+ Sem napíšte dôvod skrytia; _NEPRELOZENE_; Please write here the reason for hiding; Sem napíšte dôvod skrytia
+ Sem napíšte dôvod zamietnutia; _NEPRELOZENE_; Please write here the reason for rejection; Sem napíšte dôvod zamietnutia
+ Skrytie salónu; _NEPRELOZENE_; Hiding salon; Skrytie salónu
+ Skryť salón; _NEPRELOZENE_; Hide salon; Skryť salón
+ Služba; _NEPRELOZENE_; Service; Služba
+ Služby; _NEPRELOZENE_; Services; Služby
+ So; _NEPRELOZENE_; Sat; So
+ Sobota; _NEPRELOZENE_; Saturday; Sobota
+ Sociálne siete; _NEPRELOZENE_; Social networks; Sociálne siete
+ Spravovanie znamená tvorbu, upravovanie a mazanie vybraných údajov a informácii (ak nie je v zátvorke definované inak).; _NEPRELOZENE_; Managing salon means creating, editing and deleting selected data and information (unless otherwise defined in parentheses); Spravovanie znamená tvorbu, upravovanie a mazanie vybraných údajov a informácii (ak nie je v zátvorke definované inak).
+ Správa firemných a fakturačných údajov salónu; _NEPRELOZENE_; Management of salon company and invoicing data; Správa firemných a fakturačných údajov salónu
+ Správa offline rezervácií; _NEPRELOZENE_; Management of offline reservations; Správa offline rezervácií
+ Správa online rezervácií; _NEPRELOZENE_; Management of online reservations; Správa online rezervácií
+ Správa oprávnení zamesnancov; _NEPRELOZENE_; Management of employee permissions; Správa oprávnení zamesnancov
+ Správa profilu salónu; _NEPRELOZENE_; Management of salon profile; Správa profilu salónu
+ Správa služieb salónu; _NEPRELOZENE_; Management of salon services; Správa služieb salónu
+ Správa zamestnancov salónu; _NEPRELOZENE_; Management of salon employees; Správa zamestnancov salónu
+ Správa zákazníkov salónu; _NEPRELOZENE_; Management of salon customers; Správa zákazníkov salónu
+ Spárované; _NEPRELOZENE_; Paired; Spárované
+ Späť; _NEPRELOZENE_; Back to; Späť
+ St; _NEPRELOZENE_; Wed; St
+ Stav konta; _NEPRELOZENE_; Account status; Stav konta
+ Stav salónov; _NEPRELOZENE_; State of salons; Stav salónov
+ Stavy; _NEPRELOZENE_; States; Stavy
+ Ste majiteľom alebo prevádzkovateľom tohoto salónu?; _NEPRELOZENE_; Are you the owner or operator of this salon?; Ste majiteľom alebo prevádzkovateľom tohoto salónu?
+ Streda; _NEPRELOZENE_; Wednesday; Streda
+ Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás; _NEPRELOZENE_; The page you are trying to open does not exist. Please navigate back to the main page. If you think this is due to an application error, please contact us; Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás
+ Stále však môžete editovať existujúce; _NEPRELOZENE_; However, you can still edit existing; Stále však môžete editovať existujúce
+ Súbor je príliš veľký (max. {{size}} {{unit}}); _NEPRELOZENE_; File is too large (max. {{size}} {{unit}}); Súbor je príliš veľký (max. {{size}} {{unit}})
+ Telefón; _NEPRELOZENE_; Phone; Telefón
+ Telefónne čísla; _NEPRELOZENE_; Telephone numbers; Telefónne čísla
+ Telefónne číslo nie je platné; _NEPRELOZENE_; Telephone number is not valid; Telefónne číslo nie je platné
+ TikTok; _NEPRELOZENE_; TikTok; TikTok
+ Toto pole je povinné; _NEPRELOZENE_; This field is required; Toto pole je povinné
+ Trvanie (minúty); _NEPRELOZENE_; Duration (minutes); Trvanie (minúty)
+ Trvanie do (minúty); _NEPRELOZENE_; Duration to (minutes); Trvanie do (minúty)
+ Trvanie od (minúty); _NEPRELOZENE_; Duration from (minutes); Trvanie od (minúty)
+ Typ salónu; _NEPRELOZENE_; Salon type; Typ salónu
+ Táto hodnota už je zadaná; _NEPRELOZENE_; This value is already entered; Táto hodnota už je zadaná
+ Táto operácia nie je povolená.; _NEPRELOZENE_; This operation is not allowed.; Táto operácia nie je povolená.
+ Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo "Pridať kategóriu".; _NEPRELOZENE_; This operation is not allowed. The main category can be added via the button "Add category"  ; Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo "Pridať kategóriu".
+ Týždeň; _NEPRELOZENE_; A week; Týždeň
+ Udeľujem súhlas so spracúvaním osobných údajov na; _NEPRELOZENE_; I give my consent to the processing of my personal data for; Udeľujem súhlas so spracúvaním osobných údajov na
+ Ulica; _NEPRELOZENE_; Street; Ulica
+ Uložiť; _NEPRELOZENE_; Save; Uložiť
+ Uložiť odvetvia; _NEPRELOZENE_; Save industries; Uložiť odvetvia
+ Uložiť {{entity}}; _NEPRELOZENE_; Save {{entity}}; Uložiť {{entity}}
+ Upozornenie; _NEPRELOZENE_; Notice; Upozornenie
+ Upozornenie!; _NEPRELOZENE_; Warning!; Upozornenie!
+ Upravený; _NEPRELOZENE_; Last updated; Upravený
+ Upraviť; _NEPRELOZENE_; Edit; Upraviť
+ Upraviť jazyk; _NEPRELOZENE_; Edit language; Upraviť jazyk
+ Upraviť kategóriu; _NEPRELOZENE_; Edit category; Upraviť kategóriu
+ Upraviť kozmetiku; _NEPRELOZENE_; Adjust cosmetics; Upraviť kozmetiku
+ Upraviť rolu; _NEPRELOZENE_; Edit role; Upraviť rolu
+ Upraviť {{entity}}; _NEPRELOZENE_; Edit {{entity}}; Upraviť {{entity}}
+ Upraviť špecialistu; _NEPRELOZENE_; Edit specialist; Upraviť špecialistu
+ Ups niečo sa pokazilo; _NEPRELOZENE_; Oops something went wrong; Ups niečo sa pokazilo
+ Ut; _NEPRELOZENE_; Tue; Ut
+ Utorok; _NEPRELOZENE_; Tuesday; Utorok
+ Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.; _NEPRELOZENE_; Please provide the address to which we will send the link to invite the employee to the team.; Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.
+ Už ste registrovaný? ; _NEPRELOZENE_; Already registered?; Už ste registrovaný? 
+ V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.; _NEPRELOZENE_; There are changes that need to be approved. The changes must be saved frist before requesting approval.; V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.
+ V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.; _NEPRELOZENE_; There are unpublished changes that need to be approved by the administrator before publication.; V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.
+ V tomto odvetví nie sú dostupné na výber žiadne služby; _NEPRELOZENE_; There are no services available for selection in this industry; V tomto odvetví nie sú dostupné na výber žiadne služby
+ Variabilná cena; _NEPRELOZENE_; Variable price; Variabilná cena
+ Variabilné trvanie; _NEPRELOZENE_; Variable duration; Variabilné trvanie
+ Verifikácia; _NEPRELOZENE_; Verification; Verifikácia
+ Vlajka; _NEPRELOZENE_; Flag; Vlajka
+ Vo formulári máte neuložené zmeny. Želáte si pokračovať ďalej?; _NEPRELOZENE_; There are unsaved changes in the form. Do you wish to continue?; Vo formulári máte neuložené zmeny. Želáte si pokračovať ďalej?
+ Vrátiť sa do administrácie; _NEPRELOZENE_; Return to the administration; Vrátiť sa do administrácie
+ Vyber krajinu; _NEPRELOZENE_; Select a country; Vyber krajinu
+ Vyber pohlavie; _NEPRELOZENE_; Select a gender; Vyber pohlavie
+ Vyberte aspoň jedno odvetvie; _NEPRELOZENE_; Choose at least one industry; Vyberte aspoň jedno odvetvie
+ Vyberte aspoň jednu z možností; _NEPRELOZENE_; Select at least one of the options; Vyberte aspoň jednu z možností
+ Vyberte jazyk; _NEPRELOZENE_; Select language; Vyberte jazyk
+ Vyberte kategóriu služby; _NEPRELOZENE_; Select a category of service; Vyberte kategóriu služby
+ Vyberte kozmetiku; _NEPRELOZENE_; Select cosmetics; Vyberte kozmetiku
+ Vyberte krajinu; _NEPRELOZENE_; Select a country; Vyberte krajinu
+ Vyberte odvetvia, ktoré ponúkate; _NEPRELOZENE_; Select industries you offer; Vyberte odvetvia, ktoré ponúkate
+ Vyberte odvetvie; _NEPRELOZENE_; Select an industry; Vyberte odvetvie
+ Vyberte parameter; _NEPRELOZENE_; Select a parameter; Vyberte parameter
+ Vyberte rolu; _NEPRELOZENE_; Select a role; Vyberte rolu
+ Vyberte službu; _NEPRELOZENE_; Select a service; Vyberte službu
+ Vyberte súbor vo formáte .xls/.xlsx; _NEPRELOZENE_; Select a file in .xls/.xlsx format; Vyberte súbor vo formáte .xls/.xlsx
+ Vyberte zamestnancov; _NEPRELOZENE_; Select employees; Vyberte zamestnancov
+ Vyberte {{entity}}; _NEPRELOZENE_; Select {{entity}}; Vyberte {{entity}}
+ Vybrať; _NEPRELOZENE_; Select; Vybrať
+ Vybrať všetky služby odevetvia; _NEPRELOZENE_; Select all industry services; Vybrať všetky služby odevetvia
+ Vyhlasujem, že som sa oboznámil s; _NEPRELOZENE_; I declare that I am familiar with; Vyhlasujem, že som sa oboznámil s
+ Vyhlasujem, že som sa oboznámil so; _NEPRELOZENE_; I declare that I am familiar with; Vyhlasujem, že som sa oboznámil so
+ Vyhľadajte adresu na mape alebo vo vyhľadávači; _NEPRELOZENE_; Search an address on the map or in the search engine; Vyhľadajte adresu na mape alebo vo vyhľadávači
+ Vyhľadajte miesto na mape; _NEPRELOZENE_; Search a place on the map; Vyhľadajte miesto na mape
+ Vyhľadajte podľa {{entity}}; _NEPRELOZENE_; Search by {{entity}}; Vyhľadajte podľa {{entity}}
+ Vyhľadajte salón podľa názvu alebo zadajte vlastný; _NEPRELOZENE_; Search salon by name or enter your own name; Vyhľadajte salón podľa názvu alebo zadajte vlastný
+ Vyhľadajte {{entity}}; _NEPRELOZENE_; Search {{entity}}; Vyhľadajte {{entity}}
+ Vyhľadať; _NEPRELOZENE_; Search; Vyhľadať
+ Vymazané salóny; _NEPRELOZENE_; Deleted salons; Vymazané salóny
+ Vymazaný; _NEPRELOZENE_; Deleted; Vymazaný
+ Vyplnenie profilu; _NEPRELOZENE_; Filling out the profile; Vyplnenie profilu
+ Vyplnenie služby; _NEPRELOZENE_; Filling out the service; Vyplnenie služby
+ Vytvorenie zákazníka; _NEPRELOZENE_; Create customer; Vytvorenie zákazníka
+ Vytvorené; _NEPRELOZENE_; Created; Vytvorené
+ Vytvorený; _NEPRELOZENE_; Created; Vytvorený
+ Vytvoriť jazyk; _NEPRELOZENE_; Create language; Vytvoriť jazyk
+ Vytvoriť kategóriu; _NEPRELOZENE_; Create category; Vytvoriť kategóriu
+ Vytvoriť kozmetiku; _NEPRELOZENE_; Create cosmetics; Vytvoriť kozmetiku
+ Vytvoriť parameter kategórie; _NEPRELOZENE_; Create a parameter of category; Vytvoriť parameter kategórie
+ Vytvoriť podkategóriu; _NEPRELOZENE_; Create subcategory; Vytvoriť podkategóriu
+ Vytvoriť podkategóriu pre; _NEPRELOZENE_; Create subcategory for; Vytvoriť podkategóriu pre
+ Vytvoriť podporu; _NEPRELOZENE_; Create support; Vytvoriť podporu
+ Vytvoriť používateľa; _NEPRELOZENE_; Create user; Vytvoriť používateľa
+ Vytvoriť profil; _NEPRELOZENE_; Create profile; Vytvoriť profil
+ Vytvoriť profil kolegu; _NEPRELOZENE_; Create colleague profile; Vytvoriť profil kolegu
+ Vytvoriť salón; _NEPRELOZENE_; Create salon; Vytvoriť salón
+ Vytvoriť službu; _NEPRELOZENE_; Create service; Vytvoriť službu
+ Vytvoriť zamestnanca; _NEPRELOZENE_; Create an employee; Vytvoriť zamestnanca
+ Vytvoriť {{entity}}; _NEPRELOZENE_; Create {{entity}}; Vytvoriť {{entity}}
+ Vytvoriť špecialistu; _NEPRELOZENE_; Create specialist; Vytvoriť špecialistu
+ Vyžiadať nový odkaz pre nastavenie hesla; _NEPRELOZENE_; Request a new link to set a password; Vyžiadať nový odkaz pre nastavenie hesla
+ Výber role; _NEPRELOZENE_; Role selection; Výber role
+ Všetky; _NEPRELOZENE_; All; Všetky
+ Webstránka; _NEPRELOZENE_; Webpage; Webstránka
+ Youtube; _NEPRELOZENE_; Youtube; Youtube
+ Zabudnuté heslo; _NEPRELOZENE_; Forgot password; Zabudnuté heslo
+ Zadajte DIČ; _NEPRELOZENE_; Enter TIN; Zadajte DIČ
+ Zadajte IČ DPH; _NEPRELOZENE_; Enter Including VAT; Zadajte IČ DPH
+ Zadajte IČO; _NEPRELOZENE_; Enter Company registration number; Zadajte IČO
+ Zadajte PIN; _NEPRELOZENE_; Enter PIN; Zadajte PIN
+ Zadajte celý PIN; _NEPRELOZENE_; Enter full PIN; Zadajte celý PIN
+ Zadajte doplňujúce informácie o salóne; _NEPRELOZENE_; Enter additional salon information; Zadajte doplňujúce informácie o salóne
+ Zadajte doplňujúcu informáciu, napr "3. poschodie vľavo"; _NEPRELOZENE_; Enter addition info e.g. "3rd floor on the left side"; Zadajte doplňujúcu informáciu, napr "3. poschodie vľavo"
+ Zadajte email; _NEPRELOZENE_; Enter email; Zadajte email
+ Zadajte heslo; _NEPRELOZENE_; Enter password; Zadajte heslo
+ Zadajte hodnotu; _NEPRELOZENE_; Enter value; Zadajte hodnotu
+ Zadajte hodnotu v minútach; _NEPRELOZENE_; Enter value in minutes; Zadajte hodnotu v minútach
+ Zadajte maximálne {{max}}; _NEPRELOZENE_; Enter maximum {{max}}; Zadajte maximálne {{max}}
+ Zadajte meno; _NEPRELOZENE_; Enter name; Zadajte meno
+ Zadajte mesto; _NEPRELOZENE_; Enter city; Zadajte mesto
+ Zadajte minimálne {{min}}; _NEPRELOZENE_; Enter a minimum {{min}}; Zadajte minimálne {{min}}
+ Zadajte názov; _NEPRELOZENE_; Enter title; Zadajte názov
+ Zadajte popis; _NEPRELOZENE_; Enter a description; Zadajte popis
+ Zadajte poznámku; _NEPRELOZENE_; Enter note; Zadajte poznámku
+ Zadajte poznámku k adrese, napr. "3. poschodie vľavo"; _NEPRELOZENE_; Enter a note for the address e.g. "3rd floor on the left side"; Zadajte poznámku k adrese, napr. "3. poschodie vľavo"
+ Zadajte poznámku k parkovaniu, napr. "Parkovanie oproti budove."; _NEPRELOZENE_; Enter a note for the parking e.g. "3rd floor on the left side"; Zadajte poznámku k parkovaniu, napr. "Parkovanie oproti budove."
+ Zadajte predvoľbu; _NEPRELOZENE_; Enter prefix; Zadajte predvoľbu
+ Zadajte priezvisko; _NEPRELOZENE_; Enter surname; Zadajte priezvisko
+ Zadajte smerovacie číslo; _NEPRELOZENE_; Enter the area code; Zadajte smerovacie číslo
+ Zadajte správny formát adresy (napr. {{url}}); _NEPRELOZENE_; Enter a valid address (e.g. {{url}}); Zadajte správny formát adresy (napr. {{url}})
+ Zadajte telefón; _NEPRELOZENE_; Enter phone; Zadajte telefón
+ Zadajte ulicu; _NEPRELOZENE_; Enter the street; Zadajte ulicu
+ Zadajte základné informácie o salóne; _NEPRELOZENE_; Enter basic salon information; Zadajte základné informácie o salóne
+ Zadajte {{entity}}; _NEPRELOZENE_; Enter {{entity}}; Zadajte {{entity}}
+ Zadajte číslo; _NEPRELOZENE_; Enter number; Zadajte číslo
+ Zamestnanci; _NEPRELOZENE_; Employees; Zamestnanci
+ Zamestnanec 1; _NEPRELOZENE_; Employee 1; Zamestnanec 1
+ Zamestnanec 2; _NEPRELOZENE_; Employee 2; Zamestnanec 2
+ Zamietnuté; _NEPRELOZENE_; Rejected; Zamietnuté
+ Zamietnuť; _NEPRELOZENE_; Reject; Zamietnuť
+ Zatvorené; _NEPRELOZENE_; Closed; Zatvorené
+ Zatvoriť; _NEPRELOZENE_; Close; Zatvoriť
+ Začnite vytvorením salónu; _NEPRELOZENE_; Start by creating a salon; Začnite vytvorením salónu
+ Zmazať; _NEPRELOZENE_; Delete; Zmazať
+ Zmeny; _NEPRELOZENE_; Changes; Zmeny
+ Zmeny v publikovaných salónoch za ; _NEPRELOZENE_; Changes in published salons for ; Zmeny v publikovaných salónoch za 
+ Zmeny v salóne boli zamietnuté z dôvodu; _NEPRELOZENE_; Salon changes were rejected. Reason; Zmeny v salóne boli zamietnuté z dôvodu
+ Znovu vyžiadať PIN; _NEPRELOZENE_; Request PIN again; Znovu vyžiadať PIN
+ Zobraziť; _NEPRELOZENE_; Show; Zobraziť
+ Zopakujte heslo; _NEPRELOZENE_; Repeat the password; Zopakujte heslo
+ Zopakujte nové heslo; _NEPRELOZENE_; Repeat the new password; Zopakujte nové heslo
+ Zoznam jazykov v salónoch; _NEPRELOZENE_; List of languages in salons; Zoznam jazykov v salónoch
+ Zoznam je prázdny; _NEPRELOZENE_; The list is empty; Zoznam je prázdny
+ Zoznam kategórií; _NEPRELOZENE_; List of categories; Zoznam kategórií
+ Zoznam kozmetiky; _NEPRELOZENE_; List of cosmetics; Zoznam kozmetiky
+ Zoznam odvetví; _NEPRELOZENE_; List of industries; Zoznam odvetví
+ Zoznam parametrov kategórií; _NEPRELOZENE_; List of category parameters; Zoznam parametrov kategórií
+ Zoznam podporných centier; _NEPRELOZENE_; List of support centres; Zoznam podporných centier
+ Zoznam používateľov; _NEPRELOZENE_; List of users; Zoznam používateľov
+ Zoznam priradených služieb; _NEPRELOZENE_; List of assigned services; Zoznam priradených služieb
+ Zoznam salónov; _NEPRELOZENE_; List of salons; Zoznam salónov
+ Zoznam služieb; _NEPRELOZENE_; List of services; Zoznam služieb
+ Zoznam zamestnancov; _NEPRELOZENE_; List of employees; Zoznam zamestnancov
+ Zoznam zákazníkov; _NEPRELOZENE_; List of customers; Zoznam zákazníkov
+ Zoznam špecialistov; _NEPRELOZENE_; List of specialist; Zoznam špecialistov
+ Zrušiť; _NEPRELOZENE_; Cancel; Zrušiť
+ Zvolený dátum nesmie byť pred dátumom {{ compareDate }}; _NEPRELOZENE_; The selected date must not be before the date {{ compareDate }}; Zvolený dátum nesmie byť pred dátumom {{ compareDate }}
+ Zvoľte si krajinu; _NEPRELOZENE_; Choose country; Zvoľte si krajinu
+ Zákazníci; _NEPRELOZENE_; Customers; Zákazníci
+ Základné údaje; _NEPRELOZENE_; Basic information; Základné údaje
+ Zásadami spracovania osobných údajov; _NEPRELOZENE_; Personal data processing principles; Zásadami spracovania osobných údajov
+ alebo; _NEPRELOZENE_; or; alebo
+ email; _NEPRELOZENE_; email; email
+ hodnotu; _NEPRELOZENE_; value; hodnotu
+ jazyk; _NEPRELOZENE_; language; jazyk
+ kozmetiku; _NEPRELOZENE_; cosmetics; kozmetiku
+ ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}; _NEPRELOZENE_; which we have sent to you in a verification email to address {{email}}; ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}
+ len svoje; _NEPRELOZENE_; only own; len svoje
+ len vytváranie a úprava; _NEPRELOZENE_; only creating and editing; len vytváranie a úprava
+ len úprava; _NEPRELOZENE_; only editing; len úprava
+ len úprava a mazanie; _NEPRELOZENE_; only editing and deleting; len úprava a mazanie
+ len úprava a mazanie, len svoje; _NEPRELOZENE_; only editing and deleting, only own; len úprava a mazanie, len svoje
+ mať uvedené aspoň 1 telefónne číslo; _NEPRELOZENE_; to have at least 1 phone number filled in; mať uvedené aspoň 1 telefónne číslo
+ mať vyplnenú adresu salónu; _NEPRELOZENE_; to have address of the salon filled in; mať vyplnenú adresu salónu
+ mať vyplnený názov salónu; _NEPRELOZENE_; to have name of the salon filled in; mať vyplnený názov salónu
+ min; _NEPRELOZENE_; min; min
+ môže trvať 48 hodín; _NEPRELOZENE_; can last 48 hours; môže trvať 48 hodín
+ nami vyplnený profil salónu automaticky schválime; _NEPRELOZENE_; we will automatically approve the salon profile filled in by us; nami vyplnený profil salónu automaticky schválime
+ nebude možné editovať profil salónu; _NEPRELOZENE_; It will not be possible to edit the salon profile; nebude možné editovať profil salónu
+ názov; _NEPRELOZENE_; name; názov
+ okrem Admin; _NEPRELOZENE_; except Admin; okrem Admin
+ parameter; _NEPRELOZENE_; parameter; parameter
+ podporu; _NEPRELOZENE_; support; podporu
+ používateľa; _NEPRELOZENE_; users; používateľa
+ poznámku; _NEPRELOZENE_; note; poznámku
+ priradiť aspoň 1 zamestnanca do salónu, ktorý má aktívny účet v Notino B2B Partner; _NEPRELOZENE_; to have at least 1 employee in the salon with an active account in Notino B2B Partner; priradiť aspoň 1 zamestnanca do salónu, ktorý má aktívny účet v Notino B2B Partner
+ profesionálne vyplnené údaje o salóne,; _NEPRELOZENE_; professionally filled salon data,; profesionálne vyplnené údaje o salóne,
+ salón; _NEPRELOZENE_; salon; salón
+ salón musí mať zvolené aspoň 1 odvetvie; _NEPRELOZENE_; to have at least 1 industry selected in the salon; salón musí mať zvolené aspoň 1 odvetvie
+ salóna; _NEPRELOZENE_; of the salon; salóna
+ slovensky; _NEPRELOZENE_; slovak; slovensky
+ službu; _NEPRELOZENE_; service; službu
+ strana; _NEPRELOZENE_; page; strana
+ týždeň; _NEPRELOZENE_; week; týždeň
+ vyplniť čo najviac relevantných dát o salóne; _NEPRELOZENE_; to fill in all relevant data about the salon; vyplniť čo najviac relevantných dát o salóne
+ z; _NEPRELOZENE_; from; z
+ zabezpečíme fotografa, ktorý spraví profi fotografie vašich priestorov a tímu,; _NEPRELOZENE_; we will provide a photographer who will take professional photos of your palce and team,; zabezpečíme fotografa, ktorý spraví profi fotografie vašich priestorov a tímu,
+ zamestnanca; _NEPRELOZENE_; employee; zamestnanca
+ zdarma; _NEPRELOZENE_; free; zdarma
+ zobraziť viac; _NEPRELOZENE_; show more; zobraziť viac
+ zvolený salón; _NEPRELOZENE_; the selected salon; zvolený salón
+ zákazníka; _NEPRELOZENE_; customer; zákazníka
+ {{from}} - {{to}} z {{total}} záznamov; _NEPRELOZENE_; {{from}} - {{to}} of {{total}} records; {{from}} - {{to}} z {{total}} záznamov
+ Áno, toto je môj salón; _NEPRELOZENE_; Yes, this is my salon; Áno, toto je môj salón
+ Úpravy do; _NEPRELOZENE_; Last updated to; Úpravy do
+ Úpravy od; _NEPRELOZENE_; Last updated from; Úpravy od
+ Úspešne nahraté položky sa následne zobrazia v zozname salónov.; _NEPRELOZENE_; Successfully uploaded entries are then displayed in the list of salons.; Úspešne nahraté položky sa následne zobrazia v zozname salónov.
+ Úspešné; _NEPRELOZENE_; Successful; Úspešné
+ účet; _NEPRELOZENE_; account; účet
+ Čakajúce; _NEPRELOZENE_; Pending; Čakajúce
+ Čo sa bude diať ďalej?; _NEPRELOZENE_; What will happen next?; Čo sa bude diať ďalej?
+ Číslo ulice; _NEPRELOZENE_; Street number; Číslo ulice
+ čas do; _NEPRELOZENE_; time to; čas do
+ čas od; _NEPRELOZENE_; time from; čas od
+ Ďalšieho špecialistu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jedného.; _NEPRELOZENE_; Further specialist cannot be created. You can create a maximum of one for each country.; Ďalšieho špecialistu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jedného.
+ Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.; _NEPRELOZENE_; Further support cannot be created. You can create a maximum of one for each country.; Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.
+ Ľutujeme, momentálne nie sú k dispozící žiadne support centrá.; _NEPRELOZENE_; Sorry, there are currently no support centres available.; Ľutujeme, momentálne nie sú k dispozící žiadne support centrá.
+ Ľutujeme, momentálne nie sú k dispozící žiadni špecialisti.; _NEPRELOZENE_; We're sorry, there are currently no specialists available.; Ľutujeme, momentálne nie sú k dispozící žiadni špecialisti.
+ Ľutujeme, pre zvolenú krajinu moménalne neexistuje žiadna podpora. Ak nás chcete kontaktovať, môžete si zvoliť niektorú z krajín zo zoznamu vyššie.; _NEPRELOZENE_; Sorry, there is currently no support for your chosen country. If you want to contact us, you can choose one of the countries from the list above.; Ľutujeme, pre zvolenú krajinu moménalne neexistuje žiadna podpora. Ak nás chcete kontaktovať, môžete si zvoliť niektorú z krajín zo zoznamu vyššie.
+ Ľutujeme, pre zvolenú krajinu moménalne neexistuje žiadny špecialista; _NEPRELOZENE_; We're sorry, there is currently no specialist for your chosen country.; Ľutujeme, pre zvolenú krajinu moménalne neexistuje žiadny špecialista
+ Špecialisti; _NEPRELOZENE_; Specialists; Špecialisti
+ Štv; _NEPRELOZENE_; Thu; Štv
+ Štvrtok; _NEPRELOZENE_; Thursday; Štvrtok
+ Štát; _NEPRELOZENE_; State; Štát
+ špecialistu; _NEPRELOZENE_; specialist; špecialistu
+ Žena; _NEPRELOZENE_; Woman; Žena
+ Žiadosť o novú službu; _NEPRELOZENE_; Request new service; Žiadosť o novú službu
+--paths--
+ activation; /activation; /activation; /activation
+ billing-info; /billing-info; /billing-info; /billing-info
+ categories; /categories; /categories; /categories
+ category-parameters; /category-parameters; /category-parameters; /category-parameters
+ category-parameters/create; /category-parameters/create; /category-parameters/create; /category-parameters/create
+ category-parameters/{{parameterID}}; /category-parameters/{{parameterID}}; /category-parameters/{{parameterID}}; /category-parameters/{{parameterID}}
+ contact; /contact; /contact; /contact
+ cosmetics; /cosmetics; /cosmetics; /cosmetics
+ customers; /customers; /customers; /customers
+ customers/create; /customers/create; /customers/create; /customers/create
+ customers/{{customerID}}; /customers/{{customerID}}; /customers/{{customerID}}; /customers/{{customerID}}
+ employees; /employees; /employees; /employees
+ employees/create; /employees/create; /employees/create; /employees/create
+ employees/{{employeeID}}; /employees/{{employeeID}}; /employees/{{employeeID}}; /employees/{{employeeID}}
+ index; /; /; /
+ industries; /industries; /industries; /industries
+ industries/{{industryID}}; /industries/{{industryID}}; /industries/{{industryID}}; /industries/{{industryID}}
+ languages-in-salons; /languages-in-salons; /languages-in-salons; /languages-in-salons
+ login; /login; /login; /login
+ my-account; /my-account; /my-account; /my-account
+ reset-password; /reset-password; /reset-password; /reset-password
+ salons; /salons; /salons; /salons
+ salons/create; /salons/create; /salons/create; /salons/create
+ salons/{{salonID}}; /salons/{{salonID}}; /salons/{{salonID}}; /salons/{{salonID}}
+ services; /services; /services; /services
+ services/create; /services/create; /services/create; /services/create
+ services/{{serviceID}}; /services/{{serviceID}}; /services/{{serviceID}}; /services/{{serviceID}}
+ signup; /signup; /signup; /signup
+ specialist-contacts; /specialist-contacts; /specialist-contacts; /specialist-contacts
+ support-contacts; /support-contacts; /support-contacts; /support-contacts
+ support-contacts/create; /support-contacts/create; /support-contacts/create; /support-contacts/create
+ support-contacts/{{supportContactID}}; /support-contacts/{{supportContactID}}; /support-contacts/{{supportContactID}}; /support-contacts/{{supportContactID}}
+ users; /users; /users; /users
+ users/create; /users/create; /users/create; /users/create
+ users/{{userID}}; /users/{{userID}}; /users/{{userID}}; /users/{{userID}}

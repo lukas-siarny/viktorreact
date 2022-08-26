@@ -93,8 +93,8 @@ const graphContent = (label: string, source?: any[]) => {
 					</div>
 					<div className='h-auto w-3/5 3xl:w-1/2 flex items-center'>
 						<div className='w-full'>
-							{source.map((item: any) => (
-								<Row justify={'space-between'} className='w-full h-6 cursor-pointer mb-4' onClick={item.onClick}>
+							{source.map((item: any, index: number) => (
+								<Row justify={'space-between'} key={index} className='w-full h-6 cursor-pointer mb-4' onClick={item.onClick}>
 									<Col span={3}>
 										<div className='h-6 w-6 rounded-full' style={{ backgroundColor: item.background }} />
 									</Col>
@@ -177,7 +177,7 @@ const NotinoDashboard: FC<Props> = () => {
 				{
 					label: t('loc:BASIC salóny, systémom omylom navrhnuté na spárovanie'),
 					count: notino.data.suggestionIncidents,
-					onClick: () => history.push(t('paths:salons')) // TODO
+					onClick: () => history.push(FILTER_PATHS().SALONS.rejectedSuggestions)
 				},
 				{
 					label: (
@@ -280,7 +280,7 @@ const NotinoDashboard: FC<Props> = () => {
 		<SalonDashboard>
 			<div className='content-body medium'>
 				<Spin spinning={notino?.isLoading || !notino.data}>
-					<div className='flex flex-wrap justify-between w-full'>
+					<div className='flex flex-wrap justify-between w-full pr-4'>
 						{dashboardData.alertData.map((item: AlertData, index: number) => (
 							<button
 								type='button'
@@ -310,7 +310,7 @@ const NotinoDashboard: FC<Props> = () => {
 							</div>
 						</div>
 					) : (
-						<Row justify={'space-between'} className='mt-8 ml-4 flex-wrap'>
+						<Row justify={'space-between'} className='mt-8 mx-4 flex-wrap'>
 							{graphContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic)}
 							{graphContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates)}
 						</Row>

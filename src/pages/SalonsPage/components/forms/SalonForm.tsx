@@ -9,7 +9,6 @@ import { isEmpty } from 'lodash'
 import i18next from 'i18next'
 import OpeningHours from '../../../../components/OpeningHours/OpeningHours'
 import AddressFields from '../../../../components/AddressFields'
-import PhoneWithPrefixField from '../../../../components/PhoneWithPrefixField'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
@@ -40,13 +39,11 @@ import { ReactComponent as CreditCardIcon } from '../../../../assets/icons/credi
 import { ReactComponent as InfoIcon } from '../../../../assets/icons/info-icon.svg'
 import { ReactComponent as PhoneIcon } from '../../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
-import { ReactComponent as UserIcon } from '../../../../assets/icons/user-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
 import { ReactComponent as SocialIcon } from '../../../../assets/icons/social-24.svg'
 import { ReactComponent as SocialPinterest } from '../../../../assets/icons/social-pinterest.svg'
 import { ReactComponent as SocialYoutube } from '../../../../assets/icons/social-youtube.svg'
 import { ReactComponent as SocialTikTok } from '../../../../assets/icons/social-tiktok.svg'
-import { ReactComponent as CompanyIcon } from '../../../../assets/icons/companies-icon.svg'
 import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmetic-icon-24.svg'
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 

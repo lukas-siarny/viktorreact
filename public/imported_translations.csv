@@ -1,0 +1,360 @@
+Keys;bg;cs;en;hu;it;ro;sk
+--loc--;;--loc--;;;;;
+Muž;_NEPRELOZENE_;Muž;Man;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Muž
+Vytvoriť;_NEPRELOZENE_;Vytvorřit;Create;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť
+Adresa;_NEPRELOZENE_;Adresa;Address;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Adresa
+Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica (s číslom!), PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.;_NEPRELOZENE_;Adresa není kompletní. Ujistěte se, že jste vyplnili město, ulici s číslem, PSČ a zemi. Adresu můžete upřesnit ve vyhledávání nebo přímo v mapě.;The address is not complete. Make sure it is filled in - City, Street (with number!), ZIP code and Country. You can refine the address in the search or directly on the map.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica (s číslom!), PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.
+Aktivovať;_NEPRELOZENE_;Aktivovat;Activate;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Aktivovať
+Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...;_NEPRELOZENE_;Jaké způsoby platby akceptujeme: např. hotovost, poukazy, kryptoměny...;What payment methods do you accept, e.g. cash, vouchers, cryptocurrencies,...;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...
+Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak;_NEPRELOZENE_;Aspoň 8 znaků, 1 číslo, 1 velký, 1 malý a 1 speciální znak;At least 8 characters, 1 number, 1 uppercase, 1 lowercase and 1 special character;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Aspoň 8 znakov, 1 číslo, 1 veľký, 1 malý a 1 špeciálny znak
+Avatar;_NEPRELOZENE_;Avatar;Avatar;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Avatar
+Boli ste automaticky odhlásený;_NEPRELOZENE_;Radši jsme vás odhlásili;You have been automatically logged out;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Boli ste automaticky odhlásený
+Cena ({{symbol}});_NEPRELOZENE_;Cena ({{symbol}});Price ({{symbol}} ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Cena ({{symbol}})
+Cena (€);_NEPRELOZENE_;Cena (€);Price (€);_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Cena (€)
+Cena do ({{symbol}});_NEPRELOZENE_;Cena do ({{symbol}});Price to ({{symbol}});_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Cena do ({{symbol}})
+Cena od ({{symbol}});_NEPRELOZENE_;Cena od ({{symbol}});Price from ({{symbol}});_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Cena od ({{symbol}})
+Chyba;_NEPRELOZENE_;Chyba;Error;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Chyba
+Chyba pripojenia k serveru;_NEPRELOZENE_;Chyba připojení k serveru;Error connecting to server;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Chyba pripojenia k serveru
+Chybne vyplnený formulár;_NEPRELOZENE_;Chybně vyplněný formulář;Incorrectly filled out form;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Chybne vyplnený formulár
+Chybný rozsah;_NEPRELOZENE_;Chybný rozsah;Invalid range;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Chybný rozsah
+Chybný rozsah dátumov;_NEPRELOZENE_;Chybný rozsah dat;Invalid date range;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Chybný rozsah dátumov
+DIČ;_NEPRELOZENE_;DIČ;TIN;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;DIČ
+Detail podpory;_NEPRELOZENE_;Detail podpory;Support detail;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Detail podpory
+Detail používateľa;_NEPRELOZENE_;Detail uživatele;User detail;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Detail používateľa
+Detail salónu;_NEPRELOZENE_;Detail salonu;Salon detail;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Detail salónu
+Detail služby;_NEPRELOZENE_;Detail služby;Service detail;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Detail služby
+Detail zamestnanca;_NEPRELOZENE_;Detail zaměstnance;Employee detail;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Detail zamestnanca
+Detail zákazníka;_NEPRELOZENE_;Detail zákazníka;Customer detail;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Detail zákazníka
+Do;_NEPRELOZENE_;Do;To;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Do
+Doplňujúci popis;_NEPRELOZENE_;Doplňující popis;Additional description;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Doplňujúci popis
+Dátum;_NEPRELOZENE_;Datum;Date;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Dátum
+Dátum nesmie byť v minulosti;_NEPRELOZENE_;Datum nesmí být v minulosti;The date must not be in the past;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Dátum nesmie byť v minulosti
+Dôvod zamietnutia;_NEPRELOZENE_;Důvod zamítnutí;Reason for rejection;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Dôvod zamietnutia
+Email;_NEPRELOZENE_;E-mail;Email;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Email
+Email nie je platný;_NEPRELOZENE_;E-mail je neplatný;Invalid email;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Email nie je platný
+Emailové adresy;_NEPRELOZENE_;E-mailové adresy;Email addresses;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Emailové adresy
+Ešte nemáte účet?;_NEPRELOZENE_;Ještě nemáte účet?;Don't have an account yet?;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Ešte nemáte účet?
+Facebook;_NEPRELOZENE_;Facebook;Facebook;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Facebook
+Firemné údaje;_NEPRELOZENE_;Firemné údaje;Company data;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Firemné údaje
+Fotogaléria;_NEPRELOZENE_;Fotogaléria;Photogallery;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Fotogaléria
+Heslo;_NEPRELOZENE_;Heslo;Passwords do not match;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Heslo
+Heslá sa nezhodujú;_NEPRELOZENE_;Heslá sa nezhodujú;Password;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Heslá sa nezhodujú
+Hlavná stránka;_NEPRELOZENE_;Hlavná stránka;Main page;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Hlavná stránka
+Hľadať podľa meno, e-mail;_NEPRELOZENE_;Hľadať podľa meno, e-mail;Search by name, email;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Hľadať podľa meno, e-mail
+Hľadať podľa meno, e-mail, tel. číslo;_NEPRELOZENE_;Hľadať podľa meno, e-mail, tel. číslo;Search by name, email, phone number;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Hľadať podľa meno, e-mail, tel. číslo
+Hľadať podľa názvu;_NEPRELOZENE_;Hľadať podľa názvu;Search by title;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Hľadať podľa názvu
+Hľadať podľa názvu alebo adresy;_NEPRELOZENE_;Hľadať podľa názvu alebo adresy;Search by title or address;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Hľadať podľa názvu alebo adresy
+Import dát;_NEPRELOZENE_;Import dát;Data import;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Import dát
+Importovaný;_NEPRELOZENE_;Importovaný;Imported;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Importovaný
+Importovať;_NEPRELOZENE_;Importovať;Import;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Importovať
+Importovať salóny;_NEPRELOZENE_;Importovať salóny;Import salon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Importovať salóny
+Importovať ďalšie;_NEPRELOZENE_;Importovať ďalšie;Import another;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Importovať ďalšie
+Info;_NEPRELOZENE_;Info;Info;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Info
+Instagram;_NEPRELOZENE_;Instagram;Instagram;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Instagram
+Iné spôsoby platby;_NEPRELOZENE_;Iné spôsoby platby;Other payment methods;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Iné spôsoby platby
+IČ DPH;_NEPRELOZENE_;IČ DPH;VAT registration number;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;IČ DPH
+IČO;_NEPRELOZENE_;IČO;Company registration number;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;IČO
+Jazyk;_NEPRELOZENE_;Jazyk;Language;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Jazyk
+Kategória;_NEPRELOZENE_;Kategória;Category;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Kategória
+Kategórie;_NEPRELOZENE_;Kategórie;Categories;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Kategórie
+Kontaktná osoba;_NEPRELOZENE_;Kontaktná osoba;Contact person;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Kontaktná osoba
+Kontaktné údaje;_NEPRELOZENE_;Kontaktné údaje;Contact details;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Kontaktné údaje
+Kozmetika;_NEPRELOZENE_;Kozmetika;Cosmetics;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Kozmetika
+Kozmetika so zadaným názvom už existuje;_NEPRELOZENE_;Kozmetika so zadaným názvom už existuje;Cosmetics with the specified name already exist;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Kozmetika so zadaným názvom už existuje
+Krajina;_NEPRELOZENE_;Krajina;Country;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Krajina
+Krajiny;_NEPRELOZENE_;Krajiny;Countries;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Krajiny
+Logo;_NEPRELOZENE_;Logo;Logo;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Logo
+Marketingové účely;_NEPRELOZENE_;Marketingové účely;Marketing purposes;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Marketingové účely
+Max. počet znakov je {{max}};_NEPRELOZENE_;Max. počet znakov je {{max}};Max. number of characters is {{max}};_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Max. počet znakov je {{max}}
+Meno;_NEPRELOZENE_;Meno;Name;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Meno
+Mesto;_NEPRELOZENE_;Mesto;City;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Mesto
+Moje konto;_NEPRELOZENE_;Moje konto;My account;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Moje konto
+Možnosti platby;_NEPRELOZENE_;Možnosti platby;Payment options;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Možnosti platby
+Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?;_NEPRELOZENE_;Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?;You have unsaved changes to the form. Would you like to continue?;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?
+Môj profil;_NEPRELOZENE_;Môj profil;My profile;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Môj profil
+Na schválenie;_NEPRELOZENE_;Na schválenie;For approval;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Na schválenie
+Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás;_NEPRELOZENE_;Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás;You do not have sufficient permissions for the page you are trying to view.If you think you should have access, please contact us;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Na stránku, ktorú sa pokúšate zobraziť, nemáte dostatočné oprávnenia Ak si myslíte, že by ste mali mať prístup, prosím kontaktujte nás
+Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.;_NEPRELOZENE_;Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.;We will send a password reset link to your address. Please enter your address.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Na vašu adresu odošleme link na obnovenie hesla. Prosím zadajte svoju adresu.
+Nahrajte maximálne {{maxCount}} súborov;_NEPRELOZENE_;Nahrajte maximálne {{maxCount}} súborov;Upload a maximum of {{maxCount}} files;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nahrajte maximálne {{maxCount}} súborov
+Nahrať;_NEPRELOZENE_;Nahrať;Upload ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nahrať
+Naozaj chcete odstrániť {{entity}} ?;_NEPRELOZENE_;Naozaj chcete odstrániť {{entity}} ?;Do you really want to remove {{entity}} ?;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Naozaj chcete odstrániť {{entity}} ?
+Nastavenie hesla;_NEPRELOZENE_;Nastavenie hesla;Password setting;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nastavenie hesla
+Nastaviť heslo;_NEPRELOZENE_;Nastaviť heslo;Set password;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nastaviť heslo
+Načítavam...;_NEPRELOZENE_;Načítavam...;Loading...;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Načítavam...
+Ne;_NEPRELOZENE_;Ne;Sun;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Ne
+Nedeľa;_NEPRELOZENE_;Nedeľa;Sunday;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nedeľa
+Nepublikovaný;_NEPRELOZENE_;Nepublikovaný;Unpublished;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nepublikovaný
+Nesprávny formát emailovej adresy;_NEPRELOZENE_;Nesprávny formát emailovej adresy;Wrong email address format;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nesprávny formát emailovej adresy
+Nespárované;_NEPRELOZENE_;Nespárované;Unpaired;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nespárované
+Nevymazaný;_NEPRELOZENE_;Nevymazaný;Undeleted;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nevymazaný
+Nie je validná IP;_NEPRELOZENE_;Nie je validná IP;Invalid IP address ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nie je validná IP
+Nie je validná číselná hodnota;_NEPRELOZENE_;Nie je validná číselná hodnota;Not a valid numerical value;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nie je validná číselná hodnota
+Nový používateľ;_NEPRELOZENE_;Nový používateľ;New user;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Nový používateľ
+Názov;_NEPRELOZENE_;Názov;Name;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Názov
+Názov kategórie (EN);_NEPRELOZENE_;Názov kategórie (EN);New categories (EN);_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Názov kategórie (EN)
+Názov musí byť vyplnení pre aspoň jeden jazyk;_NEPRELOZENE_;Názov musí byť vyplnení pre aspoň jeden jazyk;Name must be filled in for at least one language ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Názov musí byť vyplnení pre aspoň jeden jazyk
+O nás;_NEPRELOZENE_;O nás;About us;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;O nás
+Obchodnými podmienkami;_NEPRELOZENE_;Obchodnými podmienkami;Terms and Conditions;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Obchodnými podmienkami
+Obnoviť;_NEPRELOZENE_;Obnoviť;Refresh;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Obnoviť
+Obrázok;_NEPRELOZENE_;Obrázok;Image;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Obrázok
+Od;_NEPRELOZENE_;Od;From;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Od
+Odhlásiť;_NEPRELOZENE_;Odhlásiť;Logout;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Odhlásiť
+Odkaz na Facebook;_NEPRELOZENE_;Odkaz na Facebook;Link to Facebook;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Odkaz na Facebook
+Odkaz na Instagram;_NEPRELOZENE_;Odkaz na Instagram;Link to Instagram;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Odkaz na Instagram
+Odkaz na webovú stránku salóna;_NEPRELOZENE_;Odkaz na webovú stránku salóna;Link to the salon website;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Odkaz na webovú stránku salóna
+Odoslať;_NEPRELOZENE_;Odoslať;Send;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Odoslať
+Odoslať email;_NEPRELOZENE_;Odoslať email;Send email;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Odoslať email
+Odstrániť {{entity}};_NEPRELOZENE_;Odstrániť {{entity}};Remove {{entity}};_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Odstrániť {{entity}}
+Odvetvie;_NEPRELOZENE_;Odvetvie;Industry;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Odvetvie
+Oprávnenie;_NEPRELOZENE_;Oprávnenie;Permissions;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Oprávnenie
+Osobné údaje;_NEPRELOZENE_;Osobné údaje;Personal data;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Osobné údaje
+Otvorené cez víkend;_NEPRELOZENE_;Otvorené cez víkend;Open at the weekend;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Otvorené cez víkend
+Otváracie hodiny;_NEPRELOZENE_;Otváracie hodiny;Open hours;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Otváracie hodiny
+PSČ;_NEPRELOZENE_;PSČ;ZIP CODE;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;PSČ
+Pia;_NEPRELOZENE_;Pia;Fri;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pia
+Piatok;_NEPRELOZENE_;Piatok;Friday;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Piatok
+Platba kartou;_NEPRELOZENE_;Platba kartou;Card payment;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Platba kartou
+Po;_NEPRELOZENE_;Po;Mon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Po
+Po - Pia;_NEPRELOZENE_;Po - Pia;Mon-Fri;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Po - Pia
+Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.;_NEPRELOZENE_;Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.;After processing, we will send you an import summary report to your email address.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Po spracovaní vám na vašu e-mailovú adresu zašleme súhrnnú správu o importe.
+Podpora;_NEPRELOZENE_;Podpora;Support;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Podpora
+Podpora nebola nájdená;_NEPRELOZENE_;Podpora nebola nájdená;Support not found;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Podpora nebola nájdená
+Pohlavie;_NEPRELOZENE_;Pohlavie;Gender;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pohlavie
+Pokračovať;_NEPRELOZENE_;Pokračovať;Continue;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pokračovať
+Položku;_NEPRELOZENE_;Položku;Item;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Položku
+Pomoc a podpora;_NEPRELOZENE_;Pomoc a podpora;Help and support;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pomoc a podpora
+Pon - Pi rovnaké otváracie hodiny;_NEPRELOZENE_;Pon - Pi rovnaké otváracie hodiny;Mon - Fri same opening hours;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pon - Pi rovnaké otváracie hodiny
+Pondelok;_NEPRELOZENE_;Pondelok;Monday;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pondelok
+Pondelok - Piatok;_NEPRELOZENE_;Pondelok - Piatok;Monday-Friday;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pondelok - Piatok
+Popis;_NEPRELOZENE_;Popis;Description;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Popis
+Popisné číslo;_NEPRELOZENE_;Popisné číslo;Descriptive number;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Popisné číslo
+Potrebujete pomôcť?;_NEPRELOZENE_;Potrebujete pomôcť?;Need help?;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Potrebujete pomôcť?
+Potrebujete pomôcť?;_NEPRELOZENE_;Potrebujete pomôcť?;Need help?;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Potrejete pomôcť?
+Potvrdiť;_NEPRELOZENE_;Potvrdiť;Confirm;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Potvrdiť
+Používatelia;_NEPRELOZENE_;Používatelia;Users;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Používatelia
+Používateľovi chýbajú oprávnenia na akciu;_NEPRELOZENE_;Používateľovi chýbajú oprávnenia na akciu;User is missing permissions for an action;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Používateľovi chýbajú oprávnenia na akciu
+Poznámka;_NEPRELOZENE_;Poznámka;Note;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Poznámka
+Poznámka k adrese;_NEPRELOZENE_;Poznámka k adrese;Note to address;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Poznámka k adrese
+Pozvať do tímu;_NEPRELOZENE_;Pozvať do tímu;Invite to team;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pozvať do tímu
+Počet znakov musí byť {{length}};_NEPRELOZENE_;Počet znakov musí byť {{length}};Number of characters must be {{length}};_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Počet znakov musí byť {{length}}
+Požiadavka na spracovanie dát bola úspešná.;_NEPRELOZENE_;Požiadavka na spracovanie dát bola úspešná.;Request to process the data was successful.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Požiadavka na spracovanie dát bola úspešná.
+Požiadať o schválenie;_NEPRELOZENE_;Požiadať o schválenie;Request approval;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Požiadať o schválenie
+Pre prístup potvrďte základné údaje;_NEPRELOZENE_;Pre prístup potvrďte základné údaje;Pre prístup potvrďte základné údaje;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pre prístup potvrďte základné údaje
+Pre túto akciu nemáte dostatočné oprávnenia.;_NEPRELOZENE_;Pre túto akciu nemáte dostatočné oprávnenia.;You do not have sufficient credentials for this action.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pre túto akciu nemáte dostatočné oprávnenia.
+Prehľad;_NEPRELOZENE_;Prehľad;Overview;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Prehľad
+Pridať interval;_NEPRELOZENE_;Pridať interval;Add interval;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať interval
+Pridať kategóriu;_NEPRELOZENE_;Pridať kategóriu;Add category;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať kategóriu
+Pridať podporu;_NEPRELOZENE_;Pridať podporu;Add support;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať podporu
+Pridať používateľa;_NEPRELOZENE_;Pridať používateľa;Add user;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať používateľa
+Pridať poznámku;_NEPRELOZENE_;Pridať poznámku;Add note;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať poznámku
+Pridať salón;_NEPRELOZENE_;Pridať salón;Add salon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať salón
+Pridať službu;_NEPRELOZENE_;Pridať službu;Add service;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať službu
+Pridať telefón;_NEPRELOZENE_;Pridať telefón;Add phone number;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať telefón
+Pridať zamestnanca;_NEPRELOZENE_;Pridať zamestnanca;Add employee;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať zamestnanca
+Pridať zamestnancov;_NEPRELOZENE_;Pridať zamestnancov;Add employees;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať zamestnancov
+Pridať zákazníka;_NEPRELOZENE_;Pridať zákazníka;Add customer;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať zákazníka
+Pridať {{entity}};_NEPRELOZENE_;Pridať {{entity}};Add {{entity}};_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Pridať {{entity}}
+Priezvisko;_NEPRELOZENE_;Priezvisko;Last name;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Priezvisko
+Prihlásenie;_NEPRELOZENE_;Prihlásenie;Login;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Prihlásenie
+Prihlásiť sa;_NEPRELOZENE_;Prihlásiť sa;Sign in;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Prihlásiť sa
+Priradiť {{entity}};_NEPRELOZENE_;Priradiť {{entity}};Assign {{entity}};_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Priradiť {{entity}}
+Publikovaný;_NEPRELOZENE_;Publikovaný;Published;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Publikovaný
+Referenčné obrázky;_NEPRELOZENE_;Referenčné obrázky;Reference images;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Referenčné obrázky
+Registrovať;_NEPRELOZENE_;Registrovať;Register;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Registrovať
+Registrovať sa;_NEPRELOZENE_;Registrovať sa;Register now;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Registrovať sa
+Registrácia;_NEPRELOZENE_;Registrácia;Registration;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Registrácia
+Rola;_NEPRELOZENE_;Rola;Role;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Rola
+Salóny;_NEPRELOZENE_;Salóny;Salons;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Salóny
+Sem napíšte dôvod skrytia;_NEPRELOZENE_;Sem napíšte dôvod skrytia;Please write here the reason for hiding;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Sem napíšte dôvod skrytia
+Sem napíšte dôvod zamietnutia;_NEPRELOZENE_;Sem napíšte dôvod zamietnutia;Please write here the reason for rejection;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Sem napíšte dôvod zamietnutia
+Skrytie salónu;_NEPRELOZENE_;Skrytie salónu;Hiding salon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Skrytie salónu
+Skryť salón;_NEPRELOZENE_;Skryť salón;Hide salon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Skryť salón
+Služba;_NEPRELOZENE_;Služba;Service;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Služba
+Služby;_NEPRELOZENE_;Služby;Services;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Služby
+So;_NEPRELOZENE_;So;Sat;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;So
+Sobota;_NEPRELOZENE_;Sobota;Saturday;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Sobota
+Sociálne siete;_NEPRELOZENE_;Sociálne siete;Social networks;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Sociálne siete
+Správa kategórií;_NEPRELOZENE_;Správa kategórií;Category management;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Správa kategórií
+Správa kozmetiky;_NEPRELOZENE_;Správa kozmetiky;Cosmetics administration;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Správa kozmetiky
+Spárované;_NEPRELOZENE_;Spárované;Paired;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Spárované
+Späť;_NEPRELOZENE_;Späť;Back to;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Späť
+St;_NEPRELOZENE_;St;Wed;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;St
+Stav konta;_NEPRELOZENE_;Stav konta;Account status;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Stav konta
+Stavy;_NEPRELOZENE_;Stavy;States;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Stavy
+Streda;_NEPRELOZENE_;Streda;Wednesday;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Streda
+Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás;_NEPRELOZENE_;Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás;The page you are trying to open does not exist. Please navigate back to the main page. If you think this is due to an application error, please contact us;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Stránka, ktorú sa pokúšate zobraziť, neexistuje Prosím prejdite späť na hlavnú stránku Ak si myslíte, že je to spôsobené chybou aplikácie, prosím kontaktujte nás
+Stále však môžete editovať existujúce;_NEPRELOZENE_;Stále však môžete editovať existujúce;However, you can still edit existing;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Stále však môžete editovať existujúce
+Súbor je príliš veľký (max. {{size}} {{unit}});_NEPRELOZENE_;Súbor je príliš veľký (max. {{size}} {{unit}});File is too large (max. {{size}} {{unit}});_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Súbor je príliš veľký (max. {{size}} {{unit}})
+Telefón;_NEPRELOZENE_;Telefón;Phone;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Telefón
+Telefónne čísla;_NEPRELOZENE_;Telefónne čísla;Telephone numbers;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Telefónne čísla
+Telefónne číslo nie je platné;_NEPRELOZENE_;Telefónne číslo nie je platné;Telephone number is not valid;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Telefónne číslo nie je platné
+Toto pole je povinné;_NEPRELOZENE_;Toto pole je povinné;This field is required;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Toto pole je povinné
+Trvanie (min);_NEPRELOZENE_;Trvanie (min);Duration (min);_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Trvanie (min)
+Trvanie (minúty);_NEPRELOZENE_;Trvanie (minúty);Duration (minutes);_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Trvanie (minúty)
+Trvanie do (minúty);_NEPRELOZENE_;Trvanie do (minúty);Duration to (minutes);_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Trvanie do (minúty)
+Trvanie od (minúty);_NEPRELOZENE_;Trvanie od (minúty);Duration from (minutes);_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Trvanie od (minúty)
+Typ vytvorenia;_NEPRELOZENE_;Typ vytvorenia;Type of creation;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Typ vytvorenia
+Táto operácia nie je povolená.;_NEPRELOZENE_;Táto operácia nie je povolená.;This operation is not allowed.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Táto operácia nie je povolená.
+"Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo ""Pridať kategóriu"".";_NEPRELOZENE_;"Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo ""Pridať kategóriu"".";"This operation is not allowed. The main category can be added via the ""Add category"" button.";_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;"Táto operácia nie je povolená. Hlavnú kategóriu je možné pridať cez tlačidlo ""Pridať kategóriu""."
+Udeľujem súhlas so spracúvaním osobných údajov na;_NEPRELOZENE_;Udeľujem súhlas so spracúvaním osobných údajov na;I give my consent to the processing of my personal data for;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Udeľujem súhlas so spracúvaním osobných údajov na
+Ulica;_NEPRELOZENE_;Ulica;Street;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Ulica
+Uložiť;_NEPRELOZENE_;Uložiť;Save;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Uložiť
+Uložiť {{entity}};_NEPRELOZENE_;Uložiť {{entity}};Save {{entity}};_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Uložiť {{entity}}
+Upozornenie;_NEPRELOZENE_;Upozornenie;Notice;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Upozornenie
+Upozornenie!;_NEPRELOZENE_;Upozornenie!;Warning!;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Upozornenie!
+Upraviť kategóriu;_NEPRELOZENE_;Upraviť kategóriu;Edit category;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Upraviť kategóriu
+Upraviť kozmetiku;_NEPRELOZENE_;Upraviť kozmetiku;Adjust cosmetics;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Upraviť kozmetiku
+Upraviť rolu;_NEPRELOZENE_;Upraviť rolu;Edit role;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Upraviť rolu
+Upraviť {{entity}};_NEPRELOZENE_;Upraviť {{entity}};Edit {{entity}};_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Upraviť {{entity}}
+Ups niečo sa pokazilo;_NEPRELOZENE_;Ups niečo sa pokazilo;Oops something went wrong;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Ups niečo sa pokazilo
+Ut;_NEPRELOZENE_;Ut;Tue;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Ut
+Utorok;_NEPRELOZENE_;Utorok;Tuesday;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Utorok
+Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.;_NEPRELOZENE_;Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.;Please provide the address to which we will send the link to invite the employee to the team.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.
+Už ste registrovaný?;_NEPRELOZENE_;Už ste registrovaný?;Are you registered yet?;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Už ste registrovaný?
+Variabilná cena;_NEPRELOZENE_;Variabilná cena;Variable price;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Variabilná cena
+Variabilné trvanie;_NEPRELOZENE_;Variabilné trvanie;Variable duration;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Variabilné trvanie
+Verifikácia;_NEPRELOZENE_;Verifikácia;Verification;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Verifikácia
+Vrátiť sa do administrácie;_NEPRELOZENE_;Vrátiť sa do administrácie;Return to the administration;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vrátiť sa do administrácie
+Vyber krajinu;_NEPRELOZENE_;Vyber krajinu;Select a country;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyber krajinu
+Vyber pohlavie;_NEPRELOZENE_;Vyber pohlavie;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyber pohlavie
+Vyberte aspoň jednu z možností;_NEPRELOZENE_;Vyberte aspoň jednu z možností;Select at least one of the options;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte aspoň jednu z možností
+Vyberte kategóriu;_NEPRELOZENE_;Vyberte kategóriu;Select category;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte kategóriu
+Vyberte krajinu;_NEPRELOZENE_;Vyberte krajinu;Select a country;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte krajinu
+Vyberte odvetvie;_NEPRELOZENE_;Vyberte odvetvie;Select an industry;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte odvetvie
+Vyberte rolu;_NEPRELOZENE_;Vyberte rolu;Select a role;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte rolu
+Vyberte služby;_NEPRELOZENE_;Vyberte služby;Select services;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte služby
+Vyberte súbor vo formáte .xls/.xlsx;_NEPRELOZENE_;Vyberte súbor vo formáte .xls/.xlsx;Select a file in .xls/.xlsx format;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte súbor vo formáte .xls/.xlsx
+Vyberte zamestnancov;_NEPRELOZENE_;Vyberte zamestnancov;Select employees;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte zamestnancov
+Vyberte {{entity}};_NEPRELOZENE_;Vyberte {{entity}};Select;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyberte {{entity}}
+Vybrať;_NEPRELOZENE_;Vybrať;Select;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vybrať
+Vyhlasujem, že som sa oboznámil s;_NEPRELOZENE_;Vyhlasujem, že som sa oboznámil s;I declare that I am familiar with;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyhlasujem, že som sa oboznámil s
+Vyhlasujem, že som sa oboznámil so;_NEPRELOZENE_;Vyhlasujem, že som sa oboznámil so;I declare that I am familiar with;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyhlasujem, že som sa oboznámil so
+Vyhľadajte miesto na mape;_NEPRELOZENE_;Vyhľadajte miesto na mape;Search a place on the map;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyhľadajte miesto na mape
+Vyhľadajte podľa {{entity}};_NEPRELOZENE_;Vyhľadajte podľa {{entity}};Search by;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyhľadajte podľa {{entity}}
+Vyhľadajte {{entity}};_NEPRELOZENE_;Vyhľadajte {{entity}};Search;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyhľadajte {{entity}}
+Vyhľadať;_NEPRELOZENE_;Vyhľadať;Search;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyhľadať
+Vymazaný;_NEPRELOZENE_;Vymazaný;Deleted;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vymazaný
+Vyplnenie profilu;_NEPRELOZENE_;Vyplnenie profilu;Filling out the profile;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyplnenie profilu
+Vytvorenie zákazníka;_NEPRELOZENE_;Vytvorenie zákazníka;Create customer;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvorenie zákazníka
+Vytvorené;_NEPRELOZENE_;Vytvorené;Created;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvorené
+Vytvoriť kategóriu;_NEPRELOZENE_;Vytvoriť kategóriu;Create category;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť kategóriu
+Vytvoriť kozmetiku;_NEPRELOZENE_;Vytvoriť kozmetiku;Create cosmetics;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť kozmetiku
+Vytvoriť podkategóriu;_NEPRELOZENE_;Vytvoriť podkategóriu;Create subcategory;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť podkategóriu
+Vytvoriť podkategóriu pre;_NEPRELOZENE_;Vytvoriť podkategóriu pre;Create subcategory for;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť podkategóriu pre
+Vytvoriť podporu;_NEPRELOZENE_;Vytvoriť podporu;Create support;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť podporu
+Vytvoriť používateľa;_NEPRELOZENE_;Vytvoriť používateľa;Create user;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť používateľa
+Vytvoriť salón;_NEPRELOZENE_;Vytvoriť salón;Create salon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť salón
+Vytvoriť službu;_NEPRELOZENE_;Vytvoriť službu;Create service;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť službu
+Vytvoriť zamestnanca;_NEPRELOZENE_;Vytvoriť zamestnanca;Create an employee;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť zamestnanca
+Vytvoriť {{entity}};_NEPRELOZENE_;Vytvoriť {{entity}};Create;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vytvoriť {{entity}}
+Vyžiadať nový odkaz pre nastavenie hesla;_NEPRELOZENE_;Vyžiadať nový odkaz pre nastavenie hesla;Request a new link to set a password;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Vyžiadať nový odkaz pre nastavenie hesla
+Všetky;_NEPRELOZENE_;Všetky;All;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Všetky
+Webstránka;_NEPRELOZENE_;Webstránka;Webpage;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Webstránka
+Zabudnuté heslo;_NEPRELOZENE_;Zabudnuté heslo;Forgot password;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zabudnuté heslo
+Zadajte DIČ;_NEPRELOZENE_;Zadajte DIČ;Enter TIN;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte DIČ
+Zadajte IČ DPH;_NEPRELOZENE_;Zadajte IČ DPH;Enter Including VAT;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte IČ DPH
+Zadajte IČO;_NEPRELOZENE_;Zadajte IČO;Enter Company registration number;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte IČO
+Zadajte PIN;_NEPRELOZENE_;Zadajte PIN;Enter PIN;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte PIN
+Zadajte celý PIN;_NEPRELOZENE_;Zadajte celý PIN;Enter full PIN;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte celý PIN
+Zadajte doplňujúce informácie o salóne;_NEPRELOZENE_;Zadajte doplňujúce informácie o salóne;Enter additional salon information;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte doplňujúce informácie o salóne
+"Zadajte doplňujúcu informáciu, napr ""3. poschodie vľavo""";_NEPRELOZENE_;"Zadajte doplňujúcu informáciu, napr ""3. poschodie vľavo""";"Enter additional information, e.g. ""3rd floor left""";_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;"Zadajte doplňujúcu informáciu, napr ""3. poschodie vľavo"""
+Zadajte email;_NEPRELOZENE_;Zadajte email;Enter email;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte email
+Zadajte heslo;_NEPRELOZENE_;Zadajte heslo;Enter password;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte heslo
+Zadajte maximálne {{max}};_NEPRELOZENE_;Zadajte maximálne {{max}};Enter maximum;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte maximálne {{max}}
+Zadajte meno;_NEPRELOZENE_;Zadajte meno;Enter name;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte meno
+Zadajte mesto;_NEPRELOZENE_;Zadajte mesto;Enter city;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte mesto
+Zadajte minimálne {{min}};_NEPRELOZENE_;Zadajte minimálne {{min}};Enter a minimum ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte minimálne {{min}}
+Zadajte názov;_NEPRELOZENE_;Zadajte názov;Enter title;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte názov
+Zadajte popis;_NEPRELOZENE_;Zadajte popis;Enter description;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte popis
+"Zadajte poznámku k adrese, napr. ""3. poschodie vľavo""";_NEPRELOZENE_;"Zadajte poznámku k adrese, napr. ""3. poschodie vľavo""";"Enter a note for the address, e.g. ""3rd floor left""";_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;"Zadajte poznámku k adrese, napr. ""3. poschodie vľavo"""
+Zadajte priezvisko;_NEPRELOZENE_;Zadajte priezvisko;Enter surname;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte priezvisko
+Zadajte smerovacie číslo;_NEPRELOZENE_;Zadajte smerovacie číslo;Enter the area code;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte smerovacie číslo
+Zadajte telefón;_NEPRELOZENE_;Zadajte telefón;Enter phone;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte telefón
+Zadajte ulicu;_NEPRELOZENE_;Zadajte ulicu;Enter the street;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte ulicu
+Zadajte základné informácie o salóne;_NEPRELOZENE_;Zadajte základné informácie o salóne;Enter basic salon information;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte základné informácie o salóne
+Zadajte {{entity}};_NEPRELOZENE_;Zadajte {{entity}};Enter;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte {{entity}}
+Zadajte číslo;_NEPRELOZENE_;Zadajte číslo;Enter number;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zadajte číslo
+Zamestnanci;_NEPRELOZENE_;Zamestnanci;Employees;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zamestnanci
+Zamestnanec;_NEPRELOZENE_;Zamestnanec;Employee;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zamestnanec
+Zamietnuté;_NEPRELOZENE_;Zamietnuté;Rejected;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zamietnuté
+Zamietnuť;_NEPRELOZENE_;Zamietnuť;Reject;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zamietnuť
+Zatvorené;_NEPRELOZENE_;Zatvorené;Closed;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zatvorené
+Zatvoriť;_NEPRELOZENE_;Zatvoriť;Close;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zatvoriť
+Začnite vytvorením salónu;_NEPRELOZENE_;Začnite vytvorením salónu;Start by creating a salon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Začnite vytvorením salónu
+Zmazať;_NEPRELOZENE_;Zmazať;Delete;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zmazať
+Zmeny;_NEPRELOZENE_;Zmeny;Changes;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zmeny
+Znovu vyžiadať PIN;_NEPRELOZENE_;Znovu vyžiadať PIN;Request PIN again;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Znovu vyžiadať PIN
+Zopakujte heslo;_NEPRELOZENE_;Zopakujte heslo;Repeat the password;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zopakujte heslo
+Zopakujte nové heslo;_NEPRELOZENE_;Zopakujte nové heslo;Repeat the new password;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zopakujte nové heslo
+Zoznam je prázdny;_NEPRELOZENE_;Zoznam je prázdny;The list is empty;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam je prázdny
+Zoznam podporných centier;_NEPRELOZENE_;Zoznam podporných centier;List of support centres;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam podporných centier
+Zoznam používateľov;_NEPRELOZENE_;Zoznam používateľov;List of users;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam používateľov
+Zoznam priradených služieb;_NEPRELOZENE_;Zoznam priradených služieb;List of assigned services;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam priradených služieb
+Zoznam priradených zamestnancov;_NEPRELOZENE_;Zoznam priradených zamestnancov;List of assigned employees;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam priradených zamestnancov
+Zoznam salónov;_NEPRELOZENE_;Zoznam salónov;List of salons;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam salónov
+Zoznam služieb;_NEPRELOZENE_;Zoznam služieb;List of services;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam služieb
+Zoznam zamestnancov;_NEPRELOZENE_;Zoznam zamestnancov;List of employees;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam zamestnancov
+Zoznam zákazníkov;_NEPRELOZENE_;Zoznam zákazníkov;List of customers;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zoznam zákazníkov
+Zrušiť;_NEPRELOZENE_;Zrušiť;Cancel;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zrušiť
+Zvolený dátum nesmie byť pred dátumom {{ compareDate }};_NEPRELOZENE_;Zvolený dátum nesmie byť pred dátumom {{ compareDate }};The selected date must not be before the date ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zvolený dátum nesmie byť pred dátumom {{ compareDate }}
+Zvoľte si krajinu;_NEPRELOZENE_;Zvoľte si krajinu;Choose country;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zvoľte si krajinu
+Zákazníci;_NEPRELOZENE_;Zákazníci;Customers;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zákazníci
+Základné údaje;_NEPRELOZENE_;Základné údaje;Basic information;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Základné údaje
+Zásadami spracovania osobných údajov;_NEPRELOZENE_;Zásadami spracovania osobných údajov;Personal data processing principles;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Zásadami spracovania osobných údajov
+email;_NEPRELOZENE_;email;email;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;email
+kontakt;_NEPRELOZENE_;kontakt;contact;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;kontakt
+kozmetiku;_NEPRELOZENE_;kozmetiku;cosmetics;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;kozmetiku
+ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}};_NEPRELOZENE_;ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}};which we have sent to you in a verification email to address ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;ktorý sme vám odoslali vo verifikačnom emaily na adresu {{email}}
+min;_NEPRELOZENE_;min;min;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;min
+používateľa;_NEPRELOZENE_;používateľa;users;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;používateľa
+poznámku;_NEPRELOZENE_;poznámku;note;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;poznámku
+salón;_NEPRELOZENE_;salón;salon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;salón
+slovensky;_NEPRELOZENE_;slovensky;slovak;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;slovensky
+službu;_NEPRELOZENE_;službu;service;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;službu
+zamestnanca;_NEPRELOZENE_;zamestnanca;employee ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;zamestnanca
+zvolený salón;_NEPRELOZENE_;zvolený salón;the selected salon;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;zvolený salón
+zákazníka;_NEPRELOZENE_;zákazníka;customer;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;zákazníka
+{{from}} - {{to}} z {{total}} záznamov;_NEPRELOZENE_;{{from}} - {{to}} z {{total}} záznamov;of records;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;{{from}} - {{to}} z {{total}} záznamov
+Úspešne nahraté položky sa následne zobrazia v zozname salónov.;_NEPRELOZENE_;Úspešne nahraté položky sa následne zobrazia v zozname salónov.;Successfully uploaded entries are then displayed in the list of salons.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Úspešne nahraté položky sa následne zobrazia v zozname salónov.
+Úspešné;_NEPRELOZENE_;Úspešné;Successful;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Úspešné
+účet;_NEPRELOZENE_;účet;account;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;účet
+Čakajúce;_NEPRELOZENE_;Čakajúce;Pending ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Čakajúce
+Číslo ulice;_NEPRELOZENE_;Číslo ulice;Street number;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Číslo ulice
+čas do;_NEPRELOZENE_;čas do;time to;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;čas do
+čas od;_NEPRELOZENE_;čas od;time from;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;čas od
+Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.;_NEPRELOZENE_;Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.;Further support cannot be created. You can create a maximum of one for each country.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.
+Ľutujeme, momentálne nie sú k dispozící žiadne support centrá.;_NEPRELOZENE_;Ľutujeme, momentálne nie sú k dispozící žiadne support centrá.;Sorry, there are currently no support centres available.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Ľutujeme, momentálne nie sú k dispozící žiadne support centrá.
+Ľutujeme, pre zvolenú krajinu moménalne neexistuje žiadna podpora. Ak nás chcete kontaktovať, môžete si zvoliť niektorú z krajín zo zoznamu vyššie.;_NEPRELOZENE_;Ľutujeme, pre zvolenú krajinu moménalne neexistuje žiadna podpora. Ak nás chcete kontaktovať, môžete si zvoliť niektorú z krajín zo zoznamu vyššie.;Sorry, there is currently no support for your chosen country. If you want to contact us, you can choose one of the countries from the list above.;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Ľutujeme, pre zvolenú krajinu moménalne neexistuje žiadna podpora. Ak nás chcete kontaktovať, môžete si zvoliť niektorú z krajín zo zoznamu vyššie.
+Štandartný;_NEPRELOZENE_;Štandartný;Standard ;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Štandartný
+Štv;_NEPRELOZENE_;Štv;Thu;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Štv
+Štvrtok;_NEPRELOZENE_;Štvrtok;Thursday;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Štvrtok
+Štát;_NEPRELOZENE_;Štát;State;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Štát
+Žena;_NEPRELOZENE_;Žena;Woman;_NEPRELOZENE_;_NEPRELOZENE_;_NEPRELOZENE_;Žena
+--paths--;;--paths--;;;;;
+activation;/activation;activation;/activation;/activation;/activation;/activation;/activation
+categories;/categories;categories;/categories;/categories;/categories;/categories;/categories
+contact;/contact;contact;/contact;/contact;/contact;/contact;/contact
+cosmetics;/cosmetics;cosmetics;/cosmetics;/cosmetics;/cosmetics;/cosmetics;/cosmetics
+customers;/customers;customers;/customers;/customers;/customers;/customers;/customers
+customers/create;/customers/create;customers/create;/customers/create;/customers/create;/customers/create;/customers/create;/customers/create
+customers/{{customerID}};/customers/{{customerID}};customers/{{customerID}};/customers/{{customerID}};/customers/{{customerID}};/customers/{{customerID}};/customers/{{customerID}};/customers/{{customerID}}
+employees;/employees;employees;/employees;/employees;/employees;/employees;/employees
+employees/create;/employees/create;employees/create;/employees/create;/employees/create;/employees/create;/employees/create;/employees/create
+employees/{{employeeID}};/employees/{{employeeID}};employees/{{employeeID}};/employees/{{employeeID}};/employees/{{employeeID}};/employees/{{employeeID}};/employees/{{employeeID}};/employees/{{employeeID}}
+index;/;index;/;/;/;/;/
+login;/login;login;/login;/login;/login;/login;/login
+my-account;/my-account;my-account;/my-account;/my-account;/my-account;/my-account;/my-account
+reset-password;/reset-password;reset-password;/reset-password;/reset-password;/reset-password;/reset-password;/reset-password
+salons;/salons;salons;/salons;/salons;/salons;/salons;/salons
+salons/create;/salons/create;salons/create;/salons/create;/salons/create;/salons/create;/salons/create;/salons/create
+salons/{{salonID}};/salons/{{salonID}};salons/{{salonID}};/salons/{{salonID}};/salons/{{salonID}};/salons/{{salonID}};/salons/{{salonID}};/salons/{{salonID}}
+services;/services;services;/services;/services;/services;/services;/services
+services/create;/services/create;services/create;/services/create;/services/create;/services/create;/services/create;/services/create
+services/{{serviceID}};/services/{{serviceID}};services/{{serviceID}};/services/{{serviceID}};/services/{{serviceID}};/services/{{serviceID}};/services/{{serviceID}};/services/{{serviceID}}
+signup;/signup;signup;/signup;/signup;/signup;/signup;/signup
+support-contacts;/support-contacts;support-contacts;/support-contacts;/support-contacts;/support-contacts;/support-contacts;/support-contacts
+support-contacts/create;/support-contacts/create;support-contacts/create;/support-contacts/create;/support-contacts/create;/support-contacts/create;/support-contacts/create;/support-contacts/create
+support-contacts/{{supportContactID}};/support-contacts/{{supportContactID}};support-contacts/{{supportContactID}};/support-contacts/{{supportContactID}};/support-contacts/{{supportContactID}};/support-contacts/{{supportContactID}};/support-contacts/{{supportContactID}};/support-contacts/{{supportContactID}}
+users;/users;users;/users;/users;/users;/users;/users
+users/create;/users/create;users/create;/users/create;/users/create;/users/create;/users/create;/users/create
+users/{{userID}};/users/{{userID}};users/{{userID}};/users/{{userID}};/users/{{userID}};/users/{{userID}};/users/{{userID}};/users/{{userID}}

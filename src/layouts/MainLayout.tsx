@@ -126,8 +126,8 @@ const MainLayout: FC<Props> = (props) => {
 												dispatch(selectSalon())
 												history.push(t('paths:salons'))
 											}}
-											icon={<BackIcon className={'text-notino-black'} />}
-											className={'noti-btn h-8 text-notino-black self-center'}
+											icon={<BackIcon className={'filter-invert max'} />}
+											className={'noti-btn h-8 text-notino-white self-center bg-notino-pink'}
 											type={'default'}
 											size={'small'}
 										>

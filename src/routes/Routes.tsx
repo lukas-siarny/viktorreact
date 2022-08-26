@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
 // authorized pages
 import HomePage from '../pages/HomePage/HomePage'
@@ -25,7 +26,6 @@ import ActivationPage from '../pages/ActivationPage/ActivationPage'
 import UserPage from '../pages/UsersPage/UserPage'
 import CreateUserPage from '../pages/UsersPage/CreateUserPage'
 import UsersPage from '../pages/UsersPage/UsersPage'
-import PendingInvitesPage from '../pages/PendingInvitesPage/PendingInvitesPage'
 
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
@@ -62,6 +62,7 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
 const Routes: FC = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 
 	return (
 		<AppInit>
@@ -85,6 +86,7 @@ const Routes: FC = (props) => {
 					component={CreatePasswordPage}
 					layout={PublicLayout}
 					className={'noti-login-page'}
+					dispatch={dispatch}
 				/>
 				<AuthRoute
 					{...props}
@@ -106,15 +108,6 @@ const Routes: FC = (props) => {
 				/>
 				<AuthRoute {...props} exact path={t('paths:users')} component={UsersPage} translatePathKey={t('paths:users')} layout={MainLayout} page={PAGE.USERS} />
 				<AuthRoute {...props} exact path={t('paths:my-account')} translatePathKey={t('paths:my-account')} component={UserPage} layout={MainLayout} page={PAGE.MY_ACCOUNT} />
-				<AuthRoute
-					{...props}
-					exact
-					path={t('paths:pending-invites')}
-					translatePathKey={t('paths:pending-invites')}
-					component={PendingInvitesPage}
-					layout={MainLayout}
-					page={PAGE.PENDING_INVITES}
-				/>
 				<AuthRoute {...props} exact path={t('paths:index')} component={HomePage} translatePathKey={t('paths:index')} layout={MainLayout} page={PAGE.HOME} />
 				<AuthRoute
 					{...props}

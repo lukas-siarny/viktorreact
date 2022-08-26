@@ -198,7 +198,7 @@ const SalonSubRoutes: FC = () => {
 				translatePathKey={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.INDUSTRY}
+				page={PAGE.INDUSTRIES}
 			/>
 			{/* Billing info */}
 			<AuthRoute

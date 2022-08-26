@@ -25,7 +25,8 @@ type ComponentProps = {
 	createCustomer: Function
 	total: number
 }
-
+// Search: nazov SalonSubRoutes, email salonu, meno priezvisko usera
+// Order: lastName, salonName, userEmail,
 interface ICustomersFilter {
 	search: string
 	salonID: string

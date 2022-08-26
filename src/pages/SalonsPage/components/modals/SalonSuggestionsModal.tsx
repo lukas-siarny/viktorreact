@@ -5,19 +5,19 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
 // reducers
-import { RootState } from '../../../reducers'
-import { getCurrentUser } from '../../../reducers/users/userActions'
-import { getSuggestedSalons } from '../../../reducers/salons/salonsActions'
-import { selectSalon } from '../../../reducers/selectedSalon/selectedSalonActions'
+import { RootState } from '../../../../reducers'
+import { getCurrentUser } from '../../../../reducers/users/userActions'
+import { getSuggestedSalons } from '../../../../reducers/salons/salonsActions'
+import { selectSalon } from '../../../../reducers/selectedSalon/selectedSalonActions'
 
 // utils
-import { history } from '../../../utils/history'
-import { getCountryPrefix } from '../../../utils/helper'
-import { patchReq } from '../../../utils/request'
-import { ENUMERATIONS_KEYS, NOTIFICATION_TYPE } from '../../../utils/enums'
+import { history } from '../../../../utils/history'
+import { getCountryPrefix } from '../../../../utils/helper'
+import { patchReq } from '../../../../utils/request'
+import { ENUMERATIONS_KEYS, NOTIFICATION_TYPE } from '../../../../utils/enums'
 
 type Props = {
 	visible: boolean

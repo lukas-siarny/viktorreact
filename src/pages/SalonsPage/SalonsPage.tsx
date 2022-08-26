@@ -11,11 +11,12 @@ import { initialize, reset } from 'redux-form'
 import { isEmpty } from 'lodash'
 import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import SalonsImportForm from './components/SalonsImportForm'
+import SalonsImportForm from './components/forms/SalonsImportForm'
 import UploadSuccess from './components/UploadSuccess'
 import TabsComponent from '../../components/TabsComponent'
-import SalonsFilterActive, { ISalonsFilterActive } from './components/SalonsFilterActive'
-import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/SalonsFilterDeleted'
+import SalonsFilterActive, { ISalonsFilterActive } from './components/filters/SalonsFilterActive'
+import SalonsFilterDeleted, { ISalonsFilterDeleted } from './components/filters/SalonsFilterDeleted'
+import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
@@ -46,7 +47,11 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
-type TabKeys = 'active' | 'deleted'
+enum TAB_KEYS {
+	ACTIVE = 'active',
+	DELETED = 'deleted',
+	MISTAKES = 'mistakes'
+}
 
 const SalonsPage = () => {
 	const [t] = useTranslation()
@@ -57,7 +62,7 @@ const SalonsPage = () => {
 
 	const [salonImportsModalVisible, setSalonImportsModalVisible] = useState(false)
 	const [uploadStatus, setUploadStatus] = useState<'uploading' | 'success' | 'error' | undefined>(undefined)
-	const [tabKey, setTabKey] = useState<TabKeys | undefined>()
+	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
 
@@ -71,7 +76,7 @@ const SalonsPage = () => {
 		categoryFirstLevelIDs: ArrayParam,
 		statuses_all: withDefault(BooleanParam, false),
 		statuses_published: ArrayParam,
-		salonState: withDefault(StringParam, 'active'),
+		salonState: withDefault(StringParam, TAB_KEYS.ACTIVE),
 		statuses_changes: ArrayParam,
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
@@ -104,51 +109,61 @@ const SalonsPage = () => {
 	const isAdmin = useMemo(() => checkPermissions(authUserPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUserPermissions])
 
 	useEffect(() => {
-		if (query.salonState === 'active') {
-			setTabKey('active')
-			dispatch(
-				initialize(FORM.SALONS_FILTER_ACITVE, {
-					search: query.search,
-					statuses_all: query.statuses_all,
-					statuses_published: query.statuses_published,
-					statuses_changes: query.statuses_changes,
-					categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-					countryCode: query.countryCode,
-					createType: query.createType,
-					dateFromTo: {
-						dateFrom: query.lastUpdatedAtFrom,
-						dateTo: query.lastUpdatedAtTo
-					}
-				})
-			)
-		} else if (query.salonState === 'deleted') {
-			setTabKey('deleted')
-			dispatch(
-				initialize(FORM.SALONS_FILTER_DELETED, {
-					search: query.search,
-					categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-					countryCode: query.countryCode
-				})
-			)
+		const salonsQueries = {
+			page: query.page,
+			limit: query.limit,
+			order: query.order,
+			search: query.search,
+			categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+			statuses_all: query.statuses_all,
+			statuses_published: query.statuses_published,
+			statuses_changes: query.statuses_changes,
+			salonState: query.salonState,
+			countryCode: query.countryCode,
+			createType: query.createType,
+			lastUpdatedAtFrom: query.lastUpdatedAtFrom,
+			lastUpdatedAtTo: query.lastUpdatedAtTo
 		}
 
-		dispatch(
-			getSalons({
-				page: query.page,
-				limit: query.limit,
-				order: query.order,
-				search: query.search,
-				categoryFirstLevelIDs: query.categoryFirstLevelIDs,
-				statuses_all: query.statuses_all,
-				statuses_published: query.statuses_published,
-				statuses_changes: query.statuses_changes,
-				salonState: query.salonState,
-				countryCode: query.countryCode,
-				createType: query.createType,
-				lastUpdatedAtFrom: query.lastUpdatedAtFrom,
-				lastUpdatedAtTo: query.lastUpdatedAtTo
-			})
-		)
+		switch (query.salonState) {
+			case TAB_KEYS.DELETED:
+				setTabKey(TAB_KEYS.DELETED)
+				dispatch(
+					initialize(FORM.SALONS_FILTER_DELETED, {
+						search: query.search,
+						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+						countryCode: query.countryCode
+					})
+				)
+				dispatch(getSalons(salonsQueries))
+				break
+
+			case TAB_KEYS.MISTAKES:
+				setTabKey(TAB_KEYS.MISTAKES)
+				dispatch(initialize(FORM.FILTER_REJECTED_SUGGESTIONS, { search: query.search }))
+				break
+
+			case TAB_KEYS.ACTIVE:
+			default:
+				setTabKey(TAB_KEYS.ACTIVE)
+				dispatch(
+					initialize(FORM.SALONS_FILTER_ACITVE, {
+						search: query.search,
+						statuses_all: query.statuses_all,
+						statuses_published: query.statuses_published,
+						statuses_changes: query.statuses_changes,
+						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
+						countryCode: query.countryCode,
+						createType: query.createType,
+						dateFromTo: {
+							dateFrom: query.lastUpdatedAtFrom,
+							dateTo: query.lastUpdatedAtTo
+						}
+					})
+				)
+				dispatch(getSalons(salonsQueries))
+				break
+		}
 	}, [
 		dispatch,
 		query.page,
@@ -243,7 +258,7 @@ const SalonsPage = () => {
 
 	const onTabChange = (selectedTabKey: string) => {
 		dispatch(emptySalons())
-		setTabKey(selectedTabKey as TabKeys)
+		setTabKey(selectedTabKey as TAB_KEYS)
 		resetQuery(selectedTabKey)
 	}
 
@@ -287,7 +302,7 @@ const SalonsPage = () => {
 				key: 'createType',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
+				width: '8%',
 				render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
 				...props
 			}),
@@ -358,33 +373,37 @@ const SalonsPage = () => {
 		[query.order, t]
 	)
 
-	const getTabContent = (selectedTabKey: 'active' | 'deleted') => {
+	const getTabContent = (selectedTabKey: TAB_KEYS) => {
 		let columns: Columns = []
 		let filters: React.ReactNode = null
 
-		if (selectedTabKey === 'active') {
-			columns = [
-				tableColumns.name(),
-				tableColumns.address(),
-				tableColumns.categories(),
-				tableColumns.isPublished(),
-				tableColumns.changes(),
-				tableColumns.createType(),
-				tableColumns.fillingProgress(),
-				tableColumns.lastUpdatedAt(),
-				tableColumns.createdAt()
-			]
-			filters = <SalonsFilterActive onSubmit={handleSubmitActive} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
-		} else if (selectedTabKey === 'deleted') {
-			columns = [
-				tableColumns.name({ width: '20%' }),
-				tableColumns.address({ width: '16%' }),
-				tableColumns.categories({ width: '16%' }),
-				tableColumns.deletedAt({ width: '16%' }),
-				tableColumns.createType({ width: '16%' }),
-				tableColumns.createdAt({ width: '16%' })
-			]
-			filters = <SalonsFilterDeleted onSubmit={handleSubmitDeleted} />
+		switch (selectedTabKey) {
+			case TAB_KEYS.MISTAKES:
+				return <RejectedSalonSuggestions />
+			case TAB_KEYS.DELETED:
+				columns = [
+					tableColumns.name({ width: '20%' }),
+					tableColumns.address({ width: '16%' }),
+					tableColumns.categories({ width: '16%' }),
+					tableColumns.deletedAt({ width: '16%' }),
+					tableColumns.fillingProgress({ width: '16%' }),
+					tableColumns.createdAt({ width: '16%' })
+				]
+				filters = <SalonsFilterDeleted onSubmit={handleSubmitDeleted} />
+				break
+			default:
+				columns = [
+					tableColumns.name(),
+					tableColumns.address(),
+					tableColumns.categories(),
+					tableColumns.isPublished(),
+					tableColumns.changes(),
+					tableColumns.createType(),
+					tableColumns.fillingProgress(),
+					tableColumns.lastUpdatedAt(),
+					tableColumns.createdAt()
+				]
+				filters = <SalonsFilterActive onSubmit={handleSubmitActive} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
 		}
 
 		return (
@@ -399,6 +418,7 @@ const SalonsPage = () => {
 								columns={columns || []}
 								dataSource={salons?.data?.salons}
 								scroll={{ x: 1000 }}
+								rowKey='id'
 								rowClassName={'clickable-row'}
 								twoToneRows
 								useCustomPagination
@@ -424,14 +444,19 @@ const SalonsPage = () => {
 
 	const tabContent = [
 		{
-			tabKey: 'active',
-			tab: <>{t('loc:Aktívne salóny')}</>,
-			tabPaneContent: getTabContent('active')
+			tabKey: TAB_KEYS.ACTIVE,
+			tab: <>{t('loc:Aktívne')}</>,
+			tabPaneContent: getTabContent(TAB_KEYS.ACTIVE)
 		},
 		{
-			tabKey: 'deleted',
-			tab: <>{t('loc:Vymazané salóny')}</>,
-			tabPaneContent: getTabContent('deleted')
+			tabKey: TAB_KEYS.DELETED,
+			tab: <>{t('loc:Vymazané')}</>,
+			tabPaneContent: getTabContent(TAB_KEYS.DELETED)
+		},
+		{
+			tabKey: TAB_KEYS.MISTAKES,
+			tab: <>{t('loc:Omylom navrhnuté na spárovanie')}</>,
+			tabPaneContent: getTabContent(TAB_KEYS.MISTAKES)
 		}
 	]
 	return (

@@ -37,6 +37,7 @@ interface ServicesTableData {
 	duration: string
 	categoryFirst: string
 	categorySecond: string
+	isComplete: boolean
 }
 
 export interface IGetServicesQueryParams {
@@ -84,7 +85,8 @@ export const getServices =
 								key: employee.id
 							})),
 							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo)),
-							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo)
+							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo),
+							isComplete: thirdCategory?.service?.isComplete
 						})
 					})
 				})

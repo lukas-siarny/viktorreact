@@ -1,9 +1,9 @@
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
 import { isEmpty } from 'lodash'
-import { ISalonForm } from '../../../types/interfaces'
-import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { socialMediaRegex } from '../../../utils/regex'
+import { ISalonForm } from '../../../../types/interfaces'
+import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { socialMediaRegex } from '../../../../utils/regex'
 
 export default (values: ISalonForm) => {
 	const errors: any = {}

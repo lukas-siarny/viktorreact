@@ -5,11 +5,11 @@ import { debounce } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 // utils
-import { FORM } from '../../../utils/enums'
-import { getSalonFilterRanges, intervals } from './salonUtils'
+import { FORM } from '../../../../utils/enums'
+import { getSalonFilterRanges } from '../../../../utils/helper'
 
 // atoms
-import DateRangePickerField from '../../../atoms/DateRangePickerField'
+import DateRangePickerField from '../../../../atoms/DateRangePickerField'
 
 type ComponentProps = {
 	clearIntervalQuery: Function
@@ -35,12 +35,11 @@ const SalonHistoryFilter = (props: Props) => {
 					className={'m-0'}
 					rangePickerClassName={'w-full'}
 					component={DateRangePickerField}
-					showTime
 					disableFuture
 					placeholder={[t('loc:Od'), t('loc:Do')]}
 					allowClear
 					name={'dateFromTo'}
-					ranges={getSalonFilterRanges(intervals)}
+					ranges={getSalonFilterRanges()}
 					dropdownAlign={{ points: ['tr', 'br'] }}
 					allowEmpty={[false, false]}
 				/>

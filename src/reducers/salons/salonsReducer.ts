@@ -1,8 +1,17 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { BASIC_SALON, BASIC_SALONS, SALON, SALONS, SUGGESTED_SALONS, SALON_HISTORY } from './salonsTypes'
-import { IBasicSalonPayload, IBasicSalonsPayload, ISalonPayload, ISalonsActions, ISalonsPayload, ISuggestedSalonsPayload, ISalonHistoryPayload } from './salonsActions'
+import { BASIC_SALON, BASIC_SALONS, SALON, SALONS, SUGGESTED_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS } from './salonsTypes'
+import {
+	IBasicSalonPayload,
+	IBasicSalonsPayload,
+	ISalonPayload,
+	ISalonsActions,
+	ISalonsPayload,
+	ISuggestedSalonsPayload,
+	ISalonHistoryPayload,
+	IRejectedSuggestionsPayload
+} from './salonsActions'
 
 export const initState = {
 	salons: {
@@ -34,7 +43,13 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as ISalonHistoryPayload & ILoadingAndFailure
+	} as ISalonHistoryPayload & ILoadingAndFailure,
+	rejectedSuggestions: {
+		data: null,
+		tableData: undefined,
+		isLoading: false,
+		isFailure: false
+	} as IRejectedSuggestionsPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -188,6 +203,32 @@ export default (state = initState, action: ISalonsActions) => {
 				salonHistory: {
 					...initState.salonHistory,
 					data: action.payload.data
+				}
+			}
+		// Rejected suggestions
+		case REJECTED_SUGGESTIONS.REJECTED_SUGGESTIONS_LOAD_START:
+			return {
+				...state,
+				rejectedSuggestions: {
+					...state.rejectedSuggestions,
+					isLoading: true
+				}
+			}
+		case REJECTED_SUGGESTIONS.REJECTED_SUGGESTIONS_LOAD_FAIL:
+			return {
+				...state,
+				rejectedSuggestions: {
+					...initState.rejectedSuggestions,
+					isFailure: true
+				}
+			}
+		case REJECTED_SUGGESTIONS.REJECTED_SUGGESTIONS_LOAD_DONE:
+			return {
+				...state,
+				rejectedSuggestions: {
+					...initState.rejectedSuggestions,
+					data: action.payload.data,
+					tableData: action.payload.tableData
 				}
 			}
 		case RESET_STORE:

@@ -7,29 +7,28 @@ import { useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // components
-import Filters from '../../../components/Filters'
+import Filters from '../../../../components/Filters'
 
 // reducers
-import { RootState } from '../../../reducers'
+import { RootState } from '../../../../reducers'
 
 // assets
-import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
-import { ReactComponent as UploadIcon } from '../../../assets/icons/upload-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
-import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as PlusIcon } from '../../../../assets/icons/plus-icon.svg'
+import { ReactComponent as UploadIcon } from '../../../../assets/icons/upload-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
+import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../../utils/enums'
-import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString } from '../../../utils/helper'
-import Permissions from '../../../utils/Permissions'
-import { history } from '../../../utils/history'
-import { getSalonFilterRanges, intervals } from './salonUtils'
+import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../../../utils/enums'
+import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges } from '../../../../utils/helper'
+import Permissions from '../../../../utils/Permissions'
+import { history } from '../../../../utils/history'
 
 // atoms
-import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
-import SwitchField from '../../../atoms/SwitchField'
-import DateRangePickerField from '../../../atoms/DateRangePickerField'
+import InputField from '../../../../atoms/InputField'
+import SelectField from '../../../../atoms/SelectField'
+import SwitchField from '../../../../atoms/SwitchField'
+import DateRangePickerField from '../../../../atoms/DateRangePickerField'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void
@@ -274,12 +273,11 @@ const SalonsFilterActive = (props: Props) => {
 								className={'w-full'}
 								rangePickerClassName={'w-full'}
 								component={DateRangePickerField}
-								showTime
 								disableFuture
 								placeholder={[t('loc:Úpravy od'), t('loc:Úpravy do')]}
 								allowClear
 								name={'dateFromTo'}
-								ranges={getSalonFilterRanges(intervals)}
+								ranges={getSalonFilterRanges()}
 								dropdownAlign={{ points: ['tr', 'br'] }}
 								allowEmpty={[false, false]}
 							/>

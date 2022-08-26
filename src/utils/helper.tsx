@@ -61,9 +61,10 @@ import {
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION,
-	SALON_CREATE_TYPES
+	SALON_CREATE_TYPES,
+	DEFAULT_DATE_TIME_OPTIONS
 } from './enums'
-import { IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
+import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
@@ -752,13 +753,13 @@ export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
 		case SALON_STATES.PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (
-				<Tag className={'noti-tag success'}>
+				<Tag className={'noti-tag bg-status-published'}>
 					<span>{i18next.t('loc:Publikovaný')}</span>
 				</Tag>
 			)
 		default:
 			return (
-				<Tag className={'noti-tag'}>
+				<Tag className={'noti-tag bg-status-notPublished'}>
 					<span>{i18next.t('loc:Nepublikovaný')}</span>
 				</Tag>
 			)
@@ -987,4 +988,15 @@ export const splitArrayByCondition = (source: any[], condition: (item: any) => b
 		},
 		[[], []]
 	)
+}
+
+export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: string]: Dayjs[] } => {
+	const options = values ?? Object.values(DEFAULT_DATE_TIME_OPTIONS())
+	const now = dayjs()
+	return options.reduce((ranges, value) => {
+		return {
+			...ranges,
+			[value.name]: [now.subtract(value.value, value.unit), now]
+		}
+	}, {})
 }

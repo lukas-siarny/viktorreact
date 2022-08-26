@@ -11,16 +11,16 @@ import cx from 'classnames'
 // components
 import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
-import SalonForm from './components/SalonForm'
+import SalonForm from './components/forms/SalonForm'
 import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 import { scrollToTopFn } from '../../components/ScrollToTop'
-import NoteForm from './components/NoteForm'
-import validateSalonFormForPublication from './components/validateSalonFormForPublication'
-import SalonSuggestionsModal from './components/SalonSuggestionsModal'
-import SpecialistModal from './components/SpecialistModal'
+import NoteForm from './components/forms/NoteForm'
+import validateSalonFormForPublication from './components/forms/validateSalonFormForPublication'
+import SalonSuggestionsModal from './components/modals/SalonSuggestionsModal'
+import SpecialistModal from './components/modals/SpecialistModal'
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
-import SalonApprovalModal from './components/SalonApprovalModal'
+import SalonApprovalModal from './components/modals/SalonApprovalModal'
 import { createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
 import { initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
@@ -328,7 +328,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/salons/{salonID}', { salonID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			if (isAdmin) {
-				history.push(t('paths:salons'))
+				history.push(backUrl)
 			} else {
 				// check if there are any other salons assigned to user and redircet user to first of them
 				const { data } = await dispatch(getCurrentUser())

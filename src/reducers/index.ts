@@ -20,6 +20,7 @@ import supportContactsReducer from './supportContacts/supportContactsReducer'
 import cosmeticsReducer from './cosmetics/cosmeticsReducer'
 import categoryParamsReducer from './categoryParams/categoryParamsReducer'
 import languagesReducer from './languages/languagesReducer'
+import dashboardReducer from './dashboard/dashboardReducer'
 import specialistContactsReducer from './specialistContacts/specialistContactsReducer'
 
 export const REDUCER_KEYS = {
@@ -37,7 +38,8 @@ export const REDUCER_KEYS = {
 	SPECIALIST_CONTACTS: 'SPECIALIST_CONTACTS',
 	COSMETICS: 'COSMETICS',
 	CATEGORY_PARAMETERS: 'CATEGORY_PARAMETERS',
-	LANGUAGES: 'LANGUAGES'
+	LANGUAGES: 'LANGUAGES',
+	DASHBOARD: 'DASHBOARD'
 }
 
 const rootReducer = combineReducers({
@@ -145,6 +147,13 @@ const rootReducer = combineReducers({
 			storage: storageLocal
 		},
 		selectedSalonReducer
+	),
+	dashboard: persistReducer(
+		{
+			key: REDUCER_KEYS.DASHBOARD,
+			storage: storageLocal
+		},
+		dashboardReducer
 	)
 })
 

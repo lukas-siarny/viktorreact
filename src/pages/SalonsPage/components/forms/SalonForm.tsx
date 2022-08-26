@@ -7,48 +7,45 @@ import { useSelector } from 'react-redux'
 // components
 import { isEmpty } from 'lodash'
 import i18next from 'i18next'
-import OpeningHours from '../../../components/OpeningHours/OpeningHours'
-import AddressFields from '../../../components/AddressFields'
-import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
+import OpeningHours from '../../../../components/OpeningHours/OpeningHours'
+import AddressFields from '../../../../components/AddressFields'
 
 // atoms
-import InputField from '../../../atoms/InputField'
-import SwitchField from '../../../atoms/SwitchField'
-import TextareaField from '../../../atoms/TextareaField'
-import ImgUploadField from '../../../atoms/ImgUploadField'
-import SelectField from '../../../atoms/SelectField'
-import PhoneArrayField from '../../../atoms/PhoneArrayField'
-import AutocompleteField from '../../../atoms/AutocompleteField'
+import InputField from '../../../../atoms/InputField'
+import SwitchField from '../../../../atoms/SwitchField'
+import TextareaField from '../../../../atoms/TextareaField'
+import ImgUploadField from '../../../../atoms/ImgUploadField'
+import SelectField from '../../../../atoms/SelectField'
+import PhoneArrayField from '../../../../atoms/PhoneArrayField'
+import AutocompleteField from '../../../../atoms/AutocompleteField'
 
 // utils
-import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
-import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
+import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 
 // types
-import { ISalonForm, ISelectOptionItem } from '../../../types/interfaces'
+import { ISalonForm, ISelectOptionItem } from '../../../../types/interfaces'
 
 // validate
 import validateSalonForm from './validateSalonForm'
 
 // reducers
-import { RootState } from '../../../reducers'
+import { RootState } from '../../../../reducers'
 
 // assets
-import { ReactComponent as InstagramIcon } from '../../../assets/icons/social-instagram-icon.svg'
-import { ReactComponent as FacebookIcon } from '../../../assets/icons/social-facebook-icon.svg'
-import { ReactComponent as CreditCardIcon } from '../../../assets/icons/credit-card-outlined-icon.svg'
-import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
-import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
-import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
-import { ReactComponent as SocialIcon } from '../../../assets/icons/social-24.svg'
-import { ReactComponent as SocialPinterest } from '../../../assets/icons/social-pinterest.svg'
-import { ReactComponent as SocialYoutube } from '../../../assets/icons/social-youtube.svg'
-import { ReactComponent as SocialTikTok } from '../../../assets/icons/social-tiktok.svg'
-import { ReactComponent as CompanyIcon } from '../../../assets/icons/companies-icon.svg'
-import { ReactComponent as CosmeticIcon } from '../../../assets/icons/cosmetic-icon-24.svg'
-import { ReactComponent as LanguagesIcon } from '../../../assets/icons/languages-24-icon.svg'
+import { ReactComponent as InstagramIcon } from '../../../../assets/icons/social-instagram-icon.svg'
+import { ReactComponent as FacebookIcon } from '../../../../assets/icons/social-facebook-icon.svg'
+import { ReactComponent as CreditCardIcon } from '../../../../assets/icons/credit-card-outlined-icon.svg'
+import { ReactComponent as InfoIcon } from '../../../../assets/icons/info-icon.svg'
+import { ReactComponent as PhoneIcon } from '../../../../assets/icons/phone-2-icon.svg'
+import { ReactComponent as TimerIcon } from '../../../../assets/icons/clock-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
+import { ReactComponent as SocialIcon } from '../../../../assets/icons/social-24.svg'
+import { ReactComponent as SocialPinterest } from '../../../../assets/icons/social-pinterest.svg'
+import { ReactComponent as SocialYoutube } from '../../../../assets/icons/social-youtube.svg'
+import { ReactComponent as SocialTikTok } from '../../../../assets/icons/social-tiktok.svg'
+import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmetic-icon-24.svg'
+import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 
 type ComponentProps = {
 	disabledForm: boolean

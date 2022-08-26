@@ -228,6 +228,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 								columns={columns}
 								dataSource={employees?.data?.employees}
 								rowClassName={'clickable-row'}
+								rowKey='id'
 								twoToneRows
 								scroll={{ x: 800 }}
 								onRow={(record) => ({

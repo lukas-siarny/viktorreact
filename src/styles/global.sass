@@ -20,6 +20,7 @@
 @import "tree"
 @import "switch"
 @import "time-range-picker"
+@import "tabs"
 
 $searchProductTop: 166px
 
@@ -1142,15 +1143,20 @@ span.ant-tag
 	display: flex
 	flex-direction: column
 
-	.image
+	.partner-dashboard
+		.add-button
+			height: calc(100% - 64px)
+
+	.dashboard-image
 		width: 100%
 		height: 100%
 		max-width: 1000px
-		max-height: 90vh
+		max-height: 40vh //75vh
 		min-width: 280px
 		background: url('../assets/images/homepage-min.png') no-repeat center center
 		background-size: contain
 		align-self: center
+		margin: auto
 
 .main-background
 	background: $background-gradient
@@ -1952,3 +1958,9 @@ li.ant-list-item:hover
 		.what-next
 			padding-left: 16px
 			margin-bottom: 24px
+
+.filter-invert
+	&.min
+		filter: invert(0)
+	&.max
+		filter: invert(1)

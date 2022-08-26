@@ -5,20 +5,20 @@ import { useDispatch, useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
 
 // reducers
-import { getSpecialistContact, getSpecialistContacts } from '../../../reducers/specialistContacts/specialistContactsActions'
+import { getSpecialistContact, getSpecialistContacts } from '../../../../reducers/specialistContacts/specialistContactsActions'
 
 // types
-import { RootState } from '../../../reducers'
-import { LOCALES } from '../../../components/LanguagePicker'
+import { RootState } from '../../../../reducers'
+import { LOCALES } from '../../../../components/LanguagePicker'
 
 // utils
-import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../../utils/enums'
-import i18n from '../../../utils/i18n'
-import { getCountryPrefix, optionRenderWithImage } from '../../../utils/helper'
+import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../../../utils/enums'
+import i18n from '../../../../utils/i18n'
+import { getCountryPrefix, optionRenderWithImage } from '../../../../utils/helper'
 
 type Props = {
 	visible: boolean

@@ -1,15 +1,11 @@
 import React from 'react'
 import { Modal } from 'antd'
-import { useSelector } from 'react-redux'
 import { t } from 'i18next'
 import { Link } from 'react-router-dom'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
-import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
-
-// types
-import { RootState } from '../../../reducers'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chevron-down.svg'
 
 type Props = {
 	onCancel: () => void
@@ -20,7 +16,6 @@ type Props = {
 
 const SalonApprovalModal = (props: Props) => {
 	const { onCancel, visible, submitButton, parentPath } = props
-	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	return (
 		<Modal centered visible={visible} onCancel={onCancel} footer={null} closable={false} className={'p-4'} forceRender width={600}>

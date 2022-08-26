@@ -6,22 +6,22 @@ import { debounce, filter, isEmpty, isNil, size } from 'lodash'
 
 // components
 import { useSelector } from 'react-redux'
-import Filters from '../../../components/Filters'
+import Filters from '../../../../components/Filters'
 
 // reducers
-import { RootState } from '../../../reducers'
+import { RootState } from '../../../../reducers'
 
 // assets
-import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
-import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../../assets/icons/globe-24.svg'
+import { ReactComponent as CategoryIcon } from '../../../../assets/icons/categories-24-icon.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
-import { optionRenderWithImage, validationString } from '../../../utils/helper'
+import { ENUMERATIONS_KEYS, FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT } from '../../../../utils/enums'
+import { optionRenderWithImage, validationString } from '../../../../utils/helper'
 
 // atoms
-import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
+import InputField from '../../../../atoms/InputField'
+import SelectField from '../../../../atoms/SelectField'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void

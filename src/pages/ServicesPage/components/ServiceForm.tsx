@@ -291,9 +291,9 @@ export const renderEmployees = (props: any) => {
 								<div className={'flex align-center'}>
 									<div className={'title flex items-center'}>
 										<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
-										{fieldData?.name}
-										{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon width={20} height={20} /> : undefined}
-										{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon width={20} height={20} /> : undefined}
+										{fieldData?.name ?? fieldData}
+										{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon className='ml-4' width={20} height={20} /> : undefined}
+										{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon className='ml-4' width={20} height={20} /> : undefined}
 									</div>
 								</div>
 							}

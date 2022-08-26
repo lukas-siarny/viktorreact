@@ -69,19 +69,6 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		streetNumber: salonData.address?.streetNumber || null,
 		locationNote: salonData.locationNote || null,
 		parkingNote: salonData.parkingNote || null,
-		companyContactPerson: {
-			email: salonData.companyContactPerson?.email || null,
-			firstName: salonData.companyContactPerson?.firstName || null,
-			lastName: salonData.companyContactPerson?.lastName || null,
-			phonePrefixCountryCode: salonData.companyContactPerson?.phonePrefixCountryCode || phonePrefixCountryCode,
-			phone: salonData.companyContactPerson?.phone || null
-		},
-		companyInfo: {
-			taxID: salonData.companyInfo?.taxID || null,
-			businessID: salonData.companyInfo?.businessID || null,
-			companyName: salonData.companyInfo?.companyName || null,
-			vatID: salonData.companyInfo?.vatID || null
-		},
 		phones:
 			salonData.phones && !isEmpty(salonData.phones)
 				? salonData.phones.map((phone) => ({
@@ -156,9 +143,6 @@ export const initEmptySalonFormData = (phonePrefixCountryCode: string, salonName
 		openingHours: initOpeningHours(undefined, true, false),
 		payByCard: false,
 		payByCash: true,
-		companyContactPerson: {
-			phonePrefixCountryCode
-		},
 		phones: getPhoneDefaultValue(phonePrefixCountryCode)
 	}
 }

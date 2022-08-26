@@ -24,6 +24,7 @@ import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24
 import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
 import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
+import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -212,6 +213,16 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
 									>
 										{t('loc:Detail salónu')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.BILLING_INFO}
+										key={PAGE.BILLING_INFO}
+										onClick={() => history.push(getPath(t('paths:billing-info')))}
+										icon={<InvoiceIcon />}
+										// fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.BILLING_INFO })}
+									>
+										{t('loc:Fakturačné údaje')}
 									</Menu.Item>
 									<Menu.Item
 										eventKey={PAGE.INDUSTRIES}

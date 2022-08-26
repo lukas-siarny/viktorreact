@@ -1,5 +1,6 @@
 {
   "activation": "/activation",
+  "billing-info": "/billing-info",
   "categories": "/categories",
   "category-parameters": "/category-parameters",
   "category-parameters/create": "/category-parameters/create",

@@ -72,6 +72,7 @@ const Localizations = (param: any) => {
 					autoSize={param.fieldAutoSize}
 					focusRow={param.fieldFocusRow}
 					required={param.required}
+					rows={param?.customRows}
 					onFocus={setFocusedWrap}
 				/>
 			</div>

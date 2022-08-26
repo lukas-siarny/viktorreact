@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { filter, forEach, get, map } from 'lodash'
+import { filter, forEach, get, map, isEmpty } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 
@@ -63,6 +63,7 @@ const CategoriesTree = () => {
 				parentTitle,
 				childrenLength,
 				nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
+				descriptionLocalizations: EMPTY_NAME_LOCALIZATIONS,
 				level
 			})
 		)
@@ -70,7 +71,7 @@ const CategoriesTree = () => {
 
 	const openCategoryUpdateDetail = async (id: string, level?: number, deletedAt?: string, isParentDeleted?: boolean) => {
 		setShowForm(true)
-		const { data } = await dispatch(getCategory(id))
+		const { data }: any = await dispatch(getCategory(id))
 		let formData = {}
 		if (data) {
 			formData = {
@@ -84,7 +85,9 @@ const CategoriesTree = () => {
 				deletedAt,
 				isParentDeleted,
 				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.icon?.id }] : undefined,
-				categoryParameterID: data?.categoryParameter?.id
+				categoryParameterID: data?.categoryParameter?.id,
+				descriptionLocalizations: level === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations, DEFAULT_LANGUAGE) : undefined,
+				childrenLength: data?.children && data.children.length
 			}
 		}
 		dispatch(initialize(FORM.CATEGORY, formData))
@@ -272,13 +275,18 @@ const CategoriesTree = () => {
 
 	const handleSubmit = async (formData: ICategoryForm) => {
 		const cat: any | null = categories?.data
+		let descriptionLocalizations: any
+		if (!isEmpty(formData.descriptionLocalizations) && formData.descriptionLocalizations.length >= 1 && formData.descriptionLocalizations[0]?.value) {
+			descriptionLocalizations = filter(formData.descriptionLocalizations, (item) => !!item.value)
+		}
 		try {
 			let body: any = {
-				orderIndex: (formData.orderIndex ?? formData.childrenLength ?? cat?.length ?? 0) + 1,
+				orderIndex: formData.orderIndex ?? (formData.childrenLength && formData.childrenLength + 1) ?? (cat?.length && cat.length + 1) ?? 1,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
 				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,
-				categoryParameterID: formData.categoryParameterID ?? undefined
+				categoryParameterID: formData.categoryParameterID ?? undefined,
+				descriptionLocalizations
 			}
 
 			if (formData.id) {

@@ -105,7 +105,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	// if salon have ID and is same as loaded
 	const isSalonExists = !!salonID && salonID === salon.data?.id
 	// if salon is deleted
-	const isDeletedSalon = !!(salon?.data?.deletedAt && salon?.data?.deletedAt !== null) && !isSalonExists
+	const isDeletedSalon = !!salon?.data?.deletedAt && salon?.data?.deletedAt !== null
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving || isSendingConfRequest || basicSalon.isLoading
 	const isPendingPublication = (salon.data && pendingStates.includes(salon.data.state)) || false
 	const isPublished = salon.data?.isPublished
@@ -562,6 +562,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const renderContentFooter = () => {
 		switch (true) {
 			// for create salon page
+			case isDeletedSalon:
+				return null
+			// for create salon page
 			case !isSalonExists:
 				return (
 					<Row className={'w-full'} justify={'center'}>
@@ -841,7 +844,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			{isAdmin && !isNewSalon ? (
+			{isAdmin && !isNewSalon && !isDeletedSalon ? (
 				<TabsComponent
 					className={'box-tab'}
 					activeKey={tabKey}

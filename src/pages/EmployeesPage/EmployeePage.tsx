@@ -178,7 +178,7 @@ const EmployeePage = (props: Props) => {
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
 
-	const emploeyeeExists = !!employee?.data?.employee?.id
+	const isEmployeeExists = !!employee?.data?.employee?.id
 
 	const isLoading = employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
 
@@ -189,20 +189,9 @@ const EmployeePage = (props: Props) => {
 		if (!data?.employee?.id) {
 			history.push('/404')
 		}
-	}
 
-	useEffect(() => {
-		fetchEmployeeData()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [employeeID])
-
-	useEffect(() => {
-		dispatch(getSalonRoles())
-	}, [dispatch, salonID])
-
-	useEffect(() => {
-		if (employee.data?.employee) {
-			const { user } = employee.data.employee
+		if (data?.employee) {
+			const { user } = data.employee
 
 			const userData = user
 				? {
@@ -222,25 +211,33 @@ const EmployeePage = (props: Props) => {
 
 			dispatch(
 				initialize(FORM.EMPLOYEE, {
-					...employee.data?.employee,
-					avatar: employee.data?.employee?.image
+					...data.employee,
+					avatar: data.employee?.image
 						? [
 								{
-									url: employee.data?.employee?.image?.original,
-									thumbUrl: employee.data?.employee?.image?.resizedImages?.thumbnail,
-									uid: employee.data?.employee?.image?.id
+									url: data.employee?.image?.original,
+									thumbUrl: data.employee?.image?.resizedImages?.thumbnail,
+									uid: data.employee?.image?.id
 								}
 						  ]
 						: [],
 					services: /* checkAndParseServices(employee.data?.employee?.services) */ [],
-					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id },
-					roleID: employee.data?.employee?.role?.id,
+					salonID: { label: data.employee?.salon?.name, value: data.employee?.salon?.id },
+					roleID: data.employee?.role?.id,
 					user: userData
 				})
 			)
 		}
+	}
+
+	useEffect(() => {
+		fetchEmployeeData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [employee.data])
+	}, [employeeID])
+
+	useEffect(() => {
+		dispatch(getSalonRoles())
+	}, [dispatch, salonID])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))
@@ -373,11 +370,11 @@ const EmployeePage = (props: Props) => {
 					<div className={'content-footer pt-0'}>
 						<Row
 							className={cx({
-								'justify-between': emploeyeeExists,
-								'justify-center': !emploeyeeExists
+								'justify-between': isEmployeeExists,
+								'justify-center': !isEmployeeExists
 							})}
 						>
-							{emploeyeeExists ? (
+							{isEmployeeExists ? (
 								<DeleteButton
 									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
 									className={'mt-2-5 w-52 xl:w-60'}

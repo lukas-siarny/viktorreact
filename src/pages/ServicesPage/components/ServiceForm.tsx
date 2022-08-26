@@ -299,6 +299,7 @@ export const renderEmployees = (props: any) => {
 							}
 							key={index}
 							extra={genExtra(index, fieldData)}
+							className={cx({ hideIcon: collapsible })}
 							collapsible={collapsible}
 						>
 							{fieldData?.serviceCategoryParameter?.length > 1 &&
@@ -379,7 +380,9 @@ const ServiceForm = (props: Props) => {
 					{t('loc:Nastavenia')}
 				</h3>
 				<Divider className={'mb-3 mt-3'} />
-				<Field className={'mb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
+				{!isEmpty(formValues?.serviceCategoryParameter) && (
+					<Field className={'mb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
+				)}
 				{formValues?.useCategoryParameter ? (
 					<div className={'my-2'}>
 						<FieldArray

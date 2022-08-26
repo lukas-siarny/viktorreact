@@ -13,7 +13,7 @@
     "start": "cross-env npm-run-all -p start-watch translate-watch build:tailwind",
     "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
     "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true npm-run-all -p build:tailwind rebuild:sass",
-	  "copy-modules": "node scripts/postBuild.js",
+    "copy-modules": "node scripts/postBuild.js",
     "copy-build": "node scripts/copyErrorBuild.js",
     "postbuild": "cross-env SKIP_PREFLIGHT_CHECK=true DISABLE_ESLINT_PLUGIN=true npm run copy-modules && npm --prefix ./error_503 run build && npm run copy-build",
     "build": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired build",
@@ -108,6 +108,7 @@
   },
   "devDependencies": {
     "@goodrequest/antd-form-fields": "0.0.1",
+    "@goodrequest/convert-translations-i18next": "1.0.5",
     "@goodrequest/eslint-config-typescript-react": "1.1.1",
     "@storybook/addon-actions": "6.4.22",
     "@storybook/addon-essentials": "6.4.22",

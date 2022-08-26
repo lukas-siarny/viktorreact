@@ -299,6 +299,7 @@ export const renderEmployees = (props: any) => {
 							}
 							key={index}
 							extra={genExtra(index, fieldData)}
+							className={cx({ hideIcon: collapsible })}
 							collapsible={collapsible}
 						>
 							{fieldData?.serviceCategoryParameter?.length > 1 &&

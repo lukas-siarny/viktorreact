@@ -26,7 +26,7 @@ pipelines:
               name: Build and push docker image
               script:
                 # push source maps to sentry service
-                - REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
                 # remove source maps from bundle build
                 - find build/static/js/ -name "*.map" -type f -delete
                 - docker build -t registry.goodrequest.com/notino-b2b-web:development -f docker/development/Dockerfile.web .
@@ -50,7 +50,7 @@ pipelines:
               name: Build and push docker image
               script:
                 # push source maps to sentry service
-                - REACT_APP_HOST=testServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=testServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
                 # remove source maps from bundle build
                 - find build/static/js/ -name "*.map" -type f -delete
                 - docker build -t registry.goodrequest.com/notino-b2b-web:test -f docker/test/Dockerfile.web .
@@ -69,7 +69,7 @@ pipelines:
           name: Build and release sentry sourcemaps
           script:
             # push source maps to sentry service
-            - REACT_APP_HOST=uatServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+            - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=uatServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
             # remove source maps from bundle build
             - find build/static/js/ -name "*.map" -type f -delete
           artifacts:
@@ -97,7 +97,7 @@ pipelines:
           name: Build and release sentry sourcemaps
           script:
             # push source maps to sentry service
-            - REACT_APP_HOST=productionServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+            - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_PROD_API REACT_APP_HOST=productionServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
             # remove source maps from bundle build
             - find build/static/js/ -name "*.map" -type f -delete
           artifacts:

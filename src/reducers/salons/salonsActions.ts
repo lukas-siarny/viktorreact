@@ -3,7 +3,7 @@ import { map } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY } from './salonsTypes'
+import { SALON, SALONS, SUGGESTED_SALONS, BASIC_SALON, BASIC_SALONS, SALON_HISTORY, REJECTED_SUGGESTIONS } from './salonsTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 import { IQueryParams, ISearchable } from '../../types/interfaces'
@@ -23,6 +23,15 @@ interface IGetSalons {
 interface IGetSalonHistory {
 	type: SALON_HISTORY
 	payload: ISalonHistoryPayload
+}
+
+interface IRejectedSuggestionsPayload {
+	data: Paths.
+}
+
+interface IGetRejectedSuggestions {
+	type: REJECTED_SUGGESTIONS,
+	payload: 
 }
 
 export interface IGetSalonsQueryParams extends IQueryParams {

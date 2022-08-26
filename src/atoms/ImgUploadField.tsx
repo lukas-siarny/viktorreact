@@ -39,6 +39,14 @@ interface IPreviewFile {
 	url: string
 }
 
+const isFilePDF = (fileUrl?: string): string | undefined => {
+	if (!fileUrl) {
+		return undefined
+	}
+
+	return fileUrl.endsWith('.pdf') ? 'application/pdf' : undefined
+}
+
 /**
  * Umoznuje nahrat obrazky na podpisanu url
  */
@@ -120,7 +128,7 @@ const ImgUploadField: FC<Props> = (props) => {
 				uploadImage(options, signUrl, category, imagesUrls)
 			}}
 			fileList={input.value || []}
-			onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type })}
+			onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
 			maxCount={maxCount}
 			showUploadList={showUploadList}
 			beforeUpload={(file, fileList) => {
@@ -152,7 +160,7 @@ const ImgUploadField: FC<Props> = (props) => {
 	useEffect(() => {
 		if (!isEmpty(input.value)) {
 			// filter application/pdf file
-			setImages(input.value.filter((file: any) => file.type !== 'application/pdf'))
+			setImages(input.value.filter((file: any) => file.type !== 'application/pdf' || !!isFilePDF(file.url)))
 		}
 	}, [input.value])
 

@@ -75,7 +75,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 				  }))
 				: getPhoneDefaultValue(phonePrefixCountryCode),
 		gallery: map(salonData.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
-		pricelists: map(salonData.pricelists, (file) => ({ url: file?.original, uid: file?.id })),
+		pricelists: map(salonData.pricelists, (file) => ({ url: file?.original, uid: file?.id, name: file?.fileName })),
 		logo: salonData.logo?.id
 			? [
 					{

@@ -256,7 +256,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				payByCash: !!data.payByCash,
 				otherPaymentMethods: data.otherPaymentMethods,
 				cosmeticIDs: data.cosmeticIDs,
-				languageIDs: data.languageIDs
+				languageIDs: data.languageIDs,
+				pricelistIDs: (data.pricelists || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['pricelistIDs']
 			}
 
 			if (isSalonExists) {

@@ -91,7 +91,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		} else {
 			// set to init values
 			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: OpeningHours = initOpeningHours(supportContact.data?.supportContact.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
+			const openingHours: OpeningHours = initOpeningHours(formValues?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
 			if (openOverWeekendFormValue && openingHours) {
 				const updatedOpeningHours = unionBy(
 					[
@@ -117,9 +117,6 @@ const SupportContactPage: FC<Props> = (props) => {
 	useEffect(() => {
 		const initForm = async (supportContactData?: ISupportContactPayload & ILoadingAndFailure) => {
 			const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-			const defaultContactPerson = {
-				phonePrefixCountryCode
-			}
 
 			if (supportContactData && !isEmpty(supportContactData) && supportContactID) {
 				// init data for existing supportContact
@@ -151,10 +148,6 @@ const SupportContactPage: FC<Props> = (props) => {
 						openOverWeekend: false,
 						sameOpenHoursOverWeek: true,
 						openingHours: initOpeningHours(supportContactData?.data?.supportContact?.openingHours, true, false),
-						payByCard: false,
-						phonePrefixCountryCode,
-						isInvoiceAddressSame: true,
-						companyContactPerson: defaultContactPerson,
 						emails: [{ email: '' }],
 						phones: [
 							{
@@ -258,7 +251,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 	}
 
-	const hasEveryCountrSupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact) => contact.country.code === country.code))
+	const hasEveryCountrSupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact: any) => contact.country.code === country.code))
 
 	return (
 		<>

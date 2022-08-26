@@ -94,8 +94,8 @@ export interface ISalonForm {
 	parkingNote: string | null
 	phones: { phonePrefixCountryCode: string | null, phone: string | null }[]
 	email: string | null
-	socialLinkFB: string | null
 	categoryIDs: [string, ...string[] ] | null
+	socialLinkFB: string | null
 	socialLinkInstagram: string | null
 	socialLinkWebPage: string | null
 	socialLinkYoutube: string | null
@@ -108,46 +108,10 @@ export interface ISalonForm {
 	gallery: any | null
 	pricelistIDs?: string[]
 	pricelists?: any
-	companyContactPerson: {
-		email: string | null
-		firstName: string | null
-		lastName: string | null
-		phonePrefixCountryCode: string | null
-		phone: string | null
-	},
-	companyInfo: {
-		taxID: string | null
-		businessID: string | null
-		companyName: string | null
-		vatID: string | null
-	},
 	locationNote: string | null
 	cosmeticIDs: string[]
 	languageIDs: string[]
 	address: boolean | null
-	publishedSalonData: {
-		name: string | null
-		aboutUsFirst: string | null
-		aboutUsSecond: string | null
-		address: {
-			countryCode: string | null
-			zipCode: string | null
-			city: string | null
-			street: string | null
-			streetNumber: string | null
-			latitude: number | null
-			longitude: number | null
-		}
-		locationNote: string | null
-		phones: {
-			phonePrefixCountryCode: string | null
-			phone: string | null
-		}[]
-		email: string | null
-		logo: any
-		gallery: any
-		pricelists: any
-	}
 }
 
 export interface IServiceForm {
@@ -195,6 +159,23 @@ export interface IForgotPasswordForm {
 
 export interface IActivationForm {
 	code: string
+}
+
+export interface IBillingForm {
+	countryCode?: string
+	zipCode?: string
+	city?: string
+	street?: string
+	streetNumber?: string
+	email?: string
+	firstName?: string
+	lastName?: string
+	phonePrefixCountryCode?: string
+	phone?: string
+	businessID?: string
+	taxID?: string
+	vatID?: string
+	companyName?: string
 }
 
 export interface IJwtPayload {

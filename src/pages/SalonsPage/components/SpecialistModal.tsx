@@ -100,7 +100,7 @@ const SpecialistModal = (props: Props) => {
 					dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
 					getPopupContainer={() => document.querySelector('.noti-specialist-contact-wrapper') as HTMLElement}
 				>
-					{specialistContacts?.options?.map((option) => (
+					{specialistContacts?.options?.map((option: any) => (
 						<Option value={option.value} key={option.key}>
 							{optionRenderWithImage(option, <GlobeIcon />)}
 						</Option>

@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import validateNoteForm from './validateNoteForm'
 
 // utils
-import { FORM } from '../../../../utils/enums'
+import { FORM, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 
 // validate
 import TextareaField from '../../../../atoms/TextareaField'
@@ -29,7 +29,14 @@ const NoteForm: FC<Props> = (props) => {
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<Row>
 				<Col span={24}>
-					<Field component={TextareaField} name={'note'} placeholder={fieldPlaceholderText} label={t('loc:Poznámka')} />
+					<Field
+						component={TextareaField}
+						name={'note'}
+						placeholder={fieldPlaceholderText}
+						label={t('loc:Poznámka')}
+						maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+						showLettersCount
+					/>
 				</Col>
 			</Row>
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>

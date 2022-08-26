@@ -5,7 +5,7 @@ import { Col, Divider, Form, Row } from 'antd'
 import { useSelector } from 'react-redux'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, GENDER, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, GENDER, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 
 // types
@@ -115,7 +115,15 @@ const CustomerForm: FC<Props> = (props) => {
 						loading={countries?.isLoading}
 						allowClear
 					/>
-					<Field component={TextareaField} label={t('loc:Poznámka')} placeholder={t('loc:Zadajte poznámku')} name={'note'} size={'large'} />
+					<Field
+						component={TextareaField}
+						label={t('loc:Poznámka')}
+						placeholder={t('loc:Zadajte poznámku')}
+						maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
+						showLettersCount
+						name={'note'}
+						size={'large'}
+					/>
 				</Row>
 			</Col>
 		</Form>

@@ -78,7 +78,8 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				streetNumber: formData.streetNumber,
 				zipCode: formData.zipCode,
 				phone: formData.phone,
-				phonePrefixCountryCode: formData.phonePrefixCountryCode
+				phonePrefixCountryCode: formData.phonePrefixCountryCode,
+				note: formData.note
 			})
 
 			history.push(backUrl)

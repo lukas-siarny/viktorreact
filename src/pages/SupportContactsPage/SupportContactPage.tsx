@@ -117,9 +117,6 @@ const SupportContactPage: FC<Props> = (props) => {
 	useEffect(() => {
 		const initForm = async (supportContactData?: ISupportContactPayload & ILoadingAndFailure) => {
 			const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-			const defaultContactPerson = {
-				phonePrefixCountryCode
-			}
 
 			if (supportContactData && !isEmpty(supportContactData) && supportContactID) {
 				// init data for existing supportContact
@@ -151,10 +148,6 @@ const SupportContactPage: FC<Props> = (props) => {
 						openOverWeekend: false,
 						sameOpenHoursOverWeek: true,
 						openingHours: initOpeningHours(supportContactData?.data?.supportContact?.openingHours, true, false),
-						payByCard: false,
-						phonePrefixCountryCode,
-						isInvoiceAddressSame: true,
-						companyContactPerson: defaultContactPerson,
 						emails: [{ email: '' }],
 						phones: [
 							{
@@ -258,7 +251,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 	}
 
-	const hasEveryCountrSupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact) => contact.country.code === country.code))
+	const hasEveryCountrSupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact: any) => contact.country.code === country.code))
 
 	return (
 		<>

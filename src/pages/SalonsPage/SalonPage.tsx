@@ -255,12 +255,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				payByCard: !!data.payByCard,
 				payByCash: !!data.payByCash,
 				otherPaymentMethods: data.otherPaymentMethods,
-				// TODO - remove
-				/* companyContactPerson: {
-					...data.companyContactPerson,
-					phonePrefixCountryCode: data.companyContactPerson?.phone ? data.companyContactPerson.phonePrefixCountryCode : undefined
-				},
-				companyInfo: data.companyInfo, */
 				cosmeticIDs: data.cosmeticIDs,
 				languageIDs: data.languageIDs
 			}
@@ -680,7 +674,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		return null
-	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, salonID, t, isNewSalon, salon.data?.state])
+	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, isNewSalon, salon.data?.state])
 
 	const declinedSalonMessage = useMemo(
 		() => (

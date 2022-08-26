@@ -50,7 +50,7 @@ const SupportContactForm: FC<Props> = (props) => {
 
 	const countriesOptions = useMemo(() => {
 		return countries?.enumerationsOptions?.map((country) => {
-			const alreadyExists = supportContacts?.data?.supportContacts?.find((supportCountry) => supportCountry.country.code === (country.value as string))
+			const alreadyExists = supportContacts?.data?.supportContacts?.find((supportCountry: any) => supportCountry.country.code === (country.value as string))
 
 			return {
 				...country,

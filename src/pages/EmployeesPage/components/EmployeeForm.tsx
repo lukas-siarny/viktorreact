@@ -1,14 +1,14 @@
-import React, { FC, MouseEventHandler, ReactNode } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import React, { FC, MouseEventHandler /* , ReactNode */ } from 'react'
+import { Field, /* FieldArray, */ InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Collapse, Tag } from 'antd'
+import { Col, Divider, Form, Row /* , Collapse, Tag */ } from 'antd'
 import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
-import cx from 'classnames'
+// import cx from 'classnames'
 
 // utils
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
+import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -16,12 +16,12 @@ import { IEmployeeForm } from '../../../types/interfaces'
 // atoms
 import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+// import InputNumberField from '../../../atoms/InputNumberField'
+// import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
-import DeleteButton from '../../../components/DeleteButton'
+// import DeleteButton from '../../../components/DeleteButton'
 
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
@@ -30,13 +30,13 @@ import validateEmployeeForm from './validateEmployeeForm'
 import { RootState } from '../../../reducers'
 
 // assets
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
+/* import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
-import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg' */
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 
-const { Panel } = Collapse
+// const { Panel } = Collapse
 
 type ComponentProps = {
 	salonID: string
@@ -44,7 +44,7 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
-
+/** 
 const numberMin0 = validationNumberMin(0)
 
 const renderListFields = (props: any) => {
@@ -201,13 +201,13 @@ const renderListFields = (props: any) => {
 			</Collapse>
 		</>
 	)
-}
+} */
 
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit } = props
 
-	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	// const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as any
 
 	return (

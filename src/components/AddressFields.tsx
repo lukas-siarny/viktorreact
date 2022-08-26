@@ -13,12 +13,23 @@ import MapContainer from './MapContainer'
 
 // utils
 import { ENUMERATIONS_KEYS, MAP } from '../utils/enums'
-import { getGoogleMapUrl, parseAddressComponents, validationRequired, optionRenderWithImage } from '../utils/helper'
+import {
+	getGoogleMapUrl,
+	parseAddressComponents,
+	validationRequired,
+	optionRenderWithImage,
+	validationRequiredNumber,
+	validationNumberMin,
+	validationNumberMax
+} from '../utils/helper'
 
 // atoms
 import LocationSearchInputField from '../atoms/LocationSearchInputField'
 import InputField from '../atoms/InputField'
 import SelectField from '../atoms/SelectField'
+import InputNumberField from '../atoms/InputNumberField'
+
+// redux
 import { RootState } from '../reducers'
 
 // assets
@@ -57,6 +68,11 @@ type Props = WrappedFieldProps & {
 }
 
 const FULL_H_ELEMENT = <div className='h-full' />
+
+const numberMinLongitude = validationNumberMin(MAP.minLongitude)
+const numberMaxLongitude = validationNumberMax(MAP.maxLongitude)
+const numberMinLatitude = validationNumberMin(MAP.minLatitude)
+const numberMaxLatitude = validationNumberMax(MAP.maxLatitude)
 
 export interface IAddressValues {
 	street?: string
@@ -242,6 +258,43 @@ const AddressFields = (props: Props) => {
 										size={'large'}
 										validate={validationRequired}
 										required
+									/>
+								</Row>
+								<Row justify={'space-between'}>
+									<Field
+										className={'w-1/4'}
+										component={SelectField}
+										optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+										label={t('loc:Štát')}
+										placeholder={t('loc:Vyber krajinu')}
+										options={countries?.enumerationsOptions || []}
+										name={'country'}
+										size={'large'}
+										loading={countries?.isLoading}
+										validate={validationRequired}
+										required
+									/>
+									<Field
+										className={'w-1/3'}
+										component={InputNumberField}
+										label={t('loc:Zem. dĺžka')}
+										placeholder={t('loc:Zem. dĺžka v rozsahu od -180 do 180')}
+										name='longitude'
+										size={'large'}
+										required
+										maxChars={10}
+										validate={[validationRequiredNumber, numberMinLongitude, numberMaxLongitude]}
+									/>
+									<Field
+										className={'w-1/3'}
+										component={InputNumberField}
+										label={t('loc:Zem. šírka')}
+										placeholder={t('loc:Zem. šírka v rozsahu od -90 do 90')}
+										name='latitude'
+										size={'large'}
+										required
+										maxChars={10}
+										validate={[validationRequiredNumber, numberMinLatitude, numberMaxLatitude]}
 									/>
 								</Row>
 								<Field

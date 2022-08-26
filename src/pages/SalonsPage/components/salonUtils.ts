@@ -1,6 +1,4 @@
 import { isEmpty, map } from 'lodash'
-import i18next from 'i18next'
-import dayjs from 'dayjs'
 
 // types
 import { ISalonForm, OpeningHours } from '../../../types/interfaces'

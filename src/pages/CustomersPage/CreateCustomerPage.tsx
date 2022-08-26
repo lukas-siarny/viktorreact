@@ -4,7 +4,7 @@ import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { get, map } from 'lodash'
+import { map } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -66,7 +66,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const createCustomer = async (formData: ICustomerForm) => {
 		try {
 			setSubmitting(true)
-			const { data } = await postReq('/api/b2b/admin/customers/', null, {
+			await postReq('/api/b2b/admin/customers/', null, {
 				email: formData.email,
 				city: formData.city,
 				countryCode: formData.countryCode,

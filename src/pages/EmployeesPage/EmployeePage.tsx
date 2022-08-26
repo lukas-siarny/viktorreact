@@ -116,44 +116,6 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
 }
 
-const checkAndParseServices = (ser: any[]) => {
-	return ser.map((service) => {
-		let updatedService = {
-			id: service?.id,
-			name: service?.name,
-			variableDuration: false,
-			variablePrice: false,
-			salonData: {
-				...service.salonPriceAndDurationData,
-				// decode and set price
-				priceFrom: decodePrice(service?.salonPriceAndDurationData?.priceFrom),
-				priceTo: decodePrice(service?.salonPriceAndDurationData?.priceTo)
-			},
-			employeeData: {
-				...service.employeeData,
-				// decode and set price
-				priceFrom: decodePrice(service?.employeeData?.priceFrom),
-				priceTo: decodePrice(service?.employeeData?.priceTo)
-			},
-			category: service?.category
-		}
-		// get data from employeeData
-		if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
-			updatedService = {
-				...updatedService,
-				variableDuration: true
-			}
-		}
-		if (service?.employeeData?.priceFrom && service?.employeeData?.priceTo) {
-			updatedService = {
-				...updatedService,
-				variablePrice: true
-			}
-		}
-		return updatedService
-	})
-}
-
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()

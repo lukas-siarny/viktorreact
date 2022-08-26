@@ -20,7 +20,6 @@ import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
-import SalonSubRoutes from '../../../routes/SalonSubRoutes'
 
 type ComponentProps = {
 	createCustomer: Function

@@ -4,7 +4,7 @@ import { change, initialize } from 'redux-form'
 import { Action, compose, Dispatch } from 'redux'
 import { notification } from 'antd'
 import i18next from 'i18next'
-import { forEach, unionBy } from 'lodash'
+import { forEach, isNil, unionBy } from 'lodash'
 
 // components
 import ServiceForm from './components/ServiceForm'
@@ -60,10 +60,10 @@ export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): 
 			result.push({
 				id: value?.id,
 				priceAndDurationData: {
-					durationFrom: value?.durationFrom,
-					durationTo: value?.variableDuration ? value?.durationTo : undefined,
-					priceFrom: value?.priceFrom ? encodePrice(value?.priceFrom) : null,
-					priceTo: value?.variablePrice ? encodePrice(value?.priceTo) : undefined
+					durationFrom: value?.durationFrom ?? null,
+					durationTo: value?.variableDuration ? value?.durationTo : null,
+					priceFrom: !isNil(value?.priceFrom) ? encodePrice(value?.priceFrom) : null,
+					priceTo: value?.variablePrice ? encodePrice(value?.priceTo) : null
 				}
 			})
 		}
@@ -118,8 +118,7 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 		const durationTo = value?.priceAndDurationData?.durationTo
 		const priceFrom = decodePrice(value?.priceAndDurationData?.priceFrom)
 		const priceTo = decodePrice(value?.priceAndDurationData?.priceTo)
-		const useParameter = !!(durationFrom || priceFrom)
-
+		const useParameter = !isNil(durationFrom) || !isNil(priceFrom)
 		result.serviceCategoryParameter.push({
 			id: value?.categoryParameterValueID || value?.id,
 			name: value.value || value.name,
@@ -173,7 +172,7 @@ const ServiceEditPage = (props: Props) => {
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
-			// NOTE: DEFAULT_ACTIVE_KEYS
+			// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 			const { /* activeKeys, */ serviceCategoryParameter } = parseParameterValuesInit(parameterValues)
 
 			initData = {
@@ -188,7 +187,7 @@ const ServiceEditPage = (props: Props) => {
 				variablePrice: !!data.service.priceAndDurationData.priceTo,
 				employees: parseEmployeesInit(data?.service?.employees),
 				useCategoryParameter: data.service.useCategoryParameter
-				// NOTE: DEFAULT_ACTIVE_KEYS
+				// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 				/* activeKeys */
 			}
 		}

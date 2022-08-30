@@ -1,31 +1,31 @@
 import i18next from 'i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, isNil } from 'lodash'
 
 const validateServiceForm = (values?: any) => {
 	const errors: any = {}
 
-	if (!values?.durationFrom && !values?.useCategoryParameter) {
+	if (isNil(values?.durationFrom) && !values?.useCategoryParameter) {
 		errors.durationFrom = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (values?.variableDuration && !values?.durationTo && !values?.useCategoryParameter) {
+	if (values?.variableDuration && isNil(values?.durationTo) && !values?.useCategoryParameter) {
 		errors.durationTo = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!values?.priceFrom && !values?.useCategoryParameter) {
+	if (isNil(values?.priceFrom) && !values?.useCategoryParameter) {
 		errors.priceFrom = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (values?.variablePrice && !values?.priceTo && !values?.useCategoryParameter) {
+	if (values?.variablePrice && isNil(values?.priceTo) && !values?.useCategoryParameter) {
 		errors.priceTo = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (values?.variableDuration && values?.durationTo && values?.durationFrom > values?.durationTo) {
+	if (values?.variableDuration && !isNil(values?.durationTo) && values?.durationFrom > values?.durationTo) {
 		errors.durationFrom = i18next.t('loc:Chybný rozsah')
 		errors.durationTo = ' '
 	}
 
-	if (values?.variablePrice && values?.priceTo && values?.priceFrom > values?.priceTo) {
+	if (values?.variablePrice && !isNil(values?.priceTo) && values?.priceFrom > values?.priceTo) {
 		errors.priceFrom = i18next.t('loc:Chybný rozsah')
 		errors.priceTo = ' '
 	}

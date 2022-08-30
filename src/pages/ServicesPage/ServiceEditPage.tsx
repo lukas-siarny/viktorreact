@@ -208,10 +208,10 @@ const ServiceEditPage = (props: Props) => {
 				priceAndDurationData: (values.useCategoryParameter
 					? null
 					: {
-							durationFrom: values.durationFrom,
-							durationTo: values.variableDuration ? values.durationTo : undefined,
-							priceFrom: encodePrice(values.priceFrom),
-							priceTo: values.variablePrice ? encodePrice(values.priceTo) : undefined
+							durationFrom: values.durationFrom ?? null,
+							durationTo: values.variableDuration ? values.durationTo : null,
+							priceFrom: !isNil(values.priceFrom) ? encodePrice(values.priceFrom) : null,
+							priceTo: values.variablePrice ? encodePrice(values.priceTo) : null
 					  }) as any,
 				categoryParameterValues: parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter),
 				employeeIDs: parseEmployeeCreateAndUpdate(values.employees)

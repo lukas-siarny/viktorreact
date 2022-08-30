@@ -158,7 +158,7 @@ const renderParameterValues = (props: any) => {
 							forceRender
 							extra={genExtra(index, fieldData, field)}
 							collapsible={useParameter ? undefined : 'disabled'}
-							className={cx({ 'service-header-has-error': hasError && isTouched })}
+							className={cx({ 'collapse-header-has-error': hasError && isTouched })}
 						>
 							{showDuration && (
 								<Row gutter={8} align='top' justify='center'>

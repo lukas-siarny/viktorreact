@@ -1,10 +1,10 @@
 import React, { MouseEventHandler, ReactNode, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { change, Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Collapse, Divider, Form, Row, Spin, Tag } from 'antd'
-import { isEmpty, get } from 'lodash'
+import { isEmpty, get, values } from 'lodash'
 import cx from 'classnames'
 
 // atoms
@@ -85,8 +85,16 @@ const renderParameterValues = (props: any) => {
 		fields,
 		meta: { error, invalid },
 		salon,
-		showDuration
+		showDuration,
+		form
+		// NOTE: DEFAULT_ACTIVE_KEYS
+		// dispatch
 	} = props
+
+	// NOTE: DEFAULT_ACTIVE_KEYS
+	// const formValues = form?.values
+	const formErrors = form?.syncErrors?.serviceCategoryParameter || []
+	const formFields = form?.fields?.serviceCategoryParameter || []
 
 	const genExtra = (index: number, fieldData: any, field: any) => {
 		return (
@@ -100,6 +108,13 @@ const renderParameterValues = (props: any) => {
 						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
 						name={`${field}.useParameter`}
 						size={'middle'}
+						// NOTE: DEFAULT_ACTIVE_KEYS
+						/* customOnChange={(checked: boolean) => {
+							const keys = formValues?.activeKeys || []
+							const newActiveKeys = checked ? [...keys, fieldData.id] : keys.filter((key: string) => key !== fieldData.id)
+							dispatch(change(FORM.SERVICE_FORM, `serviceCategoryParameter[${index}]useParameter`, checked))
+							dispatch(change(FORM.SERVICE_FORM, 'activeKeys', newActiveKeys))
+						}} */
 					/>
 				</div>
 			</div>
@@ -113,12 +128,23 @@ const renderParameterValues = (props: any) => {
 					{error}
 				</div>
 			)}
-			<Collapse className={cx('collapse-list', { 'error-border': invalid && error })} bordered={false}>
+			<Collapse
+				className={cx('collapse-list', { 'error-border': invalid && error })}
+				bordered={false}
+				// NOTE: DEFAULT_ACTIVE_KEYS
+				/* activeKey={formValues?.activeKeys}
+				onChange={(keys) => {
+					dispatch(change(FORM.SERVICE_FORM, 'activeKeys', keys))
+				}} */
+			>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					const variableDuration = fieldData?.variableDuration
 					const variablePrice = fieldData?.variablePrice
 					const useParameter = fieldData?.useParameter
+					const hasError = !isEmpty(formErrors[index])
+					const isTouched = !isEmpty(formFields[index])
+
 					return (
 						<Panel
 							header={
@@ -126,9 +152,13 @@ const renderParameterValues = (props: any) => {
 									<div className={'list-title leading-7'}>{fieldData?.name}</div>
 								</div>
 							}
+							// NOTE: DEFAULT_ACTIVE_KEYS
+							// key={fieldData.id}
 							key={index}
+							forceRender
 							extra={genExtra(index, fieldData, field)}
 							collapsible={useParameter ? undefined : 'disabled'}
+							className={cx({ 'service-header-has-error': hasError && isTouched })}
 						>
 							{showDuration && (
 								<Row gutter={8} align='top' justify='center'>
@@ -335,7 +365,8 @@ const ServiceForm = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM]?.values)
+	const form = useSelector((state: RootState) => state.form?.[FORM.SERVICE_FORM])
+	const formValues = form?.values
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const service = useSelector((state: RootState) => state.service.service)
 	const categoriesLoading = useSelector((state: RootState) => state.categories.categories.isLoading)
@@ -390,6 +421,9 @@ const ServiceForm = (props: Props) => {
 							name={'serviceCategoryParameter'}
 							salon={salon}
 							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
+							form={form}
+							// NOTE: DEFAULT_ACTIVE_KEYS
+							// dispatch={dispatch}
 						/>
 					</div>
 				) : (

@@ -73,6 +73,7 @@ import { EnumerationData } from '../reducers/enumerations/enumerationActions'
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 import { IAuthUserPayload } from '../reducers/users/userActions'
 import { IEmployeePayload } from '../reducers/employees/employeesActions'
+import { LOCALES } from '../components/LanguagePicker'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -640,6 +641,7 @@ export const checkFiltersSize = (formValues: any) => size(filter(formValues, (va
 
 type NameLocalizationsItem = {
 	language: string
+	value?: string | null
 }
 
 /**
@@ -647,17 +649,18 @@ type NameLocalizationsItem = {
  * or
  * move default language to the first position
  */
-export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[], defaultLanguageName?: string) => {
-	let defaultLanguage = { language: defaultLanguageName }
-	const otherLanguages: any = []
-	forEach(nameLocalizations, (localization) => {
-		if (localization.language === defaultLanguageName) {
-			defaultLanguage = localization
-		} else {
-			otherLanguages.push(localization)
-		}
-	})
-	return [defaultLanguage, ...otherLanguages]
+export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[]) => {
+	return Object.keys(LOCALES)
+		.sort((a: string, b: string) => {
+			if (a === DEFAULT_LANGUAGE) {
+				return -1
+			}
+			return b === DEFAULT_LANGUAGE ? 1 : 0
+		})
+		.map((language) => {
+			const value = nameLocalizations.find((localization) => localization.language === language)
+			return { language, value: value?.value || null }
+		})
 }
 
 type SelectDataItem = {

@@ -62,7 +62,7 @@ export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): 
 				priceAndDurationData: {
 					durationFrom: value?.durationFrom,
 					durationTo: value?.variableDuration ? value?.durationTo : undefined,
-					priceFrom: encodePrice(value?.priceFrom),
+					priceFrom: value?.priceFrom ? encodePrice(value?.priceFrom) : null,
 					priceTo: value?.variablePrice ? encodePrice(value?.priceTo) : undefined
 				}
 			})
@@ -105,14 +105,22 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 	dispatch(change(FORM.SERVICE_FORM, 'employee', null))
 }
 
-const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryParameterValue[]) | undefined): IParameterValue[] => {
-	const result: IParameterValue[] = []
+type ParseParameterValuesInitResult = {
+	activeKeys: string[]
+	serviceCategoryParameter: IParameterValue[]
+}
+
+const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryParameterValue[]) | undefined): ParseParameterValuesInitResult => {
+	const result: ParseParameterValuesInitResult = { activeKeys: [], serviceCategoryParameter: [] }
+
 	values?.forEach((value: any) => {
 		const durationFrom = value?.priceAndDurationData?.durationFrom
 		const durationTo = value?.priceAndDurationData?.durationTo
 		const priceFrom = decodePrice(value?.priceAndDurationData?.priceFrom)
 		const priceTo = decodePrice(value?.priceAndDurationData?.priceTo)
-		result.push({
+		const useParameter = !!(durationFrom || priceFrom)
+
+		result.serviceCategoryParameter.push({
 			id: value?.categoryParameterValueID || value?.id,
 			name: value.value || value.name,
 			durationFrom,
@@ -121,8 +129,12 @@ const parseParameterValuesInit = (values: (ServiceParameterValues | ICategoryPar
 			priceFrom,
 			priceTo,
 			variablePrice: !!value?.priceAndDurationData?.priceTo,
-			useParameter: !!(durationFrom && priceFrom)
+			useParameter
 		})
+
+		if (useParameter) {
+			result.activeKeys.push(value?.categoryParameterValueID || value?.id)
+		}
 	})
 	return result
 }
@@ -161,10 +173,13 @@ const ServiceEditPage = (props: Props) => {
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
+			// NOTE: DEFAULT_ACTIVE_KEYS
+			const { /* activeKeys, */ serviceCategoryParameter } = parseParameterValuesInit(parameterValues)
+
 			initData = {
 				id: data.service.id,
 				serviceCategoryParameterType: data.service.serviceCategoryParameter?.valueType,
-				serviceCategoryParameter: parseParameterValuesInit(parameterValues),
+				serviceCategoryParameter,
 				durationFrom: data.service.priceAndDurationData.durationFrom,
 				durationTo: data.service.priceAndDurationData.durationTo,
 				variableDuration: !!data.service.priceAndDurationData.durationTo,
@@ -173,6 +188,8 @@ const ServiceEditPage = (props: Props) => {
 				variablePrice: !!data.service.priceAndDurationData.priceTo,
 				employees: parseEmployeesInit(data?.service?.employees),
 				useCategoryParameter: data.service.useCategoryParameter
+				// NOTE: DEFAULT_ACTIVE_KEYS
+				/* activeKeys */
 			}
 		}
 		dispatch(initialize(FORM.SERVICE_FORM, initData || {}))

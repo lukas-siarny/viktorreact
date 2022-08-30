@@ -1,10 +1,10 @@
 import React, { MouseEventHandler, ReactNode, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
-import { change, Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Collapse, Divider, Form, Row, Spin, Tag } from 'antd'
-import { isEmpty, get, values } from 'lodash'
+import { isEmpty, get } from 'lodash'
 import cx from 'classnames'
 
 // atoms

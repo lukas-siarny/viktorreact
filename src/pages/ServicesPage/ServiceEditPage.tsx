@@ -173,6 +173,7 @@ const ServiceEditPage = (props: Props) => {
 		if (data) {
 			// union parameter values form service and category detail based on categoryParameterValueID
 			const parameterValues = unionBy(data.service?.serviceCategoryParameter?.values, categoryParameterValues as any, 'categoryParameterValueID')
+			// NOTE: DEFAULT_ACTIVE_KEYS
 			const { /* activeKeys, */ serviceCategoryParameter } = parseParameterValuesInit(parameterValues)
 
 			initData = {

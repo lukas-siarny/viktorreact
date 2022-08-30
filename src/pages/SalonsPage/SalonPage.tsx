@@ -71,7 +71,7 @@ import useBackUrl from '../../hooks/useBackUrl'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING]
+const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
 
 const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()

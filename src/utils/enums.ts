@@ -598,13 +598,13 @@ export const SALON_ROLES_PERMISSIONS = () => [
 
 export const FILTER_PATHS = (from?: string, to?: string) => ({
 	SALONS: {
-		[SALON_FILTER_STATES.PUBLISHED]: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
-		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
-		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
-		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
-		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.BASIC}`,
-		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPES.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
-		publishedChanges: `${i18next.t('paths:salons')}?statuses_published=${SALON_FILTER_STATES.PUBLISHED}&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
+		[SALON_FILTER_STATES.PUBLISHED]: `${i18next.t('paths:salons')}?salonState=active&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?salonState=active&statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
+		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
+		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
+		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}`,
+		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.PREMIUM}`,
+		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`
 	}
 })

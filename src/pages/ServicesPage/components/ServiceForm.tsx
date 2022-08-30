@@ -4,7 +4,7 @@ import i18next from 'i18next'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Collapse, Divider, Form, Row, Spin, Tag } from 'antd'
-import { isEmpty, get } from 'lodash'
+import { isEmpty, get, isNil } from 'lodash'
 import cx from 'classnames'
 
 // atoms
@@ -54,12 +54,12 @@ type ComponentProps = {
 type Props = InjectedFormProps<IServiceForm, ComponentProps> & ComponentProps
 
 const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => {
-	if (from || to) {
+	if (!isNil(from) || !isNil(to)) {
 		return (
 			<div className={'flex items-center mr-3'}>
 				{icon}
 				{from}
-				{variable && to ? ` - ${to}` : undefined} {extra}
+				{variable && !isNil(to) ? ` - ${to}` : undefined} {extra}
 			</div>
 		)
 	}
@@ -72,7 +72,7 @@ const validateParameterValuePriceAndDuration = (value: string, allValues: any, p
 	if ((!parameterValueFormValues?.variablePrice && key === 'priceTo') || (!parameterValueFormValues?.variableDuration && key === 'durationTo')) {
 		return undefined
 	}
-	if (parameterValueFormValues?.useParameter && !value) {
+	if (parameterValueFormValues?.useParameter && isNil(value)) {
 		return i18next.t('loc:Toto pole je povinné')
 	}
 	return undefined
@@ -87,11 +87,11 @@ const renderParameterValues = (props: any) => {
 		salon,
 		showDuration,
 		form
-		// NOTE: DEFAULT_ACTIVE_KEYS
+		// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 		// dispatch
 	} = props
 
-	// NOTE: DEFAULT_ACTIVE_KEYS
+	// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 	// const formValues = form?.values
 	const formErrors = form?.syncErrors?.serviceCategoryParameter || []
 	const formFields = form?.fields?.serviceCategoryParameter || []
@@ -108,7 +108,7 @@ const renderParameterValues = (props: any) => {
 						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
 						name={`${field}.useParameter`}
 						size={'middle'}
-						// NOTE: DEFAULT_ACTIVE_KEYS
+						// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 						/* customOnChange={(checked: boolean) => {
 							const keys = formValues?.activeKeys || []
 							const newActiveKeys = checked ? [...keys, fieldData.id] : keys.filter((key: string) => key !== fieldData.id)
@@ -131,7 +131,7 @@ const renderParameterValues = (props: any) => {
 			<Collapse
 				className={cx('collapse-list', { 'error-border': invalid && error })}
 				bordered={false}
-				// NOTE: DEFAULT_ACTIVE_KEYS
+				// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 				/* activeKey={formValues?.activeKeys}
 				onChange={(keys) => {
 					dispatch(change(FORM.SERVICE_FORM, 'activeKeys', keys))
@@ -152,7 +152,7 @@ const renderParameterValues = (props: any) => {
 									<div className={'list-title leading-7'}>{fieldData?.name}</div>
 								</div>
 							}
-							// NOTE: DEFAULT_ACTIVE_KEYS
+							// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 							// key={fieldData.id}
 							key={index}
 							forceRender
@@ -422,7 +422,7 @@ const ServiceForm = (props: Props) => {
 							salon={salon}
 							showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
 							form={form}
-							// NOTE: DEFAULT_ACTIVE_KEYS
+							// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
 							// dispatch={dispatch}
 						/>
 					</div>

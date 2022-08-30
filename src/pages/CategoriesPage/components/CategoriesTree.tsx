@@ -79,14 +79,14 @@ const CategoriesTree = () => {
 				name: data.name,
 				parentId: data.parentID,
 				orderIndex: data.orderIndex,
-				nameLocalizations: normalizeNameLocalizations(data.nameLocalizations, DEFAULT_LANGUAGE),
+				nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
 				level: level ?? lastOpenedNode.level,
 				image: data?.image?.original ? [{ url: data?.image?.original, thumbUrl: data?.image?.resizedImages?.thumbnail, uid: data?.image?.id }] : undefined,
 				deletedAt,
 				isParentDeleted,
 				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.icon?.id }] : undefined,
 				categoryParameterID: data?.categoryParameter?.id,
-				descriptionLocalizations: level === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations, DEFAULT_LANGUAGE) : undefined,
+				descriptionLocalizations: level === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations) : undefined,
 				childrenLength: data?.children && data.children.length
 			}
 		}

@@ -15,7 +15,7 @@ import { getCategoryParameter } from '../../reducers/categoryParams/categoryPara
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES, DEFAULT_LANGUAGE } from '../../utils/enums'
+import { PERMISSION, FORM, PARAMETERS_VALUE_TYPES, PARAMETERS_UNIT_TYPES } from '../../utils/enums'
 import { normalizeNameLocalizations } from '../../utils/helper'
 import { patchReq, deleteReq } from '../../utils/request'
 import { history } from '../../utils/history'
@@ -50,11 +50,11 @@ function EditCategoryParamsPage(props: Props) {
 			dispatch(
 				initialize(FORM.CATEGORY_PARAMS, {
 					valueType: data.valueType,
-					nameLocalizations: normalizeNameLocalizations(data.nameLocalizations, DEFAULT_LANGUAGE),
+					nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
 					localizedValues:
 						data.valueType === PARAMETERS_VALUE_TYPES.TIME
 							? [{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }]
-							: data.values.map((item) => ({ valueLocalizations: normalizeNameLocalizations(item.valueLocalizations || [], DEFAULT_LANGUAGE) })),
+							: data.values.map((item) => ({ valueLocalizations: normalizeNameLocalizations(item.valueLocalizations || []) })),
 					values:
 						data.valueType === PARAMETERS_VALUE_TYPES.ENUM
 							? [{ value: null }]

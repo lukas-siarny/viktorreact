@@ -203,7 +203,6 @@
   "Požiadať o novú službu": "Požiadať o novú službu",
   "Požiadať o schválenie": "Požiadať o schválenie",
   "Pre prístup potvrďte základné údaje": "Pre prístup potvrďte základné údaje",
-  "Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje": "Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje",
   "Pre túto akciu nemáte dostatočné oprávnenia.": "Pre túto akciu nemáte dostatočné oprávnenia.",
   "Prebieha nahrávanie": "Prebieha nahrávanie",
   "Pred schválením je potrebné": "Pred schválením je potrebné",
@@ -501,5 +500,7 @@
   "Štát": "Štát",
   "špecialistu": "špecialistu",
   "Žena": "Žena",
-  "Žiadosť o novú službu": "Žiadosť o novú službu"
+  "Žiadosť o novú službu": "Žiadosť o novú službu",
+  "Žiadosť o schválenie už bola odoslaná. Počkajte prosím na jej vybavenie.": "Žiadosť o schválenie už bola odoslaná. Počkajte prosím na jej vybavenie.",
+  "Žiadosť o scvhálenie nie je možné odoslať, pretože nie sú vyplnené všetky potrebné údaje zo zoznamu nižšie.": "Žiadosť o scvhálenie nie je možné odoslať, pretože nie sú vyplnené všetky potrebné údaje zo zoznamu nižšie."
 }

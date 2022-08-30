@@ -55,6 +55,7 @@ type ComponentProps = {
 	clearSalonForm: () => void
 	searchSalons: (search: string, page: number) => void
 	showBasicSalonsSuggestions?: boolean
+	isAdmin?: boolean
 }
 
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
@@ -88,7 +89,7 @@ export const optionRenderSalonSearch = (itemData: any) => {
 
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, noteModalControlButtons, disabledForm, loadBasicSalon, clearSalonForm, searchSalons, showBasicSalonsSuggestions } = props
+	const { handleSubmit, change, noteModalControlButtons, disabledForm, loadBasicSalon, clearSalonForm, searchSalons, showBasicSalonsSuggestions, isAdmin } = props
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
@@ -105,7 +106,7 @@ const SalonForm: FC<Props> = (props) => {
 							</h3>
 							<Row className={'py-2'} wrap={false}>
 								{getSalonTagPublished(formValues?.state as SALON_STATES)}
-								{getSalonTagChanges(formValues?.state as SALON_STATES)}
+								{getSalonTagChanges(formValues?.state as SALON_STATES, isAdmin)}
 								{getSalonTagDeleted(!!formValues?.deletedAt, true)}
 							</Row>
 						</Row>

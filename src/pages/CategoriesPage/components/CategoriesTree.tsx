@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { DataNode } from 'antd/lib/tree'
 import { Button, Row, Tree, Divider, notification } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { filter, forEach, get, map, isEmpty } from 'lodash'
+import { filter, forEach, get, map, isEmpty, isNil } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
 
@@ -279,9 +279,22 @@ const CategoriesTree = () => {
 		if (!isEmpty(formData.descriptionLocalizations) && formData.descriptionLocalizations.length >= 1 && formData.descriptionLocalizations[0]?.value) {
 			descriptionLocalizations = filter(formData.descriptionLocalizations, (item) => !!item.value)
 		}
+
+		let orderIndex
+
+		if (!isNil(formData.orderIndex)) {
+			orderIndex = formData.orderIndex
+		} else if (!isNil(formData.childrenLength)) {
+			orderIndex = formData.childrenLength + 1
+		} else if (!isNil(cat?.length)) {
+			orderIndex = cat.length + 1
+		} else {
+			orderIndex = 1
+		}
+
 		try {
 			let body: any = {
-				orderIndex: formData.orderIndex ?? (formData.childrenLength && formData.childrenLength + 1) ?? (cat?.length && cat.length + 1) ?? 1,
+				orderIndex,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
 				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,

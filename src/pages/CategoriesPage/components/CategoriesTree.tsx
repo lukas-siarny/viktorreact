@@ -73,6 +73,7 @@ const CategoriesTree = () => {
 		setShowForm(true)
 		const { data }: any = await dispatch(getCategory(id))
 		let formData = {}
+		const l = level ?? lastOpenedNode.level
 		if (data) {
 			formData = {
 				id,
@@ -80,13 +81,13 @@ const CategoriesTree = () => {
 				parentId: data.parentID,
 				orderIndex: data.orderIndex,
 				nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
-				level: level ?? lastOpenedNode.level,
+				level: l,
 				image: data?.image?.original ? [{ url: data?.image?.original, thumbUrl: data?.image?.resizedImages?.thumbnail, uid: data?.image?.id }] : undefined,
 				deletedAt,
 				isParentDeleted,
 				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.icon?.id }] : undefined,
 				categoryParameterID: data?.categoryParameter?.id,
-				descriptionLocalizations: level === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations) : undefined,
+				descriptionLocalizations: l === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations) : undefined,
 				childrenLength: data?.children && data.children.length
 			}
 		}

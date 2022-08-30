@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Alert, Button, Modal, Row, Spin, notification } from 'antd'
+import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
 import { get, isEmpty, map, unionBy } from 'lodash'
 import { compose } from 'redux'
@@ -15,7 +15,6 @@ import SalonForm from './components/forms/SalonForm'
 import OpenHoursNoteModal from '../../components/OpeningHours/OpenHoursNoteModal'
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import NoteForm from './components/forms/NoteForm'
-import validateSalonFormForPublication from './components/forms/validateSalonFormForPublication'
 import SalonSuggestionsModal from './components/modals/SalonSuggestionsModal'
 import SpecialistModal from './components/modals/SpecialistModal'
 import TabsComponent from '../../components/TabsComponent'
@@ -72,7 +71,7 @@ import useBackUrl from '../../hooks/useBackUrl'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
+const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING]
 
 const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const [t] = useTranslation()
@@ -396,23 +395,11 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			return
 		}
 
-		const errors = validateSalonFormForPublication(formValues as ISalonForm)
-		if (!isEmpty(errors)) {
-			notification.error({
-				message: t('loc:Chybne vyplnený formulár'),
-				description: (
-					<>
-						{t(`loc:Pre publikovanie salónu je potrebné mať vyplnené nasledujúce údaje`)}: {errors.join(', ')}
-					</>
-				)
-			})
-			return
-		}
-
 		setIsSendingConfRequest(true)
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/request-publication', { salonID }, {})
 			dispatch(selectSalon(salonID))
+			setApprovalModalVisible(false)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -491,7 +478,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						}
 					}}
 					// if is salon pending approval and user is not Admin
-					disabled={submitting || isDeletedSalon || isFormPristine || (!isPublished && isPendingPublication && !isAdmin)}
+					disabled={submitting || isDeletedSalon || (!isNewSalon && isFormPristine) || (!isNewSalon && !isPublished && isPendingPublication && !isAdmin)}
 					loading={submitting}
 				>
 					{t('loc:Uložiť')}
@@ -551,7 +538,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				size={'middle'}
 				className={cx('noti-btn m-regular', className)}
 				disabled={submitting || isDeletedSalon}
-				onClick={() => setApprovalModalVisible(true)}
+				onClick={async () => {
+					dispatch(selectSalon(salonID))
+					setApprovalModalVisible(true)
+				}}
 				loading={submitting}
 			>
 				{t('loc:Požiadať o schválenie')}
@@ -709,7 +699,17 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		setTabKey(selectedTabKey as TAB_KEYS)
 	}
 
-	const approvalButtonDisabled = !get(salon, 'hasAllRequiredSalonApprovalData') || isDeletedSalon || submitting || salon.isLoading
+	const approvalButtonDisabled = !get(salon, 'data.hasAllRequiredSalonApprovalData') || isDeletedSalon || submitting || salon.isLoading || isPendingPublication
+
+	const getApprovalButtonTooltipMessage = () => {
+		if (!get(salon, 'data.hasAllRequiredSalonApprovalData') && !isPendingPublication) {
+			return t('loc:Žiadosť o scvhálenie nie je možné odoslať, pretože nie sú vyplnené všetky potrebné údaje zo zoznamu nižšie.')
+		}
+		if (isPendingPublication) {
+			return t('loc:Žiadosť o schválenie už bola odoslaná. Počkajte prosím na jej vybavenie.')
+		}
+		return null
+	}
 
 	const salonForm = (
 		<>
@@ -720,8 +720,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					{infoMessage}
 					<SalonForm
 						onSubmit={handleSubmit}
+						isAdmin={isAdmin}
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
-						disabledForm={isDeletedSalon || (isPendingPublication && !isAdmin)}
+						disabledForm={isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)}
 						deletedSalon={isDeletedSalon}
 						showBasicSalonsSuggestions={showBasicSalonsSuggestions}
 						loadBasicSalon={loadBasicSalon}
@@ -747,7 +748,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 												size={'middle'}
 												className={'noti-btn m-regular w-12/25 xl:w-1/3'}
 												onClick={() => setVisible(true)}
-												disabled={isDeletedSalon}
+												disabled={isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)}
 											>
 												{STRINGS(t).edit(t('loc:poznámku'))}
 											</Button>
@@ -766,7 +767,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 											size={'middle'}
 											className={'noti-btn m-regular w-1/3'}
 											onClick={() => setVisible(true)}
-											disabled={isDeletedSalon}
+											disabled={isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)}
 										>
 											{STRINGS(t).addRecord(t('loc:poznámku'))}
 										</Button>
@@ -803,28 +804,34 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				<SalonApprovalModal
 					visible={approvalModalVisible}
 					onCancel={() => setApprovalModalVisible(false)}
-					parentPath={`${t('paths:salons')}/${salonID}/`}
+					parentPath={`${t('paths:salons')}/${salonID}`}
 					submitButton={
 						<Permissions
 							allowed={[...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_UPDATE]}
 							render={(hasPermission, { openForbiddenModal }) => (
-								<Button
-									type={'primary'}
-									block
-									size={'large'}
-									className={'noti-btn m-regular'}
-									disabled={approvalButtonDisabled}
-									onClick={(e) => {
-										if (hasPermission) {
-											sendConfirmationRequest()
-										} else {
-											e.preventDefault()
-											openForbiddenModal()
-										}
-									}}
-								>
-									{t('loc:Požiadať o schválenie')}
-								</Button>
+								<Tooltip title={getApprovalButtonTooltipMessage()} getPopupContainer={() => document.querySelector('#noti-approval-modal-content') as HTMLElement}>
+									<span className={cx({ 'cursor-not-allowed': approvalButtonDisabled })}>
+										<Button
+											type={'primary'}
+											block
+											size={'large'}
+											className={cx('noti-btn m-regular', {
+												'pointer-events-none': approvalButtonDisabled
+											})}
+											disabled={approvalButtonDisabled}
+											onClick={(e) => {
+												if (hasPermission) {
+													sendConfirmationRequest()
+												} else {
+													e.preventDefault()
+													openForbiddenModal()
+												}
+											}}
+										>
+											{t('loc:Požiadať o schválenie')}
+										</Button>
+									</span>
+								</Tooltip>
 							)}
 						/>
 					}

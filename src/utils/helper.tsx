@@ -786,7 +786,7 @@ export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false)
 	)
 }
 
-export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
+export const getSalonTagChanges = (salonStatus?: SALON_STATES, isAdmin = true) => {
 	if (!salonStatus) {
 		return null
 	}
@@ -794,11 +794,14 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
 	switch (salonStatus) {
 		case SALON_STATES.NOT_PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_PENDING:
-			return (
-				<Tag className={'noti-tag bg-status-pending'}>
-					<span>{i18next.t('loc:Na schválenie')}</span>
-				</Tag>
-			)
+			if (isAdmin) {
+				return (
+					<Tag className={'noti-tag bg-status-pending'}>
+						<span>{i18next.t('loc:Na schválenie')}</span>
+					</Tag>
+				)
+			}
+			return null
 		case SALON_STATES.NOT_PUBLISHED_DECLINED:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (

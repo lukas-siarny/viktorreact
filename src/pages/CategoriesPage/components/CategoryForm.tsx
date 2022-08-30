@@ -66,8 +66,6 @@ const CategoryForm: FC<Props> = (props) => {
 	const category = useSelector((state: RootState) => state.categories.category)
 	const isFormDirty = useSelector(isDirty(FORM.CATEGORY))
 
-	// console.log(values)
-
 	const renderFormTitle = () => {
 		if (values?.id) {
 			return t('loc:Upraviť kategóriu')

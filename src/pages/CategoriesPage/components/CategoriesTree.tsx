@@ -69,11 +69,11 @@ const CategoriesTree = () => {
 		)
 	}
 
-	const openCategoryUpdateDetail = async (id: string, level?: number, deletedAt?: string, isParentDeleted?: boolean) => {
+	const openCategoryUpdateDetail = async (id: string, levelArg?: number, deletedAt?: string, isParentDeleted?: boolean) => {
 		setShowForm(true)
 		const { data }: any = await dispatch(getCategory(id))
 		let formData = {}
-		const l = level ?? lastOpenedNode.level
+		const level = levelArg ?? lastOpenedNode.level
 		if (data) {
 			formData = {
 				id,
@@ -81,13 +81,13 @@ const CategoriesTree = () => {
 				parentId: data.parentID,
 				orderIndex: data.orderIndex,
 				nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
-				level: l,
+				level,
 				image: data?.image?.original ? [{ url: data?.image?.original, thumbUrl: data?.image?.resizedImages?.thumbnail, uid: data?.image?.id }] : undefined,
 				deletedAt,
 				isParentDeleted,
 				icon: data?.icon?.original ? [{ url: data?.icon?.original, uid: data?.icon?.id }] : undefined,
 				categoryParameterID: data?.categoryParameter?.id,
-				descriptionLocalizations: l === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations) : undefined,
+				descriptionLocalizations: level === 2 ? normalizeNameLocalizations(data?.descriptionLocalizations) : undefined,
 				childrenLength: data?.children && data.children.length
 			}
 		}

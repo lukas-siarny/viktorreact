@@ -16,7 +16,7 @@ import { RootState } from '../../../reducers'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../../utils/request'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, DEFAULT_LANGUAGE } from '../../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../../utils/enums'
 import { checkPermissions } from '../../../utils/Permissions'
 import { normalizeNameLocalizations } from '../../../utils/helper'
 

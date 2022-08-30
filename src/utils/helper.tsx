@@ -641,7 +641,7 @@ export const checkFiltersSize = (formValues: any) => size(filter(formValues, (va
 
 type NameLocalizationsItem = {
 	language: string
-	value: string | null
+	value?: string | null
 }
 
 /**

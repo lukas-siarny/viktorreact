@@ -2550,6 +2550,7 @@ declare namespace Paths {
                         id: string; // uuid
                         firstName?: string;
                         lastName?: string;
+                        email?: string; // email
                         image: {
                             id: string; // uuid
                             original: string;
@@ -4446,6 +4447,7 @@ declare namespace Paths {
                         id: string; // uuid
                         firstName?: string;
                         lastName?: string;
+                        email?: string; // email
                         image: {
                             id: string; // uuid
                             original: string;
@@ -5490,6 +5492,7 @@ declare namespace Paths {
                         id: string; // uuid
                         firstName?: string;
                         lastName?: string;
+                        email?: string; // email
                         image: {
                             id: string; // uuid
                             original: string;
@@ -6913,6 +6916,7 @@ declare namespace Paths {
                         id: string; // uuid
                         firstName?: string;
                         lastName?: string;
+                        email?: string; // email
                         image: {
                             id: string; // uuid
                             original: string;
@@ -7478,6 +7482,7 @@ declare namespace Paths {
                     id: string; // uuid
                     firstName?: string;
                     lastName?: string;
+                    email?: string; // email
                     image: {
                         id: string; // uuid
                         original: string;

@@ -292,7 +292,6 @@ const CategoriesTree = () => {
 
 		try {
 			let body: any = {
-				orderIndex,
 				nameLocalizations: filter(formData.nameLocalizations, (item) => !!item.value),
 				imageID: (get(formData, 'image[0].id') || get(formData, 'image[0].uid')) ?? undefined,
 				iconID: (get(formData, 'icon[0].id') || get(formData, 'icon[0].uid')) ?? undefined,
@@ -311,7 +310,7 @@ const CategoriesTree = () => {
 					}
 				}
 				// TODO - get category ID from BE to reload detail
-				await postReq('/api/b2b/admin/enums/categories/', null, body)
+				await postReq('/api/b2b/admin/enums/categories/', null, { ...body, orderIndex })
 			}
 			dispatch(getCategories())
 			// clear 'dirty' state from Form

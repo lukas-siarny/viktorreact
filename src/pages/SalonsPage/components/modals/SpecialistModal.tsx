@@ -43,7 +43,7 @@ const SpecialistModal = (props: Props) => {
 	const isLoading = specialistContacts?.isLoading || specialistContact?.isLoading || countries?.isLoading
 
 	useEffect(() => {
-		;(async () => {
+		const fetchData = async () => {
 			const specialistContactsData = await dispatch(getSpecialistContacts())
 
 			if (isEmpty(specialistContactsData.data)) {
@@ -56,7 +56,8 @@ const SpecialistModal = (props: Props) => {
 				return
 			}
 
-			const langToCompare = LOCALES[(i18n.language as LANGUAGE) || DEFAULT_LANGUAGE].countryCode?.toLowerCase()
+			const lng = (i18n.language as LANGUAGE) || DEFAULT_LANGUAGE
+			const langToCompare = LOCALES[lng].countryCode?.toLowerCase()
 			const currentLngCountry = specialistContactsData?.data?.find((specialist) => specialist.country?.code?.toLowerCase() === langToCompare)
 
 			if (currentLngCountry?.id) {
@@ -67,7 +68,9 @@ const SpecialistModal = (props: Props) => {
 
 			dispatch(getSpecialistContact())
 			setView('not_found')
-		})()
+		}
+
+		fetchData()
 	}, [dispatch, specialistContact.data])
 
 	const handleCountryChange = async (item: any) => {

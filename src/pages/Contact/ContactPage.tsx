@@ -70,7 +70,7 @@ const ContactPage: FC<Props> = () => {
 	}
 
 	useEffect(() => {
-		;(async () => {
+		const fetchData = async () => {
 			const supportContactsData = await dispatch(getSupportContacts())
 
 			if (isEmpty(supportContactsData.data?.supportContacts)) {
@@ -83,7 +83,8 @@ const ContactPage: FC<Props> = () => {
 				return
 			}
 
-			const langToCompare = LOCALES[(i18n.language as LANGUAGE) || DEFAULT_LANGUAGE].countryCode?.toLowerCase()
+			const lng = (i18n.language as LANGUAGE) || DEFAULT_LANGUAGE
+			const langToCompare = LOCALES[lng].countryCode?.toLowerCase()
 			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country?.code?.toLowerCase() === langToCompare)
 
 			if (currentLngCountry?.id) {
@@ -94,7 +95,9 @@ const ContactPage: FC<Props> = () => {
 
 			dispatch(getSupportContact())
 			setView('not_found')
-		})()
+		}
+
+		fetchData()
 	}, [dispatch, selectedContact])
 
 	useEffect(() => {

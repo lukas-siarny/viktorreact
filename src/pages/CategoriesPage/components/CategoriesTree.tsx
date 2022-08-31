@@ -220,8 +220,7 @@ const CategoriesTree = () => {
 			// drop index position in drop node children array
 			const dropPosition: number = droppedData.dropPosition - Number(dropPos[dropPos.length - 1])
 			let body: any = {
-				orderIndex: (dropPosition >= 0 ? dropPosition : 0) + 1,
-				nameLocalizations: filter(droppedData.dragNode.nameLocalizations, (item) => !!item.value)
+				orderIndex: (dropPosition >= 0 ? dropPosition : 0) + 1
 			}
 
 			// check condition if user dropped node to gap between nodes
@@ -259,13 +258,11 @@ const CategoriesTree = () => {
 				}
 				// prepare body for request
 				body = {
-					...body,
-					orderIndex,
-					imageID: get(droppedData, 'dragNode.image.id')
+					orderIndex
 				}
 			}
 			// check and update categories on BE
-			await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: dragKey }, body)
+			await patchReq('/api/b2b/admin/enums/categories/{categoryID}/reorder', { categoryID: dragKey }, body)
 			dispatch(getCategories())
 			setShowForm(false)
 		} catch (error: any) {

@@ -989,33 +989,17 @@ declare namespace Paths {
                 categories: {
                     id: string; // uuid
                     name?: string;
-                    nameLocalizations: {
-                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                        value: string | null;
-                    }[];
                     parentID?: string; // uuid
                     orderIndex: number;
                     children: {
                         id: string; // uuid
                         name?: string;
-                        nameLocalizations: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
                         parentID?: string; // uuid
                         orderIndex: number;
                         children: {
                             id: string; // uuid
                             name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                             description?: string;
-                            descriptionLocalizations?: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                             parentID?: string; // uuid
                             orderIndex: number;
                             icon?: {
@@ -1133,34 +1117,18 @@ declare namespace Paths {
                             categoryParameter?: {
                                 id: string; // uuid
                                 name?: string;
-                                nameLocalizations: {
-                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                    value: string | null;
-                                }[];
                                 values: {
                                     id: string; // uuid
                                     value?: string;
-                                    valueLocalizations?: {
-                                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                        value: string | null;
-                                    }[];
                                 }[];
                             };
                         }[];
                         categoryParameter?: {
                             id: string; // uuid
                             name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                             values: {
                                 id: string; // uuid
                                 value?: string;
-                                valueLocalizations?: {
-                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                    value: string | null;
-                                }[];
                             }[];
                         };
                     }[];
@@ -1196,17 +1164,9 @@ declare namespace Paths {
                     categoryParameter?: {
                         id: string; // uuid
                         name?: string;
-                        nameLocalizations: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
                         values: {
                             id: string; // uuid
                             value?: string;
-                            valueLocalizations?: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                         }[];
                     };
                     createdAt: string; // date-time
@@ -2129,7 +2089,7 @@ declare namespace Paths {
                             phonePrefixCountryCode: string;
                             phone: string; // ^\d+$
                         }[];
-                        address: {
+                        address?: {
                             countryCode?: string;
                             zipCode?: string;
                             city?: string;
@@ -2141,7 +2101,6 @@ declare namespace Paths {
                         id: string; // uuid
                         fullName: string;
                         email?: string;
-                        phone?: string; // ^\d+$
                     };
                 }[];
                 pagination: {
@@ -2547,6 +2506,78 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminSalonsSalonIdDashboard {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: string; // uuid
+                    countLikes: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        image?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    }[];
+                    employees: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    }[];
+                    ratingsData: {
+                        rating: number; // float
+                        ratesCount: number;
+                        groupedRatings: {
+                            ONE: number;
+                            TWO: number;
+                            THREE: number;
+                            FOUR: number;
+                            FIVE: number;
+                        };
+                    };
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminSalonsSalonIdHistory {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -2641,6 +2672,7 @@ declare namespace Paths {
                                     category: {
                                         id: string; // uuid
                                         name?: string;
+                                        description?: string;
                                     };
                                     service: {
                                         id: string; // uuid
@@ -3488,33 +3520,17 @@ declare namespace Paths {
                 categories: {
                     id: string; // uuid
                     name?: string;
-                    nameLocalizations: {
-                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                        value: string | null;
-                    }[];
                     parentID?: string; // uuid
                     orderIndex: number;
                     children: {
                         id: string; // uuid
                         name?: string;
-                        nameLocalizations: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
                         parentID?: string; // uuid
                         orderIndex: number;
                         children: {
                             id: string; // uuid
                             name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                             description?: string;
-                            descriptionLocalizations?: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                             parentID?: string; // uuid
                             orderIndex: number;
                             icon?: {
@@ -3632,34 +3648,18 @@ declare namespace Paths {
                             categoryParameter?: {
                                 id: string; // uuid
                                 name?: string;
-                                nameLocalizations: {
-                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                    value: string | null;
-                                }[];
                                 values: {
                                     id: string; // uuid
                                     value?: string;
-                                    valueLocalizations?: {
-                                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                        value: string | null;
-                                    }[];
                                 }[];
                             };
                         }[];
                         categoryParameter?: {
                             id: string; // uuid
                             name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                             values: {
                                 id: string; // uuid
                                 value?: string;
-                                valueLocalizations?: {
-                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                    value: string | null;
-                                }[];
                             }[];
                         };
                     }[];
@@ -3695,17 +3695,9 @@ declare namespace Paths {
                     categoryParameter?: {
                         id: string; // uuid
                         name?: string;
-                        nameLocalizations: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
                         values: {
                             id: string; // uuid
                             value?: string;
-                            valueLocalizations?: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                         }[];
                     };
                     createdAt: string; // date-time
@@ -5477,19 +5469,51 @@ declare namespace Paths {
             export interface $200 {
                 salon: {
                     id: string; // uuid
-                    groupedServicesByCategory: {
-                        category: {
+                    countLikes: number;
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                        image?: {
                             id: string; // uuid
-                            name?: string;
-                        };
-                        groupedServicesByCategory: {
-                            category: {
-                                id: string; // uuid
-                                name?: string;
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
                             };
-                            servicesCount: number;
-                        }[];
+                            isAutogenerated: boolean;
+                        };
                     }[];
+                    employees: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    }[];
+                    ratingsData: {
+                        rating: number; // float
+                        ratesCount: number;
+                        groupedRatings: {
+                            ONE: number;
+                            TWO: number;
+                            THREE: number;
+                            FOUR: number;
+                            FIVE: number;
+                        };
+                    };
                 };
             }
         }
@@ -5529,6 +5553,7 @@ declare namespace Paths {
                                     category: {
                                         id: string; // uuid
                                         name?: string;
+                                        description?: string;
                                     };
                                     service: {
                                         id: string; // uuid
@@ -5926,33 +5951,17 @@ declare namespace Paths {
                 categories: {
                     id: string; // uuid
                     name?: string;
-                    nameLocalizations: {
-                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                        value: string | null;
-                    }[];
                     parentID?: string; // uuid
                     orderIndex: number;
                     children: {
                         id: string; // uuid
                         name?: string;
-                        nameLocalizations: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
                         parentID?: string; // uuid
                         orderIndex: number;
                         children: {
                             id: string; // uuid
                             name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                             description?: string;
-                            descriptionLocalizations?: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
                             parentID?: string; // uuid
                             orderIndex: number;
                         }[];
@@ -7546,6 +7555,7 @@ declare namespace Paths {
                                     category: {
                                         id: string; // uuid
                                         name?: string;
+                                        description?: string;
                                     };
                                     service: {
                                         id: string; // uuid
@@ -8430,7 +8440,7 @@ declare namespace Paths {
                  * example:
                  * 10
                  */
-                durationFrom: null | number;
+                durationFrom?: null | number;
                 /**
                  * example:
                  * 10
@@ -8447,7 +8457,7 @@ declare namespace Paths {
                      * 23
                      */
                     significand: number;
-                } | null;
+                };
                 priceTo?: {
                     /**
                      * example:
@@ -8469,7 +8479,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8486,7 +8496,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8508,7 +8518,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8525,7 +8535,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8547,7 +8557,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8564,7 +8574,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8586,7 +8596,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8603,7 +8613,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8625,7 +8635,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8642,7 +8652,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8664,7 +8674,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8681,7 +8691,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8703,7 +8713,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8720,7 +8730,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8742,7 +8752,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8759,7 +8769,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8781,7 +8791,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8798,7 +8808,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8820,7 +8830,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8837,7 +8847,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8859,7 +8869,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8876,7 +8886,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8898,7 +8908,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8915,7 +8925,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8937,7 +8947,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8954,7 +8964,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -8976,7 +8986,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -8993,7 +9003,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9015,7 +9025,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9032,7 +9042,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9054,7 +9064,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9071,7 +9081,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9093,7 +9103,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9110,7 +9120,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9132,7 +9142,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9149,7 +9159,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9171,7 +9181,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9188,7 +9198,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9210,7 +9220,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9227,7 +9237,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9249,7 +9259,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9266,7 +9276,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9288,7 +9298,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9305,7 +9315,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9327,7 +9337,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9344,7 +9354,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9366,7 +9376,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9383,7 +9393,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9405,7 +9415,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9422,7 +9432,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9444,7 +9454,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9461,7 +9471,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9483,7 +9493,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9500,7 +9510,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9522,7 +9532,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9539,7 +9549,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9561,7 +9571,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9578,7 +9588,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9600,7 +9610,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9617,7 +9627,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9639,7 +9649,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9656,7 +9666,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9678,7 +9688,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9695,7 +9705,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9717,7 +9727,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9734,7 +9744,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9756,7 +9766,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9773,7 +9783,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9795,7 +9805,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9812,7 +9822,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9834,7 +9844,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9851,7 +9861,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9873,7 +9883,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9890,7 +9900,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9912,7 +9922,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9929,7 +9939,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9951,7 +9961,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -9968,7 +9978,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -9990,7 +10000,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10007,7 +10017,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10029,7 +10039,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10046,7 +10056,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10068,7 +10078,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10085,7 +10095,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10107,7 +10117,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10124,7 +10134,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10146,7 +10156,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10163,7 +10173,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10185,7 +10195,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10202,7 +10212,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10224,7 +10234,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10241,7 +10251,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10263,7 +10273,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10280,7 +10290,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10302,7 +10312,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10319,7 +10329,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10341,7 +10351,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10358,7 +10368,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10380,7 +10390,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10397,7 +10407,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10419,7 +10429,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10436,7 +10446,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10458,7 +10468,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10475,7 +10485,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10497,7 +10507,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10514,7 +10524,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10536,7 +10546,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10553,7 +10563,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10575,7 +10585,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10592,7 +10602,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10614,7 +10624,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10631,7 +10641,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10653,7 +10663,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10670,7 +10680,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10692,7 +10702,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10709,7 +10719,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10731,7 +10741,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10748,7 +10758,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10770,7 +10780,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10787,7 +10797,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10809,7 +10819,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10826,7 +10836,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10848,7 +10858,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10865,7 +10875,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10887,7 +10897,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10904,7 +10914,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10926,7 +10936,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10943,7 +10953,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -10965,7 +10975,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -10982,7 +10992,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11004,7 +11014,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11021,7 +11031,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11043,7 +11053,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11060,7 +11070,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11082,7 +11092,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11099,7 +11109,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11121,7 +11131,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11138,7 +11148,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11160,7 +11170,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11177,7 +11187,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11199,7 +11209,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11216,7 +11226,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11238,7 +11248,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11255,7 +11265,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11277,7 +11287,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11294,7 +11304,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11316,7 +11326,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11333,7 +11343,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11355,7 +11365,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11372,7 +11382,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11394,7 +11404,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11411,7 +11421,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11433,7 +11443,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11450,7 +11460,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11472,7 +11482,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11489,7 +11499,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11511,7 +11521,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11528,7 +11538,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11550,7 +11560,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11567,7 +11577,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11589,7 +11599,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11606,7 +11616,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11628,7 +11638,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11645,7 +11655,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11667,7 +11677,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11684,7 +11694,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11706,7 +11716,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11723,7 +11733,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11745,7 +11755,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11762,7 +11772,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11784,7 +11794,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11801,7 +11811,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11823,7 +11833,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11840,7 +11850,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11862,7 +11872,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11879,7 +11889,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11901,7 +11911,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11918,7 +11928,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11940,7 +11950,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11957,7 +11967,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -11979,7 +11989,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -11996,7 +12006,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12018,7 +12028,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12035,7 +12045,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12057,7 +12067,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12074,7 +12084,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12096,7 +12106,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12113,7 +12123,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12135,7 +12145,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12152,7 +12162,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12174,7 +12184,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12191,7 +12201,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12213,7 +12223,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12230,7 +12240,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12252,7 +12262,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12269,7 +12279,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12291,7 +12301,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12308,7 +12318,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12330,7 +12340,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -12347,7 +12357,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -12441,11 +12451,6 @@ declare namespace Paths {
             })[];
             /**
              * example:
-             * 1
-             */
-            orderIndex: number;
-            /**
-             * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             imageID?: string | null; // uuid
@@ -12459,6 +12464,44 @@ declare namespace Paths {
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             categoryParameterID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                category: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminEnumsCategoriesCategoryIdReorder {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryID = string; // uuid
+        }
+        export interface PathParameters {
+            categoryID: Parameters.CategoryID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 1
+             */
+            orderIndex: number;
         }
         namespace Responses {
             export interface $200 {
@@ -16992,7 +17035,7 @@ declare namespace Paths {
                  * example:
                  * 10
                  */
-                durationFrom: null | number;
+                durationFrom?: null | number;
                 /**
                  * example:
                  * 10
@@ -17009,7 +17052,7 @@ declare namespace Paths {
                      * 23
                      */
                     significand: number;
-                } | null;
+                };
                 priceTo?: {
                     /**
                      * example:
@@ -17027,7 +17070,7 @@ declare namespace Paths {
                  * example:
                  * 10
                  */
-                durationFrom: null | number;
+                durationFrom?: null | number;
                 /**
                  * example:
                  * 10
@@ -17044,7 +17087,7 @@ declare namespace Paths {
                      * 23
                      */
                     significand: number;
-                } | null;
+                };
                 priceTo?: {
                     /**
                      * example:
@@ -17066,7 +17109,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17083,7 +17126,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17105,7 +17148,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17122,7 +17165,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17144,7 +17187,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17161,7 +17204,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17183,7 +17226,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17200,7 +17243,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17222,7 +17265,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17239,7 +17282,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17261,7 +17304,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17278,7 +17321,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17300,7 +17343,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17317,7 +17360,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17339,7 +17382,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17356,7 +17399,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17378,7 +17421,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17395,7 +17438,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17417,7 +17460,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17434,7 +17477,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17456,7 +17499,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17473,7 +17516,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17495,7 +17538,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17512,7 +17555,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17534,7 +17577,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17551,7 +17594,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17573,7 +17616,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17590,7 +17633,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17612,7 +17655,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17629,7 +17672,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17651,7 +17694,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17668,7 +17711,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17690,7 +17733,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17707,7 +17750,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17729,7 +17772,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17746,7 +17789,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17768,7 +17811,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17785,7 +17828,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17807,7 +17850,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17824,7 +17867,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17846,7 +17889,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17863,7 +17906,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17885,7 +17928,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17902,7 +17945,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17924,7 +17967,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17941,7 +17984,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -17963,7 +18006,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -17980,7 +18023,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18002,7 +18045,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18019,7 +18062,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18041,7 +18084,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18058,7 +18101,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18080,7 +18123,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18097,7 +18140,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18119,7 +18162,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18136,7 +18179,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18158,7 +18201,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18175,7 +18218,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18197,7 +18240,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18214,7 +18257,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18236,7 +18279,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18253,7 +18296,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18275,7 +18318,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18292,7 +18335,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18314,7 +18357,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18331,7 +18374,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18353,7 +18396,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18370,7 +18413,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18392,7 +18435,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18409,7 +18452,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18431,7 +18474,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18448,7 +18491,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18470,7 +18513,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18487,7 +18530,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18509,7 +18552,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18526,7 +18569,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18548,7 +18591,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18565,7 +18608,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18587,7 +18630,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18604,7 +18647,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18626,7 +18669,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18643,7 +18686,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18665,7 +18708,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18682,7 +18725,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18704,7 +18747,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18721,7 +18764,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18743,7 +18786,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18760,7 +18803,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18782,7 +18825,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18799,7 +18842,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18821,7 +18864,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18838,7 +18881,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18860,7 +18903,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18877,7 +18920,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18899,7 +18942,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18916,7 +18959,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18938,7 +18981,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18955,7 +18998,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -18977,7 +19020,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -18994,7 +19037,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19016,7 +19059,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19033,7 +19076,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19055,7 +19098,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19072,7 +19115,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19094,7 +19137,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19111,7 +19154,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19133,7 +19176,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19150,7 +19193,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19172,7 +19215,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19189,7 +19232,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19211,7 +19254,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19228,7 +19271,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19250,7 +19293,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19267,7 +19310,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19289,7 +19332,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19306,7 +19349,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19328,7 +19371,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19345,7 +19388,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19367,7 +19410,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19384,7 +19427,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19406,7 +19449,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19423,7 +19466,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19445,7 +19488,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19462,7 +19505,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19484,7 +19527,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19501,7 +19544,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19523,7 +19566,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19540,7 +19583,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19562,7 +19605,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19579,7 +19622,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19601,7 +19644,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19618,7 +19661,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19640,7 +19683,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19657,7 +19700,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19679,7 +19722,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19696,7 +19739,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19718,7 +19761,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19735,7 +19778,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19757,7 +19800,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19774,7 +19817,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19796,7 +19839,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19813,7 +19856,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19835,7 +19878,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19852,7 +19895,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19874,7 +19917,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19891,7 +19934,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19913,7 +19956,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19930,7 +19973,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19952,7 +19995,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -19969,7 +20012,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -19991,7 +20034,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20008,7 +20051,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20030,7 +20073,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20047,7 +20090,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20069,7 +20112,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20086,7 +20129,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20108,7 +20151,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20125,7 +20168,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20147,7 +20190,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20164,7 +20207,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20186,7 +20229,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20203,7 +20246,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20225,7 +20268,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20242,7 +20285,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20264,7 +20307,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20281,7 +20324,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20303,7 +20346,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20320,7 +20363,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20342,7 +20385,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20359,7 +20402,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20381,7 +20424,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20398,7 +20441,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20420,7 +20463,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20437,7 +20480,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20459,7 +20502,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20476,7 +20519,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20498,7 +20541,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20515,7 +20558,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20537,7 +20580,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20554,7 +20597,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20576,7 +20619,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20593,7 +20636,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20615,7 +20658,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20632,7 +20675,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20654,7 +20697,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20671,7 +20714,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20693,7 +20736,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20710,7 +20753,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20732,7 +20775,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20749,7 +20792,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20771,7 +20814,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20788,7 +20831,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20810,7 +20853,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20827,7 +20870,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20849,7 +20892,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20866,7 +20909,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20888,7 +20931,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20905,7 +20948,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20927,7 +20970,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20944,7 +20987,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -20967,7 +21010,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -20984,7 +21027,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21006,7 +21049,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21023,7 +21066,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21045,7 +21088,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21062,7 +21105,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21084,7 +21127,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21101,7 +21144,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21123,7 +21166,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21140,7 +21183,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21162,7 +21205,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21179,7 +21222,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21201,7 +21244,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21218,7 +21261,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21240,7 +21283,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21257,7 +21300,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21279,7 +21322,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21296,7 +21339,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21318,7 +21361,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21335,7 +21378,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21357,7 +21400,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21374,7 +21417,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21396,7 +21439,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21413,7 +21456,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21435,7 +21478,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21452,7 +21495,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21474,7 +21517,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21491,7 +21534,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21513,7 +21556,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21530,7 +21573,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21552,7 +21595,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21569,7 +21612,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21591,7 +21634,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21608,7 +21651,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21630,7 +21673,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21647,7 +21690,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21669,7 +21712,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21686,7 +21729,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21708,7 +21751,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21725,7 +21768,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21747,7 +21790,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21764,7 +21807,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21786,7 +21829,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21803,7 +21846,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21825,7 +21868,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21842,7 +21885,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21864,7 +21907,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21881,7 +21924,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21903,7 +21946,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21920,7 +21963,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21942,7 +21985,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21959,7 +22002,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -21981,7 +22024,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -21998,7 +22041,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22020,7 +22063,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22037,7 +22080,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22059,7 +22102,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22076,7 +22119,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22098,7 +22141,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22115,7 +22158,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22137,7 +22180,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22154,7 +22197,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22176,7 +22219,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22193,7 +22236,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22215,7 +22258,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22232,7 +22275,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22254,7 +22297,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22271,7 +22314,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22293,7 +22336,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22310,7 +22353,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22332,7 +22375,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22349,7 +22392,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22371,7 +22414,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22388,7 +22431,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22410,7 +22453,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22427,7 +22470,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22449,7 +22492,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22466,7 +22509,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22488,7 +22531,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22505,7 +22548,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22527,7 +22570,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22544,7 +22587,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22566,7 +22609,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22583,7 +22626,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22605,7 +22648,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22622,7 +22665,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22644,7 +22687,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22661,7 +22704,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22683,7 +22726,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22700,7 +22743,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22722,7 +22765,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22739,7 +22782,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22761,7 +22804,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22778,7 +22821,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22800,7 +22843,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22817,7 +22860,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22839,7 +22882,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22856,7 +22899,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22878,7 +22921,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22895,7 +22938,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22917,7 +22960,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22934,7 +22977,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22956,7 +22999,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -22973,7 +23016,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -22995,7 +23038,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23012,7 +23055,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23034,7 +23077,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23051,7 +23094,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23073,7 +23116,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23090,7 +23133,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23112,7 +23155,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23129,7 +23172,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23151,7 +23194,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23168,7 +23211,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23190,7 +23233,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23207,7 +23250,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23229,7 +23272,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23246,7 +23289,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23268,7 +23311,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23285,7 +23328,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23307,7 +23350,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23324,7 +23367,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23346,7 +23389,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23363,7 +23406,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23385,7 +23428,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23402,7 +23445,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23424,7 +23467,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23441,7 +23484,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23463,7 +23506,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23480,7 +23523,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23502,7 +23545,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23519,7 +23562,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23541,7 +23584,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23558,7 +23601,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23580,7 +23623,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23597,7 +23640,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23619,7 +23662,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23636,7 +23679,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23658,7 +23701,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23675,7 +23718,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23697,7 +23740,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23714,7 +23757,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23736,7 +23779,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23753,7 +23796,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23775,7 +23818,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23792,7 +23835,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23814,7 +23857,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23831,7 +23874,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23853,7 +23896,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23870,7 +23913,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23892,7 +23935,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23909,7 +23952,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23931,7 +23974,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23948,7 +23991,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -23970,7 +24013,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -23987,7 +24030,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24009,7 +24052,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24026,7 +24069,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24048,7 +24091,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24065,7 +24108,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24087,7 +24130,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24104,7 +24147,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24126,7 +24169,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24143,7 +24186,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24165,7 +24208,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24182,7 +24225,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24204,7 +24247,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24221,7 +24264,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24243,7 +24286,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24260,7 +24303,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24282,7 +24325,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24299,7 +24342,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24321,7 +24364,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24338,7 +24381,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24360,7 +24403,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24377,7 +24420,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24399,7 +24442,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24416,7 +24459,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24438,7 +24481,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24455,7 +24498,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24477,7 +24520,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24494,7 +24537,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24516,7 +24559,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24533,7 +24576,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24555,7 +24598,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24572,7 +24615,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24594,7 +24637,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24611,7 +24654,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24633,7 +24676,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24650,7 +24693,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24672,7 +24715,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24689,7 +24732,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24711,7 +24754,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24728,7 +24771,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24750,7 +24793,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24767,7 +24810,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24789,7 +24832,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24806,7 +24849,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -24828,7 +24871,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -24845,7 +24888,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26010,7 +26053,7 @@ declare namespace Paths {
                  * example:
                  * 10
                  */
-                durationFrom: null | number;
+                durationFrom?: null | number;
                 /**
                  * example:
                  * 10
@@ -26027,7 +26070,7 @@ declare namespace Paths {
                      * 23
                      */
                     significand: number;
-                } | null;
+                };
                 priceTo?: {
                     /**
                      * example:
@@ -26049,7 +26092,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26066,7 +26109,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26088,7 +26131,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26105,7 +26148,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26127,7 +26170,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26144,7 +26187,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26166,7 +26209,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26183,7 +26226,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26205,7 +26248,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26222,7 +26265,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26244,7 +26287,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26261,7 +26304,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26283,7 +26326,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26300,7 +26343,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26322,7 +26365,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26339,7 +26382,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26361,7 +26404,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26378,7 +26421,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26400,7 +26443,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26417,7 +26460,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26439,7 +26482,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26456,7 +26499,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26478,7 +26521,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26495,7 +26538,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26517,7 +26560,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26534,7 +26577,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26556,7 +26599,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26573,7 +26616,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26595,7 +26638,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26612,7 +26655,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26634,7 +26677,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26651,7 +26694,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26673,7 +26716,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26690,7 +26733,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26712,7 +26755,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26729,7 +26772,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26751,7 +26794,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26768,7 +26811,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26790,7 +26833,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26807,7 +26850,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26829,7 +26872,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26846,7 +26889,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26868,7 +26911,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26885,7 +26928,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26907,7 +26950,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26924,7 +26967,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26946,7 +26989,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -26963,7 +27006,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -26985,7 +27028,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27002,7 +27045,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27024,7 +27067,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27041,7 +27084,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27063,7 +27106,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27080,7 +27123,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27102,7 +27145,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27119,7 +27162,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27141,7 +27184,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27158,7 +27201,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27180,7 +27223,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27197,7 +27240,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27219,7 +27262,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27236,7 +27279,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27258,7 +27301,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27275,7 +27318,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27297,7 +27340,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27314,7 +27357,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27336,7 +27379,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27353,7 +27396,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27375,7 +27418,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27392,7 +27435,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27414,7 +27457,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27431,7 +27474,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27453,7 +27496,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27470,7 +27513,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27492,7 +27535,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27509,7 +27552,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27531,7 +27574,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27548,7 +27591,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27570,7 +27613,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27587,7 +27630,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27609,7 +27652,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27626,7 +27669,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27648,7 +27691,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27665,7 +27708,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27687,7 +27730,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27704,7 +27747,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27726,7 +27769,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27743,7 +27786,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27765,7 +27808,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27782,7 +27825,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27804,7 +27847,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27821,7 +27864,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27843,7 +27886,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27860,7 +27903,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27882,7 +27925,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27899,7 +27942,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27921,7 +27964,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27938,7 +27981,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27960,7 +28003,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -27977,7 +28020,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -27999,7 +28042,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28016,7 +28059,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28038,7 +28081,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28055,7 +28098,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28077,7 +28120,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28094,7 +28137,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28116,7 +28159,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28133,7 +28176,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28155,7 +28198,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28172,7 +28215,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28194,7 +28237,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28211,7 +28254,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28233,7 +28276,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28250,7 +28293,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28272,7 +28315,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28289,7 +28332,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28311,7 +28354,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28328,7 +28371,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28350,7 +28393,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28367,7 +28410,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28389,7 +28432,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28406,7 +28449,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28428,7 +28471,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28445,7 +28488,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28467,7 +28510,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28484,7 +28527,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28506,7 +28549,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28523,7 +28566,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28545,7 +28588,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28562,7 +28605,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28584,7 +28627,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28601,7 +28644,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28623,7 +28666,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28640,7 +28683,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28662,7 +28705,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28679,7 +28722,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28701,7 +28744,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28718,7 +28761,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28740,7 +28783,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28757,7 +28800,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28779,7 +28822,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28796,7 +28839,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28818,7 +28861,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28835,7 +28878,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28857,7 +28900,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28874,7 +28917,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28896,7 +28939,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28913,7 +28956,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28935,7 +28978,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28952,7 +28995,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -28974,7 +29017,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -28991,7 +29034,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29013,7 +29056,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29030,7 +29073,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29052,7 +29095,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29069,7 +29112,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29091,7 +29134,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29108,7 +29151,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29130,7 +29173,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29147,7 +29190,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29169,7 +29212,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29186,7 +29229,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29208,7 +29251,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29225,7 +29268,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29247,7 +29290,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29264,7 +29307,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29286,7 +29329,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29303,7 +29346,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29325,7 +29368,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29342,7 +29385,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29364,7 +29407,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29381,7 +29424,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29403,7 +29446,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29420,7 +29463,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29442,7 +29485,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29459,7 +29502,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29481,7 +29524,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29498,7 +29541,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29520,7 +29563,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29537,7 +29580,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29559,7 +29602,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29576,7 +29619,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29598,7 +29641,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29615,7 +29658,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29637,7 +29680,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29654,7 +29697,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29676,7 +29719,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29693,7 +29736,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29715,7 +29758,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29732,7 +29775,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29754,7 +29797,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29771,7 +29814,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29793,7 +29836,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29810,7 +29853,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29832,7 +29875,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29849,7 +29892,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29871,7 +29914,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29888,7 +29931,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -29910,7 +29953,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -29927,7 +29970,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31613,7 +31656,7 @@ declare namespace Paths {
                  * example:
                  * 10
                  */
-                durationFrom: null | number;
+                durationFrom?: null | number;
                 /**
                  * example:
                  * 10
@@ -31630,7 +31673,7 @@ declare namespace Paths {
                      * 23
                      */
                     significand: number;
-                } | null;
+                };
                 priceTo?: {
                     /**
                      * example:
@@ -31648,7 +31691,7 @@ declare namespace Paths {
                  * example:
                  * 10
                  */
-                durationFrom: null | number;
+                durationFrom?: null | number;
                 /**
                  * example:
                  * 10
@@ -31665,7 +31708,7 @@ declare namespace Paths {
                      * 23
                      */
                     significand: number;
-                } | null;
+                };
                 priceTo?: {
                     /**
                      * example:
@@ -31687,7 +31730,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -31704,7 +31747,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31726,7 +31769,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -31743,7 +31786,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31765,7 +31808,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -31782,7 +31825,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31804,7 +31847,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -31821,7 +31864,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31843,7 +31886,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -31860,7 +31903,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31882,7 +31925,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -31899,7 +31942,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31921,7 +31964,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -31938,7 +31981,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31960,7 +32003,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -31977,7 +32020,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -31999,7 +32042,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32016,7 +32059,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32038,7 +32081,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32055,7 +32098,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32077,7 +32120,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32094,7 +32137,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32116,7 +32159,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32133,7 +32176,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32155,7 +32198,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32172,7 +32215,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32194,7 +32237,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32211,7 +32254,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32233,7 +32276,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32250,7 +32293,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32272,7 +32315,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32289,7 +32332,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32311,7 +32354,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32328,7 +32371,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32350,7 +32393,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32367,7 +32410,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32389,7 +32432,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32406,7 +32449,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32428,7 +32471,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32445,7 +32488,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32467,7 +32510,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32484,7 +32527,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32506,7 +32549,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32523,7 +32566,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32545,7 +32588,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32562,7 +32605,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32584,7 +32627,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32601,7 +32644,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32623,7 +32666,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32640,7 +32683,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32662,7 +32705,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32679,7 +32722,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32701,7 +32744,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32718,7 +32761,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32740,7 +32783,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32757,7 +32800,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32779,7 +32822,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32796,7 +32839,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32818,7 +32861,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32835,7 +32878,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32857,7 +32900,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32874,7 +32917,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32896,7 +32939,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32913,7 +32956,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32935,7 +32978,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32952,7 +32995,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -32974,7 +33017,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -32991,7 +33034,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33013,7 +33056,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33030,7 +33073,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33052,7 +33095,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33069,7 +33112,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33091,7 +33134,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33108,7 +33151,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33130,7 +33173,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33147,7 +33190,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33169,7 +33212,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33186,7 +33229,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33208,7 +33251,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33225,7 +33268,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33247,7 +33290,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33264,7 +33307,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33286,7 +33329,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33303,7 +33346,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33325,7 +33368,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33342,7 +33385,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33364,7 +33407,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33381,7 +33424,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33403,7 +33446,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33420,7 +33463,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33442,7 +33485,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33459,7 +33502,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33481,7 +33524,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33498,7 +33541,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33520,7 +33563,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33537,7 +33580,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33559,7 +33602,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33576,7 +33619,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33598,7 +33641,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33615,7 +33658,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33637,7 +33680,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33654,7 +33697,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33676,7 +33719,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33693,7 +33736,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33715,7 +33758,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33732,7 +33775,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33754,7 +33797,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33771,7 +33814,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33793,7 +33836,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33810,7 +33853,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33832,7 +33875,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33849,7 +33892,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33871,7 +33914,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33888,7 +33931,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33910,7 +33953,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33927,7 +33970,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33949,7 +33992,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -33966,7 +34009,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -33988,7 +34031,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34005,7 +34048,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34027,7 +34070,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34044,7 +34087,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34066,7 +34109,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34083,7 +34126,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34105,7 +34148,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34122,7 +34165,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34144,7 +34187,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34161,7 +34204,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34183,7 +34226,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34200,7 +34243,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34222,7 +34265,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34239,7 +34282,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34261,7 +34304,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34278,7 +34321,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34300,7 +34343,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34317,7 +34360,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34339,7 +34382,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34356,7 +34399,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34378,7 +34421,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34395,7 +34438,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34417,7 +34460,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34434,7 +34477,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34456,7 +34499,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34473,7 +34516,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34495,7 +34538,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34512,7 +34555,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34534,7 +34577,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34551,7 +34594,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34573,7 +34616,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34590,7 +34633,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34612,7 +34655,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34629,7 +34672,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34651,7 +34694,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34668,7 +34711,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34690,7 +34733,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34707,7 +34750,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34729,7 +34772,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34746,7 +34789,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34768,7 +34811,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34785,7 +34828,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34807,7 +34850,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34824,7 +34867,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34846,7 +34889,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34863,7 +34906,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34885,7 +34928,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34902,7 +34945,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34924,7 +34967,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34941,7 +34984,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -34963,7 +35006,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -34980,7 +35023,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35002,7 +35045,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35019,7 +35062,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35041,7 +35084,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35058,7 +35101,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35080,7 +35123,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35097,7 +35140,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35119,7 +35162,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35136,7 +35179,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35158,7 +35201,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35175,7 +35218,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35197,7 +35240,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35214,7 +35257,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35236,7 +35279,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35253,7 +35296,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35275,7 +35318,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35292,7 +35335,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35314,7 +35357,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35331,7 +35374,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35353,7 +35396,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35370,7 +35413,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35392,7 +35435,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35409,7 +35452,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35431,7 +35474,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35448,7 +35491,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35470,7 +35513,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35487,7 +35530,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35509,7 +35552,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35526,7 +35569,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35548,7 +35591,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35565,7 +35608,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35588,7 +35631,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35605,7 +35648,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35627,7 +35670,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35644,7 +35687,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35666,7 +35709,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35683,7 +35726,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35705,7 +35748,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35722,7 +35765,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35744,7 +35787,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35761,7 +35804,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35783,7 +35826,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35800,7 +35843,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35822,7 +35865,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35839,7 +35882,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35861,7 +35904,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35878,7 +35921,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35900,7 +35943,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35917,7 +35960,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35939,7 +35982,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35956,7 +35999,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -35978,7 +36021,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -35995,7 +36038,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36017,7 +36060,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36034,7 +36077,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36056,7 +36099,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36073,7 +36116,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36095,7 +36138,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36112,7 +36155,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36134,7 +36177,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36151,7 +36194,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36173,7 +36216,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36190,7 +36233,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36212,7 +36255,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36229,7 +36272,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36251,7 +36294,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36268,7 +36311,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36290,7 +36333,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36307,7 +36350,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36329,7 +36372,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36346,7 +36389,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36368,7 +36411,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36385,7 +36428,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36407,7 +36450,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36424,7 +36467,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36446,7 +36489,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36463,7 +36506,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36485,7 +36528,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36502,7 +36545,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36524,7 +36567,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36541,7 +36584,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36563,7 +36606,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36580,7 +36623,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36602,7 +36645,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36619,7 +36662,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36641,7 +36684,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36658,7 +36701,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36680,7 +36723,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36697,7 +36740,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36719,7 +36762,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36736,7 +36779,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36758,7 +36801,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36775,7 +36818,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36797,7 +36840,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36814,7 +36857,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36836,7 +36879,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36853,7 +36896,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36875,7 +36918,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36892,7 +36935,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36914,7 +36957,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36931,7 +36974,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36953,7 +36996,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -36970,7 +37013,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -36992,7 +37035,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37009,7 +37052,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37031,7 +37074,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37048,7 +37091,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37070,7 +37113,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37087,7 +37130,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37109,7 +37152,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37126,7 +37169,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37148,7 +37191,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37165,7 +37208,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37187,7 +37230,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37204,7 +37247,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37226,7 +37269,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37243,7 +37286,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37265,7 +37308,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37282,7 +37325,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37304,7 +37347,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37321,7 +37364,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37343,7 +37386,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37360,7 +37403,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37382,7 +37425,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37399,7 +37442,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37421,7 +37464,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37438,7 +37481,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37460,7 +37503,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37477,7 +37520,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37499,7 +37542,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37516,7 +37559,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37538,7 +37581,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37555,7 +37598,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37577,7 +37620,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37594,7 +37637,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37616,7 +37659,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37633,7 +37676,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37655,7 +37698,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37672,7 +37715,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37694,7 +37737,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37711,7 +37754,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37733,7 +37776,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37750,7 +37793,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37772,7 +37815,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37789,7 +37832,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37811,7 +37854,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37828,7 +37871,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37850,7 +37893,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37867,7 +37910,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37889,7 +37932,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37906,7 +37949,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37928,7 +37971,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37945,7 +37988,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -37967,7 +38010,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -37984,7 +38027,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38006,7 +38049,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38023,7 +38066,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38045,7 +38088,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38062,7 +38105,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38084,7 +38127,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38101,7 +38144,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38123,7 +38166,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38140,7 +38183,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38162,7 +38205,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38179,7 +38222,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38201,7 +38244,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38218,7 +38261,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38240,7 +38283,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38257,7 +38300,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38279,7 +38322,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38296,7 +38339,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38318,7 +38361,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38335,7 +38378,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38357,7 +38400,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38374,7 +38417,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38396,7 +38439,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38413,7 +38456,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38435,7 +38478,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38452,7 +38495,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38474,7 +38517,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38491,7 +38534,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38513,7 +38556,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38530,7 +38573,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38552,7 +38595,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38569,7 +38612,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38591,7 +38634,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38608,7 +38651,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38630,7 +38673,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38647,7 +38690,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38669,7 +38712,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38686,7 +38729,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38708,7 +38751,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38725,7 +38768,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38747,7 +38790,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38764,7 +38807,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38786,7 +38829,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38803,7 +38846,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38825,7 +38868,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38842,7 +38885,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38864,7 +38907,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38881,7 +38924,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38903,7 +38946,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38920,7 +38963,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38942,7 +38985,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38959,7 +39002,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -38981,7 +39024,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -38998,7 +39041,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39020,7 +39063,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39037,7 +39080,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39059,7 +39102,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39076,7 +39119,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39098,7 +39141,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39115,7 +39158,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39137,7 +39180,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39154,7 +39197,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39176,7 +39219,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39193,7 +39236,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39215,7 +39258,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39232,7 +39275,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39254,7 +39297,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39271,7 +39314,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39293,7 +39336,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39310,7 +39353,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39332,7 +39375,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39349,7 +39392,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39371,7 +39414,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39388,7 +39431,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39410,7 +39453,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39427,7 +39470,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -39449,7 +39492,7 @@ declare namespace Paths {
                          * example:
                          * 10
                          */
-                        durationFrom: null | number;
+                        durationFrom?: null | number;
                         /**
                          * example:
                          * 10
@@ -39466,7 +39509,7 @@ declare namespace Paths {
                              * 23
                              */
                             significand: number;
-                        } | null;
+                        };
                         priceTo?: {
                             /**
                              * example:
@@ -50750,14 +50793,6 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdTravelData.Responses.$200>
   /**
-   * getApiB2CV1SalonsSalonIdUserRating - PERMISSION: NO
-   */
-  'getApiB2CV1SalonsSalonIdUserRating'(
-    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.HeaderParameters> | null,
-    data?: any,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdUserRating.Responses.$200>
-  /**
    * getApiB2CV1SalonsSalonIdLike - PERMISSION: NO
    */
   'getApiB2CV1SalonsSalonIdLike'(
@@ -50773,6 +50808,14 @@ export interface OperationMethods {
     data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdUserRating - PERMISSION: NO
+   */
+  'getApiB2CV1SalonsSalonIdUserRating'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdUserRating.Responses.$200>
   /**
    * patchApiB2CV1SalonsSalonIdRate - PERMISSION: NO
    */
@@ -50861,6 +50904,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200>
+  /**
+   * patchApiB2BAdminEnumsCategoriesCategoryIdReorder - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
+   */
+  'patchApiB2BAdminEnumsCategoriesCategoryIdReorder'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.Responses.$200>
   /**
    * getApiB2BAdminRolesSystemUser - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_CREATE]
    */
@@ -50965,6 +51016,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdDashboard - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
+   */
+  'getApiB2BAdminSalonsSalonIdDashboard'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdDashboard.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdDashboard.Responses.$200>
   /**
    * patchApiB2BAdminSalonsSalonIdOpenHoursNote - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, PARTNER_ADMIN, SALON_UPDATE]
    */
@@ -52244,16 +52303,6 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdTravelData.Responses.$200>
   }
-  ['/api/b2c/v1/salons/{salonID}/user-rating']: {
-    /**
-     * getApiB2CV1SalonsSalonIdUserRating - PERMISSION: NO
-     */
-    'get'(
-      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.HeaderParameters> | null,
-      data?: any,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdUserRating.Responses.$200>
-  }
   ['/api/b2c/v1/salons/{salonID}/like']: {
     /**
      * getApiB2CV1SalonsSalonIdLike - PERMISSION: NO
@@ -52271,6 +52320,16 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2CV1SalonsSalonIdLike.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2CV1SalonsSalonIdLike.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/user-rating']: {
+    /**
+     * getApiB2CV1SalonsSalonIdUserRating - PERMISSION: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdUserRating.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdUserRating.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/rate']: {
     /**
@@ -52379,6 +52438,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200>
+  }
+  ['/api/b2b/admin/enums/categories/{categoryID}/reorder']: {
+    /**
+     * patchApiB2BAdminEnumsCategoriesCategoryIdReorder - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.PathParameters & Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminEnumsCategoriesCategoryIdReorder.Responses.$200>
   }
   ['/api/b2b/admin/roles/system-user']: {
     /**
@@ -52503,6 +52572,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdHistory.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/dashboard']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdDashboard - PERMISSION: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdDashboard.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdDashboard.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdDashboard.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/open-hours-note']: {
     /**

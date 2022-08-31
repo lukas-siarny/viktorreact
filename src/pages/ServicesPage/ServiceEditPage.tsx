@@ -62,7 +62,7 @@ export const parseParameterValuesCreateAndUpdate = (values: IParameterValue[]): 
 				priceAndDurationData: {
 					durationFrom: value?.durationFrom ?? null,
 					durationTo: value?.variableDuration ? value?.durationTo : null,
-					priceFrom: !isNil(value?.priceFrom) ? encodePrice(value?.priceFrom) : null,
+					priceFrom: encodePrice(value?.priceFrom),
 					priceTo: value?.variablePrice ? encodePrice(value?.priceTo) : null
 				}
 			})
@@ -210,7 +210,7 @@ const ServiceEditPage = (props: Props) => {
 					: {
 							durationFrom: values.durationFrom ?? null,
 							durationTo: values.variableDuration ? values.durationTo : null,
-							priceFrom: !isNil(values.priceFrom) ? encodePrice(values.priceFrom) : null,
+							priceFrom: encodePrice(values.priceFrom),
 							priceTo: values.variablePrice ? encodePrice(values.priceTo) : null
 					  }) as any,
 				categoryParameterValues: parseParameterValuesCreateAndUpdate(values.serviceCategoryParameter),

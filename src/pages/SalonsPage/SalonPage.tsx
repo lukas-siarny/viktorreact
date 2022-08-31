@@ -45,7 +45,7 @@ import { RootState } from '../../reducers'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCosmetics } from '../../reducers/cosmetics/cosmeticsActions'
 import { getSalonLanguages } from '../../reducers/languages/languagesActions'
-import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsActions'
+import { getBasicSalon, getSalon, getSuggestedSalons } from '../../reducers/salons/salonsActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
@@ -95,6 +95,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
 	const basicSalon = useSelector((state: RootState) => state.salons.basicSalon)
+	// docastne riesenie, kym nepridem na lepsie - ale pri otvoreni approval modalu je potrebne dotiahnut aktualne salonove data
+	// aby sme dostali akutalne hasAllRequiredSalonApprovalData
+	// zaroven vsak ak ma uzivatel rozpisane nejake data vo formulari, tak mu ich nechceme premazat, takze nie je mozne zavolat dispatch(selectSalon(salonID))
+	const salonFreshDataForApprovalModal = useSelector((state: RootState) => state.salons.salon)
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
@@ -214,6 +218,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			setTabKey(TAB_KEYS.SALON_HISTORY)
 		}
 	}, [query.history])
+
+	useEffect(() => {
+		// load fresh salon data
+		if (!isNewSalon && approvalModalVisible) {
+			dispatch(getSalon(salonID))
+		}
+	}, [salonID, isNewSalon, dispatch, approvalModalVisible])
 
 	// init forms
 	useEffect(() => {
@@ -538,10 +549,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				size={'middle'}
 				className={cx('noti-btn m-regular', className)}
 				disabled={submitting || isDeletedSalon}
-				onClick={async () => {
-					dispatch(selectSalon(salonID))
-					setApprovalModalVisible(true)
-				}}
+				onClick={() => setApprovalModalVisible(true)}
 				loading={submitting}
 			>
 				{t('loc:Požiadať o schválenie')}
@@ -699,10 +707,15 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		setTabKey(selectedTabKey as TAB_KEYS)
 	}
 
-	const approvalButtonDisabled = !get(salon, 'data.hasAllRequiredSalonApprovalData') || isDeletedSalon || submitting || salon.isLoading || isPendingPublication
+	const approvalButtonDisabled =
+		!salonFreshDataForApprovalModal?.data?.salon.hasAllRequiredSalonApprovalData ||
+		isDeletedSalon ||
+		submitting ||
+		salonFreshDataForApprovalModal.isLoading ||
+		isPendingPublication
 
 	const getApprovalButtonTooltipMessage = () => {
-		if (!get(salon, 'data.hasAllRequiredSalonApprovalData') && !isPendingPublication) {
+		if (!salonFreshDataForApprovalModal?.data?.salon.hasAllRequiredSalonApprovalData && !isPendingPublication) {
 			return t('loc:Žiadosť o scvhálenie nie je možné odoslať, pretože nie sú vyplnené všetky potrebné údaje zo zoznamu nižšie.')
 		}
 		if (isPendingPublication) {

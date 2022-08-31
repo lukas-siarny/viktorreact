@@ -124,10 +124,13 @@ const SalonForm: FC<Props> = (props) => {
 								size={'large'}
 								optionRender={optionRenderSalonSearch}
 								allowClear
-								hasExtra
 								labelInValue
 								onSearch={searchSalons}
-								onSelect={(_value: string | ISelectOptionItem, option: ISelectOptionItem) => loadBasicSalon(option?.extra.salon.id)}
+								onSelect={(_value: string | ISelectOptionItem, option: ISelectOptionItem) => {
+									if (option?.extra?.salon?.id) {
+										loadBasicSalon(option?.extra.salon.id)
+									}
+								}}
 								onClear={clearSalonForm}
 								allowInfinityScroll
 							/>

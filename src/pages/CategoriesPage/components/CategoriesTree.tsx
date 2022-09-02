@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { filter, forEach, get, map, isEmpty, isNil } from 'lodash'
 import { initialize } from 'redux-form'
 import cx from 'classnames'
+import { Key } from 'antd/lib/table/interface'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
@@ -50,18 +51,21 @@ const CategoriesTree = () => {
 	const [showForm, setShowForm] = useState<boolean>(false)
 	const [treeNodeData, setTreeNodeData] = useState<any[]>([])
 	const [lastOpenedNode, setLastOpenedNode] = useState<any>()
+	const [treeExpandedKeys, setTreeExpandedKeys] = useState<Key[]>([])
+	const [treeSelectedKeys, setTreeSelectedKeys] = useState<Key[]>([])
 
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const authUserPermissions = useSelector((state: RootState) => state.user?.authUser?.data?.uniqPermissions || [])
 	const values = useSelector((state: RootState) => state.form[FORM.CATEGORY]?.values)
 
-	const openCategoryCreateDetail = (parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
+	const openCategoryCreateDetail = (rootParentId: string, parentId: string, parentTitle: string, childrenLength: number, level = 0) => {
 		setShowForm(true)
 		dispatch(
 			initialize(FORM.CATEGORY, {
 				parentId,
 				parentTitle,
 				childrenLength,
+				rootParentId,
 				nameLocalizations: EMPTY_NAME_LOCALIZATIONS,
 				descriptionLocalizations: EMPTY_NAME_LOCALIZATIONS,
 				level
@@ -115,19 +119,11 @@ const CategoriesTree = () => {
 		[dispatch, isRemoving]
 	)
 
-	const onCategoryClickHandler = (keys: any, e: any) => {
+	const onCategoryClickHandler = (keys: Key[], e: any) => {
+		setTreeSelectedKeys(keys)
 		if (!checkPermissions(authUserPermissions, editPermissions)) return
 		const selectedNode = get(e, 'node')
 		openCategoryUpdateDetail(selectedNode?.id, selectedNode?.level, selectedNode?.deletedAt, selectedNode?.isParentDeleted)
-	}
-
-	const titleBuilder = (category: any) => {
-		const { name, deletedAt } = category
-		return (
-			<button className='p-0 border-none bg-transparent cursor-pointer' type='button' onClick={() => onCategoryClickHandler([], { node: category })} disabled={!!deletedAt}>
-				{name}
-			</button>
-		)
 	}
 
 	const childrenRecursive = (parentId: string, children: any[], level = 1, isParentDeleted = false) => {
@@ -148,7 +144,7 @@ const CategoriesTree = () => {
 				deletedAt: get(child, 'deletedAt'),
 				isParentDeleted
 			}
-			return { title: titleBuilder(data), ...data }
+			return { title: get(data, 'name'), ...data }
 		})
 		return items as any[] & TreeCategories[]
 	}
@@ -174,7 +170,7 @@ const CategoriesTree = () => {
 			}
 
 			handledData.push({
-				title: titleBuilder(data),
+				title: get(data, 'name'),
 				...data
 			})
 		})
@@ -302,6 +298,7 @@ const CategoriesTree = () => {
 			if (formData.id) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
 				openCategoryUpdateDetail(formData.id)
+				dispatch(getCategories())
 			} else {
 				if (formData.parentId) {
 					body = {
@@ -309,12 +306,19 @@ const CategoriesTree = () => {
 						parentID: formData.parentId || undefined
 					}
 				}
-				// TODO - get category ID from BE to reload detail
-				await postReq('/api/b2b/admin/enums/categories/', null, { ...body, orderIndex })
+				const { data } = await postReq('/api/b2b/admin/enums/categories/', null, { ...body, orderIndex })
+				openCategoryUpdateDetail(data.category.id, (formData?.rootParentId && formData.parentId && 2) || (formData.parentId && 1) || 0)
+				// set selected key
+				setTreeSelectedKeys([data.category.id])
+				// expand related categories
+				if (formData?.rootParentId && !treeExpandedKeys.includes(formData.rootParentId)) {
+					setTreeExpandedKeys([...treeExpandedKeys, formData.rootParentId])
+				}
+				if (!treeExpandedKeys.includes(formData.parentId)) {
+					setTreeExpandedKeys([...treeExpandedKeys, formData.parentId])
+				}
 			}
 			dispatch(getCategories())
-			// clear 'dirty' state from Form
-			dispatch(initialize(FORM.CATEGORY, formData))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -357,7 +361,20 @@ const CategoriesTree = () => {
 			</Row>
 			<div className={'w-full flex'}>
 				<div className={formClass}>
-					<Tree className={'noti-tree'} treeData={treeNodeData} onDrop={onDrop} showIcon showLine draggable onSelect={onCategoryClickHandler} />
+					<Tree
+						className={'noti-tree'}
+						treeData={treeNodeData}
+						onDrop={onDrop}
+						showIcon
+						showLine
+						draggable
+						onSelect={onCategoryClickHandler}
+						onExpand={(expandedKeys) => {
+							setTreeExpandedKeys(expandedKeys)
+						}}
+						selectedKeys={treeSelectedKeys}
+						expandedKeys={treeExpandedKeys}
+					/>
 				</div>
 				{showForm ? (
 					<div className={'w-6/12 flex justify-around items-start'}>

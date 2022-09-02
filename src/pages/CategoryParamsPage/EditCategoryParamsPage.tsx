@@ -31,40 +31,45 @@ type Props = {
 	computedMatch: IComputedMatch<{ parameterID: string }>
 }
 
-function EditCategoryParamsPage(props: Props) {
+const EditCategoryParamsPage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
 	const { parameterID } = props.computedMatch.params
 	const parameter = useSelector((state: RootState) => state.categoryParams.parameter)
-	const { data } = parameter
 
 	const [backUrl] = useBackUrl(t('paths:category-parameters'))
 
 	useEffect(() => {
-		dispatch(getCategoryParameter(parameterID))
-	}, [dispatch, parameterID])
+		const fetchData = async () => {
+			const { data } = await dispatch(getCategoryParameter(parameterID))
 
-	useEffect(() => {
-		if (data) {
-			dispatch(
-				initialize(FORM.CATEGORY_PARAMS, {
-					valueType: data.valueType,
-					nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
-					localizedValues:
-						data.valueType === PARAMETERS_VALUE_TYPES.TIME
-							? [{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }]
-							: data.values.map((item) => ({ valueLocalizations: normalizeNameLocalizations(item.valueLocalizations || []) })),
-					values:
-						data.valueType === PARAMETERS_VALUE_TYPES.ENUM
-							? [{ value: null }]
-							: data.values.map((item) => ({
-									value: item.value
-							  }))
-				})
-			)
+			if (!data?.id) {
+				history.push('/404')
+			}
+
+			if (data) {
+				dispatch(
+					initialize(FORM.CATEGORY_PARAMS, {
+						valueType: data.valueType,
+						nameLocalizations: normalizeNameLocalizations(data.nameLocalizations),
+						localizedValues:
+							data.valueType === PARAMETERS_VALUE_TYPES.TIME
+								? [{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }]
+								: data.values.map((item) => ({ valueLocalizations: normalizeNameLocalizations(item.valueLocalizations || []) })),
+						values:
+							data.valueType === PARAMETERS_VALUE_TYPES.ENUM
+								? [{ value: null }]
+								: data.values.map((item) => ({
+										value: item.value
+								  }))
+					})
+				)
+			}
 		}
-	}, [data, dispatch])
+
+		fetchData()
+	}, [dispatch, parameterID])
 
 	const handleSubmit = async (formData: ICategoryParamForm) => {
 		let values = []

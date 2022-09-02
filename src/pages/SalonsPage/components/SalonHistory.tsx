@@ -1,6 +1,6 @@
 import React, { FC, PropsWithChildren, ReactNode, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Divider, List, Pagination, Row, Spin } from 'antd'
+import { Divider, List, Row, Spin } from 'antd'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
@@ -8,6 +8,7 @@ import dayjs from 'dayjs'
 // components
 import SalonHistoryFilter, { ISalonHistoryFilter } from './filters/SalonHistoryFilter'
 import CompareComponent from '../../../components/CompareComponent'
+import CustomPagination from '../../../components/CustomPagination'
 
 // types
 import { SalonSubPageProps } from '../../../types/interfaces'
@@ -145,21 +146,19 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 					</>
 				))}
 			</Spin>
-			<div className={'content-footer pt-0 items-start'}>
-				<Row className={'w-full'} justify={'end'}>
-					{!salonHistory.isFailure && (
-						<Pagination
-							className={'mt-4'}
-							onChange={onChangePagination}
-							total={salonHistory.data?.pagination.totalCount}
-							showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-							pageSize={salonHistory.data?.pagination.limit || 0}
-							current={salonHistory.data?.pagination.page}
-							showSizeChanger
-							pageSizeOptions={[25, 50, 100, 1000]}
-						/>
-					)}
-				</Row>
+			<div className={'content-footer mt-0'}>
+				{!salonHistory.isFailure && (
+					<CustomPagination
+						className={'mt-1'}
+						onChange={onChangePagination}
+						total={salonHistory.data?.pagination.totalCount}
+						showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+						pageSize={salonHistory.data?.pagination.limit || 0}
+						current={salonHistory.data?.pagination.page}
+						showSizeChanger
+						pageSizeOptions={[25, 50, 100, 1000]}
+					/>
+				)}
 			</div>
 		</>
 	)

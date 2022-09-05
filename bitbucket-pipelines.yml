@@ -163,9 +163,9 @@ pipelines:
             script:
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
-              - docker-compose up -d
-              - sleep 90
-              - npm run test:CI
+              - docker-compose up
+              # - sleep 90
+              # - npm run test:CI
 
 definitions:
   caches:

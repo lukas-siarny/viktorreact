@@ -295,7 +295,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					// load new salon for current user
 					await dispatch(getCurrentUser())
 					// select new salon
-					await dispatch(selectSalon(result.data.salon.id))
 					history.push(t('paths:salons/{{salonID}}', { salonID: result.data.salon.id }))
 				}
 			}

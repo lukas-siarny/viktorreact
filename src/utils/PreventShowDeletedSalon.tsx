@@ -2,12 +2,15 @@ import React, { FC, ReactElement } from 'react'
 import { useSelector } from 'react-redux'
 import { Button, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { isEmpty, isNil } from 'lodash'
 
 // types
-import { isEmpty, isNil } from 'lodash'
 import { RootState } from '../reducers'
+
+// utils
 import { history } from './history'
 
+// assets
 import { ReactComponent as TrashIcon } from '../assets/icons/deleted.svg'
 
 type Props = {}

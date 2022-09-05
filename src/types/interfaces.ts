@@ -112,6 +112,7 @@ export interface ISalonForm {
 	cosmeticIDs: string[]
 	languageIDs: string[]
 	address: boolean | null
+	deletedAt?: boolean
 }
 
 export interface IServiceForm {

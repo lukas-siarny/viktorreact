@@ -390,8 +390,7 @@ export const STRINGS = (t: TFunction) => ({
 	enter: (entity: string) => t('loc:Zadajte {{entity}}', { entity }), // all input fields
 
 	MISSING_PERMISSIONS_TEXT: t('loc:Používateľovi chýbajú oprávnenia na akciu'),
-	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---',
-	DEFAULT_LANGUAGE: t('loc:slovensky')
+	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---'
 })
 
 export enum PUBLICATION_STATUS {

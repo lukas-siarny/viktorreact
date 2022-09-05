@@ -34,7 +34,7 @@ import { NameLocalizationsItem } from '../../../types/interfaces'
 
 type ComponentProps = {
 	deleteCategory: Function
-	createCategory: (parentId: string, parentTitle: string, childrenLength: number, level: number) => void
+	createCategory: (rootParentId: string, parentId: string, parentTitle: string, childrenLength: number, level: number) => void
 	closeCategoryForm: (e?: React.MouseEvent<HTMLElement> | undefined) => void
 }
 
@@ -43,6 +43,7 @@ export interface ICategoryForm {
 	id: string
 	orderIndex: number
 	parentId: string
+	rootParentId: string | undefined | null
 	childrenLength: number
 	nameLocalizations: NameLocalizationsItem[]
 	descriptionLocalizations: NameLocalizationsItem[]
@@ -84,7 +85,7 @@ const CategoryForm: FC<Props> = (props) => {
 				<PopConfirmComponent
 					placement={'left'}
 					title={t('loc:Máte neuložené zmeny vo formulári. Želáte si pokračovať ďalej?')}
-					onConfirm={() => createCategory(values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}
+					onConfirm={() => createCategory(values?.parentId, values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}
 					okText={t('loc:Pokračovať')}
 					getPopupContainer={() => documentFooter}
 					allowedButton={
@@ -96,7 +97,11 @@ const CategoryForm: FC<Props> = (props) => {
 			)
 		}
 		return (
-			<Button className={'noti-btn'} size='middle' onClick={() => createCategory(values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}>
+			<Button
+				className={'noti-btn'}
+				size='middle'
+				onClick={() => createCategory(values?.parentId, values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}
+			>
 				{t('loc:Vytvoriť podkategóriu')}
 			</Button>
 		)

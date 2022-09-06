@@ -75,6 +75,7 @@ const RegistrationForm: FC<Props> = (props) => {
 				}
 				name={'gdpr'}
 				size={'large'}
+				labelClickable={false}
 			/>
 			<Field
 				className='noti-registration-switch marketing-field'
@@ -96,6 +97,7 @@ const RegistrationForm: FC<Props> = (props) => {
 						</a>
 					</div>
 				}
+				labelClickable={false}
 			/>
 			<div className='mt-2'>
 				<Button type={'primary'} block className={`noti-btn m-regular mb-1 sm:mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>

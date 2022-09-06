@@ -5,7 +5,7 @@ import user from '../../fixtures/user.json'
 
 context('User', () => {
 	// id of created user
-	// const userID = 0
+	let userID = 0
 	beforeEach(() => {
 		// restore local storage with tokens from snapshot
 		cy.restoreLocalStorage()
@@ -25,13 +25,13 @@ context('User', () => {
 		cy.checkSuccessToastMessage()
 	})
 
-	/* it('Create partner as ADMIN', () => {
+	it('Create partner as ADMIN', () => {
 		cy.intercept({
 			method: 'POST',
 			url: '/api/b2b/admin/users'
 		}).as('createPartner')
 		cy.visit('/users/create')
-		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', `${generateRandomString(5)}${user.emailSuffix}`)
+		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', `${user.emailSuffix}`)
 		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'phone', user.phone)
 		cy.selectOptionDropdown(FORM.ADMIN_CREATE_USER, 'roleID', 'Partner')
 		cy.get('form').submit()
@@ -47,17 +47,11 @@ context('User', () => {
 	it('Update partner info as ADMIN', () => {
 		cy.intercept({
 			method: 'PATCH',
-			url: `/api/b2b/admin/users/${userID}`,
+			url: `/api/b2b/admin/users/${userID}`
 		}).as('updateUser')
 		cy.visit(`/users/${userID}`)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName',  user.firstName)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName',  user.lastName)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'companyName',  user.companyName)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'businessID',  user.businessID)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'street',  user.street)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'city',  user.city)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'zipCode',  user.zipCode)
-		cy.selectOptionDropdown(FORM.USER_ACCOUNT, 'countryCode')
+		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName)
 		cy.get('form').submit()
 		cy.wait('@updateUser').then((interception: any) => {
 			// check status code of login request
@@ -81,5 +75,5 @@ context('User', () => {
 			cy.checkSuccessToastMessage()
 			cy.location('pathname').should('eq', `/users`)
 		})
-	}) */
+	})
 })

@@ -249,7 +249,7 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	CURRENCIES = 'currencies'
+	CURRENCIES = 'currenciesx'
 }
 
 export enum ENUMERATIONS_PATHS {
@@ -475,6 +475,8 @@ export enum ACCOUNT_STATE {
 }
 
 export const IMAGE_UPLOADING_PROP = 'imageUploading'
+
+export const DELETE_BUTTON_ID = 'delete-btn'
 
 export const MAX_VALUES_PER_PARAMETER = 20
 

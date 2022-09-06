@@ -21,8 +21,9 @@ export default (on: any, config: any) => {
 		...config,
 		env: {
 			...config.env,
-			auth_email: process.env.AUTH_EMIAL,
-			auth_password: process.env.AUTH_PASSWORD
+			auth_email: process.env.AUTH_EMAIL,
+			auth_password: process.env.AUTH_PASSWORD,
+			sign_in_url: process.env.SIGN_IN_URL
 		}
 	}
 

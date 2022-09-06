@@ -87,7 +87,7 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 			updatedEmployees.push({
 				id: employeeData?.id,
 				name:
-					// show name if exist at least last name othwersie show fallback values
+					// show name if exist at least last name otherwise show fallback values
 					`${employeeData.lastName ? employeeData.firstName || '' : ''} ${employeeData.lastName || ''}`.trim() ||
 					employeeData.email ||
 					employeeData.inviteEmail ||

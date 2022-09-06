@@ -1158,6 +1158,42 @@ span.ant-tag
 		align-self: center
 		margin: auto
 
+	.dashboard-grid
+		display: grid
+		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
+		grid-gap: 16px
+
+		.grid-item
+			min-height: 192px
+
+	.stastics-box
+		width: 100%
+		box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.06), 0px 4px 6px -1px rgba(0, 0, 0, 0.1)
+		border:  none
+		border-radius: 4px
+		overflow: hidden
+		background: $backgroundColor-notino-white
+
+	.stastics-box-wide
+		width: calc(50% - 8px)
+		.stats-circle
+			flex: 0 0 auto
+		.graph-doughnut-wrapper
+			max-width: 250px
+		@media (max-width: 1200px)
+			width: 100%
+			&:first-of-type
+				margin-bottom: 16px
+			.graph-doughnut-wrapper
+				max-width: 200px
+
+	.dashboard-loading
+		position: absolute
+		inset: 0
+		.ant-spin-container
+			height: 100%
+
+
 .main-background
 	background: $background-gradient
 

@@ -64,7 +64,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
+import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -230,7 +230,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		initData(salon.data)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salon, showBasicSalonsSuggestions])
+	}, [salon.data, showBasicSalonsSuggestions])
 
 	const handleSubmit = async (data: ISalonForm) => {
 		try {
@@ -541,18 +541,30 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const requestApprovalButton = (className = '') => {
+		const disabled = submitting || isDeletedSalon || (!isFormPristine && !isPendingPublication && !isPublished)
+
+		// / Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
 		return (
-			<Button
-				type={'dashed'}
-				block
-				size={'middle'}
-				className={cx('noti-btn m-regular', className)}
-				disabled={submitting || isDeletedSalon}
-				onClick={() => setApprovalModalVisible(true)}
-				loading={submitting}
+			<Tooltip
+				title={disabled ? t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.') : null}
+				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 			>
-				{t('loc:Požiadať o schválenie')}
-			</Button>
+				<span className={cx({ 'cursor-not-allowed': disabled })}>
+					<Button
+						type={'primary'}
+						block
+						size={'middle'}
+						className={cx('noti-btn m-regular', className, {
+							'pointer-events-none': disabled
+						})}
+						disabled={disabled}
+						onClick={() => setApprovalModalVisible(true)}
+						loading={submitting}
+					>
+						{t('loc:Požiadať o schválenie')}
+					</Button>
+				</span>
+			</Tooltip>
 		)
 	}
 
@@ -593,7 +605,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					</Row>
 				)
 			// unpublished and pending approval
-			case !isPublished && isPendingPublication:
+			case (!isPublished || isPublished) && isPendingPublication:
 				return (
 					<Row className={'w-full gap-2'} justify={'space-between'}>
 						{deleteButton('mt-2-5 w-52 xl:w-60')}
@@ -856,7 +868,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			{specialistModalVisible && <SpecialistModal visible onCancel={() => setSpecialistModalVisible(false)} />}
 			{isNewSalon && (
 				<button type={'button'} className={cx('noti-specialist-button', { 'is-active': specialistModalVisible })} onClick={() => setSpecialistModalVisible(true)}>
-					<PhoneIcon />
+					<SpecialistIcon />
 					<span>{t('loc:Notino Špecialista')}</span>
 				</button>
 			)}

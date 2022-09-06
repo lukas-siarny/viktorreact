@@ -37,7 +37,8 @@
     "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
     "storybook": "npm run build:tailwind && start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "preinstall": "npx npm-force-resolutions"
+    "preinstall": "npx npm-force-resolutions",
+	  "wait-for-it": "./scripts/wait-for-it.sh"
   },
   "dependencies": {
     "@sentry/cli": "1.71.0",

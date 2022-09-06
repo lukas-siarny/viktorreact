@@ -118,9 +118,19 @@ const SpecialistModal = (props: Props) => {
 							<div>
 								<ul className={'noti-contact-list mb-0 mt-4'}>
 									{contactPhonePrefix && specialistContact?.data?.phone && (
-										<li className={'phone-list-item'}>{`${contactPhonePrefix} ${specialistContact.data.phone}`}</li>
+										<li className={'phone-list-item'}>
+											<a href={`tel:${contactPhonePrefix}${specialistContact.data.phone}`}>{`${contactPhonePrefix} ${specialistContact.data.phone}`}</a>
+										</li>
 									)}
-									{<li className={'email-list-item'}>{specialistContact?.data?.email || <i>{t('loc:Email nie je k dispozícii')}</i>}</li>}
+									{
+										<li className={'email-list-item'}>
+											{specialistContact?.data?.email ? (
+												<a href={`mailto:${specialistContact?.data?.email}`}>{specialistContact?.data?.email}</a>
+											) : (
+												<i>{t('loc:Email nie je k dispozícii')}</i>
+											)}
+										</li>
+									}
 								</ul>
 							</div>
 						)

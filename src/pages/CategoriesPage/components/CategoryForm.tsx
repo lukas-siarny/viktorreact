@@ -89,7 +89,7 @@ const CategoryForm: FC<Props> = (props) => {
 					okText={t('loc:Pokračovať')}
 					getPopupContainer={() => documentFooter}
 					allowedButton={
-						<Button className={'noti-btn'} size='middle'>
+						<Button className={'noti-btn m-regular w-full xl:w-auto'} type={'dashed'} size='middle'>
 							{t('loc:Vytvoriť podkategóriu')}
 						</Button>
 					}
@@ -98,7 +98,8 @@ const CategoryForm: FC<Props> = (props) => {
 		}
 		return (
 			<Button
-				className={'noti-btn'}
+				className={'noti-btn m-regular w-full 2xl:w-auto'}
+				type={'dashed'}
 				size='middle'
 				onClick={() => createCategory(values?.parentId, values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}
 			>
@@ -107,13 +108,11 @@ const CategoryForm: FC<Props> = (props) => {
 		)
 	}
 
-	const localizationInputCss = values?.level === 0 ? 'w-2/3' : 'w-full'
-
 	return (
-		<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
-			<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+			<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
 				<Col className={'flex'}>
-					<Row className={'w-full mx-9 h-full block'} justify='center'>
+					<Row className={'w-full h-full block'} justify='center'>
 						<h3 className={'mb-0 mt-3 relative pr-7'}>
 							{renderFormTitle()}
 							{isFormDirty ? (
@@ -136,16 +135,16 @@ const CategoryForm: FC<Props> = (props) => {
 							)}
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
-						<Row justify={'space-between'} className={'w-full'}>
+						<Row className={'w-full'}>
 							<FieldArray
 								key='nameLocalizations'
 								name='nameLocalizations'
+								className='w-full'
 								component={Localizations}
 								placeholder={t('loc:Zadajte názov')}
 								horizontal
 								ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
 								customValidate={fixLength100}
-								className={localizationInputCss}
 								mainField={
 									<Field
 										className='mb-0'
@@ -160,30 +159,6 @@ const CategoryForm: FC<Props> = (props) => {
 								}
 								noSpace
 							/>
-							{values?.level === 0 ? (
-								<div className='w-1/4'>
-									<Field
-										className='w-full'
-										component={ImgUploadField}
-										name='image'
-										label={t('loc:Obrázok')}
-										maxCount={1}
-										signUrl={URL_UPLOAD_IMAGES}
-										category={UPLOAD_IMG_CATEGORIES.CATEGORY_IMAGE}
-										required
-									/>
-									<Field
-										className='w-full'
-										component={ImgUploadField}
-										name='icon'
-										label={t('loc:Ikona')}
-										maxCount={1}
-										signUrl={URL_UPLOAD_IMAGES}
-										category={UPLOAD_IMG_CATEGORIES.CATEGORY_ICON}
-										required
-									/>
-								</div>
-							) : undefined}
 							{values?.level === 2 ? (
 								<>
 									<Field
@@ -206,7 +181,7 @@ const CategoryForm: FC<Props> = (props) => {
 										ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
 										customValidate={fixLength1500}
 										customRows={4}
-										className={localizationInputCss}
+										className={'w-full'}
 										mainField={
 											<Field
 												className='mb-0'
@@ -224,32 +199,63 @@ const CategoryForm: FC<Props> = (props) => {
 								</>
 							) : undefined}
 						</Row>
-						<div className={'flex justify-between flex-wrap gap-2'}>
+						{values?.level === 0 ? (
+							<Row className={'mb-4'}>
+								<Field
+									component={ImgUploadField}
+									name='image'
+									label={t('loc:Obrázok')}
+									maxCount={1}
+									signUrl={URL_UPLOAD_IMAGES}
+									category={UPLOAD_IMG_CATEGORIES.CATEGORY_IMAGE}
+									required
+								/>
+								<Field
+									component={ImgUploadField}
+									name='icon'
+									label={t('loc:Ikona')}
+									maxCount={1}
+									signUrl={URL_UPLOAD_IMAGES}
+									category={UPLOAD_IMG_CATEGORIES.CATEGORY_ICON}
+									required
+								/>
+							</Row>
+						) : undefined}
+
+						<div className={'flex justify-between flex-wrap gap-2 flex-row-reverse'}>
+							<div className='flex gap-2 flex-wrap w-full 2xl:flex-row-reverse 2xl:w-auto'>
+								{!values?.deletedAt ? (
+									<Permissions allowed={permissions}>
+										<Button
+											className={'noti-btn w-full 2xl:w-auto'}
+											size='middle'
+											type='primary'
+											htmlType='submit'
+											disabled={submitting || pristine}
+											loading={submitting}
+										>
+											{t('loc:Uložiť')}
+										</Button>
+									</Permissions>
+								) : undefined}
+								{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
+							</div>
 							{values?.id && !values?.deletedAt ? (
 								<Permissions allowed={permissions}>
 									<DeleteButton
 										onConfirm={() => deleteCategory(values?.id, false)}
 										entityName={''}
+										className={'w-full 2xl:w-auto'}
 										type={'default'}
 										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 									/>
 								</Permissions>
 							) : undefined}
-
-							{values?.id && values?.level < 2 && !values?.deletedAt ? renderCreatSubcategoryButton() : undefined}
-
-							{!values?.deletedAt ? (
-								<Permissions allowed={permissions}>
-									<Button className={'noti-btn'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-										{t('loc:Uložiť')}
-									</Button>
-								</Permissions>
-							) : undefined}
 						</div>
 					</Row>
 				</Col>
-			</Form>
-		</Spin>
+			</Spin>
+		</Form>
 	)
 }
 

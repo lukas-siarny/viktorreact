@@ -56,55 +56,53 @@ const SpecialistContactForm: FC<Props> = (props) => {
 	}, [countries?.enumerationsOptions, specialistContacts.data, specialistContactID])
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
-			<Col className={'flex'}>
-				<Row className={'mx-8 xl:mx-9 w-full h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3 relative pr-7'}>
-						{specialistContactID ? t('loc:Upraviť špecialistu') : t('loc:Vytvoriť špecialistu')}
-						<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={() => closeForm()}>
-							<CloseIcon />
-						</Button>
-					</h3>
-					<Divider className={'my-3'} />
-					<Field
-						component={SelectField}
-						optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
-						label={t('loc:Krajina')}
-						placeholder={t('loc:Vyberte krajinu')}
-						options={countriesOptions}
-						name={'countryCode'}
-						size={'large'}
-						loading={countries?.isLoading}
-						required
-						disabled={disabledForm}
-					/>
-					<PhoneWithPrefixField
-						label={'Telefón'}
-						placeholder={t('loc:Zadajte telefón')}
-						size={'large'}
-						prefixName={'phonePrefixCountryCode'}
-						phoneName={'phone'}
-						disabled={disabledForm}
-						formName={FORM.SPECIALIST_CONTACT}
-						required
-					/>
-					<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled={disabledForm} />
-					<div className={'flex w-full justify-around space-between mt-10 gap-2 flex-wrap'}>
-						{specialistContactID && (
-							<DeleteButton
-								onConfirm={onDelete}
-								entityName={''}
-								type={'default'}
-								className='w-40'
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-							/>
-						)}
-						<Button className={'noti-btn w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-							{specialistContactID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
-						</Button>
-					</div>
-				</Row>
-			</Col>
+		<Form layout={'vertical'} className={'w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+			<div className={'h-full'}>
+				<h3 className={'mb-0 mt-3 relative pr-7'}>
+					{specialistContactID ? t('loc:Upraviť špecialistu') : t('loc:Vytvoriť špecialistu')}
+					<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={() => closeForm()}>
+						<CloseIcon />
+					</Button>
+				</h3>
+				<Divider className={'my-3'} />
+				<Field
+					component={SelectField}
+					optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+					label={t('loc:Krajina')}
+					placeholder={t('loc:Vyberte krajinu')}
+					options={countriesOptions}
+					name={'countryCode'}
+					size={'large'}
+					loading={countries?.isLoading}
+					required
+					disabled={disabledForm}
+				/>
+				<PhoneWithPrefixField
+					label={'Telefón'}
+					placeholder={t('loc:Zadajte telefón')}
+					size={'large'}
+					prefixName={'phonePrefixCountryCode'}
+					phoneName={'phone'}
+					disabled={disabledForm}
+					formName={FORM.SPECIALIST_CONTACT}
+					required
+				/>
+				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled={disabledForm} />
+				<div className={'flex w-full justify-end mt-10 gap-2 flex-wrap'}>
+					{specialistContactID && (
+						<DeleteButton
+							onConfirm={onDelete}
+							entityName={''}
+							type={'default'}
+							className='w-full xl:w-40'
+							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+						/>
+					)}
+					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+						{specialistContactID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
+					</Button>
+				</div>
+			</div>
 		</Form>
 	)
 }

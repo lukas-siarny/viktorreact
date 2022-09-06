@@ -163,7 +163,7 @@ pipelines:
             script:
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
-              - docker-compose up -d
+              - AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login docker-compose up -d
               - ./wait-for-it.sh -h localhost -p 3000 -t 60
               - npm run test:CI
 

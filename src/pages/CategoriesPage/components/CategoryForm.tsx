@@ -89,7 +89,7 @@ const CategoryForm: FC<Props> = (props) => {
 					okText={t('loc:Pokračovať')}
 					getPopupContainer={() => documentFooter}
 					allowedButton={
-						<Button className={'noti-btn m-regular w-full xl:w-auto'} type={'dashed'} size='middle'>
+						<Button className={'noti-btn m-regular w-full 2xl:w-auto'} type={'dashed'} size='middle'>
 							{t('loc:Vytvoriť podkategóriu')}
 						</Button>
 					}

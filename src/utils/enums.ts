@@ -439,10 +439,6 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_2 = 2
 }
 
-export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
-export const GTC_URL = 'https://www.notino.sk/obchodne-podmienky-vip/'
-export const MARKETING_URL = 'https://www.notino.sk/'
-
 export enum BYTE_MULTIPLIER {
 	KILO = 10 ** 3,
 	MEGA = 10 ** 6

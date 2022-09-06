@@ -18,7 +18,7 @@ type Props = WrappedFieldProps &
 		suffixIcon?: JSX.Element
 		offsetLabel?: boolean
 		extraText?: any
-		description?: string // text ktory sa zobrazi v tooltipe pri prilozeni na ikonu, ktory moze niekedy dodefinovat dany switch (eg. doplnkove sluzby)
+		tooltipText?: React.ReactNode // text ktory sa zobrazi v tooltipe pri prilozeni na ikonu, ktory moze niekedy dodefinovat dany switch (eg. doplnkove sluzby)
 		customLabel?: any
 		customOnChange?: (value: boolean) => void
 	}
@@ -36,7 +36,7 @@ const SwitchField = (props: Props) => {
 		className,
 		suffixIcon,
 		extraText,
-		description,
+		tooltipText,
 		offsetLabel,
 		customLabel,
 		customOnChange,
@@ -79,9 +79,9 @@ const SwitchField = (props: Props) => {
 									{label}
 								</Typography.Paragraph>
 							)}
-							{description && (
-								<Tooltip title={description} className={'cursor-pointer'}>
-									{suffixIcon || <InfoIcon className={'text-blue-600'} />}
+							{tooltipText && (
+								<Tooltip title={tooltipText} className={'cursor-pointer'}>
+									{suffixIcon || <InfoIcon width={16} height={16} className={'text-notino-black'} />}
 								</Tooltip>
 							)}
 						</div>

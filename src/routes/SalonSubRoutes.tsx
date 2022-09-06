@@ -106,6 +106,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.CUSTOMERS}
+				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
@@ -116,6 +117,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.CUSTOMERS}
+				preventShowDeletedSalon
 			/>
 			{/* SERVICES */}
 			<AuthRoute
@@ -127,6 +129,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.SERVICES}
+				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
@@ -137,6 +140,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.SERVICES}
+				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
@@ -147,6 +151,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.SERVICES}
+				preventShowDeletedSalon
 			/>
 			{/* EMPLOYEES */}
 			<AuthRoute
@@ -158,6 +163,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.EMPLOYEES}
+				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
@@ -168,6 +174,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.EMPLOYEES}
+				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
@@ -178,6 +185,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.EMPLOYEES}
+				preventShowDeletedSalon
 			/>
 			{/* Industries */}
 			<AuthRoute
@@ -189,6 +197,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.INDUSTRIES}
+				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
@@ -199,6 +208,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.INDUSTRIES}
+				preventShowDeletedSalon
 			/>
 			{/* Billing info */}
 			<AuthRoute
@@ -210,6 +220,7 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.BILLING_INFO}
+				preventShowDeletedSalon
 			/>
 		</Switch>
 	)

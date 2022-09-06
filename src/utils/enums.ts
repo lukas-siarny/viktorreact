@@ -4,7 +4,7 @@ import { Gutter } from 'antd/lib/grid/row'
 
 // types
 // eslint-disable-next-line import/no-cycle
-import { ICurrency } from '../types/interfaces'
+import { ICurrency, IDateTimeFilterOption } from '../types/interfaces'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -18,11 +18,11 @@ export enum NAMESPACE {
 export enum LANGUAGE {
 	SK = 'sk',
 	CZ = 'cs',
-	EN = 'en',
-	HU = 'hu',
+	EN = 'en'
+	/* HU = 'hu',
 	RO = 'ro',
 	BG = 'bg',
-	IT = 'it'
+	IT = 'it' */
 }
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
@@ -59,7 +59,8 @@ export enum FILTER_ENTITY {
 	EMPLOYEE = 'EMPLOYEE',
 	SALON = 'SALON',
 	SERVICE = 'SERVICE',
-	USER = 'USER'
+	USER = 'USER',
+	BASIC_SALON = 'BASIC_SALON'
 }
 
 export enum TABS_TYPE {
@@ -91,9 +92,12 @@ export enum FORM {
 	SALON = 'SALON',
 	LOGIN = 'LOGIN',
 	CATEGORY = 'CATEGORY',
+	CATEGORY_PARAMS = 'CATEGORY_PARAMS',
+	CATEGORY_PARAMS_FILTER = 'CATEGORY_PARAMS_FILTER',
 	COSMETIC = 'COSMETIC',
 	COSMETICS_FILTER = 'COSMETICS_FILTER',
-	SALONS_FILTER = 'SALONS_FILTER',
+	SALONS_FILTER_ACITVE = 'SALONS_FILTER_ACTIVE',
+	SALONS_FILTER_DELETED = 'SALONS_FILTER_DELETED',
 	ACTIVATION = 'ACTIVATION',
 	FORGOT_PASSWORD = 'FORGOT_PASSWORD',
 	CREATE_PASSWORD = 'CREATE_PASSWORD',
@@ -106,6 +110,7 @@ export enum FORM {
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
 	ADMIN_UPDATE_USER = 'ADMIN_UPDATE_USER',
 	SERVICE_FORM = 'SERVICE_FORM',
+	REQUEST_NEW_SERVICE_FORM = 'REQUEST_NEW_SERVICE_FORM',
 	CUSTOMERS_FILTER = 'CUSTOMERS_FILTER',
 	SERVICES_FILTER = 'SERVICES_FILTER',
 	OPEN_HOURS_NOTE = 'OPEN_HOURS_NOTE',
@@ -115,7 +120,16 @@ export enum FORM {
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	NOTE = 'NOTE',
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
-	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM'
+	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM',
+	SALON_HISTORY_FILTER = 'SALON_HISTORY_FILTER',
+	INDUSTRIES = 'INDUSTRIES',
+	INDUSTRY = 'INDUSTRY',
+	LANGUAGES = 'LANGUAGES',
+	LANGUAGES_FILTER = 'LANGUAGES_FILTER',
+	SPECIALIST_CONTACT = 'SPECIALIST_CONTACT',
+	SPECIALIST_CONTACT_FILTER = 'SPECIALIST_CONTACT_FILTER',
+	SALON_BILLING_INFO = 'SALON_BILLING_INFO',
+	FILTER_REJECTED_SUGGESTIONS = 'FILTER_REJECTED_SUGGESTIONS'
 }
 
 // System permissions
@@ -172,11 +186,21 @@ export enum TOKEN_AUDIENCE {
 	INVITATION = 'INVITATION'
 }
 
+export enum TAB_KEYS {
+	SALON_DETAIL = 'SALON_DETAIL',
+	SALON_HISTORY = 'SALON_HISTORY'
+}
+
+export enum SALON_CREATE_TYPE {
+	NON_BASIC = 'NON_BASIC',
+	BASIC = 'BASIC'
+}
+
 export enum PAGE {
-	SALON = 'SALON',
 	SALONS = 'SALONS',
 	ENUMERATIONS = 'ENUMERATIONS',
 	CATEGORIES = 'CATEGORIES',
+	CATEGORY_PARAMETERS = 'CATEGORY_PARAMETERS',
 	USER_PROFILE = 'USER_PROFILE',
 	USERS = 'USERS',
 	ROLES = 'ROLES',
@@ -189,7 +213,17 @@ export enum PAGE {
 	EMPLOYEES = 'EMPLOYEES',
 	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
-	COSMETICS = 'COSMETICS'
+	COSMETICS = 'COSMETICS',
+	LANGUAGES = 'LANGUAGES',
+	INDUSTRIES = 'INDUSTRIES',
+	PENDING_INVITES = 'PENDING_INVITES',
+	SPECIALIST_CONTACTS = 'SPECIALIST_CONTACTS',
+	BILLING_INFO = 'BILLING_INFO'
+}
+
+export enum PARAMETER_TYPE {
+	ENUM = 'ENUM',
+	TIME = 'TIME'
 }
 
 export const DEFAULT_DATE_INPUT_FORMAT = 'DD.MM.YYYY'
@@ -204,6 +238,8 @@ export const DEFAULT_DATE_WITH_TIME_FORMAT = 'DD.MM.YYYY HH:mm'
 
 export const EN_DATE_WITH_TIME_FORMAT = 'MMM DD YYYY HH:mm'
 
+export const EN_DATE_WITHOUT_TIME_FORMAT = 'DD.MM.YYYY'
+
 export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 
 export const INDIVIDUAL_TRANSPORT = 0
@@ -216,16 +252,13 @@ export enum ENUMERATIONS_KEYS {
 	CURRENCIES = 'currencies'
 }
 
-export const GOOGLE_MAPS_API_KEY = 'AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw'
-export const GOOGLE_MAP_URL = `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&language=sk`
-
 export enum ENUMERATIONS_PATHS {
 	COUNTRIES = 'countries'
 }
 
 export const PAGINATION = {
 	defaultPageSize: 25,
-	pageSizeOptions: ['25', '50', '100'],
+	pageSizeOptions: [25, 50, 100],
 	limit: 25 // 25 | 50 | 100
 }
 
@@ -291,6 +324,7 @@ export enum SALON_FILTER_STATES {
 	NOT_DELETED = 'NOT_DELETED',
 	PENDING_PUBLICATION = 'PENDING_PUBLICATION',
 	DECLINED = 'DECLINED',
+	PREMIUM = 'PREMIUM',
 	ALL = 'ALL'
 }
 
@@ -301,6 +335,12 @@ export enum SALON_STATES {
 	PUBLISHED_PENDING = 'PUBLISHED_PENDING',
 	NOT_PUBLISHED_DECLINED = 'NOT_PUBLISHED_DECLINED',
 	PUBLISHED_DECLINED = 'PUBLISHED_DECLINED'
+}
+
+export enum SALON_FILTER_CREATE_TYPES {
+	BASIC = 'BASIC',
+	NON_BASIC = 'NON_BASIC',
+	PREMIUM = 'PREMIUM'
 }
 
 export enum SALON_CREATE_TYPES {
@@ -384,15 +424,20 @@ export enum GENDER {
 }
 
 export enum VALIDATION_MAX_LENGTH {
+	LENGTH_3000 = 3000,
+	LENGTH_1500 = 1500,
 	LENGTH_1000 = 1000,
 	LENGTH_500 = 500,
 	LENGTH_255 = 255,
 	LENGTH_100 = 100,
+	LENGTH_75 = 75,
 	LENGTH_60 = 60,
 	LENGTH_50 = 50,
 	LENGTH_30 = 30,
 	LENGTH_20 = 20,
-	LENGTH_10 = 10
+	LENGTH_10 = 10,
+	LENGTH_5 = 5,
+	LENGTH_2 = 2
 }
 
 export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
@@ -411,8 +456,11 @@ export enum UPLOAD_IMG_CATEGORIES {
 	SALON_PRICELIST = 'SALON_PRICELIST',
 	EMPLOYEE = 'EMPLOYEE_IMAGE',
 	USER = 'USER_IMAGE',
-	CATEGORY = 'CATEGORY_IMAGE',
-	COSMETIC = 'COSMETIC_IMAGE'
+	CATEGORY_IMAGE = 'CATEGORY_IMAGE',
+	CATEGORY_ICON = 'CATEGORY_ICON',
+	COSMETIC = 'COSMETIC_IMAGE',
+	CUSTOMER = 'CUSTOMER_IMAGE',
+	LANGUAGE_IMAGE = 'LANGUAGE_IMAGE'
 }
 
 export const URL_UPLOAD_IMAGES = '/api/b2b/admin/files/sign-urls'
@@ -427,3 +475,136 @@ export enum ACCOUNT_STATE {
 }
 
 export const IMAGE_UPLOADING_PROP = 'imageUploading'
+
+export const MAX_VALUES_PER_PARAMETER = 20
+
+export enum PARAMETERS_VALUE_TYPES {
+	TIME = 'TIME',
+	ENUM = 'ENUM'
+}
+
+export enum PARAMETERS_UNIT_TYPES {
+	MINUTES = 'MINUTES'
+}
+
+export const NEW_SALON_ID = 'new_salon'
+
+export enum SALON_ROLES {
+	ADMIN = 'ADMIN',
+	MANAGER = 'MANAGER',
+	RECEPTIONIST = 'RECEPTIONIST',
+	EMPLOEYEE_1 = 'EMPLOEYEE_1',
+	EMPLOEYEE_2 = 'EMPLOEYEE_2',
+	EXTERNAL = 'EXTERNAL'
+}
+
+export enum SALON_HISTORY_OPERATIONS {
+	INSERT = 'INSERT',
+	UPDATE = 'UPDATE',
+	DELETE = 'DELETE',
+	RESTORE = 'RESTORE'
+}
+
+export enum SALON_HISTORY_OPERATIONS_COLORS {
+	INSERT = 'success',
+	UPDATE = 'warning',
+	DELETE = 'danger',
+	RESTORE = 'info'
+}
+
+export const SALON_ROLES_KEYS = Object.keys(SALON_ROLES)
+
+export const SALON_ROLES_TRANSLATIONS = () => ({
+	[SALON_ROLES.ADMIN]: i18next.t('loc:Admin'),
+	[SALON_ROLES.MANAGER]: i18next.t('loc:Manažér'),
+	[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:Recepčný'),
+	[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:Zamestnanec 1'),
+	[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:Zamestnanec 2'),
+	[SALON_ROLES.EXTERNAL]: i18next.t('loc:Externista')
+})
+
+export enum DATE_TIME_RANGE {
+	LAST_DAY = 'LAST_DAY',
+	LAST_TWO_DAYS = 'LAST_TWO_DAYS',
+	LAST_WEEK = 'LAST_WEEK'
+}
+
+export const DEFAULT_DATE_TIME_OPTIONS = (): { [key: string]: IDateTimeFilterOption } => {
+	return {
+		[DATE_TIME_RANGE.LAST_DAY]: { name: i18next.t('loc:24 hodín'), value: 1, unit: 'day' },
+		[DATE_TIME_RANGE.LAST_TWO_DAYS]: { name: i18next.t('loc:48 hodín'), value: 2, unit: 'day' },
+		[DATE_TIME_RANGE.LAST_WEEK]: { name: i18next.t('loc:Týždeň'), value: 1, unit: 'week' }
+	}
+}
+
+export const SALON_ROLES_PERMISSIONS = () => [
+	{
+		name: i18next.t('loc:Správa profilu salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {
+			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa firemných a fakturačných údajov salónu'),
+		allowed: [SALON_ROLES.ADMIN],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa oprávnení zamesnancov'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {
+			[SALON_ROLES.MANAGER]: i18next.t('loc:okrem Admin')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa služieb salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa zamestnancov salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
+		extra: {}
+	},
+	{
+		name: i18next.t('loc:Správa zákazníkov salónu'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2],
+		extra: {
+			[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:len vytváranie a úprava'),
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len vytváranie a úprava')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa online rezervácií'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2],
+		extra: {
+			[SALON_ROLES.ADMIN]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:len úprava a mazanie'),
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len úprava a mazanie, len svoje')
+		}
+	},
+	{
+		name: i18next.t('loc:Správa offline rezervácií'),
+		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2, SALON_ROLES.EXTERNAL],
+		extra: {
+			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len svoje'),
+			[SALON_ROLES.EXTERNAL]: i18next.t('loc:len svoje')
+		}
+	}
+]
+
+export const FILTER_PATHS = (from?: string, to?: string) => ({
+	SALONS: {
+		[SALON_FILTER_STATES.PUBLISHED]: `${i18next.t('paths:salons')}?salonState=active&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?salonState=active&statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
+		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
+		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
+		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}`,
+		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.PREMIUM}`,
+		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
+		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`
+	}
+})

@@ -36,6 +36,10 @@ export default (values: any) => {
 		}
 	}
 
+	if (!values?.phone) {
+		errors.phone = i18next.t('loc:Toto pole je povinné')
+	}
+
 	if (values?.phone && values.phone?.length > VALIDATION_MAX_LENGTH.LENGTH_20) {
 		errors.phone = i18next.t('loc:Max. počet znakov je {{max}}', {
 			max: VALIDATION_MAX_LENGTH.LENGTH_20
@@ -44,6 +48,12 @@ export default (values: any) => {
 
 	if (values?.phone && !values?.phonePrefixCountryCode) {
 		errors.phonePrefixCountryCode = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (values?.note && values.note?.length > VALIDATION_MAX_LENGTH.LENGTH_1000) {
+		errors.note = i18next.t('loc:Max. počet znakov je {{max}}', {
+			max: VALIDATION_MAX_LENGTH.LENGTH_1000
+		})
 	}
 
 	if (values?.street && values?.street?.length > VALIDATION_MAX_LENGTH.LENGTH_100) {

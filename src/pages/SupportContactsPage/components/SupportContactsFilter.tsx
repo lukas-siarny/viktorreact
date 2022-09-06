@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { InjectedFormProps, reduxForm } from 'redux-form'
+import React, { useMemo, useState } from 'react'
+import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { useSelector } from 'react-redux'
-import { Button, Col, Form, Modal, Result, Row } from 'antd'
+import { Button, Form, Modal, Result } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 
@@ -15,13 +15,15 @@ import { RootState } from '../../../reducers'
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FIELD_MODE, FORM } from '../../../utils/enums'
+import { checkFiltersSize, checkFiltersSizeWithoutSearch, validationString } from '../../../utils/helper'
 
 // atoms
-// import SelectField from '../../../atoms/SelectField'
+import InputField from '../../../atoms/InputField'
 
 type ComponentProps = {
 	createSupportContact: Function
+	total: number
 }
 
 export interface ISupportContactsFilter {
@@ -30,35 +32,63 @@ export interface ISupportContactsFilter {
 
 type Props = InjectedFormProps<ISupportContactsFilter, ComponentProps> & ComponentProps
 
+const fixLength100 = validationString(100)
+
 // NOTE: it is possible to filter contacts by countryCode but since we can have only one concat per country it dosen't make sense
 const SupportContactsFilter = (props: Props) => {
-	const { handleSubmit, createSupportContact } = props
+	const { handleSubmit, createSupportContact, total } = props
 	const [t] = useTranslation()
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
 	const [visibleModal, setVisibleModal] = useState(false)
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.SUPPORT_CONTACTS_FILTER)(state))
 
-	const hasEveryCountrySupportContact = supportContacts?.data?.supportContacts?.length === countries?.data?.length
+	const hasEveryCountrySupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact) => contact.country.code === country.code))
 
-	/* const countryCodeOptionRender = (itemData: any) => {
-		const { value, label, flag } = itemData
-		return (
-			<div className='flex items-center'>
-				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
-				{label}
-			</div>
-		)
-	} */
+	// disable filter fields if count of cosmetics is less than 2
+	const isFilterDisabled = useMemo(() => {
+		if (checkFiltersSize(formValues) > 0) return false
+		if (total > 1) return false
+		return true
+	}, [formValues, total])
+
+	const searchInput = (
+		<Field
+			className={'h-10 p-0 m-0'}
+			component={InputField}
+			size={'large'}
+			placeholder={t('loc:Hľadať podľa krajiny')}
+			name='search'
+			fieldMode={FIELD_MODE.FILTER}
+			search
+			validate={fixLength100}
+			disabled={isFilterDisabled}
+		/>
+	)
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters>
-				<Row gutter={ROW_GUTTER_X_DEFAULT} justify={'end'}>
-					{/* <Col span={8}>
+			<Filters
+				search={searchInput}
+				activeFilters={checkFiltersSizeWithoutSearch(formValues)}
+				customContent={
+					<Button
+						onClick={() => (hasEveryCountrySupportContact ? setVisibleModal(true) : createSupportContact())}
+						type='primary'
+						htmlType='button'
+						className={'noti-btn w-full mb-2'}
+						icon={<PlusIcon />}
+					>
+						{t('loc:Pridať podporu')}
+					</Button>
+				}
+			/>
+			{/* <Row gutter={ROW_GUTTER_X_DEFAULT} justify={'end'}>
+					 <Col span={8}>
 						<Field
 							component={SelectField}
-							optionRender={countryCodeOptionRender}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 							name={'countryCode'}
 							placeholder={t('loc:Krajina')}
 							allowClear
@@ -69,33 +99,20 @@ const SupportContactsFilter = (props: Props) => {
 							loading={countries?.isLoading}
 							disabled={countries?.isLoading}
 						/>
-					</Col> */}
-					<Col>
-						<Button
-							onClick={() => (hasEveryCountrySupportContact ? setVisibleModal(true) : createSupportContact())}
-							type='primary'
-							htmlType='button'
-							className={'noti-btn w-full mb-2'}
-							icon={<PlusIcon />}
-						>
-							{t('loc:Pridať podporu')}
-						</Button>
 					</Col>
 				</Row>
-			</Filters>
-			{visibleModal && (
-				<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
-					<Result
-						status='warning'
-						title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}
-						extra={
-							<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
-								{t('loc:Zatvoriť')}
-							</Button>
-						}
-					/>
-				</Modal>
-			)}
+			</Filters> */}
+			<Modal title={t('loc:Upozornenie')} visible={visibleModal} getContainer={() => document.body} onCancel={() => setVisibleModal(false)} footer={null}>
+				<Result
+					status='warning'
+					title={t('loc:Ďalšiu podporu nie je možné vytvoriť. Pre každú krajinu môžete vytvoriť maximálne jednu.')}
+					extra={
+						<Button className={'noti-btn'} onClick={() => setVisibleModal(false)} type='primary'>
+							{t('loc:Zatvoriť')}
+						</Button>
+					}
+				/>
+			</Modal>
 		</Form>
 	)
 }

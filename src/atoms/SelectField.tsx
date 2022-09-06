@@ -4,6 +4,7 @@ import { change, FormAction, WrappedFieldProps } from 'redux-form'
 import { useDispatch } from 'react-redux'
 import cx from 'classnames'
 import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, size as length, some, take } from 'lodash'
+import i18next from 'i18next'
 
 // ant
 import { Button, Divider, Empty, Form, Popconfirm, Select, Spin } from 'antd'
@@ -123,6 +124,7 @@ const getOptions = (optionRender: any, options: any) =>
 			disabled={option.disabled}
 			label={option.label}
 			extra={option.extra}
+			className={option.className}
 			style={option.level ? { paddingLeft: 16 * option.level } : undefined}
 		>
 			{optionRender ? optionRender(option) : option.label}
@@ -134,10 +136,9 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 
 	return (
 		<Spin
-			style={{ margin: '10px', justifyContent: 'flex-start' }}
 			indicator={<LoadingIcon className={'loading-spinner text-notino-black'} />}
-			className={'flex-center text-notino-black'}
-			tip={'Načítavam...'}
+			className={'justify-start flex-center text-notino-black m-2-5'}
+			tip={i18next.t('loc:Načítavam...')}
 			spinning={fetching}
 		>
 			{menu}
@@ -300,7 +301,8 @@ const SelectField = (props: Props) => {
 		hasExtra,
 		formName,
 		confirmSelection,
-		confirmModalExtraTitle
+		confirmModalExtraTitle,
+		onClear
 	} = props
 
 	const dispatch = useDispatch()
@@ -449,7 +451,7 @@ const SelectField = (props: Props) => {
 		// check if all input values are loaded
 		const values = isArray(input.value) ? new Set([...input.value]) : new Set([input.value])
 		some(selectState.data, (item) => {
-			if (values.has(item.value)) values.delete(item.value)
+			values.delete(item.value)
 			if (values.size === 0) return true
 			return false
 		})
@@ -556,6 +558,7 @@ const SelectField = (props: Props) => {
 				showAction={showAction}
 				getPopupContainer={setGetPopupContainer(mode, getPopupContainer)}
 				autoFocus={autoFocus}
+				onClear={onClear}
 				// NOTE: Do not show chrome suggestions dropdown and do not autofill this field when user picks chrome suggestion for other field
 				{...{ autoComplete: 'new-password' }}
 			>

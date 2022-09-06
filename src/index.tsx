@@ -1,6 +1,5 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { ConfigProvider } from 'antd'
 import * as Sentry from '@sentry/react'
 import { Integrations as TracingIntegrations } from '@sentry/tracing'
 
@@ -10,10 +9,7 @@ import utcPlugin from 'dayjs/plugin/utc'
 import timezonePlugin from 'dayjs/plugin/timezone'
 import isBetween from 'dayjs/plugin/isBetween'
 import minMax from 'dayjs/plugin/minMax'
-// lokalizacia pre ConfigProvider -> ant
-import SK from 'antd/es/locale/sk_SK'
-// Lokalizcia pre antd-dayjs-webpack-plugin, ktory overridne Moment -> Dayjs format v komponentoch
-import 'dayjs/locale/sk'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 import App from './App'
 // load theme styles with webpack
@@ -32,7 +28,7 @@ dayjs.extend(isBetween)
 dayjs.extend(utcPlugin)
 dayjs.extend(timezonePlugin)
 dayjs.extend(minMax)
-dayjs.locale('sk')
+dayjs.extend(relativeTime)
 
 Sentry.init({
 	release: process.env.REACT_APP_VERSION,
@@ -44,10 +40,8 @@ Sentry.init({
 })
 
 const app = (
-	<ConfigProvider locale={SK}>
-		<ErrorBoundary>
-			<App />
-		</ErrorBoundary>
-	</ConfigProvider>
+	<ErrorBoundary>
+		<App />
+	</ErrorBoundary>
 )
 render(app, document.getElementById('root'))

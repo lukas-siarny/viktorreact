@@ -5,7 +5,9 @@ import { Col, Row, Spin } from 'antd'
 import { compose } from 'redux'
 
 // reducers
+import { RootState } from '../../reducers'
 import { getCategories } from '../../reducers/categories/categoriesActions'
+import { getCategoryParameters } from '../../reducers/categoryParams/categoryParamsActions'
 
 // components
 import CategoriesTree from './components/CategoriesTree'
@@ -17,7 +19,6 @@ import { withPermissions } from '../../utils/Permissions'
 
 // types
 import { IBreadcrumbs } from '../../types/interfaces'
-import { RootState } from '../../reducers'
 
 const CategoriesPage = () => {
 	const [t] = useTranslation()
@@ -27,6 +28,7 @@ const CategoriesPage = () => {
 
 	useEffect(() => {
 		dispatch(getCategories())
+		dispatch(getCategoryParameters())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
@@ -43,15 +45,15 @@ const CategoriesPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body'>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body'>
+						<Spin spinning={isLoading}>
 							<CategoriesTree />
-						</div>
-					</Col>
-				</Row>
-			</Spin>
+						</Spin>
+					</div>
+				</Col>
+			</Row>
 		</>
 	)
 }

@@ -33,10 +33,13 @@ import {
 } from 'lodash'
 import { notification, Tag } from 'antd'
 import slugify from 'slugify'
+import { submit, SubmissionError } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
-import { SubmissionError, submit } from 'redux-form'
+import { ArgsProps } from 'antd/lib/notification'
+// eslint-disable-next-line import/no-cycle
+import showNotifications from './tsxHelpers'
 import {
 	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_WITH_TIME_FORMAT,
@@ -44,32 +47,33 @@ import {
 	FORM,
 	INVALID_DATE_FORMAT,
 	MSG_TYPE,
-	NOTIFICATION_TYPE,
 	DEFAULT_LANGUAGE,
-	GOOGLE_MAPS_API_KEY,
 	BYTE_MULTIPLIER,
 	MONDAY_TO_FRIDAY,
 	DAY,
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT,
+	EN_DATE_WITHOUT_TIME_FORMAT,
 	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
-	DEFAULT_PHONE_PREFIX
+	DEFAULT_PHONE_PREFIX,
+	QUERY_LIMIT,
+	NOTIFICATION_TYPE,
+	ADMIN_PERMISSIONS,
+	SALON_PERMISSION,
+	SALON_CREATE_TYPES,
+	DEFAULT_DATE_TIME_OPTIONS
 } from './enums'
-import showNotifications from './tsxHelpers'
-import { IPrice, IStructuredAddress } from '../types/interfaces'
+import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
 import { EnumerationData } from '../reducers/enumerations/enumerationActions'
 
-import { ReactComponent as CheckIcon12 } from '../assets/icons/check-12.svg'
-import { ReactComponent as ClockIcon12 } from '../assets/icons/clock-12.svg'
-import { ReactComponent as TrashIcon12 } from '../assets/icons/trash-12.svg'
-import { ReactComponent as TrashCrossedIcon12 } from '../assets/icons/trash-crossed-12.svg'
-import { ReactComponent as CloseIcon12 } from '../assets/icons/close-12.svg'
-
-type serviceCategory = Paths.GetApiB2BAdminServices.Responses.$200['services'][0]['category']
+import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
+import { IAuthUserPayload } from '../reducers/users/userActions'
+import { IEmployeePayload } from '../reducers/employees/employeesActions'
+import { LOCALES } from '../components/LanguagePicker'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()
 
@@ -101,6 +105,14 @@ export const decodeBackDataQuery = (base64?: string | null) => {
 	return decoded
 }
 
+export const getLinkWithEncodedBackUrl = (link: string) => {
+	if (!window.location.search) {
+		return link
+	}
+	const backUrl = btoa(`${window.location.pathname}${window.location.search}`)
+	return `${link}?backUrl=${backUrl}`
+}
+
 export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: string[]) => {
 	const pickQueryParams = pick(queryParams, Object.values(allowQueryParams))
 
@@ -129,13 +141,13 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
  *
  * Returns formatted date by location
  */
-export const formatDateByLocale = (date: string | Date | undefined | Dayjs) => {
+export const formatDateByLocale = (date: string | Date | undefined | Dayjs, skipTime?: boolean) => {
 	const locale = i18next.language || DEFAULT_LANGUAGE
 
 	if (locale === LANGUAGE.SK || locale === LANGUAGE.CZ) {
-		return dayjs(date).format(DEFAULT_DATE_WITH_TIME_FORMAT)
+		return dayjs(date).format(skipTime ? DEFAULT_DATE_FORMAT : DEFAULT_DATE_WITH_TIME_FORMAT)
 	}
-	return dayjs(date).format(EN_DATE_WITH_TIME_FORMAT)
+	return dayjs(date).format(skipTime ? EN_DATE_WITHOUT_TIME_FORMAT : EN_DATE_WITH_TIME_FORMAT)
 }
 
 /**
@@ -410,20 +422,12 @@ export function setIntervalImmediately(func: Function, interval: number) {
 	return setInterval(func, interval)
 }
 
-export const getCurrentLanguageCode = (fallbackLng = DEFAULT_LANGUAGE) => {
-	const locale = split(i18next.language, '-')
-	const result = locale[0] || fallbackLng
-	return result.toLowerCase()
-}
-
 export const getGoogleMapUrl = (): string => {
-	const locale = getCurrentLanguageCode()
-
 	// query params for google API
 	const base = 'https://maps.googleapis.com/maps/api/'
 	// TODO read Google Map API key from .env file
-	const key = `key=${GOOGLE_MAPS_API_KEY}`
-	const language = `language=${locale.toLowerCase()}`
+	const key = `key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
+	const language = `language=${i18next.language.toLowerCase()}`
 
 	return `${base}js?${key}&libraries=places&${language}`
 }
@@ -515,7 +519,7 @@ export const transformNumberFieldValue = (rawValue: number | string | undefined 
  * @param {number} price
  * @returns {{ exponent: number, significand: number }}
  */
-export const encodePrice = (price: number) => {
+export const encodePrice = (price: number): IPrice => {
 	const stringPrice = `${price}`
 
 	let exponent = 0
@@ -595,6 +599,13 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 			url: get(file, 'url') || fileData?.path
 		}
 
+		if (get(file, 'resizedImages')) {
+			img = {
+				...img,
+				thumbUrl: fileData?.resizedImages?.thumbnail
+			}
+		}
+
 		if (get(file, 'id') || fileData?.id) {
 			img = {
 				...img,
@@ -630,6 +641,7 @@ export const checkFiltersSize = (formValues: any) => size(filter(formValues, (va
 
 type NameLocalizationsItem = {
 	language: string
+	value?: string | null
 }
 
 /**
@@ -637,21 +649,22 @@ type NameLocalizationsItem = {
  * or
  * move default language to the first position
  */
-export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[], defaultLanguageName?: string) => {
-	let defaultLanguage = { language: defaultLanguageName }
-	const otherLanguages: any = []
-	forEach(nameLocalizations, (localization) => {
-		if (localization.language === defaultLanguageName) {
-			defaultLanguage = localization
-		} else {
-			otherLanguages.push(localization)
-		}
-	})
-	return [defaultLanguage, ...otherLanguages]
+export const normalizeNameLocalizations = (nameLocalizations: NameLocalizationsItem[]) => {
+	return Object.keys(LOCALES)
+		.sort((a: string, b: string) => {
+			if (a === DEFAULT_LANGUAGE) {
+				return -1
+			}
+			return b === DEFAULT_LANGUAGE ? 1 : 0
+		})
+		.map((language) => {
+			const value = nameLocalizations.find((localization) => localization.language === language)
+			return { language, value: value?.value || null }
+		})
 }
 
 type SelectDataItem = {
-	id: number
+	id: string
 	children?: any
 	name?: string | undefined
 }
@@ -670,7 +683,7 @@ export const getSelectOptionsFromData = (data: SelectDataItem[] | null, useOnly:
 	})
 }
 
-export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any) => {
+export const showErrorNotification = (errors: any, dispatch: any, submitError: any, props: any, customMessage?: ArgsProps) => {
 	if (errors && props.form) {
 		scrollToFirstError(errors, props.form)
 		const errorKeys = Object.keys(errors)
@@ -681,17 +694,19 @@ export const showErrorNotification = (errors: any, dispatch: any, submitError: a
 		}
 
 		const isErrors: boolean = errorKeys.length > 1
-		return notification.error({
-			message: i18next.t('loc:Chybne vyplnený formulár'),
-			description: i18next.t(
-				`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
-			)
-		})
+		return notification.error(
+			customMessage || {
+				message: i18next.t('loc:Chybne vyplnený formulár'),
+				description: i18next.t(
+					`loc:Skontrolujte správnosť vyplnených polí vo formulári. Vo formulári sa ${isErrors ? i18next.t('nachádzajú chyby') : i18next.t('nachádza chyba')}!`
+				)
+			}
+		)
 	}
 	return undefined
 }
 
-export const showServiceCategory = (category: serviceCategory): string | undefined => {
+export const showServiceCategory = (category: any): string | undefined => {
 	if (category?.child?.child) {
 		return category.child.child.name
 	}
@@ -725,7 +740,7 @@ export const getCountryPrefix = (countriesData: EnumerationData | null, countryC
 	return country?.phonePrefix
 }
 
-export const getSupportContactCountryName = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
+export const getCountryNameFromNameLocalizations = (nameLocalizations?: { value: string | null; language: string }[], currentLng = DEFAULT_LANGUAGE) => {
 	const countryTranslation = nameLocalizations?.find((translation) => translation.language === currentLng)
 	return countryTranslation?.value
 }
@@ -741,14 +756,14 @@ export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
 		case SALON_STATES.PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (
-				<Tag icon={<CheckIcon12 />} className={'noti-tag success'}>
-					{i18next.t('loc:Publikovaný')}
+				<Tag className={'noti-tag bg-status-published'}>
+					<span>{i18next.t('loc:Publikovaný')}</span>
 				</Tag>
 			)
 		default:
 			return (
-				<Tag icon={<CloseIcon12 />} className={'noti-tag'}>
-					{i18next.t('loc:Nepublikovaný')}
+				<Tag className={'noti-tag bg-status-notPublished'}>
+					<span>{i18next.t('loc:Nepublikovaný')}</span>
 				</Tag>
 			)
 	}
@@ -757,8 +772,8 @@ export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
 export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false) => {
 	if (deleted) {
 		return (
-			<Tag icon={<TrashIcon12 />} className={'noti-tag danger'}>
-				{i18next.t('loc:Vymazaný')}
+			<Tag className={'noti-tag danger'}>
+				<span>{i18next.t('loc:Vymazaný')}</span>
 			</Tag>
 		)
 	}
@@ -768,13 +783,13 @@ export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false)
 	}
 
 	return (
-		<Tag icon={<TrashCrossedIcon12 />} className={'noti-tag info'}>
-			{i18next.t('loc:Nevymazaný')}
+		<Tag className={'noti-tag info'}>
+			<span>{i18next.t('loc:Nevymazaný')}</span>
 		</Tag>
 	)
 }
 
-export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
+export const getSalonTagChanges = (salonStatus?: SALON_STATES, isAdmin = true) => {
 	if (!salonStatus) {
 		return null
 	}
@@ -782,21 +797,45 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
 	switch (salonStatus) {
 		case SALON_STATES.NOT_PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_PENDING:
-			return (
-				<Tag icon={<ClockIcon12 />} className={'noti-tag warning'}>
-					{i18next.t('loc:Na schválenie')}
-				</Tag>
-			)
+			if (isAdmin) {
+				return (
+					<Tag className={'noti-tag bg-status-pending'}>
+						<span>{i18next.t('loc:Na schválenie')}</span>
+					</Tag>
+				)
+			}
+			return null
 		case SALON_STATES.NOT_PUBLISHED_DECLINED:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (
-				<Tag icon={<CloseIcon12 />} className={'noti-tag danger'}>
-					{i18next.t('loc:Zamietnuté')}
+				<Tag className={'noti-tag bg-status-declined'}>
+					<span>{i18next.t('loc:Zamietnuté')}</span>
 				</Tag>
 			)
 		default:
 			return null
 	}
+}
+
+export const getSalonTagCreateType = (salonStatus?: SALON_STATES, createType?: SALON_CREATE_TYPES) => {
+	if (salonStatus && createType) {
+		if (salonStatus === SALON_STATES.PUBLISHED && createType === SALON_CREATE_TYPES.NON_BASIC) {
+			return (
+				<Tag className={'noti-tag bg-status-premium text-color-white'}>
+					<span>{i18next.t('loc:PREMIUM')}</span>
+				</Tag>
+			)
+		}
+
+		if (createType === SALON_CREATE_TYPES.BASIC) {
+			return (
+				<Tag className={'noti-tag bg-status-basic'}>
+					<span>{i18next.t('loc:BASIC')}</span>
+				</Tag>
+			)
+		}
+	}
+	return null
 }
 /**
  * Remove accent and transform to lower case
@@ -810,3 +849,160 @@ export const transformToLowerCaseWithoutAccent = (source?: string): string =>
 				.normalize('NFD')
 				.replace(/\p{Diacritic}/gu, '')
 		: ''
+
+export const sortData = (a?: any, b?: any) => {
+	if (!isNil(a) && !isNil(b)) {
+		const aValue = typeof a === 'string' ? transformToLowerCaseWithoutAccent(a) : a
+		const bValue = typeof b === 'string' ? transformToLowerCaseWithoutAccent(b) : b
+
+		if (aValue < bValue) {
+			return -1
+		}
+		if (aValue > bValue) {
+			return 1
+		}
+	}
+
+	return 0
+}
+
+export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 24, imageHeight = 24) => {
+	const { label, extra } = itemData
+	const style = { width: imageWidth, height: imageHeight }
+	return (
+		<div className='flex items-center'>
+			{extra?.image ? (
+				<img className={'option-render-image'} style={style} src={extra.image} alt={label} />
+			) : (
+				<div className={'option-render-image fallback-icon'} style={style}>
+					{fallbackIcon}
+				</div>
+			)}
+			{label}
+		</div>
+	)
+}
+
+export const langaugesOptionRender = (itemData: any) => {
+	const { value, label, flag } = itemData
+	return (
+		<div className='flex items-center'>
+			{flag ? (
+				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
+			) : (
+				<div className={'noti-flag mr-1'}>
+					<LanguageIcon />
+				</div>
+			)}
+			{label}
+		</div>
+	)
+}
+
+export const formatLongQueryString = (search: string, limit?: number) => {
+	const maxQueryLimit = limit || QUERY_LIMIT.MAX_255
+	let formattedSearch = search
+	if (search.length > maxQueryLimit) {
+		formattedSearch = search.slice(0, maxQueryLimit)
+	}
+	return formattedSearch
+}
+
+export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: any) => {
+	const { form } = props
+
+	if (values && values[IMAGE_UPLOADING_PROP]) {
+		const error = i18next.t('loc:Prebieha nahrávanie')
+		showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
+		throw new SubmissionError({
+			[IMAGE_UPLOADING_PROP]: error
+		})
+	} else {
+		dispatch(submit(form))
+	}
+}
+
+export const hasAuthUserPermissionToEditRole = (salonID?: string, authUser?: IAuthUserPayload['data'], employee?: IEmployeePayload['data'], salonRoles?: ISelectOptionItem[]) => {
+	if (!salonID || !authUser || !employee || !salonRoles) {
+		return false
+	}
+
+	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
+		return true
+	}
+	if (authUser.id === employee?.employee?.user?.id) {
+		// salon user can't edit his own role
+		return false
+	}
+
+	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
+	if (authUserSalonRole) {
+		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+		if (authUserRoleIndex === 0) {
+			// is salon admin - has all permissions
+			return true
+		}
+
+		const employeeRole = employee.employee?.role
+		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
+		// it's not possible to edit admin role	if auth user is not admin
+		if (employeeRoleIndex === 0) {
+			return false
+		}
+		// it's possible to edit role only if you have permission to edit
+		return !!authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)
+	}
+	return false
+}
+
+export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthUserPayload['data'], salonRoles?: ISelectOptionItem[]) => {
+	if (!salonID || !authUser || !salonRoles) {
+		return salonRoles
+	}
+
+	if (authUser?.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
+		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
+		// they automatically see all options
+		return salonRoles
+	}
+	// other salon roles can assign only options that they have permission on
+	const authUserSalonRole = authUser?.salons?.find((salon) => salon.id === salonID)?.role
+	if (authUserSalonRole) {
+		const highestUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
+		if (highestUserRoleIndex === 0) {
+			// is admin - has permission to asign all roles
+			return salonRoles
+		}
+		// lower roles can assign all roles execpt admin
+		const authUserDisabledRolesOptions = salonRoles.slice(0, 1).map((option) => ({ ...option, disabled: true }))
+		const authUserAllowedRolesOptions = salonRoles.slice(1)
+		return [...authUserDisabledRolesOptions, ...authUserAllowedRolesOptions]
+	}
+
+	return salonRoles
+}
+
+/**
+ * Split array into two arrays by condition.
+ * Example: splitArrayByCondition([1, 2, 5, 2, 9], (item) => item > 2) => [[5, 9], [1, 2, 2]]
+ */
+export const splitArrayByCondition = (source: any[], condition: (item: any) => boolean): any[][] => {
+	return source.reduce(
+		([pass, fail], item) => {
+			return condition(item) ? [[...pass, item], fail] : [pass, [...fail, item]]
+		},
+		[[], []]
+	)
+}
+
+export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: string]: Dayjs[] } => {
+	const options = values ?? Object.values(DEFAULT_DATE_TIME_OPTIONS())
+	const now = dayjs()
+	return options.reduce((ranges, value) => {
+		return {
+			...ranges,
+			[value.name]: [now.subtract(value.value, value.unit), now]
+		}
+	}, {})
+}

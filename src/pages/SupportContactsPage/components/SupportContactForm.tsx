@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row, Space } from 'antd'
@@ -16,7 +16,7 @@ import PhoneArrayField from '../../../atoms/PhoneArrayField'
 import SelectField from '../../../atoms/SelectField'
 
 // utils
-import { showErrorNotification } from '../../../utils/helper'
+import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { ENUMERATIONS_KEYS, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
 // types
@@ -31,10 +31,11 @@ import { RootState } from '../../../reducers'
 // assets
 import { ReactComponent as PhoneIcon } from '../../../assets/icons/phone-2-icon.svg'
 import { ReactComponent as TimerIcon } from '../../../assets/icons/clock-icon.svg'
+import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
 
 type ComponentProps = {
 	disabledForm: boolean
-	supportContactID?: number
+	supportContactID?: string
 }
 
 type Props = InjectedFormProps<ISupportContactForm, ComponentProps> & ComponentProps
@@ -45,26 +46,18 @@ const SupportContactForm: FC<Props> = (props) => {
 
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 	const supportContacts = useSelector((state: RootState) => state.supportContacts.supportContacts)
-	const formValues = useSelector((state: RootState) => state.form[FORM.SUPPORT_CONTACT]?.values)
+	const supportContact = useSelector((state: RootState) => state.supportContacts.supportContact)
 
-	const countriesOptions = countries?.enumerationsOptions?.map((country) => {
-		const alreadyExists = supportContacts?.data?.supportContacts?.find((supportCountry) => supportCountry.country.code === (country.value as string))
+	const countriesOptions = useMemo(() => {
+		return countries?.enumerationsOptions?.map((country) => {
+			const alreadyExists = supportContacts?.data?.supportContacts?.find((supportCountry: any) => supportCountry.country.code === (country.value as string))
 
-		return {
-			...country,
-			disabled: country?.value !== formValues?.countryCode && !!alreadyExists
-		}
-	})
-
-	const countryOptionRender = (itemData: any) => {
-		const { value, label, flag } = itemData
-		return (
-			<div className='flex items-center'>
-				<img className='noti-flag w-6 mr-1 rounded' src={flag} alt={value} />
-				{label}
-			</div>
-		)
-	}
+			return {
+				...country,
+				disabled: country?.value !== supportContact?.data?.supportContact?.country.code && !!alreadyExists
+			}
+		})
+	}, [supportContact?.data?.supportContact?.country.code, countries?.enumerationsOptions, supportContacts?.data?.supportContacts])
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -78,7 +71,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						<Divider className={'mb-3 mt-3'} />
 						<Field
 							component={SelectField}
-							optionRender={countryOptionRender}
+							optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 							label={t('loc:Krajina')}
 							placeholder={t('loc:Vyberte krajinu')}
 							options={countriesOptions || []}
@@ -102,7 +95,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte ulicu')}
 								name={'street'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_75}
 								disabled={disabledForm}
 							/>
 							<Field
@@ -112,7 +105,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte číslo')}
 								name={'streetNumber'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 								disabled={disabledForm}
 							/>
 						</Row>
@@ -124,7 +117,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte mesto')}
 								name={'city'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_100}
 								disabled={disabledForm}
 							/>
 							<Field
@@ -134,7 +127,7 @@ const SupportContactForm: FC<Props> = (props) => {
 								placeholder={t('loc:Zadajte smerovacie číslo')}
 								name={'zipCode'}
 								size={'large'}
-								maxLength={VALIDATION_MAX_LENGTH.LENGTH_30}
+								maxLength={VALIDATION_MAX_LENGTH.LENGTH_10}
 								disabled={disabledForm}
 							/>
 						</Row>

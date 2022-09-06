@@ -4,7 +4,7 @@ import { Button, Row, Spin } from 'antd'
 import { initialize, isPristine, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import { get, map } from 'lodash'
+import { map } from 'lodash'
 
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
@@ -23,6 +23,9 @@ import { getPrefixCountryCode } from '../../utils/helper'
 // reducers
 import { RootState } from '../../reducers'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]
 
 const CreateCustomerPage = (props: SalonSubPageProps) => {
@@ -35,12 +38,14 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 
 	const { isLoading } = countriesPhonePrefix
 
+	const [backUrl] = useBackUrl(parentPath + t('paths:customers'))
+
 	// View
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: parentPath + t('paths:customers')
+				link: backUrl
 			},
 			{
 				name: t('loc:Vytvorenie zákazníka')
@@ -61,7 +66,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 	const createCustomer = async (formData: ICustomerForm) => {
 		try {
 			setSubmitting(true)
-			const { data } = await postReq('/api/b2b/admin/customers/', null, {
+			await postReq('/api/b2b/admin/customers/', null, {
 				email: formData.email,
 				city: formData.city,
 				countryCode: formData.countryCode,
@@ -73,11 +78,11 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				streetNumber: formData.streetNumber,
 				zipCode: formData.zipCode,
 				phone: formData.phone,
-				phonePrefixCountryCode: formData.phonePrefixCountryCode
+				phonePrefixCountryCode: formData.phonePrefixCountryCode,
+				note: formData.note
 			})
 
-			const customerID = get(data, 'cusomer.id', 0)
-			history.push(parentPath + (customerID > 0 ? t('paths:customers/{{customerID}}', { customerID }) : t('paths:customers')))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

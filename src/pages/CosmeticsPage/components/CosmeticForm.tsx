@@ -6,7 +6,7 @@ import { Col, Divider, Form, Row, Button } from 'antd'
 // utils
 import { isEmpty } from 'lodash'
 import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { showErrorNotification } from '../../../utils/helper'
+import { showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -22,7 +22,7 @@ import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.sv
 import { ICosmeticForm } from '../../../types/interfaces'
 
 type ComponentProps = {
-	cosmeticID: number
+	cosmeticID?: string
 	closeForm: () => void
 	onDelete: () => void
 	usedBrands?: string[]
@@ -47,7 +47,7 @@ const CosmeticForm: FC<Props> = (props) => {
 			}
 
 			// each cosmetic name is unique brand and can be created only once
-			if (cosmeticID === 0 && usedBrands.includes(value)) {
+			if (!cosmeticID && usedBrands.includes(value)) {
 				return t('loc:Kozmetika so zadaným názvom už existuje')
 			}
 
@@ -57,11 +57,11 @@ const CosmeticForm: FC<Props> = (props) => {
 	)
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Col className={'flex'}>
 				<Row className={'mx-8 xl:mx-9 w-full h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 relative pr-7'}>
-						{cosmeticID > 0 ? t('loc:Upraviť kozmetiku') : t('loc:Vytvoriť kozmetiku')}
+						{cosmeticID ? t('loc:Upraviť kozmetiku') : t('loc:Vytvoriť kozmetiku')}
 						<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={() => closeForm()}>
 							<CloseIcon />
 						</Button>
@@ -90,7 +90,7 @@ const CosmeticForm: FC<Props> = (props) => {
 						/>
 					</Row>
 					<div className={'flex w-full justify-around space-between mt-10 gap-2 flex-wrap'}>
-						{cosmeticID > 0 && (
+						{cosmeticID && (
 							<DeleteButton
 								onConfirm={onDelete}
 								entityName={''}
@@ -100,7 +100,7 @@ const CosmeticForm: FC<Props> = (props) => {
 							/>
 						)}
 						<Button className={'noti-btn w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-							{cosmeticID > 0 ? t('loc:Uložiť') : t('loc: Vytvoriť')}
+							{cosmeticID ? t('loc:Uložiť') : t('loc: Vytvoriť')}
 						</Button>
 					</div>
 				</Row>

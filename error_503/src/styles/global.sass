@@ -1,0 +1,38 @@
+@use 'sass:math'
+@import 'tailwind-variables'
+@import 'variables'
+@import 'button'
+@import 'typography'
+
+*, input, textarea, button
+	font-family: '#{$font-family}', #{$font-family-sans-serif} !important
+	font-feature-settings: normal!important
+	font-variant: normal!important
+
+html
+	scroll-behavior: smooth
+
+html, body
+	height: 100%
+	width: 100%
+	margin: 0
+
+body, .ant-layout
+	color: $textColor-black
+	background: $backgroundColor-notino-grayLighter
+	font-size: initial
+
+.suspense-loading-spinner
+	position: fixed
+	top: 0
+	left: 0
+	z-index: $z-index-spinner
+	background: $backgroundColor-gray-200
+	width: 100%
+	height: 100%
+	display: flex
+	justify-content: center
+	align-items: center
+
+	.ant-spin-dot-item
+		background-color: $backgroundColor-notino-black

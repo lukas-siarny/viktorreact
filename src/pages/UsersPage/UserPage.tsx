@@ -26,8 +26,11 @@ import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions from '../../utils/Permissions'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type Props = {
-	computedMatch: IComputedMatch<{ userID: number }>
+	computedMatch: IComputedMatch<{ userID: string }>
 }
 
 const UserPage: FC<Props> = (props) => {
@@ -41,6 +44,8 @@ const UserPage: FC<Props> = (props) => {
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
 	const isMyAccountPath = computedMatch.path === t('paths:my-account')
 	let submitPermissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_EDIT]
+
+	const [backUrl] = useBackUrl(t('paths:users'))
 
 	if (isMyAccountPath) {
 		submitPermissions = [...submitPermissions, PERMISSION.PARTNER]
@@ -86,7 +91,7 @@ const UserPage: FC<Props> = (props) => {
 			}
 
 			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
-			if (!userID || Number(authUser.data?.id) === Number(userID)) dispatch(getCurrentUser())
+			if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -100,7 +105,7 @@ const UserPage: FC<Props> = (props) => {
 		items: [
 			{
 				name: t('loc:Zoznam používateľov'),
-				link: t('paths:users')
+				link: backUrl
 			},
 			{
 				name: t('loc:Detail používateľa'),

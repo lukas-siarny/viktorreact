@@ -72,6 +72,7 @@ const Localizations = (param: any) => {
 					autoSize={param.fieldAutoSize}
 					focusRow={param.fieldFocusRow}
 					required={param.required}
+					rows={param?.customRows}
 					onFocus={setFocusedWrap}
 				/>
 			</div>
@@ -80,8 +81,19 @@ const Localizations = (param: any) => {
 
 	return (
 		<div className={cx(param.className, 'relative noti-localizations-collapse-wrapper')}>
+			<button
+				type='button'
+				className={cx(' flex items-center justify-end cursor-pointer border-none bg-none p-0 bg-transparent', {
+					'language-btn': param.noSpace,
+					'absolute -top-1 right-0': !param.noSpace
+				})}
+				onClick={onChange}
+			>
+				<LanguageIcon className={'text-blue-600'} />
+				<div className={'text-blue-600'}>{i18next.t('loc:Jazyk')}</div>
+				<div className={'ml-2'}>{`${filter(formValueLocalizations, (item) => !!item.value)?.length}/${formValueLocalizations?.length || 0}`}</div>
+			</button>
 			{param.mainField}
-
 			<Collapse
 				// Collapse is controlled by other element
 				expandIcon={() => null}
@@ -90,14 +102,9 @@ const Localizations = (param: any) => {
 				activeKey={finalCollapseKey}
 			>
 				<Collapse.Panel header={''} key={keyName}>
-					<div className='mt-2'>{otherFields}</div>
+					<div className={`mt-2 ${get(param, 'otherFieldsClass', '')}`}>{otherFields}</div>
 				</Collapse.Panel>
 			</Collapse>
-			<button type='button' className={'absolute -top-1 right-0 flex items-center justify-end cursor-pointer border-none bg-none p-0 bg-transparent'} onClick={onChange}>
-				<LanguageIcon className={'text-blue-600'} />
-				<div className={'text-blue-600'}>{i18next.t('loc:Jazyk')}</div>
-				<div className={'ml-2'}>{`${filter(formValueLocalizations, (item) => !!item.value)?.length}/${formValueLocalizations?.length || 0}`}</div>
-			</button>
 			{param?.meta?.error && (
 				<div id={`${param.meta.form}-${param.fields.name}._error`} className={'text-red-600'}>
 					{param.meta.error}

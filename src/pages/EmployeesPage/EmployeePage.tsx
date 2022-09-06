@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Action, compose, Dispatch } from 'redux'
@@ -13,6 +13,7 @@ import EmployeeForm from './components/EmployeeForm'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import DeleteButton from '../../components/DeleteButton'
 import InviteForm from './components/InviteForm'
+import EditRoleForm from './components/EditRoleForm'
 
 // types
 import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
@@ -22,20 +23,23 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { decodePrice, encodePrice } from '../../utils/helper'
+import { decodePrice, encodePrice, filterSalonRolesByPermission, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
 import { getEmployee } from '../../reducers/employees/employeesActions'
 import { IServicesPayload } from '../../reducers/services/serviceActions'
 import { getSalonRoles } from '../../reducers/roles/rolesActions'
+import { getCurrentUser } from '../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
-import EditRoleForm from './components/EditRoleForm'
+
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
 
 type Props = SalonSubPageProps & {
-	computedMatch: IComputedMatch<{ employeeID: number }>
+	computedMatch: IComputedMatch<{ employeeID: string }>
 }
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
@@ -59,7 +63,9 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	const updatedServices: any[] = []
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		const serviceData = services?.data?.services?.find((service: any) => service?.id === serviceId)
+		// TODO - services?.data?.services
+		const test: any[] = []
+		const serviceData = test.find((service: any) => service?.id === serviceId)
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
@@ -110,44 +116,6 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
 }
 
-const checkAndParseServices = (ser: any[]) => {
-	return ser.map((service) => {
-		let updatedService = {
-			id: service?.id,
-			name: service?.name,
-			variableDuration: false,
-			variablePrice: false,
-			salonData: {
-				...service.salonData,
-				// decode and set price
-				priceFrom: decodePrice(service?.salonData?.priceFrom),
-				priceTo: decodePrice(service?.salonData?.priceTo)
-			},
-			employeeData: {
-				...service.employeeData,
-				// decode and set price
-				priceFrom: decodePrice(service?.employeeData?.priceFrom),
-				priceTo: decodePrice(service?.employeeData?.priceTo)
-			},
-			category: service?.category
-		}
-		// get data from employeeData
-		if (service?.employeeData?.durationFrom && service?.employeeData?.durationTo) {
-			updatedService = {
-				...updatedService,
-				variableDuration: true
-			}
-		}
-		if (service?.employeeData?.priceFrom && service?.employeeData?.priceTo) {
-			updatedService = {
-				...updatedService,
-				variablePrice: true
-			}
-		}
-		return updatedService
-	})
-}
-
 const EmployeePage = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -162,48 +130,76 @@ const EmployeePage = (props: Props) => {
 	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
 	const isFormPristine = useSelector(isPristine(FORM.EMPLOYEE))
 	const isInviteFromSubmitting = useSelector(isSubmitting(FORM.INVITE_EMPLOYEE))
+	const currentAuthUser = useSelector((state: RootState) => state.user.authUser)
+	const salonRoles = useSelector((state: RootState) => state.roles.salonRoles)
+
+	const filteredSalonRolesByPermission = useMemo(
+		() => filterSalonRolesByPermission(salonID, currentAuthUser?.data, salonRoles?.data || undefined),
+		[salonID, currentAuthUser?.data, salonRoles?.data]
+	)
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values)
 
-	const emploeyeeExists = !!employee?.data?.employee?.id
+	const isEmployeeExists = !!employee?.data?.employee?.id
 
-	const isLoading = employee.isLoading || services.isLoading || isRemoving
+	const isLoading = employee.isLoading || services.isLoading || currentAuthUser.isLoading || isRemoving
+
+	const [backUrl] = useBackUrl(parentPath + t('paths:employees'))
 
 	const fetchEmployeeData = async () => {
 		const { data } = await dispatch(getEmployee(employeeID))
 		if (!data?.employee?.id) {
 			history.push('/404')
 		}
+
+		if (data?.employee) {
+			const { user } = data.employee
+
+			const userData = user
+				? {
+						fullName: `${user.firstName || user.lastName ? `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() : '-'}`,
+						email: user.email,
+						phonePrefixCountryCode: user.phonePrefixCountryCode,
+						phone: user.phone,
+						image: [
+							{
+								url: user.image?.original,
+								thumbUrl: user.image?.resizedImages?.thumbnail,
+								uid: user.image?.id
+							}
+						]
+				  }
+				: undefined
+
+			dispatch(
+				initialize(FORM.EMPLOYEE, {
+					...data.employee,
+					avatar: data.employee?.image
+						? [
+								{
+									url: data.employee?.image?.original,
+									thumbUrl: data.employee?.image?.resizedImages?.thumbnail,
+									uid: data.employee?.image?.id
+								}
+						  ]
+						: [],
+					services: /* checkAndParseServices(employee.data?.employee?.services) */ [],
+					salonID: { label: data.employee?.salon?.name, value: data.employee?.salon?.id },
+					roleID: data.employee?.role?.id,
+					user: userData
+				})
+			)
+		}
 	}
 
 	useEffect(() => {
 		fetchEmployeeData()
-		dispatch(getSalonRoles())
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [employeeID])
 
 	useEffect(() => {
-		if (employee.data?.employee) {
-			dispatch(
-				initialize(FORM.EMPLOYEE, {
-					...employee.data?.employee,
-					avatar: employee.data?.employee?.image
-						? [
-								{
-									url: employee.data?.employee?.image?.original,
-									thumbUrl: employee.data?.employee?.image?.resizedImages?.thumbnail,
-									uid: employee.data?.employee?.image?.id
-								}
-						  ]
-						: [],
-					services: checkAndParseServices(employee.data?.employee?.services),
-					salonID: { label: employee.data?.employee?.salon?.name, value: employee.data?.employee?.salon?.id },
-					roleID: employee.data?.employee?.role?.id
-				})
-			)
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [employee.data])
+		dispatch(getSalonRoles())
+	}, [dispatch, salonID])
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, { roleID: form?.values?.roleID }))
@@ -216,7 +212,6 @@ const EmployeePage = (props: Props) => {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				email: data?.email,
-				services: parseServicesForCreateAndUpdate(data?.services),
 				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid')
 			}
 
@@ -227,9 +222,10 @@ const EmployeePage = (props: Props) => {
 					phone: data?.phone
 				}
 			}
-
+			/* const serviceData = parseServicesForCreateAndUpdate(data?.services)
+			await patchReq('/api/b2b/admin/employees/{employeeID}/services/{serviceID}', { employeeID, serviceID }, serviceData) */
 			await patchReq('/api/b2b/admin/employees/{employeeID}', { employeeID }, reqBody)
-			dispatch(getEmployee(employeeID))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -245,7 +241,7 @@ const EmployeePage = (props: Props) => {
 		try {
 			setIsRemoving(true)
 			await deleteReq('/api/b2b/admin/employees/{employeeID}', { employeeID })
-			history.push(parentPath + t('paths:employees'))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -258,7 +254,7 @@ const EmployeePage = (props: Props) => {
 		items: [
 			{
 				name: t('loc:Zoznam zamestnancov'),
-				link: parentPath + t('paths:employees')
+				link: backUrl
 			},
 			{
 				name: t('loc:Detail zamestnanca'),
@@ -281,7 +277,7 @@ const EmployeePage = (props: Props) => {
 					roleID: formData?.roleID
 				}
 			)
-			dispatch(getEmployee(employeeID))
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -301,6 +297,7 @@ const EmployeePage = (props: Props) => {
 				}
 			)
 			dispatch(getEmployee(employeeID))
+			dispatch(getCurrentUser())
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -317,22 +314,29 @@ const EmployeePage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:employees')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				{formValues?.hasActiveAccount && (
-					<div className='content-body small mt-2 mb-8'>
-						<EditRoleForm onSubmit={editEmployeeRole} />
-					</div>
-				)}
+
+			{formValues?.hasActiveAccount && (
 				<div className='content-body small mt-2 mb-8'>
+					<Spin spinning={isLoading}>
+						<EditRoleForm
+							onSubmit={editEmployeeRole}
+							salonRolesOptions={filteredSalonRolesByPermission}
+							hasPermissionToEdit={hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)}
+						/>
+					</Spin>
+				</div>
+			)}
+			<div className='content-body small mt-2 mb-8'>
+				<Spin spinning={isLoading}>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 					<div className={'content-footer pt-0'}>
 						<Row
 							className={cx({
-								'justify-between': emploeyeeExists,
-								'justify-center': !emploeyeeExists
+								'justify-between': isEmployeeExists,
+								'justify-center': !isEmployeeExists
 							})}
 						>
-							{emploeyeeExists ? (
+							{isEmployeeExists ? (
 								<DeleteButton
 									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
 									className={'mt-2-5 w-52 xl:w-60'}
@@ -395,7 +399,6 @@ const EmployeePage = (props: Props) => {
 									)}
 								/>
 							</div>
-
 							<Modal
 								className='rounded-fields'
 								title={t('loc:Pozvať do tímu')}
@@ -406,12 +409,26 @@ const EmployeePage = (props: Props) => {
 								closeIcon={<CloseIcon />}
 								width={394}
 							>
-								{<InviteForm onSubmit={inviteEmployee} />}
+								<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
+								<Button
+									className='noti-btn'
+									onClick={() => {
+										dispatch(submit(FORM.INVITE_EMPLOYEE))
+									}}
+									block
+									size='large'
+									type='primary'
+									htmlType='submit'
+									disabled={isInviteFromSubmitting}
+									loading={isInviteFromSubmitting}
+								>
+									{t('loc:Odoslať email')}
+								</Button>
 							</Modal>
 						</Row>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

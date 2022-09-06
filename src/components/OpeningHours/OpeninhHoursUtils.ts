@@ -59,6 +59,9 @@ export const initOpeningHours = (openingHours: OpeningHours | undefined, sameOpe
 			day: MONDAY_TO_FRIDAY as DAY,
 			timeRanges: openingHours?.[0]?.timeRanges as any
 		})
+	} else {
+		// remove same open hours over week
+		workWeek = [...(workWeek?.filter((openingHour) => openingHour?.day !== (MONDAY_TO_FRIDAY as any)) || [])]
 	}
 	return workWeek
 }

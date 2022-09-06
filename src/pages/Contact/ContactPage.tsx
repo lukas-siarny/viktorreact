@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Row, Select, Collapse, Spin, Result } from 'antd'
+import { Row, Select, Collapse, Spin, Result, Popover, Divider, Button } from 'antd'
 import { isEmpty } from 'lodash'
 
 // reducers
@@ -9,15 +9,20 @@ import { getSupportContact, getSupportContacts, getSupportContactsOptions } from
 import { RootState } from '../../reducers'
 
 // utils
-import { getCountryPrefix, getSupportContactCountryName, translateDayName } from '../../utils/helper'
+import { getCountryPrefix, getCountryNameFromNameLocalizations, optionRenderWithImage, translateDayName } from '../../utils/helper'
 import { DAYS, DEFAULT_LANGUAGE, ENUMERATIONS_KEYS, LANGUAGE } from '../../utils/enums'
 import i18n from '../../utils/i18n'
+import { LOCALES } from '../../components/LanguagePicker'
 
 // assets
 import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-pink.svg'
 import { ReactComponent as TimerIcon } from '../../assets/icons/clock-pink.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question-100.svg'
-import { LOCALES } from '../../components/LanguagePicker'
+import { ReactComponent as GlobeIcon } from '../../assets/icons/globe-24.svg'
+import { ReactComponent as PencilIcon } from '../../assets/icons/pencil-icon-16.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+
+const NOTE_MAX_LENGTH = 60
 
 type Props = {}
 
@@ -34,8 +39,30 @@ const ContactPage: FC<Props> = () => {
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const [view, setView] = useState<'empty' | 'default' | 'not_found'>()
+	const [isNoteOpen, setIsNoteOpen] = useState(false)
 
 	const currentLng = i18n.language
+
+	const notePopoverRef = useRef<any | null>(null)
+
+	useEffect(() => {
+		const listener = (event: Event) => {
+			const popupEl = notePopoverRef.current?.popupRef?.current?.getElement()
+			const triggerEl = notePopoverRef.current?.triggerRef?.current
+			if (!popupEl || !triggerEl || popupEl.contains((event?.target as Node) || null) || triggerEl.contains((event?.target as Node) || null)) {
+				return
+			}
+
+			setIsNoteOpen(false)
+		}
+		document.addEventListener('mousedown', listener)
+		document.addEventListener('touchstart', listener)
+
+		return () => {
+			document.removeEventListener('mousedown', listener)
+			document.removeEventListener('touchstart', listener)
+		}
+	}, [])
 
 	const handleCountryChange = async (item: any) => {
 		await dispatch(getSupportContact(item.key))
@@ -43,7 +70,7 @@ const ContactPage: FC<Props> = () => {
 	}
 
 	useEffect(() => {
-		;(async () => {
+		const fetchData = async () => {
 			const supportContactsData = await dispatch(getSupportContacts())
 
 			if (isEmpty(supportContactsData.data?.supportContacts)) {
@@ -56,7 +83,8 @@ const ContactPage: FC<Props> = () => {
 				return
 			}
 
-			const langToCompare = LOCALES[(i18n.language as LANGUAGE) || DEFAULT_LANGUAGE].countryCode?.toLowerCase()
+			const lng = (i18n.language as LANGUAGE) || DEFAULT_LANGUAGE
+			const langToCompare = LOCALES[lng].countryCode?.toLowerCase()
 			const currentLngCountry = supportContactsData?.data?.supportContacts?.find((support) => support.country?.code?.toLowerCase() === langToCompare)
 
 			if (currentLngCountry?.id) {
@@ -67,7 +95,9 @@ const ContactPage: FC<Props> = () => {
 
 			dispatch(getSupportContact())
 			setView('not_found')
-		})()
+		}
+
+		fetchData()
 	}, [dispatch, selectedContact])
 
 	useEffect(() => {
@@ -94,7 +124,7 @@ const ContactPage: FC<Props> = () => {
 					<Select
 						id={'noti-country-select'}
 						onChange={handleCountryChange}
-						value={selectedContact?.country.code}
+						value={selectedContact?.id}
 						className={'noti-select-input w-full'}
 						size={'large'}
 						dropdownClassName={'noti-select-dropdown dropdown-match-select-width'}
@@ -102,10 +132,7 @@ const ContactPage: FC<Props> = () => {
 					>
 						{supportContacts?.options?.map((option) => (
 							<Option value={option.value} key={option.key}>
-								<div className='flex items-center'>
-									<img className='noti-flag w-6 mr-1 rounded' src={option.flag} alt={''} />
-									{option.label}
-								</div>
+								{optionRenderWithImage(option, <GlobeIcon />)}
 							</Option>
 						))}
 					</Select>
@@ -128,7 +155,7 @@ const ContactPage: FC<Props> = () => {
 					}
 					if (view === 'default') {
 						return (
-							<Collapse className={'noti-support-collapse mt-8'} bordered={false} defaultActiveKey={1} accordion>
+							<Collapse className={'noti-collapse noti-support-collapse mt-3'} bordered={false} defaultActiveKey={1} accordion expandIconPosition={'right'}>
 								<Panel
 									header={
 										<h3 className={'flex items-center text-lg my-2'}>
@@ -138,11 +165,11 @@ const ContactPage: FC<Props> = () => {
 									}
 									key={1}
 								>
-									<Row className={'contact-row'}>
-										<div className={'contact-col'}>
-											<ul className={'noti-support-contact-list'}>
+									<div className={'contact-row'}>
+										<div className={'contact-col pr-2'}>
+											<ul className={'noti-contact-list'}>
 												{selectedContact?.emails?.map((email, index) => (
-													<li key={index} className={'email-list-item'}>
+													<li key={index} className={'email-list-item break-all'}>
 														{email}
 													</li>
 												))}
@@ -156,23 +183,72 @@ const ContactPage: FC<Props> = () => {
 											</ul>
 										</div>
 										<div className={'contact-col'}>
-											<ul className={'noti-support-contact-list'}>
+											<ul className={'noti-contact-list'}>
 												<li className={'address-list-item'}>
-													{selectedContact?.address?.street && (
-														<>
-															{selectedContact.address.street} {selectedContact?.address?.streetNumber}
-															<br />
-														</>
-													)}
-													{selectedContact?.address?.zipCode} {selectedContact?.address?.city}
-													<br />
-													{getSupportContactCountryName(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
-														selectedContact?.country.code}
+													<div className={'flex flex-col'}>
+														{selectedContact?.address?.street && (
+															<div>
+																<span className={'break-all mr-1'}>{selectedContact.address.street.trim()}</span>
+																{selectedContact?.address?.streetNumber?.trim()}
+															</div>
+														)}
+														<div>
+															{selectedContact?.address?.zipCode && <span className={'mr-1'}>{selectedContact?.address?.zipCode?.trim()}</span>}
+															<span className={'break-all'}>{selectedContact?.address?.city?.trim()}</span>
+														</div>
+														{getCountryNameFromNameLocalizations(selectedContact?.country?.nameLocalizations, currentLng as LANGUAGE) ||
+															selectedContact?.country.code}
+													</div>
 												</li>
-												{selectedContact?.note && <li className={'note-list-item'}>{selectedContact?.note}</li>}
+												{selectedContact?.note && (
+													<li className={'note-list-item'}>
+														<p className={'m-0 break-all'}>
+															{selectedContact.note.length > NOTE_MAX_LENGTH ? (
+																<>
+																	{`${selectedContact.note.slice(0, NOTE_MAX_LENGTH)}… `}
+																	<Popover
+																		overlayClassName={'w-full sm:max-w-md p-2'}
+																		ref={notePopoverRef}
+																		visible={isNoteOpen}
+																		content={
+																			<>
+																				<Row align={'middle'} justify={'space-between'}>
+																					<Row align={'middle'} className={'gap-1'}>
+																						<PencilIcon />
+																						<h4 className={'m-0'}>{t('loc:Poznámka')}</h4>
+																					</Row>
+																					<Button className={'p-0 border-none shadow-none'} onClick={() => setIsNoteOpen(false)}>
+																						<CloseIcon style={{ width: 16, height: 16 }} />
+																					</Button>
+																				</Row>
+																				<Divider className={'my-1'} />
+																				<p className={'whitespace-pre-wrap break-all m-0'}>{selectedContact?.note}</p>
+																			</>
+																		}
+																		trigger='click'
+																		arrowPointAtCenter
+																		overlayInnerStyle={{ borderRadius: 10 }}
+																	>
+																		<button
+																			type={'button'}
+																			className={
+																				'underline cursor-pointer break-normal outline-none border-none bg-transparent p-0 noti-show-more-button'
+																			}
+																			onClick={() => setIsNoteOpen(true)}
+																		>
+																			{t('loc:zobraziť viac')}
+																		</button>
+																	</Popover>
+																</>
+															) : (
+																selectedContact.note
+															)}
+														</p>
+													</li>
+												)}
 											</ul>
 										</div>
-									</Row>
+									</div>
 								</Panel>
 								<Panel
 									header={

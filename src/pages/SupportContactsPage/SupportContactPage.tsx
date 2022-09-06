@@ -33,13 +33,16 @@ import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
 type Props = {
 	computedMatch: IComputedMatch<{
-		supportContactID: number
+		supportContactID: string
 	}>
 }
 
@@ -66,7 +69,9 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const isLoading = supportContact.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving
 
-	const supportContactExists = supportContactID > 0
+	const supportContactExists = !!supportContactID
+
+	const [backUrl] = useBackUrl(t('paths:support-contacts'))
 
 	useEffect(() => {
 		if (sameOpenHoursOverWeekFormValue) {
@@ -86,7 +91,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		} else {
 			// set to init values
 			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: OpeningHours = initOpeningHours(supportContact.data?.supportContact.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
+			const openingHours: OpeningHours = initOpeningHours(formValues?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
 			if (openOverWeekendFormValue && openingHours) {
 				const updatedOpeningHours = unionBy(
 					[
@@ -112,9 +117,6 @@ const SupportContactPage: FC<Props> = (props) => {
 	useEffect(() => {
 		const initForm = async (supportContactData?: ISupportContactPayload & ILoadingAndFailure) => {
 			const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-			const defaultContactPerson = {
-				phonePrefixCountryCode
-			}
 
 			if (supportContactData && !isEmpty(supportContactData) && supportContactID) {
 				// init data for existing supportContact
@@ -146,10 +148,6 @@ const SupportContactPage: FC<Props> = (props) => {
 						openOverWeekend: false,
 						sameOpenHoursOverWeek: true,
 						openingHours: initOpeningHours(supportContactData?.data?.supportContact?.openingHours, true, false),
-						payByCard: false,
-						phonePrefixCountryCode,
-						isInvoiceAddressSame: true,
-						companyContactPerson: defaultContactPerson,
 						emails: [{ email: '' }],
 						phones: [
 							{
@@ -229,7 +227,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		items: [
 			{
 				name: t('loc:Zoznam podporných centier'),
-				link: t('paths:support-contacts')
+				link: backUrl
 			},
 			breadcrumbDetailItem
 		]
@@ -253,7 +251,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 	}
 
-	const hasEveryCountrSupportContact = supportContacts?.data?.supportContacts?.length === countries.data?.length
+	const hasEveryCountrSupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact: any) => contact.country.code === country.code))
 
 	return (
 		<>
@@ -275,7 +273,7 @@ const SupportContactPage: FC<Props> = (props) => {
 							}
 							showIcon
 							type={'warning'}
-							className={'mb-4'}
+							className={'noti-alert mb-4'}
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />

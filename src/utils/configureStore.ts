@@ -14,7 +14,7 @@ import showNotifications from './tsxHelpers'
  * IMAGE_UPLOADING_PROP must be set outside e.g. ImgUploadField
  */
 const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: any) => {
-	if (action.type === '@@redux-form/SUBMIT') {
+	if (action?.type === '@@redux-form/SUBMIT') {
 		const { form } = store.getState()
 		const submittedForm = form[action.meta.form]
 
@@ -45,8 +45,8 @@ const loggerFilter = (getState: any, action: any) => {
 const configureStoreProd = (rootReducer: Reducer) => {
 	const middlewares = [
 		// Add other middleware on this line...
-		preventSubmitFormDuringUpload,
-		thunk
+		thunk,
+		preventSubmitFormDuringUpload
 	]
 
 	const store = createStore(rootReducer, compose(applyMiddleware(...middlewares)))

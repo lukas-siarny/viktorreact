@@ -20,6 +20,11 @@ import { ReactComponent as VersionIcon } from '../../assets/icons/version-icon.s
 import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 import { ReactComponent as HelpIcon } from '../../assets/icons/help-icon.svg'
 import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon-24.svg'
+import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24.svg'
+import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
+import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
+import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
+import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -40,7 +45,7 @@ const { Sider } = Layout
 export type LayoutSiderProps = {
 	page?: PAGE
 	showNavigation?: boolean
-	salonID?: number
+	salonID?: string
 	parentPath?: string
 }
 
@@ -56,7 +61,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
 	const MY_ACCOUNT_MENU = (
-		<Menu className='noti-sider-menu'>
+		<Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}>
 			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
 				{t('loc:Môj profil')}
 			</Menu.Item>
@@ -83,7 +88,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 	return (
 		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0'>
-			<div className='sticky top-0 flex flex-col h-screen'>
+			<div className='sticky top-0 flex flex-col h-screen z-50' id={'noti-sider-wrapper'}>
 				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`}>
 					<LogoIcon className='h-8' />
 				</Link>
@@ -123,6 +128,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
 										<Menu.Item
+											eventKey={PAGE.CATEGORY_PARAMETERS}
+											key={PAGE.CATEGORY_PARAMETERS}
+											onClick={() => history.push(t('paths:category-parameters'))}
+											icon={<ParametersIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORY_PARAMETERS })}
+										>
+											{t('loc:Parametre')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
+										<Menu.Item
 											eventKey={PAGE.COSMETICS}
 											key={PAGE.COSMETICS}
 											onClick={() => history.push(t('paths:cosmetics'))}
@@ -135,6 +152,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
 										<Menu.Item
+											eventKey={PAGE.LANGUAGES}
+											key={PAGE.LANGUAGES}
+											onClick={() => history.push(t('paths:languages-in-salons'))}
+											icon={<LanguagesIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.LANGUAGES })}
+										>
+											{t('loc:Jazyky')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+										<Menu.Item
 											eventKey={PAGE.SUPPORT_CONTACTS}
 											key={PAGE.SUPPORT_CONTACTS}
 											onClick={() => history.push(t('paths:support-contacts'))}
@@ -143,6 +172,18 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											className={cx({ 'ant-menu-item-selected': page === PAGE.SUPPORT_CONTACTS })}
 										>
 											{t('loc:Podpora')}
+										</Menu.Item>
+									</Permissions>
+									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+										<Menu.Item
+											eventKey={PAGE.SPECIALIST_CONTACTS}
+											key={PAGE.SPECIALIST_CONTACTS}
+											onClick={() => history.push(t('paths:specialist-contacts'))}
+											icon={<PhoneIcon />}
+											// fix style issue due wrapped item into <Permission> component
+											className={cx({ 'ant-menu-item-selected': page === PAGE.SPECIALIST_CONTACTS })}
+										>
+											{t('loc:Špecialisti')}
 										</Menu.Item>
 									</Permissions>
 									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
@@ -172,6 +213,26 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
 									>
 										{t('loc:Detail salónu')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.BILLING_INFO}
+										key={PAGE.BILLING_INFO}
+										onClick={() => history.push(getPath(t('paths:billing-info')))}
+										icon={<InvoiceIcon />}
+										// fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.BILLING_INFO })}
+									>
+										{t('loc:Fakturačné údaje')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.INDUSTRIES}
+										key={PAGE.INDUSTRIES}
+										onClick={() => history.push(getPath(t('paths:industries')))}
+										icon={<IndustiresIcon />}
+										// fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES })}
+									>
+										{t('loc:Odvetvia')}
 									</Menu.Item>
 									<Menu.Item
 										eventKey={PAGE.SERVICES}
@@ -208,7 +269,12 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</div>
 
 				<div className='p-2 pb-4'>
-					<Dropdown overlay={MY_ACCOUNT_MENU} placement='topLeft' trigger={['click']}>
+					<Dropdown
+						overlay={MY_ACCOUNT_MENU}
+						placement='topLeft'
+						trigger={['click']}
+						getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
+					>
 						<div
 							role='button'
 							className='cursor-pointer hover:bg-notino-grayLighter py-2'

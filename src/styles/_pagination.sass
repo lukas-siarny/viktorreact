@@ -6,9 +6,6 @@
 		color: $textColor-gray-600
 		border: none
 		border-radius: 4px
-		&:hover, &:focus
-			a
-				color: $textColor-gray-600
 		&.ant-pagination-item-active > a
 			background-color: $backgroundColor-gray-900
 			border-radius: 4px
@@ -19,10 +16,29 @@
 			border-radius: 4px
 			border: none
 			position: relative
-			&:hover
-				background-color: $backgroundColor-gray-200
 			span
 				display: none
+	&:not(.ant-pagination-disabled)
+		li:not(.ant-pagination-item-active)
+			&:hover, &:focus-visible
+				a
+					color: $textColor-gray-600
+		.ant-pagination-item,
+		.ant-pagination-item-link:not(:disabled)
+			&:hover
+				background-color: $backgroundColor-gray-200
+		.ant-pagination-item-link:disabled
+			&::before
+				opacity: 0.2
+	&.ant-pagination-disabled
+		li:not(.ant-pagination-item-active)
+			a
+				color: $textColor-gray-400
+		.ant-pagination-next,
+		.ant-pagination-prev
+			.ant-pagination-item-link
+				&::before
+					opacity: 0.2
 	.ant-pagination-prev
 		.ant-pagination-item-link
 			&:before
@@ -35,6 +51,9 @@
 				width: 20px
 				height: 20px
 				background: url('../assets/icons/arrow.svg') no-repeat center center
+		&.ant-pagination-disabled
+			button
+				color: $textColor-gray-400
 	.ant-pagination-next
 		.ant-pagination-item-link
 			&:before
@@ -48,6 +67,7 @@
 				transform: rotate(180deg)
 				height: 20px
 				background: url('../assets/icons/arrow.svg') no-repeat center center
+
 	.ant-pagination-options
 		.ant-select
 			text-align: left
@@ -81,3 +101,81 @@
 						opacity: 0.2
 .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector
 	box-shadow: none
+
+.noti-custom-pagination
+	.ant-pagination
+		margin: 0
+
+	.custom-dropdown
+		position: relative
+		font-size: 14px
+		color: $textColor-trueGray-700
+
+		.selector
+			border: none
+			border-radius: 4px
+			background-color: $backgroundColor-gray-100
+			height: 32px
+			padding: 0 30px 0 12px
+			display: flex
+			align-items: center
+			position: relative
+			transition: 300ms ease
+			cursor: pointer
+			color: $textColor-trueGray-700
+			&::before
+				position: absolute
+				z-index: 1
+				content: ''
+				border-radius: 4px
+				transition: 300ms
+				transition-property: background-color opacity
+				top: calc(50% - 10px)
+				right: 10px
+				width: 20px
+				transform: rotate(270deg)
+				height: 20px
+				background: url('../assets/icons/arrow.svg') no-repeat center center
+			&:not(:disabled)
+				&:hover,
+				&:focus-visible
+					background-color: $backgroundColor-gray-200
+			&:disabled
+				color: $textColor-gray-400
+				cursor: not-allowed
+				&::before
+					opacity: 0.4
+		&-menu
+			position: absolute
+			bottom: calc(100% + 4px)
+			background: #fff
+			width: 100%
+			box-shadow: 0 3px 6px -4px rgb(0 0 0 / 12%), 0 6px 16px 0 rgb(0 0 0 / 8%), 0 9px 28px 8px rgb(0 0 0 / 5%)
+			line-height: 1.5715
+			border-radius: 2px
+			transform: scale(1,0)
+			transform-origin: bottom
+			opacity: 0
+			transition: opacity 150ms ease, transform 150ms ease-in-out
+
+			ul
+				margin: 0
+				padding: 0
+				list-style: none
+				li
+					padding: 6px 12px
+					cursor: pointer
+					transition: 300ms ease
+					&:hover
+						background-color: $backgroundColor-gray-200
+					&.selected
+						background: $backgroundColor-black
+						color: $textColor-white
+		&.is-open
+			.custom-dropdown-menu
+				transform: scale(1)
+				opacity: 1
+			button
+				color: $textColor-notino-gray
+				&::before
+					opacity: 0.2

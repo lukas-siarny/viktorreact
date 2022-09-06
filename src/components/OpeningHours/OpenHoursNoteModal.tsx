@@ -21,7 +21,7 @@ type Props = {
 	visible?: boolean
 	onClose?: () => void
 	title?: string
-	salonID: number
+	salonID: string
 	openingHoursNote?: Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHoursNote']
 }
 
@@ -37,10 +37,10 @@ const OpenHoursNoteModal = (props: Props) => {
 		if (openingHoursNote) {
 			initData = {
 				hoursNote: {
-					note: openingHoursNote?.note,
+					note: openingHoursNote.note,
 					range: {
-						dateFrom: openingHoursNote?.validFrom,
-						dateTo: openingHoursNote?.validTo
+						dateFrom: openingHoursNote.validFrom,
+						dateTo: openingHoursNote.validTo
 					}
 				}
 			}

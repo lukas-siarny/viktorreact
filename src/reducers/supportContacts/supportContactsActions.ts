@@ -12,6 +12,7 @@ import i18n from '../../utils/i18n'
 
 // types
 import { Paths } from '../../types/api'
+import { ISelectOptionItem } from '../../types/interfaces'
 
 export type ISupportContactsActions = IResetStore | IGetSupportContacts | IGetSupportContact | IGetSupportContactsOptions
 
@@ -35,8 +36,8 @@ export interface IGetSupportContactsOptions {
 }
 
 export interface ISupportContactsTableData {
-	key: number
-	supportContactID: number
+	key: string
+	supportContactID: string
 	country: {
 		nameLocalizations: {
 			language: string
@@ -51,17 +52,10 @@ export interface ISupportContactsTableData {
 	zipCode: string
 }
 
-export interface ISupportContactOption {
-	key: string | number
-	label: string
-	value: string | number
-	flag?: string
-}
-
 export interface ISupportContactsPayload {
 	data: Paths.GetApiB2BAdminEnumsSupportContacts.Responses.$200 | null
 	tableData?: ISupportContactsTableData[]
-	options: ISupportContactOption[]
+	options: ISelectOptionItem[]
 }
 
 export interface ISupportContactPayload {
@@ -69,7 +63,7 @@ export interface ISupportContactPayload {
 }
 
 export interface ISupportContactOptionsPayload {
-	options: ISupportContactOption[]
+	options: ISelectOptionItem[]
 }
 
 export const getSupportContactsOptions =
@@ -77,16 +71,17 @@ export const getSupportContactsOptions =
 	async (dispatch) => {
 		let payload = {} as ISupportContactOptionsPayload
 
-		const options: ISupportContactOption[] =
-			data?.supportContacts?.map((item: any) => {
-				const countryCode = item.country.code
+		const options: ISelectOptionItem[] =
+			data?.supportContacts?.map((item) => {
 				const countryTranslation = item.country.nameLocalizations.find((translation: any) => translation.language === currentLng)
 
 				return {
 					key: item.id,
-					label: countryTranslation?.value || countryCode,
-					value: countryCode,
-					flag: item.country.flag
+					label: countryTranslation?.value || item.country.code,
+					value: item.id,
+					extra: {
+						image: item.country.flag
+					}
 				}
 			}) || []
 
@@ -123,12 +118,12 @@ export const getSupportContacts =
 				return tableItem
 			})
 
-			const { options } = await dispatch(getSupportContactsOptions((i18n.language as LANGUAGE) || DEFAULT_LANGUAGE, data))
+			const supportContactOptions = await dispatch(getSupportContactsOptions((i18n.language as LANGUAGE) || DEFAULT_LANGUAGE, data))
 
 			payload = {
 				data,
 				tableData,
-				options
+				options: supportContactOptions?.options || []
 			}
 
 			dispatch({ type: SUPPORT_CONTACTS.SUPPORT_CONTACTS_DONE, payload })
@@ -142,7 +137,7 @@ export const getSupportContacts =
 	}
 
 export const getSupportContact =
-	(supportContactID?: number): ThunkResult<Promise<ISupportContactPayload>> =>
+	(supportContactID?: string): ThunkResult<Promise<ISupportContactPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISupportContactPayload
 

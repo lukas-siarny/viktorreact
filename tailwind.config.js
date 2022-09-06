@@ -41,6 +41,14 @@ module.exports = {
 				redDark: '#6C0A0A',
 				success: '#008700'
 			},
+			status: {
+				premium: colors.blue[700],
+				basic: colors.blue[200],
+				declined: colors.red[200],
+				pending: colors.yellow[200],
+				notPublished: colors.trueGray[200],
+				published: colors.green[200]
+			},
 			// Tailwind colors
 			black: colors.black,
 			white: colors.white,
@@ -165,7 +173,8 @@ module.exports = {
 			xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
 			'2xl': '0 16px 64px rgba(0, 0, 0, 0.06), 0 12px 24px rgba(0, 0, 0, 0.04), 0px 6px 8px rgba(0, 0, 0, 0.02)',
 			inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
-			none: 'none'
+			none: 'none',
+			notino: '0px 10px 25px 10px rgb(0 0 0 / 10%)'
 		},
 		container: {},
 		cursor: {

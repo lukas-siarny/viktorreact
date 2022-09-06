@@ -35,6 +35,13 @@ import EmployeesPage from '../pages/EmployeesPage/EmployeesPage'
 import EmployeePage from '../pages/EmployeesPage/EmployeePage'
 import CreateEmployeePage from '../pages/EmployeesPage/CreateEmployeePage'
 
+// Industries
+import IndustriesPage from '../pages/IndustriesPage/IndustriesPage'
+import IndustryPage from '../pages/IndustriesPage/IndustryPage'
+
+// Billing info
+import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
+
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
 }
@@ -42,9 +49,9 @@ const redirectoToForbiddenPage = () => {
 const SalonSubRoutes: FC = () => {
 	const { path, url, params } = useRouteMatch()
 
-	const salonID = Number((params as any).salonID)
+	const { salonID } = (params as any) || {}
 
-	if (!salonID || Number.isNaN(salonID)) {
+	if (!salonID) {
 		redirectoToForbiddenPage()
 	}
 
@@ -56,6 +63,9 @@ const SalonSubRoutes: FC = () => {
 	const getPath = useCallback((pathSuffix: string) => `${path}${pathSuffix}`, [path])
 
 	useEffect(() => {
+		if (currentUser.isLoading) {
+			return
+		}
 		if (currentUser.data) {
 			// Only SUPER_ADMIN, ADMIN or PARTNER with assigned salon
 			if (
@@ -168,6 +178,38 @@ const SalonSubRoutes: FC = () => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.EMPLOYEES}
+			/>
+			{/* Industries */}
+			<AuthRoute
+				exact
+				path={getPath(t('paths:industries'))}
+				component={IndustriesPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:industries'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.INDUSTRIES}
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
+				component={IndustryPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.INDUSTRIES}
+			/>
+			{/* Billing info */}
+			<AuthRoute
+				exact
+				path={getPath(t('paths:billing-info'))}
+				component={BillingInfoPage}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:billing-info'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.BILLING_INFO}
 			/>
 		</Switch>
 	)

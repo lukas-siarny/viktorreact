@@ -197,10 +197,7 @@ const SupportContactPage: FC<Props> = (props) => {
 				// create new supportContact
 				const result = await postReq('/api/b2b/admin/enums/support-contacts/', undefined, supportContactData as SupportContactPatch)
 				if (result?.data?.supportContact?.id) {
-					// load new supportContact for current user
-					await dispatch(getCurrentUser())
 					// select new supportContact
-					await dispatch(getSupportContact(result.data.supportContact.id))
 					history.push(t('paths:support-contacts/{{supportContactID}}', { supportContactID: result.data.supportContact.id }))
 				}
 			}

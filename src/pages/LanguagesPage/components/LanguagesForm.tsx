@@ -92,7 +92,7 @@ const LanguagesForm: FC<Props> = (props) => {
 							/>
 						)}
 						<Button className={'noti-btn w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-							{languageID ? t('loc:Uložiť') : t('loc: Vytvoriť')}
+							{languageID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
 						</Button>
 					</div>
 				</Row>

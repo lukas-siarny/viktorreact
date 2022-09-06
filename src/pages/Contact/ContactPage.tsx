@@ -98,7 +98,8 @@ const ContactPage: FC<Props> = () => {
 		}
 
 		fetchData()
-	}, [dispatch, selectedContact])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch])
 
 	useEffect(() => {
 		dispatch(getSupportContactsOptions(currentLng as LANGUAGE, supportContacts?.data))

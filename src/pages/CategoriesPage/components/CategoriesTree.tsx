@@ -298,7 +298,6 @@ const CategoriesTree = () => {
 			if (formData.id) {
 				await patchReq('/api/b2b/admin/enums/categories/{categoryID}', { categoryID: formData.id }, body)
 				openCategoryUpdateDetail(formData.id)
-				dispatch(getCategories())
 			} else {
 				if (formData.parentId) {
 					body = {

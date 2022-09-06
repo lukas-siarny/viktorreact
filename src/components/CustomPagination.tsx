@@ -43,7 +43,8 @@ const CustomPagination = (props: IPagination) => {
 		current = defaultPaginationOptions.current,
 		total = defaultPaginationOptions.total,
 		defaultCurrent = defaultPaginationOptions.defaultCurrent,
-		defaultPageSize = defaultPaginationOptions.defaultPageSize
+		defaultPageSize = defaultPaginationOptions.defaultPageSize,
+		className
 	} = props
 
 	const [t] = useTranslation()
@@ -66,7 +67,7 @@ const CustomPagination = (props: IPagination) => {
 	)
 
 	return total ? (
-		<Row justify={'end'} align={'middle'} className={'noti-custom-pagination gap-4'}>
+		<Row justify={'end'} align={'middle'} className={cx('noti-custom-pagination gap-4', className)}>
 			<Pagination
 				{...props}
 				className='ant-table-pagination ant-table-pagination-right'

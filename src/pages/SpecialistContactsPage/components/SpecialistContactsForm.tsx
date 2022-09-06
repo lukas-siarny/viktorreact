@@ -100,7 +100,7 @@ const SpecialistContactForm: FC<Props> = (props) => {
 							/>
 						)}
 						<Button className={'noti-btn w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-							{specialistContactID ? t('loc:Uložiť') : t('loc: Vytvoriť')}
+							{specialistContactID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
 						</Button>
 					</div>
 				</Row>

@@ -55,7 +55,6 @@ type ComponentProps = {
 	clearSalonForm: () => void
 	searchSalons: (search: string, page: number) => void
 	showBasicSalonsSuggestions?: boolean
-	isAdmin?: boolean
 }
 
 type Props = InjectedFormProps<ISalonForm, ComponentProps> & ComponentProps
@@ -89,7 +88,7 @@ export const optionRenderSalonSearch = (itemData: any) => {
 
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, noteModalControlButtons, disabledForm, loadBasicSalon, clearSalonForm, searchSalons, showBasicSalonsSuggestions, isAdmin, deletedSalon } = props
+	const { handleSubmit, change, noteModalControlButtons, disabledForm, loadBasicSalon, clearSalonForm, searchSalons, showBasicSalonsSuggestions, deletedSalon } = props
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)

@@ -68,6 +68,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<Menu.Item
 				key='support'
 				onClick={() => {
+					// reset support contact data to empty in case there are some stored in redux
+					// otherwise language detection would not work correctly in t('paths:contact') page
 					dispatch(getSupportContact())
 					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
 				}}

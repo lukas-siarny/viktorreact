@@ -295,7 +295,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					// load new salon for current user
 					await dispatch(getCurrentUser())
 					// select new salon
-					await dispatch(selectSalon(result.data.salon.id))
 					history.push(t('paths:salons/{{salonID}}', { salonID: result.data.salon.id }))
 				}
 			}
@@ -606,46 +605,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const renderContentHeader = () =>
-		isPendingPublication &&
-		isSalonExists && (
-			<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-				<div className={'content-header warning'}>
-					<Row justify={'space-between'} className={'w-full'}>
-						<Button
-							type={'primary'}
-							icon={<CloseCricleIcon />}
-							size={'middle'}
-							className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
-							onClick={() =>
-								setModalConfig({
-									title: t('loc:Dôvod zamietnutia'),
-									fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
-									visible: true,
-									onSubmit: resolveConfirmationRequest
-								})
-							}
-							disabled={submitting}
-							loading={submitting}
-						>
-							{t('loc:Zamietnuť')}
-						</Button>
-						<Button
-							type={'primary'}
-							icon={<CheckIcon />}
-							size={'middle'}
-							className={'noti-btn m-regular w-44 xl:w-56'}
-							onClick={() => resolveConfirmationRequest()}
-							disabled={submitting}
-							loading={submitting}
-						>
-							{t('loc:Potvrdiť')}
-						</Button>
-					</Row>
-				</div>
-			</Permissions>
-		)
-
 	const infoMessage = useMemo(() => {
 		let message: string | null
 
@@ -664,7 +623,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			case !isPublished && !isPendingPublication:
 				message = t('loc:V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.')
 				break
-			case isPendingPublication:
+			case isPendingPublication && !isAdmin:
 				message = t('loc:Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.')
 				break
 			default:
@@ -672,11 +631,11 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		if (message) {
-			return <Alert message={message} showIcon type={'warning'} className={'noti-alert mb-4'} />
+			return <Alert message={message} showIcon type={'warning'} className={'noti-alert w-full'} />
 		}
 
 		return null
-	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, isNewSalon, salon.data?.state])
+	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, isNewSalon, salon.data?.state, isAdmin])
 
 	const declinedSalonMessage = useMemo(
 		() => (
@@ -696,6 +655,52 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		),
 		[t, salon?.data?.publicationDeclineReason]
 	)
+
+	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header'}>{infoMessage}</div>
+
+	const showAdminSalonApporvalButtons = isPendingPublication && isSalonExists
+
+	const renderContentHeaderAdmin = () =>
+		(infoMessage || showAdminSalonApporvalButtons) && (
+			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication && isSalonExists })}>
+				{showAdminSalonApporvalButtons && (
+					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+						<Row justify={'space-between'} className={'w-full'}>
+							<Button
+								type={'primary'}
+								icon={<CloseCricleIcon />}
+								size={'middle'}
+								className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
+								onClick={() =>
+									setModalConfig({
+										title: t('loc:Dôvod zamietnutia'),
+										fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
+										visible: true,
+										onSubmit: resolveConfirmationRequest
+									})
+								}
+								disabled={submitting}
+								loading={submitting}
+							>
+								{t('loc:Zamietnuť')}
+							</Button>
+							<Button
+								type={'primary'}
+								icon={<CheckIcon />}
+								size={'middle'}
+								className={'noti-btn m-regular w-44 xl:w-56'}
+								onClick={() => resolveConfirmationRequest()}
+								disabled={submitting}
+								loading={submitting}
+							>
+								{t('loc:Potvrdiť')}
+							</Button>
+						</Row>
+					</Permissions>
+				)}
+				{infoMessage}
+			</div>
+		)
 
 	const onTabChange = (selectedTabKey: string) => {
 		// set query for history tab
@@ -728,12 +733,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		<>
 			<div className='content-body mt-2'>
 				<Spin spinning={isLoading}>
-					{renderContentHeader()}
+					{isAdmin ? renderContentHeaderAdmin() : renderContentHeaderPartner()}
 					{declinedSalon && declinedSalonMessage}
-					{infoMessage}
 					<SalonForm
 						onSubmit={handleSubmit}
-						isAdmin={isAdmin}
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
 						disabledForm={isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)}
 						deletedSalon={isDeletedSalon}

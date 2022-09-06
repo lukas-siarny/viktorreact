@@ -390,8 +390,7 @@ export const STRINGS = (t: TFunction) => ({
 	enter: (entity: string) => t('loc:Zadajte {{entity}}', { entity }), // all input fields
 
 	MISSING_PERMISSIONS_TEXT: t('loc:Používateľovi chýbajú oprávnenia na akciu'),
-	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---',
-	DEFAULT_LANGUAGE: t('loc:slovensky')
+	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---'
 })
 
 export enum PUBLICATION_STATUS {
@@ -439,10 +438,6 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_5 = 5,
 	LENGTH_2 = 2
 }
-
-export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
-export const GTC_URL = 'https://www.notino.sk/obchodne-podmienky-vip/'
-export const MARKETING_URL = 'https://www.notino.sk/'
 
 export enum BYTE_MULTIPLIER {
 	KILO = 10 ** 3,

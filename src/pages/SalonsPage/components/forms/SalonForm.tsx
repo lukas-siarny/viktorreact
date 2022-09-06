@@ -107,7 +107,7 @@ const SalonForm: FC<Props> = (props) => {
 								{!deletedSalon ? (
 									<>
 										{getSalonTagPublished(formValues?.state as SALON_STATES)}
-										{getSalonTagChanges(formValues?.state as SALON_STATES, isAdmin)}
+										{getSalonTagChanges(formValues?.state as SALON_STATES)}
 									</>
 								) : (
 									getSalonTagDeleted(!!formValues?.deletedAt, true)

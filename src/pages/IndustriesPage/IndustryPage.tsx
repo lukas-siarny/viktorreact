@@ -223,7 +223,7 @@ const IndustryPage = (props: Props) => {
 					<div className='content-body small'>
 						<Spin spinning={loading || submitting}>
 							<Row justify='space-between'>
-								<h3 className={'mb-0 mt-0 flex items-center'}>
+								<h3 className={'mb-0 mt-0 flex items-center pr-4'}>
 									<ServiceIcon className={'text-notino-black mr-2'} />
 									{t('loc:Priradiť služby')}
 								</h3>

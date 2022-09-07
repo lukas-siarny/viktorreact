@@ -44,7 +44,7 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam odvetví')
+				name: t('loc:Zoznam odvetví a služieb')
 			}
 		]
 	}
@@ -98,7 +98,7 @@ const IndustriesPage = (props: SalonSubPageProps) => {
 								onSubmit={handleSubmit}
 								disabledForm={categories.isLoading || services.isLoading || isCategoriesFromSubmitting}
 								onShowMore={(industryID) => {
-									history.push(parentPath + t('paths:industries/{{industryID}}', { industryID }))
+									history.push(parentPath + t('paths:industries-and-services/{{industryID}}', { industryID }))
 								}}
 							/>
 						</Spin>

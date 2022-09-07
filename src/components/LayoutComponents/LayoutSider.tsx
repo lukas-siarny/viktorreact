@@ -89,7 +89,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	)
 
 	return (
-		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0'>
+		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0' width={230}>
 			<div className='sticky top-0 flex flex-col h-screen z-50' id={'noti-sider-wrapper'}>
 				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`}>
 					<LogoIcon className='h-8' />
@@ -227,24 +227,24 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										{t('loc:Fakturačné údaje')}
 									</Menu.Item>
 									<Menu.Item
-										eventKey={PAGE.INDUSTRIES}
-										key={PAGE.INDUSTRIES}
-										onClick={() => history.push(getPath(t('paths:industries')))}
+										eventKey={PAGE.INDUSTRIES_AND_SERVICES}
+										key={PAGE.INDUSTRIES_AND_SERVICES}
+										onClick={() => history.push(getPath(t('paths:industries-and-services')))}
 										icon={<IndustiresIcon />}
 										// fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES })}
+										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES_AND_SERVICES })}
 									>
-										{t('loc:Odvetvia')}
+										{t('loc:Odvetvia a služby')}
 									</Menu.Item>
 									<Menu.Item
-										eventKey={PAGE.SERVICES}
-										key={PAGE.SERVICES}
-										onClick={() => history.push(getPath(t('paths:services')))}
+										eventKey={PAGE.SERVICES_SETTINGS}
+										key={PAGE.SERVICES_SETTINGS}
+										onClick={() => history.push(getPath(t('paths:services-settings')))}
 										icon={<ServiceIcon />}
 										// fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
+										className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES_SETTINGS })}
 									>
-										{t('loc:Služby')}
+										{t('loc:Nastavenie služieb')}
 									</Menu.Item>
 									<Menu.Item
 										eventKey={PAGE.CUSTOMERS}

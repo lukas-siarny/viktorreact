@@ -30,7 +30,7 @@ const ServicePage = (props: Props) => {
 	const dispatch = useDispatch()
 
 	const service = useSelector((state: RootState) => state.service.service)
-	const [backUrl] = useBackUrl(parentPath + t('paths:services'))
+	const [backUrl] = useBackUrl(parentPath + t('paths:services-settings'))
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -49,7 +49,7 @@ const ServicePage = (props: Props) => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam služieb'),
+				name: t('loc:Nastavenie služieb'),
 				link: backUrl
 			},
 			{

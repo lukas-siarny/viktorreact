@@ -122,35 +122,24 @@ const SalonSubRoutes: FC = () => {
 			{/* SERVICES */}
 			<AuthRoute
 				exact
-				path={getPath(t('paths:services'))}
+				path={getPath(t('paths:services-settings'))}
 				component={ServicesPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:services'))}
+				translatePathKey={getPath(t('paths:services-settings'))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.SERVICES}
+				page={PAGE.SERVICES_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:services/create'))}
+				path={getPath(t('paths:services-settings/{{serviceID}}', { serviceID: ':serviceID' }))}
 				component={ServicePage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:services/create'))}
+				translatePathKey={getPath(t('paths:services-settings/{{serviceID}}', { serviceID: ':serviceID' }))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.SERVICES}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				exact
-				path={getPath(t('paths:services/{{serviceID}}', { serviceID: ':serviceID' }))}
-				component={ServicePage}
-				parentPath={url}
-				translatePathKey={getPath(t('paths:services/{{serviceID}}', { serviceID: ':serviceID' }))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.SERVICES}
+				page={PAGE.SERVICES_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			{/* EMPLOYEES */}
@@ -190,24 +179,24 @@ const SalonSubRoutes: FC = () => {
 			{/* Industries */}
 			<AuthRoute
 				exact
-				path={getPath(t('paths:industries'))}
+				path={getPath(t('paths:industries-and-services'))}
 				component={IndustriesPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:industries'))}
+				translatePathKey={getPath(t('paths:industries-and-services'))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.INDUSTRIES}
+				page={PAGE.INDUSTRIES_AND_SERVICES}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
+				path={getPath(t('paths:industries-and-services/{{industryID}}', { industryID: ':industryID' }))}
 				component={IndustryPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
+				translatePathKey={getPath(t('paths:industries-and-services/{{industryID}}', { industryID: ':industryID' }))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.INDUSTRIES}
+				page={PAGE.INDUSTRIES_AND_SERVICES}
 				preventShowDeletedSalon
 			/>
 			{/* Billing info */}

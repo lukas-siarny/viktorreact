@@ -63,12 +63,12 @@ const IndustriesForm: FC<Props> = (props) => {
 
 	return (
 		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
-			<h3 className={'mb-0 mt-0 flex items-center'}>
+			<h3 className={'mb-0 mt-0 flex items-center space-'}>
 				<CategoryIcon className={'text-notino-black mr-2'} />
-				{t('loc:Odvetvia')}
+				{t('loc:Odvetvia a služby')}
 			</h3>
 			<Divider className={'mb-3 mt-3'} />
-			<Field name={'categoryIDs'} component={CheckboxGroupImageField} required options={categoriesOptions} label={t('loc:Vyberte odvetvia, ktoré ponúkate')} />
+			<Field name={'categoryIDs'} component={CheckboxGroupImageField} required options={categoriesOptions} label={t('loc:Vyberte odvetvia a služby, ktoré ponúkate')} />
 			<div className={'content-footer'}>
 				<Row justify='center'>
 					<Permissions

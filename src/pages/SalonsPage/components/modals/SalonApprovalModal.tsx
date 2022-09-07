@@ -50,7 +50,7 @@ const SalonApprovalModal = (props: Props) => {
 						<li className={'req-list-item phone'}>{t('loc:mať uvedené aspoň 1 telefónne číslo')}</li>
 						<li className={'req-list-item address'}>{t('loc:mať vyplnenú adresu salónu')}</li>
 						<li>
-							<Link to={parentPath + t('paths:industries')} className={'req-list-item req-list-item-link industry'}>
+							<Link to={parentPath + t('paths:industries-and-services')} className={'req-list-item req-list-item-link industry'}>
 								{t('loc:salón musí mať zvolené aspoň 1 odvetvie')}
 								<span className='arrow-icon'>
 									<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />

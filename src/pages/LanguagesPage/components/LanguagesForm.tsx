@@ -72,7 +72,10 @@ const LanguagesForm: FC<Props> = (props) => {
 				/>
 				<Field component={ImgUploadField} name='image' label={t('loc:Vlajka')} maxCount={1} signUrl={URL_UPLOAD_IMAGES} category={UPLOAD_IMG_CATEGORIES.LANGUAGE_IMAGE} />
 
-				<div className={'flex w-full justify-end mt-10 gap-2 flex-wrap'}>
+				<div className={'flex w-full justify-start mt-10 gap-2 flex-wrap'}>
+					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+						{languageID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
+					</Button>
 					{languageID && (
 						<DeleteButton
 							onConfirm={onDelete}
@@ -82,9 +85,6 @@ const LanguagesForm: FC<Props> = (props) => {
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 					)}
-					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-						{languageID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
-					</Button>
 				</div>
 			</div>
 		</Form>

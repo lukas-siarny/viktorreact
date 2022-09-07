@@ -1165,6 +1165,8 @@ span.ant-tag
 
 		.grid-item
 			min-height: 192px
+			.grid-item-label
+				max-width: 230px
 
 	.stastics-box
 		width: 100%
@@ -1179,13 +1181,16 @@ span.ant-tag
 		.stats-circle
 			flex: 0 0 auto
 		.graph-doughnut-wrapper
-			max-width: 250px
+			max-width: 300px
+			margin-left: -20px
+		.right-side
+			max-width: 500px
 		@media (max-width: 1200px)
 			width: 100%
 			&:first-of-type
 				margin-bottom: 16px
 			.graph-doughnut-wrapper
-				max-width: 200px
+				max-width: 250px
 
 	.dashboard-loading
 		position: absolute

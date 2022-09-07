@@ -222,8 +222,8 @@ const CategoryForm: FC<Props> = (props) => {
 							</Row>
 						) : undefined}
 
-						<div className={'flex justify-between flex-wrap gap-2 flex-row-reverse'}>
-							<div className='flex gap-2 flex-wrap w-full 2xl:flex-row-reverse 2xl:w-auto'>
+						<div className={'flex justify-between flex-wrap gap-2'}>
+							<div className='flex gap-2 flex-wrap w-full 2xl:w-auto'>
 								{!values?.deletedAt ? (
 									<Permissions allowed={permissions}>
 										<Button

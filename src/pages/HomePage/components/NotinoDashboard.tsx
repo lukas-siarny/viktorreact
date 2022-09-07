@@ -76,11 +76,11 @@ const doughnutOptions = (clickHandlers: any[]) => {
 
 const graphContent = (label: string, source?: any[]) => {
 	return (
-		<div className='stastics-box stastics-box-wide py-4 px-6 h-60'>
-			<div className='heading-3'>{label}</div>
+		<div className='stastics-box stastics-box-wide py-4 px-6 md:py-8 md:px-12'>
+			<div className='heading-3 mb-4'>{label}</div>
 			{source && (
 				<div className='flex flex-wrap justify-between w-full'>
-					<div className='graph-doughnut-wrapper h-44 w-2/5 3xl:w-12/25 flex items-center'>
+					<div className='graph-doughnut-wrapper w-2/5 3xl:w-12/25 flex items-center'>
 						<Doughnut
 							className={'graph-doughnut'}
 							data={{
@@ -95,14 +95,14 @@ const graphContent = (label: string, source?: any[]) => {
 							options={doughnutOptions(source)}
 						/>
 					</div>
-					<div className='h-auto w-3/5 3xl:w-1/2 flex items-center'>
+					<div className='flex flex-1 items-center right-side'>
 						<div className='w-full flex flex-col gap-4'>
 							{source.map((item: any, index: number) => (
 								<div key={index} className='flex items-center w-full h-6 cursor-pointer' onClick={item.onClick}>
 									<div className={'flex flex-1 items-center'}>
 										<div className='h-6 w-6 rounded-full mr-4 stats-circle' style={{ backgroundColor: item.background }} />
 										<span className='base-semibold mr-3'>{item.data}</span>
-										<span className='s-semibold'>{item.label}</span>
+										<span className='text-sm'>{item.label}</span>
 									</div>
 									<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
 								</div>
@@ -288,10 +288,10 @@ const NotinoDashboard: FC<Props> = () => {
 										<div className='w-20 h-20 rounded-full flex justify-center items-center bg-yellow-200 mt-8'>
 											<span className={cx({ 'heading-3': !isCountMoreThan5Digits, 'heading-4': isCountMoreThan5Digits })}>{item.count}</span>
 										</div>
-										<span className='s-semibold pt-4'>{item.label}</span>
+										<span className='s-semibold pt-4 text-sm grid-item-label'>{item.label}</span>
 									</div>
 									<div className='flex justify-between items-center w-full h-12 bg-yellow-200 mt-4 px-4'>
-										<span className='heading-4'>{t('loc:Zobraziť')}</span>
+										<span className='heading-5 font-bold'>{t('loc:Zobraziť')}</span>
 										<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
 									</div>
 								</button>

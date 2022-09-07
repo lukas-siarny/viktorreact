@@ -88,7 +88,10 @@ const SpecialistContactForm: FC<Props> = (props) => {
 					required
 				/>
 				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled={disabledForm} />
-				<div className={'flex w-full justify-end mt-10 gap-2 flex-wrap'}>
+				<div className={'flex w-full justify-start mt-10 gap-2 flex-wrap'}>
+					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+						{specialistContactID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
+					</Button>
 					{specialistContactID && (
 						<DeleteButton
 							onConfirm={onDelete}
@@ -98,9 +101,6 @@ const SpecialistContactForm: FC<Props> = (props) => {
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 					)}
-					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-						{specialistContactID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
-					</Button>
 				</div>
 			</div>
 		</Form>

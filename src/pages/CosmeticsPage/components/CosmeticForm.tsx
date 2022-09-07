@@ -88,7 +88,10 @@ const CosmeticForm: FC<Props> = (props) => {
 					maxCount={1}
 				/>
 
-				<div className={'flex w-full justify-end mt-10 gap-2 flex-wrap'}>
+				<div className={'flex w-full justify-start mt-10 gap-2 flex-wrap'}>
+					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+						{cosmeticID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
+					</Button>
 					{cosmeticID && (
 						<DeleteButton
 							onConfirm={onDelete}
@@ -98,9 +101,6 @@ const CosmeticForm: FC<Props> = (props) => {
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 					)}
-					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-						{cosmeticID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
-					</Button>
 				</div>
 			</div>
 		</Form>

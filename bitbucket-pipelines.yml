@@ -138,8 +138,9 @@ pipelines:
               name: download BE
               image: cypress/browsers:node16.13.0-chrome95-ff94
               script:
+                - pwd && ls
                 - cd .. && git clone git@bitbucket.org:GoodRequest/notino_backend.git
-                - ls
+                - pwd && ls
                 - cd notino_backend && npm install --legacy-peer-deps
               artifacts: # defining the artifacts to be passed to each future step.
                 - ../notino_backend/**

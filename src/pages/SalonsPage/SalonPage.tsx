@@ -551,7 +551,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			>
 				<span className={cx({ 'cursor-not-allowed': disabled })}>
 					<Button
-						type={'primary'}
+						type={'dashed'}
 						block
 						size={'middle'}
 						className={cx('noti-btn m-regular', className, {

@@ -57,6 +57,7 @@ const LanguagesForm: FC<Props> = (props) => {
 					className={'flex-1 noti-languages-localizations'}
 					ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
 					customValidate={fixLength255}
+					noSpace
 					mainField={
 						<Field
 							className='mb-0'

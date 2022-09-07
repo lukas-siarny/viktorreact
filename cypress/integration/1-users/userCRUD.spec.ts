@@ -36,6 +36,7 @@ context('User', () => {
 		cy.selectOptionDropdown(FORM.ADMIN_CREATE_USER, 'roleID', 'Partner')
 		cy.get('form').submit()
 		cy.wait('@createPartner').then((interception: any) => {
+			console.log(interception)
 			// check status code of login request
 			expect(interception.response.statusCode).to.equal(200)
 			userID = interception.response.body.user.id

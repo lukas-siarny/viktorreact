@@ -59,7 +59,7 @@ const renderFromTo = (from: number | undefined | null, to: number | undefined | 
 			<div className={'flex items-center mr-3'}>
 				{icon}
 				{from}
-				{variable && !isNil(to) ? ` - ${to}` : undefined} {extra}
+				{variable && !isNil(to) && from !== to ? ` - ${to}` : undefined} {extra}
 			</div>
 		)
 	}

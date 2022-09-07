@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import i18next from 'i18next'
 
 // types
 import { ThunkResult } from '../index'
@@ -60,8 +61,9 @@ export interface IServiceRootCategoryPayload {
 
 export const getServices =
 	(queryParams: IGetServicesQueryParams): ThunkResult<Promise<IServicesPayload>> =>
-	async (dispatch) => {
+	async (dispatch, getState) => {
 		let payload = {} as IServicesPayload
+		const state = getState()
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
 			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
@@ -71,6 +73,11 @@ export const getServices =
 				parentCategory?.category?.children?.forEach((secondCategory) => {
 					secondCategory?.category?.children?.forEach((thirdCategory) => {
 						const rangePriceAndDurationData = thirdCategory?.service?.rangePriceAndDurationData
+						const currencies = state.enumerationsStore.currencies.data
+						const symbol =
+							currencies?.find((currency) => currency.code === thirdCategory?.service?.rangePriceAndDurationData?.priceFrom?.currency)?.symbol ||
+							thirdCategory?.service?.rangePriceAndDurationData?.priceFrom?.currency
+
 						tableData.push({
 							key: thirdCategory?.category?.id,
 							serviceID: thirdCategory?.service?.id,
@@ -84,8 +91,8 @@ export const getServices =
 								text: `${employee.firstName} ${employee.lastName}`,
 								key: employee.id
 							})),
-							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo)),
-							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo),
+							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo), symbol) || '-',
+							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo, i18next.t('loc:min')) || '-',
 							isComplete: thirdCategory?.service?.isComplete
 						})
 					})

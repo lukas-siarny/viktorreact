@@ -149,6 +149,18 @@ const ServicesPage = (props: SalonSubPageProps) => {
 				)
 		},
 		{
+			title: t('loc:Trvanie služby'),
+			dataIndex: 'duration',
+			key: 'duration',
+			ellipsis: true
+		},
+		{
+			title: t('loc:Cena služby'),
+			dataIndex: 'price',
+			key: 'price',
+			ellipsis: true
+		},
+		{
 			title: t('loc:Vytvorené'),
 			dataIndex: 'createdAt',
 			key: 'createdAt',

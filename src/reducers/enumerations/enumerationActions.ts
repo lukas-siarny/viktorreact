@@ -12,14 +12,13 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 import { getReq } from '../../utils/request'
 import { Paths } from '../../types/api'
 import i18n from '../../utils/i18n'
-import { sortData } from '../../utils/helper'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 
 interface IGetEnumerationsActions {
 	type: ENUMERATIONS
 	enumType: ENUMERATIONS_KEYS
-	payload: IEnumerationsPayload
+	payload: IEnumerationsCurrenciesPayload | IEnumerationsCountriesPayload
 }
 
 export interface IEnumerationOptions {
@@ -30,21 +29,30 @@ export interface IEnumerationOptions {
 }
 
 export interface IEnumerationsPayload {
-	data: EnumerationData | null
 	pagination: IResponsePagination | null
 	enumerationsOptions: IEnumerationOptions[]
 }
 
-export interface ICountriesPayload {
-	countriesPayload: IEnumerationsPayload
-	countriesPhonePrefixPayload: IEnumerationsPayload
+export interface IEnumerationsCountriesPayload extends IEnumerationsPayload {
+	data: CountriesData | null
 }
 
-export type EnumerationData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
+export interface ICountriesPayload {
+	countriesPayload: IEnumerationsCountriesPayload
+	countriesPhonePrefixPayload: IEnumerationsCountriesPayload
+}
+
+export interface IEnumerationsCurrenciesPayload extends IEnumerationsPayload {
+	data: CurrenciesData | null
+}
+
+export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
+
+export type CurrenciesData = Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies']
 
 export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async (dispatch) => {
-	let countriesPhonePrefixPayload: IEnumerationsPayload = {} as IEnumerationsPayload
-	let countriesPayload: IEnumerationsPayload = {} as IEnumerationsPayload
+	let countriesPhonePrefixPayload: IEnumerationsCountriesPayload = {} as IEnumerationsCountriesPayload
+	let countriesPayload: IEnumerationsCountriesPayload = {} as IEnumerationsCountriesPayload
 	try {
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX })
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES })
@@ -100,8 +108,8 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 	return { countriesPayload, countriesPhonePrefixPayload }
 }
 
-export const getCurrencies = (): ThunkResult<Promise<IEnumerationsPayload>> => async (dispatch) => {
-	let payload: IEnumerationsPayload = {} as IEnumerationsPayload
+export const getCurrencies = (): ThunkResult<Promise<IEnumerationsCurrenciesPayload>> => async (dispatch) => {
+	let payload: IEnumerationsCurrenciesPayload = {} as IEnumerationsCurrenciesPayload
 
 	try {
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.CURRENCIES })

@@ -138,10 +138,10 @@ pipelines:
               name: download BE
               image: cypress/browsers:node16.13.0-chrome95-ff94
               script:
-                - git clone git@bitbucket.org:GoodRequest/notino_backend.git
+                - cd .. && git clone git@bitbucket.org:GoodRequest/notino_backend.git
                 - cd notino_backend && npm install --legacy-peer-deps
               artifacts: # defining the artifacts to be passed to each future step.
-                - notino_backend/**
+                - ../notino_backend/**
           - step:
               name: install FE deps
               image: cypress/browsers:node16.13.0-chrome95-ff94
@@ -164,8 +164,7 @@ pipelines:
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
               - docker-compose up
-              - npm run wait-for-it -- http://localhost:3000/api/b2b/admin/auth/login
-              # - npm run wait-for-it -- -h localhost -p 3000 -t 60
+              - npm run wait-for-it -- -h localhost -p 3000 -t 60
               - npm run test:CI
 
 definitions:

@@ -3,7 +3,7 @@ version: '3.8'
 services:
   database_test:
     build:
-      context: ./notino_backend/.
+      context: ../notino_backend/.
       dockerfile: ./docker/local/postgres/Dockerfile
     ports:
       - "25432:5432"
@@ -30,7 +30,7 @@ services:
       - './notino_backend/docker/CI/localstack:/docker-entrypoint-initaws.d'
   backend:
     build:
-        context: ./notino_backend/.
+        context: ../notino_backend/.
         dockerfile: ./docker/CI/Dockerfile.api
     ports:
       - "3000:3000"

@@ -168,7 +168,7 @@ pipelines:
               - chmod +x /usr/local/bin/docker-compose
               - cd .. && pwd && ls
               - cd ./artifact  && pwd && ls && cd ..
-              - cd ./build && docker-compose up
+              - cd ./build && pwd && ls && docker-compose up
               - npm run wait-for-it -- -h localhost -p 3000 -t 60
               - npm run test:CI
 

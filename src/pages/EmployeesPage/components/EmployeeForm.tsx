@@ -2,8 +2,6 @@ import React, { FC, MouseEventHandler /* , ReactNode */ } from 'react'
 import { Field, /* FieldArray, */ InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Col, Divider, Form, Row /* , Collapse, Tag */ } from 'antd'
-import { useSelector } from 'react-redux'
-import { isEmpty } from 'lodash'
 // import cx from 'classnames'
 
 // utils
@@ -26,15 +24,11 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
 
-// reducers
-import { RootState } from '../../../reducers'
-
 // assets
 /* import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg' */
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
-import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 
 // const { Panel } = Collapse
 

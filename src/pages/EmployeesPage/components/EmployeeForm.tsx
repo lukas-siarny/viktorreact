@@ -266,7 +266,7 @@ const EmployeeForm: FC<Props> = (props) => {
 
 				<div>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
-						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje zamestnanca')}
+						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>

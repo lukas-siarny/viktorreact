@@ -101,7 +101,7 @@ const graphContent = (label: string, source?: any[]) => {
 								<div key={index} className='flex items-center w-full h-6 cursor-pointer' onClick={item.onClick}>
 									<div className={'flex flex-1 items-center'}>
 										<div className='h-6 w-6 rounded-full mr-4 stats-circle' style={{ backgroundColor: item.background }} />
-										<span className='base-semibold mr-3'>{item.data}</span>
+										<span className='base-semibold mr-3 leading-4'>{item.data}</span>
 										<span className='text-sm'>{item.label}</span>
 									</div>
 									<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />

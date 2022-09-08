@@ -1,14 +1,11 @@
 import React, { FC, MouseEventHandler /* , ReactNode */ } from 'react'
 import { Field, /* FieldArray, */ InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form /* , Collapse, Tag */, Space } from 'antd'
-import { useSelector } from 'react-redux'
-import { isEmpty } from 'lodash'
-// import cx from 'classnames'
+import { Divider, Form, Space } from 'antd'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { getCountryPrefix, showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -26,15 +23,11 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
 
-// reducers
-import { RootState } from '../../../reducers'
-
 // assets
 /* import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
 import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg' */
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
-import { ReactComponent as UserIcon } from '../../../assets/icons/user-icon.svg'
 
 // const { Panel } = Collapse
 
@@ -208,62 +201,10 @@ const EmployeeForm: FC<Props> = (props) => {
 	const { handleSubmit } = props
 
 	// const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as any
-	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
-
-	const phonePrefix = getCountryPrefix(countriesData.data, formValues?.user?.phonePrefixCountryCode)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full px-9'} direction='vertical' size={36}>
-				{!isEmpty(formValues?.user) && (
-					<div>
-						<h3 className={'mb-0 mt-0 flex items-center'}>
-							<UserIcon className={'text-notino-black mr-2'} />
-							{t('loc:Používateľský profil')}
-						</h3>
-						<Divider className={'mb-3 mt-3'} />
-						<div className={'flex space-between w-full flex-wrap'}>
-							<Field
-								className={'m-0 mr-5'}
-								component={ImgUploadField}
-								name={'user.image'}
-								label={t('loc:Avatar')}
-								signUrl={URL_UPLOAD_IMAGES}
-								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
-								multiple={false}
-								maxCount={1}
-								disabled
-							/>
-							<div className={'flex-1 mt-5'}>
-								<ul className='list-none pl-0'>
-									<li className='mb-2'>
-										<strong>{t('loc:Meno a Priezvisko')}:</strong> {formValues?.user?.fullName}
-										<Divider className={'mb-0 mt-2'} />
-									</li>
-									<li className='mb-2'>
-										<strong>{t('loc:Email')}:</strong>{' '}
-										<span className='break-all'>
-											{formValues?.user?.email ? <a href={`mailto:${formValues?.user?.email}`}>{formValues?.user?.email}</a> : '-'}
-										</span>
-										<Divider className={'mb-0 mt-2'} />
-									</li>
-									<li>
-										<strong>{t('loc:Telefón')}:</strong>{' '}
-										{phonePrefix && formValues?.user?.phone ? (
-											<a href={`tel:${phonePrefix}${formValues?.user?.phone}`}>
-												{phonePrefix} {formValues?.user?.phone}
-											</a>
-										) : (
-											'-'
-										)}
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				)}
-
 				<div>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
 						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}

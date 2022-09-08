@@ -233,8 +233,8 @@ const CosmeticsPage = () => {
 									/>
 								</div>
 								{visibleForm ? (
-									<div className={'w-6/12 flex justify-around items-start'}>
-										<Divider className={'h-full'} type={'vertical'} />
+									<div className={'w-6/12 flex items-start'}>
+										<Divider className={'h-full mx-6 xl:mx-9'} type={'vertical'} />
 										<CosmeticForm
 											closeForm={changeFormVisibility}
 											cosmeticID={cosmeticID}

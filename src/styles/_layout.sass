@@ -90,7 +90,7 @@ $inner-padding: 16px
 					filter: invert(1)
 
 			&:active
-				color: $textColor-notino-white
+				background-color: $backgroundColor-notino-grayLighter
 
 			&:hover:not(.ant-menu-item-selected)
 				background-color: $backgroundColor-notino-grayLighter
@@ -168,6 +168,12 @@ $inner-padding: 16px
 	&.without-content-footer
 		.floating-content-wrapper
 			min-height: calc(100vh - 80px - 81px) // 100vh - header - breadcrumbs
+	&.dashboard-content
+		max-width: 1200px
+		margin: 0 auto
+		width: 100%
+		background: transparent
+		box-shadow: none
 	@media (max-width: 1700px)
 		&.small
 			width: 75%
@@ -197,7 +203,7 @@ $inner-padding: 16px
 		min-height: 60px
 		margin: -24px -24px 16px -24px
 		// box-shadow: $boxShadow-lg
-		background-color: $backgroundColor-gray-50
+		background-color: $backgroundColor-notino-white
 		padding: 10px 24px
 		width: calc(100% + 48px)
 		&.warning
@@ -250,10 +256,12 @@ $inner-padding: 16px
 // header
 .header-salon-label
 	color: $textColor-notino-black
-	.ant-avatar
-		flex: 0 0 auto
 	.icon-dropdown
 		flex: 0 0 auto
+
+.header-avatar
+	flex: 0 0 auto
+	// border: 1px solid $borderColor-notino-grayLight
 
 .selected-salon-text
 	color: $textColor-notino-grayDark

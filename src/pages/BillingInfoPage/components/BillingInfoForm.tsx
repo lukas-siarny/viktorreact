@@ -1,7 +1,7 @@
 import React from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Button, Col, Divider, Form, Row } from 'antd'
+import { Button, Col, Divider, Form, Row, Space } from 'antd'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -37,7 +37,7 @@ const BillingInfoForm = (props: Props) => {
 			<Permissions
 				allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_BILLING_UPDATE]}
 				render={(hasPermission) => (
-					<>
+					<Space className={'w-full'} direction='vertical' size={36}>
 						<Row>
 							<Col span={24}>
 								<h3 className={'mb-0 flex items-center'}>
@@ -186,7 +186,7 @@ const BillingInfoForm = (props: Props) => {
 								</Row>
 							</div>
 						)}
-					</>
+					</Space>
 				)}
 			/>
 		</Form>

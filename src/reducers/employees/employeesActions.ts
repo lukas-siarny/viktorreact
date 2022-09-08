@@ -44,7 +44,8 @@ export const getEmployees =
 			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
 			const employeesOptions = map(data.employees, (employee) => {
 				return {
-					label: `${employee.firstName || ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
+					// show name if exist at least last name otherwise show fallback values
+					label: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
 					value: employee.id,
 					key: `${employee.id}-key`
 				}

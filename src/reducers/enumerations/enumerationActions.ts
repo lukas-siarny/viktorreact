@@ -12,7 +12,6 @@ import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
 import { getReq } from '../../utils/request'
 import { Paths } from '../../types/api'
 import i18n from '../../utils/i18n'
-import { sortData } from '../../utils/helper'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 

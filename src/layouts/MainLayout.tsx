@@ -50,7 +50,7 @@ const MainLayout: FC<Props> = (props) => {
 							history.push(t('paths:salons/{{salonID}}', { salonID: item.value }))
 						}}
 					>
-						<AvatarComponents src={item.logo} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5'} />
+						<AvatarComponents src={item.logo || SalonDefaultAvatar} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5 header-avatar'} />
 						{item.label}
 					</Menu.Item>
 				))}
@@ -68,7 +68,12 @@ const MainLayout: FC<Props> = (props) => {
 		const content = (
 			<Row className={cx('m-2 flex items-center gap-2 min-w-0')} justify='space-between' wrap={false}>
 				<Row wrap={false} className={'min-w-0 flex items-center gap-2-5'}>
-					<AvatarComponents size={24} src={selectedSalon?.logo?.resizedImages.thumbnail} fallBackSrc={SalonDefaultAvatar} />
+					<AvatarComponents
+						size={24}
+						src={selectedSalon?.logo?.resizedImages.thumbnail || SalonDefaultAvatar}
+						fallBackSrc={SalonDefaultAvatar}
+						className={'header-avatar'}
+					/>
 					{selectedSalon?.name && <span className='truncate leading-4 min-w-0 inline-block'>{selectedSalon.name}</span>}
 				</Row>
 

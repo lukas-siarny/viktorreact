@@ -212,7 +212,6 @@ export enum PAGE {
 	ACTIVATION = 'ACTIVATION',
 	EMPLOYEES = 'EMPLOYEES',
 	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
-	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	COSMETICS = 'COSMETICS',
 	LANGUAGES = 'LANGUAGES',
 	INDUSTRIES = 'INDUSTRIES',
@@ -305,16 +304,30 @@ export enum DROPPABLE_IDS {
 	WEBPROJECTS_FILES = 'WEBPROJECTS_FILES'
 }
 
+const PRAGUE_LOCATION = {
+	lat: 50.0755381,
+	lng: 14.4378005
+}
+
 export const MAP = {
 	defaultZoom: 10,
-	defaultLatitude: 48.736277,
-	defaultLongitude: 19.1461917,
 	minLatitude: -90,
 	maxLatitude: 90,
 	minLongitude: -180,
 	maxLongitude: 180,
 	minZoom: 1,
-	maxZoom: 20
+	maxZoom: 20,
+	placeZoom: 16,
+	defaultLocation: PRAGUE_LOCATION,
+	locations: {
+		[LANGUAGE.CZ]: PRAGUE_LOCATION,
+		[LANGUAGE.EN]: PRAGUE_LOCATION,
+		// Bratislava
+		[LANGUAGE.SK]: {
+			lat: 48.1485965,
+			lng: 17.1077477
+		}
+	}
 }
 
 export enum SALON_FILTER_STATES {

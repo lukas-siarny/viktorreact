@@ -387,7 +387,7 @@ const SalonsPage = () => {
 					tableColumns.categories({ width: '16%' }),
 					tableColumns.deletedAt({ width: '16%' }),
 					tableColumns.fillingProgress({ width: '16%' }),
-					tableColumns.createdAt({ width: '16%' })
+					tableColumns.createdAt({ width: '20%' })
 				]
 				filters = <SalonsFilterDeleted onSubmit={handleSubmitDeleted} />
 				break

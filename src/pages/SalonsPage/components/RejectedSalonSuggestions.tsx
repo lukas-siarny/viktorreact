@@ -75,7 +75,7 @@ const RejectedSalonSuggestions = () => {
 			className: 'heading-4 text-left',
 			children: [
 				{
-					title: t('loc:Názov'),
+					title: t('loc:Názov salónu'),
 					dataIndex: 'salonName',
 					key: 'salonName',
 					ellipsis: true,
@@ -83,14 +83,14 @@ const RejectedSalonSuggestions = () => {
 					sortOrder: setOrder(query.order, 'salonName')
 				},
 				{
-					title: t('loc:Adresa'),
+					title: t('loc:Adresa salónu'),
 					dataIndex: 'address',
 					key: 'address',
 					ellipsis: true,
 					sorter: false
 				},
 				{
-					title: t('loc:Email'),
+					title: t('loc:Email salónu'),
 					dataIndex: 'salonMail',
 					key: 'salonMail',
 					ellipsis: true,
@@ -111,7 +111,7 @@ const RejectedSalonSuggestions = () => {
 					sortOrder: setOrder(query.order, 'userLastName')
 				},
 				{
-					title: t('loc:Email'),
+					title: t('loc:Email používateľa'),
 					dataIndex: 'userEmail',
 					key: 'userEmail',
 					ellipsis: true,
@@ -119,7 +119,7 @@ const RejectedSalonSuggestions = () => {
 					sortOrder: setOrder(query.order, 'userEmail')
 				},
 				{
-					title: t('loc:Telefón'),
+					title: t('loc:Telefón používateľa'),
 					dataIndex: 'userPhone',
 					key: 'userPhone',
 					ellipsis: true,

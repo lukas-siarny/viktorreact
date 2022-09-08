@@ -18,7 +18,7 @@ import { getSalonHistory } from '../../../reducers/salons/salonsActions'
 import { RootState } from '../../../reducers'
 
 // utils
-import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, TAB_KEYS } from '../../../utils/enums'
+import { FORM, SALON_HISTORY_OPERATIONS, SALON_HISTORY_OPERATIONS_COLORS, TAB_KEYS, DEFAULT_DATE_INIT_FORMAT } from '../../../utils/enums'
 import { formatDateByLocale } from '../../../utils/helper'
 
 // assets
@@ -54,8 +54,8 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 	const [query, setQuery] = useQueryParams({
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
-		dateFrom: withDefault(StringParam, now.subtract(1, 'week').toISOString()),
-		dateTo: withDefault(StringParam, now.toISOString())
+		dateFrom: withDefault(StringParam, now.subtract(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)),
+		dateTo: withDefault(StringParam, now.format(DEFAULT_DATE_INIT_FORMAT))
 	})
 
 	const salonHistory = useSelector((state: RootState) => state.salons.salonHistory)

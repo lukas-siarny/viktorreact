@@ -864,7 +864,7 @@ declare namespace Paths {
                                 };
                                 employees: {
                                     id: string; // uuid
-                                    fullName: string;
+                                    fullName?: string;
                                     hasActiveAccount: boolean;
                                     inviteEmail?: string;
                                     image: {
@@ -2099,7 +2099,7 @@ declare namespace Paths {
                     };
                     user: {
                         id: string; // uuid
-                        fullName: string;
+                        fullName?: string;
                         email?: string;
                     };
                 }[];
@@ -2810,7 +2810,7 @@ declare namespace Paths {
                     };
                     employees: {
                         id: string; // uuid
-                        fullName: string;
+                        fullName?: string;
                         hasActiveAccount: boolean;
                         inviteEmail?: string;
                         image: {
@@ -3248,7 +3248,6 @@ declare namespace Paths {
             export type ServiceID = string; // uuid
         }
         export interface QueryParameters {
-            search?: Parameters.Search;
             salonID?: /**
              * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
@@ -3260,6 +3259,7 @@ declare namespace Paths {
              */
             Parameters.ServiceID /* uuid */;
             accountState?: Parameters.AccountState;
+            search?: Parameters.Search;
             order?: Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -3396,7 +3396,7 @@ declare namespace Paths {
                                 };
                                 employees: {
                                     id: string; // uuid
-                                    fullName: string;
+                                    fullName?: string;
                                     hasActiveAccount: boolean;
                                     inviteEmail?: string;
                                     image: {
@@ -5693,7 +5693,7 @@ declare namespace Paths {
                     };
                     employees: {
                         id: string; // uuid
-                        fullName: string;
+                        fullName?: string;
                         hasActiveAccount: boolean;
                         inviteEmail?: string;
                         image: {
@@ -8116,7 +8116,7 @@ declare namespace Paths {
                                 };
                                 employees: {
                                     id: string; // uuid
-                                    fullName: string;
+                                    fullName?: string;
                                     hasActiveAccount: boolean;
                                     inviteEmail?: string;
                                     image: {
@@ -8309,7 +8309,7 @@ declare namespace Paths {
                                 };
                                 employees: {
                                     id: string; // uuid
-                                    fullName: string;
+                                    fullName?: string;
                                     hasActiveAccount: boolean;
                                     inviteEmail?: string;
                                     image: {
@@ -25077,7 +25077,7 @@ declare namespace Paths {
                     };
                     employees: {
                         id: string; // uuid
-                        fullName: string;
+                        fullName?: string;
                         hasActiveAccount: boolean;
                         inviteEmail?: string;
                         image: {
@@ -25729,7 +25729,7 @@ declare namespace Paths {
                                 };
                                 employees: {
                                     id: string; // uuid
-                                    fullName: string;
+                                    fullName?: string;
                                     hasActiveAccount: boolean;
                                     inviteEmail?: string;
                                     image: {
@@ -25922,7 +25922,7 @@ declare namespace Paths {
                                 };
                                 employees: {
                                     id: string; // uuid
-                                    fullName: string;
+                                    fullName?: string;
                                     hasActiveAccount: boolean;
                                     inviteEmail?: string;
                                     image: {
@@ -39698,7 +39698,7 @@ declare namespace Paths {
                     };
                     employees: {
                         id: string; // uuid
-                        fullName: string;
+                        fullName?: string;
                         hasActiveAccount: boolean;
                         inviteEmail?: string;
                         image: {
@@ -40741,7 +40741,7 @@ declare namespace Paths {
                                 };
                                 employees: {
                                     id: string; // uuid
-                                    fullName: string;
+                                    fullName?: string;
                                     hasActiveAccount: boolean;
                                     inviteEmail?: string;
                                     image: {
@@ -46676,11 +46676,6 @@ declare namespace Paths {
             agreeMarketing: boolean;
             /**
              * example:
-             * true
-             */
-            agreeGTC: boolean;
-            /**
-             * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             imageID?: string | null; // uuid
@@ -47518,7 +47513,7 @@ declare namespace Paths {
                                 };
                                 employees: {
                                     id: string; // uuid
-                                    fullName: string;
+                                    fullName?: string;
                                     hasActiveAccount: boolean;
                                     inviteEmail?: string;
                                     image: {
@@ -49412,6 +49407,57 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiB2BV1PartnerContactForm {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * Janko Hraško
+             */
+            salonName: string;
+            /**
+             * example:
+             * Janko Hraško
+             */
+            fullName: string;
+            /**
+             * example:
+             * test.confirmed_notinouser@goodrequest.com
+             */
+            email: string; // email
+            /**
+             * example:
+             * 0900000000
+             */
+            phone: string;
+            /**
+             * example:
+             * 999999999
+             */
+            vatNumber?: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PostApiB2BV1PushNotificationsSubscribe {
         export interface HeaderParameters {
             "accept-language": /**
@@ -50111,11 +50157,6 @@ declare namespace Paths {
             agreeMarketing: boolean;
             /**
              * example:
-             * true
-             */
-            agreeGTC: boolean;
-            /**
-             * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
              */
             imageID?: string | null; // uuid
@@ -50725,6 +50766,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
+  /**
+   * postApiB2BV1PartnerContactForm - PERMISSION: NO
+   */
+  'postApiB2BV1PartnerContactForm'(
+    parameters?: Parameters<Paths.PostApiB2BV1PartnerContactForm.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1PartnerContactForm.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1PartnerContactForm.Responses.$200>
   /**
    * getApiB2CV1Salons - PERMISSION: NO
    */
@@ -52217,6 +52266,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
+  }
+  ['/api/b2b/v1/partner-contact-form/']: {
+    /**
+     * postApiB2BV1PartnerContactForm - PERMISSION: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1PartnerContactForm.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1PartnerContactForm.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1PartnerContactForm.Responses.$200>
   }
   ['/api/b2c/v1/salons/']: {
     /**

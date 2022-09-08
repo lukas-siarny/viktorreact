@@ -13,6 +13,7 @@ import { ReactComponent as SalonIcon } from '../../assets/icons/salon-24-icon.sv
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
 import { ReactComponent as UsersIcon } from '../../assets/icons/users-24-icon.svg'
 import { ReactComponent as CustomerIcon } from '../../assets/icons/customer-24-icon.svg'
+import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/profile-icon.svg'
 import { ReactComponent as LogOutIcon } from '../../assets/icons/logout-icon.svg'
 import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
@@ -23,7 +24,6 @@ import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon
 import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24.svg'
 import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
 import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
 
 // utils
@@ -181,7 +181,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											eventKey={PAGE.SPECIALIST_CONTACTS}
 											key={PAGE.SPECIALIST_CONTACTS}
 											onClick={() => history.push(t('paths:specialist-contacts'))}
-											icon={<PhoneIcon />}
+											icon={<SpecialistIcon />}
 											// fix style issue due wrapped item into <Permission> component
 											className={cx({ 'ant-menu-item-selected': page === PAGE.SPECIALIST_CONTACTS })}
 										>

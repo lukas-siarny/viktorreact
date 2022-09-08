@@ -57,7 +57,7 @@ export const initOpeningHours = (openingHours: OpeningHours | undefined, sameOpe
 		// add monday to friday field
 		workWeek?.splice(0, 0, {
 			day: MONDAY_TO_FRIDAY as DAY,
-			timeRanges: openingHours?.[0]?.timeRanges as any
+			timeRanges: (openingHours?.[0]?.timeRanges as any) || []
 		})
 	} else {
 		// remove same open hours over week

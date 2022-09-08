@@ -31,12 +31,11 @@ context('User', () => {
 			url: '/api/b2b/admin/users'
 		}).as('createPartner')
 		cy.visit('/users/create')
-		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', `${user.emailSuffix}`)
+		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', user.emailSuffix)
 		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'phone', user.phone)
 		cy.selectOptionDropdown(FORM.ADMIN_CREATE_USER, 'roleID', 'Partner')
 		cy.get('form').submit()
 		cy.wait('@createPartner').then((interception: any) => {
-			cy.log('interception: ', interception)
 			// check status code of login request
 			expect(interception.response.statusCode).to.equal(200)
 			userID = interception.response.body.user.id

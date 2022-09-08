@@ -202,7 +202,7 @@ const Routes: FC = (props) => {
 					component={SupportContactPage}
 					translatePathKey={t('paths:support-contacts/create')}
 					layout={MainLayout}
-					page={PAGE.SUPPORT_CONTACT}
+					page={PAGE.SUPPORT_CONTACTS}
 				/>
 				<AuthRoute
 					{...props}
@@ -211,7 +211,7 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:support-contacts/{{supportContactID}}', { supportContactID: ':supportContactID' })}
 					component={SupportContactPage}
 					layout={MainLayout}
-					page={PAGE.SUPPORT_CONTACT}
+					page={PAGE.SUPPORT_CONTACTS}
 				/>
 				<AuthRoute
 					{...props}

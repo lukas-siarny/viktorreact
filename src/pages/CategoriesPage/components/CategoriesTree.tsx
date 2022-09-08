@@ -377,7 +377,7 @@ const CategoriesTree = () => {
 				</div>
 				{showForm ? (
 					<div className={'w-6/12 flex justify-around items-start'}>
-						<Divider className={'h-full'} type={'vertical'} />
+						<Divider className={'h-full mx-6 xl:mx-9'} type={'vertical'} />
 						<CategoryForm
 							deleteCategory={deleteCategoryHandler}
 							onSubmit={handleSubmit}

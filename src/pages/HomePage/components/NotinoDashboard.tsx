@@ -1,11 +1,14 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { FC, useMemo, useEffect } from 'react'
-import { Spin, Row, Col, Button } from 'antd'
+import { Spin, Row, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'
 import dayjs from 'dayjs'
 import { Doughnut } from 'react-chartjs-2'
 import colors from 'tailwindcss/colors'
+import cx from 'classnames'
 
 // components
 import SalonDashboard from './SalonDashboard'
@@ -73,12 +76,13 @@ const doughnutOptions = (clickHandlers: any[]) => {
 
 const graphContent = (label: string, source?: any[]) => {
 	return (
-		<Col xl={11} xs={24} className='shadow-notino py-4 px-6 h-60'>
-			<div className='heading-3'>{label}</div>
+		<div className='stastics-box stastics-box-wide py-4 px-6 md:py-8 md:px-12'>
+			<div className='heading-3 mb-4'>{label}</div>
 			{source && (
-				<div className='flex flex-wrap justify-between w-full h-full'>
-					<div className='h-44 w-2/5 3xl:w-12/25 flex items-center'>
+				<div className='flex flex-wrap justify-between w-full'>
+					<div className='graph-doughnut-wrapper w-2/5 3xl:w-12/25 flex items-center'>
 						<Doughnut
+							className={'graph-doughnut'}
 							data={{
 								labels: source.map((item: any) => item.label),
 								datasets: [
@@ -91,29 +95,23 @@ const graphContent = (label: string, source?: any[]) => {
 							options={doughnutOptions(source)}
 						/>
 					</div>
-					<div className='h-auto w-3/5 3xl:w-1/2 flex items-center'>
-						<div className='w-full'>
+					<div className='flex flex-1 items-center right-side'>
+						<div className='w-full flex flex-col gap-4'>
 							{source.map((item: any, index: number) => (
-								<Row justify={'space-between'} key={index} className='w-full h-6 cursor-pointer mb-4' onClick={item.onClick}>
-									<Col span={3}>
-										<div className='h-6 w-6 rounded-full' style={{ backgroundColor: item.background }} />
-									</Col>
-									<Col span={6} className='flex items-center justify-center'>
-										<span className='base-semibold'>{item.data}</span>
-									</Col>
-									<Col span={12} className='flex items-center'>
-										<span className='s-semibold'>{item.label}</span>
-									</Col>
-									<Col span={3} className='flex items-center text-right'>
-										<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
-									</Col>
-								</Row>
+								<div key={index} className='flex items-center w-full h-6 cursor-pointer' onClick={item.onClick}>
+									<div className={'flex flex-1 items-center'}>
+										<div className='h-6 w-6 rounded-full mr-4 stats-circle' style={{ backgroundColor: item.background }} />
+										<span className='base-semibold mr-3 leading-4'>{item.data}</span>
+										<span className='text-sm'>{item.label}</span>
+									</div>
+									<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
+								</div>
 							))}
 						</div>
 					</div>
 				</div>
 			)}
-		</Col>
+		</div>
 	)
 }
 
@@ -278,26 +276,27 @@ const NotinoDashboard: FC<Props> = () => {
 	// if salon is not selected, show global (Notino) dashboard content
 	return (
 		<SalonDashboard>
-			<div className='content-body medium'>
-				<Spin spinning={notino?.isLoading || !notino.data}>
-					<div className='flex flex-wrap justify-between w-full pr-4'>
-						{dashboardData.alertData.map((item: AlertData, index: number) => (
-							<button
-								type='button'
-								className='cursor-pointer shadow-notino h-52 w-48 ml-4 mb-4 relative grid place-items-center text-center bg-notino-white border-0'
-								key={`alert_item_${index}`}
-								onClick={item.onClick}
-							>
-								<div className='w-16 h-16 rounded-full flex justify-center items-center bg-yellow-200 absolute top-8'>
-									<span className='heading-3'>{item.count}</span>
-								</div>
-								<span className='s-semibold absolute top-24 pt-4 px-2'>{item.label}</span>
-								<div className='flex justify-around items-center absolute bottom-0 w-full h-12 bg-yellow-200'>
-									<span className='heading-4'>{t('loc:Zobraziť')}</span>
-									<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
-								</div>
-							</button>
-						))}
+			<Spin spinning={notino?.isLoading || !notino.data} wrapperClassName='dashboard-loading'>
+				<div className='content-body dashboard-content pt-20'>
+					<div className='dashboard-grid'>
+						{dashboardData.alertData.map((item: AlertData, index: number) => {
+							const isCountMoreThan5Digits = (item.count || 0) > 9999
+
+							return (
+								<button type='button' className='grid-item stastics-box flex flex-col p-0 cursor-pointer' key={`alert_item_${index}`} onClick={item.onClick}>
+									<div className='flex-1 flex flex-col items-center w-full px-4'>
+										<div className='w-20 h-20 rounded-full flex justify-center items-center bg-yellow-200 mt-8'>
+											<span className={cx({ 'heading-3': !isCountMoreThan5Digits, 'heading-4': isCountMoreThan5Digits })}>{item.count}</span>
+										</div>
+										<span className='s-semibold pt-4 text-sm grid-item-label'>{item.label}</span>
+									</div>
+									<div className='flex justify-between items-center w-full h-12 bg-yellow-200 mt-4 px-4'>
+										<span className='heading-5 font-bold'>{t('loc:Zobraziť')}</span>
+										<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
+									</div>
+								</button>
+							)
+						})}
 					</div>
 
 					{dashboardData.graphData.noSalons ? (
@@ -310,13 +309,13 @@ const NotinoDashboard: FC<Props> = () => {
 							</div>
 						</div>
 					) : (
-						<Row justify={'space-between'} className='mt-8 mx-4 flex-wrap'>
+						<Row className='mt-12 gap-4'>
 							{graphContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic)}
 							{graphContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates)}
 						</Row>
 					)}
-				</Spin>
-			</div>
+				</div>
+			</Spin>
 		</SalonDashboard>
 	)
 }

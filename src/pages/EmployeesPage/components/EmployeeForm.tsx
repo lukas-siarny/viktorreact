@@ -1,14 +1,14 @@
 import React, { FC, MouseEventHandler /* , ReactNode */ } from 'react'
 import { Field, /* FieldArray, */ InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row /* , Collapse, Tag */ } from 'antd'
+import { Divider, Form /* , Collapse, Tag */, Space } from 'antd'
 import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 // import cx from 'classnames'
 
 // utils
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
+import { ENUMERATIONS_KEYS, FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { getCountryPrefix, showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -44,7 +44,7 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
-/** 
+/**
 const numberMin0 = validationNumberMin(0)
 
 const renderListFields = (props: any) => {
@@ -209,67 +209,78 @@ const EmployeeForm: FC<Props> = (props) => {
 
 	// const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE]?.values) as any
+	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
+
+	const phonePrefix = getCountryPrefix(countriesData.data, formValues?.user?.phonePrefixCountryCode)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
-			<Col className={'flex'}>
-				<Row className={'mx-9 w-full h-full block'} justify='center'>
-					{!isEmpty(formValues?.user) && (
-						<>
-							<h3 className={'mb-0 mt-0 flex items-center'}>
-								<UserIcon className={'text-notino-black mr-2'} />
-								{t('loc:Používateľský profil')}
-							</h3>
-							<Divider className={'mb-3 mt-3'} />
-							<div className={'flex space-between w-full'}>
-								<div className={'w-1/5'}>
-									<Field
-										className={'m-0'}
-										component={ImgUploadField}
-										name={'user.image'}
-										label={t('loc:Avatar')}
-										signUrl={URL_UPLOAD_IMAGES}
-										category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
-										multiple={false}
-										maxCount={1}
-										disabled
-									/>
-								</div>
-
-								<div className={'w-full'}>
-									<Field component={InputField} label={t('loc:Meno a Priezvisko')} name={'user.fullName'} size={'large'} disabled />
-									<Field component={InputField} label={t('loc:Email')} name={'user.email'} size={'large'} disabled />
-									<PhoneWithPrefixField
-										label={'Telefón'}
-										size={'large'}
-										prefixName={'user.phonePrefixCountryCode'}
-										phoneName={'user.phone'}
-										formName={FORM.EMPLOYEE}
-										disabled
-									/>
-								</div>
-							</div>
-						</>
-					)}
-					<h3 className={'mb-0 mt-0 flex items-center'}>
-						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
-					</h3>
-					<Divider className={'mb-3 mt-3'} />
-					<div className={'flex space-between w-full'}>
-						<div className={'w-1/5'}>
+			<Space className={'w-full px-9'} direction='vertical' size={36}>
+				{!isEmpty(formValues?.user) && (
+					<div>
+						<h3 className={'mb-0 mt-0 flex items-center'}>
+							<UserIcon className={'text-notino-black mr-2'} />
+							{t('loc:Používateľský profil')}
+						</h3>
+						<Divider className={'mb-3 mt-3'} />
+						<div className={'flex space-between w-full flex-wrap'}>
 							<Field
-								className={'m-0'}
+								className={'m-0 mr-5'}
 								component={ImgUploadField}
-								name={'avatar'}
+								name={'user.image'}
 								label={t('loc:Avatar')}
 								signUrl={URL_UPLOAD_IMAGES}
 								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
 								multiple={false}
 								maxCount={1}
+								disabled
 							/>
+							<div className={'flex-1 mt-5'}>
+								<ul className='list-none pl-0'>
+									<li className='mb-2'>
+										<strong>{t('loc:Meno a Priezvisko')}:</strong> {formValues?.user?.fullName}
+										<Divider className={'mb-0 mt-2'} />
+									</li>
+									<li className='mb-2'>
+										<strong>{t('loc:Email')}:</strong>{' '}
+										<span className='break-all'>
+											{formValues?.user?.email ? <a href={`mailto:${formValues?.user?.email}`}>{formValues?.user?.email}</a> : '-'}
+										</span>
+										<Divider className={'mb-0 mt-2'} />
+									</li>
+									<li>
+										<strong>{t('loc:Telefón')}:</strong>{' '}
+										{phonePrefix && formValues?.user?.phone ? (
+											<a href={`tel:${phonePrefix}${formValues?.user?.phone}`}>
+												{phonePrefix} {formValues?.user?.phone}
+											</a>
+										) : (
+											'-'
+										)}
+									</li>
+								</ul>
+							</div>
 						</div>
+					</div>
+				)}
 
-						<div className={'w-full'}>
+				<div>
+					<h3 className={'mb-0 mt-0 flex items-center'}>
+						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
+					</h3>
+					<Divider className={'mb-3 mt-3'} />
+					<div className={'flex space-between w-full'}>
+						<Field
+							className={'m-0 mr-5'}
+							component={ImgUploadField}
+							name={'avatar'}
+							label={t('loc:Avatar')}
+							signUrl={URL_UPLOAD_IMAGES}
+							category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
+							multiple={false}
+							maxCount={1}
+						/>
+						<div className={'flex-1'}>
 							<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
 							<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
 						</div>
@@ -283,14 +294,16 @@ const EmployeeForm: FC<Props> = (props) => {
 						phoneName={'phone'}
 						formName={FORM.EMPLOYEE}
 					/>
+				</div>
+				<div>
 					{/* TODO - refactor assigned services
 					<h3 className={'mb-0 mt-0 flex items-center'}>
 						<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<FieldArray component={renderListFields} name={'services'} salon={salon} /> */}
-				</Row>
-			</Col>
+				</div>
+			</Space>
 		</Form>
 	)
 }

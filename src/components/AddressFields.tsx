@@ -120,7 +120,6 @@ const AddressFields = (props: Props) => {
 	const {
 		changeFormFieldValue,
 		inputValues,
-		zoom = MAP.defaultZoom,
 		input,
 		meta: { error, touched },
 		locationSearchElements = {
@@ -349,7 +348,6 @@ const AddressFields = (props: Props) => {
 										onLocationChange={changeLocation}
 										lat={get(inputValues, 'latitude')}
 										long={get(inputValues, 'longitude')}
-										zoom={zoom}
 										disabled={disabled}
 									/>
 								</div>

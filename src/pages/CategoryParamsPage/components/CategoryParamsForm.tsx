@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Space, Button } from 'antd'
+import { Divider, Form, Row, Space, Button } from 'antd'
 import { useSelector } from 'react-redux'
 
 // atoms

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Row, Spin } from 'antd'
 import { change, initialize, isPristine, submit } from 'redux-form'
-import { get, isEmpty, map, unionBy } from 'lodash'
+import { get, map, unionBy } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -20,12 +20,11 @@ import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERM
 
 // types
 import { Paths } from '../../types/api'
-import { IBreadcrumbs, ILoadingAndFailure, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getCurrentUser } from '../../reducers/users/userActions'
-import { getSupportContact, getSupportContacts, ISupportContactPayload } from '../../reducers/supportContacts/supportContactsActions'
+import { getSupportContact, getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'

@@ -1,7 +1,7 @@
 import React, { FC, useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Button } from 'antd'
+import { Divider, Form, Button } from 'antd'
 
 // utils
 import { isEmpty } from 'lodash'

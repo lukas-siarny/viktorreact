@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { FC, useMemo, useEffect } from 'react'
-import { Spin, Row, Col, Button } from 'antd'
+import { Spin, Row, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useSelector, useDispatch } from 'react-redux'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js'

@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Button } from 'antd'
+import { Divider, Form, Button } from 'antd'
 
 // utils
 import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM } from '../../../utils/enums'

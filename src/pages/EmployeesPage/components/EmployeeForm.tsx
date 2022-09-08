@@ -1,7 +1,7 @@
 import React, { FC, MouseEventHandler /* , ReactNode */ } from 'react'
 import { Field, /* FieldArray, */ InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row /* , Collapse, Tag */, Space } from 'antd'
+import { Divider, Form /* , Collapse, Tag */, Space } from 'antd'
 import { useSelector } from 'react-redux'
 import { isEmpty } from 'lodash'
 // import cx from 'classnames'

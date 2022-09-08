@@ -15,7 +15,7 @@ import TextareaField from '../../../atoms/TextareaField'
 import { RootState } from '../../../reducers'
 
 // validations
-import validateRequestNewServiceForm from './validateRequestNewServiceForm'
+import validateRequestNewServiceForm from '../../ServicesPage/components/validateRequestNewServiceForm'
 import { optionRenderWithImage } from '../../../utils/helper'
 
 // assets

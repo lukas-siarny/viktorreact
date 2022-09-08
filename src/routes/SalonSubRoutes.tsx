@@ -42,11 +42,14 @@ import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 // Billing info
 import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 
+// 404
+import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
+
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
 }
 
-const SalonSubRoutes: FC = () => {
+const SalonSubRoutes: FC = (props) => {
 	const { path, url, params } = useRouteMatch()
 
 	const { salonID } = (params as any) || {}
@@ -122,35 +125,24 @@ const SalonSubRoutes: FC = () => {
 			{/* SERVICES */}
 			<AuthRoute
 				exact
-				path={getPath(t('paths:services'))}
+				path={getPath(t('paths:services-settings'))}
 				component={ServicesPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:services'))}
+				translatePathKey={getPath(t('paths:services-settings'))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.SERVICES}
+				page={PAGE.SERVICES_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:services/create'))}
+				path={getPath(t('paths:services-settings/{{serviceID}}', { serviceID: ':serviceID' }))}
 				component={ServicePage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:services/create'))}
+				translatePathKey={getPath(t('paths:services-settings/{{serviceID}}', { serviceID: ':serviceID' }))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.SERVICES}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				exact
-				path={getPath(t('paths:services/{{serviceID}}', { serviceID: ':serviceID' }))}
-				component={ServicePage}
-				parentPath={url}
-				translatePathKey={getPath(t('paths:services/{{serviceID}}', { serviceID: ':serviceID' }))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.SERVICES}
+				page={PAGE.SERVICES_SETTINGS}
 				preventShowDeletedSalon
 			/>
 			{/* EMPLOYEES */}
@@ -190,24 +182,24 @@ const SalonSubRoutes: FC = () => {
 			{/* Industries */}
 			<AuthRoute
 				exact
-				path={getPath(t('paths:industries'))}
+				path={getPath(t('paths:industries-and-services'))}
 				component={IndustriesPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:industries'))}
+				translatePathKey={getPath(t('paths:industries-and-services'))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.INDUSTRIES}
+				page={PAGE.INDUSTRIES_AND_SERVICES}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
+				path={getPath(t('paths:industries-and-services/{{industryID}}', { industryID: ':industryID' }))}
 				component={IndustryPage}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:industries/{{industryID}}', { industryID: ':industryID' }))}
+				translatePathKey={getPath(t('paths:industries-and-services/{{industryID}}', { industryID: ':industryID' }))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.INDUSTRIES}
+				page={PAGE.INDUSTRIES_AND_SERVICES}
 				preventShowDeletedSalon
 			/>
 			{/* Billing info */}
@@ -221,6 +213,11 @@ const SalonSubRoutes: FC = () => {
 				layout={MainLayout}
 				page={PAGE.BILLING_INFO}
 				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				{...props}
+				component={NotFoundPage} // NOTE: for non auth route just let the user redirect on login page
+				layout={MainLayout}
 			/>
 		</Switch>
 	)

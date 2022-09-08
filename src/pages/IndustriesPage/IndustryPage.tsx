@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { Col, Divider, Empty, Row, Spin } from 'antd'
+import { Button, Col, Divider, Empty, Modal, Row, Spin } from 'antd'
 import { compose } from 'redux'
-import { getFormValues, initialize, isSubmitting } from 'redux-form'
+import { getFormValues, initialize, isSubmitting, reset } from 'redux-form'
 import { DataNode } from 'antd/lib/tree'
 import { isEmpty, map } from 'lodash'
 import i18next from 'i18next'
@@ -17,11 +17,12 @@ import { getServices } from '../../reducers/services/serviceActions'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import IndustryForm from './components/IndustryForm'
 import { NestedMultiselectDataItem } from './components/CheckboxGroupNestedField'
+import RequestNewServiceForm, { IRequestNewServiceForm } from './components/RequestNewServiceForm'
 
 // utils
-import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM } from '../../utils/enums'
-import { withPermissions } from '../../utils/Permissions'
-import { patchReq } from '../../utils/request'
+import { ROW_GUTTER_X_DEFAULT, PERMISSION, FORM, SALON_PERMISSION, NOTIFICATION_TYPE } from '../../utils/enums'
+import Permissions, { withPermissions } from '../../utils/Permissions'
+import { patchReq, postReq } from '../../utils/request'
 import { flattenTree } from '../../utils/helper'
 import { history } from '../../utils/history'
 
@@ -32,11 +33,15 @@ import { Paths } from '../../types/api'
 // assets
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
 import { ReactComponent as ChevronDown } from '../../assets/icons/chevron-down.svg'
+import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ industryID: string }>
 }
 type CategoriesPatch = Paths.PatchApiB2BAdminSalonsSalonIdServices.RequestBody
+
+type ServiceCategorySuggestPost = Paths.PostApiB2BAdminServicesCategoryServiceSuggest.RequestBody
 
 // create category keys
 //  keys with prefix level2 are service keys
@@ -117,10 +122,12 @@ const IndustryPage = (props: Props) => {
 	const rootUserCategory = services?.data?.groupedServicesByCategory?.find((category) => category.category?.id === industryID)
 
 	// https://ant.design/components/tree/#Note - nastava problem, ze pokial nie je vygenerovany strom, tak sa vyrendruje collapsnuty, aj ked je nastavena propa defaultExpandAll
-	// preto sa setuje cez state az po tom, co sa vytvoria data pre strom (vid useEffect nizzsie)
+	// preto sa strom setuje cez state az po tom, co sa vytvoria data pre strom (vid useEffect nizzsie)
 	// cize pokial je null, znamena ze strom este nebol vygenerovany a zobrazuje sa loading state
 	const [dataTree, setDataTree] = useState<DataNode[] | null>(null)
 	const isLoadingTree = dataTree === null
+
+	const [isVisible, setIsVisible] = useState<boolean>(false)
 
 	useEffect(() => {
 		;(async () => {
@@ -145,14 +152,30 @@ const IndustryPage = (props: Props) => {
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam odvetví'),
-				link: parentPath + t('paths:industries')
+				name: t('loc:Zoznam odvetví a služieb'),
+				link: parentPath + t('paths:industries-and-services')
 			},
 			{
 				name: t('loc:Priradiť služby'),
 				titleName: rootCategory?.name
 			}
 		]
+	}
+
+	const handleSubmitRequestNewService = async (data: IRequestNewServiceForm) => {
+		try {
+			const reqData: ServiceCategorySuggestPost = {
+				salonID,
+				rootCategoryID: data.rootCategoryID,
+				description: data.description
+			}
+			await postReq('/api/b2b/admin/services/category-service-suggest', {}, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			dispatch(reset(FORM.REQUEST_NEW_SERVICE_FORM))
+			setIsVisible(false)
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
 	}
 
 	const handleSubmit = async (values: IIndustryForm) => {
@@ -174,7 +197,7 @@ const IndustryPage = (props: Props) => {
 				const serviceID = getCategoryById(updatedUserRootCategory, categoryIDs[0])?.service?.id
 				// redirect
 				if (serviceID) {
-					history.push(parentPath + t('paths:services/{{serviceID}}', { serviceID }))
+					history.push(parentPath + t('paths:services-settings/{{serviceID}}', { serviceID }))
 				}
 			}
 		} catch (e) {
@@ -193,16 +216,38 @@ const IndustryPage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:industries')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:industries-and-services')} />
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body small'>
 						<Spin spinning={loading || submitting}>
-							<h3 className={'mb-0 mt-0 flex items-center'}>
-								<ServiceIcon className={'text-notino-black mr-2'} />
-								{t('loc:Priradiť služby')}
-							</h3>
+							<Row justify='space-between'>
+								<h3 className={'mb-0 mt-0 flex items-center pr-4'}>
+									<ServiceIcon className={'text-notino-black mr-2'} />
+									{t('loc:Priradiť služby')}
+								</h3>
+								<Permissions
+									allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_CREATE]}
+									render={(hasPermission, { openForbiddenModal }) => (
+										<Button
+											onClick={() => {
+												if (hasPermission) {
+													setIsVisible(true)
+												} else {
+													openForbiddenModal()
+												}
+											}}
+											type='primary'
+											htmlType='button'
+											className={'noti-btn'}
+											icon={<PlusIcon />}
+										>
+											{t('loc:Požiadať o novú službu')}
+										</Button>
+									)}
+								/>
+							</Row>
 							<Divider className={'mb-3 mt-3'} />
 
 							<header className={'category-select-header mb-4'}>
@@ -221,6 +266,19 @@ const IndustryPage = (props: Props) => {
 					</div>
 				</Col>
 			</Row>
+			<Modal
+				key={'requestNewServiceModal'}
+				title={t('loc:Žiadosť o novú službu')}
+				visible={isVisible}
+				onCancel={() => {
+					dispatch(reset(FORM.REQUEST_NEW_SERVICE_FORM))
+					setIsVisible(false)
+				}}
+				footer={null}
+				closeIcon={<CloseIcon />}
+			>
+				<RequestNewServiceForm onSubmit={handleSubmitRequestNewService} />
+			</Modal>
 		</>
 	)
 }

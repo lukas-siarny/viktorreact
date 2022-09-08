@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 // utils
 import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -116,6 +117,6 @@ const form = reduxForm<ISpecialistContactForm, ComponentProps>({
 	destroyOnUnmount: true,
 	validate: validateSpecialistContactForm,
 	onSubmitFail: showErrorNotification
-})(SpecialistContactForm)
+})(withPromptUnsavedChanges(SpecialistContactForm))
 
 export default form

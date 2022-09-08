@@ -20,6 +20,7 @@ import { ReactComponent as LocationIcon } from '../../../assets/icons/location-1
 import { PERMISSION, SALON_PERMISSION, FORM } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { IBillingForm } from '../../../types/interfaces'
@@ -200,6 +201,6 @@ const form = reduxForm<IBillingForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateBillingInfoForm
-})(BillingInfoForm)
+})(withPromptUnsavedChanges(BillingInfoForm))
 
 export default form

@@ -26,6 +26,7 @@ import { FILTER_ENTITY, FORM, NOTIFICATION_TYPE, PARAMETER_TYPE, SALON_PERMISSIO
 import { deleteReq } from '../../../utils/request'
 import { history } from '../../../utils/history'
 import searchWrapper from '../../../utils/filters'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { IServiceForm } from '../../../types/interfaces'
@@ -568,6 +569,6 @@ const form = reduxForm<IServiceForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateServiceForm
-})(ServiceForm)
+})(withPromptUnsavedChanges(ServiceForm))
 
 export default form

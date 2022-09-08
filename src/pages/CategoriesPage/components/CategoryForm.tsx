@@ -25,6 +25,7 @@ import validateCategoryFrom from './validateCategoryFrom'
 import { validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -259,6 +260,6 @@ const form = reduxForm<ICategoryForm, ComponentProps>({
 	touchOnChange: true,
 	destroyOnUnmount: true,
 	validate: validateCategoryFrom
-})(CategoryForm)
+})(withPromptUnsavedChanges(CategoryForm))
 
 export default form

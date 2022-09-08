@@ -383,9 +383,10 @@ const SalonsPage = () => {
 			case TAB_KEYS.DELETED:
 				columns = [
 					tableColumns.name({ width: '20%' }),
-					tableColumns.address({ width: '20%' }),
-					tableColumns.categories({ width: '20%' }),
-					tableColumns.deletedAt({ width: '20%' }),
+					tableColumns.address({ width: '16%' }),
+					tableColumns.categories({ width: '16%' }),
+					tableColumns.deletedAt({ width: '16%' }),
+					tableColumns.fillingProgress({ width: '16%' }),
 					tableColumns.createdAt({ width: '20%' })
 				]
 				filters = <SalonsFilterDeleted onSubmit={handleSubmitDeleted} />

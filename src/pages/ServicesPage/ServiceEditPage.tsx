@@ -155,7 +155,7 @@ const parseEmployeesInit = (employees: ServiceEmployees) => {
 			priceTo: decodePrice(employee.priceAndDurationData?.priceTo),
 			variableDuration: !!employee?.priceAndDurationData?.durationTo,
 			variablePrice: !!employee?.priceAndDurationData?.priceTo,
-			serviceCategoryParameter: parseParameterValuesInit(employee?.serviceCategoryParameter?.values)
+			serviceCategoryParameter: parseParameterValuesInit(employee?.serviceCategoryParameter?.values).serviceCategoryParameter
 		}
 	})
 }

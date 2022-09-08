@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { IEnumerationActions, IEnumerationsPayload } from './enumerationActions'
+import { IEnumerationActions, IEnumerationsCountriesPayload, IEnumerationsCurrenciesPayload } from './enumerationActions'
 import { ENUMERATIONS } from './enumerationTypes'
 import { ENUMERATIONS_KEYS } from '../../utils/enums'
 
@@ -13,21 +13,21 @@ export const initState = {
 		pagination: null,
 		isLoading: false,
 		isFailure: false
-	} as IEnumerationsPayload & ILoadingAndFailure,
+	} as IEnumerationsCountriesPayload & ILoadingAndFailure,
 	[ENUMERATIONS_KEYS.COUNTRIES]: {
 		data: null,
 		enumerationsOptions: [],
 		pagination: null,
 		isLoading: false,
 		isFailure: false
-	} as IEnumerationsPayload & ILoadingAndFailure,
+	} as IEnumerationsCountriesPayload & ILoadingAndFailure,
 	[ENUMERATIONS_KEYS.CURRENCIES]: {
 		data: null,
 		enumerationsOptions: [],
 		pagination: null,
 		isLoading: false,
 		isFailure: false
-	} as IEnumerationsPayload & ILoadingAndFailure
+	} as IEnumerationsCurrenciesPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last

@@ -42,11 +42,14 @@ import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 // Billing info
 import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 
+// 404
+import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
+
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
 }
 
-const SalonSubRoutes: FC = () => {
+const SalonSubRoutes: FC = (props) => {
 	const { path, url, params } = useRouteMatch()
 
 	const { salonID } = (params as any) || {}
@@ -210,6 +213,11 @@ const SalonSubRoutes: FC = () => {
 				layout={MainLayout}
 				page={PAGE.BILLING_INFO}
 				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				{...props}
+				component={NotFoundPage} // NOTE: for non auth route just let the user redirect on login page
+				layout={MainLayout}
 			/>
 		</Switch>
 	)

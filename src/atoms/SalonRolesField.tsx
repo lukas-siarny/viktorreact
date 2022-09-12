@@ -28,10 +28,11 @@ type Props = {
 	options: ISelectOptionItem[]
 	className?: string
 	required?: boolean
+	size?: string
 }
 
 const SalonRolesField: FC<Props> = (props) => {
-	const { name, loading, options, disabled, className, required } = props
+	const { name, loading, options, disabled, className, required, size = 'large' } = props
 	const [t] = useTranslation()
 	const [visible, setVisible] = useState(false)
 
@@ -47,7 +48,7 @@ const SalonRolesField: FC<Props> = (props) => {
 				}
 				placeholder={t('loc:Vyberte rolu')}
 				name={name}
-				size={'large'}
+				size={size}
 				loading={loading}
 				disabled={disabled}
 				className={className}

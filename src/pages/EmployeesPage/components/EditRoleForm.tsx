@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 // atoms
-import SelectField from '../../../atoms/SelectField'
+import SalonRolesField from '../../../atoms/SalonRolesField'
 
 // interfaces
 import { IInviteEmployeeForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -49,11 +49,8 @@ const EditRoleForm: FC<Props> = (props) => {
 						allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.USER_ROLE_EDIT]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<>
-								<Field
-									component={SelectField}
-									options={salonRolesOptions}
-									label={t('loc:Rola')}
-									placeholder={t('loc:Vyberte rolu')}
+								<SalonRolesField
+									options={salonRolesOptions || []}
 									name={'roleID'}
 									size={'large'}
 									loading={roles?.isLoading}

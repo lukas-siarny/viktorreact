@@ -12,7 +12,7 @@ import { NOTIFICATION_TYPE, FORM } from '../../utils/enums'
 import { Paths } from '../../types/api'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // interfaces
 import { IOpenHoursNoteForm } from '../../types/interfaces'

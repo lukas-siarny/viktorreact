@@ -63,22 +63,19 @@ const UserPage: FC<Props> = (props) => {
 		if (!data?.user?.id) {
 			history.push('/404')
 		}
+
+		dispatch(
+			initialize(FORM.USER_ACCOUNT, {
+				...get(data, 'user'),
+				avatar: data?.user?.image ? [{ url: data?.user?.image?.original, uid: data?.user?.image?.id }] : null
+			})
+		)
 	}
 
 	useEffect(() => {
 		fetchUserData()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, userID])
-
-	// init forms
-	useEffect(() => {
-		dispatch(
-			initialize(FORM.USER_ACCOUNT, {
-				...get(userAccountDetail, 'data.user'),
-				avatar: userAccountDetail?.data?.user?.image ? [{ url: userAccountDetail?.data?.user?.image?.original, uid: userAccountDetail?.data?.user?.image?.id }] : null
-			})
-		)
-	}, [userAccountDetail, dispatch])
 
 	const handleUserAccountFormSubmit = async (data: any) => {
 		try {

@@ -14,13 +14,12 @@ import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
-import SwitchLabel from './SwitchLabel'
 
 // // interfaces
 import { IRegistrationForm } from '../../../types/interfaces'
 
 // // utils
-import { FORM, GDPR_URL, GTC_URL, MARKETING_URL } from '../../../utils/enums'
+import { FORM } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
 
 // validate
@@ -58,27 +57,63 @@ const RegistrationForm: FC<Props> = (props) => {
 				formName={FORM.REGISTRATION}
 				required
 			/>
-
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
-				customLabel={<SwitchLabel label={t('loc:Vyhlasujem, že som sa oboznámil so')} anchorText={t('loc:Zásadami spracovania osobných údajov')} href={GDPR_URL} />}
 				name={'gdpr'}
-				size={'large'}
-			/>
-			<Field
-				className='noti-registration-switch'
-				component={SwitchField}
-				name={'gtc'}
-				customLabel={<SwitchLabel label={t('loc:Vyhlasujem, že som sa oboznámil s')} anchorText={t('loc:Obchodnými podmienkami')} href={GTC_URL} />}
+				customLabel={
+					<div className='text-notino-grayDark text-xs md:text-sm'>
+						<span>{t('loc:Prehlasujem, že som sa oboznámil s ')}</span>
+						<a
+							onClick={(e) => e.stopPropagation()}
+							className='text-notino-grayDark hover:text-notino-pink'
+							href={t('loc:LINK podmienky používania')}
+							target='_blank'
+							rel='noreferrer'
+						>
+							<u>{t('loc:Podmienkami používania')}</u>
+						</a>
+						{t('loc: a ')}
+						<a
+							onClick={(e) => e.stopPropagation()}
+							className='text-notino-grayDark hover:text-notino-pink'
+							href={t('loc:LINK ochrana osobných údajov')}
+							target='_blank'
+							rel='noreferrer'
+						>
+							<u>{t('loc:Zásadami spracovania osobných údajov')}</u>
+						</a>
+						<span>{t('loc: a chcem sa zaregistrovať do programu Notino Partner.')}</span>
+					</div>
+				}
 				size={'large'}
 			/>
 			<Field
 				className='noti-registration-switch marketing-field'
 				component={SwitchField}
 				name={'marketing'}
-				customLabel={<SwitchLabel label={t('loc:Udeľujem súhlas so spracúvaním osobných údajov na')} anchorText={t('loc:Marketingové účely')} href={MARKETING_URL} />}
+				customLabel={
+					<div className='text-notino-grayDark text-xs md:text-sm w-11/12'>
+						{t('loc:V súvislosti s touto registráciou si neprajem dostávať informácie o novinkách a akciách.')}
+					</div>
+				}
 				size={'large'}
+				tooltipText={
+					<div>
+						{t(
+							'loc:Spoločnosť Notino, s.r.o. je oprávnená kontaktovať registrovaných užívateľov z dôvodu priameho marketingu. Aby sme zamedzili nevyžiadanej pošte, potvrďte, ak toto spracovanie namietate. Viac informácii v '
+						)}
+						<a
+							onClick={(e) => e.stopPropagation()}
+							className='text-notino-pink font-semibold'
+							href={t('loc:LINK ochrana osobných údajov')}
+							target='_blank'
+							rel='noreferrer'
+						>
+							{t('loc:zásadách zpracovania osobných údajov.')}
+						</a>
+					</div>
+				}
 			/>
 			<div className='mt-2'>
 				<Button type={'primary'} block className={`noti-btn m-regular mb-1 sm:mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>

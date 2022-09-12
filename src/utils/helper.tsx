@@ -68,7 +68,7 @@ import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption } 
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
-import { EnumerationData } from '../reducers/enumerations/enumerationActions'
+import { CountriesData } from '../reducers/enumerations/enumerationActions'
 
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
 import { IAuthUserPayload } from '../reducers/users/userActions'
@@ -623,10 +623,20 @@ export const getImagesFormValues = (fileList: any, filesData: ImgUploadParam) =>
 	return values
 }
 
-export const getServiceRange = (from: number | undefined | null, to?: number | undefined | null, unit = '') => {
-	if (!to) return `${from || ''}${unit}`
-	if (from === to) return `${from}${unit}`
-	return `${from || ''} - ${to || ''}${unit}`
+export const getServiceRange = (from: number | undefined | null, to: number | undefined | null, unit = '') => {
+	if (isNil(from) && isNil(to)) {
+		return null
+	}
+
+	if (isNil(to)) {
+		return `${from || ''} ${unit}`
+	}
+
+	if (from === to) {
+		return `${from} ${unit}`
+	}
+
+	return `${from || ''} - ${to || ''} ${unit}`
 }
 
 export const isValidDateRange = (from: string, to: string) => {
@@ -735,7 +745,7 @@ export const flattenTree = (array: any[], callback?: (item: any, level: number) 
 export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, enumObject: T): checkValue is T[keyof T] =>
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 
-export const getCountryPrefix = (countriesData: EnumerationData | null, countryCode?: string) => {
+export const getCountryPrefix = (countriesData: CountriesData | null, countryCode?: string) => {
 	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode?.toLocaleLowerCase())
 	return country?.phonePrefix
 }
@@ -789,7 +799,7 @@ export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false)
 	)
 }
 
-export const getSalonTagChanges = (salonStatus?: SALON_STATES, isAdmin = true) => {
+export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
 	if (!salonStatus) {
 		return null
 	}
@@ -797,14 +807,11 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES, isAdmin = true) =
 	switch (salonStatus) {
 		case SALON_STATES.NOT_PUBLISHED_PENDING:
 		case SALON_STATES.PUBLISHED_PENDING:
-			if (isAdmin) {
-				return (
-					<Tag className={'noti-tag bg-status-pending'}>
-						<span>{i18next.t('loc:Na schválenie')}</span>
-					</Tag>
-				)
-			}
-			return null
+			return (
+				<Tag className={'noti-tag bg-status-pending'}>
+					<span>{i18next.t('loc:Na schválenie')}</span>
+				</Tag>
+			)
 		case SALON_STATES.NOT_PUBLISHED_DECLINED:
 		case SALON_STATES.PUBLISHED_DECLINED:
 			return (

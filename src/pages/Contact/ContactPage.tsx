@@ -98,7 +98,8 @@ const ContactPage: FC<Props> = () => {
 		}
 
 		fetchData()
-	}, [dispatch, selectedContact])
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch])
 
 	useEffect(() => {
 		dispatch(getSupportContactsOptions(currentLng as LANGUAGE, supportContacts?.data))
@@ -170,13 +171,17 @@ const ContactPage: FC<Props> = () => {
 											<ul className={'noti-contact-list'}>
 												{selectedContact?.emails?.map((email, index) => (
 													<li key={index} className={'email-list-item break-all'}>
-														{email}
+														<a href={`mailto:${email}`}>{email}</a>
 													</li>
 												))}
 												{selectedContact?.phones?.map((phone, index) => {
 													const prefix = getCountryPrefix(countriesData.data, phone?.phonePrefixCountryCode)
 													if (prefix && phone?.phone) {
-														return <li key={index} className={'phone-list-item'}>{`${prefix} ${phone.phone}`}</li>
+														return (
+															<li key={index} className={'phone-list-item'}>
+																<a href={`tel:${prefix}${phone.phone}`}>{`${prefix} ${phone.phone}`}</a>
+															</li>
+														)
 													}
 													return null
 												})}

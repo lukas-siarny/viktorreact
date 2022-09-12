@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "0.3.6",
+  "version": "0.3.8",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",

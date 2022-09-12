@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Button } from 'antd'
+import { Divider, Form, Button } from 'antd'
 
 // utils
 import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM } from '../../../utils/enums'
@@ -39,64 +39,55 @@ const LanguagesForm: FC<Props> = (props) => {
 	const { handleSubmit, languageID, closeForm, onDelete, submitting, pristine } = props
 
 	return (
-		<Form layout={'vertical'} className={'form w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
-			<Col className={'flex'}>
-				<Row className={'mx-8 xl:mx-9 w-full h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3 relative pr-7'}>
-						{languageID ? t('loc:Upraviť jazyk') : t('loc:Vytvoriť jazyk')}
-						<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={() => closeForm()}>
-							<CloseIcon />
-						</Button>
-					</h3>
-					<Divider className={'my-3'} />
-					<Row className={'w-full gap-4'} justify='space-between'>
-						<FieldArray
-							key='nameLocalizations'
-							name='nameLocalizations'
-							component={Localizations}
-							placeholder={t('loc:Zadajte názov')}
-							horizontal
-							className={'flex-1 noti-languages-localizations'}
-							ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
-							customValidate={fixLength255}
-							mainField={
-								<Field
-									className='mb-0'
-									component={InputField}
-									label={t('loc:Názov jazyka (EN)')}
-									placeholder={t('loc:Zadajte názov')}
-									key='nameLocalizations[0].value'
-									name='nameLocalizations[0].value'
-									required
-									validate={fixLength255}
-								/>
-							}
-						/>
+		<Form layout={'vertical'} className={'w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+			<div className={'h-full '}>
+				<h3 className={'mb-0 mt-3 relative pr-7'}>
+					{languageID ? t('loc:Upraviť jazyk') : t('loc:Vytvoriť jazyk')}
+					<Button className='absolute top-1 right-0 p-0 border-none shadow-none' onClick={() => closeForm()}>
+						<CloseIcon />
+					</Button>
+				</h3>
+				<Divider className={'my-3'} />
+				<FieldArray
+					key='nameLocalizations'
+					name='nameLocalizations'
+					component={Localizations}
+					placeholder={t('loc:Zadajte názov')}
+					horizontal
+					className={'flex-1 noti-languages-localizations'}
+					ignoreFieldIndex={0} // do not render "0" field because it is rendered in mainField prop
+					customValidate={fixLength255}
+					noSpace
+					mainField={
 						<Field
-							component={ImgUploadField}
-							name='image'
-							label={t('loc:Vlajka')}
-							maxCount={1}
-							signUrl={URL_UPLOAD_IMAGES}
-							category={UPLOAD_IMG_CATEGORIES.LANGUAGE_IMAGE}
+							className='mb-0'
+							component={InputField}
+							label={t('loc:Názov jazyka (EN)')}
+							placeholder={t('loc:Zadajte názov')}
+							key='nameLocalizations[0].value'
+							name='nameLocalizations[0].value'
+							required
+							validate={fixLength255}
 						/>
-					</Row>
-					<div className={'flex w-full justify-around space-between mt-10 gap-2 flex-wrap'}>
-						{languageID && (
-							<DeleteButton
-								onConfirm={onDelete}
-								entityName={''}
-								type={'default'}
-								className='w-40'
-								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-							/>
-						)}
-						<Button className={'noti-btn w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-							{languageID ? t('loc:Uložiť') : t('loc: Vytvoriť')}
-						</Button>
-					</div>
-				</Row>
-			</Col>
+					}
+				/>
+				<Field component={ImgUploadField} name='image' label={t('loc:Vlajka')} maxCount={1} signUrl={URL_UPLOAD_IMAGES} category={UPLOAD_IMG_CATEGORIES.LANGUAGE_IMAGE} />
+
+				<div className={'flex w-full justify-start mt-10 gap-2 flex-wrap'}>
+					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
+						{languageID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
+					</Button>
+					{languageID && (
+						<DeleteButton
+							onConfirm={onDelete}
+							entityName={''}
+							type={'default'}
+							className='w-full xl:w-40'
+							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+						/>
+					)}
+				</div>
+			</div>
 		</Form>
 	)
 }

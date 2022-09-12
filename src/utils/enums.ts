@@ -205,17 +205,16 @@ export enum PAGE {
 	USERS = 'USERS',
 	ROLES = 'ROLES',
 	CUSTOMERS = 'CUSTOMERS',
-	SERVICES = 'SERVICES',
 	PERMISSIONS = 'PERMISSIONS',
 	HOME = 'HOME',
 	MY_ACCOUNT = 'MY_ACCOUNT',
 	ACTIVATION = 'ACTIVATION',
 	EMPLOYEES = 'EMPLOYEES',
 	SUPPORT_CONTACTS = 'SUPPORT_CONTACTS',
-	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	COSMETICS = 'COSMETICS',
 	LANGUAGES = 'LANGUAGES',
-	INDUSTRIES = 'INDUSTRIES',
+	INDUSTRIES_AND_SERVICES = 'INDUSTRIES_AND_SERVICES',
+	SERVICES_SETTINGS = 'SERVICES_SETTINGS',
 	PENDING_INVITES = 'PENDING_INVITES',
 	SPECIALIST_CONTACTS = 'SPECIALIST_CONTACTS',
 	BILLING_INFO = 'BILLING_INFO'
@@ -305,16 +304,30 @@ export enum DROPPABLE_IDS {
 	WEBPROJECTS_FILES = 'WEBPROJECTS_FILES'
 }
 
+const PRAGUE_LOCATION = {
+	lat: 50.0755381,
+	lng: 14.4378005
+}
+
 export const MAP = {
 	defaultZoom: 10,
-	defaultLatitude: 48.736277,
-	defaultLongitude: 19.1461917,
 	minLatitude: -90,
 	maxLatitude: 90,
 	minLongitude: -180,
 	maxLongitude: 180,
 	minZoom: 1,
-	maxZoom: 20
+	maxZoom: 20,
+	placeZoom: 16,
+	defaultLocation: PRAGUE_LOCATION,
+	locations: {
+		[LANGUAGE.CZ]: PRAGUE_LOCATION,
+		[LANGUAGE.EN]: PRAGUE_LOCATION,
+		// Bratislava
+		[LANGUAGE.SK]: {
+			lat: 48.1485965,
+			lng: 17.1077477
+		}
+	}
 }
 
 export enum SALON_FILTER_STATES {
@@ -390,8 +403,7 @@ export const STRINGS = (t: TFunction) => ({
 	enter: (entity: string) => t('loc:Zadajte {{entity}}', { entity }), // all input fields
 
 	MISSING_PERMISSIONS_TEXT: t('loc:Používateľovi chýbajú oprávnenia na akciu'),
-	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---',
-	DEFAULT_LANGUAGE: t('loc:slovensky')
+	EMPTY_TABLE_COLUMN_PLACEHOLDER: '---'
 })
 
 export enum PUBLICATION_STATUS {
@@ -439,10 +451,6 @@ export enum VALIDATION_MAX_LENGTH {
 	LENGTH_5 = 5,
 	LENGTH_2 = 2
 }
-
-export const GDPR_URL = 'https://www.notino.sk/ochrana-osobnych-udajov/'
-export const GTC_URL = 'https://www.notino.sk/obchodne-podmienky-vip/'
-export const MARKETING_URL = 'https://www.notino.sk/'
 
 export enum BYTE_MULTIPLIER {
 	KILO = 10 ** 3,

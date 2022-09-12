@@ -36,8 +36,7 @@ const RegistrationPage: FC<Props> = () => {
 				phonePrefixCountryCode: values.phonePrefixCountryCode,
 				phone: values.phone,
 				agreeGDPR: values.gdpr,
-				agreeMarketing: !!values?.marketing,
-				agreeGTC: values.gtc
+				agreeMarketing: !!values?.marketing
 			}
 
 			const { data } = await postReq('/api/b2b/admin/users/registration', null, reqData)

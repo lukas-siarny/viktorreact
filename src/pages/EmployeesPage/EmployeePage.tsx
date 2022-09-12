@@ -153,24 +153,6 @@ const EmployeePage = (props: Props) => {
 		}
 
 		if (data?.employee) {
-			const { user } = data.employee
-
-			const userData = user
-				? {
-						fullName: `${user.firstName || user.lastName ? `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim() : '-'}`,
-						email: user.email,
-						phonePrefixCountryCode: user.phonePrefixCountryCode,
-						phone: user.phone,
-						image: [
-							{
-								url: user.image?.original,
-								thumbUrl: user.image?.resizedImages?.thumbnail,
-								uid: user.image?.id
-							}
-						]
-				  }
-				: undefined
-
 			dispatch(
 				initialize(FORM.EMPLOYEE, {
 					...data.employee,
@@ -185,8 +167,7 @@ const EmployeePage = (props: Props) => {
 						: [],
 					services: /* checkAndParseServices(employee.data?.employee?.services) */ [],
 					salonID: { label: data.employee?.salon?.name, value: data.employee?.salon?.id },
-					roleID: data.employee?.role?.id,
-					user: userData
+					roleID: data.employee?.role?.id
 				})
 			)
 		}

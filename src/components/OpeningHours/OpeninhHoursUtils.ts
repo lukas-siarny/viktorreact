@@ -57,7 +57,7 @@ export const initOpeningHours = (openingHours: OpeningHours | undefined, sameOpe
 		// add monday to friday field
 		workWeek?.splice(0, 0, {
 			day: MONDAY_TO_FRIDAY as DAY,
-			timeRanges: openingHours?.[0]?.timeRanges as any
+			timeRanges: (openingHours?.[0]?.timeRanges as any) || []
 		})
 	} else {
 		// remove same open hours over week
@@ -107,12 +107,15 @@ export const checkSameOpeningHours = (openingHours: OpeningHours | undefined): b
 				// take reference
 				if (index === 0) {
 					referenceTimeRanges = openingHour.timeRanges
+					// init checks array
+					checks.push(true)
 				} else {
 					checks.push(equals(referenceTimeRanges, openingHour.timeRanges))
 				}
 			}
 		})
-		if (!isEmpty(checks) && checks.every((value) => value)) {
+		// checks length array must be 5 because all days from monday to friday must have same ranges
+		if (!isEmpty(checks) && checks.every((value) => value) && checks.length === 5) {
 			return true
 		}
 	}

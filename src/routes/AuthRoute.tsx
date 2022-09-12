@@ -28,6 +28,7 @@ type Props = RouteProps & {
 	extra?: Dictionary<any>
 	salonID?: string
 	parentPath?: string
+	preventShowDeletedSalon?: boolean
 }
 
 const onIdle = () => {

@@ -13,6 +13,7 @@ import { ReactComponent as SalonIcon } from '../../assets/icons/salon-24-icon.sv
 import { ReactComponent as ServiceIcon } from '../../assets/icons/services-24-icon.svg'
 import { ReactComponent as UsersIcon } from '../../assets/icons/users-24-icon.svg'
 import { ReactComponent as CustomerIcon } from '../../assets/icons/customer-24-icon.svg'
+import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
 import { ReactComponent as ProfileIcon } from '../../assets/icons/profile-icon.svg'
 import { ReactComponent as LogOutIcon } from '../../assets/icons/logout-icon.svg'
 import { ReactComponent as ChevronIcon } from '../../assets/icons/up-down.svg'
@@ -23,7 +24,6 @@ import { ReactComponent as CosmeticIcon } from '../../assets/icons/cosmetic-icon
 import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24.svg'
 import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
 import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
 
 // utils
@@ -68,6 +68,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			<Menu.Item
 				key='support'
 				onClick={() => {
+					// reset support contact data to empty in case there are some stored in redux
+					// otherwise language detection would not work correctly in t('paths:contact') page
 					dispatch(getSupportContact())
 					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
 				}}
@@ -87,7 +89,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	)
 
 	return (
-		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0'>
+		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0' width={230}>
 			<div className='sticky top-0 flex flex-col h-screen z-50' id={'noti-sider-wrapper'}>
 				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`}>
 					<LogoIcon className='h-8' />
@@ -179,7 +181,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 											eventKey={PAGE.SPECIALIST_CONTACTS}
 											key={PAGE.SPECIALIST_CONTACTS}
 											onClick={() => history.push(t('paths:specialist-contacts'))}
-											icon={<PhoneIcon />}
+											icon={<SpecialistIcon />}
 											// fix style issue due wrapped item into <Permission> component
 											className={cx({ 'ant-menu-item-selected': page === PAGE.SPECIALIST_CONTACTS })}
 										>
@@ -225,24 +227,24 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										{t('loc:Fakturačné údaje')}
 									</Menu.Item>
 									<Menu.Item
-										eventKey={PAGE.INDUSTRIES}
-										key={PAGE.INDUSTRIES}
-										onClick={() => history.push(getPath(t('paths:industries')))}
+										eventKey={PAGE.INDUSTRIES_AND_SERVICES}
+										key={PAGE.INDUSTRIES_AND_SERVICES}
+										onClick={() => history.push(getPath(t('paths:industries-and-services')))}
 										icon={<IndustiresIcon />}
 										// fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES })}
+										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES_AND_SERVICES })}
 									>
-										{t('loc:Odvetvia')}
+										{t('loc:Odvetvia a služby')}
 									</Menu.Item>
 									<Menu.Item
-										eventKey={PAGE.SERVICES}
-										key={PAGE.SERVICES}
-										onClick={() => history.push(getPath(t('paths:services')))}
+										eventKey={PAGE.SERVICES_SETTINGS}
+										key={PAGE.SERVICES_SETTINGS}
+										onClick={() => history.push(getPath(t('paths:services-settings')))}
 										icon={<ServiceIcon />}
 										// fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES })}
+										className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES_SETTINGS })}
 									>
-										{t('loc:Služby')}
+										{t('loc:Nastavenie služieb')}
 									</Menu.Item>
 									<Menu.Item
 										eventKey={PAGE.CUSTOMERS}

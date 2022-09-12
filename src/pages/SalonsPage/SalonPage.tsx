@@ -64,7 +64,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
-import { ReactComponent as PhoneIcon } from '../../assets/icons/phone-icon.svg'
+import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -230,7 +230,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		initData(salon.data)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salon, showBasicSalonsSuggestions])
+	}, [salon.data, showBasicSalonsSuggestions])
 
 	const handleSubmit = async (data: ISalonForm) => {
 		try {
@@ -295,7 +295,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					// load new salon for current user
 					await dispatch(getCurrentUser())
 					// select new salon
-					await dispatch(selectSalon(result.data.salon.id))
 					history.push(t('paths:salons/{{salonID}}', { salonID: result.data.salon.id }))
 				}
 			}
@@ -542,18 +541,30 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const requestApprovalButton = (className = '') => {
+		const disabled = submitting || isDeletedSalon || (!isFormPristine && !isPendingPublication && !isPublished)
+
+		// / Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
 		return (
-			<Button
-				type={'dashed'}
-				block
-				size={'middle'}
-				className={cx('noti-btn m-regular', className)}
-				disabled={submitting || isDeletedSalon}
-				onClick={() => setApprovalModalVisible(true)}
-				loading={submitting}
+			<Tooltip
+				title={disabled ? t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.') : null}
+				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 			>
-				{t('loc:Požiadať o schválenie')}
-			</Button>
+				<span className={cx({ 'cursor-not-allowed': disabled })}>
+					<Button
+						type={'dashed'}
+						block
+						size={'middle'}
+						className={cx('noti-btn m-regular', className, {
+							'pointer-events-none': disabled
+						})}
+						disabled={disabled}
+						onClick={() => setApprovalModalVisible(true)}
+						loading={submitting}
+					>
+						{t('loc:Požiadať o schválenie')}
+					</Button>
+				</span>
+			</Tooltip>
 		)
 	}
 
@@ -594,7 +605,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					</Row>
 				)
 			// unpublished and pending approval
-			case !isPublished && isPendingPublication:
+			case (!isPublished || isPublished) && isPendingPublication:
 				return (
 					<Row className={'w-full gap-2'} justify={'space-between'}>
 						{deleteButton('mt-2-5 w-52 xl:w-60')}
@@ -605,46 +616,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 				return null
 		}
 	}
-
-	const renderContentHeader = () =>
-		isPendingPublication &&
-		isSalonExists && (
-			<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-				<div className={'content-header warning'}>
-					<Row justify={'space-between'} className={'w-full'}>
-						<Button
-							type={'primary'}
-							icon={<CloseCricleIcon />}
-							size={'middle'}
-							className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
-							onClick={() =>
-								setModalConfig({
-									title: t('loc:Dôvod zamietnutia'),
-									fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
-									visible: true,
-									onSubmit: resolveConfirmationRequest
-								})
-							}
-							disabled={submitting}
-							loading={submitting}
-						>
-							{t('loc:Zamietnuť')}
-						</Button>
-						<Button
-							type={'primary'}
-							icon={<CheckIcon />}
-							size={'middle'}
-							className={'noti-btn m-regular w-44 xl:w-56'}
-							onClick={() => resolveConfirmationRequest()}
-							disabled={submitting}
-							loading={submitting}
-						>
-							{t('loc:Potvrdiť')}
-						</Button>
-					</Row>
-				</div>
-			</Permissions>
-		)
 
 	const infoMessage = useMemo(() => {
 		let message: string | null
@@ -664,7 +635,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			case !isPublished && !isPendingPublication:
 				message = t('loc:V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.')
 				break
-			case isPendingPublication:
+			case isPendingPublication && !isAdmin:
 				message = t('loc:Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.')
 				break
 			default:
@@ -672,11 +643,11 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 
 		if (message) {
-			return <Alert message={message} showIcon type={'warning'} className={'noti-alert mb-4'} />
+			return <Alert message={message} showIcon type={'warning'} className={'noti-alert w-full'} />
 		}
 
 		return null
-	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, isNewSalon, salon.data?.state])
+	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, isNewSalon, salon.data?.state, isAdmin])
 
 	const declinedSalonMessage = useMemo(
 		() => (
@@ -696,6 +667,52 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		),
 		[t, salon?.data?.publicationDeclineReason]
 	)
+
+	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header'}>{infoMessage}</div>
+
+	const showAdminSalonApporvalButtons = isPendingPublication && isSalonExists
+
+	const renderContentHeaderAdmin = () =>
+		(infoMessage || showAdminSalonApporvalButtons) && (
+			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication && isSalonExists })}>
+				{showAdminSalonApporvalButtons && (
+					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
+						<Row justify={'space-between'} className={'w-full'}>
+							<Button
+								type={'primary'}
+								icon={<CloseCricleIcon />}
+								size={'middle'}
+								className={'ant-btn-dangerous noti-btn m-regular hover:shadow-none w-44 xl:w-56'}
+								onClick={() =>
+									setModalConfig({
+										title: t('loc:Dôvod zamietnutia'),
+										fieldPlaceholderText: t('loc:Sem napíšte dôvod zamietnutia'),
+										visible: true,
+										onSubmit: resolveConfirmationRequest
+									})
+								}
+								disabled={submitting}
+								loading={submitting}
+							>
+								{t('loc:Zamietnuť')}
+							</Button>
+							<Button
+								type={'primary'}
+								icon={<CheckIcon />}
+								size={'middle'}
+								className={'noti-btn m-regular w-44 xl:w-56'}
+								onClick={() => resolveConfirmationRequest()}
+								disabled={submitting}
+								loading={submitting}
+							>
+								{t('loc:Potvrdiť')}
+							</Button>
+						</Row>
+					</Permissions>
+				)}
+				{infoMessage}
+			</div>
+		)
 
 	const onTabChange = (selectedTabKey: string) => {
 		// set query for history tab
@@ -728,12 +745,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		<>
 			<div className='content-body mt-2'>
 				<Spin spinning={isLoading}>
-					{renderContentHeader()}
+					{isAdmin ? renderContentHeaderAdmin() : renderContentHeaderPartner()}
 					{declinedSalon && declinedSalonMessage}
-					{infoMessage}
 					<SalonForm
 						onSubmit={handleSubmit}
-						isAdmin={isAdmin}
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
 						disabledForm={isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)}
 						deletedSalon={isDeletedSalon}
@@ -853,7 +868,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			{specialistModalVisible && <SpecialistModal visible onCancel={() => setSpecialistModalVisible(false)} />}
 			{isNewSalon && (
 				<button type={'button'} className={cx('noti-specialist-button', { 'is-active': specialistModalVisible })} onClick={() => setSpecialistModalVisible(true)}>
-					<PhoneIcon />
+					<SpecialistIcon />
 					<span>{t('loc:Notino Špecialista')}</span>
 				</button>
 			)}

@@ -39,7 +39,7 @@ const CustomerForm: FC<Props> = (props) => {
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const genders: ISelectOptionItem[] = [
-		{ label: `${t('loc: Muž')}`, value: GENDER.MALE, key: GENDER.MALE },
+		{ label: `${t('loc:Muž')}`, value: GENDER.MALE, key: GENDER.MALE },
 		{ label: `${t('loc:Žena')}`, value: GENDER.FEMALE, key: GENDER.FEMALE }
 	]
 

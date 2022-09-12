@@ -1,7 +1,7 @@
 import React, { FC, useMemo } from 'react'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Space, Button } from 'antd'
+import { Divider, Form, Row, Space, Button } from 'antd'
 import { useSelector } from 'react-redux'
 
 // atoms
@@ -107,77 +107,77 @@ const CategoryParamsForm: FC<Props> = (props) => {
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full'} direction='vertical' size={36}>
-				<Row>
-					<Col span={24}>
-						<h3 className={'mb-0 flex items-center'}>{t('loc:Parameter')}</h3>
-						<Divider className={'mb-3 mt-3'} />
-						<Row justify={'space-between'} className={'w-full'}>
-							<FieldArray
-								key='nameLocalizations'
-								name='nameLocalizations'
-								component={Localizations}
-								placeholder={t('loc:Zadajte názov')}
-								horizontal
-								ignoreFieldIndex={0}
-								customValidate={maxLength100}
-								className='w-7/12'
-								mainField={
-									<Field
-										className='mb-0'
-										component={InputField}
-										label={t('loc:Názov (EN)')}
-										placeholder={t('loc:Zadajte názov')}
-										key='nameLocalizations[0].value'
-										name='nameLocalizations[0].value'
-										required
-										validate={maxLength100}
-									/>
-								}
-							/>
-							<Field
-								id='value-type-switch'
-								customOnChange={() =>
-									change('valueType', formValues?.valueType === PARAMETERS_VALUE_TYPES.TIME ? PARAMETERS_VALUE_TYPES.ENUM : PARAMETERS_VALUE_TYPES.TIME)
-								}
-								checked={formValues?.valueType === PARAMETERS_VALUE_TYPES.TIME}
-								component={SwitchField}
-								name={'valueType'}
-								key={'valueType'}
-								label={t('loc:Hodnoty sú uvedené v minútach')}
-								className='w-2/5 mb-0 mt-3-5'
-								size={'small'}
-							/>
-						</Row>
-						<h3 className={'mb-0 flex items-center'}>{t('loc:Hodnoty')}</h3>
-						<Divider className={'mb-3 mt-3'} />
-						{formValues?.valueType === PARAMETERS_VALUE_TYPES.TIME ? (
-							<FieldArray
-								component={InputsArrayField}
-								name={'values'}
-								placeholder={t('loc:Zadajte hodnotu v minútach')}
-								entityName={t('loc:hodnotu')}
-								label={t('loc:Hodnoty (min)')}
-								nestedFieldName='value'
-								maxCount={MAX_VALUES_PER_PARAMETER}
-								inputSize={'middle'}
-								type='number'
-								emptyValue={{ value: null }}
-								required
-							/>
-						) : (
-							<FieldArray
-								name={'localizedValues'}
-								component={LocalizationsArray}
-								placeholder={t('loc:Zadajte hodnotu')}
-								required
-								addBtnLabel={t('loc:Pridať hodnotu')}
-								label={t('loc:Hodnota (EN)')}
-								nestedFieldName={'valueLocalizations'}
-								emptyValue={{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }}
-							/>
-						)}
-					</Col>
-				</Row>
+				<div>
+					<h3 className={'mb-0 flex items-center'}>{t('loc:Parameter')}</h3>
+					<Divider className={'mb-3 mt-3'} />
+					<Row justify={'space-between'} className={'w-full'}>
+						<FieldArray
+							key='nameLocalizations'
+							name='nameLocalizations'
+							component={Localizations}
+							placeholder={t('loc:Zadajte názov')}
+							horizontal
+							ignoreFieldIndex={0}
+							customValidate={maxLength100}
+							className='w-7/12 mb-0'
+							mainField={
+								<Field
+									className='mb-0'
+									component={InputField}
+									label={t('loc:Názov (EN)')}
+									placeholder={t('loc:Zadajte názov')}
+									key='nameLocalizations[0].value'
+									name='nameLocalizations[0].value'
+									required
+									validate={maxLength100}
+								/>
+							}
+						/>
+						<Field
+							id='value-type-switch'
+							customOnChange={() =>
+								change('valueType', formValues?.valueType === PARAMETERS_VALUE_TYPES.TIME ? PARAMETERS_VALUE_TYPES.ENUM : PARAMETERS_VALUE_TYPES.TIME)
+							}
+							checked={formValues?.valueType === PARAMETERS_VALUE_TYPES.TIME}
+							component={SwitchField}
+							name={'valueType'}
+							key={'valueType'}
+							label={t('loc:Hodnoty sú uvedené v minútach')}
+							className='w-2/5 mb-0 mt-3-5'
+							size={'small'}
+						/>
+					</Row>
+				</div>
+				<div>
+					<h3 className={'mb-0 flex items-center'}>{t('loc:Hodnoty')}</h3>
+					<Divider className={'mb-3 mt-3'} />
+					{formValues?.valueType === PARAMETERS_VALUE_TYPES.TIME ? (
+						<FieldArray
+							component={InputsArrayField}
+							name={'values'}
+							placeholder={t('loc:Zadajte hodnotu v minútach')}
+							entityName={t('loc:hodnotu')}
+							label={t('loc:Hodnoty (min)')}
+							nestedFieldName='value'
+							maxCount={MAX_VALUES_PER_PARAMETER}
+							inputSize={'middle'}
+							type='number'
+							emptyValue={{ value: null }}
+							required
+						/>
+					) : (
+						<FieldArray
+							name={'localizedValues'}
+							component={LocalizationsArray}
+							placeholder={t('loc:Zadajte hodnotu')}
+							required
+							addBtnLabel={t('loc:Pridať hodnotu')}
+							label={t('loc:Hodnota (EN)')}
+							nestedFieldName={'valueLocalizations'}
+							emptyValue={{ valueLocalizations: EMPTY_NAME_LOCALIZATIONS }}
+						/>
+					)}
+				</div>
 			</Space>
 			<div className={'content-footer pt-0'}>
 				<Row className={`w-full ${onDelete ? 'justify-between' : 'justify-center'}`}>

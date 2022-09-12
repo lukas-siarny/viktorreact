@@ -107,12 +107,15 @@ export const checkSameOpeningHours = (openingHours: OpeningHours | undefined): b
 				// take reference
 				if (index === 0) {
 					referenceTimeRanges = openingHour.timeRanges
+					// init checks array
+					checks.push(true)
 				} else {
 					checks.push(equals(referenceTimeRanges, openingHour.timeRanges))
 				}
 			}
 		})
-		if (!isEmpty(checks) && checks.every((value) => value)) {
+		// checks length array must be 5 because all days from monday to friday must have same ranges
+		if (!isEmpty(checks) && checks.every((value) => value) && checks.length === 5) {
 			return true
 		}
 	}

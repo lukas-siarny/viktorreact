@@ -114,7 +114,7 @@ export const checkSameOpeningHours = (openingHours: OpeningHours | undefined): b
 				}
 			}
 		})
-		// checks length array must be 5 because work week have 5 days
+		// checks length array must be 5 because all days from monday to friday must have same ranges
 		if (!isEmpty(checks) && checks.every((value) => value) && checks.length === 5) {
 			return true
 		}

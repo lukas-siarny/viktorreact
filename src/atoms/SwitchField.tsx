@@ -21,7 +21,6 @@ type Props = WrappedFieldProps &
 		tooltipText?: React.ReactNode // text ktory sa zobrazi v tooltipe pri prilozeni na ikonu, ktory moze niekedy dodefinovat dany switch (eg. doplnkove sluzby)
 		customLabel?: any
 		customOnChange?: (value: boolean) => void
-		labelClickable?: boolean
 	}
 
 const SwitchField = (props: Props) => {
@@ -41,8 +40,7 @@ const SwitchField = (props: Props) => {
 		offsetLabel,
 		customLabel,
 		customOnChange,
-		defaultChecked,
-		labelClickable = true
+		defaultChecked
 	} = props
 	// NOTE: ak existuje label znamena to ze switch je pouzity ako label vo forme a vtedy sa pouzije novy layout ikona + label text + switch
 	// Ak nie je label pouzite je v tabulke alebo vo filtri a vtedy sa nerenderuje label ani ikona ale len samotny switch field
@@ -65,13 +63,10 @@ const SwitchField = (props: Props) => {
 				<div
 					className={cx('noti-switch', { 'pointer-events-none': disabled, 'bg-gray-50': disabled })}
 					onClick={() => {
-						if (!labelClickable) {
-							return
-						}
 						onChange(!checkedState)
 					}}
 					onKeyDown={(e) => {
-						if (e.key === KEYBOARD_KEY.ENTER && labelClickable) {
+						if (e.key === KEYBOARD_KEY.ENTER) {
 							onChange(!checkedState)
 						}
 					}}

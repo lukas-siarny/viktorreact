@@ -60,22 +60,33 @@ const RegistrationForm: FC<Props> = (props) => {
 			<Field
 				className='noti-registration-switch'
 				component={SwitchField}
+				name={'gdpr'}
 				customLabel={
 					<div className='text-notino-grayDark text-xs md:text-sm'>
 						<span>{t('loc:Prehlasujem, že som sa oboznámil s ')}</span>
-						<a className='text-notino-grayDark hover:text-notino-pink' href={t('loc:LINK podmienky používania')} target='_blank' rel='noreferrer'>
+						<a
+							onClick={(e) => e.stopPropagation()}
+							className='text-notino-grayDark hover:text-notino-pink'
+							href={t('loc:LINK podmienky používania')}
+							target='_blank'
+							rel='noreferrer'
+						>
 							<u>{t('loc:Podmienkami používania')}</u>
 						</a>
 						{t('loc: a ')}
-						<a className='text-notino-grayDark hover:text-notino-pink' href={t('loc:LINK ochrana osobných údajov')} target='_blank' rel='noreferrer'>
+						<a
+							onClick={(e) => e.stopPropagation()}
+							className='text-notino-grayDark hover:text-notino-pink'
+							href={t('loc:LINK ochrana osobných údajov')}
+							target='_blank'
+							rel='noreferrer'
+						>
 							<u>{t('loc:Zásadami spracovania osobných údajov')}</u>
 						</a>
 						<span>{t('loc: a chcem sa zaregistrovať do programu Notino Partner.')}</span>
 					</div>
 				}
-				name={'gdpr'}
 				size={'large'}
-				labelClickable={false}
 			/>
 			<Field
 				className='noti-registration-switch marketing-field'
@@ -92,12 +103,17 @@ const RegistrationForm: FC<Props> = (props) => {
 						{t(
 							'loc:Spoločnosť Notino, s.r.o. je oprávnená kontaktovať registrovaných užívateľov z dôvodu priameho marketingu. Aby sme zamedzili nevyžiadanej pošte, potvrďte, ak toto spracovanie namietate. Viac informácii v '
 						)}
-						<a className='text-notino-pink font-semibold' href={t('loc:LINK ochrana osobných údajov')} target='_blank' rel='noreferrer'>
+						<a
+							onClick={(e) => e.stopPropagation()}
+							className='text-notino-pink font-semibold'
+							href={t('loc:LINK ochrana osobných údajov')}
+							target='_blank'
+							rel='noreferrer'
+						>
 							{t('loc:zásadách zpracovania osobných údajov.')}
 						</a>
 					</div>
 				}
-				labelClickable={false}
 			/>
 			<div className='mt-2'>
 				<Button type={'primary'} block className={`noti-btn m-regular mb-1 sm:mb-4`} htmlType={'submit'} disabled={submitting} loading={submitting}>

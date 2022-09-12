@@ -2,6 +2,7 @@
 import { FORM } from '../../../src/utils/enums'
 
 import salon from '../../fixtures/salon.json'
+import { generateRandomString } from '../../support/helpers'
 
 context('Salon', () => {
 	// id of created salon
@@ -26,7 +27,7 @@ context('Salon', () => {
 		cy.setInputValue(FORM.SALON, 'name', salon.create.name)
 		cy.uploadFile('gallery', '../images/test.jpg', FORM.SALON)
 		cy.setInputValue(FORM.SALON, 'phones-0-phone', salon.create.phone)
-		cy.setInputValue(FORM.SALON, 'email', salon.create.email)
+		cy.setInputValue(FORM.SALON, 'email', `${generateRandomString(6)}_${salon.create.emailSuffix}`)
 		cy.setSearchBoxValueAndSelectFirstOption('address', salon.create.address, '.pac-item', FORM.SALON, true)
 		cy.setInputValue(FORM.SALON, 'otherPaymentMethods', salon.create.paymentMethods)
 		cy.clickButton('payByCard', FORM.SALON, true)

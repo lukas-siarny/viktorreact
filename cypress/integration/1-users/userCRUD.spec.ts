@@ -2,6 +2,8 @@
 import { FORM } from '../../../src/utils/enums'
 
 import user from '../../fixtures/user.json'
+import { generateRandomString } from '../../support/helpers'
+import customer from '../../fixtures/customer.json'
 
 context('User', () => {
 	// id of created user
@@ -31,7 +33,7 @@ context('User', () => {
 			url: '/api/b2b/admin/users'
 		}).as('createPartner')
 		cy.visit('/users/create')
-		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', user.emailSuffix)
+		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'email', `${generateRandomString(6)}_${user.emailSuffix}`)
 		cy.setInputValue(FORM.ADMIN_CREATE_USER, 'phone', user.phone)
 		cy.selectOptionDropdown(FORM.ADMIN_CREATE_USER, 'roleID', 'Partner')
 		cy.get('form').submit()

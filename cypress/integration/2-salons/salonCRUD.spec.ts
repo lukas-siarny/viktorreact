@@ -5,7 +5,7 @@ import salon from '../../fixtures/salon.json'
 
 context('Salon', () => {
 	// id of created salon
-	// const createdSalonID = 0
+	let createdSalonID = 0
 	beforeEach(() => {
 		// restore local storage with tokens from snapshot
 		cy.restoreLocalStorage()
@@ -16,7 +16,7 @@ context('Salon', () => {
 		cy.saveLocalStorage()
 	})
 
-	/* it('Create salon', () => {
+	it('Create salon', () => {
 		// prepare image for upload
 		cy.intercept({
 			method: 'POST',
@@ -25,7 +25,7 @@ context('Salon', () => {
 		cy.visit('/salons/create')
 		cy.setInputValue(FORM.SALON, 'name', salon.create.name)
 		cy.uploadFile('gallery', '../images/test.jpg', FORM.SALON)
-		cy.setInputValue(FORM.SALON, 'phone', salon.create.phone)
+		cy.setInputValue(FORM.SALON, 'phones-0-phone', salon.create.phone)
 		cy.setInputValue(FORM.SALON, 'email', salon.create.email)
 		cy.setSearchBoxValueAndSelectFirstOption('address-search', salon.create.address, '.pac-item', undefined, true)
 		cy.setInputValue(FORM.SALON, 'otherPaymentMethods', salon.create.paymentMethods)
@@ -72,5 +72,5 @@ context('Salon', () => {
 			cy.checkSuccessToastMessage()
 			cy.location('pathname').should('eq', `/salons`)
 		})
-	}) */
+	})
 })

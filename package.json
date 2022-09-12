@@ -21,7 +21,7 @@
     "release": "npm run build && npm run sentry",
     "sentry": "cross-env REACT_APP_VERSION=$npm_package_version node sentry.js",
     "test": "AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login cypress open",
-    "test:CI": "AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login cypress run",
+    "test:CI": "AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login cypress run --browser chrome",
     "eject": "react-scripts eject",
     "translate-scan": "i18next-scanner 'src/**/*.{js,jsx,ts,tsx}'",
     "translate-watch": "npm run translate-scan && gulp watch",

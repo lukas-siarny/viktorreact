@@ -27,9 +27,8 @@ context('Salon', () => {
 		cy.uploadFile('gallery', '../images/test.jpg', FORM.SALON)
 		cy.setInputValue(FORM.SALON, 'phones-0-phone', salon.create.phone)
 		cy.setInputValue(FORM.SALON, 'email', salon.create.email)
-		cy.setSearchBoxValueAndSelectFirstOption('address-search', salon.create.address, '.pac-item', undefined, true)
+		cy.setSearchBoxValueAndSelectFirstOption('address', salon.create.address, '.pac-item', FORM.SALON, true)
 		cy.setInputValue(FORM.SALON, 'otherPaymentMethods', salon.create.paymentMethods)
-		cy.setSearchBoxValueAndSelectFirstOption('userID', 't', '.rc-virtual-list', FORM.SALON)
 		cy.clickButton('payByCard', FORM.SALON, true)
 		cy.get('form').submit()
 		cy.wait('@createSalon').then((interception: any) => {
@@ -48,7 +47,8 @@ context('Salon', () => {
 			url: `/api/b2b/admin/salons/${createdSalonID}`
 		}).as('updateSalon')
 		cy.visit(`/salons/${createdSalonID}`)
-		cy.setInputValue(FORM.SALON, 'name', salon.update.name, true)
+		cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage, true)
+		cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB, true)
 		cy.get('form').submit()
 		cy.wait('@updateSalon').then((interception: any) => {
 			// check status code

@@ -165,7 +165,7 @@ pipelines:
               - chmod +x /usr/local/bin/docker-compose
               - docker-compose up -d
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
-              - sleep 60
+              - sleep 90
               - npm run test:CI
 
 definitions:

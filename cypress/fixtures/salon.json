@@ -7,6 +7,7 @@
 		"address": "Kosice, Rampova 2, Slovakia"
 	},
 	"update" : {
-		"name": "Update test salon"
+		"socialLinkWebPage": "http://www.notino.com",
+		"socialLinkFB": "http://www.facebook.com/facebook"
 	}
 }

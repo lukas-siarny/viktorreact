@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import MapContainer from './MapContainer'
 
 // utils
-import { ENUMERATIONS_KEYS, MAP } from '../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, MAP } from '../utils/enums'
 import {
 	getGoogleMapUrl,
 	parseAddressComponents,
@@ -65,6 +65,7 @@ type Props = WrappedFieldProps & {
 	locationSearchElements?: LocationSearchElements
 	mapContainerElements?: MapContainerElements
 	disabled?: boolean
+	form?: FORM
 }
 
 const FULL_H_ELEMENT = <div className='h-full' />
@@ -121,7 +122,7 @@ const AddressFields = (props: Props) => {
 		changeFormFieldValue,
 		inputValues,
 		input,
-		meta: { error, touched },
+		meta: { form, error, touched },
 		locationSearchElements = {
 			loadingElement: FULL_H_ELEMENT,
 			containerElement: <div />
@@ -326,6 +327,8 @@ const AddressFields = (props: Props) => {
 												className={'mb-0'}
 												error={error && touched}
 												disabled={disabled}
+												form={form}
+												name={input.name}
 											/>
 											<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 										</Col>

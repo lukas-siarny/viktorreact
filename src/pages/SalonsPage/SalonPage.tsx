@@ -25,7 +25,7 @@ import { initEmptySalonFormData, initSalonFormData, SalonInitType } from './comp
 
 // enums
 import {
-	DAY,
+	DAY, DELETE_BUTTON_ID,
 	ENUMERATIONS_KEYS,
 	FILTER_ENTITY,
 	FORM,
@@ -56,7 +56,7 @@ import { Paths } from '../../types/api'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
+import { getPrefixCountryCode, formatDateByLocale, formFieldID } from '../../utils/helper'
 import searchWrapper from '../../utils/filters'
 
 // assets
@@ -506,6 +506,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 			type={'default'}
 			getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 			disabled={isDeletedSalon}
+			id={formFieldID(FORM.SALON, DELETE_BUTTON_ID)}
 		/>
 	)
 

@@ -248,7 +248,7 @@ export const BACK_DATA_QUERY = 'backData'
 export enum ENUMERATIONS_KEYS {
 	COUNTRIES_PHONE_PREFIX = 'countries_phone_prefix',
 	COUNTRIES = 'countries',
-	CURRENCIES = 'currenciesx'
+	CURRENCIES = 'currencies'
 }
 
 export enum ENUMERATIONS_PATHS {

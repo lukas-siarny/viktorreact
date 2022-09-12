@@ -25,7 +25,8 @@ import { initEmptySalonFormData, initSalonFormData, SalonInitType } from './comp
 
 // enums
 import {
-	DAY, DELETE_BUTTON_ID,
+	DAY,
+	DELETE_BUTTON_ID,
 	ENUMERATIONS_KEYS,
 	FILTER_ENTITY,
 	FORM,

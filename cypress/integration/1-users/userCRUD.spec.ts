@@ -19,9 +19,9 @@ context('User', () => {
 
 	it('Update my account info', () => {
 		cy.visit('/my-account')
-		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, true)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, true)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.phone, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, false, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, false, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'phone', user.phone, false, true)
 		cy.get('form').submit()
 		cy.checkSuccessToastMessage()
 	})
@@ -51,8 +51,8 @@ context('User', () => {
 			url: `/api/b2b/admin/users/${userID}`
 		}).as('updateUser')
 		cy.visit(`/users/${userID}`)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, true)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, false, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, false, true)
 		cy.get('form').submit()
 		cy.wait('@updateUser').then((interception: any) => {
 			// check status code of login request

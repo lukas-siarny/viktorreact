@@ -141,7 +141,10 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
  *
  * Returns formatted date by location
  */
-export const formatDateByLocale = (date: string | Date | undefined | Dayjs, skipTime?: boolean) => {
+export const formatDateByLocale = (date?: string | Date | Dayjs | null, skipTime?: boolean): string | null | undefined => {
+	if (!date) {
+		return date
+	}
 	const locale = i18next.language || DEFAULT_LANGUAGE
 
 	if (locale === LANGUAGE.SK || locale === LANGUAGE.CZ) {

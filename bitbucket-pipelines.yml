@@ -25,6 +25,8 @@ pipelines:
           - step:
               name: Build and push docker image
               script:
+                # copy .well-known files from development env
+                - cp -R ./docker/development/.well-known ./public/.well-known
                 # push source maps to sentry service
                 - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
                 # remove source maps from bundle build
@@ -49,6 +51,8 @@ pipelines:
           - step:
               name: Build and push docker image
               script:
+                # copy .well-known files from test env
+                - cp -R ./docker/test/.well-known ./public/.well-known
                 # push source maps to sentry service
                 - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=testServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
                 # remove source maps from bundle build
@@ -68,6 +72,8 @@ pipelines:
       - step:
           name: Build and release sentry sourcemaps
           script:
+            # copy .well-known files from uat env
+            - cp -R ./docker/uat/.well-known ./public/.well-known
             # push source maps to sentry service
             - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=uatServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
             # remove source maps from bundle build
@@ -96,6 +102,8 @@ pipelines:
       - step:
           name: Build and release sentry sourcemaps
           script:
+            # copy .well-known files from production env
+            - cp -R ./docker/production/.well-known ./public/.well-known
             # push source maps to sentry service
             - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_PROD_API REACT_APP_HOST=productionServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
             # remove source maps from bundle build

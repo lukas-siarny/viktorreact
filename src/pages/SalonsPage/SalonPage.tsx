@@ -766,9 +766,9 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 											<div className='w-full'>
 												<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
 												<p className='mb-2'>
-													{formatDateByLocale(salon.data.openingHoursNote.validFrom as string, true)}
+													{formatDateByLocale(salon.data.openingHoursNote.validFrom, true)}
 													{' - '}
-													{formatDateByLocale(salon.data.openingHoursNote.validTo as string, true)}
+													{formatDateByLocale(salon.data.openingHoursNote.validTo, true)}
 												</p>
 												<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
 											</div>

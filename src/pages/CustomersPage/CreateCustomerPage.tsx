@@ -12,6 +12,7 @@ import CustomerForm from './components/CustomerForm'
 
 // types
 import { IBreadcrumbs, ICustomerForm, SalonSubPageProps } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
@@ -79,7 +80,10 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				zipCode: formData.zipCode,
 				phone: formData.phone,
 				phonePrefixCountryCode: formData.phonePrefixCountryCode,
-				note: formData.note
+				note: formData.note,
+				galleryImageIDs:
+					((formData?.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody['galleryImageIDs']) || null,
+				profileImageID: (formData?.avatar?.[0]?.id ?? formData?.avatar?.[0]?.uid) || null
 			})
 
 			history.push(backUrl)

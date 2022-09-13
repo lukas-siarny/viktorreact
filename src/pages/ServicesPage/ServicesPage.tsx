@@ -141,7 +141,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			dataIndex: 'createdAt',
 			key: 'createdAt',
 			ellipsis: true,
-			render: (value: string) => formatDateByLocale(value)
+			render: (value: string) => formatDateByLocale(value) ?? '-'
 		}
 	]
 

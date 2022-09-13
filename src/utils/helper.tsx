@@ -141,9 +141,9 @@ export const toNormalizeQueryParams = (queryParams: any, allowQueryParams: strin
  *
  * Returns formatted date by location
  */
-export const formatDateByLocale = (date: string | Date | Dayjs, skipTime?: boolean) => {
+export const formatDateByLocale = (date?: string | Date | Dayjs | null, skipTime?: boolean): string | null | undefined => {
 	if (!date) {
-		throw new Error('Date can not be empty')
+		return date
 	}
 	const locale = i18next.language || DEFAULT_LANGUAGE
 

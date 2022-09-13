@@ -130,7 +130,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 							<div className={'w-full'}>
 								<Divider className={'mb-1 mt-1'}>
 									<div className={'flex items-center justify-center'}>
-										<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt as string)}</h4>
+										<h4 className={'mr-2 mb-0'}>{formatDateByLocale(history.createdAt)}</h4>
 										{setIcon(history.operation as SALON_HISTORY_OPERATIONS)}
 										<div className={'flex items-center'}>
 											<h4 className={`m-0 p-0 history-text-action ${SALON_HISTORY_OPERATIONS_COLORS?.[history.operation]}`}>{history.operation}</h4>{' '}

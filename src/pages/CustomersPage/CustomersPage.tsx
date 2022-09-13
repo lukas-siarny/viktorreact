@@ -130,7 +130,7 @@ const CustomersPage = (props: SalonSubPageProps) => {
 			ellipsis: true,
 			sorter: true,
 			sortOrder: setOrder(query.order, 'createdAt'),
-			render: (value) => formatDateByLocale(value)
+			render: (value) => formatDateByLocale(value) ?? '-'
 		}
 	]
 

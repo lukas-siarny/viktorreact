@@ -135,7 +135,7 @@ const CategoryParamsPage = () => {
 			sorter: {
 				compare: (a, b) => sortData(new Date(a.createdAt), new Date(b.createdAt))
 			},
-			render: (value) => formatDateByLocale(value)
+			render: (value) => formatDateByLocale(value) ?? '-'
 		}
 	]
 

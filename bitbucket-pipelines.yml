@@ -163,6 +163,7 @@ pipelines:
             script:
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
+              - ls && cd ./notino_backend && ls
               - docker-compose up -d
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
               - sleep 60

@@ -52,7 +52,7 @@ services:
       - "localstack"
       - "redis"
       - "database_test"
-    volume:
+    volumes:
       -  './logs:./logs'
   frontend:
     build:

@@ -4,7 +4,14 @@
 		"emailSuffix": "test@goodrequest.com",
 		"phone": "956520900",
 		"paymentMethods": "cash, coupons",
-		"address": "Kosice, Rampova 2, Slovakia"
+		"address": "Kosice, Rampova 2, Slovakia",
+		"street": "Rampova",
+		"streetNumber": "2",
+		"city": "Kosice",
+		"zipCode": "04001",
+		"lon" : "21,2647891",
+		"lat": "48,7352721",
+		"country": "Slovakia"
 	},
 	"update" : {
 		"socialLinkWebPage": "http://www.notino.com",

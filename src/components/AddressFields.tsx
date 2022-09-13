@@ -215,7 +215,7 @@ const AddressFields = (props: Props) => {
 					<Row className={'mb-4 gap-4'} wrap={false}>
 						{mapError ? (
 							<Row className={'w-full h-full block'} justify='center'>
-								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4'} />
+								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4 google-map-warning'} />
 								<Row justify={'space-between'}>
 									<Field
 										className={'w-4/5'}
@@ -297,18 +297,6 @@ const AddressFields = (props: Props) => {
 										validate={[validationRequiredNumber, numberMinLatitude, numberMaxLatitude]}
 									/>
 								</Row>
-								<Field
-									component={SelectField}
-									optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
-									label={t('loc:Štát')}
-									placeholder={t('loc:Vyber krajinu')}
-									options={countries?.enumerationsOptions || []}
-									name={'country'}
-									size={'large'}
-									loading={countries?.isLoading}
-									validate={validationRequired}
-									required
-								/>
 							</Row>
 						) : (
 							<>

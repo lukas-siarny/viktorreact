@@ -170,6 +170,7 @@ pipelines:
             artifacts: # store any generates images and videos as artifacts
               - cypress/screenshots/**
               - cypress/videos/**
+              - notino_backend/logs/**
 
 definitions:
   caches:

@@ -39,6 +39,7 @@ interface ServicesTableData {
 	categoryFirst: string
 	categorySecond: string
 	isComplete: boolean
+	createdAt: string
 }
 
 export interface IGetServicesQueryParams {
@@ -93,7 +94,8 @@ export const getServices =
 							})),
 							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo), symbol) || '-',
 							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo, i18next.t('loc:min')) || '-',
-							isComplete: thirdCategory?.service?.isComplete
+							isComplete: thirdCategory?.service?.isComplete,
+							createdAt: thirdCategory?.service?.createdAt
 						})
 					})
 				})

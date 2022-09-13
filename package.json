@@ -108,7 +108,7 @@
     "use-query-params": "1.2.3"
   },
   "devDependencies": {
-    "@goodrequest/antd-form-fields": "0.0.1",
+    "@goodrequest/antd-form-fields": "0.0.3",
     "@goodrequest/convert-translations-i18next": "1.0.5",
     "@goodrequest/eslint-config-typescript-react": "1.1.1",
     "@storybook/addon-actions": "6.4.22",

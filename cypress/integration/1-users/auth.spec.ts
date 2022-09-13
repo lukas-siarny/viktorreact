@@ -2,11 +2,9 @@
 import { FORM } from '../../../src/utils/enums'
 import { generateRandomString } from '../../support/helpers'
 
-import credentials from '../../fixtures/credentials.json'
 import user from '../../fixtures/user.json'
 
 context('Auth', () => {
-	// TODO
 	/* it('Sign up', () => {
 		cy.clearLocalStorage()
 		cy.intercept({
@@ -29,7 +27,7 @@ context('Auth', () => {
 		})
 		// check redirect to activation page
 		cy.location('pathname').should('eq', '/activation')
-	})
+	}) */
 
 	it('Sign out', () => {
 		cy.restoreLocalStorage()
@@ -38,7 +36,8 @@ context('Auth', () => {
 			url: '/api/b2b/admin/auth/logout'
 		}).as('authLogout')
 		cy.visit('/')
-		cy.clickButton('logout-btn')
+		cy.get('.noti-my-account').click()
+		cy.get('rc-menu-uuid-86717-2-logOut').click()
 		cy.wait('@authLogout').then((interception: any) => {
 			// check status code of logout request
 			expect(interception.response.statusCode).to.equal(200)
@@ -48,7 +47,7 @@ context('Auth', () => {
 		})
 		// check redirect to login page
 		cy.location('pathname').should('eq', '/login')
-	}) */
+	})
 
 	it('Sign in', () => {
 		cy.clearLocalStorage()

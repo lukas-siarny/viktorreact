@@ -52,8 +52,8 @@ context('User', () => {
 			url: `/api/b2b/admin/users/${userID}`
 		}).as('updateUser')
 		cy.visit(`/users/${userID}`)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName)
-		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, true)
+		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, true)
 		cy.get('form').submit()
 		cy.wait('@updateUser').then((interception: any) => {
 			// check status code of login request

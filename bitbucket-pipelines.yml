@@ -165,8 +165,11 @@ pipelines:
               - chmod +x /usr/local/bin/docker-compose
               - docker-compose up -d
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
-              - sleep 90
+              - sleep 60
               - npm run test:CI
+            artifacts: # store any generates images and videos as artifacts
+              - cypress/screenshots/**
+              - cypress/videos/**
 
 definitions:
   caches:

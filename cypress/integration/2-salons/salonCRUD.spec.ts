@@ -64,8 +64,9 @@ context('Salon', () => {
 			url: `/api/b2b/admin/salons/${createdSalonID}`
 		}).as('updateSalon')
 		cy.visit(`/salons/${createdSalonID}`)
-		cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage, true)
-		cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB, true)
+		cy.setInputValue(FORM.SALON, 'name', salon.update.name, false, true)
+		cy.setInputValue(FORM.SALON, 'socialLinkWebPage', salon.update.socialLinkWebPage)
+		cy.setInputValue(FORM.SALON, 'socialLinkFB', salon.update.socialLinkFB)
 		cy.get('form').submit()
 		cy.wait('@updateSalon').then((interception: any) => {
 			// check status code

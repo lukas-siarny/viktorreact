@@ -3,7 +3,6 @@ import { FORM } from '../../../src/utils/enums'
 
 import user from '../../fixtures/user.json'
 import { generateRandomString } from '../../support/helpers'
-import customer from '../../fixtures/customer.json'
 
 context('User', () => {
 	// id of created user

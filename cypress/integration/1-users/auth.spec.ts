@@ -5,7 +5,7 @@ import { generateRandomString } from '../../support/helpers'
 import user from '../../fixtures/user.json'
 
 context('Auth', () => {
-	/* it('Sign up', () => {
+	it('Sign up', () => {
 		cy.clearLocalStorage()
 		cy.intercept({
 			method: 'POST',
@@ -14,10 +14,9 @@ context('Auth', () => {
 		cy.visit('/signup')
 		cy.setInputValue(FORM.REGISTRATION, 'email', `${generateRandomString(5)}_${user.emailSuffix}`)
 		cy.setInputValue(FORM.REGISTRATION, 'password', user.password)
-		cy.setInputValue(FORM.REGISTRATION, 'confirmPassword', user.password)
 		cy.setInputValue(FORM.REGISTRATION, 'phone', user.phone)
 		cy.clickButton('gdpr', FORM.REGISTRATION, true)
-		cy.clickButton('gtc', FORM.REGISTRATION, true)
+		cy.clickButton('marketing', FORM.REGISTRATION, true)
 		cy.get('form').submit()
 		cy.wait('@registration').then((interception: any) => {
 			// check status code of registration request
@@ -27,7 +26,7 @@ context('Auth', () => {
 		})
 		// check redirect to activation page
 		cy.location('pathname').should('eq', '/activation')
-	}) */
+	})
 
 	it('Sign out', () => {
 		cy.restoreLocalStorage()

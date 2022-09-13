@@ -175,7 +175,7 @@ pipelines:
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
               - sleep 60
               - npm run test:CI
-            artifacts: # store any generates images and videos as artifacts
+            artifacts: # store cypress images, videos and BE logs
               - cypress/screenshots/**
               - cypress/videos/**
               - notino_backend/logs/**

@@ -53,7 +53,7 @@ services:
       - "redis"
       - "database_test"
     volumes:
-      -  './notino_backend/logs:/notino_backend/logs'
+      -  './notino_backend/logs:/logs'
   frontend:
     build:
         context: .

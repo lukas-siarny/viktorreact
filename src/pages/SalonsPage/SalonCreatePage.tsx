@@ -13,7 +13,7 @@ import SalonForm from './components/forms/SalonForm'
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import SalonSuggestionsModal from './components/modals/SalonSuggestionsModal'
 import SpecialistModal from './components/modals/SpecialistModal'
-import { useChangeOpeningHoursForm } from '../../components/OpeningHours/OpeningHoursUtils'
+import { useChangeOpeningHoursFormFields } from '../../components/OpeningHours/OpeningHoursUtils'
 import { getSalonDataForSubmission, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
 // enums
@@ -60,7 +60,7 @@ const SalonCreatePage: FC<SalonSubPageProps> = () => {
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 
-	useChangeOpeningHoursForm(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
+	useChangeOpeningHoursFormFields(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
@@ -140,6 +140,11 @@ const SalonCreatePage: FC<SalonSubPageProps> = () => {
 		dispatch(initialize(FORM.SALON, initEmptySalonFormData(phonePrefixCountryCode, true)))
 	}, [dispatch, phonePrefixCountryCode])
 
+	const breadcrumbDetailItem = {
+		name: t('loc:Vytvoriť salón'),
+		link: t('paths:salons/create')
+	}
+
 	// View
 	const breadcrumbs: IBreadcrumbs = {
 		items: isAdmin
@@ -148,12 +153,9 @@ const SalonCreatePage: FC<SalonSubPageProps> = () => {
 						name: t('loc:Zoznam salónov'),
 						link: backUrl
 					},
-					{
-						name: t('loc:Vytvoriť salón'),
-						link: t('paths:salons/create')
-					}
+					breadcrumbDetailItem
 			  ]
-			: []
+			: [breadcrumbDetailItem]
 	}
 
 	return (

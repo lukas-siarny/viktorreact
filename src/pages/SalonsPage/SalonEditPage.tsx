@@ -18,7 +18,7 @@ import NoteForm from './components/forms/NoteForm'
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
-import { useChangeOpeningHoursForm } from '../../components/OpeningHours/OpeningHoursUtils'
+import { useChangeOpeningHoursFormFields } from '../../components/OpeningHours/OpeningHoursUtils'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // enums
@@ -81,7 +81,7 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 
-	useChangeOpeningHoursForm(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
+	useChangeOpeningHoursFormFields(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 

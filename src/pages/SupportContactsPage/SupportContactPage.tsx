@@ -19,7 +19,7 @@ import {
 	createSameOpeningHours,
 	initOpeningHours,
 	orderDaysInWeek,
-	useChangeOpeningHoursForm
+	useChangeOpeningHoursFormFields
 } from '../../components/OpeningHours/OpeningHoursUtils'
 
 // enums
@@ -140,7 +140,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		dispatch(getSupportContacts())
 	}, [dispatch])
 
-	useChangeOpeningHoursForm(FORM.SUPPORT_CONTACT, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
+	useChangeOpeningHoursFormFields(FORM.SUPPORT_CONTACT, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	const handleSubmit = async (data: ISupportContactForm) => {
 		try {

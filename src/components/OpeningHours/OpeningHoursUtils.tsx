@@ -154,7 +154,7 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 	return openingHours?.filter((openingHour) => openingHour?.timeRanges?.length > 0)
 }
 
-export const useChangeOpeningHoursForm = (
+export const useChangeOpeningHoursFormFields = (
 	formName: string,
 	openingHours: OpeningHours,
 	sameOpenHoursOverWeekFormValue: boolean,

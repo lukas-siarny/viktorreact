@@ -11,10 +11,10 @@ type Props = TabsProps & {
 }
 
 const TabsComponent: FC<Props> = (props) => {
-	const { tabsContent, className, animated = false, ...restProps } = props
+	const { tabsContent, className, ...restProps } = props
 
 	return (
-		<Tabs {...restProps} className={`noti-tabs ${className ?? ''}`} animated={animated}>
+		<Tabs {...restProps} className={`noti-tabs ${className ?? ''}`}>
 			{tabsContent?.map((tabPane) => (
 				<TabPane closeIcon={tabPane.closeIcon} forceRender={tabPane.forceRender} disabled={tabPane.disabled} tab={tabPane.tab} key={tabPane.tabKey}>
 					{tabPane.tabPaneContent}

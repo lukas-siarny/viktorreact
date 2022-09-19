@@ -5,8 +5,8 @@ import { Divider, Form, Button } from 'antd'
 
 // utils
 import { isEmpty } from 'lodash'
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH, DELETE_BUTTON_ID } from '../../../utils/enums'
+import { showErrorNotification, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -99,6 +99,7 @@ const CosmeticForm: FC<Props> = (props) => {
 							type={'default'}
 							className='w-full xl:w-40'
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							id={formFieldID(FORM.COSMETIC, DELETE_BUTTON_ID)}
 						/>
 					)}
 				</div>

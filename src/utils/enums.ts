@@ -486,6 +486,8 @@ export const IMAGE_UPLOADING_PROP = 'imageUploading'
 
 export const DELETE_BUTTON_ID = 'delete-btn'
 
+export const CREATE_BUTTON_ID = 'create-btn'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {

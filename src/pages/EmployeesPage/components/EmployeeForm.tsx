@@ -203,7 +203,7 @@ const EmployeeForm: FC<Props> = (props) => {
 	// const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form id={`${FORM.EMPLOYEE}-form`} layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
 			<Space className={'w-full px-9'} direction='vertical' size={36}>
 				<div>
 					<h3 className={'mb-0 mt-0 flex items-center'}>

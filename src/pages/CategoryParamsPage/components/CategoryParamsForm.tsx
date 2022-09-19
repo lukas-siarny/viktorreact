@@ -14,8 +14,8 @@ import DeleteButton from '../../../components/DeleteButton'
 import Localizations from '../../../components/Localizations'
 
 // utils
-import { showErrorNotification, validationString } from '../../../utils/helper'
-import { FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS } from '../../../utils/enums'
+import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
+import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS } from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
 
 // validate
@@ -188,6 +188,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							entityName={t('loc:parameter')}
 							type={'default'}
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							id={formFieldID(FORM.CATEGORY_PARAMS, DELETE_BUTTON_ID)}
 						/>
 					)}
 					<Button

@@ -32,7 +32,7 @@ import { PAGE, PERMISSION } from '../../utils/enums'
 import Permissions from '../../utils/Permissions'
 
 // redux
-import { logOutUser } from '../../reducers/users/userActions'
+import { logOutUser, setRegularLogout } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 import { getSupportContact } from '../../reducers/supportContacts/supportContactsActions'
 
@@ -78,7 +78,14 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				{t('loc:Potrebujete pomôcť?')}
 			</Menu.Item>
 			<LanguagePicker asMenuItem />
-			<Menu.Item key='logOut' onClick={() => dispatch(logOutUser())} icon={<LogOutIcon />}>
+			<Menu.Item
+				key='logOut'
+				onClick={() => {
+					dispatch(logOutUser())
+					dispatch(setRegularLogout())
+				}}
+				icon={<LogOutIcon />}
+			>
 				{t('loc:Odhlásiť')}
 			</Menu.Item>
 			<Menu.Divider />

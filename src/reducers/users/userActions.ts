@@ -6,7 +6,7 @@ import { get, map, flatten, uniq } from 'lodash'
 // types
 import { ThunkResult } from '../index'
 import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IPermissions } from '../../types/interfaces'
-import { AUTH_USER, USER, USERS, PENDING_INVITES } from './userTypes'
+import { AUTH_USER, USER, USERS, PENDING_INVITES, SET_PREVIOUS_ROUTE, SET_REGULAR_LOGOUT } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
@@ -19,7 +19,7 @@ import { normalizeQueryParams } from '../../utils/helper'
 // actions
 import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
 
-export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites
+export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites | ISetPreviousRoute | ISetRegularLogout
 
 interface IGetAuthUser {
 	type: AUTH_USER
@@ -39,6 +39,16 @@ interface IGetUsers {
 interface IGetPendingInvites {
 	type: PENDING_INVITES
 	payload: IPendingInvitesPayload
+}
+
+interface ISetPreviousRoute {
+	type: typeof SET_PREVIOUS_ROUTE
+	payload: string | undefined
+}
+
+interface ISetRegularLogout {
+	type: typeof SET_REGULAR_LOGOUT
+	payload: boolean
 }
 
 export interface IGetUsersQueryParams extends IQueryParams {
@@ -88,7 +98,7 @@ export const processAuthorizationResult =
 			history.push(redirectPath)
 		} catch (e) {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
-			history.push(i18next.t('paths:login'))
+			// history.push(i18next.t('paths:login'))
 			// eslint-disable-next-line no-console
 			console.log(e)
 		} finally {
@@ -134,6 +144,18 @@ export const getCurrentUser = (): ThunkResult<Promise<IAuthUserPayload>> => asyn
 	return payload
 }
 
+export const setPreviousRoute =
+	(previousRoute?: string): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		dispatch({ type: SET_PREVIOUS_ROUTE, payload: previousRoute })
+	}
+
+export const setRegularLogout =
+	(previousRoute?: boolean): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		dispatch({ type: SET_REGULAR_LOGOUT, payload: previousRoute })
+	}
+
 export const logOutUser =
 	(skipRedirect?: boolean): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
@@ -151,7 +173,7 @@ export const logOutUser =
 			})
 
 			if (!skipRedirect) {
-				history.push(i18next.t('paths:login'))
+				history.push({ pathname: i18next.t('paths:login') })
 			}
 		}
 	}

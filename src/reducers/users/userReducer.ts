@@ -3,7 +3,7 @@ import { RESET_STORE } from '../generalTypes'
 import { IUserActions, IAuthUserPayload, IUserPayload, IUsersPayload, IPendingInvitesPayload } from './userActions'
 // eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { AUTH_USER, USERS, USER, PENDING_INVITES, SET_PREVIOUS_ROUTE, SET_REGULAR_LOGOUT } from './userTypes'
+import { AUTH_USER, USERS, USER, PENDING_INVITES } from './userTypes'
 
 export const initState = {
 	authUser: {
@@ -25,9 +25,7 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as IPendingInvitesPayload & ILoadingAndFailure,
-	previousRoute: undefined as string | undefined,
-	regularLogout: false
+	} as IPendingInvitesPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -132,16 +130,6 @@ export default (state = initState, action: IUserActions) => {
 					...initState.pendingInvites,
 					data: action.payload.data
 				}
-			}
-		case SET_PREVIOUS_ROUTE:
-			return {
-				...state,
-				previousRoute: action.payload
-			}
-		case SET_REGULAR_LOGOUT:
-			return {
-				...state,
-				regularLogout: action.payload
 			}
 		case RESET_STORE:
 			return initState

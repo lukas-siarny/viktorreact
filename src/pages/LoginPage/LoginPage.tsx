@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 
@@ -15,7 +15,6 @@ import { processAuthorizationResult } from '../../reducers/users/userActions'
 
 // utils
 import { postReq } from '../../utils/request'
-import { RootState } from '../../reducers'
 
 type Props = {}
 
@@ -28,15 +27,11 @@ const LoginPage: FC<Props> = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
 	const location = useLocation<LocationState>()
-	const previousRoute = useSelector((state: RootState) => state.user.previousRoute)
-	const regularLogout = useSelector((state: RootState) => state.user.regularLogout)
-
-	console.log({ routerState: location, previousRoute, regularLogout })
 
 	const handleLoginSubmit = async (values: ILoginForm) => {
 		try {
-			const { data } = await postReq('/api/b2b/admin/auth/login', null, values)
-			dispatch(processAuthorizationResult(data, regularLogout ? t('paths:index') : previousRoute))
+			const { data } = await postReq('/api/b2b/admin/auth/login', null, values, { skipLoginRedirect: true })
+			dispatch(processAuthorizationResult(data, location?.state?.redirectFrom))
 		} catch (error) {
 			// eslint-disable-next-line no-console
 			console.error(error)

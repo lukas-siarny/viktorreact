@@ -32,7 +32,7 @@ import { PAGE, PERMISSION } from '../../utils/enums'
 import Permissions from '../../utils/Permissions'
 
 // redux
-import { logOutUser, setRegularLogout } from '../../reducers/users/userActions'
+import { logOutUser } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 import { getSupportContact } from '../../reducers/supportContacts/supportContactsActions'
 
@@ -82,7 +82,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				key='logOut'
 				onClick={() => {
 					dispatch(logOutUser())
-					dispatch(setRegularLogout())
 				}}
 				icon={<LogOutIcon />}
 			>

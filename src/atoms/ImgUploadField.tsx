@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, useEffect, useMemo, useRef, useState } from 'react'
+import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -9,14 +9,16 @@ import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import cx from 'classnames'
 
-// assets
-import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
-
 // utils
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
 import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
+
+// assets
+import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
+import { ReactComponent as EyeIcon } from '../assets/icons/eye-icon.svg'
+import { ReactComponent as BinIcon } from '../assets/icons/bin-icon.svg'
 
 const { Item } = Form
 
@@ -126,6 +128,34 @@ const ImgUploadField: FC<Props> = (props) => {
 			customRequest={(options: any) => {
 				dispatch(change(form, IMAGE_UPLOADING_PROP, true))
 				uploadImage(options, signUrl, category, imagesUrls)
+			}}
+			itemRender={(originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => {
+				return (
+					<>
+						<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card'}>
+							<div className='ant-upload-list-item-info'>
+								<img src={file.thumbUrl} alt={file.name} className='ant-upload-list-item-image' />
+							</div>
+							<span className='ant-upload-list-item-actions'>
+								<a onClick={() => actions.preview()} target='_blank' rel='noopener noreferrer' title='Preview file'>
+									<span role='img' aria-label='eye' className='anticon anticon-eye'>
+										<EyeIcon />
+									</span>
+								</a>
+								<button
+									onClick={() => actions.remove()}
+									title='Remove file'
+									type='button'
+									className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn'
+								>
+									<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete'>
+										<BinIcon />
+									</span>
+								</button>
+							</span>
+						</div>
+					</>
+				)
 			}}
 			fileList={input.value || []}
 			onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}

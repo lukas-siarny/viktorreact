@@ -48,7 +48,7 @@ services:
       - AWS_S3_PUBLIC_URL=http://sample-bucket.s3.eu-cental-1.localstack:4566
       - AWS_S3_ENDPOINT=http://s3.eu-cental-1.localstack:4566
       - SERVICES_SUGGESTION_EMAILS=test@goodrequest.com
-      - SMTP_HOST=127.0.0.1
+      - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
       - SMTP_PORT=7777
       - SMTP_FROM_ADDRESS=e2e@goodrequest.com
     depends_on:

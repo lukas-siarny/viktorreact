@@ -169,7 +169,6 @@ pipelines:
             services:
               - "docker"
             script:
-              - cat /etc/hosts
               - echo "127.0.0.1 s3.eu-central-1.localhost" >> /etc/hosts
               - echo "127.0.0.1 sample-bucket.s3.eu-central-1.localhost" >> /etc/hosts
               - cat /etc/hosts

@@ -27,7 +27,7 @@ export default (on: any, config: any) => {
 	mailServer.bind((addr, id, email) => {
 		console.log('--- email ---')
 		// TODO: figure out how it would be possible use received emails
-		console.log(addr, id, email)
+		// console.log(addr, id, email)
 	})
 
 	// eslint-disable-next-line no-param-reassign

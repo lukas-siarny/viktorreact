@@ -50,9 +50,7 @@ const SalonRolesField: FC<Props> = (props) => {
 							style={{ marginBottom: 2 }}
 							className={'ml-1 cursor-pointer'}
 							onClick={() => {
-								if (!loading) {
-									setVisible(true)
-								}
+								setVisible(true)
 							}}
 						/>
 					</>

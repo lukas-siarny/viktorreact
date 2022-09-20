@@ -451,6 +451,9 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 			case salon.data?.state === SALON_STATES.NOT_PUBLISHED || salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED:
 				message = t('loc:Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.')
 				break
+			case !isPublished && !isPendingPublication:
+				message = t('loc:V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.')
+				break
 			case isPendingPublication && !isAdmin:
 				message = t('loc:Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.')
 				break

@@ -127,11 +127,11 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 			}
 		}
 
-		if (!salon?.isLoading || !dontUpdateFormData.current) {
+		if (!dontUpdateFormData.current) {
 			initData(salon.data)
 			dontUpdateFormData.current = false
 		}
-	}, [salon.data, salon?.isLoading, dispatch, phonePrefixes?.data])
+	}, [salon.data, dispatch, phonePrefixes?.data])
 
 	const handleSubmit = async (data: ISalonForm) => {
 		try {

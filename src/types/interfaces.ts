@@ -436,3 +436,14 @@ export interface IDateTimeFilterOption {
 	unit: 'day' | 'week'
 	name: string
 }
+
+export interface IRoleDescription
+	{
+		key: string
+		name: string
+		permissions:
+			{
+				description: string
+				checked: boolean
+			}[]
+	}

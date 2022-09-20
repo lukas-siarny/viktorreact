@@ -51,6 +51,7 @@ const EditRoleForm: FC<Props> = (props) => {
 							<>
 								<SalonRolesField
 									options={salonRolesOptions || []}
+									rolesDescriptions={roles.rolesDescriptions || []}
 									name={'roleID'}
 									size={'large'}
 									loading={roles?.isLoading}

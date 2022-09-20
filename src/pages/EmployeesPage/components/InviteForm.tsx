@@ -35,7 +35,15 @@ const InviteForm: FC<Props> = (props) => {
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<p className={'base-regular mb-7'}>{t('loc:Uveďte adresu, na ktorú odošleme link pre pozvanie zamestnanca do tímu.')}</p>
-			<SalonRolesField options={salonRolesOptions || []} name={'roleID'} size={'large'} loading={roles?.isLoading} className={'flex-1'} required />
+			<SalonRolesField
+				options={salonRolesOptions || []}
+				rolesDescriptions={roles.rolesDescriptions || []}
+				name={'roleID'}
+				size={'large'}
+				loading={roles?.isLoading}
+				className={'flex-1'}
+				required
+			/>
 			<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} required />
 		</Form>
 	)

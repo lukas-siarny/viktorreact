@@ -50,6 +50,7 @@ services:
       - SERVICES_SUGGESTION_EMAILS=test@goodrequest.com
       # in bitbucket pipeline do not work docker.host.internal instead of it has to be used $BITBUCKET_DOCKER_HOST_INTERNAL variable
       - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
+      # mail server is running with cypress test define in cypress plugins
       - SMTP_PORT=7777
       - SMTP_FROM_ADDRESS=e2e@goodrequest.com
     depends_on:

@@ -150,16 +150,16 @@ pipelines:
                 - cd notino_backend && npm install --legacy-peer-deps
               artifacts: # defining the artifacts to be passed to each future step.
                 - notino_backend/**
-          # - step:
-          #     name: install FE deps
-          #     image: cypress/browsers:node16.13.0-chrome95-ff94
-          #     caches:
-          #       - cypress
-          #       - frontend
-          #     script:
-          #       - npm install --legacy-peer-deps && CI=false npm run build
-          #     artifacts: # defining the artifacts to be passed to each future step.
-          #       - build/**
+          - step:
+              name: install FE deps
+              image: cypress/browsers:node16.13.0-chrome95-ff94
+              caches:
+                - cypress
+                - frontend
+              script:
+                - npm install --legacy-peer-deps && CI=false npm run build
+              artifacts: # defining the artifacts to be passed to each future step.
+                - build/**
         - step:
             name: run Test
             image: cypress/browsers:node16.13.0-chrome95-ff94
@@ -169,17 +169,17 @@ pipelines:
             services:
               - "docker"
             script:
-              - echo "127.0.0.1 s3.eu-central-1.localhost" >> /etc/hosts
-              - echo "127.0.0.1 sample-bucket.s3.eu-central-1.localhost" >> /etc/hosts
+              - echo "127.0.0.1 s3.eu-central-1.localstack" >> /etc/hosts
+              - echo "127.0.0.1 sample-bucket.s3.eu-central-1.localstack" >> /etc/hosts
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
               - docker-compose up -d
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
               - sleep 75
               - curl 127.0.0.1:4566
-              - curl s3.eu-central-1.localhost:4566
-              - curl sample-bucket.s3.eu-central-1.localhost:4566
-              # - npm run test:CI
+              - curl s3.eu-central-1.localstack:4566
+              - curl sample-bucket.s3.eu-central-1.localstack:4566
+              - npm run test:CI
             artifacts: # store cypress images, videos and BE logs
               - cypress/screenshots/**
               - cypress/videos/**

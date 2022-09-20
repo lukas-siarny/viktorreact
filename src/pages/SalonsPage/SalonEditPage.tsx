@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
-import { get, isEmpty, map } from 'lodash'
+import { get, map } from 'lodash'
 import { compose } from 'redux'
 import { BooleanParam, useQueryParams } from 'use-query-params'
 import cx from 'classnames'
@@ -73,21 +73,12 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
-	// docastne riesenie, kym nepridem na lepsie - ale pri otvoreni approval modalu je potrebne dotiahnut aktualne salonove data
-	// aby sme dostali akutalne hasAllRequiredSalonApprovalData
-	// zaroven vsak ak ma uzivatel rozpisane nejake data vo formulari, tak mu ich nechceme premazat, takze nie je mozne zavolat dispatch(selectSalon(salonID))
-	const salonFreshDataForApprovalModal = useSelector((state: RootState) => state.salons.salon)
 
 	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
 	const openOverWeekendFormValue = formValues?.openOverWeekend
 
 	useChangeOpeningHoursFormFields(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
-	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-
-	// if salon have ID and is same as loaded
-	const isSalonExists = !!salonID && salonID === salon.data?.id
-	// if salon is deleted
 	const isDeletedSalon = !!salon?.data?.deletedAt && salon?.data?.deletedAt !== null
 	const isSubmittingData = submitting || isRemoving || isSendingConfRequest
 
@@ -108,22 +99,7 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 	})
 
 	const updateOnlyOpeningHours = useRef(false)
-
-	const initData = async (salonData: ISalonPayloadData | null) => {
-		if (updateOnlyOpeningHours.current) {
-			if (salon?.isLoading) return
-			dispatch(
-				change(FORM.SALON, 'openingHoursNote', {
-					note: salonData?.openingHoursNote?.note,
-					noteFrom: salonData?.openingHoursNote?.validFrom,
-					noteTo: salonData?.openingHoursNote?.validTo
-				})
-			)
-			updateOnlyOpeningHours.current = false
-		} else if (!isEmpty(salonData) && isSalonExists) {
-			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode)))
-		}
-	}
+	const dontUpdateFormData = useRef(false)
 
 	// change tab based on query
 	useEffect(() => {
@@ -132,18 +108,30 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}, [query.history])
 
+	// init form
 	useEffect(() => {
-		// load fresh salon data
-		if (approvalModalVisible) {
-			dispatch(getSalon(salonID))
-		}
-	}, [salonID, dispatch, approvalModalVisible])
+		const initData = async (salonData: ISalonPayloadData | null) => {
+			const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
-	// init forms
-	useEffect(() => {
-		initData(salon.data)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salon.data])
+			if (updateOnlyOpeningHours.current) {
+				dispatch(
+					change(FORM.SALON, 'openingHoursNote', {
+						note: salonData?.openingHoursNote?.note,
+						noteFrom: salonData?.openingHoursNote?.validFrom,
+						noteTo: salonData?.openingHoursNote?.validTo
+					})
+				)
+				updateOnlyOpeningHours.current = false
+			} else {
+				dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode)))
+			}
+		}
+
+		if (!salon?.isLoading || !dontUpdateFormData.current) {
+			initData(salon.data)
+			dontUpdateFormData.current = false
+		}
+	}, [salon.data, salon?.isLoading, dispatch, phonePrefixes?.data])
 
 	const handleSubmit = async (data: ISalonForm) => {
 		try {
@@ -386,7 +374,11 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 							'pointer-events-none': disabled
 						})}
 						disabled={disabled}
-						onClick={() => setApprovalModalVisible(true)}
+						onClick={() => {
+							dontUpdateFormData.current = true
+							dispatch(selectSalon(salonID))
+							setApprovalModalVisible(true)
+						}}
 						loading={submitting}
 					>
 						{t('loc:Požiadať o schválenie')}
@@ -398,44 +390,51 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 
 	// render buttons on footer based on salon statuses
 	const renderContentFooter = () => {
-		switch (true) {
-			// for create salon page
-			case isDeletedSalon:
-				return null
-			// published and not basic
-			case isPublished && !isBasic:
-				return (
-					<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
-						<Row className={'gap-2 flex-row-reverse justify-end'}>
-							{/* if is admin show hide button */}
-							{isAdmin && hideSalonButton('w-52 lg:w-60 mt-2-5')}
-							{deleteButton('w-52 lg:w-60 mt-2-5')}
-						</Row>
-						<Row className={'gap-2 md:justify-end'}>{submitButton('w-52 lg:w-60 mt-2-5')}</Row>
-					</Row>
-				)
-			// unpublished or published and not pending publication
-			case (!isPublished || isPublished) && !isPendingPublication:
-				return (
-					<Row className={'w-full gap-2 flex-col sm:flex-nowrap sm:flex-row'}>
-						{deleteButton('w-48 lg:w-60 mt-2-5')}
-						<Row className={'gap-2 flex-1 sm:justify-end'}>
-							{requestApprovalButton('w-48 lg:w-60 mt-2-5')}
-							{submitButton('w-48 lg:w-60 mt-2-5')}
-						</Row>
-					</Row>
-				)
-			// unpublished and pending approval
-			case (!isPublished || isPublished) && isPendingPublication:
-				return (
-					<Row className={'w-full gap-2'} justify={'space-between'}>
-						{deleteButton('mt-2-5 w-52 xl:w-60')}
-						{submitButton('mt-2-5 w-52 xl:w-60')}
-					</Row>
-				)
-			default:
-				return null
+		if (isDeletedSalon) {
+			return null
 		}
+
+		return (
+			<div className={'content-footer pt-0'}>
+				{(() => {
+					switch (true) {
+						// published and not basic
+						case isPublished && !isBasic:
+							return (
+								<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
+									<Row className={'gap-2 flex-row-reverse justify-end'}>
+										{/* if is admin show hide button */}
+										{isAdmin && hideSalonButton('w-52 lg:w-60 mt-2-5')}
+										{deleteButton('w-52 lg:w-60 mt-2-5')}
+									</Row>
+									<Row className={'gap-2 md:justify-end'}>{submitButton('w-52 lg:w-60 mt-2-5')}</Row>
+								</Row>
+							)
+						// not pending publication
+						case !isPendingPublication:
+							return (
+								<Row className={'w-full gap-2 flex-col sm:flex-nowrap sm:flex-row'}>
+									{deleteButton('w-48 lg:w-60 mt-2-5')}
+									<Row className={'gap-2 flex-1 sm:justify-end'}>
+										{requestApprovalButton('w-48 lg:w-60 mt-2-5')}
+										{submitButton('w-48 lg:w-60 mt-2-5')}
+									</Row>
+								</Row>
+							)
+						// pending approval
+						case isPendingPublication:
+							return (
+								<Row className={'w-full gap-2'} justify={'space-between'}>
+									{deleteButton('mt-2-5 w-52 xl:w-60')}
+									{submitButton('mt-2-5 w-52 xl:w-60')}
+								</Row>
+							)
+						default:
+							return null
+					}
+				})()}
+			</div>
+		)
 	}
 
 	const infoMessage = useMemo(() => {
@@ -451,9 +450,6 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 				break
 			case salon.data?.state === SALON_STATES.NOT_PUBLISHED || salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED:
 				message = t('loc:Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.')
-				break
-			case !isPublished && !isPendingPublication:
-				message = t('loc:V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.')
 				break
 			case isPendingPublication && !isAdmin:
 				message = t('loc:Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.')
@@ -490,12 +486,10 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 
 	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header'}>{infoMessage}</div>
 
-	const showAdminSalonApporvalButtons = isPendingPublication && isSalonExists
-
 	const renderContentHeaderAdmin = () =>
-		(infoMessage || showAdminSalonApporvalButtons) && (
-			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication && isSalonExists })}>
-				{showAdminSalonApporvalButtons && (
+		(infoMessage || isPendingPublication) && (
+			<div className={cx('content-header flex-col gap-2', { warning: isPendingPublication })}>
+				{isPendingPublication && (
 					<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
 						<Row justify={'space-between'} className={'w-full'}>
 							<Button
@@ -544,15 +538,10 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 		setTabKey(selectedTabKey as TAB_KEYS)
 	}
 
-	const approvalButtonDisabled =
-		!salonFreshDataForApprovalModal?.data?.salon.hasAllRequiredSalonApprovalData ||
-		isDeletedSalon ||
-		isSubmittingData ||
-		salonFreshDataForApprovalModal.isLoading ||
-		isPendingPublication
+	const approvalButtonDisabled = !salon?.data?.hasAllRequiredSalonApprovalData || isDeletedSalon || isSubmittingData || salon?.isLoading || isPendingPublication
 
 	const getApprovalButtonTooltipMessage = () => {
-		if (!salonFreshDataForApprovalModal?.data?.salon.hasAllRequiredSalonApprovalData && !isPendingPublication) {
+		if (!salon?.data?.hasAllRequiredSalonApprovalData && !isPendingPublication) {
 			return t('loc:Žiadosť o scvhálenie nie je možné odoslať, pretože nie sú vyplnené všetky potrebné údaje zo zoznamu nižšie.')
 		}
 		if (isPendingPublication) {
@@ -573,37 +562,18 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 						disabledForm={isDeletedSalon || (isPendingPublication && !isAdmin)}
 						deletedSalon={isDeletedSalon}
 						noteModalControlButtons={
-							isSalonExists && (
-								<Row className={'flex justify-start w-full mt-4 gap-2'}>
-									{salon?.data?.openingHoursNote ? (
-										<>
-											<div className='w-full'>
-												<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
-												<p className='mb-0'>
-													{formatDateByLocale(salon.data.openingHoursNote.validFrom, true)}
-													{' - '}
-													{formatDateByLocale(salon.data.openingHoursNote.validTo, true)}
-												</p>
-												<i className='block text-base mt-2'>{salon.data.openingHoursNote.note}</i>
-											</div>
-											<Button
-												type={'primary'}
-												size={'middle'}
-												className={'noti-btn m-regular mt-2'}
-												onClick={() => setOpeningHoursModalVisble(true)}
-												disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
-											>
-												{STRINGS(t).edit(t('loc:poznámku'))}
-											</Button>
-											<DeleteButton
-												className={'mt-2'}
-												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-												onConfirm={deleteOpenHoursNote}
-												entityName={t('loc:poznámku')}
-												disabled={isDeletedSalon}
-											/>
-										</>
-									) : (
+							<Row className={'flex justify-start w-full mt-4 gap-2'}>
+								{salon?.data?.openingHoursNote ? (
+									<>
+										<div className='w-full'>
+											<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
+											<p className='mb-0'>
+												{formatDateByLocale(salon.data.openingHoursNote.validFrom, true)}
+												{' - '}
+												{formatDateByLocale(salon.data.openingHoursNote.validTo, true)}
+											</p>
+											<i className='block text-base mt-2'>{salon.data.openingHoursNote.note}</i>
+										</div>
 										<Button
 											type={'primary'}
 											size={'middle'}
@@ -611,24 +581,34 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 											onClick={() => setOpeningHoursModalVisble(true)}
 											disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
 										>
-											{STRINGS(t).addRecord(t('loc:poznámku'))}
+											{STRINGS(t).edit(t('loc:poznámku'))}
 										</Button>
-									)}
-								</Row>
-							)
+										<DeleteButton
+											className={'mt-2'}
+											getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+											onConfirm={deleteOpenHoursNote}
+											entityName={t('loc:poznámku')}
+											disabled={isDeletedSalon}
+										/>
+									</>
+								) : (
+									<Button
+										type={'primary'}
+										size={'middle'}
+										className={'noti-btn m-regular mt-2'}
+										onClick={() => setOpeningHoursModalVisble(true)}
+										disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
+									>
+										{STRINGS(t).addRecord(t('loc:poznámku'))}
+									</Button>
+								)}
+							</Row>
 						}
 					/>
-					{isSalonExists && (
-						<OpenHoursNoteModal
-							visible={openingHoursModalVisble}
-							salonID={salonID}
-							openingHoursNote={salon?.data?.openingHoursNote}
-							onClose={onOpenHoursNoteModalClose}
-						/>
-					)}
-					{!isDeletedSalon && <div className={'content-footer pt-0'}>{renderContentFooter()}</div>}
+					{renderContentFooter()}
 				</Spin>
 			</div>
+			<OpenHoursNoteModal visible={openingHoursModalVisble} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
 			<Modal
 				key={`${modalConfig.visible}`}
 				title={modalConfig.title}

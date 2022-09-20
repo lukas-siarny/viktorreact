@@ -1,0 +1,12 @@
+{
+	"parameter" : {
+		"create" : {
+			"title": "test",
+			"value": "small"
+		},
+		"update" : {
+			"title": "test 123",
+			"value": "medium"
+		}
+	}
+}

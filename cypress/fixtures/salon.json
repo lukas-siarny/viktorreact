@@ -1,35 +1,12 @@
 {
 	"create" : {
 		"name": "Test salon",
-		"emailSuffix": "test@goodrequest.com",
+		"email": "test.confirmed_partneruser@goodrequest.com",
 		"phone": "956520900",
 		"paymentMethods": "cash, coupons",
-		"address": "Kosice, Rampova 2, Slovakia",
-		"street": "Rampova",
-		"streetNumber": "2",
-		"city": "Kosice",
-		"zipCode": "04001",
-		"lon" : "21,2647891",
-		"lat": "48,7352721",
-		"country": "SK"
+		"address": "Kosice, Rampova 2, Slovakia"
 	},
 	"update" : {
-		"name": "TEST SALON 123",
-		"socialLinkWebPage": "http://www.notino.com",
-		"socialLinkFB": "http://www.facebook.com/facebook"
-	},
-	"billingInfo" : {
-		"companyName" : "Test s.r.o.",
-		"businessID" : "2020202020",
-		"vatID" : "44981023",
-		"taxID" : "2020202020",
-		"firstName": "Test",
-		"lastName": "Testovic",
-		"emailSuffix": "test@goodrequest.com",
-		"phone": "956520900",
-		"street": "Rampova",
-		"streetNumber": "2",
-		"city": "Kosice",
-		"zipCode": "04001"
+		"name": "Update test salon"
 	}
 }

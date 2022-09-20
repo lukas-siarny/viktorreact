@@ -44,10 +44,13 @@ services:
       - AWS_S3_SECRET_KEY=test
       - AWS_KEYPAIR_ID=test
       - PORT=3000
-      - NODE_ENV=development
+      - NODE_ENV=production
       - AWS_S3_PUBLIC_URL=http://sample-bucket.s3.eu-cental-1.localstack:4566
       - AWS_S3_ENDPOINT=http://s3.eu-cental-1.localstack:4566
       - SERVICES_SUGGESTION_EMAILS=test@goodrequest.com
+      - SMTP_HOST=localhost
+      - SMTP_PORT=7777
+      - SMTP_FROM_ADDRESS=e2e@goodrequest.com
     depends_on:
       - "localstack"
       - "redis"

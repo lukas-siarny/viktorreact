@@ -38,7 +38,7 @@
     "storybook": "npm run build:tailwind && start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "preinstall": "npx npm-force-resolutions",
-	  "wait-for-it": "./scripts/wait-for-it.sh"
+    "wait-for-it": "./scripts/wait-for-it.sh"
   },
   "dependencies": {
     "@sentry/cli": "1.71.0",
@@ -102,6 +102,7 @@
     "regenerator-runtime": "0.13.9",
     "sass": "1.50.1",
     "slugify": "1.6.5",
+    "smtp-tester": "2.0.0",
     "symlink-dir": "5.0.1",
     "tailwindcss": "2.2.19",
     "tailwindcss-export-config": "2.3.0",

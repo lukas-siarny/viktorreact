@@ -177,11 +177,6 @@ pipelines:
               - docker-compose up -d
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
               - sleep 60
-              - cd notino_backend
-              - ls -la
-              - cd logs
-              - ls -la
-              - cd ../..
               - npm run test:CI
             artifacts: # store cypress images, videos and BE logs
               - cypress/screenshots/**

@@ -88,7 +88,7 @@ export const processAuthorizationResult =
 			history.push(redirectPath)
 		} catch (e) {
 			dispatch({ type: AUTH_USER.AUTH_USER_LOAD_FAIL })
-			// history.push(i18next.t('paths:login'))
+			history.push(i18next.t('paths:login'))
 			// eslint-disable-next-line no-console
 			console.log(e)
 		} finally {
@@ -151,7 +151,7 @@ export const logOutUser =
 			})
 
 			if (!skipRedirect) {
-				history.push({ pathname: i18next.t('paths:login') })
+				history.push(i18next.t('paths:login'))
 			}
 		}
 	}

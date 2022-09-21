@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { FC, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row, Spin } from 'antd'
 import { initialize, submit } from 'redux-form'
-import { isEmpty, map } from 'lodash'
+import { isEmpty } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -13,11 +13,10 @@ import SalonForm from './components/forms/SalonForm'
 import { scrollToTopFn } from '../../components/ScrollToTop'
 import SalonSuggestionsModal from './components/modals/SalonSuggestionsModal'
 import SpecialistModal from './components/modals/SpecialistModal'
-import { useChangeOpeningHoursFormFields } from '../../components/OpeningHours/OpeningHoursUtils'
 import { getSalonDataForSubmission, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
 // enums
-import { ENUMERATIONS_KEYS, FILTER_ENTITY, FORM, PERMISSION } from '../../utils/enums'
+import { FILTER_ENTITY, FORM, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -25,48 +24,34 @@ import { getBasicSalon, getSuggestedSalons } from '../../reducers/salons/salonsA
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { CategoriesPatch, IBreadcrumbs, ISalonForm, SalonSubPageProps } from '../../types/interfaces'
+import { CategoriesPatch, IBreadcrumbs, ISalonForm, SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { patchReq, postReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode } from '../../utils/helper'
+import Permissions, { withPermissions } from '../../utils/Permissions'
 import searchWrapper from '../../utils/filters'
 
 // assets
 import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
 
-// hooks
-import useBackUrl from '../../hooks/useBackUrl'
-
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-const SalonCreatePage: FC<SalonSubPageProps> = () => {
+interface SalonCreatePageProps extends SalonPageProps {}
+
+const SalonCreatePage: FC<SalonCreatePageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+
+	const { isAdmin, backUrl, phonePrefixCountryCode, authUser, phonePrefixes } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [suggestionsModalVisible, setSuggestionsModalVisible] = useState(false)
 	const [specialistModalVisible, setSpecialistModalVisible] = useState(false)
 
-	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const basicSalon = useSelector((state: RootState) => state.salons.basicSalon)
 
-	const [backUrl] = useBackUrl(t('paths:salons'))
-
-	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
-	const openOverWeekendFormValue = formValues?.openOverWeekend
-
-	useChangeOpeningHoursFormFields(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
-
-	const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-
 	const isLoading = phonePrefixes?.isLoading || authUser?.isLoading || basicSalon.isLoading
-
-	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
 
 	// show salons searchbox with basic salon suggestions instead of text field for name input
 	const showBasicSalonsSuggestions = !isAdmin

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
 import { change, initialize, isPristine, reset, submit } from 'redux-form'
-import { get, map } from 'lodash'
+import { get } from 'lodash'
 import { compose } from 'redux'
 import { BooleanParam, useQueryParams } from 'use-query-params'
 import cx from 'classnames'
@@ -18,11 +18,9 @@ import NoteForm from './components/forms/NoteForm'
 import TabsComponent from '../../components/TabsComponent'
 import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
-import { useChangeOpeningHoursFormFields } from '../../components/OpeningHours/OpeningHoursUtils'
-import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // enums
-import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_CREATE_TYPE, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS } from '../../utils/enums'
+import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_CREATE_TYPE, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -30,13 +28,14 @@ import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/sel
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, SalonPageProps, SalonSubPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
-import Permissions, { checkPermissions, withPermissions } from '../../utils/Permissions'
-import { getPrefixCountryCode, formatDateByLocale } from '../../utils/helper'
+import Permissions, { withPermissions } from '../../utils/Permissions'
+import { formatDateByLocale } from '../../utils/helper'
+import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
@@ -44,18 +43,19 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 
-// hooks
-import useBackUrl from '../../hooks/useBackUrl'
-
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
 const pendingStates: string[] = [SALON_STATES.NOT_PUBLISHED_PENDING, SALON_STATES.PUBLISHED_PENDING]
 
-const SalonEditPage: FC<SalonSubPageProps> = (props) => {
+interface SalonEditPageProps extends SalonPageProps {
+	salonID: string
+}
+
+const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { salonID } = props
+	const { salonID, isAdmin, backUrl, phonePrefixes, authUser, phonePrefixCountryCode } = props
 
 	const [submitting, setSubmitting] = useState<boolean>(false)
 	const [isSendingConfRequest, setIsSendingConfRequest] = useState<boolean>(false)
@@ -67,16 +67,8 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 
 	const [tabKey, setTabKey] = useState<TAB_KEYS>(TAB_KEYS.SALON_DETAIL)
 
-	const authUser = useSelector((state: RootState) => state.user.authUser)
-	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON]?.values)
 	const isFormPristine = useSelector(isPristine(FORM.SALON))
-
-	const sameOpenHoursOverWeekFormValue = formValues?.sameOpenHoursOverWeek
-	const openOverWeekendFormValue = formValues?.openOverWeekend
-
-	useChangeOpeningHoursFormFields(FORM.SALON, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	const isDeletedSalon = !!salon?.data?.deletedAt && salon?.data?.deletedAt !== null
 	const isSubmittingData = submitting || isRemoving || isSendingConfRequest
@@ -88,10 +80,6 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 
 	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
-
-	const isAdmin = useMemo(() => checkPermissions(authUser.data?.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]), [authUser])
-
-	const [backUrl] = useBackUrl(t('paths:salons'))
 
 	const [query, setQuery] = useQueryParams({
 		history: BooleanParam
@@ -110,8 +98,6 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 	// init form
 	useEffect(() => {
 		const initData = async (salonData: ISalonPayloadData | null) => {
-			const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-
 			if (updateOnlyOpeningHours.current) {
 				dispatch(
 					change(FORM.SALON, 'openingHoursNote', {
@@ -130,7 +116,7 @@ const SalonEditPage: FC<SalonSubPageProps> = (props) => {
 			initData(salon.data)
 			dontUpdateFormData.current = false
 		}
-	}, [salon.data, dispatch, phonePrefixes?.data])
+	}, [salon.data, dispatch, phonePrefixCountryCode])
 
 	const handleSubmit = async (data: ISalonForm) => {
 		try {

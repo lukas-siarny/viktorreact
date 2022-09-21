@@ -1,10 +1,15 @@
-import { SALON_STATES } from './../utils/enums'
 /* eslint-disable import/no-cycle */
 import { ColumnsType } from 'antd/lib/table'
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
-import { Paths } from './api'
 import { PaginationProps } from 'antd'
-import { Path } from 'typescript'
+
+// utils
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
+import { SALON_STATES } from './../utils/enums'
+
+// types
+import { Paths } from './api'
+import { IAuthUserPayload } from '../reducers/users/userActions'
+import { IEnumerationsCountriesPayload } from '../reducers/enumerations/enumerationActions'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -435,4 +440,12 @@ export interface IDateTimeFilterOption {
 	value: number
 	unit: 'day' | 'week'
 	name: string
+}
+
+export interface SalonPageProps {
+	isAdmin: boolean
+	backUrl?: string
+	phonePrefixCountryCode: string
+	authUser: IAuthUserPayload & ILoadingAndFailure
+	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
 }

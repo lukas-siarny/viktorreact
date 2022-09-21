@@ -56,7 +56,6 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		openOverWeekend,
 		sameOpenHoursOverWeek,
 		openingHours,
-		openingHoursNote: salonData.openingHoursNote?.note || null,
 		latitude: salonData.address?.latitude ?? null,
 		longitude: salonData.address?.longitude ?? null,
 		city: salonData.address?.city || null,

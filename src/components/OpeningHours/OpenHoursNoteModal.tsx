@@ -49,7 +49,7 @@ const OpenHoursNoteModal = (props: Props) => {
 		onClose()
 	}
 
-	// TODO: change
+	// TODO: remove validFrom and validTo when BE is done
 	const handleSubmit = async (values: IOpenHoursNoteForm) => {
 		try {
 			const reqData = {

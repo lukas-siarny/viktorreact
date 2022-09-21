@@ -191,14 +191,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		}
 	}, [dispatch, showBasicSalonsSuggestions])
 
-	const updateOnlyOpeningHours = useRef(false)
+	const dontUpdateForm = useRef(false)
 
 	const initData = async (salonData: ISalonPayloadData | null) => {
-		if (updateOnlyOpeningHours.current) {
-			if (salon?.isLoading) return
-			dispatch(change(FORM.SALON, 'openingHoursNote', salonData?.openingHoursNote?.note))
-			updateOnlyOpeningHours.current = false
-		} else if (!isEmpty(salonData) && isSalonExists) {
+		if (!isEmpty(salonData) && isSalonExists) {
 			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode, showBasicSalonsSuggestions)))
 		} else if (!salon?.isLoading) {
 			// init data for new "creating process" salon
@@ -222,7 +218,10 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 
 	// init forms
 	useEffect(() => {
-		initData(salon.data)
+		if (!dontUpdateForm.current) {
+			initData(salon.data)
+			dontUpdateForm.current = false
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [salon.data, showBasicSalonsSuggestions])
 
@@ -458,7 +457,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, phonePrefixCountryCode])
 
 	const onOpenHoursNoteModalClose = () => {
-		updateOnlyOpeningHours.current = true
+		dontUpdateForm.current = true
 		setVisible(false)
 		dispatch(selectSalon(salonID))
 	}

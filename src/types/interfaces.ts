@@ -79,7 +79,6 @@ export interface ISalonForm {
 	state?: SALON_STATES
 	aboutUsSecond: string | null
 	openingHours: OpeningHours
-	openingHoursNote: string | null
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
 	country: string | null

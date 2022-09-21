@@ -3,7 +3,7 @@ import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Form, Upload, UploadProps, Image } from 'antd'
+import { Form, Upload, UploadProps, Image, Popconfirm, Divider } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
@@ -13,12 +13,14 @@ import cx from 'classnames'
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
-import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
+import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP, STRINGS } from '../utils/enums'
 
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 import { ReactComponent as EyeIcon } from '../assets/icons/eye-icon.svg'
 import { ReactComponent as BinIcon } from '../assets/icons/bin-icon.svg'
+import { ReactComponent as DownloadIcon } from '../assets/icons/download-icon.svg'
+import { ReactComponent as PdfIcon } from '../assets/icons/pdf-icon.svg'
 
 const { Item } = Form
 
@@ -75,6 +77,7 @@ const ImgUploadField: FC<Props> = (props) => {
 	const imagesUrls = useRef<ImgUploadParam>({})
 	const [previewUrl, setPreviewUrl] = useState<IPreviewFile | null>(null)
 	const [images, setImages] = useState<any[]>([])
+	const [popConf, setPopConf] = useState<boolean>(false)
 
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
@@ -116,6 +119,57 @@ const ImgUploadField: FC<Props> = (props) => {
 		[staticMode]
 	)
 
+	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => <div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
+		<div className={'ant-upload-list-item-info flex items-center justify-center'}>
+			{ file.type !== 'application/pdf' ? <img src={file.thumbUrl} alt={file.name} className='ant-upload-list-item-image' /> : <div className={'flex items-center justify-center'}><PdfIcon />{file.name}</div>}
+		</div>
+		<span className={'ant-upload-list-item-actions w-full h-full'}>
+			<div className={'w-full flex items-center h-1/2'}>
+				<a className={'flex items-center justify-center w-1/2'} href={`${file.url}?response-content-disposition=attachment`} target='_blank' rel='noopener noreferrer' title='Download file' download>
+					<span role='img' aria-label='download' className='anticon anticon-download w-full'>
+						<DownloadIcon width={24} />
+					</span>
+				</a>
+				<Divider className={'m-0 p-0 h-full'} type='vertical' />
+				<a className={'flex items-center justify-center w-1/2'} onClick={() => actions.preview()} target='_blank' rel='noopener noreferrer' title='Preview file'>
+					<span role='img' aria-label='eye' className='anticon anticon-eye w-full'>
+						<EyeIcon width={24} />
+					</span>
+				</a>
+			</div>
+			<Divider className={'m-0 p-0'} type='horizontal' />
+			<div className={'w-full flex items-center h-1/2'}>
+				<Popconfirm
+					placement={'top'}
+					title={t('loc:Naozaj chcete odstrániť súbor?')}
+					okButtonProps={{
+						type: 'default',
+						className: 'noti-btn'
+					}}
+					cancelButtonProps={{
+						type: 'primary',
+						className: 'noti-btn'
+					}}
+					okText={t('loc:Zmazať')}
+					onConfirm={() => actions.remove()}
+					cancelText={t('loc:Zrušiť')}
+					disabled={disabled}
+				>
+					<button
+						title='Remove file'
+						type='button'
+						className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center w-1/2'
+					>
+						<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full'>
+							<BinIcon width={24} />
+						</span>
+					</button>
+				</Popconfirm>
+				<Divider className={'m-0 p-0 h-full'} type='vertical' />
+			</div>
+		</span>
+	</div>
+
 	const uploader = (
 		<Upload
 			id={formFieldID(form, input.name)}
@@ -129,34 +183,7 @@ const ImgUploadField: FC<Props> = (props) => {
 				dispatch(change(form, IMAGE_UPLOADING_PROP, true))
 				uploadImage(options, signUrl, category, imagesUrls)
 			}}
-			itemRender={(originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => {
-				return (
-					<>
-						<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card'}>
-							<div className='ant-upload-list-item-info'>
-								<img src={file.thumbUrl} alt={file.name} className='ant-upload-list-item-image' />
-							</div>
-							<span className='ant-upload-list-item-actions'>
-								<a onClick={() => actions.preview()} target='_blank' rel='noopener noreferrer' title='Preview file'>
-									<span role='img' aria-label='eye' className='anticon anticon-eye'>
-										<EyeIcon />
-									</span>
-								</a>
-								<button
-									onClick={() => actions.remove()}
-									title='Remove file'
-									type='button'
-									className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn'
-								>
-									<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete'>
-										<BinIcon />
-									</span>
-								</button>
-							</span>
-						</div>
-					</>
-				)
-			}}
+			itemRender={renderGalleryImage}
 			fileList={input.value || []}
 			onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
 			maxCount={maxCount}
@@ -217,7 +244,8 @@ const ImgUploadField: FC<Props> = (props) => {
 					preview={{
 						visible: !!previewUrl && previewUrl?.type !== 'application/pdf',
 						onVisibleChange: () => setPreviewUrl(null),
-						current: images?.findIndex((image: any) => image?.url === previewUrl?.url)
+						current: images?.findIndex((image: any) => image?.url === previewUrl?.url),
+						countRender: (current: number, total: number) => `${current}/${total}`
 					}}
 				>
 					{map(images, (image) => (

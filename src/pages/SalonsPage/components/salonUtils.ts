@@ -4,13 +4,13 @@ import { isEmpty, map } from 'lodash'
 import { ISalonForm, OpeningHours } from '../../../types/interfaces'
 import { ISalonPayloadData } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
+import { Paths } from '../../../types/api'
 
 // enums
 import { SALON_STATES } from '../../../utils/enums'
 
 // components
 import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, initOpeningHours, orderDaysInWeek } from '../../../components/OpeningHours/OpeningHoursUtils'
-import { Paths } from '../../../types/api'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{

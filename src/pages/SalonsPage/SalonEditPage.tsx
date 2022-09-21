@@ -27,7 +27,6 @@ import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_CREATE_TY
 // reducers
 import { RootState } from '../../reducers'
 import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
-import { getSalon } from '../../reducers/salons/salonsActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types

@@ -22,6 +22,7 @@ import AutocompleteField from '../../../../atoms/AutocompleteField'
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
 import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
 
 // types
 import { ISalonForm, ISelectOptionItem } from '../../../../types/interfaces'
@@ -422,6 +423,6 @@ const form = reduxForm<ISalonForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateSalonForm
-})(SalonForm)
+})(withPromptUnsavedChanges(SalonForm))
 
 export default form

@@ -18,6 +18,7 @@ import SelectField from '../../../atoms/SelectField'
 // utils
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { ENUMERATIONS_KEYS, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { ISupportContactForm } from '../../../types/interfaces'
@@ -172,6 +173,6 @@ const form = reduxForm<ISupportContactForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateSupportContactForm
-})(SupportContactForm)
+})(withPromptUnsavedChanges(SupportContactForm))
 
 export default form

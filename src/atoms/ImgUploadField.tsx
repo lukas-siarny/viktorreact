@@ -3,7 +3,7 @@ import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Form, Upload, UploadProps, Image, Popconfirm, Divider } from 'antd'
+import { Form, Upload, UploadProps, Image, Popconfirm, Divider, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
@@ -132,24 +132,34 @@ const ImgUploadField: FC<Props> = (props) => {
 			</div>
 			<span className={'ant-upload-list-item-actions w-full h-full'}>
 				<div className={'w-full flex items-center h-1/2'}>
-					<a
-						className={'flex items-center justify-center w-1/2'}
+					<Button
+						className={'flex items-center justify-center w-1/2 m-0 p-0'}
 						href={`${file.url}?response-content-disposition=attachment`}
 						target='_blank'
 						rel='noopener noreferrer'
+						type={'link'}
+						htmlType={'button'}
 						title='Download file'
 						download
 					>
 						<span role='img' aria-label='download' className='anticon anticon-download w-full'>
 							<DownloadIcon width={24} />
 						</span>
-					</a>
+					</Button>
 					<Divider className={'m-0 p-0 h-full'} type='vertical' />
-					<a className={'flex items-center justify-center w-1/2'} onClick={() => actions.preview()} target='_blank' rel='noopener noreferrer' title='Preview file'>
+					<Button
+						type={'link'}
+						htmlType={'button'}
+						className={'flex items-center justify-center w-1/2 m-0 p-0'}
+						onClick={() => actions.preview()}
+						target='_blank'
+						rel='noopener noreferrer'
+						title='Preview file'
+					>
 						<span role='img' aria-label='eye' className='anticon anticon-eye w-full'>
 							<EyeIcon width={24} />
 						</span>
-					</a>
+					</Button>
 				</div>
 				<Divider className={'m-0 p-0'} type='horizontal' />
 				<div className={'w-full flex items-center h-1/2'}>

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { get, map } from 'lodash'
 import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../../utils/enums'
 /* eslint-disable import/no-cycle */

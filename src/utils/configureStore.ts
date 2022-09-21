@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { createStore, compose, applyMiddleware, Reducer } from 'redux'
 import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'

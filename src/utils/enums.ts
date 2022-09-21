@@ -1,6 +1,14 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
+import sk_SK from 'antd/lib/locale-provider/sk_SK'
+import cs_CZ from 'antd/lib/locale-provider/cs_CZ'
+import en_GB from 'antd/lib/locale-provider/en_GB'
+
+// assets
+import { ReactComponent as SK_Flag } from '../assets/flags/SK.svg'
+import { ReactComponent as EN_Flag } from '../assets/flags/GB.svg'
+import { ReactComponent as CZ_Flag } from '../assets/flags/CZ.svg'
 
 // types
 // eslint-disable-next-line import/no-cycle
@@ -23,6 +31,52 @@ export enum LANGUAGE {
 	RO = 'ro',
 	BG = 'bg',
 	IT = 'it' */
+}
+
+export const LOCALES = {
+	[LANGUAGE.SK]: {
+		ISO_639: 'sk',
+		antD: sk_SK,
+		icon: SK_Flag,
+		countryCode: 'SK'
+	},
+	[LANGUAGE.CZ]: {
+		ISO_639: 'cs',
+		antD: cs_CZ,
+		icon: CZ_Flag,
+		displayAs: 'cz',
+		countryCode: 'CZ'
+	},
+	[LANGUAGE.EN]: {
+		ISO_639: 'en',
+		antD: en_GB,
+		icon: EN_Flag,
+		countryCode: 'EN'
+	} /* ,
+	[LANGUAGE.HU]: {
+		ISO_639: 'hu',
+		antD: hu_HU,
+		icon: HU_Flag,
+		countryCode: 'HU'
+	},
+	[LANGUAGE.RO]: {
+		ISO_639: 'ro',
+		antD: ro_RO,
+		icon: RO_Flag,
+		countryCode: 'RO'
+	},
+	[LANGUAGE.BG]: {
+		ISO_639: 'bg',
+		antD: bg_BG,
+		icon: BG_Flag,
+		countryCode: 'BG'
+	},
+	[LANGUAGE.IT]: {
+		ISO_639: 'it',
+		antD: it_IT,
+		icon: IT_Flag,
+		countryCode: 'IT'
+	} */
 }
 
 export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes

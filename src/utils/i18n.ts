@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import i18n from 'i18next'
 import Backend from 'i18next-chained-backend'
 import LocalStorageBackend from 'i18next-localstorage-backend'

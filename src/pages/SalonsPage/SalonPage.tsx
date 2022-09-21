@@ -2,7 +2,6 @@ import React, { FC, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { map } from 'lodash'
-import { isPristine } from 'redux-form'
 
 // components
 import SalonCreatePage from './SalonCreatePage'

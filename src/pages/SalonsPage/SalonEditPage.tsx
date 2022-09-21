@@ -28,7 +28,7 @@ import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/sel
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, SalonPageProps, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'

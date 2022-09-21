@@ -196,13 +196,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 	const initData = async (salonData: ISalonPayloadData | null) => {
 		if (updateOnlyOpeningHours.current) {
 			if (salon?.isLoading) return
-			dispatch(
-				change(FORM.SALON, 'openingHoursNote', {
-					note: salonData?.openingHoursNote?.note,
-					noteFrom: salonData?.openingHoursNote?.validFrom,
-					noteTo: salonData?.openingHoursNote?.validTo
-				})
-			)
+			dispatch(change(FORM.SALON, 'openingHoursNote', salonData?.openingHoursNote?.note))
 			updateOnlyOpeningHours.current = false
 		} else if (!isEmpty(salonData) && isSalonExists) {
 			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode, showBasicSalonsSuggestions)))
@@ -741,6 +735,8 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 		return null
 	}
 
+	const disabledForm = isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)
+
 	const salonForm = (
 		<>
 			<div className='content-body mt-2'>
@@ -750,7 +746,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 					<SalonForm
 						onSubmit={handleSubmit}
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
-						disabledForm={isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)}
+						disabledForm={disabledForm}
 						deletedSalon={isDeletedSalon}
 						showBasicSalonsSuggestions={showBasicSalonsSuggestions}
 						loadBasicSalon={loadBasicSalon}
@@ -763,11 +759,6 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 										<>
 											<div className='w-full'>
 												<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
-												<p className='mb-2'>
-													{formatDateByLocale(salon.data.openingHoursNote.validFrom, true)}
-													{' - '}
-													{formatDateByLocale(salon.data.openingHoursNote.validTo, true)}
-												</p>
 												<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
 											</div>
 											<Button
@@ -776,7 +767,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 												size={'middle'}
 												className={'noti-btn m-regular w-12/25 xl:w-1/3'}
 												onClick={() => setVisible(true)}
-												disabled={isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)}
+												disabled={disabledForm}
 											>
 												{STRINGS(t).edit(t('loc:poznámku'))}
 											</Button>
@@ -785,7 +776,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 												onConfirm={deleteOpenHoursNote}
 												entityName={t('loc:poznámku')}
-												disabled={isDeletedSalon}
+												disabled={disabledForm}
 											/>
 										</>
 									) : (
@@ -795,7 +786,7 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 											size={'middle'}
 											className={'noti-btn m-regular w-1/3'}
 											onClick={() => setVisible(true)}
-											disabled={isDeletedSalon || (!isNewSalon && isPendingPublication && !isAdmin)}
+											disabled={disabledForm}
 										>
 											{STRINGS(t).addRecord(t('loc:poznámku'))}
 										</Button>
@@ -805,7 +796,13 @@ const SalonPage: FC<SalonSubPageProps> = (props) => {
 						}
 					/>
 					{isSalonExists && (
-						<OpenHoursNoteModal visible={visible} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
+						<OpenHoursNoteModal
+							title={t('loc:Poznámka pre otváracie hodiny')}
+							visible={visible}
+							salonID={salonID}
+							openingHoursNote={salon?.data?.openingHoursNote}
+							onClose={onOpenHoursNoteModalClose}
+						/>
 					)}
 					<div className={'content-footer pt-0'}>{renderContentFooter()}</div>
 				</Spin>

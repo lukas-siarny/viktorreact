@@ -79,9 +79,7 @@ export interface ISalonForm {
 	state?: SALON_STATES
 	aboutUsSecond: string | null
 	openingHours: OpeningHours
-	note: string | null
-	noteFrom: string | null
-	noteTo: string | null
+	openingHoursNote: string | null
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
 	country: string | null
@@ -236,13 +234,7 @@ export interface INoteForm {
 }
 
 export interface IOpenHoursNoteForm {
-	hoursNote: {
-		note: string
-		range: {
-			dateFrom: string
-			dateTo: string
-		}
-	}
+	openingHoursNote: string
 }
 
 export interface ISearchFilter {

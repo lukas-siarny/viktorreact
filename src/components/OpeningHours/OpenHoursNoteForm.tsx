@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { reduxForm, InjectedFormProps } from 'redux-form'
+import { reduxForm, InjectedFormProps, Field } from 'redux-form'
 import { Form, Button } from 'antd'
 import { useTranslation } from 'react-i18next'
 
@@ -7,13 +7,11 @@ import { useTranslation } from 'react-i18next'
 import { IOpenHoursNoteForm } from '../../types/interfaces'
 
 // utils
-import { FORM, STRINGS } from '../../utils/enums'
-
-// components
-import OpenHoursNoteFields from './OpenHoursNoteFields'
+import { FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../utils/enums'
 
 // validate
 import validateOpenHoursNoteForm from './validateOpenHoursNoteForm'
+import TextareaField from '../../atoms/TextareaField'
 
 type ComponentProps = {}
 
@@ -25,12 +23,14 @@ const OpenHoursNoteForm: FC<Props> = (props) => {
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
-			<OpenHoursNoteFields
-				datePlaceholder={[t('loc:Od'), t('loc:Do')]}
-				dateLabel={t('loc:Dátum')}
-				textAreaPlaceholder={STRINGS(t).enter(t('loc:poznámku'))}
-				textAreaLabel={t('loc:Poznámka')}
+			<Field
+				component={TextareaField}
+				name={'openingHoursNote'}
+				placeholder={STRINGS(t).enter(t('loc:poznámku'))}
+				label={t('loc:Poznámka')}
 				size={'large'}
+				maxLength={VALIDATION_MAX_LENGTH.LENGTH_100}
+				showLettersCount
 			/>
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
 				{STRINGS(t).save(t('loc:poznámku'))}

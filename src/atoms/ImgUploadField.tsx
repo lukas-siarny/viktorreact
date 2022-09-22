@@ -118,66 +118,63 @@ const ImgUploadField: FC<Props> = (props) => {
 		[staticMode]
 	)
 
-	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => {
-		console.log(file)
-		return (
-			<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
-				<div className={'ant-upload-list-item-info flex items-center justify-center'}>
-					{file.type !== 'application/pdf' ? (
-						<Image src={file.thumbUrl || file.url} alt={file.name} fallback={file.url} className='ant-upload-list-item-image' />
-					) : (
-						<div className={'flex items-center justify-center'}>
-							<PdfIcon />
-							{file.name}
-						</div>
-					)}
-				</div>
-				<span className={'ant-upload-list-item-actions w-full h-full'}>
-					<div className={'w-full flex items-center h-full'}>
-						<Popconfirm
-							placement={'top'}
-							title={t('loc:Naozaj chcete odstrániť súbor?')}
-							okButtonProps={{
-								type: 'default',
-								className: 'noti-btn'
-							}}
-							cancelButtonProps={{
-								type: 'primary',
-								className: 'noti-btn'
-							}}
-							okText={t('loc:Zmazať')}
-							onConfirm={() => actions.remove()}
-							cancelText={t('loc:Zrušiť')}
-							disabled={disabled}
-						>
-							<button
-								title='Remove file'
-								type='button'
-								className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50'
-							>
-								<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full'>
-									<RemoveIcon className='remove-icon-image' width={18} />
-								</span>
-							</button>
-						</Popconfirm>
-						<Button
-							type={'link'}
-							htmlType={'button'}
-							className={'flex items-center justify-center m-0 p-0 w-full h-full'}
-							onClick={() => actions.preview()}
-							target='_blank'
-							rel='noopener noreferrer'
-							title='Preview file'
-						>
-							<span role='img' aria-label='eye' className='anticon anticon-eye'>
-								<EyeIcon width={24} />
-							</span>
-						</Button>
+	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => (
+		<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
+			<div className={'ant-upload-list-item-info flex items-center justify-center'}>
+				{file.type !== 'application/pdf' ? (
+					<Image src={file.thumbUrl || file.url} alt={file.name} fallback={file.url} className='ant-upload-list-item-image' />
+				) : (
+					<div className={'flex items-center justify-center'}>
+						<PdfIcon />
+						{file.name}
 					</div>
-				</span>
+				)}
 			</div>
-		)
-	}
+			<span className={'ant-upload-list-item-actions w-full h-full'}>
+				<div className={'w-full flex items-center h-full'}>
+					<Popconfirm
+						placement={'top'}
+						title={t('loc:Naozaj chcete odstrániť súbor?')}
+						okButtonProps={{
+							type: 'default',
+							className: 'noti-btn'
+						}}
+						cancelButtonProps={{
+							type: 'primary',
+							className: 'noti-btn'
+						}}
+						okText={t('loc:Zmazať')}
+						onConfirm={() => actions.remove()}
+						cancelText={t('loc:Zrušiť')}
+						disabled={disabled}
+					>
+						<button
+							title='Remove file'
+							type='button'
+							className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50'
+						>
+							<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full'>
+								<RemoveIcon className='remove-icon-image' width={18} />
+							</span>
+						</button>
+					</Popconfirm>
+					<Button
+						type={'link'}
+						htmlType={'button'}
+						className={'flex items-center justify-center m-0 p-0 w-full h-full'}
+						onClick={() => actions.preview()}
+						target='_blank'
+						rel='noopener noreferrer'
+						title='Preview file'
+					>
+						<span role='img' aria-label='eye' className='anticon anticon-eye'>
+							<EyeIcon width={24} />
+						</span>
+					</Button>
+				</div>
+			</span>
+		</div>
+	)
 
 	const uploader = (
 		<Upload

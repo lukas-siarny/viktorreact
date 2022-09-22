@@ -269,8 +269,7 @@ const ImgUploadField: FC<Props> = (props) => {
 					preview={{
 						visible: !!previewUrl && previewUrl?.type !== 'application/pdf',
 						onVisibleChange: () => setPreviewUrl(null),
-						current: images?.findIndex((image: any) => image?.url === previewUrl?.url),
-						countRender: (current: number, total: number) => `${current}/${total}`
+						current: images?.findIndex((image: any) => image?.url === previewUrl?.url)
 					}}
 				>
 					{map(images, (image) => (

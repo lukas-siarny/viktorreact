@@ -122,7 +122,7 @@ const ImgUploadField: FC<Props> = (props) => {
 		<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
 			<div className={'ant-upload-list-item-info flex items-center justify-center'}>
 				{file.type !== 'application/pdf' ? (
-					<Image src={file.thumbUrl} alt={file.name} fallback={file.url} className='ant-upload-list-item-image' />
+					<Image src={file.thumbUrl || file.url} alt={file.name} fallback={file.url} className='ant-upload-list-item-image' />
 				) : (
 					<div className={'flex items-center justify-center'}>
 						<PdfIcon />

@@ -37,9 +37,7 @@ import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-interface SalonCreatePageProps extends SalonPageProps {}
-
-const SalonCreatePage: FC<SalonCreatePageProps> = (props) => {
+const SalonCreatePage: FC<SalonPageProps> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 

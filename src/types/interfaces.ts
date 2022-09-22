@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
@@ -8,8 +7,6 @@ import { SALON_STATES } from './../utils/enums'
 
 // types
 import { Paths } from './api'
-import { IAuthUserPayload } from '../reducers/users/userActions'
-import { IEnumerationsCountriesPayload } from '../reducers/enumerations/enumerationActions'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -440,6 +437,32 @@ export interface IDateTimeFilterOption {
 	value: number
 	unit: 'day' | 'week'
 	name: string
+}
+
+export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
+
+export interface IEnumerationOptions {
+	key: string | number
+	label: string
+	value: string | number
+	flag?: string
+}
+
+export interface IEnumerationsPayload {
+	pagination: IResponsePagination | null
+	enumerationsOptions: IEnumerationOptions[]
+}
+
+export interface IEnumerationsCountriesPayload extends IEnumerationsPayload {
+	data: CountriesData | null
+}
+
+export interface IAuthUserPayload {
+	data: ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) | null
+}
+
+export interface IEmployeePayload {
+	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
 }
 
 export interface SalonPageProps {

@@ -18,7 +18,7 @@ import { showErrorNotification } from '../../../utils/helper'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-16.svg'
 
 // validate
-// eslint-disable-next-line import/no-cycle
+
 import validateCreatePasswordForm from './validateCreatePasswordForm'
 
 type ComponentProps = {

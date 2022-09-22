@@ -6,7 +6,6 @@ import { InputProps } from 'antd/lib/input'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { trimStart, trim } from 'lodash'
 import { FIELD_MODE } from '../utils/enums'
-// eslint-disable-next-line import/no-cycle
 import { formFieldID } from '../utils/helper'
 import { ReactComponent as SearchIcon } from '../assets/icons/search-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'

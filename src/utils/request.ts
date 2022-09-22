@@ -5,6 +5,7 @@ import { get, has, isEmpty, split } from 'lodash'
 import i18next from 'i18next'
 import qs from 'qs'
 import rootReducer from '../reducers'
+import { logOutUser } from '../reducers/users/userActions'
 import { getAccessToken, isLoggedIn } from './auth'
 import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import configureStore from './configureStore'
@@ -12,8 +13,6 @@ import { history } from './history'
 
 // types
 import { IErrorMessage } from '../types/interfaces'
-
-import { logOutUser } from '../reducers/users/userActions'
 import showNotifications from './tsxHelpers'
 import { PathsDictionary } from '../types/api'
 

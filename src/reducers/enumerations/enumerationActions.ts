@@ -1,18 +1,17 @@
 /* eslint-disable import/no-cycle */
 import { get, map } from 'lodash'
-import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../../utils/enums'
-/* eslint-disable import/no-cycle */
-import { IResetStore } from '../generalTypes'
 import { ThunkResult } from '../index'
 
 // types
 import { ENUMERATIONS } from './enumerationTypes'
-import { IResponsePagination, ISelectOptionItem } from '../../types/interfaces'
+import { IResetStore } from '../generalTypes'
+import { ISelectOptionItem, IEnumerationsPayload, IEnumerationsCountriesPayload, IEnumerationOptions } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 // utils
 import { getReq } from '../../utils/request'
-import { Paths } from '../../types/api'
 import i18n from '../../utils/i18n'
+import { DEFAULT_LANGUAGE, ENUMERATIONS_KEYS } from '../../utils/enums'
 
 export type IEnumerationActions = IGetEnumerationsActions | IResetStore
 
@@ -20,22 +19,6 @@ interface IGetEnumerationsActions {
 	type: ENUMERATIONS
 	enumType: ENUMERATIONS_KEYS
 	payload: IEnumerationsCurrenciesPayload | IEnumerationsCountriesPayload
-}
-
-export interface IEnumerationOptions {
-	key: string | number
-	label: string
-	value: string | number
-	flag?: string
-}
-
-export interface IEnumerationsPayload {
-	pagination: IResponsePagination | null
-	enumerationsOptions: IEnumerationOptions[]
-}
-
-export interface IEnumerationsCountriesPayload extends IEnumerationsPayload {
-	data: CountriesData | null
 }
 
 export interface ICountriesPayload {
@@ -46,8 +29,6 @@ export interface ICountriesPayload {
 export interface IEnumerationsCurrenciesPayload extends IEnumerationsPayload {
 	data: CurrenciesData | null
 }
-
-export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
 
 export type CurrenciesData = Paths.GetApiB2BAdminEnumsCurrencies.Responses.$200['currencies']
 

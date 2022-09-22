@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import React, { FC } from 'react'
 import { Select, Menu, Row } from 'antd'
 // eslint-disable-next-line import/no-extraneous-dependencies

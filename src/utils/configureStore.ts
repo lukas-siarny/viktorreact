@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import { createStore, compose, applyMiddleware, Reducer } from 'redux'
 import thunk from 'redux-thunk'
 import { createLogger } from 'redux-logger'
@@ -11,7 +10,7 @@ import showNotifications from './tsxHelpers'
 
 /**
  * OnSubmit validate if IMAGE_UPLOADING_PROP is true -> indicates uploading
- * During upload will be submit action denied
+ * During upload will be submit action deniedw
  * IMAGE_UPLOADING_PROP must be set outside e.g. ImgUploadField
  */
 const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: any) => {

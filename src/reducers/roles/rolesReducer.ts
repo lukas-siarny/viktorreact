@@ -1,7 +1,6 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
 import { IRolesActions, IRolesPayload } from './rolesActions'
-// eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { SYSTEM_ROLES, SALON_ROLES } from './rolesTypes'
 

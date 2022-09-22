@@ -167,12 +167,12 @@ pipelines:
               - cypress
               - frontend
             services:
-              - "docker"
+              - "custom-docker"
             script:
               - echo "127.0.0.1 s3.eu-central-1.$BITBUCKET_DOCKER_HOST_INTERNAL" >> /etc/hosts
               - echo "127.0.0.1 sample-bucket.s3.eu-central-1.$BITBUCKET_DOCKER_HOST_INTERNAL" >> /etc/hosts
-              - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-              - chmod +x /usr/local/bin/docker-compose
+              # - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+              # - chmod +x /usr/local/bin/docker-compose
               - docker-compose up
               # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
               # - sleep 75
@@ -189,3 +189,7 @@ definitions:
   services:
     docker:
       memory: 4092
+    custom-docker:
+      memory: 4092
+      image: docker/compose:1.25.4
+

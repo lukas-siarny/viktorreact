@@ -59,13 +59,13 @@ services:
       - "database_test"
     volumes:
       - './notino_backend/logs:/home/app/logs'
-  frontend:
-    build:
-        context: .
-        dockerfile: ./docker/CI/Dockerfile
-    ports:
-      - "80:80"
-    volumes:
-      - './docker/CI/nginx.conf:/etc/nginx/nginx.conf'
-    depends_on:
-      - "backend"
+  # frontend:
+  #   build:
+  #       context: .
+  #       dockerfile: ./docker/CI/Dockerfile
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - './docker/CI/nginx.conf:/etc/nginx/nginx.conf'
+  #   depends_on:
+  #     - "backend"

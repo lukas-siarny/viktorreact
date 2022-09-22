@@ -51,6 +51,7 @@ services:
       - AWS_S3_PUBLIC_URL=http://sample-bucket.s3.eu-central-1.localhost:4566
       - AWS_S3_ENDPOINT=http://s3.eu-central-1.localhost:4566
       - SERVICES_SUGGESTION_EMAILS=test@goodrequest.com
+      - USE_CLOUD_WATCH=false
       # in bitbucket pipeline do not work docker.host.internal instead of it has to be used $BITBUCKET_DOCKER_HOST_INTERNAL variable
       - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
       # mail server is running with cypress test define in cypress plugins

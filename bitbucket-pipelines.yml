@@ -140,16 +140,6 @@ pipelines:
               script:
                 - CI=false npm run build
   custom:
-    docker_test:
-     - step:
-        name: 'run tests'
-        image: cypress/browsers:node16.13.0-chrome95-ff94
-        script:
-          - docker-compose -v
-          - echo 'tests done'
-        services:
-          - "docker"
-          - "dockercomp"
     e2e:
         - parallel:      # these 2 steps will run in parallel
           - step:
@@ -199,5 +189,3 @@ definitions:
   services:
     docker:
       memory: 4092
-    dockercomp:
-      image: docker/compose:1.25.4

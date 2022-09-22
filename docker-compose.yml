@@ -32,6 +32,7 @@ services:
     build:
         context: ./notino_backend/.
         dockerfile: ./docker/CI/Dockerfile.api
+    entrypoint: ['echo "localstack s3.eu-central-1.$BITBUCKET_DOCKER_HOST_INTERNAL" >> /etc/hosts', 'echo "localstack sample-bucket.s3.eu-central-1.$BITBUCKET_DOCKER_HOST_INTERNAL" >> /etc/hosts', 'cat /etc/hosts', 'npm run wait-for-it -- -h database_test -p 5432 -t 60', 'npm run prestart && npm run db-sync && npm run seed:dev && npm run upload-general-files && npm run start-prod']
     ports:
       - "3000:3000"
     environment:

@@ -1,22 +1,26 @@
-import React, { CSSProperties, FC, useEffect, useMemo, useRef, useState } from 'react'
+import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Form, Upload, UploadProps, Image } from 'antd'
+import { Form, Upload, UploadProps, Image, Popconfirm, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import cx from 'classnames'
-
-// assets
-import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 
 // utils
 import { uploadImage } from '../utils/request'
 import { formFieldID, getImagesFormValues, getMaxSizeNotifMessage, ImgUploadParam, splitArrayByCondition } from '../utils/helper'
 import showNotifications from '../utils/tsxHelpers'
 import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PROP } from '../utils/enums'
+
+// assets
+import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
+import { ReactComponent as EyeIcon } from '../assets/icons/eye-icon.svg'
+import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
+import { ReactComponent as DownloadIcon } from '../assets/icons/download-icon.svg'
+import { ReactComponent as PdfIcon } from '../assets/icons/pdf-icon.svg'
 
 const { Item } = Form
 
@@ -114,6 +118,64 @@ const ImgUploadField: FC<Props> = (props) => {
 		[staticMode]
 	)
 
+	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => (
+		<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
+			<div className={'ant-upload-list-item-info flex items-center justify-center'}>
+				{file.type !== 'application/pdf' ? (
+					<Image src={file.thumbUrl} alt={file.name} fallback={file.url} className='ant-upload-list-item-image' />
+				) : (
+					<div className={'flex items-center justify-center'}>
+						<PdfIcon />
+						{file.name}
+					</div>
+				)}
+			</div>
+			<span className={'ant-upload-list-item-actions w-full h-full'}>
+				<div className={'w-full flex items-center h-full'}>
+					<Popconfirm
+						placement={'top'}
+						title={t('loc:Naozaj chcete odstrániť súbor?')}
+						okButtonProps={{
+							type: 'default',
+							className: 'noti-btn'
+						}}
+						cancelButtonProps={{
+							type: 'primary',
+							className: 'noti-btn'
+						}}
+						okText={t('loc:Zmazať')}
+						onConfirm={() => actions.remove()}
+						cancelText={t('loc:Zrušiť')}
+						disabled={disabled}
+					>
+						<button
+							title='Remove file'
+							type='button'
+							className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50'
+						>
+							<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full'>
+								<RemoveIcon className='remove-icon-image' width={18} />
+							</span>
+						</button>
+					</Popconfirm>
+					<Button
+						type={'link'}
+						htmlType={'button'}
+						className={'flex items-center justify-center m-0 p-0 w-full h-full'}
+						onClick={() => actions.preview()}
+						target='_blank'
+						rel='noopener noreferrer'
+						title='Preview file'
+					>
+						<span role='img' aria-label='eye' className='anticon anticon-eye'>
+							<EyeIcon width={24} />
+						</span>
+					</Button>
+				</div>
+			</span>
+		</div>
+	)
+
 	const uploader = (
 		<Upload
 			id={formFieldID(form, input.name)}
@@ -127,6 +189,7 @@ const ImgUploadField: FC<Props> = (props) => {
 				dispatch(change(form, IMAGE_UPLOADING_PROP, true))
 				uploadImage(options, signUrl, category, imagesUrls)
 			}}
+			itemRender={renderGalleryImage}
 			fileList={input.value || []}
 			onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
 			maxCount={maxCount}
@@ -182,6 +245,22 @@ const ImgUploadField: FC<Props> = (props) => {
 		>
 			{staticMode && !input.value && '-'}
 			{uploader}
+			<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
+				<Button
+					className={'w-full h-full m-0 p-0'}
+					href={`${previewUrl?.url}?response-content-disposition=attachment`}
+					target='_blank'
+					rel='noopener noreferrer'
+					type={'link'}
+					htmlType={'button'}
+					title='Download file'
+					download
+				>
+					<span role='img' aria-label='download' className='w-full h-full flex items-center justify-center'>
+						<DownloadIcon width={24} />
+					</span>
+				</Button>
+			</div>
 			<div className={'hidden'}>
 				<Image.PreviewGroup
 					preview={{

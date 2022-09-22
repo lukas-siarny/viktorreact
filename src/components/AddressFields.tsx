@@ -170,8 +170,10 @@ const AddressFields = (props: Props) => {
 
 	const selectLocation = (place: any) => {
 		parseAddressObject(place.address_components)
-		changeFormFieldValue('latitude', parseFloat(place.location.lat().toFixed(8)))
-		changeFormFieldValue('longitude', parseFloat(place.location.lng().toFixed(8)))
+		if (place.location) {
+			changeFormFieldValue('latitude', parseFloat(place.location.lat().toFixed(8)))
+			changeFormFieldValue('longitude', parseFloat(place.location.lng().toFixed(8)))
+		}
 	}
 
 	const changeLocation = async (event: any) => {

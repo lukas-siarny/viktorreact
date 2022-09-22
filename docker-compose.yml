@@ -33,6 +33,9 @@ services:
         dockerfile: ./docker/CI/Dockerfile.api
     ports:
       - "3000:3000"
+    extra_hosts:
+      - "sample-bucket.s3.eu-central-1.$BITBUCKET_DOCKER_HOST_INTERNAL:$BITBUCKET_DOCKER_HOST_INTERNAL"
+      - "s3.eu-central-1.$BITBUCKET_DOCKER_HOST_INTERNAL:$BITBUCKET_DOCKER_HOST_INTERNAL"
     environment:
       - REDIS_URL=redis://:PLEASE_CHANGE_ME@redis:6379
       - POSTGRESQL_URL=postgresql://postgres:root@database_test:5432/notino_test
@@ -44,8 +47,8 @@ services:
       - AWS_KEYPAIR_ID=test
       - PORT=3000
       - NODE_ENV=production
-      - AWS_S3_PUBLIC_URL=http://sample-bucket.s3.eu-cental-1.$BITBUCKET_DOCKER_HOST_INTERNAL:4566
-      - AWS_S3_ENDPOINT=http://s3.eu-cental-1.$BITBUCKET_DOCKER_HOST_INTERNAL:4566
+      - AWS_S3_PUBLIC_URL=http://sample-bucket.s3.eu-central-1.$BITBUCKET_DOCKER_HOST_INTERNAL:4566
+      - AWS_S3_ENDPOINT=http://s3.eu-central-1.$BITBUCKET_DOCKER_HOST_INTERNAL:4566
       - SERVICES_SUGGESTION_EMAILS=test@goodrequest.com
       - BITBUCKET_DOCKER_HOST_INTERNAL=$BITBUCKET_DOCKER_HOST_INTERNAL
       # in bitbucket pipeline do not work docker.host.internal instead of it has to be used $BITBUCKET_DOCKER_HOST_INTERNAL variable

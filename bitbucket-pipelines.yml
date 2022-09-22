@@ -148,7 +148,7 @@ pipelines:
           - docker-compose run app npm run test
           - echo 'tests done'
         services:
-          - docker_test
+          - "docker-test"
     e2e:
         - parallel:      # these 2 steps will run in parallel
           - step:
@@ -198,5 +198,5 @@ definitions:
   services:
     docker:
       memory: 4092
-    docker_test:
+    docker-test:
         image: docker/compose:1.25.4

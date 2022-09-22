@@ -3,7 +3,7 @@ import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Form, Upload, UploadProps, Image, Popconfirm, Divider, Button } from 'antd'
+import { Form, Upload, UploadProps, Image, Popconfirm, Button } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
@@ -18,7 +18,7 @@ import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES, IMAGE_UPLOADING_PRO
 // assets
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
 import { ReactComponent as EyeIcon } from '../assets/icons/eye-icon.svg'
-import { ReactComponent as BinIcon } from '../assets/icons/bin-icon.svg'
+import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 import { ReactComponent as DownloadIcon } from '../assets/icons/download-icon.svg'
 import { ReactComponent as PdfIcon } from '../assets/icons/pdf-icon.svg'
 
@@ -131,38 +131,7 @@ const ImgUploadField: FC<Props> = (props) => {
 				)}
 			</div>
 			<span className={'ant-upload-list-item-actions w-full h-full'}>
-				<div className={'w-full flex items-center h-1/2'}>
-					<Button
-						className={'flex items-center justify-center w-1/2 m-0 p-0'}
-						href={`${file.url}?response-content-disposition=attachment`}
-						target='_blank'
-						rel='noopener noreferrer'
-						type={'link'}
-						htmlType={'button'}
-						title='Download file'
-						download
-					>
-						<span role='img' aria-label='download' className='anticon anticon-download w-full'>
-							<DownloadIcon width={24} />
-						</span>
-					</Button>
-					<Divider className={'m-0 p-0 h-full'} type='vertical' />
-					<Button
-						type={'link'}
-						htmlType={'button'}
-						className={'flex items-center justify-center w-1/2 m-0 p-0'}
-						onClick={() => actions.preview()}
-						target='_blank'
-						rel='noopener noreferrer'
-						title='Preview file'
-					>
-						<span role='img' aria-label='eye' className='anticon anticon-eye w-full'>
-							<EyeIcon width={24} />
-						</span>
-					</Button>
-				</div>
-				<Divider className={'m-0 p-0'} type='horizontal' />
-				<div className={'w-full flex items-center h-1/2'}>
+				<div className={'w-full flex items-center h-full'}>
 					<Popconfirm
 						placement={'top'}
 						title={t('loc:Naozaj chcete odstrániť súbor?')}
@@ -182,14 +151,26 @@ const ImgUploadField: FC<Props> = (props) => {
 						<button
 							title='Remove file'
 							type='button'
-							className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center w-1/2'
+							className='ant-btn ant-btn-text ant-btn-sm ant-btn-icon-only ant-upload-list-item-card-actions-btn flex items-center justify-center fixed top-1 right-1 z-50'
 						>
 							<span role='img' aria-label='delete' tabIndex={-1} className='anticon anticon-delete w-full'>
-								<BinIcon width={24} />
+								<RemoveIcon className='remove-icon-image' width={18} />
 							</span>
 						</button>
 					</Popconfirm>
-					<Divider className={'m-0 p-0 h-full'} type='vertical' />
+					<Button
+						type={'link'}
+						htmlType={'button'}
+						className={'flex items-center justify-center m-0 p-0 w-full h-full'}
+						onClick={() => actions.preview()}
+						target='_blank'
+						rel='noopener noreferrer'
+						title='Preview file'
+					>
+						<span role='img' aria-label='eye' className='anticon anticon-eye'>
+							<EyeIcon width={24} />
+						</span>
+					</Button>
 				</div>
 			</span>
 		</div>
@@ -264,6 +245,22 @@ const ImgUploadField: FC<Props> = (props) => {
 		>
 			{staticMode && !input.value && '-'}
 			{uploader}
+			<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
+				<Button
+					className={'w-full h-full m-0 p-0'}
+					href={`${previewUrl?.url}?response-content-disposition=attachment`}
+					target='_blank'
+					rel='noopener noreferrer'
+					type={'link'}
+					htmlType={'button'}
+					title='Download file'
+					download
+				>
+					<span role='img' aria-label='download' className='w-full h-full flex items-center justify-center'>
+						<DownloadIcon width={24} />
+					</span>
+				</Button>
+			</div>
 			<div className={'hidden'}>
 				<Image.PreviewGroup
 					preview={{

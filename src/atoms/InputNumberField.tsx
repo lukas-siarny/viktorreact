@@ -8,7 +8,6 @@ import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { InputNumberProps } from 'antd/lib/input-number'
 
 // utils
-// eslint-disable-next-line import/no-cycle
 import { formFieldID, transformNumberFieldValue } from '../utils/helper'
 
 const { Item } = Form

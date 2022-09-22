@@ -190,6 +190,5 @@ definitions:
     docker:
       memory: 4092
     custom-docker:
-      memory: 4092
       image: docker/compose:1.25.4
 

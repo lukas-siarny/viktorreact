@@ -253,6 +253,8 @@ describe('Salons', () => {
 				url: `/api/b2b/admin/salons/${createdSalonID}`
 			}).as('deleteSalon')
 			cy.visit(`/salons/${createdSalonID}`)
+			// wait duw to animations and fetch data
+			cy.wait(5000)
 			cy.clickDeleteButtonWithConf(FORM.SALON)
 			cy.wait('@deleteSalon').then((interception: any) => {
 				// check status code

@@ -21,9 +21,9 @@ import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IIn
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { decodePrice, encodePrice, filterSalonRolesByPermission, hasAuthUserPermissionToEditRole } from '../../utils/helper'
+import { decodePrice, encodePrice, filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -325,6 +325,7 @@ const EmployeePage = (props: Props) => {
 									entityName={t('loc:zamestnanca')}
 									type={'default'}
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+									id={formFieldID(FORM.EMPLOYEE, DELETE_BUTTON_ID)}
 								/>
 							) : undefined}
 							<div className={`flex flex-wrap`}>

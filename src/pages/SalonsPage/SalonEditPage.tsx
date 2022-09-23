@@ -20,7 +20,7 @@ import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 
 // enums
-import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_CREATE_TYPE, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_CREATE_TYPE, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -34,7 +34,7 @@ import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, SalonPageProps } from 
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formatDateByLocale } from '../../utils/helper'
+import { formatDateByLocale, formFieldID } from '../../utils/helper'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
@@ -307,6 +307,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			type={'default'}
 			getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 			disabled={isLoading || isDeletedSalon}
+			id={formFieldID(FORM.SALON, DELETE_BUTTON_ID)}
 		/>
 	)
 

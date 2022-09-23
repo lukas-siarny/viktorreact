@@ -34,6 +34,32 @@ pipelines:
                 - docker build -t registry.goodrequest.com/notino-b2b-web:development -f docker/development/Dockerfile.web .
                 - docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
                 - docker push registry.goodrequest.com/notino-b2b-web:development
+    development2:
+      - step:
+          name: Install npm modules
+          script:
+            - npm install --legacy-peer-deps
+          caches:
+            - node
+          artifacts:
+            - node_modules/**
+      - parallel:
+          - step:
+              name: Lint checking
+              script:
+                - npm run lint
+          - step:
+              name: Build and push docker image
+              script:
+                # copy .well-known files from development env
+                - cp -R ./docker/development/.well-known ./public/.well-known
+                # push source maps to sentry service
+                - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                # remove source maps from bundle build
+                - find build/static/js/ -name "*.map" -type f -delete
+                - docker build -t registry.goodrequest.com/notino-b2b-web:development-2 -f docker/development/Dockerfile.web .
+                - docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
+                - docker push registry.goodrequest.com/notino-b2b-web:development-2
     test:
       - step:
           name: Install npm modules

@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import MapContainer from './MapContainer'
 
 // utils
-import { ENUMERATIONS_KEYS, MAP } from '../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, MAP } from '../utils/enums'
 import {
 	getGoogleMapUrl,
 	parseAddressComponents,
@@ -65,6 +65,7 @@ type Props = WrappedFieldProps & {
 	locationSearchElements?: LocationSearchElements
 	mapContainerElements?: MapContainerElements
 	disabled?: boolean
+	form?: FORM
 }
 
 const FULL_H_ELEMENT = <div className='h-full' />
@@ -121,7 +122,7 @@ const AddressFields = (props: Props) => {
 		changeFormFieldValue,
 		inputValues,
 		input,
-		meta: { error, touched },
+		meta: { form, error, touched },
 		locationSearchElements = {
 			loadingElement: FULL_H_ELEMENT,
 			containerElement: <div />
@@ -214,7 +215,7 @@ const AddressFields = (props: Props) => {
 					<Row className={'mb-4 gap-4'} wrap={false}>
 						{mapError ? (
 							<Row className={'w-full h-full block'} justify='center'>
-								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4'} />
+								<Alert message={t('loc:Google mapa je aktuálne nedostupná.')} showIcon type={'warning'} className={'noti-alert mb-4 google-map-warning'} />
 								<Row justify={'space-between'}>
 									<Field
 										className={'w-4/5'}
@@ -296,18 +297,6 @@ const AddressFields = (props: Props) => {
 										validate={[validationRequiredNumber, numberMinLatitude, numberMaxLatitude]}
 									/>
 								</Row>
-								<Field
-									component={SelectField}
-									optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
-									label={t('loc:Štát')}
-									placeholder={t('loc:Vyber krajinu')}
-									options={countries?.enumerationsOptions || []}
-									name={'country'}
-									size={'large'}
-									loading={countries?.isLoading}
-									validate={validationRequired}
-									required
-								/>
 							</Row>
 						) : (
 							<>
@@ -326,6 +315,8 @@ const AddressFields = (props: Props) => {
 												className={'mb-0'}
 												error={error && touched}
 												disabled={disabled}
+												form={form}
+												name={input.name}
 											/>
 											<div className={cx('text-danger', { hidden: !(error && touched) })}>{error}</div>
 										</Col>

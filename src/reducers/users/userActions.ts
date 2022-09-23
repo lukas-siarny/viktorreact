@@ -5,7 +5,7 @@ import { get, map, flatten, uniq } from 'lodash'
 
 // types
 import { ThunkResult } from '../index'
-import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IPermissions } from '../../types/interfaces'
+import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IAuthUserPayload } from '../../types/interfaces'
 import { AUTH_USER, USER, USERS, PENDING_INVITES } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
@@ -43,10 +43,6 @@ interface IGetPendingInvites {
 
 export interface IGetUsersQueryParams extends IQueryParams {
 	roleID?: string | undefined | null
-}
-
-export interface IAuthUserPayload {
-	data: ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) | null
 }
 
 export interface IUserPayload {

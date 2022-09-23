@@ -89,8 +89,8 @@ const CreateUserPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+			<div className='content-body small mt-2'>
+				<Spin spinning={isLoading}>
 					<CreateUserAccountForm onSubmit={createUser} />
 					<div className={'content-footer'}>
 						<Row justify='center'>
@@ -110,8 +110,8 @@ const CreateUserPage = () => {
 							</Button>
 						</Row>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

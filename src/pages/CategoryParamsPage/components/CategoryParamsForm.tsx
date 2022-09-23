@@ -17,6 +17,7 @@ import Localizations from '../../../components/Localizations'
 import { formFieldID, showErrorNotification, validationString } from '../../../utils/helper'
 import { DELETE_BUTTON_ID, FORM, MAX_VALUES_PER_PARAMETER, PARAMETERS_VALUE_TYPES, STRINGS } from '../../../utils/enums'
 import { EMPTY_NAME_LOCALIZATIONS } from '../../../components/LanguagePicker'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // validate
 import validateCategoryParamsForm from './validateCategoryParamsForm'
@@ -215,6 +216,6 @@ const form = reduxForm<ICategoryParamForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateCategoryParamsForm
-})(CategoryParamsForm)
+})(withPromptUnsavedChanges(CategoryParamsForm))
 
 export default form

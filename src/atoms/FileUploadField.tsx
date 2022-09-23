@@ -12,7 +12,6 @@ import { FormItemProps } from 'antd/lib/form/FormItem'
 import { MSG_TYPE, NOTIFICATION_TYPE } from '../utils/enums'
 import { getAccessToken } from '../utils/auth'
 import { ReactComponent as UploadIcon } from '../assets/icons/upload-icon.svg'
-// eslint-disable-next-line import/no-cycle
 import showNotifications from '../utils/tsxHelpers'
 
 const { Item } = Form

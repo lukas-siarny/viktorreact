@@ -9,13 +9,13 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
 import { IBreadcrumbs, IComputedMatch, SalonSubPageProps } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
-import { RootState } from '../../reducers'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{

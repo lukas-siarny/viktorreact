@@ -151,8 +151,8 @@ const UserPage: FC<Props> = (props) => {
 					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 				</Row>
 			)}
-			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+			<div className='content-body small mt-2'>
+				<Spin spinning={isLoading}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
 					<div className={'content-footer pt-0'}>
 						<Row className={'justify-between gap-2'}>
@@ -192,8 +192,8 @@ const UserPage: FC<Props> = (props) => {
 							/>
 						</Row>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

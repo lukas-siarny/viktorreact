@@ -15,6 +15,7 @@ import validateIndustryFrom from './validateIndustryFrom'
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // redux
 import Permissions from '../../../utils/Permissions'
@@ -73,6 +74,6 @@ const form = reduxForm<IIndustryForm, ComponentProps>({
 	destroyOnUnmount: true,
 	validate: validateIndustryFrom,
 	onSubmitFail: showErrorNotification
-})(IndustryForm)
+})(withPromptUnsavedChanges(IndustryForm))
 
 export default form

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 // utils
 import { ENUMERATIONS_KEYS, FORM, GENDER, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { ICustomerForm, ISelectOptionItem } from '../../../types/interfaces'
@@ -137,6 +138,6 @@ const form = reduxForm<ICustomerForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateCustomerForm
-})(CustomerForm)
+})(withPromptUnsavedChanges(CustomerForm))
 
 export default form

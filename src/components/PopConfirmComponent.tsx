@@ -2,13 +2,13 @@ import React from 'react'
 import { Popconfirm, PopconfirmProps } from 'antd'
 import { useTranslation } from 'react-i18next'
 
-type Props = Partial<PopconfirmProps> & {
+export type PopConfirmComponentProps = Partial<PopconfirmProps> & {
 	// TODO - check and add type
 	allowedButton: any
 }
 
-const PopConfirmComponent = (props: Props) => {
-	const { getPopupContainer, onConfirm, placement, title, disabled, onCancel, allowedButton, okText } = props
+const PopConfirmComponent = (props: PopConfirmComponentProps) => {
+	const { getPopupContainer, onConfirm, placement, title, disabled, onCancel, allowedButton, okText, style } = props
 
 	const [t] = useTranslation()
 
@@ -16,6 +16,7 @@ const PopConfirmComponent = (props: Props) => {
 		<Popconfirm
 			placement={placement || 'top'}
 			title={title}
+			style={style}
 			okButtonProps={{
 				type: 'default',
 				className: 'noti-btn'

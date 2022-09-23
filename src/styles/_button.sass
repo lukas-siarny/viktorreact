@@ -110,7 +110,7 @@
 		&:not(:disabled):hover,
 		&:not(:disabled):focus-visible
 			background-color: $backgroundColor-notino-white
-			box-shadow: $btn-shadow-hover-default
+			box-shadow: 0px 4px 8px 0px rgba(0,0,0,0.16)
 	// Ghost
 	&.ant-btn-background-ghost
 		background-color: transparent
@@ -232,3 +232,11 @@ a.ant-btn.noti-btn // ak ma btn href atributu tak ho zmeni na anchor -> treba vy
 		&:hover
 			border-radius: 4px
 			background: $backgroundColor-notino-black
+
+.noti-public-back-btn
+	@media (max-width: 744px)
+		svg
+			width: 20px
+			height: 20px
+		span
+			padding-left: 28px !important

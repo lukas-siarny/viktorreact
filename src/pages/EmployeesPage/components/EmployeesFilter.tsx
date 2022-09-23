@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
@@ -38,7 +38,7 @@ const EmployeesFilter = (props: Props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const form = useSelector((state: RootState) => state.form?.[FORM.ADMIN_USERS_FILTER])
+	const formValues = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEES_FILTER)(state))
 
 	const accountStateOptions = [
 		{ label: t('loc:Nespárované'), value: ACCOUNT_STATE.UNPAIRED, key: ACCOUNT_STATE.UNPAIRED },
@@ -74,7 +74,7 @@ const EmployeesFilter = (props: Props) => {
 
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(form?.values)}>
+			<Filters customContent={customContent} search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)}>
 				<Row gutter={ROW_GUTTER_X_DEFAULT}>
 					<Col span={8}>
 						<Field

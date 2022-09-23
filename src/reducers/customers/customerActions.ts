@@ -4,6 +4,7 @@ import { ThunkResult } from '../index'
 import { CUSTOMER, CUSTOMERS } from './customerTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { IQueryParams } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -11,12 +12,8 @@ import { normalizeQueryParams } from '../../utils/helper'
 
 export type ICustomerActions = IResetStore | IGetCustomers | IGetCustomer
 
-interface IGetCustomersQueryParams {
-	page: number
-	limit?: any | undefined
-	order?: string | undefined
-	search?: string | undefined | null
-	salonID?: number | undefined | null
+interface IGetCustomersQueryParams extends IQueryParams {
+	salonID?: string | undefined | null
 }
 
 interface IGetCustomers {
@@ -58,7 +55,7 @@ export const getCustomers =
 	}
 
 export const getCustomer =
-	(customerID: number): ThunkResult<Promise<ICustomerPayload>> =>
+	(customerID: string): ThunkResult<Promise<ICustomerPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICustomerPayload
 		try {

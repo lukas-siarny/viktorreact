@@ -9,8 +9,8 @@ import { BACK_DATA_QUERY } from '../utils/enums'
 /**
  * @param fallbackUrl Ak v adrese prehliadača chýba ?backUrl nastav ?backUrl=fallbackUrl
  */
-export default <BackData>(fallbackUrl?: string | null, queryName: string = BACK_DATA_QUERY) => {
-	const [decodedBackUrl, setDecodedBackUrl] = useState<string | null>()
+export default <BackData>(fallbackUrl?: string, queryName: string = BACK_DATA_QUERY) => {
+	const [decodedBackUrl, setDecodedBackUrl] = useState<string | undefined>()
 	const [parsedBackData, setParsedBackData] = useState<BackData>()
 
 	const [query] = useQueryParams({

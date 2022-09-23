@@ -18,11 +18,14 @@ import { history } from '../../utils/history'
 import { FORM, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
+import { getPrefixCountryCode } from '../../utils/helper'
 
 // reducers
 import { getSystemRoles } from '../../reducers/roles/rolesActions'
-import { getPrefixCountryCode } from '../../utils/helper'
 import { RootState } from '../../reducers'
+
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
 
 const permission: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]
 
@@ -35,11 +38,13 @@ const CreateUserPage = () => {
 
 	const { isLoading } = phonePrefixes
 
+	const [backUrl] = useBackUrl(t('paths:users'))
+
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
 				name: t('loc:Zoznam používateľov'),
-				link: t('paths:users')
+				link: backUrl
 			},
 			{
 				name: t('loc:Nový používateľ')
@@ -70,7 +75,7 @@ const CreateUserPage = () => {
 			})
 
 			const userID = data.user.id
-			history.push(userID > 0 ? t('paths:users/{{userID}}', { userID }) : t('paths:users'))
+			history.push(userID ? t('paths:users/{{userID}}', { userID }) : t('paths:users'))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -84,8 +89,8 @@ const CreateUserPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+			<div className='content-body small mt-2'>
+				<Spin spinning={isLoading}>
 					<CreateUserAccountForm onSubmit={createUser} />
 					<div className={'content-footer'}>
 						<Row justify='center'>
@@ -105,8 +110,8 @@ const CreateUserPage = () => {
 							</Button>
 						</Row>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

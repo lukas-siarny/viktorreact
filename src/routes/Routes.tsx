@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useDispatch } from 'react-redux'
 
 // authorized pages
 import HomePage from '../pages/HomePage/HomePage'
@@ -15,7 +16,7 @@ import MainLayout from '../layouts/MainLayout'
 import PublicLayout from '../layouts/PublicLayout'
 
 // utils
-import { PAGE } from '../utils/enums'
+import { PAGE, NEW_SALON_ID } from '../utils/enums'
 
 // User
 import LoginPage from '../pages/LoginPage/LoginPage'
@@ -29,8 +30,16 @@ import UsersPage from '../pages/UsersPage/UsersPage'
 // Categories
 import CategoriesPage from '../pages/CategoriesPage/CategoriesPage'
 
+// Category params
+import CategoryParamsPage from '../pages/CategoryParamsPage/CategoryParamsPage'
+import CreateCategoryParamsPage from '../pages/CategoryParamsPage/CreateCategoryParamsPage'
+import EditCategoryParamsPage from '../pages/CategoryParamsPage/EditCategoryParamsPage'
+
 // Cosmetics
 import CosmeticsPage from '../pages/CosmeticsPage/CosmeticsPage'
+
+// Languages
+import LanguagesPage from '../pages/LanguagesPage/LanguagesPage'
 
 // Salons
 import SalonSubRoutes from './SalonSubRoutes'
@@ -42,6 +51,9 @@ import SupportContactsPage from '../pages/SupportContactsPage/SupportContactsPag
 import SupportContactPage from '../pages/SupportContactsPage/SupportContactPage'
 import ContactPage from '../pages/Contact/ContactPage'
 
+// Specialist contacts
+import SpecialistContactsPage from '../pages/SpecialistContactsPage/SpecialistContactsPage'
+
 import AppInit from '../components/AppInit'
 
 // 404, 403
@@ -50,6 +62,7 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
 const Routes: FC = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 
 	return (
 		<AppInit>
@@ -73,6 +86,7 @@ const Routes: FC = (props) => {
 					component={CreatePasswordPage}
 					layout={PublicLayout}
 					className={'noti-login-page'}
+					dispatch={dispatch}
 				/>
 				<AuthRoute
 					{...props}
@@ -112,8 +126,8 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:salons/create')}
 					layout={MainLayout}
 					page={PAGE.SALONS}
-					// override selected salon ID - 0 indicates CREATE form
-					salonID={0}
+					// NOTE: override selected salon ID -> NEW_SALON_ID indicates CREATE form
+					salonID={NEW_SALON_ID}
 				/>
 				<Route {...props} path={t('paths:salons/{{salonID}}', { salonID: ':salonID' })} component={SalonSubRoutes} />
 
@@ -130,11 +144,47 @@ const Routes: FC = (props) => {
 				<AuthRoute
 					{...props}
 					exact
+					path={t('paths:category-parameters')}
+					component={CategoryParamsPage}
+					translatePathKey={t('paths:category-parameters')}
+					layout={MainLayout}
+					page={PAGE.CATEGORY_PARAMETERS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:category-parameters/create')}
+					component={CreateCategoryParamsPage}
+					translatePathKey={t('paths:category-parameters/create')}
+					layout={MainLayout}
+					page={PAGE.CATEGORY_PARAMETERS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:category-parameters/{{parameterID}}', { parameterID: ':parameterID' })}
+					component={EditCategoryParamsPage}
+					translatePathKey={t('paths:category-parameters/{{parameterID}}', { parameterID: ':parameterID' })}
+					layout={MainLayout}
+					page={PAGE.CATEGORY_PARAMETERS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
 					path={t('paths:cosmetics')}
 					component={CosmeticsPage}
 					translatePathKey={t('paths:cosmetics')}
 					layout={MainLayout}
 					page={PAGE.COSMETICS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:languages-in-salons')}
+					component={LanguagesPage}
+					translatePathKey={t('paths:languages-in-salons')}
+					layout={MainLayout}
+					page={PAGE.LANGUAGES}
 				/>
 				<AuthRoute
 					{...props}
@@ -152,7 +202,7 @@ const Routes: FC = (props) => {
 					component={SupportContactPage}
 					translatePathKey={t('paths:support-contacts/create')}
 					layout={MainLayout}
-					page={PAGE.SUPPORT_CONTACT}
+					page={PAGE.SUPPORT_CONTACTS}
 				/>
 				<AuthRoute
 					{...props}
@@ -161,7 +211,16 @@ const Routes: FC = (props) => {
 					translatePathKey={t('paths:support-contacts/{{supportContactID}}', { supportContactID: ':supportContactID' })}
 					component={SupportContactPage}
 					layout={MainLayout}
-					page={PAGE.SUPPORT_CONTACT}
+					page={PAGE.SUPPORT_CONTACTS}
+				/>
+				<AuthRoute
+					{...props}
+					exact
+					path={t('paths:specialist-contacts')}
+					component={SpecialistContactsPage}
+					translatePathKey={t('paths:specialist-contacts')}
+					layout={MainLayout}
+					page={PAGE.SPECIALIST_CONTACTS}
 				/>
 				{/* NOTE: add all private routes before this declaration */}
 				<AuthRoute {...props} path={'/403'} component={ForbiddenPage} layout={MainLayout} />

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Row, Spin } from 'antd'
-import { change, initialize, isPristine, submit } from 'redux-form'
-import { get, isEmpty, map, unionBy } from 'lodash'
+import { initialize, isPristine, submit } from 'redux-form'
+import { get, map } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -13,19 +13,25 @@ import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SupportContactForm from './components/SupportContactForm'
 import { scrollToTopFn } from '../../components/ScrollToTop'
-import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import {
+	checkSameOpeningHours,
+	checkWeekend,
+	createSameOpeningHours,
+	initOpeningHours,
+	orderDaysInWeek,
+	useChangeOpeningHoursFormFields
+} from '../../components/OpeningHours/OpeningHoursUtils'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // types
 import { Paths } from '../../types/api'
-import { IBreadcrumbs, ILoadingAndFailure, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, OpeningHours, ISupportContactForm, IComputedMatch } from '../../types/interfaces'
 
 // reducers
 import { RootState } from '../../reducers'
-import { getCurrentUser } from '../../reducers/users/userActions'
-import { getSupportContact, getSupportContacts, ISupportContactPayload } from '../../reducers/supportContacts/supportContactsActions'
+import { getSupportContact, getSupportContacts } from '../../reducers/supportContacts/supportContactsActions'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
@@ -33,13 +39,16 @@ import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]
 
 type Props = {
 	computedMatch: IComputedMatch<{
-		supportContactID: number
+		supportContactID: string
 	}>
 }
 
@@ -66,108 +75,72 @@ const SupportContactPage: FC<Props> = (props) => {
 
 	const isLoading = supportContact.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isRemoving
 
-	const supportContactExists = supportContactID > 0
+	const supportContactExists = !!supportContactID
+
+	const [backUrl] = useBackUrl(t('paths:support-contacts'))
 
 	useEffect(() => {
-		if (sameOpenHoursOverWeekFormValue) {
-			if (openOverWeekendFormValue) {
-				// set switch same open hours over week with weekend
-				dispatch(
-					change(FORM.SUPPORT_CONTACT, 'openingHours', [
-						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(formValues?.openingHours) },
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
-					])
-				)
-			} else {
-				// set switch same open hours over week without weekend
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', [{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(formValues?.openingHours) }]))
-			}
-		} else {
-			// set to init values
-			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: OpeningHours = initOpeningHours(supportContact.data?.supportContact.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
-			if (openOverWeekendFormValue && openingHours) {
-				const updatedOpeningHours = unionBy(
-					[
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
-					],
-					openingHours,
-					'day'
-				)?.sort(orderDaysInWeek)
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', updatedOpeningHours))
-			} else {
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', openingHours?.sort(orderDaysInWeek)))
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
+		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 
-	useEffect(() => {
-		dispatch(getSupportContact(supportContactID))
-	}, [supportContactID, dispatch])
+		const fetchData = async () => {
+			const { data } = await dispatch(getSupportContact(supportContactID))
 
-	// init forms
-	useEffect(() => {
-		const initForm = async (supportContactData?: ISupportContactPayload & ILoadingAndFailure) => {
-			const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
-			const defaultContactPerson = {
-				phonePrefixCountryCode
+			if (!data?.supportContact?.id) {
+				history.push('/404')
 			}
 
-			if (supportContactData && !isEmpty(supportContactData) && supportContactID) {
+			if (data) {
 				// init data for existing supportContact
-				const openOverWeekend: boolean = checkWeekend(supportContactData.data?.supportContact?.openingHours)
-				const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(supportContactData.data?.supportContact?.openingHours)
-				const openingHours: OpeningHours = initOpeningHours(supportContactData.data?.supportContact?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(
+				const openOverWeekend: boolean = checkWeekend(data?.supportContact?.openingHours)
+				const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(data?.supportContact?.openingHours)
+				const openingHours: OpeningHours = initOpeningHours(data?.supportContact?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(
 					orderDaysInWeek
 				) as OpeningHours
 
 				dispatch(
 					initialize(FORM.SUPPORT_CONTACT, {
-						...supportContactData.data?.supportContact,
+						...data?.supportContact,
 						openOverWeekend,
 						sameOpenHoursOverWeek,
 						openingHours,
-						city: supportContactData.data?.supportContact?.address?.city,
-						street: supportContactData.data?.supportContact?.address?.street,
-						zipCode: supportContactData.data?.supportContact?.address?.zipCode,
-						countryCode: supportContactData.data?.supportContact?.address?.countryCode,
-						streetNumber: supportContactData.data?.supportContact?.address?.streetNumber,
-						emails: supportContactData.data?.supportContact?.emails?.map((email) => ({ email })),
-						phones: supportContactData.data?.supportContact?.phones
-					})
-				)
-			} else if (!supportContact?.isLoading) {
-				// init data for new "creating process" supportContact
-				dispatch(
-					initialize(FORM.SUPPORT_CONTACT, {
-						openOverWeekend: false,
-						sameOpenHoursOverWeek: true,
-						openingHours: initOpeningHours(supportContactData?.data?.supportContact?.openingHours, true, false),
-						payByCard: false,
-						phonePrefixCountryCode,
-						isInvoiceAddressSame: true,
-						companyContactPerson: defaultContactPerson,
-						emails: [{ email: '' }],
-						phones: [
-							{
-								phonePrefixCountryCode,
-								phone: ''
-							}
-						]
+						city: data?.supportContact?.address?.city,
+						street: data?.supportContact?.address?.street,
+						zipCode: data?.supportContact?.address?.zipCode,
+						countryCode: data?.supportContact?.address?.countryCode,
+						streetNumber: data?.supportContact?.address?.streetNumber,
+						emails: data?.supportContact?.emails?.map((email) => ({ email })),
+						phones: data?.supportContact?.phones
 					})
 				)
 			}
 		}
 
-		initForm(supportContact)
-	}, [supportContact, dispatch, phonePrefixes.data, supportContactID])
+		if (supportContactID) {
+			fetchData()
+		} else {
+			// init data for new "creating process" supportContact
+			dispatch(
+				initialize(FORM.SUPPORT_CONTACT, {
+					openOverWeekend: false,
+					sameOpenHoursOverWeek: true,
+					openingHours: initOpeningHours(undefined, true, false),
+					emails: [{ email: '' }],
+					phones: [
+						{
+							phonePrefixCountryCode,
+							phone: ''
+						}
+					]
+				})
+			)
+		}
+	}, [dispatch, phonePrefixes.data, supportContactID])
 
 	useEffect(() => {
 		dispatch(getSupportContacts())
 	}, [dispatch])
+
+	useChangeOpeningHoursFormFields(FORM.SUPPORT_CONTACT, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	const handleSubmit = async (data: ISupportContactForm) => {
 		try {
@@ -199,10 +172,7 @@ const SupportContactPage: FC<Props> = (props) => {
 				// create new supportContact
 				const result = await postReq('/api/b2b/admin/enums/support-contacts/', undefined, supportContactData as SupportContactPatch)
 				if (result?.data?.supportContact?.id) {
-					// load new supportContact for current user
-					await dispatch(getCurrentUser())
 					// select new supportContact
-					await dispatch(getSupportContact(result.data.supportContact.id))
 					history.push(t('paths:support-contacts/{{supportContactID}}', { supportContactID: result.data.supportContact.id }))
 				}
 			}
@@ -229,7 +199,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		items: [
 			{
 				name: t('loc:Zoznam podporných centier'),
-				link: t('paths:support-contacts')
+				link: backUrl
 			},
 			breadcrumbDetailItem
 		]
@@ -253,7 +223,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		}
 	}
 
-	const hasEveryCountrSupportContact = supportContacts?.data?.supportContacts?.length === countries.data?.length
+	const hasEveryCountrSupportContact = !countries?.data?.some((country) => !supportContacts?.data?.supportContacts?.find((contact: any) => contact.country.code === country.code))
 
 	return (
 		<>
@@ -275,7 +245,7 @@ const SupportContactPage: FC<Props> = (props) => {
 							}
 							showIcon
 							type={'warning'}
-							className={'mb-4'}
+							className={'noti-alert mb-4'}
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />

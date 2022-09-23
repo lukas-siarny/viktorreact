@@ -1,77 +1,110 @@
 /* eslint-disable import/no-cycle */
+import i18next from 'i18next'
 
 // types
 import { ThunkResult } from '../index'
-import { SERVICES, SERVICE } from './serviceTypes'
+import { SERVICES, SERVICE, SERVICE_ROOT_CATEGORY } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IUserAvatar, IQueryParams, ISearchablePayload } from '../../types/interfaces'
+import { IUserAvatar, ISearchableWithoutPagination } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { decodePrice, getServiceRange, normalizeQueryParams, showServiceCategory } from '../../utils/helper'
+import { decodePrice, getServiceRange } from '../../utils/helper'
 
-export type IServiceActions = IResetStore | IGetServices | IGetService
+export type IServiceActions = IResetStore | IGetServices | IGetService | IGetServiceRootCategory
 
 interface IGetServices {
 	type: SERVICES
 	payload: IServicesPayload
 }
 
+interface IGetService {
+	type: SERVICE
+	payload: IServicePayload
+}
+
+interface IGetServiceRootCategory {
+	type: SERVICE_ROOT_CATEGORY
+	payload: IServiceRootCategoryPayload
+}
+
 interface ServicesTableData {
-	key: number
-	serviceID: number
+	key: string
+	serviceID: string
 	name: string
 	employees: IUserAvatar[]
 	price: string
 	duration: string
 	categoryFirst: string
 	categorySecond: string
-	salon: string | undefined
+	isComplete: boolean
+	createdAt: string
 }
 
-export interface IGetServicesQueryParams extends IQueryParams {
-	categoryID?: number | undefined | null
-	employeeID?: number | undefined | null
-	salonID?: number | undefined | null
+export interface IGetServicesQueryParams {
+	rootCategoryID?: string
+	salonID: string
 }
 
-export interface IServicesPayload extends ISearchablePayload<Paths.GetApiB2BAdminServices.Responses.$200> {
+export interface IGetServiceRootCategoryQueryParams {
+	rootCategoryID: string
+	salonID: string
+}
+
+export interface IServicesPayload extends ISearchableWithoutPagination<Paths.GetApiB2BAdminServices.Responses.$200> {
 	tableData: ServicesTableData[] | undefined
+}
+
+export interface IServiceRootCategoryPayload {
+	data: Paths.GetApiB2BAdminServices.Responses.$200['groupedServicesByCategory'][0] | null
 }
 
 export const getServices =
 	(queryParams: IGetServicesQueryParams): ThunkResult<Promise<IServicesPayload>> =>
-	async (dispatch) => {
+	async (dispatch, getState) => {
 		let payload = {} as IServicesPayload
+		const state = getState()
 		try {
 			dispatch({ type: SERVICES.SERVICES_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
+			const categories = data.groupedServicesByCategory
+			const tableData: ServicesTableData[] = []
+			categories?.forEach((parentCategory) => {
+				parentCategory?.category?.children?.forEach((secondCategory) => {
+					secondCategory?.category?.children?.forEach((thirdCategory) => {
+						const rangePriceAndDurationData = thirdCategory?.service?.rangePriceAndDurationData
+						const currencies = state.enumerationsStore.currencies.data
+						const symbol =
+							currencies?.find((currency) => currency.code === thirdCategory?.service?.rangePriceAndDurationData?.priceFrom?.currency)?.symbol ||
+							thirdCategory?.service?.rangePriceAndDurationData?.priceFrom?.currency
 
-			const { data } = await getReq('/api/b2b/admin/services/', { ...normalizeQueryParams(queryParams) })
-			const tableData: ServicesTableData[] = data.services.map((item) => {
-				const tableItem = {
-					key: item.id,
-					serviceID: item.id,
-					name: item.category?.child?.child?.name || '-',
-					categoryFirst: item.category?.name || '-',
-					categorySecond: item.category?.child?.name || '-',
-					employees: item.employees.map((employee) => ({
-						src: employee.image?.resizedImages?.thumbnail,
-						fallBackSrc: employee.image?.original,
-						alt: `${employee.firstName} ${employee.lastName}`,
-						text: `${employee.firstName} ${employee.lastName}`,
-						key: employee.id
-					})),
-					price: getServiceRange(decodePrice(item.priceFrom), decodePrice(item.priceTo)),
-					duration: getServiceRange(item.durationFrom, item.durationTo),
-					category: (item.category.child ? showServiceCategory(item.category) : item.category.name) || '-',
-					salon: item.salon.name
-				}
-				return tableItem
+						tableData.push({
+							key: thirdCategory?.category?.id,
+							serviceID: thirdCategory?.service?.id,
+							name: thirdCategory?.category?.name || '-',
+							categoryFirst: parentCategory?.category?.name || '-',
+							categorySecond: secondCategory?.category?.name || '-',
+							employees: thirdCategory?.service?.employees?.map((employee) => ({
+								src: employee.image?.resizedImages?.thumbnail,
+								fallBackSrc: employee.image?.original,
+								alt: `${employee.firstName} ${employee.lastName}`,
+								text: `${employee.firstName} ${employee.lastName}`,
+								key: employee.id
+							})),
+							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo), symbol) || '-',
+							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo, i18next.t('loc:min')) || '-',
+							isComplete: thirdCategory?.service?.isComplete,
+							createdAt: thirdCategory?.service?.createdAt
+						})
+					})
+				})
 			})
-			const servicesOptions = data.services.map((service) => {
+
+			const servicesOptions = [{ key: '', label: '', value: '' }]
+			/* const servicesOptions = data.services.map((service) => {
 				return { label: service.category.child?.child?.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
-			})
+			}) */
 			payload = {
 				data,
 				tableData,
@@ -88,17 +121,34 @@ export const getServices =
 		return payload
 	}
 
-interface IGetService {
-	type: SERVICE
-	payload: IServicePayload
-}
+export const getServiceRootCategory =
+	(queryParams: IGetServiceRootCategoryQueryParams): ThunkResult<Promise<IServiceRootCategoryPayload>> =>
+	async (dispatch) => {
+		let payload = {} as IServiceRootCategoryPayload
+		try {
+			dispatch({ type: SERVICES.SERVICES_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/services/', queryParams)
+
+			payload = {
+				data: data as IServiceRootCategoryPayload['data']
+			}
+
+			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: SERVICES.SERVICES_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
 
 export interface IServicePayload {
 	data: Paths.GetApiB2BAdminServicesServiceId.Responses.$200 | null
 }
 
 export const getService =
-	(serviceID: number): ThunkResult<Promise<IServicePayload>> =>
+	(serviceID: string): ThunkResult<Promise<IServicePayload>> =>
 	async (dispatch) => {
 		let payload = {} as IServicePayload
 		try {

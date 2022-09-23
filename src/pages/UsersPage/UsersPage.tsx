@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
+import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -14,8 +13,8 @@ import Breadcrumbs from '../../components/Breadcrumbs'
 import AdminUsersFilter, { IUsersFilter } from './components/AdminUsersFilter'
 
 // utils
-import { FORM, PAGINATION, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -25,9 +24,7 @@ import { getUsers } from '../../reducers/users/userActions'
 import { RootState } from '../../reducers'
 
 // types
-import { IBreadcrumbs } from '../../types/interfaces'
-
-type Columns = ColumnsType<any>
+import { IBreadcrumbs, Columns } from '../../types/interfaces'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]
 
@@ -44,7 +41,7 @@ const UsersPage = () => {
 		limit: NumberParam,
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'fullName:ASC'),
-		roleID: withDefault(NumberParam, undefined)
+		roleID: withDefault(StringParam, undefined)
 	})
 
 	useEffect(() => {
@@ -63,17 +60,24 @@ const UsersPage = () => {
 		setPrefixOptions(prefixes)
 	}, [phonePrefixes, dispatch])
 
-	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
 				...query,
-				limit: pagination.pageSize,
-				page: pagination.current,
 				order
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const onChangePagination = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: IUsersFilter) => {
@@ -161,50 +165,46 @@ const UsersPage = () => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Permissions
-							allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<AdminUsersFilter
-									createUser={() => {
-										if (hasPermission) {
-											history.push(t('paths:users/create'))
-										} else {
-											openForbiddenModal()
-										}
-									}}
-									onSubmit={handleSubmit}
-								/>
-							)}
-						/>
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={users?.data?.users}
-							rowClassName={'clickable-row'}
-							loading={users?.isLoading}
-							twoToneRows
-							scroll={{ x: 800 }}
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(t('paths:users/{{userID}}', { userID: record.id }))
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: users?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: users?.data?.pagination?.totalCount,
-								current: users?.data?.pagination?.page
-							}}
-						/>
+						<Spin spinning={users?.isLoading}>
+							<Permissions
+								allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<AdminUsersFilter
+										createUser={() => {
+											if (hasPermission) {
+												history.push(getLinkWithEncodedBackUrl(t('paths:users/create')))
+											} else {
+												openForbiddenModal()
+											}
+										}}
+										onSubmit={handleSubmit}
+									/>
+								)}
+							/>
+							<CustomTable
+								className='table-fixed'
+								onChange={onChangeTable}
+								columns={columns}
+								dataSource={users?.data?.users}
+								rowClassName={'clickable-row'}
+								twoToneRows
+								rowKey='id'
+								scroll={{ x: 800 }}
+								onRow={(record) => ({
+									onClick: () => {
+										history.push(getLinkWithEncodedBackUrl(t('paths:users/{{userID}}', { userID: record.id })))
+									}
+								})}
+								useCustomPagination
+								pagination={{
+									pageSize: users?.data?.pagination?.limit,
+									total: users?.data?.pagination?.totalCount,
+									current: users?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: users?.isLoading
+								}}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>

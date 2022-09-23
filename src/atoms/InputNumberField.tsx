@@ -8,7 +8,6 @@ import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { InputNumberProps } from 'antd/lib/input-number'
 
 // utils
-// eslint-disable-next-line import/no-cycle
 import { formFieldID, transformNumberFieldValue } from '../utils/helper'
 
 const { Item } = Form
@@ -47,7 +46,8 @@ const InputNumberField = (props: Props) => {
 		className,
 		notNullValue = false,
 		onPressEnter,
-		readOnly
+		readOnly,
+		stringMode
 	} = props
 
 	const maxCharsParser = (displayValue: string | undefined): string => {
@@ -118,6 +118,7 @@ const InputNumberField = (props: Props) => {
 				onBlur={onBlur}
 				onPressEnter={onPressEnterWrap}
 				onChange={input.onChange}
+				stringMode={stringMode}
 			/>
 		</Item>
 	)

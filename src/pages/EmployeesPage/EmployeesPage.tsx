@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row } from 'antd'
-import { ColumnsType } from 'antd/lib/table'
+import { Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -13,10 +12,12 @@ import CustomTable from '../../components/CustomTable'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeesFilter, { IEmployeesFilter } from './components/EmployeesFilter'
 import PopoverList from '../../components/PopoverList'
+import TooltipEllipsis from '../../components/TooltipEllipsis'
+import UserAvatar from '../../components/AvatarComponents'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM, PAGINATION, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 
@@ -25,14 +26,11 @@ import { getEmployees } from '../../reducers/employees/employeesActions'
 import { RootState } from '../../reducers'
 
 // types
-import { IBreadcrumbs, SalonSubPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, SalonSubPageProps, Columns } from '../../types/interfaces'
 
 // assets
 import { ReactComponent as CloudOfflineIcon } from '../../assets/icons/cloud-offline.svg'
 import { ReactComponent as QuestionIcon } from '../../assets/icons/question.svg'
-import TooltipEllipsis from '../../components/TooltipEllipsis'
-
-type Columns = ColumnsType<any>
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -50,14 +48,22 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		page: withDefault(NumberParam, 1),
 		order: withDefault(StringParam, 'createdAt:desc'),
 		accountState: StringParam,
-		serviceID: NumberParam,
-		salonID: NumberParam
+		serviceID: StringParam,
+		salonID: StringParam
 	})
 
 	useEffect(() => {
 		dispatch(initialize(FORM.EMPLOYEES_FILTER, { search: query.search, serviceID: query.serviceID, accountState: query.accountState }))
 		dispatch(
-			getEmployees({ page: query.page, limit: query.limit, order: query.order, search: query.search, accountState: query.accountState, serviceID: query.serviceID, salonID })
+			getEmployees({
+				page: query.page,
+				limit: query.limit,
+				order: query.order,
+				search: query.search,
+				accountState: query.accountState,
+				serviceID: query.serviceID,
+				salonID
+			})
 		)
 	}, [dispatch, query.page, query.limit, query.search, query.order, query.accountState, query.serviceID, salonID])
 
@@ -71,17 +77,24 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 		setPrefixOptions(prefixes)
 	}, [phonePrefixes, dispatch])
 
-	const onChangeTable = (pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
+	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
 			const order = `${sorter.columnKey}:${normalizeDirectionKeys(sorter.order)}`
 			const newQuery = {
 				...query,
-				limit: pagination.pageSize,
-				page: pagination.current,
 				order
 			}
 			setQuery(newQuery)
 		}
+	}
+
+	const onChangePagination = (page: number, limit: number) => {
+		const newQuery = {
+			...query,
+			limit,
+			page
+		}
+		setQuery(newQuery)
 	}
 
 	const handleSubmit = (values: IEmployeesFilter) => {
@@ -101,15 +114,30 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			ellipsis: true,
 			sorter: true,
 			sortOrder: setOrder(query.order, 'lastName'),
-			width: '20%',
-			render: (value, record) => <>{record?.firstName || record?.lastName ? `${record?.firstName} ${record?.lastName}`.trim() : '-'}</>
+			width: '25%',
+			render: (_value, record) => {
+				return (
+					<>
+						<UserAvatar className='mr-2-5 w-7 h-7' src={record?.image?.resizedImages?.thumbnail} fallBackSrc={record?.image?.original} />
+						{record?.firstName || record.lastName ? `${record?.firstName ?? ''} ${record?.lastName ?? ''}`.trim() : '-'}
+					</>
+				)
+			}
 		},
 		{
 			title: t('loc:Email'),
 			dataIndex: 'email',
 			key: 'email',
 			ellipsis: true,
-			width: '25%',
+			width: '20%',
+			render: (value) => value || '-'
+		},
+		{
+			title: t('loc:Pozvánkový email'),
+			dataIndex: 'inviteEmail',
+			key: 'inviteEmail',
+			ellipsis: true,
+			width: '20%',
 			render: (value) => value || '-'
 		},
 		{
@@ -119,7 +147,9 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			ellipsis: true,
 			sorter: false,
 			width: '15%',
-			render: (value, record) => <>{value && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${value}` : '-'}</>
+			render: (_value, record) => {
+				return <>{record?.phone && prefixOptions[record?.phonePrefixCountryCode] ? `${prefixOptions[record?.phonePrefixCountryCode]} ${record.phone}` : '-'}</>
+			}
 		},
 		{
 			title: t('loc:Služby'),
@@ -171,51 +201,47 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
 					<div className='content-body'>
-						<Permissions
-							allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
-							render={(hasPermission, { openForbiddenModal }) => (
-								<EmployeesFilter
-									createEmployee={() => {
-										if (hasPermission) {
-											history.push(parentPath + t('paths:employees/create'))
-										} else {
-											openForbiddenModal()
-										}
-									}}
-									onSubmit={handleSubmit}
-								/>
-							)}
-						/>
+						<Spin spinning={employees?.isLoading}>
+							<Permissions
+								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
+								render={(hasPermission, { openForbiddenModal }) => (
+									<EmployeesFilter
+										createEmployee={() => {
+											if (hasPermission) {
+												history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/create')))
+											} else {
+												openForbiddenModal()
+											}
+										}}
+										onSubmit={handleSubmit}
+									/>
+								)}
+							/>
 
-						<CustomTable
-							className='table-fixed'
-							onChange={onChangeTable}
-							columns={columns}
-							dataSource={employees?.data?.employees}
-							rowClassName={'clickable-row'}
-							loading={employees?.isLoading}
-							twoToneRows
-							scroll={{ x: 800 }}
-							onRow={(record) => ({
-								onClick: () => {
-									history.push(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id }))
-								}
-							})}
-							pagination={{
-								showTotal: (total, [from, to]) =>
-									t('loc:{{from}} - {{to}} z {{total}} záznamov', {
-										total,
-										from,
-										to
-									}),
-								defaultPageSize: PAGINATION.defaultPageSize,
-								pageSizeOptions: PAGINATION.pageSizeOptions,
-								pageSize: employees?.data?.pagination?.limit,
-								showSizeChanger: true,
-								total: employees?.data?.pagination?.totalCount,
-								current: employees?.data?.pagination?.page
-							}}
-						/>
+							<CustomTable
+								className='table-fixed'
+								onChange={onChangeTable}
+								columns={columns}
+								dataSource={employees?.data?.employees}
+								rowClassName={'clickable-row'}
+								rowKey='id'
+								twoToneRows
+								scroll={{ x: 800 }}
+								onRow={(record) => ({
+									onClick: () => {
+										history.push(getLinkWithEncodedBackUrl(parentPath + t('paths:employees/{{employeeID}}', { employeeID: record.id })))
+									}
+								})}
+								useCustomPagination
+								pagination={{
+									pageSize: employees?.data?.pagination?.limit,
+									total: employees?.data?.pagination?.totalCount,
+									current: employees?.data?.pagination?.page,
+									onChange: onChangePagination,
+									disabled: employees?.isLoading
+								}}
+							/>
+						</Spin>
 					</div>
 				</Col>
 			</Row>

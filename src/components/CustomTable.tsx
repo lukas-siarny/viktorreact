@@ -1,6 +1,4 @@
-/* eslint-disable import/no-cycle */
 import React, { useCallback, useEffect } from 'react'
-import { useDispatch } from 'react-redux'
 
 import { forEach, includes } from 'lodash'
 import cx from 'classnames'
@@ -8,6 +6,8 @@ import cx from 'classnames'
 // ant
 import { Empty, Table } from 'antd'
 import { TableProps } from 'antd/lib/table'
+import CustomPagination from './CustomPagination'
+import { IPagination } from '../types/interfaces'
 
 type ComponentProps<RecordType> = TableProps<RecordType> & {
 	emptyText?: string
@@ -17,10 +17,23 @@ type ComponentProps<RecordType> = TableProps<RecordType> & {
 	IDColumnDataIndex?: Array<string>
 	disabled?: boolean
 	onRow?: Function
+	/*
+		useCustomPagination - custom pagination is used instead of table internal one - so table onChange callback won't send information about pagination in this case
+		it is necessary to declare onChange callback in pagination config for pagination info in this case
+
+		pagination={{
+			...,
+			pageSize: 20,
+			total: 30,
+			onChange: (page, pageSize) => {}
+		}}
+	*/
+	useCustomPagination?: boolean
+	pagination?: IPagination | false
 }
 
 const CustomTable = <RecordType extends object = any>(props: ComponentProps<RecordType>) => {
-	const { disabled = false, className, columns, onRow } = props
+	const { disabled = false, className, columns, onRow, useCustomPagination, pagination } = props
 
 	const onClickOptionSizeChanger = useCallback(
 		(e: any) => {
@@ -38,18 +51,6 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 			}
 		},
 		[className]
-	)
-
-	const dispatch = useDispatch()
-
-	const onChange = useCallback(
-		(page: number, pageSize: number) => {
-			if (props.pagination && props.pagination.onChange) {
-				props.pagination.onChange(page, pageSize)
-			}
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[props.pagination, dispatch]
 	)
 
 	useEffect(() => {
@@ -87,16 +88,22 @@ const CustomTable = <RecordType extends object = any>(props: ComponentProps<Reco
 				className={cx('noti-table', props.className, { 'two-tone-table-style': props.twoToneRows })}
 				onRow={onRow}
 				pagination={
-					props.pagination &&
-					({
-						...props.pagination,
-						onChange,
-						className: 'ant-table-pagination ant-table-pagination-right custom-table-pagination'
-					} as any)
+					useCustomPagination
+						? false
+						: pagination &&
+						  ({
+								...pagination,
+								className: 'ant-table-pagination ant-table-pagination-right'
+						  } as any)
 				}
 				locale={emptyLocale}
 				bordered={props.bordered || false}
 			/>
+			{useCustomPagination && pagination && (
+				<div className='table-footer-custom-pagination'>
+					<CustomPagination {...pagination} />
+				</div>
+			)}
 		</div>
 	)
 }

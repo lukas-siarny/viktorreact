@@ -32,9 +32,9 @@
 		justify-content: space-between
 	&.ant-select-item-option
 		&.ant-select-item-option-active
-			color: $textColor-notino-white
-			background: $backgroundColor-notino-black
-			& span.ant-select-item-option-state svg path
+			// color: $textColor-notino-white
+			background: $backgroundColor-notino-grayLighter
+			/* & span.ant-select-item-option-state svg path
 				stroke: $backgroundColor-notino-white
 		& .ant-select-item-option-selected
 			color: $textColor-white
@@ -50,6 +50,10 @@
 		color: $textColor-notino-black
 		font-weight: 400
 		background-color: $backgroundColor-notino-grayLight
+
+.ant-select-item-option-disabled.ant-select-item-option-selected
+	color: $textColor-notino-grayLight
+	background-color: $textColor-notino-grayDark
 
 .ant-select-multiple
 	span.ant-select-selection-item-remove svg path
@@ -73,3 +77,19 @@
 		display: flex
 		align-items: center
 
+
+.noti-custom-autocomplete-dropdown-item
+	// je potrebne vynegovat selected a active styly
+	&.ant-select-item-option-active,
+	&.ant-select-item-option-selected
+		color: $textColor-notino-grayDarker !important
+		background: transparent !important
+	// treba nastavit nove styly, ktore by mali byt totozne ako selected styly
+	// tato classa sa nastavuje custom logikou a neodpoveda logike, ktorou nastavuje selected classy Antd AutoComplete komponent, preto sa robi takato obkluka
+	&.noti-custom-autocomplete-dropdown-item-selected
+		color: $textColor-notino-grayDarker !important
+		background: $backgroundColor-notino-grayLight !important
+	&:hover
+		// color: $textColor-notino-white !important
+		// background: $backgroundColor-notino-black !important
+		background: $backgroundColor-notino-grayLighter !important

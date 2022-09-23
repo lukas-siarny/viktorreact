@@ -10,11 +10,11 @@ import showNotifications from './tsxHelpers'
 
 /**
  * OnSubmit validate if IMAGE_UPLOADING_PROP is true -> indicates uploading
- * During upload will be submit action denied
+ * During upload will be submit action deniedw
  * IMAGE_UPLOADING_PROP must be set outside e.g. ImgUploadField
  */
 const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: any) => {
-	if (action.type === '@@redux-form/SUBMIT') {
+	if (action?.type === '@@redux-form/SUBMIT') {
 		const { form } = store.getState()
 		const submittedForm = form[action.meta.form]
 
@@ -24,7 +24,7 @@ const preventSubmitFormDuringUpload = (store: any) => (next: any) => (action: an
 			if (values && values[IMAGE_UPLOADING_PROP]) {
 				const error = i18next.t('loc:Prebieha nahrávanie')
 				showNotifications([{ type: MSG_TYPE.ERROR, message: error }], NOTIFICATION_TYPE.NOTIFICATION)
-				next(null)
+				return
 			}
 		}
 	}
@@ -45,8 +45,8 @@ const loggerFilter = (getState: any, action: any) => {
 const configureStoreProd = (rootReducer: Reducer) => {
 	const middlewares = [
 		// Add other middleware on this line...
-		preventSubmitFormDuringUpload,
-		thunk
+		thunk,
+		preventSubmitFormDuringUpload
 	]
 
 	const store = createStore(rootReducer, compose(applyMiddleware(...middlewares)))

@@ -8,7 +8,7 @@ import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IQueryParams, ISearchablePayload } from '../../types/interfaces'
+import { IQueryParams, ISearchable, IEmployeePayload } from '../../types/interfaces'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
 
@@ -23,16 +23,12 @@ interface IGetEmployee {
 }
 
 export interface IGetEmployeesQueryParams extends IQueryParams {
-	salonID?: number | undefined | null
-	serviceID?: number | undefined | null
+	salonID?: string | undefined | null
+	serviceID?: string | undefined | null
 	accountState?: string | undefined | null
 }
 
-export interface IEmployeePayload {
-	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
-}
-
-export interface IEmployeesPayload extends ISearchablePayload<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
+export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
 
 export const getEmployees =
 	(queryParams: IGetEmployeesQueryParams): ThunkResult<Promise<IEmployeesPayload>> =>
@@ -44,7 +40,8 @@ export const getEmployees =
 			const { data } = await getReq('/api/b2b/admin/employees/', { ...normalizeQueryParams(queryParams) })
 			const employeesOptions = map(data.employees, (employee) => {
 				return {
-					label: `${employee.firstName} ${employee.lastName}` || `${employee.id}`,
+					// show name if exist at least last name otherwise show fallback values
+					label: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
 					value: employee.id,
 					key: `${employee.id}-key`
 				}
@@ -65,12 +62,12 @@ export const getEmployees =
 	}
 
 export const getEmployee =
-	(employeeID: number): ThunkResult<Promise<IEmployeePayload>> =>
+	(employeeID: string): ThunkResult<Promise<IEmployeePayload>> =>
 	async (dispatch) => {
 		let payload = {} as IEmployeePayload
 		try {
 			dispatch({ type: EMPLOYEE.EMPLOYEE_LOAD_START })
-			const { data } = await getReq('/api/b2b/admin/employees/{employeeID}', { employeeID } as any)
+			const { data } = await getReq('/api/b2b/admin/employees/{employeeID}', { employeeID })
 			payload = {
 				data
 			}

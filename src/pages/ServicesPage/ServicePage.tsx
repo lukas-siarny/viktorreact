@@ -1,22 +1,25 @@
 import React, { useEffect } from 'react'
 import { Row } from 'antd'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 // components
-import ServiceCreatePage from './ServiceCreatePage'
 import ServiceEditPage from './ServiceEditPage'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // types
 import { IBreadcrumbs, IComputedMatch, SalonSubPageProps } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 // reducers
 import { getCategories } from '../../reducers/categories/categoriesActions'
 
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
+
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
-		serviceID: number
+		serviceID: string
 	}>
 }
 
@@ -26,18 +29,31 @@ const ServicePage = (props: Props) => {
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 
+	const service = useSelector((state: RootState) => state.service.service)
+	const [backUrl] = useBackUrl(parentPath + t('paths:services-settings'))
+
 	useEffect(() => {
 		dispatch(getCategories())
 	}, [dispatch])
 
+	const renderBredCrumbLastLabel = () => {
+		if (serviceID) {
+			if (service?.data?.service?.category?.child?.child?.name) {
+				return `${t('loc:Detail služby')} - ${service?.data?.service?.category?.child?.child?.name}`
+			}
+			return t('loc:Detail služby')
+		}
+		return t('loc:Vytvoriť službu')
+	}
+
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
-				name: t('loc:Zoznam služieb'),
-				link: parentPath + t('paths:services')
+				name: t('loc:Nastavenie služieb'),
+				link: backUrl
 			},
 			{
-				name: serviceID ? t('loc:Detail služby') : t('loc:Vytvoriť službu')
+				name: renderBredCrumbLastLabel()
 			}
 		]
 	}
@@ -45,11 +61,9 @@ const ServicePage = (props: Props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:services')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={backUrl} />
 			</Row>
-			<div className='content-body small mt-2'>
-				{serviceID ? <ServiceEditPage serviceID={serviceID} salonID={salonID} parentPath={parentPath} /> : <ServiceCreatePage salonID={salonID} parentPath={parentPath} />}
-			</div>
+			<div className='content-body small mt-2'>{serviceID && <ServiceEditPage serviceID={serviceID} salonID={salonID} parentPath={backUrl} />}</div>
 		</>
 	)
 }

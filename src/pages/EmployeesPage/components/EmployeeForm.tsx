@@ -1,50 +1,44 @@
-import React, { FC, MouseEventHandler, ReactNode, useCallback, useEffect } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import React, { FC, MouseEventHandler /* , ReactNode */ } from 'react'
+import { Field, /* FieldArray, */ InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row, Collapse, Button, Tag } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
-import cx from 'classnames'
+import { Divider, Form, Space } from 'antd'
 
 // utils
-import { isEmpty } from 'lodash'
-import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FILTER_ENTITY } from '../../../utils/enums'
-import { showErrorNotification, showServiceCategory, validationNumberMin } from '../../../utils/helper'
-import searchWrapper from '../../../utils/filters'
+import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
+import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
 
 // atoms
 import InputField from '../../../atoms/InputField'
-import SelectField from '../../../atoms/SelectField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
-import InputNumberField from '../../../atoms/InputNumberField'
-import SwitchField from '../../../atoms/SwitchField'
+// import InputNumberField from '../../../atoms/InputNumberField'
+// import SwitchField from '../../../atoms/SwitchField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
-import DeleteButton from '../../../components/DeleteButton'
+// import DeleteButton from '../../../components/DeleteButton'
 
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
 
-// reducers
-import { getServices } from '../../../reducers/services/serviceActions'
-import { RootState } from '../../../reducers'
-
 // assets
-import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
+/* import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
 import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg' */
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 
-const { Panel } = Collapse
+// const { Panel } = Collapse
 
 type ComponentProps = {
-	salonID: number
+	salonID: string
 	addService: MouseEventHandler<HTMLElement>
 }
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
-
+/**
 const numberMin0 = validationNumberMin(0)
 
 const renderListFields = (props: any) => {
@@ -201,50 +195,34 @@ const renderListFields = (props: any) => {
 			</Collapse>
 		</>
 	)
-}
+} */
 
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
-	const { handleSubmit, salonID, addService } = props
+	const { handleSubmit } = props
 
-	const formValues = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE].values)
-	const services = useSelector((state: RootState) => state.service.services)
-	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
-
-	useEffect(() => {
-		dispatch(getServices({ page: 1, salonID }))
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [salonID])
-
-	const searchService = useCallback(
-		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search, salonID } as any, FILTER_ENTITY.SERVICE)
-		},
-		[dispatch, salonID]
-	)
+	// const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
 	return (
 		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
-			<Col className={'flex'}>
-				<Row className={'mx-9 w-full h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
+			<Space className={'w-full px-9'} direction='vertical' size={36}>
+				<div>
+					<h3 className={'mb-0 mt-0 flex items-center'}>
+						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
+					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>
-						<div className={'w-1/5'}>
-							<Field
-								className={'m-0'}
-								component={ImgUploadField}
-								name={'avatar'}
-								label={t('loc:Avatar')}
-								signUrl={URL_UPLOAD_IMAGES}
-								category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
-								multiple={false}
-								maxCount={1}
-							/>
-						</div>
-
-						<div className={'w-full'}>
+						<Field
+							className={'m-0 mr-5'}
+							component={ImgUploadField}
+							name={'avatar'}
+							label={t('loc:Avatar')}
+							signUrl={URL_UPLOAD_IMAGES}
+							category={UPLOAD_IMG_CATEGORIES.EMPLOYEE}
+							multiple={false}
+							maxCount={1}
+						/>
+						<div className={'flex-1'}>
 							<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} required />
 							<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} required />
 						</div>
@@ -258,32 +236,16 @@ const EmployeeForm: FC<Props> = (props) => {
 						phoneName={'phone'}
 						formName={FORM.EMPLOYEE}
 					/>
-					<h3>{t('loc:Zoznam priradených služieb')}</h3>
+				</div>
+				<div>
+					{/* TODO - refactor assigned services
+					<h3 className={'mb-0 mt-0 flex items-center'}>
+						<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}
+					</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
-						<Field
-							label={t('loc:Služby')}
-							className={'flex-1'}
-							size={'large'}
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Vyberte služby')}
-							name={'service'}
-							onSearch={searchService}
-							filterOption={true}
-							mode={'multiple'}
-							options={services?.options}
-							showSearch
-							allowInfinityScroll
-							formName={FORM.EMPLOYEE}
-						/>
-						<Button type={'primary'} size={'middle'} className={'self-start noti-btn m-regular md:mt-5'} onClick={addService} disabled={isEmpty(formValues?.service)}>
-							{t('loc:Pridať službu')}
-						</Button>
-					</div>
-					<FieldArray component={renderListFields} name={'services'} salon={salon} />
-				</Row>
-			</Col>
+					<FieldArray component={renderListFields} name={'services'} salon={salon} /> */}
+				</div>
+			</Space>
 		</Form>
 	)
 }
@@ -295,6 +257,6 @@ const form = reduxForm<IEmployeeForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateEmployeeForm
-})(EmployeeForm)
+})(withPromptUnsavedChanges(EmployeeForm))
 
 export default form

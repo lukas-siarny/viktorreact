@@ -62,9 +62,5 @@ export default (values: IRegistrationForm) => {
 		errors.gdpr = i18next.t('loc:Toto pole je povinné')
 	}
 
-	if (!get(values, 'gtc')) {
-		errors.gtc = i18next.t('loc:Toto pole je povinné')
-	}
-
 	return errors
 }

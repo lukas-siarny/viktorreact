@@ -1,10 +1,8 @@
-/* eslint-disable import/no-cycle */
-import { IEnumerationActions, IEnumerationsPayload } from './enumerationActions'
+// eslint-disable-next-line import/no-cycle
+import { IEnumerationActions, IEnumerationsCurrenciesPayload } from './enumerationActions'
 import { ENUMERATIONS } from './enumerationTypes'
 import { ENUMERATIONS_KEYS } from '../../utils/enums'
-
-// eslint-disable-next-line import/no-cycle
-import { ILoadingAndFailure } from '../../types/interfaces'
+import { ILoadingAndFailure, IEnumerationsCountriesPayload } from '../../types/interfaces'
 
 export const initState = {
 	[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX]: {
@@ -13,21 +11,21 @@ export const initState = {
 		pagination: null,
 		isLoading: false,
 		isFailure: false
-	} as IEnumerationsPayload & ILoadingAndFailure,
+	} as IEnumerationsCountriesPayload & ILoadingAndFailure,
 	[ENUMERATIONS_KEYS.COUNTRIES]: {
 		data: null,
 		enumerationsOptions: [],
 		pagination: null,
 		isLoading: false,
 		isFailure: false
-	} as IEnumerationsPayload & ILoadingAndFailure,
+	} as IEnumerationsCountriesPayload & ILoadingAndFailure,
 	[ENUMERATIONS_KEYS.CURRENCIES]: {
 		data: null,
 		enumerationsOptions: [],
 		pagination: null,
 		isLoading: false,
 		isFailure: false
-	} as IEnumerationsPayload & ILoadingAndFailure
+	} as IEnumerationsCurrenciesPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last

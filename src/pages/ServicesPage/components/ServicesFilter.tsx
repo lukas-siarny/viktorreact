@@ -1,118 +1,59 @@
-import React, { useCallback, useMemo } from 'react'
+import React from 'react'
 import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
-import { Button, Col, Form, Row } from 'antd'
+import { Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 // utils
-import { FIELD_MODE, FORM, ROW_GUTTER_X_DEFAULT, FILTER_ENTITY } from '../../../utils/enums'
-import { checkFiltersSizeWithoutSearch, validationString, checkFiltersSize } from '../../../utils/helper'
-import searchWrapper from '../../../utils/filters'
+import { FORM } from '../../../utils/enums'
+import { checkFiltersSizeWithoutSearch, optionRenderWithImage } from '../../../utils/helper'
 
 // atoms
-import InputField from '../../../atoms/InputField'
 import SelectField from '../../../atoms/SelectField'
-
-// assets
-import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 
 // components
 import Filters from '../../../components/Filters'
 
 // reducers
 import { RootState } from '../../../reducers'
+import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 type ComponentProps = {
 	createNewTemplate?: any
 	total: number
-	createService: () => void
 }
 
 interface IServicesFilter {
-	search: string
-	categoryID: number
-	employeeID: number
-	salonID: number
+	rootCategoryID: String
+	salonID: String
 }
 
 type Props = InjectedFormProps<IServicesFilter, ComponentProps> & ComponentProps
 
-const fixLength100 = validationString(100)
-
 const ServicesFilter = (props: Props) => {
-	const { handleSubmit, total, createService } = props
+	const { handleSubmit } = props
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 	const formValues = useSelector((state: RootState) => getFormValues(FORM.SERVICES_FILTER)(state))
 	const categories = useSelector((state: RootState) => state.categories.categories)
 
-	const searchEmployee = useCallback(
-		async (search: string, page: number) => {
-			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.EMPLOYEE)
-		},
-		[dispatch]
-	)
-
-	// disable filter fields if the number of services is less than 2
-	const isFilterDisabled = useMemo(() => {
-		if (checkFiltersSize(formValues) > 0) return false
-		if (total > 1) return false
-		return true
-	}, [formValues, total])
-
-	const searchInput = (
-		<Field
-			className={'h-10 p-0 m-0'}
-			component={InputField}
-			size={'large'}
-			placeholder={t('loc:Hľadať podľa názvu')}
-			name='search'
-			fieldMode={FIELD_MODE.FILTER}
-			search
-			validate={fixLength100}
-			disabled={isFilterDisabled}
-		/>
-	)
-
-	const customContent = (
-		<Button onClick={createService} type='primary' htmlType='button' className={'noti-btn w-full'} icon={<PlusIcon />}>
-			{t('loc:Pridať službu')}
-		</Button>
-	)
-
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'pt-0'}>
-			<Filters search={searchInput} activeFilters={checkFiltersSizeWithoutSearch(formValues)} customContent={customContent}>
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={8}>
-						<Field
-							className='m-0'
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Kategória')}
-							name='categoryID'
-							options={categories.enumerationsOptions}
-							disabled={isFilterDisabled}
-						/>
-					</Col>
-					<Col span={8}>
-						<Field
-							className='m-0'
-							component={SelectField}
-							allowClear
-							placeholder={t('loc:Zamestnanec')}
-							name='employeeID'
-							showSearch
-							onSearch={searchEmployee}
-							onDidMountSearch
-							disabled={isFilterDisabled}
-							allowInfinityScroll
-							filterOption={false}
-						/>
-					</Col>
-				</Row>
-			</Filters>
+			<Filters
+				search={
+					<Field
+						className='m-0'
+						component={SelectField}
+						optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
+						allowClear
+						placeholder={t('loc:Odvetvie')}
+						name='rootCategoryID'
+						options={categories.enumerationsOptions}
+						loading={categories.isLoading}
+					/>
+				}
+				activeFilters={checkFiltersSizeWithoutSearch(formValues)}
+			/>
 		</Form>
 	)
 }

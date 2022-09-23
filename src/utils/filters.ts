@@ -1,15 +1,14 @@
 import { Action, Dispatch } from 'redux'
 import { ThunkResult } from '../reducers'
-import { IQueryParams, ISearchablePayload, ISelectOptionItem } from '../types/interfaces'
+import { IQueryParams, ISearchable, ISelectOptionItem } from '../types/interfaces'
 import { FILTER_ENTITY } from './enums'
 
 // reducers
-import { getSalons } from '../reducers/salons/salonsActions'
-import { getServices } from '../reducers/services/serviceActions'
+import { getSalons, getBasicSalons } from '../reducers/salons/salonsActions'
 import { getUsers } from '../reducers/users/userActions'
 import { getEmployees } from '../reducers/employees/employeesActions'
 
-const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResult<Promise<ISearchablePayload<any>>>) => {
+const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResult<Promise<ISearchable<any>>>) => {
 	switch (type) {
 		case FILTER_ENTITY.EMPLOYEE:
 			return getEmployees
@@ -17,12 +16,11 @@ const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResul
 		case FILTER_ENTITY.SALON:
 			return getSalons
 
-		case FILTER_ENTITY.SERVICE:
-			return getServices
+		case FILTER_ENTITY.BASIC_SALON:
+			return getBasicSalons
 
 		case FILTER_ENTITY.USER:
 			return getUsers
-
 		default:
 			throw new Error(`Unsupported entity type for filtering:${type}`)
 	}

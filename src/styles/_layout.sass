@@ -1,4 +1,5 @@
 @import tailwind-variables
+@import variables
 
 $vertical-header-spacing: 8px
 $right-left-layout-spacig: 16px
@@ -16,11 +17,11 @@ $inner-padding: 16px
 		max-width: 1280px
 		width: 100%
 		position: relative
-		padding: 64px 0
 
 	.layout-content
 		border-radius: 4px
-		box-shadow: $boxShadow-xl
+		// box-shadow: $boxShadow-xl
+		box-shadow: $content-box-shadow
 		min-height: 760px
 
 	.cover
@@ -53,7 +54,6 @@ $inner-padding: 16px
 	@media (max-width: 744px)
 		.layout-wrapper
 			max-width: 440px
-			padding: 24px 0
 			min-height: 500px
 
 	@media (max-width: 640px)
@@ -67,7 +67,6 @@ $inner-padding: 16px
 .noti-login-page
 	@media (max-width: 744px)
 		.layout-wrapper
-			padding: 24px 16px
 			max-width: 328px
 
 .noti-support-contact-page
@@ -91,7 +90,7 @@ $inner-padding: 16px
 					filter: invert(1)
 
 			&:active
-				color: $textColor-notino-white
+				background-color: $backgroundColor-notino-grayLighter
 
 			&:hover:not(.ant-menu-item-selected)
 				background-color: $backgroundColor-notino-grayLighter
@@ -147,7 +146,8 @@ $inner-padding: 16px
 	padding: 24px
 	margin-top: 8px
 	border-radius: 4px
-	box-shadow: $boxShadow-xl
+	// box-shadow: $boxShadow-xl
+	box-shadow: $content-box-shadow
 	margin-bottom: 24px
 	width: 100%
 	&.floating // cena sirka aj vyska bez marginov / paddingov so sedym pozadim na ktore idu biele formy a ine informacie (eg: dokoncenie-rezervacie)
@@ -168,6 +168,12 @@ $inner-padding: 16px
 	&.without-content-footer
 		.floating-content-wrapper
 			min-height: calc(100vh - 80px - 81px) // 100vh - header - breadcrumbs
+	&.dashboard-content
+		max-width: 1200px
+		margin: 0 auto
+		width: 100%
+		background: transparent
+		box-shadow: none
 	@media (max-width: 1700px)
 		&.small
 			width: 75%
@@ -197,11 +203,27 @@ $inner-padding: 16px
 		min-height: 60px
 		margin: -24px -24px 16px -24px
 		// box-shadow: $boxShadow-lg
-		background-color: $backgroundColor-gray-50
+		background-color: $backgroundColor-notino-white
 		padding: 10px 24px
 		width: calc(100% + 48px)
 		&.warning
 			background: $backgroundColor-yellow-50
+
+.content-body-width
+	&-floating
+		width: calc(100% + 38px)
+	&-small
+		width: 50%
+		margin: 0 auto
+	&-medium
+		width: 75%
+		margin: 0 auto
+	@media (max-width: 1700px)
+		&-small
+			width: 75%
+	@media (max-width: 1200px)
+		&-small, &-medium
+			width: 100%
 
 // Dropdown pre MENU
 .noti-layout-popup
@@ -234,10 +256,12 @@ $inner-padding: 16px
 // header
 .header-salon-label
 	color: $textColor-notino-black
-	.ant-avatar
-		flex: 0 0 auto
 	.icon-dropdown
 		flex: 0 0 auto
+
+.header-avatar
+	flex: 0 0 auto
+	// border: 1px solid $borderColor-notino-grayLight
 
 .selected-salon-text
 	color: $textColor-notino-grayDark

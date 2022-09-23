@@ -25,10 +25,11 @@ type ComponentProps = {
 	createCustomer: Function
 	total: number
 }
-
+// Search: nazov SalonSubRoutes, email salonu, meno priezvisko usera
+// Order: lastName, salonName, userEmail,
 interface ICustomersFilter {
 	search: string
-	salonID: number
+	salonID: string
 }
 
 type Props = InjectedFormProps<ICustomersFilter, ComponentProps> & ComponentProps

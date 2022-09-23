@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row, Spin } from 'antd'
-import { get } from 'lodash'
+import { get, map } from 'lodash'
 import { compose } from 'redux'
 import { initialize, submit, isPristine } from 'redux-form'
 
@@ -23,10 +23,14 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
+import { Paths } from '../../types/api'
+
+// hooks
+import useBackUrl from '../../hooks/useBackUrl'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
-		customerID: number
+		customerID: string
 	}>
 }
 
@@ -44,11 +48,28 @@ const CustomerPage = (props: Props) => {
 
 	const isLoading = customer?.isLoading || isRemoving
 
+	const [backUrl] = useBackUrl(parentPath + t('paths:customers'))
+
 	const fetchCustomerData = async () => {
 		const { data } = await dispatch(getCustomer(customerID))
 		if (!data?.customer?.id) {
 			history.push('/404')
 		}
+		dispatch(
+			initialize(FORM.CUSTOMER, {
+				...data?.customer,
+				zipCode: data?.customer.address.zipCode,
+				city: data?.customer.address.city,
+				street: data?.customer.address.street,
+				streetNumber: data?.customer.address.streetNumber,
+				countryCode: data?.customer.address.countryCode,
+				salonID: data?.customer.salon.id,
+				gallery: map(data?.customer?.galleryImages, (image) => ({ url: image?.original, thumbnail: image?.resizedImages?.thumbnail, uid: image?.id })),
+				avatar: data?.customer?.profileImage
+					? [{ url: data?.customer?.profileImage?.original, thumbnail: data?.customer?.profileImage?.resizedImages?.thumbnail, uid: data?.customer?.profileImage?.id }]
+					: null
+			})
+		)
 	}
 
 	useEffect(() => {
@@ -56,25 +77,12 @@ const CustomerPage = (props: Props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, customerID])
 
-	useEffect(() => {
-		dispatch(
-			initialize(FORM.CUSTOMER, {
-				...customer.data?.customer,
-				zipCode: customer.data?.customer.address.zipCode,
-				city: customer.data?.customer.address.city,
-				street: customer.data?.customer.address.street,
-				countryCode: customer.data?.customer.address.countryCode,
-				salonID: customer.data?.customer.salon.id
-			})
-		)
-	}, [dispatch, customer])
-
 	// View
 	const breadcrumbs: IBreadcrumbs = {
 		items: [
 			{
 				name: t('loc:Zoznam zákazníkov'),
-				link: parentPath + t('paths:customers')
+				link: backUrl
 			},
 			{
 				name: t('loc:Detail zákazníka'),
@@ -99,14 +107,19 @@ const CustomerPage = (props: Props) => {
 					firstName: data.firstName,
 					gender: data.gender,
 					lastName: data.lastName,
+					note: data.note,
 					street: data.street,
 					streetNumber: data.streetNumber,
 					zipCode: data.zipCode,
 					phone: data.phone,
-					phonePrefixCountryCode: data.phonePrefixCountryCode
+					phonePrefixCountryCode: data.phonePrefixCountryCode,
+					galleryImageIDs:
+						((data?.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody['galleryImageIDs']) || null,
+					profileImageID: (data?.avatar?.[0]?.id ?? data?.avatar?.[0]?.uid) || null
 				}
 			)
-			dispatch(getCustomer(customerID))
+
+			history.push(backUrl)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

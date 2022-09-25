@@ -7,8 +7,8 @@ import { includes } from 'lodash'
 import AuthRoute from './AuthRoute'
 
 // utils
-import { PAGE, PERMISSION } from '../utils/enums'
-import { checkPermissions } from '../utils/Permissions'
+import { PAGE } from '../utils/enums'
+import { isAdmin } from '../utils/Permissions'
 import { history } from '../utils/history'
 
 // redux
@@ -62,6 +62,7 @@ const SalonSubRoutes: FC = (props) => {
 	const dispatch = useDispatch()
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser)
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 
 	const getPath = useCallback((pathSuffix: string) => `${path}${pathSuffix}`, [path])
 
@@ -72,18 +73,20 @@ const SalonSubRoutes: FC = (props) => {
 		if (currentUser.data) {
 			// Only SUPER_ADMIN, ADMIN or PARTNER with assigned salon
 			if (
-				checkPermissions(currentUser.data.uniqPermissions, [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]) ||
+				isAdmin(currentUser.data.uniqPermissions) ||
 				includes(
 					currentUser.data.salons.map((salon) => salon.id),
 					salonID
 				)
 			) {
-				dispatch(selectSalon(salonID))
+				if (selectedSalon?.id !== salonID) {
+					dispatch(selectSalon(salonID))
+				}
 			} else {
 				redirectoToForbiddenPage()
 			}
 		}
-	}, [salonID, dispatch, currentUser])
+	}, [salonID, dispatch, currentUser, selectedSalon?.id])
 
 	return (
 		<Switch>

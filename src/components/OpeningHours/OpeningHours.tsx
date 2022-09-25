@@ -58,20 +58,38 @@ const TimeRangesComponent = (props: any) => {
 	)
 }
 
+const getDayLabel = (value: any, t: any, showOnDemand = false) => {
+	const label = translateDayName(value?.day)
+
+	if (showOnDemand && value.onDemand) {
+		return `${label} - ${t('loc:Na objednávku')}`
+	}
+
+	if (isEmpty(value?.timeRanges)) {
+		return `${label} - ${t('loc:Zatvorené')}`
+	}
+
+	return label
+}
+
 const OpeningHours = (props: any) => {
-	const { fields, disabled } = props
+	const { fields, disabled, showOnDemand } = props
 	const [t] = useTranslation()
 
 	return (
 		<>
 			{fields.map((field: any, index: any) => {
 				const value = fields.get(index)
+
 				return (
 					<div key={field} className={'mt-2'}>
-						<div className={'text-gray-900 font-semibold text-base'}>
-							{translateDayName(value?.day)} {isEmpty(value?.timeRanges) ? ` - ${t('loc:Zatvorené')}` : undefined}
+						<div className={'text-gray-900 font-semibold text-base'}>{getDayLabel(value, t, showOnDemand)}</div>
+						<div className={'flex items-center justify-between gap-2'}>
+							<FieldArray props={{ disabled: disabled || value.onDemand }} component={TimeRangesComponent} name={`${field}.timeRanges`} />
+							{showOnDemand && (
+								<Field name={`${field}.onDemand`} component={SwitchField} label={t('loc:Na objednávku')} size={'small'} disabled={disabled} className={'m-0'} />
+							)}
 						</div>
-						<FieldArray props={{ disabled }} component={TimeRangesComponent} name={`${field}.timeRanges`} />
 						{/* show switch filed for open work hours over weekend */}
 						{index === 4 || fields.length === 1 || (fields.length === 3 && index === 0) ? (
 							<Field

@@ -68,7 +68,21 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
-export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+// export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+export type OpeningHours = {
+	day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
+	timeRanges: [
+		{
+			timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+			timeTo: string
+		},
+		...{
+			timeFrom: string
+			timeTo: string
+		}[]
+	],
+	onDemand?: boolean
+}[]
 
 export interface ISalonForm {
 	salonNameFromSelect: boolean

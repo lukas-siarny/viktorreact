@@ -7,11 +7,11 @@ import { DAY, MONDAY_TO_FRIDAY } from '../../utils/enums'
 type TimeRanges = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours'][0]['timeRanges']
 
 export const week: OpeningHours = [
-	{ day: DAY.MONDAY, timeRanges: [] as never },
-	{ day: DAY.TUESDAY, timeRanges: [] as never },
-	{ day: DAY.WEDNESDAY, timeRanges: [] as never },
-	{ day: DAY.THURSDAY, timeRanges: [] as never },
-	{ day: DAY.FRIDAY, timeRanges: [] as never }
+	{ day: DAY.MONDAY, timeRanges: [] as never, onDemand: false },
+	{ day: DAY.TUESDAY, timeRanges: [] as never, onDemand: false },
+	{ day: DAY.WEDNESDAY, timeRanges: [] as never, onDemand: false },
+	{ day: DAY.THURSDAY, timeRanges: [] as never, onDemand: false },
+	{ day: DAY.FRIDAY, timeRanges: [] as never, onDemand: false }
 ]
 
 export const daysOrderMap: any = {
@@ -34,7 +34,7 @@ export const initOpeningHours = (openingHours: OpeningHours | undefined, sameOpe
 	let workWeek: OpeningHours = [...week]
 	if (openOverWeekend) {
 		// add weekend days
-		workWeek = [...week, { day: DAY.SATURDAY, timeRanges: [] as never }, { day: DAY.SUNDAY, timeRanges: [] as never }]
+		workWeek = [...week, { day: DAY.SATURDAY, timeRanges: [] as never, onDemand: false }, { day: DAY.SUNDAY, timeRanges: [] as never, onDemand: false }]
 		workWeek = unionBy(openingHours, workWeek, 'day') as OpeningHours
 	} else {
 		// remove weekend days
@@ -57,7 +57,8 @@ export const initOpeningHours = (openingHours: OpeningHours | undefined, sameOpe
 		// add monday to friday field
 		workWeek?.splice(0, 0, {
 			day: MONDAY_TO_FRIDAY as DAY,
-			timeRanges: (openingHours?.[0]?.timeRanges as any) || []
+			timeRanges: (openingHours?.[0]?.timeRanges as any) || [],
+			onDemand: !!openingHours?.[0]?.onDemand
 		})
 	} else {
 		// remove same open hours over week
@@ -128,7 +129,8 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 		week.forEach((day) => {
 			result?.push({
 				day: day?.day,
-				timeRanges: openingHours?.[0]?.timeRanges || ([] as any)
+				timeRanges: openingHours?.[0]?.timeRanges || ([] as any),
+				onDemand: !!openingHours?.[0]?.onDemand
 			})
 		})
 		if (openOverWeekend) {
@@ -137,7 +139,8 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 				if (openingHour.day === DAY.SUNDAY || openingHour.day === DAY.SATURDAY) {
 					result?.push({
 						day: openingHour.day,
-						timeRanges: openingHour.timeRanges
+						timeRanges: openingHour.timeRanges,
+						onDemand: !!openingHours?.[0]?.onDemand
 					})
 				}
 			})

@@ -425,6 +425,7 @@ export function setIntervalImmediately(func: Function, interval: number) {
 export const getGoogleMapUrl = (): string => {
 	// query params for google API
 	const base = 'https://maps.googleapis.com/maps/api/'
+	// eslint-disable-next-line no-underscore-dangle
 	const key = `key=${window.__RUNTIME_CONFIG__.GOOGLE_MAPS_API_KEY}`
 	const language = `language=${i18next.language.toLowerCase()}`
 

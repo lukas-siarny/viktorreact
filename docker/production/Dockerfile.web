@@ -1,8 +1,8 @@
-FROM nginx
+FROM nginx:1.21.5-alpine
 USER root
 
 COPY ./build /usr/share/nginx/html
-COPY  ./docker/production/nginx.conf /etc/nginx
+COPY ./docker/production/nginx.conf /etc/nginx
 
 # copy .env to the container
 COPY .env .env

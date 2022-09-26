@@ -18,7 +18,7 @@ import { translateDayName, validationRequired } from '../../utils/helper'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon-16.svg'
 
 const TimeRangesComponent = (props: any) => {
-	const { fields, disabled } = props
+	const { fields, disabled, onDemandSwitch } = props
 	const [t] = useTranslation()
 
 	const items = fields.map((field: any, index: any) => (
@@ -42,18 +42,21 @@ const TimeRangesComponent = (props: any) => {
 	return (
 		<div className={'flex items-center'}>
 			{items}
-			{items.length < 3 && (
-				<Button
-					onClick={() => fields.push({ timeFrom: null, timeTo: null })}
-					icon={<PlusIcon className={'text-notino-black'} />}
-					className={'noti-btn'}
-					type={'default'}
-					size={'small'}
-					disabled={disabled}
-				>
-					{t('loc:Pridať interval')}
-				</Button>
-			)}
+			<div className={'flex items-center gap-2'}>
+				{items.length < 3 && (
+					<Button
+						onClick={() => fields.push({ timeFrom: null, timeTo: null })}
+						icon={<PlusIcon className={'text-notino-black'} />}
+						className={'noti-btn'}
+						type={'default'}
+						size={'small'}
+						disabled={disabled}
+					>
+						{t('loc:Pridať interval')}
+					</Button>
+				)}
+				{onDemandSwitch}
+			</div>
 		</div>
 	)
 }
@@ -84,12 +87,17 @@ const OpeningHours = (props: any) => {
 				return (
 					<div key={field} className={'mt-2'}>
 						<div className={'text-gray-900 font-semibold text-base'}>{getDayLabel(value, t, showOnDemand)}</div>
-						<div className={'flex items-center justify-between gap-2'}>
-							<FieldArray props={{ disabled: disabled || value.onDemand }} component={TimeRangesComponent} name={`${field}.timeRanges`} />
-							{showOnDemand && (
-								<Field name={`${field}.onDemand`} component={SwitchField} label={t('loc:Na objednávku')} size={'small'} disabled={disabled} className={'m-0'} />
-							)}
-						</div>
+						<FieldArray
+							props={{
+								disabled: disabled || value.onDemand,
+								onDemandSwitch: showOnDemand && (
+									<Field name={`${field}.onDemand`} component={SwitchField} label={t('loc:Na objednávku')} size={'small'} disabled={disabled} className={'m-0'} />
+								)
+							}}
+							component={TimeRangesComponent}
+							name={`${field}.timeRanges`}
+						/>
+
 						{/* show switch filed for open work hours over weekend */}
 						{index === 4 || fields.length === 1 || (fields.length === 3 && index === 0) ? (
 							<Field

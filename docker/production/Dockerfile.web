@@ -4,6 +4,16 @@ USER root
 COPY ./build /usr/share/nginx/html
 COPY  ./docker/production/nginx.conf /etc/nginx
 
+# copy .env to the container
+COPY .env .env
+
+# install nodejs & npm
+RUN apk add --update nodejs
+RUN apk add --update npm
+
+# install runtime-env-cra package
+RUN npm i -g runtime-env-cra
+
 STOPSIGNAL SIGTERM
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/bin/sh", "-c", "runtime-env-cra && nginx -g \"daemon off;\""]

@@ -1,1 +1,0 @@
-window.RUNTIME_CONFIG = {'GOOGLE_MAPS_API_KEY':'AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw'};

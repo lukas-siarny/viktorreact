@@ -425,8 +425,7 @@ export function setIntervalImmediately(func: Function, interval: number) {
 export const getGoogleMapUrl = (): string => {
 	// query params for google API
 	const base = 'https://maps.googleapis.com/maps/api/'
-	// TODO read Google Map API key from .env file
-	const key = `key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
+	const key = `key=${window.__RUNTIME_CONFIG__.GOOGLE_MAPS_API_KEY}`
 	const language = `language=${i18next.language.toLowerCase()}`
 
 	return `${base}js?${key}&libraries=places&${language}`

@@ -10,7 +10,7 @@
     "node": "^16.13.0"
   },
   "scripts": {
-    "start": "cross-env REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw npm-run-all -p start-watch translate-watch build:tailwind",
+    "start": "GOOGLE_MAPS_API_KEY=AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw runtime-env-cra --config-name=./public/runtime-env.js && cross-env npm-run-all -p start-watch translate-watch build:tailwind",
     "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
     "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true npm-run-all -p build:tailwind rebuild:sass",
     "copy-modules": "node scripts/postBuild.js",
@@ -100,6 +100,7 @@
     "redux-persist": "6.0.0",
     "redux-thunk": "2.4.1",
     "regenerator-runtime": "0.13.9",
+    "runtime-env-cra": "0.2.4",
     "sass": "1.50.1",
     "slugify": "1.6.5",
     "smtp-tester": "2.0.0",

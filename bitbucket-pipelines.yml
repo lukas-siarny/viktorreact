@@ -34,7 +34,7 @@ pipelines:
                 - docker build -t registry.goodrequest.com/notino-b2b-web:development -f docker/development/Dockerfile.web .
                 - docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
                 - docker push registry.goodrequest.com/notino-b2b-web:development
-    development2:
+    development-2:
       - step:
           name: Install npm modules
           script:

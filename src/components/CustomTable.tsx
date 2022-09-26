@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import React, { useCallback, useEffect } from 'react'
 
 import { forEach, includes } from 'lodash'

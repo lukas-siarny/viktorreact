@@ -20,13 +20,14 @@ import { RootState } from '../../reducers'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { Paths } from '../../types/api'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import { formFieldID } from '../../utils/helper'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
@@ -161,6 +162,7 @@ const CustomerPage = (props: Props) => {
 								entityName={t('loc:zákazníka')}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								id={formFieldID(FORM.CUSTOMER, DELETE_BUTTON_ID)}
 							/>
 							<Permissions
 								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_UPDATE]}

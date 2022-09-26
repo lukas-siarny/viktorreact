@@ -85,7 +85,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						<FieldArray
 							component={InputsArrayField}
 							name={'emails'}
-							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Emailové adresy'), requied: true }}
+							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Emailové adresy'), required: true }}
 						/>
 						<FieldArray component={PhoneArrayField} name={'phones'} props={{ disabled: disabledForm, requied: true }} />
 						<Row justify={'space-between'}>

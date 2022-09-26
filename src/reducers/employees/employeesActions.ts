@@ -8,7 +8,7 @@ import { getReq } from '../../utils/request'
 import { normalizeQueryParams } from '../../utils/helper'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IQueryParams, ISearchable } from '../../types/interfaces'
+import { IQueryParams, ISearchable, IEmployeePayload } from '../../types/interfaces'
 
 export type IEmployeesActions = IResetStore | IGetEmployees | IGetEmployee
 
@@ -26,10 +26,6 @@ export interface IGetEmployeesQueryParams extends IQueryParams {
 	salonID?: string | undefined | null
 	serviceID?: string | undefined | null
 	accountState?: string | undefined | null
-}
-
-export interface IEmployeePayload {
-	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
 }
 
 export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}

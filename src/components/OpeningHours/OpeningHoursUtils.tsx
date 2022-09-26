@@ -1,5 +1,12 @@
 import { isEmpty, unionBy } from 'lodash'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { change } from 'redux-form'
+
+// types
 import { OpeningHours } from '../../types/interfaces'
+
+// utils
 import { DAY, MONDAY_TO_FRIDAY } from '../../utils/enums'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -148,4 +155,57 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 		return result?.filter((openingHour) => openingHour?.timeRanges?.length > 0)
 	}
 	return openingHours?.filter((openingHour) => openingHour?.timeRanges?.length > 0)
+}
+
+export const useChangeOpeningHoursFormFields = (
+	formName: string,
+	openingHours: OpeningHours,
+	sameOpenHoursOverWeekFormValue: boolean,
+	openOverWeekendFormValue: boolean,
+	fieldName = 'openingHours'
+) => {
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		if (sameOpenHoursOverWeekFormValue) {
+			if (openOverWeekendFormValue) {
+				// set switch same open hours over week with weekend
+				dispatch(
+					change(formName, fieldName, [
+						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(openingHours) },
+						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY) },
+						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY) }
+					])
+				)
+			} else {
+				// set switch same open hours over week without weekend
+				dispatch(
+					change(formName, fieldName, [
+						{
+							day: MONDAY_TO_FRIDAY,
+							timeRanges: getDayTimeRanges(openingHours)
+						}
+					])
+				)
+			}
+		} else {
+			// set to init values
+			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
+			const initHours: OpeningHours = initOpeningHours(openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
+			if (openOverWeekendFormValue && initHours) {
+				const updatedOpeningHours = unionBy(
+					[
+						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY) },
+						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY) }
+					],
+					initHours,
+					'day'
+				)?.sort(orderDaysInWeek)
+				dispatch(change(formName, fieldName, updatedOpeningHours))
+			} else {
+				dispatch(change(formName, fieldName, initHours?.sort(orderDaysInWeek)))
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 }

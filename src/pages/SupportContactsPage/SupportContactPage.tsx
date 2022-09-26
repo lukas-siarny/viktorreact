@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Row, Spin } from 'antd'
-import { change, initialize, isPristine, submit } from 'redux-form'
-import { get, map, unionBy } from 'lodash'
+import { initialize, isPristine, submit } from 'redux-form'
+import { get, map } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -13,10 +13,17 @@ import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SupportContactForm from './components/SupportContactForm'
 import { scrollToTopFn } from '../../components/ScrollToTop'
-import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import {
+	checkSameOpeningHours,
+	checkWeekend,
+	createSameOpeningHours,
+	initOpeningHours,
+	orderDaysInWeek,
+	useChangeOpeningHoursFormFields
+} from '../../components/OpeningHours/OpeningHoursUtils'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // types
 import { Paths } from '../../types/api'
@@ -133,41 +140,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		dispatch(getSupportContacts())
 	}, [dispatch])
 
-	useEffect(() => {
-		if (sameOpenHoursOverWeekFormValue) {
-			if (openOverWeekendFormValue) {
-				// set switch same open hours over week with weekend
-				dispatch(
-					change(FORM.SUPPORT_CONTACT, 'openingHours', [
-						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(formValues?.openingHours) },
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
-					])
-				)
-			} else {
-				// set switch same open hours over week without weekend
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', [{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(formValues?.openingHours) }]))
-			}
-		} else {
-			// set to init values
-			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: OpeningHours = initOpeningHours(formValues?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
-			if (openOverWeekendFormValue && openingHours) {
-				const updatedOpeningHours = unionBy(
-					[
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
-					],
-					openingHours,
-					'day'
-				)?.sort(orderDaysInWeek)
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', updatedOpeningHours))
-			} else {
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', openingHours?.sort(orderDaysInWeek)))
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
+	useChangeOpeningHoursFormFields(FORM.SUPPORT_CONTACT, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	const handleSubmit = async (data: ISupportContactForm) => {
 		try {

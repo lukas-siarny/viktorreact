@@ -2,10 +2,6 @@ import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 
-// types
-// eslint-disable-next-line import/no-cycle
-import { ICurrency, IDateTimeFilterOption } from '../types/interfaces'
-
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
 }
@@ -33,7 +29,7 @@ export const DEFAULT_LANGUAGE = LANGUAGE.EN
 
 export const DEFAULT_PHONE_PREFIX = 'CZ'
 
-export const DEFAULT_CURRENCY: ICurrency = {
+export const DEFAULT_CURRENCY = {
 	code: 'EUR',
 	symbol: '€'
 }
@@ -484,6 +480,10 @@ export enum ACCOUNT_STATE {
 
 export const IMAGE_UPLOADING_PROP = 'imageUploading'
 
+export const DELETE_BUTTON_ID = 'delete-btn'
+
+export const CREATE_BUTTON_ID = 'create-btn'
+
 export const MAX_VALUES_PER_PARAMETER = 20
 
 export enum PARAMETERS_VALUE_TYPES {
@@ -537,7 +537,7 @@ export enum DATE_TIME_RANGE {
 	LAST_WEEK = 'LAST_WEEK'
 }
 
-export const DEFAULT_DATE_TIME_OPTIONS = (): { [key: string]: IDateTimeFilterOption } => {
+export const DEFAULT_DATE_TIME_OPTIONS = (): { [key: string]: any } => {
 	return {
 		[DATE_TIME_RANGE.LAST_DAY]: { name: i18next.t('loc:24 hodín'), value: 1, unit: 'day' },
 		[DATE_TIME_RANGE.LAST_TWO_DAYS]: { name: i18next.t('loc:48 hodín'), value: 2, unit: 'day' },

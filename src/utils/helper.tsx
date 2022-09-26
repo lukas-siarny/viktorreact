@@ -1,4 +1,3 @@
-/* eslint-disable import/no-cycle */
 import React from 'react'
 import {
 	first,
@@ -64,15 +63,13 @@ import {
 	SALON_CREATE_TYPES,
 	DEFAULT_DATE_TIME_OPTIONS
 } from './enums'
-import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption } from '../types/interfaces'
+import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption, CountriesData, IAuthUserPayload, IEmployeePayload } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
-import { CountriesData } from '../reducers/enumerations/enumerationActions'
 
 import { ReactComponent as LanguageIcon } from '../assets/icons/language-icon-16.svg'
-import { IAuthUserPayload } from '../reducers/users/userActions'
-import { IEmployeePayload } from '../reducers/employees/employeesActions'
+// eslint-disable-next-line import/no-cycle
 import { LOCALES } from '../components/LanguagePicker'
 
 export const preventDefault = (e: any) => e?.preventDefault?.()

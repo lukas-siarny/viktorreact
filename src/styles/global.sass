@@ -2009,3 +2009,20 @@ li.ant-list-item:hover
 
 .ant-collapse-item.collapse-header-has-error
 	box-shadow: 0 0 0 1px $backgroundColor-notino-red
+
+.noti-opening-hours
+	.noti-opening-hours-row
+		//display: flex
+		//align-items: center
+		//flex-direction: row-reverse
+		// flex-wrap: wrap
+		//justify-content: flex-end
+		display: flex
+		align-items: center
+		@media (max-width: 1200px)
+			flex-direction: column-reverse
+			align-items: flex-start
+		@media (max-width: 900px)
+			.noti-opening-hours-ranges
+				flex-direction: column
+

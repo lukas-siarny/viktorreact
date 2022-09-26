@@ -4,10 +4,10 @@ import { useDispatch } from 'react-redux'
 import { change } from 'redux-form'
 
 // types
-import { OpeningHours } from '../../types/interfaces'
+import { OpeningHours, RawOpeningHours, RawOpeningHoursPatch } from '../../types/interfaces'
 
 // utils
-import { DAY, MONDAY_TO_FRIDAY } from '../../utils/enums'
+import { DAY, MONDAY_TO_FRIDAY, OPENING_HOURS_STATES } from '../../utils/enums'
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -130,14 +130,14 @@ export const checkSameOpeningHours = (openingHours: OpeningHours | undefined): b
 	return false
 }
 
-export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWeek: boolean, openOverWeekend: boolean) => {
+export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWeek: boolean, openOverWeekend: boolean): RawOpeningHoursPatch => {
 	if (sameOpenHoursOverWeek && openingHours) {
-		const result: OpeningHours = [] as any
+		const result: RawOpeningHoursPatch = []
 		week.forEach((day) => {
 			result?.push({
 				day: day?.day,
-				timeRanges: openingHours?.[0]?.timeRanges || ([] as any),
-				onDemand: !!openingHours?.[0]?.onDemand
+				timeRanges: openingHours?.[0]?.onDemand ? undefined : ((openingHours?.[0]?.timeRanges || []) as any),
+				state: openingHours?.[0]?.onDemand ? OPENING_HOURS_STATES.CUSTOM_ORDER : undefined
 			})
 		})
 		if (openOverWeekend) {
@@ -146,20 +146,26 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 				if (openingHour.day === DAY.SUNDAY || openingHour.day === DAY.SATURDAY) {
 					result?.push({
 						day: openingHour.day,
-						timeRanges: openingHour.timeRanges,
-						onDemand: !!openingHours?.[0]?.onDemand
+						timeRanges: openingHour.onDemand ? undefined : ((openingHour.timeRanges || []) as any),
+						state: openingHour.onDemand ? OPENING_HOURS_STATES.CUSTOM_ORDER : undefined
 					})
 				}
 			})
 		}
-		return result?.filter((openingHour) => openingHour?.timeRanges?.length > 0)
+		return result?.filter((openingHour) => (openingHour?.timeRanges?.length || []) > 0) as RawOpeningHoursPatch
 	}
-	return openingHours?.filter((openingHour) => openingHour?.timeRanges?.length > 0)
+	return openingHours
+		?.map((openingHour) => ({
+			day: openingHour.day,
+			timeRanges: openingHour.onDemand ? undefined : ((openingHour.timeRanges || []) as any),
+			state: openingHour.onDemand ? OPENING_HOURS_STATES.CUSTOM_ORDER : undefined
+		}))
+		.filter((openingHour) => openingHour?.timeRanges?.length > 0 || openingHour.state === OPENING_HOURS_STATES.CUSTOM_ORDER) as RawOpeningHoursPatch
 }
 
 export const useChangeOpeningHoursFormFields = (
 	formName: string,
-	openingHours: OpeningHours,
+	openingHours: OpeningHours | undefined,
 	sameOpenHoursOverWeekFormValue: boolean,
 	openOverWeekendFormValue: boolean,
 	fieldName = 'openingHours'
@@ -167,12 +173,15 @@ export const useChangeOpeningHoursFormFields = (
 	const dispatch = useDispatch()
 
 	useEffect(() => {
+		if (!openingHours) {
+			return
+		}
 		if (sameOpenHoursOverWeekFormValue) {
 			if (openOverWeekendFormValue) {
 				// set switch same open hours over week with weekend
 				dispatch(
 					change(formName, fieldName, [
-						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(openingHours) },
+						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(openingHours), onDemand: openingHours?.[0]?.onDemand },
 						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY) },
 						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY) }
 					])
@@ -183,7 +192,8 @@ export const useChangeOpeningHoursFormFields = (
 					change(formName, fieldName, [
 						{
 							day: MONDAY_TO_FRIDAY,
-							timeRanges: getDayTimeRanges(openingHours)
+							timeRanges: getDayTimeRanges(openingHours),
+							onDemand: openingHours?.[0]?.onDemand
 						}
 					])
 				)
@@ -192,6 +202,7 @@ export const useChangeOpeningHoursFormFields = (
 			// set to init values
 			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
 			const initHours: OpeningHours = initOpeningHours(openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
+
 			if (openOverWeekendFormValue && initHours) {
 				const updatedOpeningHours = unionBy(
 					[
@@ -209,3 +220,11 @@ export const useChangeOpeningHoursFormFields = (
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
 }
+
+export const mapRawOpeningHoursToComponentOpeningHours = (rawOpeningHours?: RawOpeningHours): OpeningHours =>
+	(rawOpeningHours || []).map((day) => {
+		const newOpeningHours: any = { ...day }
+		delete newOpeningHours.state
+		newOpeningHours.onDemand = (day.state as OPENING_HOURS_STATES) === OPENING_HOURS_STATES.CUSTOM_ORDER
+		return newOpeningHours
+	})

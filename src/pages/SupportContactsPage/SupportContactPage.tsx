@@ -18,6 +18,7 @@ import {
 	checkWeekend,
 	createSameOpeningHours,
 	initOpeningHours,
+	mapRawOpeningHoursToComponentOpeningHours,
 	orderDaysInWeek,
 	useChangeOpeningHoursFormFields
 } from '../../components/OpeningHours/OpeningHoursUtils'
@@ -91,11 +92,10 @@ const SupportContactPage: FC<Props> = (props) => {
 
 			if (data) {
 				// init data for existing supportContact
-				const openOverWeekend: boolean = checkWeekend(data?.supportContact?.openingHours)
-				const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(data?.supportContact?.openingHours)
-				const openingHours: OpeningHours = initOpeningHours(data?.supportContact?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(
-					orderDaysInWeek
-				) as OpeningHours
+				const mappedOpeningHours = mapRawOpeningHoursToComponentOpeningHours(data?.supportContact?.openingHours)
+				const openOverWeekend: boolean = checkWeekend(mappedOpeningHours)
+				const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(mappedOpeningHours)
+				const openingHours: OpeningHours = initOpeningHours(mappedOpeningHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 
 				dispatch(
 					initialize(FORM.SUPPORT_CONTACT, {

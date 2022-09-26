@@ -618,5 +618,5 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 })
 
 export enum OPENING_HOURS_STATES {
-	CUSTOMR_ORDER = 'CUSTOMR_ORDER'
+	CUSTOM_ORDER = 'CUSTOM_ORDER'
 }

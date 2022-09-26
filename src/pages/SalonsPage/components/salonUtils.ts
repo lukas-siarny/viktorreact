@@ -10,7 +10,14 @@ import { Paths } from '../../../types/api'
 import { SALON_STATES } from '../../../utils/enums'
 
 // components
-import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, initOpeningHours, orderDaysInWeek } from '../../../components/OpeningHours/OpeningHoursUtils'
+import {
+	checkSameOpeningHours,
+	checkWeekend,
+	createSameOpeningHours,
+	initOpeningHours,
+	mapRawOpeningHoursToComponentOpeningHours,
+	orderDaysInWeek
+} from '../../../components/OpeningHours/OpeningHoursUtils'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
@@ -27,9 +34,10 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		return {}
 	}
 	// init data for existing salon
-	const openOverWeekend: boolean = checkWeekend(salonData.openingHours)
-	const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.openingHours)
-	const openingHours: OpeningHours = initOpeningHours(salonData.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+	const mappedOpeningHours = mapRawOpeningHoursToComponentOpeningHours(salonData.openingHours)
+	const openOverWeekend: boolean = checkWeekend(mappedOpeningHours)
+	const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(mappedOpeningHours)
+	const openingHours: OpeningHours = initOpeningHours(mappedOpeningHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 	// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
 	// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
 	// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)

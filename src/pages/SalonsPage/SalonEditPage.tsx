@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
-import { change, initialize, isPristine, reset, submit } from 'redux-form'
+import { initialize, isPristine, reset, submit } from 'redux-form'
 import { get } from 'lodash'
 import { compose } from 'redux'
 import { BooleanParam, useQueryParams } from 'use-query-params'
@@ -34,7 +34,7 @@ import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, SalonPageProps } from 
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formatDateByLocale, formFieldID } from '../../utils/helper'
+import { formFieldID } from '../../utils/helper'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
@@ -96,12 +96,8 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	// init form
 	useEffect(() => {
-		const initData = async (salonData: ISalonPayloadData | null) => {
-			dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode)))
-		}
-
 		if (!dontUpdateFormData.current) {
-			initData(salon.data)
+			dispatch(initialize(FORM.SALON, initSalonFormData(salon.data, phonePrefixCountryCode)))
 			dontUpdateFormData.current = false
 		}
 	}, [salon.data, dispatch, phonePrefixCountryCode])

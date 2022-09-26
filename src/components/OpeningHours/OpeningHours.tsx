@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, Fields } from 'redux-form'
 import { Button } from 'antd'
 import { isEmpty } from 'lodash'
+import i18next from 'i18next'
 
 // components
 import DeleteButton from '../DeleteButton'
@@ -18,7 +19,7 @@ import { translateDayName, validationRequired } from '../../utils/helper'
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon-16.svg'
 
 const TimeRangesComponent = (props: any) => {
-	const { fields, disabled, onDemandSwitch } = props
+	const { fields, disabled, onDemandSwitch, onDemandValue } = props
 	const [t] = useTranslation()
 
 	const items = fields.map((field: any, index: any) => (
@@ -31,7 +32,7 @@ const TimeRangesComponent = (props: any) => {
 				allowClear
 				size={'small'}
 				itemClassName={'m-0'}
-				validate={validationRequired}
+				validate={!onDemandValue ? (v: any) => validationRequired(v) : undefined}
 				disabled={disabled}
 				minuteStep={15}
 			/>
@@ -40,21 +41,19 @@ const TimeRangesComponent = (props: any) => {
 	))
 
 	return (
-		<div className={'flex items-center'}>
-			{items}
+		<div className={'noti-opening-hours-row'}>
+			<div className={'flex items-center noti-opening-hours-ranges'}>{items}</div>
 			<div className={'flex items-center gap-2'}>
-				{items.length < 3 && (
-					<Button
-						onClick={() => fields.push({ timeFrom: null, timeTo: null })}
-						icon={<PlusIcon className={'text-notino-black'} />}
-						className={'noti-btn'}
-						type={'default'}
-						size={'small'}
-						disabled={disabled}
-					>
-						{t('loc:Pridať interval')}
-					</Button>
-				)}
+				<Button
+					onClick={() => fields.push({ timeFrom: null, timeTo: null })}
+					icon={<PlusIcon className={'text-notino-black'} />}
+					className={'noti-btn'}
+					type={'default'}
+					size={'small'}
+					disabled={disabled || items.length >= 3}
+				>
+					{t('loc:Pridať interval')}
+				</Button>
 				{onDemandSwitch}
 			</div>
 		</div>
@@ -80,7 +79,7 @@ const OpeningHours = (props: any) => {
 	const [t] = useTranslation()
 
 	return (
-		<>
+		<div className={'noti-opening-hours'}>
 			{fields.map((field: any, index: any) => {
 				const value = fields.get(index)
 
@@ -90,8 +89,16 @@ const OpeningHours = (props: any) => {
 						<FieldArray
 							props={{
 								disabled: disabled || value.onDemand,
+								onDemandValue: value.onDemand,
 								onDemandSwitch: showOnDemand && (
-									<Field name={`${field}.onDemand`} component={SwitchField} label={t('loc:Na objednávku')} size={'small'} disabled={disabled} className={'m-0'} />
+									<Field
+										name={`${field}.onDemand`}
+										component={SwitchField}
+										label={t('loc:Na objednávku')}
+										size={'small'}
+										disabled={disabled}
+										className={'m-0 noti-opening-hours-on-demand-switch'}
+									/>
 								)
 							}}
 							component={TimeRangesComponent}
@@ -112,7 +119,7 @@ const OpeningHours = (props: any) => {
 					</div>
 				)
 			})}
-		</>
+		</div>
 	)
 }
 

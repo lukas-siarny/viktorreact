@@ -70,19 +70,25 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
-// export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
-export type OpeningHours = {
+export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+
+export type RawOpeningHoursPatch = {
 	day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
-	timeRanges: [
+	timeRanges?:
 		{
-			timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-			timeTo: string
-		},
-		...{
 			timeFrom: string
 			timeTo: string
-		}[]
-	],
+		}[],
+	state?: "CUSTOM_ORDER"
+}[]
+
+export type OpeningHours = {
+	day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
+	timeRanges:
+		{
+			timeFrom: string
+			timeTo: string
+		}[],
 	onDemand?: boolean
 }[]
 

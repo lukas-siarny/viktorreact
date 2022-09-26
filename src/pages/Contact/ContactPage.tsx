@@ -274,7 +274,7 @@ const ContactPage: FC<Props> = () => {
 														{!dayFromData || isEmpty(dayFromData.timeRanges) ? (
 															<span className={'day-interval'}>{t('loc:Zatvorené')}</span>
 														) : (
-															dayFromData.timeRanges.map((timeRange, index) => (
+															dayFromData.timeRanges?.map((timeRange, index) => (
 																<span className={'day-interval'} key={index}>{`${timeRange.timeFrom}-${timeRange.timeTo}`}</span>
 															))
 														)}

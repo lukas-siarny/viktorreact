@@ -11,6 +11,8 @@ import { FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../utils/enums'
 
 // validate
 import validateOpenHoursNoteForm from './validateOpenHoursNoteForm'
+
+// atoms
 import TextareaField from '../../atoms/TextareaField'
 
 type ComponentProps = {}

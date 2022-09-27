@@ -1,3 +1,4 @@
+import i18next from 'i18next'
 import { isEmpty, unionBy } from 'lodash'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
@@ -228,3 +229,34 @@ export const mapRawOpeningHoursToComponentOpeningHours = (rawOpeningHours?: RawO
 		newOpeningHours.onDemand = (day.state as OPENING_HOURS_STATES) === OPENING_HOURS_STATES.CUSTOM_ORDER
 		return newOpeningHours
 	})
+
+export const validateOpeningHours = (values: OpeningHours) => {
+	const openingHoursErrors: { [key: number]: any } = {}
+
+	values.forEach((day, index) => {
+		const dayErrors: any = {}
+		const timeRangesErrors: any = {}
+		if (!day.onDemand && day.timeRanges) {
+			day.timeRanges.forEach((timeRange, i) => {
+				const timeRangeError: any = {}
+				if (timeRange.timeFrom === null) {
+					timeRangeError.timeFrom = i18next.t('loc:Toto pole je povinné')
+				}
+				if (timeRange.timeTo === null) {
+					timeRangeError.timeTo = i18next.t('loc:Toto pole je povinné')
+				}
+				if (!isEmpty(timeRangeError)) {
+					timeRangesErrors[i] = timeRangeError
+				}
+			})
+		}
+		if (!isEmpty(timeRangesErrors)) {
+			dayErrors.timeRanges = timeRangesErrors
+		}
+		if (!isEmpty(dayErrors)) {
+			openingHoursErrors[index] = dayErrors
+		}
+	})
+
+	return openingHoursErrors
+}

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { Field, FieldArray, Fields } from 'redux-form'
 import { Button } from 'antd'
 import { isEmpty } from 'lodash'
-import i18next from 'i18next'
 
 // components
 import DeleteButton from '../DeleteButton'
@@ -13,13 +12,13 @@ import SwitchField from '../../atoms/SwitchField'
 import TimeRangeField from '../../atoms/TimeRangeField'
 
 // helpers
-import { translateDayName, validationRequired } from '../../utils/helper'
+import { translateDayName } from '../../utils/helper'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon-16.svg'
 
 const TimeRangesComponent = (props: any) => {
-	const { fields, disabled, onDemandSwitch, onDemandValue } = props
+	const { fields, disabled, onDemandSwitch } = props
 	const [t] = useTranslation()
 
 	const items = fields.map((field: any, index: any) => (
@@ -32,7 +31,6 @@ const TimeRangesComponent = (props: any) => {
 				allowClear
 				size={'small'}
 				itemClassName={'m-0'}
-				validate={!onDemandValue ? (v: any) => validationRequired(v) : undefined}
 				disabled={disabled}
 				minuteStep={15}
 			/>
@@ -89,7 +87,6 @@ const OpeningHours = (props: any) => {
 						<FieldArray
 							props={{
 								disabled: disabled || value.onDemand,
-								onDemandValue: value.onDemand,
 								onDemandSwitch: showOnDemand && (
 									<Field
 										name={`${field}.onDemand`}

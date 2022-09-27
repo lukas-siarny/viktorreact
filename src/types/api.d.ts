@@ -838,11 +838,13 @@ declare namespace Paths {
                         parentID?: string; // uuid
                         orderIndex: number;
                         totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
                         children: {
                             id: string; // uuid
                             name?: string;
                             children: {
                                 id: string; // uuid
+                                isComplete: boolean;
                                 priceAndDurationData: {
                                     durationFrom?: number;
                                     durationTo?: number;
@@ -863,6 +865,7 @@ declare namespace Paths {
                                 category: {
                                     id: string; // uuid
                                     name?: string;
+                                    description?: string;
                                 };
                                 employees: {
                                     id: string; // uuid
@@ -1082,58 +1085,12 @@ declare namespace Paths {
                         value: string | null;
                     }[];
                     description?: string;
-                    descriptionLocalizations?: {
+                    descriptionLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     parentID?: string; // uuid
                     orderIndex: number;
-                    children: {
-                        id: string; // uuid
-                        name?: string;
-                        nameLocalizations: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
-                        description?: string;
-                        descriptionLocalizations?: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
-                        parentID?: string; // uuid
-                        orderIndex: number;
-                        children: {
-                            id: string; // uuid
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                            description?: string;
-                            descriptionLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                            parentID?: string; // uuid
-                            orderIndex: number;
-                            categoryParameter?: {
-                                id: string; // uuid
-                                name?: string;
-                                values: {
-                                    id: string; // uuid
-                                    value?: string;
-                                }[];
-                            };
-                        }[];
-                        categoryParameter?: {
-                            id: string; // uuid
-                            name?: string;
-                            values: {
-                                id: string; // uuid
-                                value?: string;
-                            }[];
-                        };
-                    }[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -1171,6 +1128,52 @@ declare namespace Paths {
                             value?: string;
                         }[];
                     };
+                    children: {
+                        id: string; // uuid
+                        name?: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        description?: string;
+                        descriptionLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        categoryParameter?: {
+                            id: string; // uuid
+                            name?: string;
+                            values: {
+                                id: string; // uuid
+                                value?: string;
+                            }[];
+                        };
+                        children: {
+                            id: string; // uuid
+                            name?: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            description?: string;
+                            descriptionLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            parentID?: string; // uuid
+                            orderIndex: number;
+                            categoryParameter?: {
+                                id: string; // uuid
+                                name?: string;
+                                values: {
+                                    id: string; // uuid
+                                    value?: string;
+                                }[];
+                            };
+                        }[];
+                    }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                 };
@@ -1653,8 +1656,8 @@ declare namespace Paths {
                                  */
                                 timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                             }[]
-                        ];
-                        state?: "CUSTOM_ORDER";
+                        ] | null;
+                        state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                     }[];
                     note?: string;
                     address?: {
@@ -1764,8 +1767,8 @@ declare namespace Paths {
                                  */
                                 timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                             }[]
-                        ];
-                        state?: "CUSTOM_ORDER";
+                        ] | null;
+                        state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                     }[];
                     address?: {
                         countryCode?: string;
@@ -2182,8 +2185,8 @@ declare namespace Paths {
                                  */
                                 timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                             }[]
-                        ];
-                        state?: "CUSTOM_ORDER";
+                        ] | null;
+                        state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                     }[];
                     openingHoursNote?: {
                         /**
@@ -3434,11 +3437,13 @@ declare namespace Paths {
                         parentID?: string; // uuid
                         orderIndex: number;
                         totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
                         children: {
                             id: string; // uuid
                             name?: string;
                             children: {
                                 id: string; // uuid
+                                isComplete: boolean;
                                 priceAndDurationData: {
                                     durationFrom?: number;
                                     durationTo?: number;
@@ -3459,6 +3464,7 @@ declare namespace Paths {
                                 category: {
                                     id: string; // uuid
                                     name?: string;
+                                    description?: string;
                                 };
                                 employees: {
                                     id: string; // uuid
@@ -3678,58 +3684,12 @@ declare namespace Paths {
                         value: string | null;
                     }[];
                     description?: string;
-                    descriptionLocalizations?: {
+                    descriptionLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     parentID?: string; // uuid
                     orderIndex: number;
-                    children: {
-                        id: string; // uuid
-                        name?: string;
-                        nameLocalizations: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
-                        description?: string;
-                        descriptionLocalizations?: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
-                        parentID?: string; // uuid
-                        orderIndex: number;
-                        children: {
-                            id: string; // uuid
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                            description?: string;
-                            descriptionLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                            parentID?: string; // uuid
-                            orderIndex: number;
-                            categoryParameter?: {
-                                id: string; // uuid
-                                name?: string;
-                                values: {
-                                    id: string; // uuid
-                                    value?: string;
-                                }[];
-                            };
-                        }[];
-                        categoryParameter?: {
-                            id: string; // uuid
-                            name?: string;
-                            values: {
-                                id: string; // uuid
-                                value?: string;
-                            }[];
-                        };
-                    }[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -3767,6 +3727,52 @@ declare namespace Paths {
                             value?: string;
                         }[];
                     };
+                    children: {
+                        id: string; // uuid
+                        name?: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        description?: string;
+                        descriptionLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        categoryParameter?: {
+                            id: string; // uuid
+                            name?: string;
+                            values: {
+                                id: string; // uuid
+                                value?: string;
+                            }[];
+                        };
+                        children: {
+                            id: string; // uuid
+                            name?: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            description?: string;
+                            descriptionLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            parentID?: string; // uuid
+                            orderIndex: number;
+                            categoryParameter?: {
+                                id: string; // uuid
+                                name?: string;
+                                values: {
+                                    id: string; // uuid
+                                    value?: string;
+                                }[];
+                            };
+                        }[];
+                    }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                 };
@@ -4122,8 +4128,8 @@ declare namespace Paths {
                                  */
                                 timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                             }[]
-                        ];
-                        state?: "CUSTOM_ORDER";
+                        ] | null;
+                        state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                     }[];
                     note?: string;
                     address?: {
@@ -6413,86 +6419,12 @@ declare namespace Paths {
                         value: string | null;
                     }[];
                     description?: string;
-                    descriptionLocalizations?: {
+                    descriptionLocalizations: {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
                     parentID?: string; // uuid
                     orderIndex: number;
-                    children: {
-                        id: string; // uuid
-                        name?: string;
-                        nameLocalizations: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
-                        description?: string;
-                        descriptionLocalizations?: {
-                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                            value: string | null;
-                        }[];
-                        parentID?: string; // uuid
-                        orderIndex: number;
-                        children: {
-                            id: string; // uuid
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                            description?: string;
-                            descriptionLocalizations?: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                            parentID?: string; // uuid
-                            orderIndex: number;
-                            icon?: {
-                                id: string; // uuid
-                                original: string;
-                                fileName: string;
-                                isAutogenerated: boolean;
-                            };
-                            categoryParameter?: {
-                                id: string; // uuid
-                                name?: string;
-                                nameLocalizations: {
-                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                    value: string | null;
-                                }[];
-                                values: {
-                                    id: string; // uuid
-                                    value?: string;
-                                    valueLocalizations?: {
-                                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                        value: string | null;
-                                    }[];
-                                }[];
-                            };
-                        }[];
-                        icon?: {
-                            id: string; // uuid
-                            original: string;
-                            fileName: string;
-                            isAutogenerated: boolean;
-                        };
-                        categoryParameter?: {
-                            id: string; // uuid
-                            name?: string;
-                            nameLocalizations: {
-                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                value: string | null;
-                            }[];
-                            values: {
-                                id: string; // uuid
-                                value?: string;
-                                valueLocalizations?: {
-                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
-                                    value: string | null;
-                                }[];
-                            }[];
-                        };
-                    }[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -6538,6 +6470,80 @@ declare namespace Paths {
                             }[];
                         }[];
                     };
+                    children: {
+                        id: string; // uuid
+                        name?: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        description?: string;
+                        descriptionLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            isAutogenerated: boolean;
+                        };
+                        categoryParameter?: {
+                            id: string; // uuid
+                            name?: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            values: {
+                                id: string; // uuid
+                                value?: string;
+                                valueLocalizations?: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }[];
+                        };
+                        children: {
+                            id: string; // uuid
+                            name?: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            description?: string;
+                            descriptionLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            parentID?: string; // uuid
+                            orderIndex: number;
+                            icon?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                isAutogenerated: boolean;
+                            };
+                            categoryParameter?: {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                                values: {
+                                    id: string; // uuid
+                                    value?: string;
+                                    valueLocalizations?: {
+                                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                        value: string | null;
+                                    }[];
+                                }[];
+                            };
+                        }[];
+                    }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                 };
@@ -8471,11 +8477,13 @@ declare namespace Paths {
                         parentID?: string; // uuid
                         orderIndex: number;
                         totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
                         children: {
                             id: string; // uuid
                             name?: string;
                             children: {
                                 id: string; // uuid
+                                isComplete: boolean;
                                 priceAndDurationData: {
                                     durationFrom?: number;
                                     durationTo?: number;
@@ -8496,6 +8504,7 @@ declare namespace Paths {
                                 category: {
                                     id: string; // uuid
                                     name?: string;
+                                    description?: string;
                                 };
                                 employees: {
                                     id: string; // uuid
@@ -8666,11 +8675,13 @@ declare namespace Paths {
                         parentID?: string; // uuid
                         orderIndex: number;
                         totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
                         children: {
                             id: string; // uuid
                             name?: string;
                             children: {
                                 id: string; // uuid
+                                isComplete: boolean;
                                 priceAndDurationData: {
                                     durationFrom?: number;
                                     durationTo?: number;
@@ -8691,6 +8702,7 @@ declare namespace Paths {
                                 category: {
                                     id: string; // uuid
                                     name?: string;
+                                    description?: string;
                                 };
                                 employees: {
                                     id: string; // uuid
@@ -16255,8 +16267,8 @@ declare namespace Paths {
                          */
                         timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[]
-                ];
-                state?: "CUSTOM_ORDER";
+                ] | null;
+                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
             }[] | null;
             /**
              * example:
@@ -16369,8 +16381,8 @@ declare namespace Paths {
                          */
                         timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[]
-                ];
-                state?: "CUSTOM_ORDER";
+                ] | null;
+                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
             }[];
             /**
              * example:
@@ -26090,11 +26102,13 @@ declare namespace Paths {
                         parentID?: string; // uuid
                         orderIndex: number;
                         totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
                         children: {
                             id: string; // uuid
                             name?: string;
                             children: {
                                 id: string; // uuid
+                                isComplete: boolean;
                                 priceAndDurationData: {
                                     durationFrom?: number;
                                     durationTo?: number;
@@ -26115,6 +26129,7 @@ declare namespace Paths {
                                 category: {
                                     id: string; // uuid
                                     name?: string;
+                                    description?: string;
                                 };
                                 employees: {
                                     id: string; // uuid
@@ -26285,11 +26300,13 @@ declare namespace Paths {
                         parentID?: string; // uuid
                         orderIndex: number;
                         totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
                         children: {
                             id: string; // uuid
                             name?: string;
                             children: {
                                 id: string; // uuid
+                                isComplete: boolean;
                                 priceAndDurationData: {
                                     durationFrom?: number;
                                     durationTo?: number;
@@ -26310,6 +26327,7 @@ declare namespace Paths {
                                 category: {
                                     id: string; // uuid
                                     name?: string;
+                                    description?: string;
                                 };
                                 employees: {
                                     id: string; // uuid
@@ -30517,8 +30535,8 @@ declare namespace Paths {
                              */
                             timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                         }[]
-                    ];
-                    state?: "CUSTOM_ORDER";
+                    ] | null;
+                    state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                 }[];
                 openingHoursNote?: {
                     /**
@@ -41611,11 +41629,13 @@ declare namespace Paths {
                         parentID?: string; // uuid
                         orderIndex: number;
                         totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
                         children: {
                             id: string; // uuid
                             name?: string;
                             children: {
                                 id: string; // uuid
+                                isComplete: boolean;
                                 priceAndDurationData: {
                                     durationFrom?: number;
                                     durationTo?: number;
@@ -41636,6 +41656,7 @@ declare namespace Paths {
                                 category: {
                                     id: string; // uuid
                                     name?: string;
+                                    description?: string;
                                 };
                                 employees: {
                                     id: string; // uuid
@@ -45232,8 +45253,8 @@ declare namespace Paths {
                          */
                         timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[]
-                ];
-                state?: "CUSTOM_ORDER";
+                ] | null;
+                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
             }[] | null;
             /**
              * example:
@@ -47107,8 +47128,8 @@ declare namespace Paths {
                          */
                         timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[]
-                ];
-                state?: "CUSTOM_ORDER";
+                ] | null;
+                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
             }[];
             /**
              * example:
@@ -48387,11 +48408,13 @@ declare namespace Paths {
                         parentID?: string; // uuid
                         orderIndex: number;
                         totalThirdLevelCategoriesCount: number;
+                        usedThirdLevelCategoriesCount: number;
                         children: {
                             id: string; // uuid
                             name?: string;
                             children: {
                                 id: string; // uuid
+                                isComplete: boolean;
                                 priceAndDurationData: {
                                     durationFrom?: number;
                                     durationTo?: number;
@@ -48412,6 +48435,7 @@ declare namespace Paths {
                                 category: {
                                     id: string; // uuid
                                     name?: string;
+                                    description?: string;
                                 };
                                 employees: {
                                     id: string; // uuid

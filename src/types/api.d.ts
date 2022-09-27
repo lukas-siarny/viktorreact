@@ -848,11 +848,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -1841,6 +1843,10 @@ declare namespace Paths {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    descriptions: {
+                        activated: boolean;
+                        name: string;
+                    }[];
                     permissions: {
                         id: string; // uuid
                         name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
@@ -2683,11 +2689,13 @@ declare namespace Paths {
                                             durationTo?: number;
                                             priceFrom?: {
                                                 currency: string;
+                                                currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
                                                 currency: string;
+                                                currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
@@ -2756,11 +2764,13 @@ declare namespace Paths {
                         durationTo?: number;
                         priceFrom?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
@@ -2783,11 +2793,13 @@ declare namespace Paths {
                                 durationTo?: number;
                                 priceFrom?: {
                                     currency: string;
+                                    currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
                                     currency: string;
+                                    currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
@@ -2799,11 +2811,13 @@ declare namespace Paths {
                         durationTo?: number;
                         priceFrom?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
@@ -2831,11 +2845,13 @@ declare namespace Paths {
                             durationTo?: number;
                             priceFrom?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
@@ -2858,11 +2874,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -3059,6 +3077,59 @@ declare namespace Paths {
                     salon: {
                         id: string; // uuid
                         name?: string;
+                        cover?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    invitor: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                    };
+                    permissions: {
+                        salon: {
+                            salonUpdate: boolean;
+                            salonUpdateBilling: boolean;
+                            salonDelete: boolean;
+                        };
+                        service: {
+                            serviceCreate: boolean;
+                            serviceUpdate: boolean;
+                            serviceDelete: boolean;
+                        };
+                        customer: {
+                            customerCreate: boolean;
+                            customerUpdate: boolean;
+                            customerDelete: boolean;
+                        };
+                        employee: {
+                            employeeCreate: boolean;
+                            employeeInvite: boolean;
+                            employeeUpdate: boolean;
+                            employeeDelete: boolean;
+                        };
                     };
                 }[];
             }
@@ -3380,11 +3451,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -4106,6 +4179,10 @@ declare namespace Paths {
                         language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
                         value: string | null;
                     }[];
+                    descriptions: {
+                        activated: boolean;
+                        name: string;
+                    }[];
                     permissions: {
                         id: string; // uuid
                         name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
@@ -4433,11 +4510,13 @@ declare namespace Paths {
                             durationTo?: number;
                             priceFrom?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
@@ -5016,6 +5095,24 @@ declare namespace Paths {
                         categories: {
                             id: string; // uuid
                             name?: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                            icon?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                isAutogenerated: boolean;
+                            };
                         }[];
                     };
                     gallerySegment?: {
@@ -5153,6 +5250,10 @@ declare namespace Paths {
                         parkingNote?: string;
                         locationNote?: string;
                     };
+                    currencySegment?: {
+                        code: string;
+                        symbol: string;
+                    };
                     contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
@@ -5204,82 +5305,322 @@ declare namespace Paths {
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?
                         ];
                     };
@@ -5566,11 +5907,13 @@ declare namespace Paths {
                                             durationTo?: number;
                                             priceFrom?: {
                                                 currency: string;
+                                                currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
                                                 currency: string;
+                                                currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
@@ -5639,11 +5982,13 @@ declare namespace Paths {
                         durationTo?: number;
                         priceFrom?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
@@ -5666,11 +6011,13 @@ declare namespace Paths {
                                 durationTo?: number;
                                 priceFrom?: {
                                     currency: string;
+                                    currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
                                     currency: string;
+                                    currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
@@ -5682,11 +6029,13 @@ declare namespace Paths {
                         durationTo?: number;
                         priceFrom?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
@@ -5714,11 +6063,13 @@ declare namespace Paths {
                             durationTo?: number;
                             priceFrom?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
@@ -5741,11 +6092,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -5929,6 +6282,59 @@ declare namespace Paths {
                     salon: {
                         id: string; // uuid
                         name?: string;
+                        cover?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                    invitor: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                    };
+                    permissions: {
+                        salon: {
+                            salonUpdate: boolean;
+                            salonUpdateBilling: boolean;
+                            salonDelete: boolean;
+                        };
+                        service: {
+                            serviceCreate: boolean;
+                            serviceUpdate: boolean;
+                            serviceDelete: boolean;
+                        };
+                        customer: {
+                            customerCreate: boolean;
+                            customerUpdate: boolean;
+                            customerDelete: boolean;
+                        };
+                        employee: {
+                            employeeCreate: boolean;
+                            employeeInvite: boolean;
+                            employeeUpdate: boolean;
+                            employeeDelete: boolean;
+                        };
                     };
                 }[];
             }
@@ -6345,9 +6751,11 @@ declare namespace Paths {
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
             export type LanguageIDs = string /* uuid */[];
+            export type Lat = number; // float
             export type LatMy = number; // float
             export type Liked = boolean;
             export type Limit = 20;
+            export type Lon = number; // float
             export type LonMy = number; // float
             export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
             export type Order = string;
@@ -6358,6 +6766,8 @@ declare namespace Paths {
         export interface QueryParameters {
             latMy?: Parameters.LatMy /* float */;
             lonMy?: Parameters.LonMy /* float */;
+            lat?: Parameters.Lat /* float */;
+            lon?: Parameters.Lon /* float */;
             categoryIDs?: Parameters.CategoryIDs;
             priceLevel?: Parameters.PriceLevel;
             openingHoursStatus?: Parameters.OpeningHoursStatus;
@@ -6589,11 +6999,14 @@ declare namespace Paths {
                 cities: {
                     name: string;
                     placeID: string;
+                    latitude?: number; // float
+                    longitude?: number; // float
                 }[];
                 salons: {
                     id: string; // uuid
                     name?: string;
                     distance?: number; // float
+                    createType: "NON_BASIC" | "BASIC";
                     lat?: number; // float
                     lon?: number; // float
                     address?: {
@@ -6902,11 +7315,13 @@ declare namespace Paths {
                             durationTo?: number;
                             priceFrom?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
@@ -7569,11 +7984,13 @@ declare namespace Paths {
                                             durationTo?: number;
                                             priceFrom?: {
                                                 currency: string;
+                                                currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
                                             priceTo?: {
                                                 currency: string;
+                                                currencySymbol: string;
                                                 exponent: number;
                                                 significand: number;
                                             };
@@ -8100,11 +8517,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -8293,11 +8712,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -25023,11 +25444,13 @@ declare namespace Paths {
                         durationTo?: number;
                         priceFrom?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
@@ -25050,11 +25473,13 @@ declare namespace Paths {
                                 durationTo?: number;
                                 priceFrom?: {
                                     currency: string;
+                                    currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
                                     currency: string;
+                                    currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
@@ -25066,11 +25491,13 @@ declare namespace Paths {
                         durationTo?: number;
                         priceFrom?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
@@ -25098,11 +25525,13 @@ declare namespace Paths {
                             durationTo?: number;
                             priceFrom?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
@@ -25125,11 +25554,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -25713,11 +26144,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -25906,11 +26339,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -30331,6 +30766,24 @@ declare namespace Paths {
                         categories: {
                             id: string; // uuid
                             name?: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                            icon?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                isAutogenerated: boolean;
+                            };
                         }[];
                     };
                     gallerySegment?: {
@@ -30468,6 +30921,10 @@ declare namespace Paths {
                         parkingNote?: string;
                         locationNote?: string;
                     };
+                    currencySegment?: {
+                        code: string;
+                        symbol: string;
+                    };
                     contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
@@ -30519,82 +30976,322 @@ declare namespace Paths {
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?
                         ];
                     };
@@ -31045,6 +31742,24 @@ declare namespace Paths {
                         categories: {
                             id: string; // uuid
                             name?: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                            icon?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                isAutogenerated: boolean;
+                            };
                         }[];
                     };
                     gallerySegment?: {
@@ -31182,6 +31897,10 @@ declare namespace Paths {
                         parkingNote?: string;
                         locationNote?: string;
                     };
+                    currencySegment?: {
+                        code: string;
+                        symbol: string;
+                    };
                     contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
@@ -31233,82 +31952,322 @@ declare namespace Paths {
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?
                         ];
                     };
@@ -39644,11 +40603,13 @@ declare namespace Paths {
                         durationTo?: number;
                         priceFrom?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
@@ -39671,11 +40632,13 @@ declare namespace Paths {
                                 durationTo?: number;
                                 priceFrom?: {
                                     currency: string;
+                                    currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
                                 priceTo?: {
                                     currency: string;
+                                    currencySymbol: string;
                                     exponent: number;
                                     significand: number;
                                 };
@@ -39687,11 +40650,13 @@ declare namespace Paths {
                         durationTo?: number;
                         priceFrom?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
                         priceTo?: {
                             currency: string;
+                            currencySymbol: string;
                             exponent: number;
                             significand: number;
                         };
@@ -39719,11 +40684,13 @@ declare namespace Paths {
                             durationTo?: number;
                             priceFrom?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
                             priceTo?: {
                                 currency: string;
+                                currencySymbol: string;
                                 exponent: number;
                                 significand: number;
                             };
@@ -39746,11 +40713,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -40725,11 +41694,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -47497,11 +48468,13 @@ declare namespace Paths {
                                     durationTo?: number;
                                     priceFrom?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
                                     priceTo?: {
                                         currency: string;
+                                        currencySymbol: string;
                                         exponent: number;
                                         significand: number;
                                     };
@@ -49536,6 +50509,24 @@ declare namespace Paths {
                         categories: {
                             id: string; // uuid
                             name?: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                            icon?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                isAutogenerated: boolean;
+                            };
                         }[];
                     };
                     gallerySegment?: {
@@ -49673,6 +50664,10 @@ declare namespace Paths {
                         parkingNote?: string;
                         locationNote?: string;
                     };
+                    currencySegment?: {
+                        code: string;
+                        symbol: string;
+                    };
                     contactInfoSegment?: {
                         phones: {
                             phonePrefixCountryCode: string;
@@ -49724,82 +50719,322 @@ declare namespace Paths {
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?,
                             {
                                 id: string; // uuid
                                 name: string;
+                                image?: {
+                                    id: string; // uuid
+                                    original: string;
+                                    fileName: string;
+                                    resizedImages: {
+                                        thumbnail: string;
+                                        small: string;
+                                        medium: string;
+                                        large: string;
+                                    };
+                                    isAutogenerated: boolean;
+                                };
                             }?
                         ];
                     };

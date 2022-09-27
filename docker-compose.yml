@@ -18,10 +18,9 @@ services:
     command: redis-server --requirepass PLEASE_CHANGE_ME
   localstack:
     image: localstack/localstack:0.14.3
-    network_mode: bridge
     ports:
-      - "127.0.0.1:4510-4559:4510-4559"  # external service port range
-      - "127.0.0.1:4566:4566"            # LocalStack Edge Proxy
+      - "4510-4559:4510-4559"  # external service port range
+      - "4566:4566"            # LocalStack Edge Proxy
     environment:
       - DEFAULT_REGION=eu-central-1
       - SERVICES=s3
@@ -34,6 +33,10 @@ services:
         dockerfile: ./docker/CI/Dockerfile.api
     ports:
       - "3000:3000"
+      # NOTE: localy can be test with export BITBUCKET_DOCKER_HOST_INTERNAL=host.docker.internal (as a IP address 192.168.65.2 check by ping host.docker.internal from container)
+    extra_hosts:
+      - "sample-bucket.s3.eu-central-1.localhost:$BITBUCKET_DOCKER_HOST_INTERNAL"
+      - "s3.eu-central-1.localhost:$BITBUCKET_DOCKER_HOST_INTERNAL"
     environment:
       - REDIS_URL=redis://:PLEASE_CHANGE_ME@redis:6379
       - POSTGRESQL_URL=postgresql://postgres:root@database_test:5432/notino_test
@@ -44,14 +47,22 @@ services:
       - AWS_S3_SECRET_KEY=test
       - AWS_KEYPAIR_ID=test
       - PORT=3000
-      - NODE_ENV=development
-      - AWS_S3_PUBLIC_URL=http://sample-bucket.s3.eu-cental-1.localstack:4566
-      - AWS_S3_ENDPOINT=http://s3.eu-cental-1.localstack:4566
+      - NODE_ENV=production
+      - AWS_S3_PUBLIC_URL=http://sample-bucket.s3.eu-central-1.localhost:4566
+      - AWS_S3_ENDPOINT=http://s3.eu-central-1.localhost:4566
       - SERVICES_SUGGESTION_EMAILS=test@goodrequest.com
+      - USE_CLOUD_WATCH=false
+      # in bitbucket pipeline do not work docker.host.internal instead of it has to be used $BITBUCKET_DOCKER_HOST_INTERNAL variable
+      - SMTP_HOST=$BITBUCKET_DOCKER_HOST_INTERNAL
+      # mail server is running with cypress test define in cypress plugins
+      - SMTP_PORT=7777
+      - SMTP_FROM_ADDRESS=e2e@goodrequest.com
     depends_on:
       - "localstack"
       - "redis"
       - "database_test"
+    volumes:
+      - './notino_backend/logs:/home/app/logs'
   frontend:
     build:
         context: .

@@ -6,6 +6,7 @@ import { Divider, Form, Button } from 'antd'
 // utils
 import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM } from '../../../utils/enums'
 import { showErrorNotification, validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -99,6 +100,6 @@ const form = reduxForm<ILanguageForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateLanguagesFrom
-})(LanguagesForm)
+})(withPromptUnsavedChanges(LanguagesForm))
 
 export default form

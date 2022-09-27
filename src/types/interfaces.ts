@@ -1,10 +1,12 @@
-import { SALON_STATES } from './../utils/enums'
-/* eslint-disable import/no-cycle */
 import { ColumnsType } from 'antd/lib/table'
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
-import { Paths } from './api'
 import { PaginationProps } from 'antd'
-import { Path } from 'typescript'
+
+// utils
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
+import { SALON_STATES } from './../utils/enums'
+
+// types
+import { Paths } from './api'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -447,3 +449,37 @@ export interface IRoleDescription
 				checked: boolean
 			}[]
 	}
+
+export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
+
+export interface IEnumerationOptions {
+	key: string | number
+	label: string
+	value: string | number
+	flag?: string
+}
+
+export interface IEnumerationsPayload {
+	pagination: IResponsePagination | null
+	enumerationsOptions: IEnumerationOptions[]
+}
+
+export interface IEnumerationsCountriesPayload extends IEnumerationsPayload {
+	data: CountriesData | null
+}
+
+export interface IAuthUserPayload {
+	data: ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) | null
+}
+
+export interface IEmployeePayload {
+	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
+}
+
+export interface SalonPageProps {
+	isAdmin: boolean
+	backUrl?: string
+	phonePrefixCountryCode: string
+	authUser: IAuthUserPayload & ILoadingAndFailure
+	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
+}

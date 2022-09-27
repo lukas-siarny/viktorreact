@@ -87,11 +87,14 @@ export const getSalonRoles = (): ThunkResult<Promise<ISelectOptionItem[]>> => as
 				key: role.id,
 				extra: { permissions: role.permissions }
 			})
-			// TODO: treba pockat na BE, pretoze zo specky nie su zname presne nazvy atributov
+
 			rolesDescriptions.push({
 				key: role.id,
 				name: role.name || '',
-				permissions: []
+				permissions: role.descriptions.map((description) => ({
+					description: description.name,
+					checked: description.activated
+				}))
 			})
 		})
 

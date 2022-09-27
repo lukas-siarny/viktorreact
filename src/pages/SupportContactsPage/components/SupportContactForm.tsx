@@ -18,6 +18,7 @@ import SelectField from '../../../atoms/SelectField'
 // utils
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { ENUMERATIONS_KEYS, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { ISupportContactForm } from '../../../types/interfaces'
@@ -84,7 +85,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						<FieldArray
 							component={InputsArrayField}
 							name={'emails'}
-							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Emailové adresy'), requied: true }}
+							props={{ disabled: disabledForm, entityName: t('loc:email'), label: t('loc:Emailové adresy'), required: true }}
 						/>
 						<FieldArray component={PhoneArrayField} name={'phones'} props={{ disabled: disabledForm, requied: true }} />
 						<Row justify={'space-between'}>
@@ -172,6 +173,6 @@ const form = reduxForm<ISupportContactForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateSupportContactForm
-})(SupportContactForm)
+})(withPromptUnsavedChanges(SupportContactForm))
 
 export default form

@@ -16,6 +16,7 @@ import validateCategoryFrom from './validateIndustriesFrom'
 import { FORM, PERMISSION, SALON_PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -111,6 +112,6 @@ const form = reduxForm<IIndustriesForm, ComponentProps>({
 			description: i18next.t('loc:Vyberte aspoň jedno odvetvie')
 		}),
 	validate: validateCategoryFrom
-})(IndustriesForm)
+})(withPromptUnsavedChanges(IndustriesForm))
 
 export default form

@@ -78,7 +78,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				{t('loc:Potrebujete pomôcť?')}
 			</Menu.Item>
 			<LanguagePicker asMenuItem />
-			<Menu.Item key='logOut' onClick={() => dispatch(logOutUser())} icon={<LogOutIcon />}>
+			<Menu.Item id='logOut' key='logOut' onClick={() => dispatch(logOutUser())} icon={<LogOutIcon />}>
 				{t('loc:Odhlásiť')}
 			</Menu.Item>
 			<Menu.Divider />

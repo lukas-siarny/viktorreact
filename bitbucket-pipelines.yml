@@ -169,11 +169,18 @@ pipelines:
             services:
               - "docker"
             script:
+              - echo "127.0.0.1 s3.eu-central-1.localhost" >> /etc/hosts
+              - echo "127.0.0.1 sample-bucket.s3.eu-central-1.localhost" >> /etc/hosts
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
               - docker-compose up -d
-              - sleep 90
+              # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
+              - sleep 75
               - npm run test:CI
+            artifacts: # store cypress images, videos and BE logs
+              - cypress/screenshots/**
+              - cypress/videos/**
+              - notino_backend/logs/**
 
 definitions:
   caches:

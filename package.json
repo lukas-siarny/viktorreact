@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -20,8 +20,8 @@
     "lint": "eslint src --color --ext .js --ext .ts --ext .jsx --ext .tsx",
     "release": "npm run build && npm run sentry",
     "sentry": "cross-env REACT_APP_VERSION=$npm_package_version node sentry.js",
-    "test": "cypress open",
-    "test:CI": "cypress run",
+    "test": "AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login cypress open",
+    "test:CI": "AUTH_EMAIL=test.confirmed_notinouser@goodrequest.com AUTH_PASSWORD=Lopaty123. SIGN_IN_URL=http://localhost:3000/api/b2b/admin/auth/login cypress run",
     "eject": "react-scripts eject",
     "translate-scan": "i18next-scanner 'src/**/*.{js,jsx,ts,tsx}'",
     "translate-watch": "npm run translate-scan && gulp watch",
@@ -37,7 +37,8 @@
     "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",
     "storybook": "npm run build:tailwind && start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "preinstall": "npx npm-force-resolutions"
+    "preinstall": "npx npm-force-resolutions",
+    "wait-for-it": "./scripts/wait-for-it.sh"
   },
   "dependencies": {
     "@sentry/cli": "1.71.0",
@@ -101,13 +102,14 @@
     "regenerator-runtime": "0.13.9",
     "sass": "1.50.1",
     "slugify": "1.6.5",
+    "smtp-tester": "2.0.0",
     "symlink-dir": "5.0.1",
     "tailwindcss": "2.2.19",
     "tailwindcss-export-config": "2.3.0",
     "use-query-params": "1.2.3"
   },
   "devDependencies": {
-    "@goodrequest/antd-form-fields": "0.0.1",
+    "@goodrequest/antd-form-fields": "0.0.3",
     "@goodrequest/convert-translations-i18next": "1.0.5",
     "@goodrequest/eslint-config-typescript-react": "1.1.1",
     "@storybook/addon-actions": "6.4.22",

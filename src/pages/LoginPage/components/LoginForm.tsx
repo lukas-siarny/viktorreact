@@ -15,7 +15,7 @@ import { FORM } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
 
 // validate
-// eslint-disable-next-line import/no-cycle
+
 import validateLoginForm from './validateLoginForm'
 import InputPasswordField from '../../../atoms/InputPasswordField'
 

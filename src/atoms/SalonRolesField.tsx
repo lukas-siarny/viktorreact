@@ -81,7 +81,7 @@ const SalonRolesField: FC<Props> = (props) => {
 					<p className={'text-notino-grayDark max-w-md'}>
 						{t('loc:Spravovanie znamená tvorbu, upravovanie a mazanie vybraných údajov a informácii (ak nie je v zátvorke definované inak).')}
 					</p>
-					<Collapse defaultActiveKey={defaultActiveKeys} className={'noti-collapse salon-roles-collapse m-0'} bordered={false} ghost expandIconPosition={'right'}>
+					<Collapse defaultActiveKey={defaultActiveKeys} className={'noti-collapse m-0'} bordered={false} ghost expandIconPosition={'right'}>
 						{rolesDescriptions.map((salonRole) => {
 							const hasPermissions = salonRole?.permissions?.length !== 0
 							return (

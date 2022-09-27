@@ -22,6 +22,7 @@ import AutocompleteField from '../../../../atoms/AutocompleteField'
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
 import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
 
 // types
 import { ISalonForm, ISelectOptionItem } from '../../../../types/interfaces'
@@ -48,12 +49,12 @@ import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmeti
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 
 type ComponentProps = {
-	disabledForm: boolean
+	disabledForm?: boolean
 	noteModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
-	loadBasicSalon: (id: string) => void
-	clearSalonForm: () => void
-	searchSalons: (search: string, page: number) => void
+	loadBasicSalon?: (id: string) => void
+	clearSalonForm?: () => void
+	searchSalons?: (search: string, page: number) => void
 	showBasicSalonsSuggestions?: boolean
 }
 
@@ -131,7 +132,7 @@ const SalonForm: FC<Props> = (props) => {
 								labelInValue
 								onSearch={searchSalons}
 								onSelect={(_value: string | ISelectOptionItem, option: ISelectOptionItem) => {
-									if (option?.extra?.salon?.id) {
+									if (option?.extra?.salon?.id && loadBasicSalon) {
 										loadBasicSalon(option?.extra.salon.id)
 									}
 								}}
@@ -422,6 +423,6 @@ const form = reduxForm<ISalonForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateSalonForm
-})(SalonForm)
+})(withPromptUnsavedChanges(SalonForm))
 
 export default form

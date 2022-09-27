@@ -3,8 +3,8 @@ USER root
 
 COPY ./build /usr/share/nginx/html
 
-# copy .env to the container
-COPY .env .env
+# copy .env.template as env to the container
+COPY .env.template .env
 
 # install nodejs & npm
 RUN apk add --update nodejs

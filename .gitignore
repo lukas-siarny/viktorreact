@@ -3,6 +3,7 @@ logs/
 coverage/
 .vscode/
 .idea
+.env
 dist/
 package-lock.json
 build/

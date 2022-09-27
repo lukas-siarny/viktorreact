@@ -26,13 +26,14 @@ import { RootState } from '../../../reducers'
 type ComponentProps = {
 	hasPermissionToEdit?: boolean
 	salonRolesOptions?: ISelectOptionItem[]
+	permissionTooltip?: string | null
 }
 
 type Props = InjectedFormProps<IInviteEmployeeForm, ComponentProps> & ComponentProps
 
 const EditRoleForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, pristine, hasPermissionToEdit, salonRolesOptions } = props
+	const { handleSubmit, submitting, pristine, hasPermissionToEdit, salonRolesOptions, permissionTooltip } = props
 
 	const roles = useSelector((state: RootState) => state.roles.salonRoles)
 
@@ -57,6 +58,7 @@ const EditRoleForm: FC<Props> = (props) => {
 									loading={roles?.isLoading}
 									className={'flex-1'}
 									disabled={!hasPermission || !hasPermissionToEdit}
+									tooltip={permissionTooltip}
 									required
 								/>
 								<Button

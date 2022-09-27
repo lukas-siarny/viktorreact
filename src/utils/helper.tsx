@@ -929,18 +929,31 @@ export const checkUploadingBeforeSubmit = (values: any, dispatch: any, props: an
 	}
 }
 
-export const hasAuthUserPermissionToEditRole = (salonID?: string, authUser?: IAuthUserPayload['data'], employee?: IEmployeePayload['data'], salonRoles?: ISelectOptionItem[]) => {
+export const hasAuthUserPermissionToEditRole = (
+	salonID?: string,
+	authUser?: IAuthUserPayload['data'],
+	employee?: IEmployeePayload['data'],
+	salonRoles?: ISelectOptionItem[]
+): { hasPermission: boolean; tooltip: string | null } => {
+	const result: { hasPermission: boolean; tooltip: string | null } = {
+		hasPermission: false,
+		tooltip: i18next.t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
+	}
+
 	if (!salonID || !authUser || !employee || !salonRoles) {
-		return false
+		return result
 	}
 
 	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
-		return true
+		result.hasPermission = true
+		result.tooltip = null
+		return result
 	}
 	if (authUser.id === employee?.employee?.user?.id) {
 		// salon user can't edit his own role
-		return false
+		result.tooltip = i18next.t('loc:Nemôžeš editovať svoju rolu')
+		return result
 	}
 
 	const authUserSalonRole = authUser.salons?.find((salon) => salon.id === salonID)?.role
@@ -948,19 +961,26 @@ export const hasAuthUserPermissionToEditRole = (salonID?: string, authUser?: IAu
 		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
 		if (authUserRoleIndex === 0) {
 			// is salon admin - has all permissions
-			return true
+			result.hasPermission = true
+			result.tooltip = null
+			return result
 		}
 
 		const employeeRole = employee.employee?.role
 		const employeeRoleIndex = salonRoles.findIndex((role) => role?.value === employeeRole?.id)
 		// it's not possible to edit admin role	if auth user is not admin
 		if (employeeRoleIndex === 0) {
-			return false
+			return result
 		}
 		// it's possible to edit role only if you have permission to edit
-		return !!authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)
+		if (authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)) {
+			result.hasPermission = true
+			result.tooltip = null
+			return result
+		}
+		return result
 	}
-	return false
+	return result
 }
 
 export const filterSalonRolesByPermission = (salonID?: string, authUser?: IAuthUserPayload['data'], salonRoles?: ISelectOptionItem[]) => {

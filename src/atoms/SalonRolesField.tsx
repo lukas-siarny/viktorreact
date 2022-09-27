@@ -1,10 +1,7 @@
 import React, { FC, useState } from 'react'
-import { Modal, Collapse, Row, Spin } from 'antd'
+import { Modal, Collapse, Row, Spin, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Field } from 'redux-form'
-
-// enums
-import { SALON_ROLES, SALON_ROLES_KEYS } from '../utils/enums'
 
 // types
 import { IRoleDescription, ISelectOptionItem } from '../types/interfaces'
@@ -30,10 +27,11 @@ type Props = {
 	required?: boolean
 	size?: string
 	rolesDescriptions: IRoleDescription[]
+	tooltip?: string | null
 }
 
 const SalonRolesField: FC<Props> = (props) => {
-	const { name, loading, options, disabled, className, required, size = 'large', rolesDescriptions } = props
+	const { name, loading, options, disabled, className, required, size = 'large', rolesDescriptions, tooltip } = props
 	const [t] = useTranslation()
 	const [visible, setVisible] = useState(false)
 	const defaultActiveKeys = rolesDescriptions.reduce((keys, role) => (role.permissions?.length ? [...keys, role.key] : keys), [] as string[])
@@ -62,6 +60,7 @@ const SalonRolesField: FC<Props> = (props) => {
 				disabled={disabled}
 				className={className}
 				required={required}
+				tooltipSelect={tooltip}
 			/>
 			<Modal
 				className={'noti-roles-tooltip-modal rounded-fields md:p-4'}

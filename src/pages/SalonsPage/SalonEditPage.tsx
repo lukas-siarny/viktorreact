@@ -469,7 +469,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					type={'error'}
 					className={'noti-alert mb-4'}
 				/>
-			) : null,
+			) : undefined,
 		[t, salon?.data?.publicationDeclineReason, declinedSalon]
 	)
 
@@ -487,7 +487,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					type={'error'}
 					className={'noti-alert mb-4'}
 				/>
-			) : null,
+			) : undefined,
 		[t, salon?.data?.publicationDeclineReason, hiddenSalon]
 	)
 

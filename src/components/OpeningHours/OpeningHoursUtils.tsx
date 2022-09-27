@@ -252,8 +252,6 @@ export const validateOpeningHours = (values: OpeningHours) => {
 		}
 		if (!isEmpty(timeRangesErrors)) {
 			dayErrors.timeRanges = timeRangesErrors
-		}
-		if (!isEmpty(dayErrors)) {
 			openingHoursErrors[index] = dayErrors
 		}
 	})

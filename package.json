@@ -31,7 +31,7 @@
     "type-check": "tsc --noEmit",
     "normalize-apidoc": "node scripts/normalizeApidoc.js",
     "typegen": "typegen apidoc/apidoc-normalize.json > src/types/api.d.ts",
-    "download:apidoc": "cross-env APIDOC=https://notino-admin.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
+    "download:apidoc": "cross-env APIDOC=https://notino-development.goodrequest.dev/api/doc/data.json node scripts/downloadApidoc.js",
     "generate-ts-api": "npm run download:apidoc && npm run normalize-apidoc && npm run typegen",
     "translations-csv-to-json": "npx convert-csv-to-json GoodRequest/i18nextJsonToCsv",
     "translations-json-to-csv": "npx convert-json-to-csv GoodRequest/i18nextJsonToCsv",

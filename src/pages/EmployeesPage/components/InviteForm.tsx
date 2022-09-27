@@ -13,7 +13,6 @@ import { IInviteEmployeeForm, ISelectOptionItem } from '../../../types/interface
 
 // utils
 import { FORM } from '../../../utils/enums'
-import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // validate
 import validateInviteFrom from './validateInviteFrom'
@@ -57,6 +56,6 @@ const form = reduxForm<IInviteEmployeeForm, ComponentProps>({
 	touchOnBlur: true,
 	destroyOnUnmount: true,
 	validate: validateInviteFrom
-})(withPromptUnsavedChanges(InviteForm))
+})(InviteForm)
 
 export default form

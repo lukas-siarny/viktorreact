@@ -79,7 +79,7 @@ type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
 export type OpeningHoursTimeRanges = {
 	timeFrom: string
 	timeTo: string
-}[] | undefined
+}[]
 
 export type OpeningHours = {
 	day:  OpeningHoursDay

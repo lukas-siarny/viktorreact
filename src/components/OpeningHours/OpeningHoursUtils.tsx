@@ -101,6 +101,20 @@ export const getDayTimeRanges = (openingHours: OpeningHours, day?: DAY) => {
 	return timeRanges
 }
 
+export const getDayOnDemand = (openingHours: OpeningHours, day: DAY) => {
+	let onDemand = false
+	if (openingHours) {
+		// eslint-disable-next-line consistent-return,no-restricted-syntax
+		for (const openingHour of openingHours) {
+			if (openingHour.day === day) {
+				onDemand = !!openingHour.onDemand
+				break
+			}
+		}
+	}
+	return onDemand
+}
+
 export const equals = (ref: OpeningHoursTimeRanges, comp: OpeningHoursTimeRanges): boolean => JSON.stringify(ref) === JSON.stringify(comp)
 
 export const checkSameOpeningHours = (openingHours: OpeningHours | undefined): boolean => {
@@ -184,8 +198,8 @@ export const useChangeOpeningHoursFormFields = (
 				dispatch(
 					change(formName, fieldName, [
 						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(openingHours), onDemand: openingHours?.[0]?.onDemand },
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY), onDemand: false },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY), onDemand: false }
+						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY), onDemand: getDayOnDemand(openingHours, DAY.SATURDAY) },
+						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY), onDemand: getDayOnDemand(openingHours, DAY.SUNDAY) }
 					])
 				)
 			} else {
@@ -208,8 +222,8 @@ export const useChangeOpeningHoursFormFields = (
 			if (openOverWeekendFormValue && initHours) {
 				const updatedOpeningHours = unionBy(
 					[
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY), onDemand: false },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY), onDemand: false }
+						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY), onDemand: getDayOnDemand(openingHours, DAY.SATURDAY) },
+						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY), onDemand: getDayOnDemand(openingHours, DAY.SUNDAY) }
 					],
 					initHours,
 					'day'
@@ -227,7 +241,7 @@ export const mapRawOpeningHoursToComponentOpeningHours = (rawOpeningHours?: RawO
 	(rawOpeningHours || []).map((day) => {
 		const newOpeningHours: OpeningHours[0] = {
 			day: day.day,
-			timeRanges: day.timeRanges || undefined,
+			timeRanges: day.timeRanges || [],
 			onDemand: (day.state as OPENING_HOURS_STATES) === OPENING_HOURS_STATES.CUSTOM_ORDER
 		}
 		return newOpeningHours

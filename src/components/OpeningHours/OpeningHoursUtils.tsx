@@ -5,14 +5,10 @@ import { useDispatch } from 'react-redux'
 import { change } from 'redux-form'
 
 // types
-import { OpeningHours, RawOpeningHours, RawOpeningHoursPatch } from '../../types/interfaces'
+import { OpeningHours, OpeningHoursTimeRanges, RawOpeningHours } from '../../types/interfaces'
 
 // utils
 import { DAY, MONDAY_TO_FRIDAY, OPENING_HOURS_STATES } from '../../utils/enums'
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-type TimeRanges = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours'][0]['timeRanges']
 
 export const week: OpeningHours = [
 	{ day: DAY.MONDAY, timeRanges: [] as never, onDemand: false },
@@ -89,14 +85,14 @@ export const checkWeekend = (openingHours: OpeningHours | undefined): boolean =>
 }
 
 export const getDayTimeRanges = (openingHours: OpeningHours, day?: DAY) => {
-	let timeRanges: TimeRanges | [] = []
+	let timeRanges: OpeningHoursTimeRanges | [] = []
 	if (openingHours) {
 		// eslint-disable-next-line consistent-return,no-restricted-syntax
 		for (const openingHour of openingHours) {
 			if (day && openingHour.day === day) {
 				timeRanges = openingHour.timeRanges
 				break
-			} else if (!isEmpty(openingHour.timeRanges) && !isEmpty(openingHour.timeRanges[0]) && isEmpty(day)) {
+			} else if (!isEmpty(openingHour.timeRanges) && !isEmpty((openingHour.timeRanges || [])[0]) && isEmpty(day)) {
 				timeRanges = openingHour.timeRanges
 				break
 			}
@@ -105,12 +101,12 @@ export const getDayTimeRanges = (openingHours: OpeningHours, day?: DAY) => {
 	return timeRanges
 }
 
-export const equals = (ref: TimeRanges, comp: TimeRanges): boolean => JSON.stringify(ref) === JSON.stringify(comp)
+export const equals = (ref: OpeningHoursTimeRanges, comp: OpeningHoursTimeRanges): boolean => JSON.stringify(ref) === JSON.stringify(comp)
 
 export const checkSameOpeningHours = (openingHours: OpeningHours | undefined): boolean => {
 	if (openingHours) {
 		const checks: boolean[] = []
-		let referenceTimeRanges: TimeRanges
+		let referenceTimeRanges: OpeningHoursTimeRanges
 		openingHours.forEach((openingHour, index) => {
 			if (openingHour?.day !== DAY.SUNDAY && openingHour?.day !== DAY.SATURDAY) {
 				// take reference
@@ -131,9 +127,9 @@ export const checkSameOpeningHours = (openingHours: OpeningHours | undefined): b
 	return false
 }
 
-export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWeek: boolean, openOverWeekend: boolean): RawOpeningHoursPatch => {
+export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHoursOverWeek: boolean, openOverWeekend: boolean): RawOpeningHours => {
 	if (sameOpenHoursOverWeek && openingHours) {
-		const result: RawOpeningHoursPatch = []
+		const result: RawOpeningHours = []
 		week.forEach((day) => {
 			result?.push({
 				day: day?.day,
@@ -153,7 +149,7 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 				}
 			})
 		}
-		return result?.filter((openingHour) => (openingHour?.timeRanges?.length || []) > 0) as RawOpeningHoursPatch
+		return result?.filter((openingHour) => (openingHour?.timeRanges?.length || []) > 0) as RawOpeningHours
 	}
 	return openingHours
 		?.map((openingHour) => ({
@@ -161,7 +157,7 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 			timeRanges: openingHour.onDemand ? undefined : ((openingHour.timeRanges || []) as any),
 			state: openingHour.onDemand ? OPENING_HOURS_STATES.CUSTOM_ORDER : undefined
 		}))
-		.filter((openingHour) => openingHour?.timeRanges?.length > 0 || openingHour.state === OPENING_HOURS_STATES.CUSTOM_ORDER) as RawOpeningHoursPatch
+		.filter((openingHour) => openingHour?.timeRanges?.length > 0 || openingHour.state === OPENING_HOURS_STATES.CUSTOM_ORDER) as RawOpeningHours
 }
 
 export const useChangeOpeningHoursFormFields = (
@@ -183,8 +179,8 @@ export const useChangeOpeningHoursFormFields = (
 				dispatch(
 					change(formName, fieldName, [
 						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(openingHours), onDemand: openingHours?.[0]?.onDemand },
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY) },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY) }
+						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY), onDemand: false },
+						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY), onDemand: false }
 					])
 				)
 			} else {
@@ -207,8 +203,8 @@ export const useChangeOpeningHoursFormFields = (
 			if (openOverWeekendFormValue && initHours) {
 				const updatedOpeningHours = unionBy(
 					[
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY) },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY) }
+						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SATURDAY), onDemand: false },
+						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(openingHours, DAY.SUNDAY), onDemand: false }
 					],
 					initHours,
 					'day'
@@ -224,35 +220,53 @@ export const useChangeOpeningHoursFormFields = (
 
 export const mapRawOpeningHoursToComponentOpeningHours = (rawOpeningHours?: RawOpeningHours): OpeningHours =>
 	(rawOpeningHours || []).map((day) => {
-		const newOpeningHours: any = { ...day }
-		delete newOpeningHours.state
-		newOpeningHours.onDemand = (day.state as OPENING_HOURS_STATES) === OPENING_HOURS_STATES.CUSTOM_ORDER
+		const newOpeningHours: OpeningHours[0] = {
+			day: day.day,
+			timeRanges: day.timeRanges || undefined,
+			onDemand: (day.state as OPENING_HOURS_STATES) === OPENING_HOURS_STATES.CUSTOM_ORDER
+		}
 		return newOpeningHours
 	})
 
 export const validateOpeningHours = (values: OpeningHours) => {
-	const openingHoursErrors: { [key: number]: any } = {}
+	let openingHoursErrors: { [key: number]: any } = {}
 
 	values.forEach((day, index) => {
-		const dayErrors: any = {}
-		const timeRangesErrors: any = {}
+		let dayErrors: any = {}
+		let timeRangesErrors: any = {}
+
 		if (!day.onDemand && day.timeRanges) {
 			day.timeRanges.forEach((timeRange, i) => {
-				const timeRangeError: any = {}
+				let timeRangeError: any = {}
 				if (timeRange.timeFrom === null) {
-					timeRangeError.timeFrom = i18next.t('loc:Toto pole je povinné')
+					timeRangeError = {
+						...timeRangesErrors,
+						timeFrom: i18next.t('loc:Toto pole je povinné')
+					}
 				}
 				if (timeRange.timeTo === null) {
-					timeRangeError.timeTo = i18next.t('loc:Toto pole je povinné')
+					timeRangeError = {
+						...timeRangesErrors,
+						timeTo: i18next.t('loc:Toto pole je povinné')
+					}
 				}
 				if (!isEmpty(timeRangeError)) {
-					timeRangesErrors[i] = timeRangeError
+					timeRangesErrors = {
+						...timeRangesErrors,
+						[i]: timeRangeError
+					}
 				}
 			})
 		}
 		if (!isEmpty(timeRangesErrors)) {
-			dayErrors.timeRanges = timeRangesErrors
-			openingHoursErrors[index] = dayErrors
+			dayErrors = {
+				...dayErrors,
+				timeRanges: timeRangesErrors
+			}
+			openingHoursErrors = {
+				...openingHoursErrors,
+				[index]: dayErrors
+			}
 		}
 	})
 

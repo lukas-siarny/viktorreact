@@ -70,25 +70,20 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
+// type of BE opening hours data
 export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
 
-export type RawOpeningHoursPatch = {
-	day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
-	timeRanges?:
-		{
-			timeFrom: string
-			timeTo: string
-		}[],
-	state?: "CUSTOM_ORDER"
-}[]
+type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
+
+// type for OpeningHours component
+export type OpeningHoursTimeRanges = {
+	timeFrom: string
+	timeTo: string
+}[] | undefined
 
 export type OpeningHours = {
-	day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY"
-	timeRanges:
-		{
-			timeFrom: string
-			timeTo: string
-		}[],
+	day:  OpeningHoursDay
+	timeRanges: OpeningHoursTimeRanges,
 	onDemand?: boolean
 }[]
 

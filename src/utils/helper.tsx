@@ -935,7 +935,7 @@ export const hasAuthUserPermissionToEditRole = (
 	employee?: IEmployeePayload['data'],
 	salonRoles?: ISelectOptionItem[]
 ): { hasPermission: boolean; tooltip: string | null } => {
-	const result: { hasPermission: boolean; tooltip: string | null } = {
+	let result: { hasPermission: boolean; tooltip: string | null } = {
 		hasPermission: false,
 		tooltip: i18next.t('loc:Pre túto akciu nemáte dostatočné oprávnenia.')
 	}
@@ -946,13 +946,17 @@ export const hasAuthUserPermissionToEditRole = (
 
 	if (authUser.uniqPermissions?.some((permission) => [...ADMIN_PERMISSIONS, SALON_PERMISSION.PARTNER_ADMIN].includes(permission as any))) {
 		// admin and super admin roles have access to all salons, so salons array in authUser data is empty (no need to list there all existing salons)
-		result.hasPermission = true
-		result.tooltip = null
-		return result
+		return {
+			hasPermission: true,
+			tooltip: null
+		}
 	}
 	if (authUser.id === employee?.employee?.user?.id) {
 		// salon user can't edit his own role
-		result.tooltip = i18next.t('loc:Nemôžeš editovať svoju rolu')
+		result = {
+			...result,
+			tooltip: i18next.t('loc:Nemôžeš editovať svoju rolu')
+		}
 		return result
 	}
 
@@ -961,9 +965,10 @@ export const hasAuthUserPermissionToEditRole = (
 		const authUserRoleIndex = salonRoles.findIndex((role) => role?.value === authUserSalonRole?.id)
 		if (authUserRoleIndex === 0) {
 			// is salon admin - has all permissions
-			result.hasPermission = true
-			result.tooltip = null
-			return result
+			return {
+				hasPermission: true,
+				tooltip: null
+			}
 		}
 
 		const employeeRole = employee.employee?.role
@@ -974,9 +979,10 @@ export const hasAuthUserPermissionToEditRole = (
 		}
 		// it's possible to edit role only if you have permission to edit
 		if (authUserSalonRole?.permissions.find((permission) => permission.name === SALON_PERMISSION.USER_ROLE_EDIT)) {
-			result.hasPermission = true
-			result.tooltip = null
-			return result
+			return {
+				hasPermission: true,
+				tooltip: null
+			}
 		}
 		return result
 	}

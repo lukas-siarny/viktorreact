@@ -1,6 +1,6 @@
 import i18next from 'i18next'
 import { isEmpty, unionBy } from 'lodash'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { change } from 'redux-form'
 
@@ -168,8 +168,13 @@ export const useChangeOpeningHoursFormFields = (
 	fieldName = 'openingHours'
 ) => {
 	const dispatch = useDispatch()
+	const firstUpdate = useRef(true)
 
 	useEffect(() => {
+		if (firstUpdate.current) {
+			firstUpdate.current = false
+			return
+		}
 		if (!openingHours) {
 			return
 		}
@@ -240,13 +245,13 @@ export const validateOpeningHours = (values: OpeningHours) => {
 				let timeRangeError: any = {}
 				if (timeRange.timeFrom === null) {
 					timeRangeError = {
-						...timeRangesErrors,
+						...timeRangeError,
 						timeFrom: i18next.t('loc:Toto pole je povinné')
 					}
 				}
 				if (timeRange.timeTo === null) {
 					timeRangeError = {
-						...timeRangesErrors,
+						...timeRangeError,
 						timeTo: i18next.t('loc:Toto pole je povinné')
 					}
 				}

@@ -35,7 +35,7 @@ const Breadcrumbs = (props: Props) => {
 								</Link>
 							) : (
 								<>
-									<span className='text-gray-600 text-base font-normal'>{item.name}</span>{' '}
+									<span className='text-gray-600 text-base font-normal'>{item.name}</span>
 									{item.titleName && <span className={'text-gray-600 text-base'}>&nbsp; - {item.titleName}</span>}
 								</>
 							)}

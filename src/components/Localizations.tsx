@@ -18,6 +18,7 @@ import InputField from '../atoms/InputField'
 
 const fixLength255 = validationString(255)
 const horizontalLabelStyle = { minWidth: 25 }
+const inputFieldStyle = { paddingBottom: 4 }
 
 const Localizations = (param: any) => {
 	const formValueLocalizations = param.fields.getAll()
@@ -55,13 +56,13 @@ const Localizations = (param: any) => {
 		otherFields.push(
 			<div className={'flex items-start'} key={`${field}.value`}>
 				{param.horizontal && (
-					<label htmlFor={`${field}.value`} className={cx('noti-input-label mt-1', { required: param.required })} style={horizontalLabelStyle}>
+					<label htmlFor={`${field}.value`} className={cx('noti-input-label pt-1', { required: param.required })} style={horizontalLabelStyle}>
 						{displayAs}
 					</label>
 				)}
 
 				<Field
-					className={'flex-grow mb-1'}
+					className={'flex-grow'}
 					key={`${field}.value`}
 					name={`${field}.value`}
 					component={param.fieldComponent || InputField}
@@ -74,6 +75,7 @@ const Localizations = (param: any) => {
 					required={param.required}
 					rows={param?.customRows}
 					onFocus={setFocusedWrap}
+					style={inputFieldStyle}
 				/>
 			</div>
 		)

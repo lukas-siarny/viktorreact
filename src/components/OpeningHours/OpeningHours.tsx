@@ -30,7 +30,7 @@ const TimeRangesComponent = (props: any) => {
 				hideHelp
 				allowClear
 				size={'small'}
-				itemClassName={'m-0'}
+				itemClassName={'m-0 pb-0'}
 				validate={validationRequired}
 				disabled={disabled}
 				minuteStep={15}
@@ -75,7 +75,7 @@ const OpeningHours = (props: any) => {
 						{/* show switch filed for open work hours over weekend */}
 						{index === 4 || fields.length === 1 || (fields.length === 3 && index === 0) ? (
 							<Field
-								className={'mt-3 mb-0'}
+								className={'mt-3 mb-0 pb-0'}
 								component={SwitchField}
 								label={t('loc:Otvorené cez víkend')}
 								name={'openOverWeekend'}

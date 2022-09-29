@@ -1,15 +1,24 @@
 @import tailwind-variables
 
 .ant-breadcrumb.noti-breadcrumb
-	height: 16px
+	min-height: 24px
 	display: flex
 	align-items: center
+	ol
+		height: 100%
+		display: flex
+		align-items: center
+		li
+			padding: 2px 0
+			min-height: 24px
+			height: 100%
+			display: flex
+			align-items: center
+			line-height: 1.5
 	.last
+		display: inline
 		span
+			display: inline
 			font-weight: $fontWeight-bold !important
 	.ant-breadcrumb-separator
 		margin: 0
-	span
-		display: flex
-		align-items: center
-		height: 16px

@@ -213,7 +213,7 @@ const EmployeeForm: FC<Props> = (props) => {
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>
 						<Field
-							className={'m-0 mr-5'}
+							className={'m-0 mr-3'}
 							component={ImgUploadField}
 							name={'avatar'}
 							label={t('loc:Avatar')}

@@ -148,7 +148,7 @@ const CategoryForm: FC<Props> = (props) => {
 								customValidate={fixLength100}
 								mainField={
 									<Field
-										className='mb-0'
+										className='mb-0 pb-0'
 										component={InputField}
 										label={t('loc:Názov kategórie (EN)')}
 										placeholder={t('loc:Zadajte názov')}
@@ -163,7 +163,7 @@ const CategoryForm: FC<Props> = (props) => {
 							{values?.level === 2 ? (
 								<>
 									<Field
-										className={'w-full'}
+										className={'w-full mb-2'}
 										component={SelectField}
 										options={categoriesParameters.enumerationsOptions}
 										label={t('loc:Parameter')}
@@ -185,7 +185,7 @@ const CategoryForm: FC<Props> = (props) => {
 										className={'w-full'}
 										mainField={
 											<Field
-												className='mb-0'
+												className='mb-0 pb-0'
 												component={TextareaField}
 												label={t('loc:Popis kategórie (EN)')}
 												placeholder={t('loc:Zadajte popis')}
@@ -223,7 +223,7 @@ const CategoryForm: FC<Props> = (props) => {
 							</Row>
 						) : undefined}
 
-						<div className={'flex justify-between flex-wrap gap-2'}>
+						<div className={'flex justify-between flex-wrap gap-2 mt-6'}>
 							<div className='flex gap-2 flex-wrap w-full 2xl:w-auto'>
 								{!values?.deletedAt ? (
 									<Permissions allowed={permissions}>

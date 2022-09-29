@@ -34,11 +34,11 @@ const BillingInfoForm = (props: Props) => {
 	const [t] = useTranslation()
 
 	return (
-		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-			<Permissions
-				allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_BILLING_UPDATE]}
-				render={(hasPermission) => (
-					<Space className={'w-full'} direction='vertical' size={36}>
+		<Permissions
+			allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_BILLING_UPDATE]}
+			render={(hasPermission) => (
+				<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+					<Space className={'w-full'} direction='vertical' size={20}>
 						<Row>
 							<Col span={24}>
 								<h3 className={'mb-0 flex items-center'}>
@@ -171,26 +171,26 @@ const BillingInfoForm = (props: Props) => {
 								</Row>
 							</Col>
 						</Row>
-						{hasPermission && (
-							<div className={'content-footer pt-0'}>
-								<Row className='justify-center w-full'>
-									<Button
-										type={'primary'}
-										className={'noti-btn mt-2-5 w-52 xl:w-60'}
-										htmlType={'submit'}
-										icon={<EditIcon />}
-										disabled={submitting || pristine}
-										loading={submitting}
-									>
-										{t('loc:Upraviť')}
-									</Button>
-								</Row>
-							</div>
-						)}
 					</Space>
-				)}
-			/>
-		</Form>
+					{hasPermission && (
+						<div className={'content-footer pt-0'}>
+							<Row className='justify-center w-full'>
+								<Button
+									type={'primary'}
+									className={'noti-btn mt-2-5 w-52 xl:w-60'}
+									htmlType={'submit'}
+									icon={<EditIcon />}
+									disabled={submitting || pristine}
+									loading={submitting}
+								>
+									{t('loc:Upraviť')}
+								</Button>
+							</Row>
+						</div>
+					)}
+				</Form>
+			)}
+		/>
 	)
 }
 

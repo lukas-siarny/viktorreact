@@ -60,7 +60,7 @@ const LocalizationsArray = (props: any) => {
 						<FieldArray
 							key={key}
 							name={key}
-							className={'w-full mb-0'}
+							className={'w-full mb-0 pb-0'}
 							otherFieldsClass='mr-8'
 							component={Localizations}
 							placeholder={placeholder}
@@ -70,7 +70,7 @@ const LocalizationsArray = (props: any) => {
 							mainField={
 								<div key={index} className={'flex gap-2 items-center'}>
 									<Field
-										className='mb-0 flex-1'
+										className='pb-0 flex-1'
 										component={InputField}
 										label={label}
 										placeholder={placeholder}
@@ -123,7 +123,7 @@ const CategoryParamsForm: FC<Props> = (props) => {
 							className='w-7/12 mb-0'
 							mainField={
 								<Field
-									className='mb-0'
+									className='mb-0 pb-0'
 									component={InputField}
 									label={t('loc:Názov (EN)')}
 									placeholder={t('loc:Zadajte názov')}

@@ -151,7 +151,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 					</Row>
 				</div>
 				<div className='content-body-width-small'>
-					<Divider className={'mt-10 mb-6'}>{t('loc:alebo')}</Divider>
+					<Divider className={'my-6'}>{t('loc:alebo')}</Divider>
 				</div>
 				<h2 className={'content-body-width-small'}>{t('loc:Vytvoriť profil kolegu')}</h2>
 				<div className='content-body small mt-2 without-content-footer'>

@@ -104,7 +104,7 @@ const renderParameterValues = (props: any) => {
 					{showDuration && renderFromTo(fieldData?.durationFrom, fieldData?.durationTo, fieldData?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
 					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, fieldData?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
 					<Field
-						className={'mb-0'}
+						className={'mb-0 pb-0'}
 						component={SwitchField}
 						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
 						name={`${field}.useParameter`}
@@ -415,7 +415,7 @@ const ServiceForm = (props: Props) => {
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
 						{!isEmpty(formValues?.serviceCategoryParameter) && (
-							<Field className={'mb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
+							<Field className={'mb-0 pb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
 						)}
 						{formValues?.useCategoryParameter ? (
 							<div className={'my-2'}>

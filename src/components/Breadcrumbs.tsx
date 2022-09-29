@@ -22,7 +22,7 @@ const Breadcrumbs = (props: Props) => {
 	const { breadcrumbs, backButtonPath, defaultBackButtonAction } = props
 
 	return (
-		<div className={'flex items-center w-full mb-2 mt-2'}>
+		<div className={'flex items-center flex-wrap w-full mb-2 mt-2'}>
 			{backButtonPath && <BackButton path={backButtonPath} defaultBackButtonAction={defaultBackButtonAction} />}
 			{breadcrumbs && (
 				<Breadcrumb className={'noti-breadcrumb'} separator={<BreadcrumbSeparator className={'text-gray-600'} />}>

@@ -473,7 +473,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		[t, salon?.data?.publicationDeclineReason]
 	)
 
-	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header'}>{infoMessage}</div>
+	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header z-40'}>{infoMessage}</div>
 
 	const renderContentHeaderAdmin = () =>
 		(infoMessage || isPendingPublication) && (

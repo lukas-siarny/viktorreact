@@ -12,10 +12,13 @@
 .ant-form-item
 	margin-bottom: 0
 	padding-bottom: 16px
-	/* &.ant-form-item-has-error
-		.ant-form-item-margin-offset
-			transition: 0.3s ease
-			margin-bottom: 0 !important
+	&.hidden-label
+		.ant-form-item-label
+			width: 1px
+			overflow: hidden
+			opacity: 0
+			pointer-events: none
+			user-select: none
 
 @media (max-width: $min-supported-resoulution)
 	.ant-form-item
@@ -28,12 +31,14 @@
 			background-color: #D2141433
 	.ant-form-item.noti-registration-switch:not(.marketing-field)
 		margin-bottom: $gap-1
+		padding-bottom: 0
 
 // Label
 .ant-form-item-label,
 .ant-form-vertical .ant-form-item-label // this is for higher specificity so it can override the original style
 	line-height: 1.5
 	padding-bottom: 0
+	width: 100%
 
 	label
 		color: $textColor-notino-black

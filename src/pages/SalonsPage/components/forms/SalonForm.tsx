@@ -292,7 +292,7 @@ const SalonForm: FC<Props> = (props) => {
 							size={'middle'}
 							disabled={disabledForm}
 						/>
-						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
+						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm, showOnDemand: true }} />
 						{noteModalControlButtons}
 					</Col>
 				</Row>

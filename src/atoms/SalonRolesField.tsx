@@ -45,7 +45,6 @@ const SalonRolesField: FC<Props> = (props) => {
 					<>
 						{t('loc:Rola')}{' '}
 						<InfoIcon16
-							style={{ marginBottom: 2 }}
 							className={'ml-1 cursor-pointer'}
 							onClick={() => {
 								setVisible(true)

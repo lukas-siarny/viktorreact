@@ -1,9 +1,19 @@
-FROM nginx
+FROM nginx:1.21.5-alpine
 USER root
 
 COPY ./build /usr/share/nginx/html
-COPY  ./docker/development/nginx.conf /etc/nginx
+COPY ./docker/development/nginx.conf /etc/nginx
+
+# copy .env.template as env to the container
+COPY .env.template .env
+
+# install nodejs & npm
+RUN apk add --update nodejs
+RUN apk add --update npm
+
+# install runtime-env-cra package
+RUN npm i -g runtime-env-cra
 
 STOPSIGNAL SIGTERM
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["/bin/sh", "-c", "runtime-env-cra && nginx -g \"daemon off;\""]

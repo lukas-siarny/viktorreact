@@ -64,6 +64,8 @@ services:
     volumes:
       - './notino_backend/logs:/home/app/logs'
   frontend:
+    environment:
+      - REACT_APP_GOOGLE_MAPS_API_KEY=testGoogleAPIKey
     build:
         context: .
         dockerfile: ./docker/CI/Dockerfile

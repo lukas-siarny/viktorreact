@@ -27,6 +27,7 @@ import { RootState } from '../../../reducers'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon-16.svg'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // types
 import { ICategoryParamForm } from '../../../types/interfaces'
@@ -180,11 +181,11 @@ const CategoryParamsForm: FC<Props> = (props) => {
 					)}
 				</div>
 			</Space>
-			<div className={'content-footer pt-0'}>
-				<Row className={`w-full ${onDelete ? 'justify-between' : 'justify-center'}`}>
+			<div className={'content-footer'}>
+				<div className={`flex flex-col gap-2 md:flex-row ${onDelete ? 'md:justify-between' : 'md:justify-center'}`}>
 					{onDelete && (
 						<DeleteButton
-							className={'mt-2-5 w-52 xl:w-60'}
+							className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 							onConfirm={onDelete}
 							entityName={t('loc:parameter')}
 							type={'default'}
@@ -194,16 +195,16 @@ const CategoryParamsForm: FC<Props> = (props) => {
 					)}
 					<Button
 						type={'primary'}
-						block
 						size={'middle'}
-						className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+						className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 						htmlType={'submit'}
 						disabled={submitting || pristine}
 						loading={submitting}
+						icon={onDelete ? <EditIcon /> : <PlusIcon />}
 					>
 						{onDelete ? STRINGS(t).save(entityName) : STRINGS(t).createRecord(entityName)}
 					</Button>
-				</Row>
+				</div>
 			</div>
 		</Form>
 	)

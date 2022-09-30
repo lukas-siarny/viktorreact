@@ -237,14 +237,15 @@ const EmployeeForm: FC<Props> = (props) => {
 						formName={FORM.EMPLOYEE}
 					/>
 				</div>
-				<div>
-					{/* TODO - refactor assigned services
+
+				{/* TODO - refactor assigned services
+						<div>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
 						<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
-					<FieldArray component={renderListFields} name={'services'} salon={salon} /> */}
-				</div>
+					<FieldArray component={renderListFields} name={'services'} salon={salon} />
+					</div> */}
 			</Space>
 		</Form>
 	)

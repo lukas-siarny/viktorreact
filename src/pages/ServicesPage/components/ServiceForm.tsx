@@ -181,7 +181,8 @@ const renderParameterValues = (props: any) => {
 											name={`${field}.durationFrom`}
 											precision={0}
 											step={1}
-											maxChars={3}
+											min={0}
+											max={999}
 											size={'large'}
 											validate={[numberMin0, validateParameterValuePriceAndDuration]}
 											disabled={!useParameter}
@@ -197,7 +198,8 @@ const renderParameterValues = (props: any) => {
 												name={`${field}.durationTo`}
 												precision={0}
 												step={1}
-												maxChars={3}
+												min={0}
+												max={999}
 												size={'large'}
 												validate={[numberMin0, validateParameterValuePriceAndDuration]}
 												disabled={!useParameter}
@@ -230,7 +232,8 @@ const renderParameterValues = (props: any) => {
 										name={`${field}.priceFrom`}
 										precision={2}
 										step={1}
-										maxChars={5}
+										min={0}
+										maxC={99999}
 										size={'large'}
 										validate={[numberMin0, validateParameterValuePriceAndDuration]}
 										disabled={!useParameter}
@@ -246,7 +249,8 @@ const renderParameterValues = (props: any) => {
 											name={`${field}.priceTo`}
 											precision={2}
 											step={1}
-											maxChars={5}
+											min={0}
+											// max={99999}
 											size={'large'}
 											validate={[numberMin0, validateParameterValuePriceAndDuration]}
 											disabled={!useParameter}
@@ -443,7 +447,8 @@ const ServiceForm = (props: Props) => {
 											name='durationFrom'
 											precision={0}
 											step={1}
-											maxChars={3}
+											min={0}
+											max={999}
 											size={'large'}
 											validate={[numberMin0]}
 											required
@@ -459,7 +464,8 @@ const ServiceForm = (props: Props) => {
 												name='durationTo'
 												precision={0}
 												step={1}
-												maxChars={3}
+												min={0}
+												max={999}
 												size={'large'}
 												validate={[numberMin0]}
 												required
@@ -483,7 +489,8 @@ const ServiceForm = (props: Props) => {
 											name='priceFrom'
 											precision={2}
 											step={1}
-											maxChars={5}
+											min={0}
+											// max={99999}
 											size={'large'}
 											validate={[numberMin0]}
 											required
@@ -498,7 +505,8 @@ const ServiceForm = (props: Props) => {
 												name='priceTo'
 												precision={2}
 												step={1}
-												maxChars={5}
+												min={0}
+												// max={99999}
 												size={'large'}
 												validate={[numberMin0]}
 												required
@@ -543,11 +551,11 @@ const ServiceForm = (props: Props) => {
 							</Button>
 						</div>
 						<FieldArray component={renderEmployees} name={'employees'} salon={salon} showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME} />
-						<div className={'content-footer pt-0'} id={'content-footer-container'}>
-							<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
+						<div className={'content-footer'} id={'content-footer-container'}>
+							<Row className={cx('flex flex-col gap-2 md:flex-row w-full', { 'justify-between': serviceID, 'justify-center': !serviceID })}>
 								{serviceID ? (
 									<DeleteButton
-										className={'noti-btn mt-2-5 w-52 xl:w-60'}
+										className={'noti-btn w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 										onConfirm={onConfirmDelete}
 										entityName={t('loc:službu')}
@@ -557,7 +565,7 @@ const ServiceForm = (props: Props) => {
 
 								<Button
 									type={'primary'}
-									className={'noti-btn mt-2-5 w-52 xl:w-60'}
+									className={'noti-btn w-full md:w-auto md:min-w-50 xl:min-w-60'}
 									htmlType={'submit'}
 									icon={serviceID ? <EditIcon /> : <CreateIcon />}
 									disabled={submitting || pristine}

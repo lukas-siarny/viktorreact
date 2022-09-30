@@ -524,7 +524,13 @@ module.exports = {
 			0: '0px',
 			full: '100%',
 			min: 'min-content',
-			max: 'max-content'
+			max: 'max-content',
+			'40': '10rem',
+			'45': '11.25rem',
+			'48': '12rem',
+			'50': '12.5rem',
+			'52': '13rem',
+			'60': '14rem'
 		},
 		objectPosition: {
 			bottom: 'bottom',
@@ -712,8 +718,8 @@ module.exports = {
 			'-full': '-100%'
 		}),
 		width: (theme) => ({
-			auto: 'auto',
 			...theme('spacing'),
+			auto: 'auto',
 			'1/2': '50%',
 			'1/3': '33.333333%',
 			'2/3': '66.666667%',

@@ -30,6 +30,9 @@ import { formFieldID } from '../../utils/helper'
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 
+// assets
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
+
 type Props = {
 	computedMatch: IComputedMatch<{ userID: string }>
 }
@@ -154,11 +157,11 @@ const UserPage: FC<Props> = (props) => {
 			<div className='content-body small mt-2'>
 				<Spin spinning={isLoading}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
-					<div className={'content-footer pt-0'}>
-						<Row className={'justify-between gap-2'}>
+					<div className={'content-footer'}>
+						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
 								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_DELETE]}
-								className={'mt-2-5 w-52 xl:w-60'}
+								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								id={formFieldID(FORM.USER_ACCOUNT, DELETE_BUTTON_ID)}
 								onConfirm={deleteUser}
 								entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
@@ -171,10 +174,10 @@ const UserPage: FC<Props> = (props) => {
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
-										block
 										size={'middle'}
-										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
+										icon={<EditIcon />}
 										onClick={(e) => {
 											if (hasPermission) {
 												dispatch(submit(FORM.USER_ACCOUNT))
@@ -190,7 +193,7 @@ const UserPage: FC<Props> = (props) => {
 									</Button>
 								)}
 							/>
-						</Row>
+						</div>
 					</div>
 				</Spin>
 			</div>

@@ -23,7 +23,7 @@ import {
 } from '../../components/OpeningHours/OpeningHoursUtils'
 
 // enums
-import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from '../../utils/enums'
 
 // types
 import { Paths } from '../../types/api'
@@ -41,6 +41,10 @@ import { getPrefixCountryCode } from '../../utils/helper'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+
+// assets
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
+import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
@@ -249,12 +253,12 @@ const SupportContactPage: FC<Props> = (props) => {
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />
-					<div className={'content-footer pt-0'}>
-						<Row className={cx({ 'justify-between': supportContactExists, 'justify-center': !supportContactExists }, 'w-full')}>
+					<div className={'content-footer'}>
+						<Row className={cx('flex flex-col gap-2 md:flex-row', { 'md:justify-between': supportContactExists, 'md:justify-center': !supportContactExists })}>
 							{supportContactExists && (
 								<DeleteButton
 									permissions={permissions}
-									className={'mt-2-5 w-52 xl:w-60'}
+									className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 									onConfirm={deleteSupportContact}
 									entityName={t('loc:podporu')}
 									type={'default'}
@@ -266,10 +270,10 @@ const SupportContactPage: FC<Props> = (props) => {
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
-										block
 										size={'middle'}
-										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
+										icon={supportContactExists ? <EditIcon /> : <CreateIcon />}
 										onClick={(e) => {
 											if (hasPermission) {
 												dispatch(submit(FORM.SUPPORT_CONTACT))
@@ -281,7 +285,7 @@ const SupportContactPage: FC<Props> = (props) => {
 										disabled={(!supportContactExists && hasEveryCountrSupportContact) || submitting || isFormPristine}
 										loading={submitting}
 									>
-										{t('loc:Uložiť')}
+										{supportContactExists ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:podporu'))}
 									</Button>
 								)}
 							/>

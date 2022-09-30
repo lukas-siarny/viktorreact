@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -23,7 +25,7 @@ import validateCategoryFrom from './validateCategoryFrom'
 
 // utils
 import { validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
-import { FORM, PERMISSION, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { FORM, PERMISSION, STRINGS, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -90,7 +92,7 @@ const CategoryForm: FC<Props> = (props) => {
 					okText={t('loc:Pokračovať')}
 					getPopupContainer={() => documentFooter}
 					allowedButton={
-						<Button className={'noti-btn m-regular w-full 2xl:w-auto'} type={'dashed'} size='middle'>
+						<Button className={'noti-btn m-regular w-full 2xl:w-auto max-w-full min-w-0'} icon={<CreateIcon />} type={'dashed'} size='middle'>
 							{t('loc:Vytvoriť podkategóriu')}
 						</Button>
 					}
@@ -99,9 +101,10 @@ const CategoryForm: FC<Props> = (props) => {
 		}
 		return (
 			<Button
-				className={'noti-btn m-regular w-full 2xl:w-auto'}
+				className={'noti-btn m-regular w-full 2xl:w-auto max-w-full min-w-0'}
 				type={'dashed'}
 				size='middle'
+				icon={<CreateIcon />}
 				onClick={() => createCategory(values?.parentId, values?.id, values?.name, values?.childrenLength, (values?.level ?? 0) + 1)}
 			>
 				{t('loc:Vytvoriť podkategóriu')}
@@ -110,7 +113,7 @@ const CategoryForm: FC<Props> = (props) => {
 	}
 
 	return (
-		<Form layout={'vertical'} className={'w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<Spin wrapperClassName={'w-full'} spinning={category.isLoading || categoriesParameters.isLoading}>
 				<Col className={'flex'}>
 					<Row className={'w-full h-full block'} justify='center'>
@@ -228,14 +231,15 @@ const CategoryForm: FC<Props> = (props) => {
 								{!values?.deletedAt ? (
 									<Permissions allowed={permissions}>
 										<Button
-											className={'noti-btn w-full 2xl:w-auto'}
+											className={'noti-btn w-full 2xl:w-auto max-w-full min-w-0'}
 											size='middle'
 											type='primary'
 											htmlType='submit'
 											disabled={submitting || pristine}
 											loading={submitting}
+											icon={values?.id ? <EditIcon /> : <CreateIcon />}
 										>
-											{t('loc:Uložiť')}
+											{values?.id ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:kategóriu'))}
 										</Button>
 									</Permissions>
 								) : undefined}
@@ -246,7 +250,7 @@ const CategoryForm: FC<Props> = (props) => {
 									<DeleteButton
 										onConfirm={() => deleteCategory(values?.id, false)}
 										entityName={''}
-										className={'w-full 2xl:w-auto'}
+										className={'w-full 2xl:w-auto max-w-full min-w-0'}
 										type={'default'}
 										getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 									/>

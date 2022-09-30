@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 // eslint-disable-next-line import/prefer-default-export
 export function withPromptUnsavedChanges(WrappedComponent: ComponentType<RouteComponentProps<any>> | ComponentType<any>): any {
 	return withRouter((props: any) => {
-		const { dirty, history } = props
+		const { dirty, history, submitting } = props
 		const [t] = useTranslation()
 		const message = t('loc:Chcete zahodiť vykonané zmeny?')
 
@@ -30,22 +30,18 @@ export function withPromptUnsavedChanges(WrappedComponent: ComponentType<RouteCo
 			window.removeEventListener('beforeunload', onBrowserUnload)
 		}
 
-		const update = () => {
-			if (dirty) {
+		useEffect(() => {
+			if (dirty && !submitting) {
 				enable()
 			} else {
 				disable()
 			}
-		}
-
-		useEffect(() => {
-			update()
 
 			return () => {
 				disable()
 			}
 			// eslint-disable-next-line react-hooks/exhaustive-deps
-		}, [dirty])
+		}, [dirty, submitting])
 
 		return <WrappedComponent {...props} />
 	})

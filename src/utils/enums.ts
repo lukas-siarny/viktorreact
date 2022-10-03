@@ -502,7 +502,7 @@ export enum SALON_ROLES {
 	MANAGER = 'MANAGER',
 	RECEPTIONIST = 'RECEPTIONIST',
 	EMPLOEYEE_1 = 'EMPLOEYEE_1',
-	EMPLOEYEE_2 = 'EMPLOEYEE_2',
+	/* EMPLOEYEE_2 = 'EMPLOEYEE_2', */
 	EXTERNAL = 'EXTERNAL'
 }
 
@@ -522,15 +522,6 @@ export enum SALON_HISTORY_OPERATIONS_COLORS {
 
 export const SALON_ROLES_KEYS = Object.keys(SALON_ROLES)
 
-export const SALON_ROLES_TRANSLATIONS = () => ({
-	[SALON_ROLES.ADMIN]: i18next.t('loc:Admin'),
-	[SALON_ROLES.MANAGER]: i18next.t('loc:Manažér'),
-	[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:Recepčný'),
-	[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:Zamestnanec 1'),
-	[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:Zamestnanec 2'),
-	[SALON_ROLES.EXTERNAL]: i18next.t('loc:Externista')
-})
-
 export enum DATE_TIME_RANGE {
 	LAST_DAY = 'LAST_DAY',
 	LAST_TWO_DAYS = 'LAST_TWO_DAYS',
@@ -544,65 +535,6 @@ export const DEFAULT_DATE_TIME_OPTIONS = (): { [key: string]: any } => {
 		[DATE_TIME_RANGE.LAST_WEEK]: { name: i18next.t('loc:Týždeň'), value: 1, unit: 'week' }
 	}
 }
-
-export const SALON_ROLES_PERMISSIONS = () => [
-	{
-		name: i18next.t('loc:Správa profilu salónu'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
-		extra: {
-			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava')
-		}
-	},
-	{
-		name: i18next.t('loc:Správa firemných a fakturačných údajov salónu'),
-		allowed: [SALON_ROLES.ADMIN],
-		extra: {}
-	},
-	{
-		name: i18next.t('loc:Správa oprávnení zamesnancov'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
-		extra: {
-			[SALON_ROLES.MANAGER]: i18next.t('loc:okrem Admin')
-		}
-	},
-	{
-		name: i18next.t('loc:Správa služieb salónu'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
-		extra: {}
-	},
-	{
-		name: i18next.t('loc:Správa zamestnancov salónu'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER],
-		extra: {}
-	},
-	{
-		name: i18next.t('loc:Správa zákazníkov salónu'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2],
-		extra: {
-			[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:len vytváranie a úprava'),
-			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len vytváranie a úprava')
-		}
-	},
-	{
-		name: i18next.t('loc:Správa online rezervácií'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2],
-		extra: {
-			[SALON_ROLES.ADMIN]: i18next.t('loc:len úprava a mazanie'),
-			[SALON_ROLES.MANAGER]: i18next.t('loc:len úprava a mazanie'),
-			[SALON_ROLES.RECEPTIONIST]: i18next.t('loc:len úprava a mazanie'),
-			[SALON_ROLES.EMPLOEYEE_1]: i18next.t('loc:len úprava a mazanie'),
-			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len úprava a mazanie, len svoje')
-		}
-	},
-	{
-		name: i18next.t('loc:Správa offline rezervácií'),
-		allowed: [SALON_ROLES.ADMIN, SALON_ROLES.MANAGER, SALON_ROLES.RECEPTIONIST, SALON_ROLES.EMPLOEYEE_1, SALON_ROLES.EMPLOEYEE_2, SALON_ROLES.EXTERNAL],
-		extra: {
-			[SALON_ROLES.EMPLOEYEE_2]: i18next.t('loc:len svoje'),
-			[SALON_ROLES.EXTERNAL]: i18next.t('loc:len svoje')
-		}
-	}
-]
 
 export const FILTER_PATHS = (from?: string, to?: string) => ({
 	SALONS: {

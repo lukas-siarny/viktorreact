@@ -161,16 +161,6 @@ const SalonForm: FC<Props> = (props) => {
 							showLettersCount
 						/>
 						<Field
-							component={TextareaField}
-							label={t('loc:Doplňujúci popis')}
-							name={'aboutUsSecond'}
-							size={'large'}
-							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
-							disabled={disabledForm}
-							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
-							showLettersCount
-						/>
-						<Field
 							component={SelectField}
 							options={languages.enumerationsOptions}
 							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}

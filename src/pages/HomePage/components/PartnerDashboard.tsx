@@ -61,12 +61,12 @@ const PartnerDashboard: FC<Props> = () => {
 
 	const columns: Columns = [
 		{
-			title: t('loc:Boli ste pozvaný do salónu'),
+			title: () => <h4>{t('loc:Boli ste pozvaný do salónu')}</h4>,
 			dataIndex: 'salon',
 			key: 'name',
 			sorter: false,
 			width: '100%',
-			render: (value) => <h3>{value.name}</h3>
+			render: (value) => <span className='base-regular pl-4'>{value.name}</span>
 		},
 		{
 			key: 'action',
@@ -91,23 +91,7 @@ const PartnerDashboard: FC<Props> = () => {
 	]
 
 	return (
-		<div className='partner-dashboard h-full'>
-			{!isEmpty(pendingInvites.data?.pendingEmployeeInvites) && (
-				<Row gutter={ROW_GUTTER_X_DEFAULT}>
-					<Col span={24}>
-						<div className='content-body small'>
-							<CustomTable
-								columns={columns}
-								dataSource={pendingInvites?.data?.pendingEmployeeInvites}
-								loading={pendingInvites?.isLoading || currentUser?.isLoading || submitting}
-								twoToneRows
-								pagination={false}
-								rowKey={(record) => record.salon?.id}
-							/>
-						</div>
-					</Col>
-				</Row>
-			)}
+		<>
 			{/* if salon is not selected and salon options are empty, display Create salon button */}
 			<SalonDashboard>
 				{isEmpty(salonOptions) && (
@@ -121,7 +105,23 @@ const PartnerDashboard: FC<Props> = () => {
 					</div>
 				)}
 			</SalonDashboard>
-		</div>
+			{!isEmpty(pendingInvites.data?.pendingEmployeeInvites) && (
+				<Row gutter={ROW_GUTTER_X_DEFAULT}>
+					<Col span={24}>
+						<div className='content-body mt-8'>
+							<CustomTable
+								columns={columns}
+								dataSource={pendingInvites?.data?.pendingEmployeeInvites}
+								loading={pendingInvites?.isLoading || currentUser?.isLoading || submitting}
+								twoToneRows
+								pagination={false}
+								rowKey={(record) => record.salon?.id}
+							/>
+						</div>
+					</Col>
+				</Row>
+			)}
+		</>
 	)
 }
 

@@ -184,7 +184,7 @@ const NotinoDashboard: FC<Props> = () => {
 							<strong>{t('loc:24 hodín')}</strong>
 						</span>
 					),
-					count: notino.data.lastUpdateOneDayAgo,
+					count: notino.data.lastUpdated?.oneDayAgo, // notino.data.lastUpdateOneDayAgo,
 					onClick: () => history.push(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.publishedChanges) // 24h ago
 				},
 				{
@@ -194,7 +194,7 @@ const NotinoDashboard: FC<Props> = () => {
 							<strong>{t('loc:48 hodín')}</strong>
 						</span>
 					),
-					count: notino.data.lastUpdateTwoDaysAgo,
+					count: notino.data.lastUpdated?.twoDaysAgo,
 					onClick: () => history.push(FILTER_PATHS(ranges[1].from, ranges[1].to).SALONS.publishedChanges) // 48h ago
 				},
 				{
@@ -204,16 +204,17 @@ const NotinoDashboard: FC<Props> = () => {
 							<strong>{t('loc:týždeň')}</strong>
 						</span>
 					),
-					count: notino.data.lastUpdateSevenDaysAgo,
+					count: notino.data.lastUpdated?.sevenDaysAgo,
 					onClick: () => history.push(FILTER_PATHS(ranges[2].from, ranges[2].to).SALONS.publishedChanges) // week ago
 				}
 			]
 
 			const graphProperties = ['basicSalons', 'nonBasicSalons', 'declinedSalons', 'pendingSalons', 'unpublishedSalons']
+			type GraphProps = Pick<INotinoDashboard, 'basicSalons' | 'nonBasicSalons' | 'declinedSalons' | 'pendingSalons' | 'unpublishedSalons'>
 			let sum = 0
 
 			graphProperties.forEach((property: string) => {
-				sum += notino.data ? notino.data[property as keyof INotinoDashboard] : 0
+				sum += notino.data ? notino.data[property as keyof GraphProps] : 0
 			})
 
 			if (sum === 0) {

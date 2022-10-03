@@ -12,7 +12,11 @@ const HomePage = () => {
 	return (
 		<Permissions
 			allowed={ADMIN_PERMISSIONS}
-			render={(hasPermission) => <div className={'homepage-wrapper'}>{hasPermission ? <NotinoDashboard /> : <PartnerDashboard />}</div>}
+			render={(hasPermission) => (
+				<div className={'homepage-wrapper'}>
+					<div className='w-11/12 lg:w-5/6 xl:w-3/4 mx-auto mt-10'>{hasPermission ? <NotinoDashboard /> : <PartnerDashboard />}</div>
+				</div>
+			)}
 		/>
 	)
 }

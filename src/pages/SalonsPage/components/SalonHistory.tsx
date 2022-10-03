@@ -1,9 +1,10 @@
 import React, { FC, PropsWithChildren, ReactNode, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Divider, List, Spin } from 'antd'
+import { Divider, List, Spin, Empty } from 'antd'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import { initialize } from 'redux-form'
 import dayjs from 'dayjs'
+import { isEmpty } from 'lodash'
 
 // components
 import SalonHistoryFilter, { ISalonHistoryFilter } from './filters/SalonHistoryFilter'
@@ -145,6 +146,7 @@ const SalonHistory: FC<ComponentProps> = (props) => {
 						</List.Item>
 					</>
 				))}
+				{isEmpty(salonHistory.data?.salonHistory) && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
 			</Spin>
 			<div className={'content-footer mt-0'}>
 				{!salonHistory.isFailure && (

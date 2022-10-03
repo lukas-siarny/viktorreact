@@ -233,7 +233,7 @@ const renderParameterValues = (props: any) => {
 										precision={2}
 										step={1}
 										min={0}
-										maxC={99999}
+										// max={99999}
 										size={'large'}
 										validate={[numberMin0, validateParameterValuePriceAndDuration]}
 										disabled={!useParameter}

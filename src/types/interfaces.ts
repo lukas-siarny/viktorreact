@@ -399,8 +399,7 @@ export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosme
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
 
-// TODO: change any when BE is done
-export type ISpecialistContact = any /* Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0] */
+export type ISpecialistContact = Paths.GetApiB2BAdminEnumsContactsContactId.Responses.$200['contact']
 
 export interface IPagination extends PaginationProps {
 	pageSizeOptions?: number[]
@@ -440,6 +439,15 @@ export interface IDateTimeFilterOption {
 	value: number
 	unit: 'day' | 'week'
 	name: string
+}
+
+export interface IRoleDescription {
+	key: string
+	name: string
+	permissions: {
+		description: string
+		checked: boolean
+	}[]
 }
 
 export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']

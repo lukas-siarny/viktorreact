@@ -309,7 +309,7 @@ const EmployeePage = (props: Props) => {
 					</Spin>
 				</div>
 			)}
-			<div className='content-body small mb-8'>
+			<div className='content-body small'>
 				<Spin spinning={isLoading}>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 					<div className={'content-footer pt-0'}>

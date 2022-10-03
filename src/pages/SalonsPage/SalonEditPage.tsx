@@ -416,16 +416,6 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 									</Row>
 								</Row>
 							)
-						// pending approval
-						case isPendingPublication:
-							return (
-								<Row className={'w-full gap-2'} justify={'space-between'}>
-									{deleteButton('')}
-									{submitButton('')}
-								</Row>
-							)
-						default:
-							return null
 					}
 				})()}
 			</div>

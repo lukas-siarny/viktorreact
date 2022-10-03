@@ -289,6 +289,7 @@ const EmployeePage = (props: Props) => {
 	}
 
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
+	const { hasPermission: hasPermissionToEdit, tooltip } = hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)
 
 	return (
 		<>
@@ -302,7 +303,8 @@ const EmployeePage = (props: Props) => {
 						<EditRoleForm
 							onSubmit={editEmployeeRole}
 							salonRolesOptions={filteredSalonRolesByPermission}
-							hasPermissionToEdit={hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)}
+							hasPermissionToEdit={hasPermissionToEdit}
+							permissionTooltip={tooltip}
 						/>
 					</Spin>
 				</div>

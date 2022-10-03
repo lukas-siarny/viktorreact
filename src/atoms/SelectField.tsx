@@ -7,7 +7,7 @@ import { debounce, filter, find, get, isArray, isEmpty, isString, last, map, siz
 import i18next from 'i18next'
 
 // ant
-import { Button, Divider, Empty, Form, Popconfirm, Select, Spin } from 'antd'
+import { Button, Divider, Empty, Form, Popconfirm, Select, Spin, Tooltip } from 'antd'
 import { SelectProps } from 'antd/lib/select'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 
@@ -68,6 +68,7 @@ export type Props = {
 	formName?: FORM
 	confirmSelection?: boolean
 	confirmModalExtraTitle?: string
+	tooltipSelect?: string | null
 } & WrappedFieldProps &
 	SelectProps<any> &
 	FormItemProps
@@ -302,7 +303,8 @@ const SelectField = (props: Props) => {
 		formName,
 		confirmSelection,
 		confirmModalExtraTitle,
-		onClear
+		onClear,
+		tooltipSelect
 	} = props
 
 	const dispatch = useDispatch()
@@ -502,6 +504,62 @@ const SelectField = (props: Props) => {
 		notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={selectState.emptyText || emptyText} />
 	}
 
+	const select = (
+		<Select
+			bordered={bordered}
+			style={{ backgroundColor }}
+			className={cx({ 'noti-select-input': !disableTpStyles, rounded: backgroundColor, 'filter-select': fieldMode === FIELD_MODE.FILTER })}
+			tagRender={tagRender}
+			mode={mode}
+			{...input}
+			id={formFieldID(meta.form, input.name)}
+			onFocus={onFocus}
+			onChange={onChange}
+			size={size || 'middle'}
+			// if is only one option select it
+			value={value}
+			onBlur={onBlur}
+			placeholder={placeholder || ''}
+			loading={loading || selectState.fetching}
+			clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
+			allowClear={allowClear}
+			showSearch={showSearch}
+			// NOTE: set to FALSE when we expect filtering on BE
+			filterOption={filterOption && localFilterOption}
+			onSearch={showSearch ? onSearchDebounced : undefined}
+			suffixIcon={suffIcon}
+			labelInValue={labelInValue}
+			dropdownRender={props.dropdownRender || renderDropdown(actions)}
+			disabled={disabled}
+			removeIcon={removeIcon || <CloseIconSmall className={'text-blue-600'} />}
+			notFoundContent={notFound}
+			onPopupScroll={allowInfinityScroll ? onScroll : undefined}
+			onDropdownVisibleChange={onDropdownVisibleChange}
+			ref={itemRef as any}
+			defaultValue={defaultValue}
+			optionLabelProp={optionLabelProp}
+			open={open}
+			onDeselect={onDeselectWrap}
+			onSelect={onSelectWrap}
+			showArrow={showArrow}
+			menuItemSelectedIcon={renderMenuItemSelectedIcon(mode, menuItemSelectedIcon, disableMenuItemSelectedIcon)}
+			dropdownClassName={cx(`noti-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
+			dropdownStyle={dropdownStyle}
+			dropdownMatchSelectWidth={dropdownMatchSelectWidth}
+			listHeight={listHeight}
+			autoClearSearchValue={autoClearSearchValue}
+			maxTagTextLength={maxTagTextLength}
+			showAction={showAction}
+			getPopupContainer={setGetPopupContainer(mode, getPopupContainer)}
+			autoFocus={autoFocus}
+			onClear={onClear}
+			// NOTE: Do not show chrome suggestions dropdown and do not autofill this field when user picks chrome suggestion for other field
+			{...{ autoComplete: 'new-password' }}
+		>
+			{getOptions(optionRender, opt)}
+		</Select>
+	)
+
 	const selectItem = (
 		<Item
 			label={label}
@@ -511,59 +569,7 @@ const SelectField = (props: Props) => {
 			help={(meta?.touched || showErrorWhenUntouched) && !hideHelp && isString(meta?.error) ? meta?.error : undefined}
 			validateStatus={(meta?.touched || showErrorWhenUntouched) && meta?.error ? 'error' : undefined}
 		>
-			<Select
-				bordered={bordered}
-				style={{ backgroundColor }}
-				className={cx({ 'noti-select-input': !disableTpStyles, rounded: backgroundColor, 'filter-select': fieldMode === FIELD_MODE.FILTER })}
-				tagRender={tagRender}
-				mode={mode}
-				{...input}
-				id={formFieldID(meta.form, input.name)}
-				onFocus={onFocus}
-				onChange={onChange}
-				size={size || 'middle'}
-				// if is only one option select it
-				value={value}
-				onBlur={onBlur}
-				placeholder={placeholder || ''}
-				loading={loading || selectState.fetching}
-				clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
-				allowClear={allowClear}
-				showSearch={showSearch}
-				// NOTE: set to FALSE when we expect filtering on BE
-				filterOption={filterOption && localFilterOption}
-				onSearch={showSearch ? onSearchDebounced : undefined}
-				suffixIcon={suffIcon}
-				labelInValue={labelInValue}
-				dropdownRender={props.dropdownRender || renderDropdown(actions)}
-				disabled={disabled}
-				removeIcon={removeIcon || <CloseIconSmall className={'text-blue-600'} />}
-				notFoundContent={notFound}
-				onPopupScroll={allowInfinityScroll ? onScroll : undefined}
-				onDropdownVisibleChange={onDropdownVisibleChange}
-				ref={itemRef as any}
-				defaultValue={defaultValue}
-				optionLabelProp={optionLabelProp}
-				open={open}
-				onDeselect={onDeselectWrap}
-				onSelect={onSelectWrap}
-				showArrow={showArrow}
-				menuItemSelectedIcon={renderMenuItemSelectedIcon(mode, menuItemSelectedIcon, disableMenuItemSelectedIcon)}
-				dropdownClassName={cx(`noti-select-dropdown ${dropdownClassName}`, { 'dropdown-match-select-width': dropdownMatchSelectWidth })}
-				dropdownStyle={dropdownStyle}
-				dropdownMatchSelectWidth={dropdownMatchSelectWidth}
-				listHeight={listHeight}
-				autoClearSearchValue={autoClearSearchValue}
-				maxTagTextLength={maxTagTextLength}
-				showAction={showAction}
-				getPopupContainer={setGetPopupContainer(mode, getPopupContainer)}
-				autoFocus={autoFocus}
-				onClear={onClear}
-				// NOTE: Do not show chrome suggestions dropdown and do not autofill this field when user picks chrome suggestion for other field
-				{...{ autoComplete: 'new-password' }}
-			>
-				{getOptions(optionRender, opt)}
-			</Select>
+			{tooltipSelect ? <Tooltip title={tooltipSelect}>{select}</Tooltip> : select}
 		</Item>
 	)
 

@@ -7,11 +7,13 @@ import { SYSTEM_ROLES, SALON_ROLES } from './rolesTypes'
 export const initState = {
 	systemRoles: {
 		data: null,
+		rolesDescriptions: null,
 		isLoading: false,
 		isFailure: false
 	} as IRolesPayload & ILoadingAndFailure,
 	salonRoles: {
 		data: null,
+		rolesDescriptions: null,
 		isLoading: false,
 		isFailure: false
 	} as IRolesPayload & ILoadingAndFailure
@@ -42,7 +44,8 @@ export default (state = initState, action: IRolesActions) => {
 				...state,
 				systemRoles: {
 					...initState.systemRoles,
-					data: action.payload.data
+					data: action.payload.data,
+					rolesDescriptions: action.payload.rolesDescriptions
 				}
 			}
 		// Salon roles
@@ -67,7 +70,8 @@ export default (state = initState, action: IRolesActions) => {
 				...state,
 				salonRoles: {
 					...initState.salonRoles,
-					data: action.payload.data
+					data: action.payload.data,
+					rolesDescriptions: action.payload.rolesDescriptions
 				}
 			}
 		case RESET_STORE:

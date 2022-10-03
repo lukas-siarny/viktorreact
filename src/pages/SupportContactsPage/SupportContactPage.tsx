@@ -231,7 +231,7 @@ const SupportContactPage: FC<Props> = (props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
 			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+				<div className='content-body small'>
 					{!supportContactExists && hasEveryCountrSupportContact && (
 						<Alert
 							message={

@@ -151,7 +151,7 @@ const CustomerPage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
 			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+				<div className='content-body small'>
 					<CustomerForm onSubmit={updateCustomer} />
 					<div className={'content-footer pt-0'}>
 						<Row className={'justify-between gap-2'}>

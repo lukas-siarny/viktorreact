@@ -407,9 +407,9 @@ const ServiceForm = (props: Props) => {
 	return (
 		<>
 			<div className='content-body-width-small mb-4 flex items-start gap-2 bg-notino-grayDarker text-notino-white p-3 rounded mt-2'>
-				<IndustiresIcon className='w-6 h-6 shrink-0 filter-gray' />
+				<IndustiresIcon className='w-6 h-6 filter-gray' style={{ flex: '0 0 auto' }} />
 				<span className='text-notino-gray'>
-					{`${service.data?.service?.category?.name} > ${service.data?.service?.category?.child?.name} > `}
+					{`${service.data?.service?.category?.name} • ${service.data?.service?.category?.child?.name} • `}
 					<strong className='text-notino-pink text-base'>{service.data?.service?.category?.child?.child?.name}</strong>
 				</span>
 			</div>

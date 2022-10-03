@@ -316,13 +316,14 @@ export const renderEmployees = (props: any) => {
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
 					const collapsible = (fieldData?.durationFrom && fieldData?.priceFrom) || fieldData?.serviceCategoryParameter?.length > 1 ? undefined : 'disabled'
+
 					return (
 						<Panel
 							header={
 								<div className={'flex align-center'}>
 									<div className={'title flex items-center'}>
 										<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
-										{fieldData?.name ?? fieldData}
+										{fieldData?.name || fieldData.email || fieldData.inviteEmail || fieldData.id}
 										{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon className='ml-4' width={20} height={20} /> : undefined}
 										{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon className='ml-4' width={20} height={20} /> : undefined}
 									</div>

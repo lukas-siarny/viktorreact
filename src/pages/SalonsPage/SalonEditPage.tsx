@@ -541,7 +541,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const salonForm = (
 		<>
-			<div className='content-body mt-2'>
+			<div className='content-body'>
 				<Spin spinning={isLoading}>
 					{isAdmin ? renderContentHeaderAdmin() : renderContentHeaderPartner()}
 					{declinedSalon && declinedSalonMessage}
@@ -673,7 +673,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 							tabKey: TAB_KEYS.SALON_HISTORY,
 							tab: <>{t('loc:História salónu')}</>,
 							tabPaneContent: (
-								<div className='content-body mt-2'>
+								<div className='content-body'>
 									<SalonHistory salonID={salonID} tabKey={tabKey} />
 								</div>
 							)

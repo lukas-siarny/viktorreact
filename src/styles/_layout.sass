@@ -89,7 +89,7 @@ $inner-padding: 16px
 				svg
 					filter: invert(1)
 
-			&:active
+			&:active:not(.ant-menu-item-selected)
 				background-color: $backgroundColor-notino-grayLighter
 
 			&:hover:not(.ant-menu-item-selected)
@@ -148,7 +148,7 @@ $inner-padding: 16px
 	border-radius: 4px
 	// box-shadow: $boxShadow-xl
 	box-shadow: $content-box-shadow
-	margin-bottom: 24px
+	margin-bottom: 0
 	width: 100%
 	&.floating // cena sirka aj vyska bez marginov / paddingov so sedym pozadim na ktore idu biele formy a ine informacie (eg: dokoncenie-rezervacie)
 		min-height: calc(100vh - #{$header-height} - 80px - 56px) // 100vh - header - breadcrumbs - footer
@@ -161,16 +161,20 @@ $inner-padding: 16px
 			min-height: calc(100vh - #{$header-height} - 80px - 56px)
 	&.small
 		width: 50%
-		margin: 0 auto
+		margin-left: auto
+		margin-right: auto
 	&.medium
 		width: 75%
-		margin: 0 auto
+		margin-left: auto
+		margin-right: auto
 	&.without-content-footer
 		.floating-content-wrapper
 			min-height: calc(100vh - 80px - 81px) // 100vh - header - breadcrumbs
 	&.dashboard-content
 		max-width: 1200px
-		margin: 0 auto
+		margin-top: 0
+		margin-left: auto
+		margin-right: auto
 		width: 100%
 		background: transparent
 		box-shadow: none

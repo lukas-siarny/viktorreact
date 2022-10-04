@@ -16,4 +16,4 @@ RUN npm i -g runtime-env-cra
 
 STOPSIGNAL SIGTERM
 
-CMD ["/bin/sh", "-c", "runtime-env-cra && nginx -g \"daemon off;\""]
+CMD ["/bin/sh", "-c", "runtime-env-cra --config-name=/usr/share/nginx/html/runtime-env.js && nginx -g \"daemon off;\""]

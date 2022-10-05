@@ -264,6 +264,24 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									>
 										{t('loc:Zamestnanci')}
 									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.CALENDAR1}
+										key={PAGE.CALENDAR1}
+										onClick={() => history.push(getPath(t('paths:calendar1')))}
+										icon={<EmployeesIcon />} // fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.CALENDAR1 })}
+									>
+										{t('loc:Fullcalendar')}
+									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.CALENDAR2}
+										key={PAGE.CALENDAR2}
+										onClick={() => history.push(getPath(t('paths:calendar2')))}
+										icon={<EmployeesIcon />} // fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.CALENDAR2 })}
+									>
+										{t('loc:React big calendar')}
+									</Menu.Item>
 								</Permissions>
 							)}
 						</Menu>

@@ -2015,3 +2015,52 @@ li.ant-list-item:hover
 
 .ant-collapse-item.collapse-header-has-error
 	box-shadow: 0 0 0 1px $backgroundColor-notino-red
+
+
+// full calendar
+.noti-fc-resource-label
+	display: flex
+	align-items: start
+
+.fc-timegrid-event-harness
+	.fc-timegrid-event
+		background: transparent
+		border: none
+		box-shadow: none
+		.fc-event-main
+			padding: 2px
+
+.fc-timegrid-bg-harness
+	.fc-bg-event
+		opacity: 0.1
+
+.fc-day-today
+	background: transparent !important
+
+.noti-fc-event
+	width: 100%
+	height: 100%
+	background: #fff
+	position: relative
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+	border-radius: 4px
+	color: $textColor-notino-black
+	padding: 2px 8px
+	font-size: 10px
+	line-height: 1
+	.event-accent
+		content: ''
+		background: '#000',
+		position: absolute
+		top: 0
+		bottom: 0
+		left: 0
+		width: 4px
+		border-top-left-radius: 4px
+		border-bottom-left-radius: 4px
+	.desc
+		color: $textColor-notino-gray
+	strong
+		font-size: 12px
+
+// big calendar

@@ -44,6 +44,8 @@ import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
+import Calendar1 from '../pages/Calendar1/Calendar1'
+import Calendar2 from '../pages/Calendar2/Calendar2'
 
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
@@ -215,6 +217,28 @@ const SalonSubRoutes: FC = (props) => {
 				salonID={salonID}
 				layout={MainLayout}
 				page={PAGE.BILLING_INFO}
+				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:calendar1'))}
+				component={Calendar1}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:calendar1'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.CALENDAR1}
+				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:calendar2'))}
+				component={Calendar2}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:calendar2'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.CALENDAR2}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute

@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Modal, Row } from 'antd'
-import { useDispatch } from 'react-redux'
+import { Button, Input, Modal, Row, Spin } from 'antd'
+import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { uniqueId } from 'lodash'
 
@@ -19,6 +19,9 @@ import { withPermissions } from '../../utils/Permissions'
 
 // assets
 import Avatar from '../../assets/images/avatar.png'
+import { getCalendarEmployees, getCalendarEvents, getCalendarServices } from '../../reducers/calendar/calendarActions'
+import { RootState } from '../../reducers'
+import { composeEvents } from './helpers'
 
 const TIME_FORMAT: FormatterInput = {
 	hour: '2-digit',
@@ -272,6 +275,16 @@ const Calendar1 = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
+	const employees = useSelector((state: RootState) => state.calendar.employees)
+	const services = useSelector((state: RootState) => state.calendar.services)
+	const events = useSelector((state: RootState) => state.calendar.events)
+	const shifts = useSelector((state: RootState) => state.calendar.shifts)
+	const timeOff = useSelector((state: RootState) => state.calendar.timeOff)
+
+	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading || shifts?.isLoading || timeOff?.isLoading
+
+	const composedEvents = composeEvents({ employees: employees?.data, services: services?.data, events: events?.data })
+
 	const [calendarStore, setCalendarStore] = useState<any>(INITIAL_CALENDAR_STATE)
 	const [eventModalProps, setEventModalProps] = useState<any>({
 		visible: false,
@@ -301,25 +314,6 @@ const Calendar1 = () => {
 				avatar: resource.extendedProps?.employeeData?.image
 			}
 		})
-
-		// show some modal with settings before adding new item
-		/* setCalendarStore((prevState: any) => ({
-			...prevState,
-			events: [
-				...prevState.events,
-				{
-					id: uniqueId(),
-					resourceId: resource.id,
-					title: 'Anthony Terry',
-					start,
-					end,
-					allDay: false,
-					description: 'Man’s clipper cut',
-					accent: resource.extendedProps?.employeeData?.accent,
-					avatar: resource.extendedProps?.employeeData?.image
-				}
-			]
-		})) */
 	}
 
 	const handleEventClick = (info: any) => {
@@ -328,58 +322,66 @@ const Calendar1 = () => {
 		console.log({ info })
 	}
 
+	useEffect(() => {
+		dispatch(getCalendarEmployees())
+		dispatch(getCalendarServices())
+		dispatch(getCalendarEvents({ start: '2022-10-12T00:00:00', end: '2022-10-12T23:59:59' }))
+	}, [dispatch])
+
 	return (
 		<div className='bg-notino-white'>
-			<FullCalendar
-				schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
-				plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
-				timeZone='local'
-				slotLabelFormat={TIME_FORMAT}
-				eventTimeFormat={TIME_FORMAT}
-				height='auto'
-				headerToolbar={{
-					left: 'title prev,today,next',
-					right: 'resourceTimeGridDay,timeGridWeek,dayGridMonth'
-				}}
-				initialView='resourceTimeGridDay'
-				// customize view
-				views={{
-					resourceTimeGridDay: {
-						duration: { days: 1 },
-						buttonText: 'Day',
-						resourceLabelContent,
-						eventContent: renderEventContent,
-						dayMinWidth: 200,
-						editable: true,
-						selectable: true
-					},
-					timeGridWeek: {
-						buttonText: 'Week',
-						eventContent: renderEventContent,
-						dayHeaderContent: dayHeaderContentWeek,
-						dayMinWidth: 130
-					},
-					dayGridMonth: {
-						buttonText: 'Month',
-						eventContent: renderEventContent,
-						dayHeaderContent: dayHeaderContentMonth,
-						dayMaxEvents: 3,
-						moreLinkContent: renderMoreLinkMonth,
-						dayMinWidth: 130
-					}
-				}}
-				weekends
-				allDaySlot={false}
-				stickyFooterScrollbar
-				select={handleSelect}
-				events={calendarStore.events}
-				resources={calendarStore.resources}
-				dateClick={handleDateClick}
-				eventClick={handleEventClick}
-				// eventMinHeight={52}
-				// eventContent={renderEventContent}
-				// eventDidMount={onDidMount}
-			/>
+			<Spin spinning={loadingData}>
+				<FullCalendar
+					schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
+					plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
+					timeZone='local'
+					slotLabelFormat={TIME_FORMAT}
+					eventTimeFormat={TIME_FORMAT}
+					height='auto'
+					headerToolbar={{
+						left: 'title prev,today,next',
+						right: 'resourceTimeGridDay,timeGridWeek,dayGridMonth'
+					}}
+					initialView='resourceTimeGridDay'
+					// customize view
+					views={{
+						resourceTimeGridDay: {
+							duration: { days: 1 },
+							buttonText: 'Day',
+							resourceLabelContent,
+							eventContent: renderEventContent,
+							dayMinWidth: 200,
+							editable: true,
+							selectable: true
+						},
+						timeGridWeek: {
+							buttonText: 'Week',
+							eventContent: renderEventContent,
+							dayHeaderContent: dayHeaderContentWeek,
+							dayMinWidth: 130
+						},
+						dayGridMonth: {
+							buttonText: 'Month',
+							eventContent: renderEventContent,
+							dayHeaderContent: dayHeaderContentMonth,
+							dayMaxEvents: 3,
+							moreLinkContent: renderMoreLinkMonth,
+							dayMinWidth: 130
+						}
+					}}
+					weekends
+					allDaySlot={false}
+					stickyFooterScrollbar
+					select={handleSelect}
+					events={composedEvents}
+					resources={calendarStore.resources}
+					dateClick={handleDateClick}
+					eventClick={handleEventClick}
+					// eventMinHeight={52}
+					// eventContent={renderEventContent}
+					// eventDidMount={onDidMount}
+				/>
+			</Spin>
 			<Modal visible={eventModalProps.visible} onCancel={() => setEventModalProps((prevState: any) => ({ ...prevState, visible: false }))} title={'Add Event'} footer={null}>
 				<div className='flex flex-col gap-2'>
 					<div>

@@ -1,0 +1,622 @@
+{
+	"employees": [
+		{
+			"id": "emp_1",
+			"name": "Gayle Green",
+			"image": "https://source.unsplash.com/random/24×24",
+			"color": "#2EAF00"
+		},
+		{
+			"id": "emp_2",
+			"name": "Ron Witting",
+			"image": "https://source.unsplash.com/random/24×24",
+			"color": "#4656E6"
+		},
+		{
+			"id": "emp_3",
+			"name": "Dana Tromp",
+			"image": "https://source.unsplash.com/random/24×24",
+			"color": "#DC7C0C"
+		},
+		{
+			"id": "emp_4",
+			"name": "Amelia Kirlin",
+			"image": "https://source.unsplash.com/random/24×24",
+			"color": "#FF5353"
+		}
+	],
+	"services": [
+		{
+			"id": "service_1",
+			"name": "Man’s cut"
+		},
+		{
+			"id": "service_2",
+			"name": "Man’s cut with washing and styling"
+		},
+		{
+			"id": "service_3",
+			"name": "Man’s clipper cut"
+		},
+		{
+			"id": "service_4",
+			"name": "Woman’s cut + Balayage"
+		}
+	],
+	"events": [
+		{
+			"id": "event_1",
+			"employeeId": "emp_1",
+			"serviceID": "service_1",
+			"title": "Janice Runolfsson",
+			"start": "2022-10-10T09:00:00",
+			"end": "2022-10-10T11:00:00"
+		},
+		{
+			"id": "event_2",
+			"employeeId": "emp_1",
+			"serviceID": "service_1",
+			"title": "Vincent Oberbrunner",
+			"start": "2022-10-10T12:00:00",
+			"end": "2022-10-10T13:00:00"
+		},
+		{
+			"id": "event_3",
+			"employeeId": "emp_1",
+			"serviceID": "service_2",
+			"title": "Dianna Harris",
+			"start": "2022-10-10T13:00:00",
+			"end": "2022-10-10T17:00:00"
+		},
+		{
+			"id": "event_4",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Anthony Terry",
+			"start": "2022-10-10T08:00:00",
+			"end": "2022-10-10T09:00:00"
+		},
+		{
+			"id": "event_5",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Roger Bosco",
+			"start": "2022-10-10T09:00:00",
+			"end": "2022-10-10T10:00:00"
+		},
+		{
+			"id": "event_6",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Albert Emmerich",
+			"start": "2022-10-10T14:00:00",
+			"end": "2022-10-10T15:00:00"
+		},
+		{
+			"id": "event_7",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Luther Skiles",
+			"start": "2022-10-10T15:00:00",
+			"end": "2022-10-10T16:30:00"
+		},
+		{
+			"id": "event_8",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Miguel Bauch",
+			"start": "2022-10-10T15:00:00",
+			"end": "2022-10-10T16:30:00"
+		},
+		{
+			"id": "event_9",
+			"employeeId": "emp_4",
+			"serviceID": "service_2",
+			"title": "Elsie Littel",
+			"start": "2022-10-10T08:00:00",
+			"end": "2022-10-10T12:00:00"
+		},
+		{
+			"id": "event_10",
+			"employeeId": "emp_4",
+			"serviceID": "service_2",
+			"title": "Elsie Littel",
+			"start": "2022-10-10T13:00:00",
+			"end": "2022-10-10T16:00:00"
+		},
+
+
+
+		{
+			"id": "event_11",
+			"employeeId": "emp_1",
+			"serviceID": "service_2",
+			"title": "Cree Soterios",
+			"start": "2022-10-11T09:00:00",
+			"end": "2022-10-11T11:30:00"
+		},
+		{
+			"id": "event_12",
+			"employeeId": "emp_1",
+			"serviceID": "service_2",
+			"title": "Tasunka Stina",
+			"start": "2022-10-11T14:00:00",
+			"end": "2022-10-11T15:30:00"
+		},
+		{
+			"id": "event_13",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Gudrun Aurélien",
+			"start": "2022-10-11T14:00:00",
+			"end": "2022-10-11T15:30:00"
+		},
+		{
+			"id": "event_14",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Gudrun Aurélien",
+			"start": "2022-10-11T16:00:00",
+			"end": "2022-10-11T18:00:00"
+		},
+		{
+			"id": "event_15",
+			"employeeId": "emp_3",
+			"serviceID": "service_2",
+			"title": "Peretz Geir",
+			"start": "2022-10-11T09:30:00",
+			"end": "2022-10-11T15:00:00"
+		},
+		{
+			"id": "event_16",
+			"employeeId": "emp_3",
+			"serviceID": "service_2",
+			"title": "Rory Deirdre",
+			"start": "2022-10-11T16:00:00",
+			"end": "2022-10-11T17:00:00"
+		},
+		{
+			"id": "event_17",
+			"employeeId": "emp_3",
+			"serviceID": "service_2",
+			"title": "andace Christianne",
+			"start": "2022-10-11T17:00:00",
+			"end": "2022-10-11T18:00:00"
+		},
+		{
+			"id": "event_18",
+			"employeeId": "emp_4",
+			"serviceID": "service_2",
+			"title": "andace Christianne",
+			"start": "2022-10-11T13:00:00",
+			"end": "2022-10-11T15:00:00"
+		},
+
+
+		{
+			"id": "event_19",
+			"employeeId": "emp_1",
+			"serviceID": "service_1",
+			"title": "Stefan Giuseppina",
+			"start": "2022-10-12T08:00:00",
+			"end": "2022-10-12T12:00:00"
+		},
+		{
+			"id": "event_20",
+			"employeeId": "emp_2",
+			"serviceID": "service_1",
+			"title": "Cúchulainn Joris",
+			"start": "2022-10-12T09:00:00",
+			"end": "2022-10-12T11:00:00"
+		},
+		{
+			"id": "event_21",
+			"employeeId": "emp_4",
+			"serviceID": "service_1",
+			"title": "Milena Dragan",
+			"start": "2022-10-12T13:00:00",
+			"end": "2022-10-12T16:00:00"
+		},
+
+
+		{
+			"id": "event_22",
+			"employeeId": "emp_3",
+			"serviceID": "service_1",
+			"title": "Ulric Amalasuintha",
+			"start": "2022-10-13T14:00:00",
+			"end": "2022-10-13T15:45:00"
+		},
+		{
+			"id": "event_23",
+			"employeeId": "emp_4",
+			"serviceID": "service_2",
+			"title": "Petronius Hrolf",
+			"start": "2022-10-13T09:00:00",
+			"end": "2022-10-13T11:30:00"
+		},
+		{
+			"id": "event_24",
+			"employeeId": "emp_4",
+			"serviceID": "service_3",
+			"title": "Furqan Minakshi",
+			"start": "2022-10-13T14:30:00",
+			"end": "2022-10-13T15:30:00"
+		},
+		{
+			"id": "event_25",
+			"employeeId": "emp_4",
+			"serviceID": "service_4",
+			"title": "Agaue Kristel",
+			"start": "2022-10-13T16:00:00",
+			"end": "2022-10-13T18:15:00"
+		},
+
+
+		{
+			"id": "event_26",
+			"employeeId": "emp_1",
+			"serviceID": "service_1",
+			"title": "Priti Odhiambo",
+			"start": "2022-10-25T09:00:00",
+			"end": "2022-10-125T11:00:00"
+		},
+		{
+			"id": "event_27",
+			"employeeId": "emp_1",
+			"serviceID": "service_1",
+			"title": "Irenaeus Morris",
+			"start": "2022-10-25T12:00:00",
+			"end": "2022-10-25T13:00:00"
+		},
+		{
+			"id": "event_28",
+			"employeeId": "emp_1",
+			"serviceID": "service_2",
+			"title": "Cyril Shprintze",
+			"start": "2022-10-25T13:00:00",
+			"end": "2022-10-25T17:00:00"
+		},
+		{
+			"id": "event_29",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Sukhwinder Joni",
+			"start": "2022-10-25T08:00:00",
+			"end": "2022-10-25T09:00:00"
+		},
+		{
+			"id": "event_30",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Roger Bosco",
+			"start": "2022-10-25T09:00:00",
+			"end": "2022-10-25T10:00:00"
+		},
+		{
+			"id": "event_31",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Rajkumari Kolab",
+			"start": "2022-10-25T14:00:00",
+			"end": "2022-10-25T15:00:00"
+		},
+		{
+			"id": "event_32",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Manuel Darius",
+			"start": "2022-10-25T15:00:00",
+			"end": "2022-10-25T16:30:00"
+		},
+		{
+			"id": "event_33",
+			"employeeId": "emp_2",
+			"serviceID": "service_2",
+			"title": "Miguel Bauch",
+			"start": "2022-10-25T15:00:00",
+			"end": "2022-10-25T16:30:00"
+		},
+		{
+			"id": "event_34",
+			"employeeId": "emp_4",
+			"serviceID": "service_2",
+			"title": "Elsie Littel",
+			"start": "2022-10-25T08:00:00",
+			"end": "2022-10-25T12:00:00"
+		},
+		{
+			"id": "event_35",
+			"employeeId": "emp_4",
+			"serviceID": "service_2",
+			"title": "Gillespie Tamerlane",
+			"start": "2022-10-25T13:00:00",
+			"end": "2022-10-25T16:00:00"
+		}
+	],
+	"shifts": [
+		{
+			"id": "shift_1",
+			"employeeId": "emp_1",
+			"start": "2022-10-10T09:00:00",
+			"end": "2022-10-10T17:00:00"
+		},
+		{
+			"id": "shift_2",
+			"employeeId": "emp_2",
+			"start": "2022-10-10T08:00:00",
+			"end": "2022-10-10T11:00:00"
+		},
+		{
+			"id": "shift_3",
+			"employeeId": "emp_2",
+			"start": "2022-10-10T12:00:00",
+			"end": "2022-10-10T18:00:00"
+		},
+		{
+			"id": "shift_4",
+			"employeeId": "emp_4",
+			"start": "2022-10-10T08:00:00",
+			"end": "2022-10-10T12:00:00"
+		},
+		{
+			"id": "shift_5",
+			"employeeId": "emp_4",
+			"start": "2022-10-10T13:00:00",
+			"end": "2022-10-10T16:00:00"
+		},
+
+
+		{
+			"id": "shift_6",
+			"employeeId": "emp_1",
+			"start": "2022-10-10T08:00:00",
+			"end": "2022-10-10T12:00:00"
+		},
+		{
+			"id": "shift_7",
+			"employeeId": "emp_1",
+			"start": "2022-10-10T13:00:00",
+			"end": "2022-10-10T16:00:00"
+		},
+		{
+			"id": "shift_8",
+			"employeeId": "emp_2",
+			"start": "2022-10-11T09:00:00",
+			"end": "2022-10-11T17:00:00"
+		},
+		{
+			"id": "shift_9",
+			"employeeId": "emp_3",
+			"start": "2022-10-11T08:00:00",
+			"end": "2022-10-11T11:00:00"
+		},
+		{
+			"id": "shift_10",
+			"employeeId": "emp_3",
+			"start": "2022-10-11T12:00:00",
+			"end": "2022-10-11T18:00:00"
+		},
+		{
+			"id": "shift_11",
+			"employeeId": "emp_4",
+			"start": "2022-10-11T08:00:00",
+			"end": "2022-10-11T11:00:00"
+		},
+		{
+			"id": "shift_12",
+			"employeeId": "emp_5",
+			"start": "2022-10-11T12:00:00",
+			"end": "2022-10-11T18:00:00"
+		},
+
+
+
+		{
+			"id": "shift_13",
+			"employeeId": "emp_1",
+			"start": "2022-10-12T09:00:00",
+			"end": "2022-10-12T17:00:00"
+		},
+		{
+			"id": "shift_14",
+			"employeeId": "emp_2",
+			"start": "2022-10-12T08:00:00",
+			"end": "2022-10-12T11:00:00"
+		},
+		{
+			"id": "shift_15",
+			"employeeId": "emp_2",
+			"start": "2022-10-12T12:00:00",
+			"end": "2022-10-12T18:00:00"
+		},
+		{
+			"id": "shift_16",
+			"employeeId": "emp_4",
+			"start": "2022-10-12T08:00:00",
+			"end": "2022-10-12T12:00:00"
+		},
+		{
+			"id": "shift_17",
+			"employeeId": "emp_4",
+			"start": "2022-10-12T13:00:00",
+			"end": "2022-10-12T16:00:00"
+		},
+
+
+		{
+			"id": "shift_18",
+			"employeeId": "emp_3",
+			"start": "2022-10-13T13:00:00",
+			"end": "2022-10-13T18:00:00"
+		},
+		{
+			"id": "shift_19",
+			"employeeId": "emp_4",
+			"start": "2022-10-13T08:00:00",
+			"end": "2022-10-13T12:00:00"
+		},
+		{
+			"id": "shift_20",
+			"employeeId": "emp_4",
+			"start": "2022-10-13T13:00:00",
+			"end": "2022-10-13T16:00:00"
+		},
+
+
+		{
+			"id": "shift_21",
+			"employeeId": "emp_1",
+			"start": "2022-10-14T09:00:00",
+			"end": "2022-10-14T17:00:00"
+		},
+		{
+			"id": "shift_22",
+			"employeeId": "emp_2",
+			"start": "2022-10-14T08:00:00",
+			"end": "2022-10-14T11:00:00"
+		},
+		{
+			"id": "shift_23",
+			"employeeId": "emp_3",
+			"start": "2022-10-14T12:00:00",
+			"end": "2022-10-14T18:00:00"
+		},
+		{
+			"id": "shift_24",
+			"employeeId": "emp_4",
+			"start": "2022-10-14T08:00:00",
+			"end": "2022-10-14T12:00:00"
+		},
+		{
+			"id": "shift_25",
+			"employeeId": "emp_4",
+			"start": "2022-10-14T13:00:00",
+			"end": "2022-10-14T16:00:00"
+		},
+
+
+		{
+			"id": "shift_26",
+			"employeeId": "emp_1",
+			"start": "2022-10-17T13:00:00",
+			"end": "2022-10-17T17:00:00"
+		},
+		{
+			"id": "shift_27",
+			"employeeId": "emp_2",
+			"start": "2022-10-17T08:00:00",
+			"end": "2022-10-17T11:00:00"
+		},
+		{
+			"id": "shift_28",
+			"employeeId": "emp_3",
+			"start": "2022-10-17T12:00:00",
+			"end": "2022-10-17T18:00:00"
+		},
+		{
+			"id": "shift_29",
+			"employeeId": "emp_4",
+			"start": "2022-10-17T08:00:00",
+			"end": "2022-10-17T12:00:00"
+		},
+		{
+			"id": "shift_30",
+			"employeeId": "emp_4",
+			"start": "2022-10-17T13:00:00",
+			"end": "2022-10-17T16:00:00"
+		},
+
+
+		{
+			"id": "shift_31",
+			"employeeId": "emp_1",
+			"start": "2022-10-25T09:00:00",
+			"end": "2022-10-25T17:00:00"
+		},
+		{
+			"id": "shift_32",
+			"employeeId": "emp_2",
+			"start": "2022-10-25T08:00:00",
+			"end": "2022-10-25T11:00:00"
+		},
+		{
+			"id": "shift_33",
+			"employeeId": "emp_2",
+			"start": "2022-10-25T12:00:00",
+			"end": "2022-10-25T18:00:00"
+		},
+		{
+			"id": "shift_34",
+			"employeeId": "emp_4",
+			"start": "2022-10-25T08:00:00",
+			"end": "2022-10-25T12:00:00"
+		},
+		{
+			"id": "shift_35",
+			"employeeId": "emp_4",
+			"start": "2022-10-25T13:00:00",
+			"end": "2022-10-25T16:00:00"
+		}
+	],
+	"timeOff": [
+		{
+			"id": "timeoff_1",
+			"employeeId": "emp_3",
+			"start": "2022-10-10T00:00:00",
+			"end": "2022-10-10T23:59:59"
+		},
+
+
+		{
+			"id": "timeoff_2",
+			"employeeId": "emp_3",
+			"start": "2022-10-12T00:00:00",
+			"end": "2022-10-12T23:59:59"
+		},
+
+
+		{
+			"id": "timeoff_3",
+			"employeeId": "emp_1",
+			"start": "2022-10-13T00:00:00",
+			"end": "2022-10-13T23:59:59"
+		},
+		{
+			"id": "timeoff_4",
+			"employeeId": "emp_2",
+			"start": "2022-10-13T00:00:00",
+			"end": "2022-10-13T23:59:59"
+		},
+		{
+			"id": "timeoff_5",
+			"employeeId": "emp_3",
+			"start": "2022-10-13T08:00:00",
+			"end": "2022-10-13T12:00:00"
+		},
+
+
+		{
+			"id": "timeoff_6",
+			"employeeId": "emp_2",
+			"start": "2022-10-12T00:00:00",
+			"end": "2022-10-14T23:59:59"
+		},
+
+
+		{
+			"id": "timeoff_7",
+			"employeeId": "emp_1",
+			"start": "2022-10-17T00:08:00",
+			"end": "2022-10-17T12:00:00"
+		},
+
+
+		{
+			"id": "timeoff_8",
+			"employeeId": "emp_4",
+			"start": "2022-10-27T00:08:00",
+			"end": "2022-10-27T12:00:00"
+		}
+	]
+}

@@ -618,3 +618,18 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`
 	}
 })
+
+export enum CALENDAR_VIEW {
+	DAY_RESERVATIONS = 'DAY_RESERVATIONS',
+	DAY_SHIFTS = 'DAY_SHIFTS',
+	WEEK_RESERVATIONS = 'WEEK_RESERVATIONS',
+	WEEK_SHIFTS = 'WEEK_SHIFTS',
+	MONTH_RESERVATIONS = 'MONTH_RESERVATIONS',
+	MONTH_SHIFTS = 'MONTH_SHIFTS'
+}
+
+export enum CALENDAR_EVENT_TYPE {
+	RESERVATION = 'reservation',
+	SHIFT = 'shift',
+	TIMEOFF = 'timeOff'
+}

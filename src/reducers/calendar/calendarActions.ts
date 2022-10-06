@@ -1,7 +1,7 @@
+import { RESERVATIONS, EVENTS, SHIFTS, TIMEOFF, EMPLOYEES, SERVICES, EVENT_DETAIL } from './calendarTypes'
 /* eslint-disable import/no-cycle */
 // types
 import { ThunkResult } from '../index'
-import { EVENTS, SHIFTS, TIMEOFF, EMPLOYEES, SERVICES, EVENT_DETAIL } from './calendarTypes'
 import { IResetStore } from '../generalTypes'
 
 // utils
@@ -15,6 +15,23 @@ interface ICalendarEvent {
 	title?: string
 	start?: string
 	end?: string
+	isShift?: boolean
+	isReservation?: boolean
+	isTimeOff?: boolean
+	type?: string
+}
+
+interface ICalendarReservation {
+	id?: string
+	employeeId?: string
+	serviceID?: string
+	title?: string
+	start?: string
+	end?: string
+	isShift?: boolean
+	isReservation?: boolean
+	isTimeOff?: boolean
+	type?: string
 }
 
 interface ICalendarShift {
@@ -22,6 +39,10 @@ interface ICalendarShift {
 	employeeId?: string
 	start?: string
 	end?: string
+	isShift?: boolean
+	isReservation?: boolean
+	isTimeOff?: boolean
+	type?: string
 }
 
 interface ICalendarTimeOff {
@@ -29,13 +50,17 @@ interface ICalendarTimeOff {
 	employeeId?: string
 	start?: string
 	end?: string
+	isShift?: boolean
+	isReservation?: boolean
+	isTimeOff?: boolean
+	type?: string
 }
 
 interface ICalendarEmployee {
 	id?: string
 	name?: string
 	image?: string
-	color?: string
+	accent?: string
 }
 
 interface ICalendarService {
@@ -48,13 +73,30 @@ interface ICalendarQueryParams {
 	end?: string
 	employeeID?: string
 	serviceID?: string
+	type?: string
+	isReservation?: string
+	isShift?: string
+	isTimeOff?: string
 }
 
-export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarShifts | IGetCalendarTimeOff | IGetCalendarEmployees | IGetCalendarServices | IGetCalendarEventDetail
+export type ICalendarActions =
+	| IResetStore
+	| IGetCalendarEvents
+	| IGetCalendarReservations
+	| IGetCalendarShifts
+	| IGetCalendarTimeOff
+	| IGetCalendarEmployees
+	| IGetCalendarServices
+	| IGetCalendarEventDetail
 
 interface IGetCalendarEvents {
 	type: EVENTS
 	payload: ICalendarEventsPayload
+}
+
+interface IGetCalendarReservations {
+	type: RESERVATIONS
+	payload: ICalendarReservationsPayload
 }
 
 interface IGetCalendarShifts {
@@ -86,6 +128,10 @@ export interface ICalendarEventsPayload {
 	data: ICalendarEvent[] | null
 }
 
+export interface ICalendarReservationsPayload {
+	data: ICalendarReservation[] | null
+}
+
 export interface ICalendarShiftsPayload {
 	data: ICalendarShift[] | null
 }
@@ -106,20 +152,24 @@ export interface ICalendarEventDetailPayload {
 	data: ICalendarEvent | null
 }
 
+const mapQueryParams = (queryParams?: ICalendarQueryParams) => ({
+	start_gte: queryParams?.start,
+	end_lte: queryParams?.end,
+	employeeID: queryParams?.employeeID,
+	serviceID: queryParams?.serviceID,
+	type: queryParams?.type,
+	isShift: queryParams?.isShift,
+	isReservation: queryParams?.isReservation,
+	isTimeOff: queryParams?.isTimeOff
+})
+
 export const getCalendarEvents =
 	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
-		const params: any = {
-			start_gte: queryParams?.start,
-			end_lte: queryParams?.end,
-			employeeID: queryParams?.employeeID,
-			serviceID: queryParams?.serviceID
-		}
-
 		try {
 			dispatch({ type: EVENTS.EVENTS_LOAD_START })
 
-			const { data } = await getReq('http://localhost:7200/events' as any, { ...normalizeQueryParams(params) })
+			const { data } = await getReq('http://localhost:7200/events' as any, { ...normalizeQueryParams(mapQueryParams(queryParams)) })
 
 			const payload = {
 				data
@@ -133,19 +183,33 @@ export const getCalendarEvents =
 		}
 	}
 
+export const getCalendarReservations =
+	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		try {
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
+
+			const { data } = await getReq('http://localhost:7200/reservations' as any, { ...normalizeQueryParams(mapQueryParams(queryParams)) })
+
+			const payload = {
+				data
+			}
+
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+	}
+
 export const getCalendarShifts =
 	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<void>> =>
 	async (dispatch) => {
-		const params: any = {
-			start_gte: queryParams?.start,
-			end_lte: queryParams?.end,
-			employeeID: queryParams?.employeeID
-		}
-
 		try {
 			dispatch({ type: SHIFTS.SHIFTS_LOAD_START })
 
-			const { data } = await getReq('http://localhost:7200/shifts' as any, { ...normalizeQueryParams(params) })
+			const { data } = await getReq('http://localhost:7200/shifts' as any, { ...normalizeQueryParams(mapQueryParams(queryParams)) })
 
 			const payload = {
 				data
@@ -171,7 +235,7 @@ export const getCalendarTimeOff =
 		try {
 			dispatch({ type: TIMEOFF.TIMEOFF_LOAD_START })
 
-			const { data } = await getReq('http://localhost:7200/timeOff' as any, { ...normalizeQueryParams(params) })
+			const { data } = await getReq('http://localhost:7200/timeOff' as any, { ...normalizeQueryParams(mapQueryParams(queryParams)) })
 
 			const payload = {
 				data

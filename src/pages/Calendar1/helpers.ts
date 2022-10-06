@@ -1,34 +1,86 @@
-import { ICalendarTimeOffPayload, ICalendarShiftsPayload, ICalendarEmployeesPayload, ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
+/* eslint-disable import/prefer-default-export */
+import dayjs from 'dayjs'
+import { find, map } from 'lodash'
+import { ICalendarEmployeesPayload, ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
+import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
 
-interface IComposeEventsArgs {
-	events?: ICalendarEventsPayload['data']
-	employees?: ICalendarEmployeesPayload['data']
-	services?: ICalendarEmployeesPayload['data']
-	shifts?: ICalendarTimeOffPayload['data']
-	timeOff?: ICalendarShiftsPayload['data']
+interface IComposeEventsData {
+	events?: ICalendarEventsPayload
+	employees?: ICalendarEmployeesPayload
+	services?: ICalendarEmployeesPayload
 }
 
-interface IComposeBackgroundEventsArgs {
-	shifts?: ICalendarTimeOffPayload['data']
-	timeOff?: ICalendarShiftsPayload['data']
-	employees?: ICalendarEmployeesPayload['data']
+export const composeEvents = ({ events, employees, services }: IComposeEventsData, calendarView?: CALENDAR_VIEW) => {
+	switch (calendarView) {
+		case CALENDAR_VIEW.DAY_RESERVATIONS:
+		case CALENDAR_VIEW.WEEK_RESERVATIONS:
+		case CALENDAR_VIEW.MONTH_RESERVATIONS:
+			return map(events?.data, (calendarEvent) => {
+				const employee = find(employees?.data, (e) => calendarEvent?.employeeId === e?.id)
+				const service = find(services?.data, (s) => calendarEvent?.serviceID === s?.id)
+				const event = {
+					id: calendarEvent.id,
+					resourceId: employee?.id,
+					start: calendarEvent.start,
+					end: calendarEvent.end,
+					employee,
+					allDay: false
+				}
+
+				switch (calendarEvent.type) {
+					case CALENDAR_EVENT_TYPE.SHIFT:
+						return {
+							...event,
+							backgroundColor: '#000',
+							display: 'background'
+						}
+					case CALENDAR_EVENT_TYPE.TIMEOFF:
+						return {
+							...event,
+							backgroundColor: '#DC0069',
+							display: 'background'
+						}
+					case CALENDAR_EVENT_TYPE.RESERVATION:
+					default:
+						return {
+							...event,
+							title: calendarEvent.title,
+							service
+						}
+				}
+			})
+		default:
+			return []
+	}
 }
 
-export const composeEvents = ({ events, employees, services, shifts, timeOff }: IComposeEventsArgs) => {
-	return events?.map((calendarEvent) => {
-		const employee = employees?.find((e) => calendarEvent.employeeId === e.id)
-		const service = services?.find((s) => calendarEvent.serviceID === s.id)
+export const composeResources = (events: ICalendarEventsPayload, employees: ICalendarEmployeesPayload) => {
+	return map(employees?.data, (employee) => {
+		const employeeShifts = events?.data
+			?.filter((event) => event.employeeId === employee.id && event.type === CALENDAR_EVENT_TYPE.SHIFT)
+			.sort((eventA, eventB) => {
+				const key1 = eventA.start
+				const key2 = eventB.start
+
+				if (key1 && key2) {
+					if (key1 < key2) {
+						return -1
+					}
+					if (key1 === key2) {
+						return 0
+					}
+				}
+				return 1
+			})
+			.reduce((result, cv, i, arr) => {
+				const newResult = `${result}${dayjs(cv.start).format('HH:mm')}-${dayjs(cv.end).format('HH:mm')}${i + 1 !== arr.length ? ', ' : ''}`
+				return newResult
+			}, '')
+
 		return {
-			id: calendarEvent.id,
-			resourceID: calendarEvent.employeeId,
-			title: calendarEvent.title,
-			start: calendarEvent.start,
-			end: calendarEvent.end,
-			service,
-			employee,
-			allDay: false
+			id: employee.id,
+			employeeData: employee,
+			description: employeeShifts
 		}
 	})
 }
-
-export const composeBackgroundEvents = ({ shifts, timeOff, employees }: IComposeBackgroundEventsArgs) => {}

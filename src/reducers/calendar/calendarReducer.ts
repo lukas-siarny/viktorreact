@@ -7,10 +7,11 @@ import {
 	ICalendarTimeOffPayload,
 	ICalendarEmployeesPayload,
 	ICalendarServicesPayload,
-	ICalendarEventDetailPayload
+	ICalendarEventDetailPayload,
+	ICalendarReservationsPayload
 } from './calendarActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { EVENTS, SHIFTS, TIMEOFF, EMPLOYEES, SERVICES, EVENT_DETAIL } from './calendarTypes'
+import { EVENTS, RESERVATIONS, SHIFTS, TIMEOFF, EMPLOYEES, SERVICES, EVENT_DETAIL } from './calendarTypes'
 
 export const initState = {
 	events: {
@@ -18,6 +19,11 @@ export const initState = {
 		isLoading: false,
 		isFailure: false
 	} as ICalendarEventsPayload & ILoadingAndFailure,
+	reservations: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ICalendarReservationsPayload & ILoadingAndFailure,
 	shifts: {
 		data: null,
 		isLoading: false,
@@ -70,6 +76,31 @@ export default (state = initState, action: ICalendarActions) => {
 				...state,
 				events: {
 					...initState.events,
+					data: action.payload.data
+				}
+			}
+		// Reservations
+		case RESERVATIONS.RESERVATIONS_LOAD_START:
+			return {
+				...state,
+				reservations: {
+					...state.shifts,
+					isLoading: true
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_LOAD_FAIL:
+			return {
+				...state,
+				reservations: {
+					...initState.shifts,
+					isFailure: true
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_LOAD_DONE:
+			return {
+				...state,
+				reservations: {
+					...initState.shifts,
 					data: action.payload.data
 				}
 			}

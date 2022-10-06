@@ -7,7 +7,8 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "node": "^16.13.0"
+    "node": ">=16.13.0",
+    "npm": ">=8.0.0"
   },
   "scripts": {
     "start": "cross-env REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw npm-run-all -p start-watch translate-watch build:tailwind",

@@ -21,6 +21,7 @@
 @import "switch"
 @import "time-range-picker"
 @import "tabs"
+@import "image"
 
 $searchProductTop: 166px
 
@@ -421,10 +422,14 @@ h4.ant-typography
 		.ant-upload-list-item-info::before
 			opacity: 0
 
-// antd descripotion
+// antd description
 .ant-descriptions-row
 	.ant-descriptions-item
 		padding-right: 7px
+
+.noti-upload-item
+	> .ant-row
+		display: block
 
 .ant-tabs-nav
 	margin: 0
@@ -972,6 +977,7 @@ span.ant-tag
 .noti-phone-prefix-array
 	.ant-form-item
 		margin: 0
+		padding-bottom: 0
 
 .noti-support-contact-wrapper
 	max-width: 640px
@@ -1098,7 +1104,7 @@ span.ant-tag
 	align-items: center
 	gap: 4px
 	padding: 8px
-	max-width: fit-content
+	width: fit-content
 	background: $backgroundColor-notino-grayLight
 	min-width: 0
 	height: 28px
@@ -1590,8 +1596,9 @@ span.ant-tag .title
 		color: $textColor-notino-pink
 		transition: 300ms ease
 
-@media (min-width: 1195px)
-	.language-btn
+.language-btn
+	z-index: 2
+	@media (min-width: 1195px)
 		top: -0.25rem
 		right: 0px
 		position: absolute
@@ -2005,6 +2012,20 @@ li.ant-list-item:hover
 		filter: invert(0)
 	&.max
 		filter: invert(1)
+.filter-gray
+	filter: brightness(0) saturate(100%) invert(79%) sepia(1%) saturate(7%) hue-rotate(314deg) brightness(98%) contrast(92%)
 
 .ant-collapse-item.collapse-header-has-error
 	box-shadow: 0 0 0 1px $backgroundColor-notino-red
+
+.noti-opening-hours
+	.noti-opening-hours-row
+		display: flex
+		align-items: center
+		@media (max-width: 1200px)
+			flex-direction: column-reverse
+			align-items: flex-start
+		@media (max-width: 900px)
+			.noti-opening-hours-ranges
+				flex-direction: column
+

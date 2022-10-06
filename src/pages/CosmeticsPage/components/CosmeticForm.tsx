@@ -5,8 +5,8 @@ import { Divider, Form, Button } from 'antd'
 
 // utils
 import { isEmpty } from 'lodash'
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
-import { showErrorNotification, checkUploadingBeforeSubmit } from '../../../utils/helper'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS, VALIDATION_MAX_LENGTH, DELETE_BUTTON_ID } from '../../../utils/enums'
+import { showErrorNotification, checkUploadingBeforeSubmit, formFieldID } from '../../../utils/helper'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -17,6 +17,8 @@ import DeleteButton from '../../../components/DeleteButton'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 // types
 import { ICosmeticForm } from '../../../types/interfaces'
@@ -57,7 +59,7 @@ const CosmeticForm: FC<Props> = (props) => {
 	)
 
 	return (
-		<Form layout={'vertical'} className={'w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form id={`${FORM.COSMETIC}-form`} layout={'vertical'} className={'w-full top-0 sticky overflow-hidden'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<div className={'h-full'}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{cosmeticID ? t('loc:Upraviť kozmetiku') : t('loc:Vytvoriť kozmetiku')}
@@ -88,17 +90,26 @@ const CosmeticForm: FC<Props> = (props) => {
 					maxCount={1}
 				/>
 
-				<div className={'flex w-full justify-start mt-10 gap-2 flex-wrap'}>
-					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-						{cosmeticID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
+				<div className={'flex w-full justify-start mt-6 gap-2 flex-wrap'}>
+					<Button
+						className={'noti-btn w-full xl:w-auto xl:min-w-40'}
+						size='middle'
+						type='primary'
+						htmlType='submit'
+						disabled={submitting || pristine}
+						loading={submitting}
+						icon={cosmeticID ? <EditIcon /> : <CreateIcon />}
+					>
+						{cosmeticID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:kozmetiku'))}
 					</Button>
 					{cosmeticID && (
 						<DeleteButton
 							onConfirm={onDelete}
 							entityName={''}
 							type={'default'}
-							className='w-full xl:w-40'
+							className='w-full xl:w-auto xl:min-w-40'
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+							id={formFieldID(FORM.COSMETIC, DELETE_BUTTON_ID)}
 						/>
 					)}
 				</div>

@@ -1,8 +1,7 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
-import { IUserActions, IAuthUserPayload, IUserPayload, IUsersPayload, IPendingInvitesPayload } from './userActions'
-// eslint-disable-next-line import/no-cycle
-import { ILoadingAndFailure } from '../../types/interfaces'
+import { IUserActions, IUserPayload, IUsersPayload, IPendingInvitesPayload } from './userActions'
+import { ILoadingAndFailure, IAuthUserPayload } from '../../types/interfaces'
 import { AUTH_USER, USERS, USER, PENDING_INVITES } from './userTypes'
 
 export const initState = {

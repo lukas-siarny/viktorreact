@@ -9,7 +9,6 @@ import { ReactComponent as DateSuffixIcon } from '../assets/icons/date-suffix-ic
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
 import { DEFAULT_DATE_INIT_FORMAT, DEFAULT_DATE_INPUT_FORMAT, DROPDOWN_POSITION } from '../utils/enums'
-// eslint-disable-next-line import/no-cycle
 import { formFieldID } from '../utils/helper'
 
 type Props = WrappedFieldProps &

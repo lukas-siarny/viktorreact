@@ -20,13 +20,17 @@ import { RootState } from '../../reducers'
 
 // utils
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { Paths } from '../../types/api'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+import { formFieldID } from '../../utils/helper'
+
+// assets
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
 type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{
@@ -150,27 +154,28 @@ const CustomerPage = (props: Props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:customers')} />
 			</Row>
 			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+				<div className='content-body small'>
 					<CustomerForm onSubmit={updateCustomer} />
-					<div className={'content-footer pt-0'}>
-						<Row className={'justify-between gap-2'}>
+					<div className={'content-footer'}>
+						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
 								permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_DELETE]}
-								className={'mt-2-5 w-52 xl:w-60'}
+								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								onConfirm={deleteCustomer}
 								entityName={t('loc:zákazníka')}
 								type={'default'}
 								getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+								id={formFieldID(FORM.CUSTOMER, DELETE_BUTTON_ID)}
 							/>
 							<Permissions
 								allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_UPDATE]}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
-										block
 										size={'middle'}
-										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
+										icon={<EditIcon />}
 										onClick={(e) => {
 											if (hasPermission) {
 												dispatch(submit(FORM.CUSTOMER))
@@ -186,7 +191,7 @@ const CustomerPage = (props: Props) => {
 									</Button>
 								)}
 							/>
-						</Row>
+						</div>
 					</div>
 				</div>
 			</Spin>

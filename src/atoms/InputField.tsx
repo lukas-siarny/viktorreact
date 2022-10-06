@@ -4,9 +4,8 @@ import cx from 'classnames'
 import { WrappedFieldProps } from 'redux-form'
 import { InputProps } from 'antd/lib/input'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
-import { trimStart, trim } from 'lodash'
+import { trimStart } from 'lodash'
 import { FIELD_MODE } from '../utils/enums'
-// eslint-disable-next-line import/no-cycle
 import { formFieldID } from '../utils/helper'
 import { ReactComponent as SearchIcon } from '../assets/icons/search-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
@@ -35,7 +34,6 @@ const InputField = (props: Props) => {
 		prefix,
 		disabled,
 		style,
-		customOnBlur,
 		meta: { form, error, touched },
 		hideHelp,
 		maxLength,
@@ -67,6 +65,14 @@ const InputField = (props: Props) => {
 		[input, customOnChange]
 	)
 
+	/*
+	 * This logic (onBlur, onFocus) set 'dirty' state for Form incorrectly.
+	 * Scenario:
+	 * 1.Non required field
+	 * 2.Focus field
+	 * 3.Blur field
+	 * 4.Form state is dirty without changes
+
 	const onBlur = useCallback(
 		async (e) => {
 			// NOTE: prevent to have "" empty string as empty value
@@ -90,7 +96,7 @@ const InputField = (props: Props) => {
 			}
 		},
 		[input]
-	)
+	) */
 
 	return (
 		<Item
@@ -106,14 +112,14 @@ const InputField = (props: Props) => {
 				id={formFieldID(form, input.name)}
 				className={cx('noti-input', { 'noti-input-filter': fieldMode === FIELD_MODE.FILTER })}
 				onChange={onChange}
-				onBlur={onBlur}
+				// onBlur={onBlur}
 				addonBefore={addonBefore}
 				size={size || 'middle'}
-				onFocus={onFocus}
+				// onFocus={onFocus}
 				value={input.value}
 				placeholder={placeholder}
 				type={type || 'text'}
-				// Ak je filter cez RemoveIcon zmaat string (ant ma pre input aj allowClear ale neda sa mu zmenit ikona tak ako napr v selecte preto to je takto robene)
+				// Ak je filter cez RemoveIcon zmazat string (ant ma pre input aj allowClear ale neda sa mu zmenit ikona tak ako napr v selecte preto to je takto robene)
 				suffix={
 					(allowClear || fieldMode === FIELD_MODE.FILTER) && input.value ? (
 						<RemoveIcon onClick={() => input.onChange('')} className={'text-blue-600 cursor-pointer'} />

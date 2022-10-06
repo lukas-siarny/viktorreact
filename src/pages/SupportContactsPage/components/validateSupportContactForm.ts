@@ -1,7 +1,13 @@
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
-import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { isEmpty } from 'lodash'
+
+// types
 import { ISupportContactForm } from '../../../types/interfaces'
+
+// utils
+import { VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { validateOpeningHours } from '../../../components/OpeningHours/OpeningHoursUtils'
 
 export default (values: ISupportContactForm) => {
 	const errors: any = {}
@@ -62,6 +68,13 @@ export default (values: ISupportContactForm) => {
 
 	if (!values?.countryCode) {
 		errors.countryCode = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (values.openingHours) {
+		const openingHoursErrors = validateOpeningHours(values.openingHours)
+		if (!isEmpty(openingHoursErrors)) {
+			errors.openingHours = openingHoursErrors
+		}
 	}
 
 	return errors

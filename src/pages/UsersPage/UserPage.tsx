@@ -12,7 +12,7 @@ import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 
 // enums
-import { FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -25,9 +25,13 @@ import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions from '../../utils/Permissions'
+import { formFieldID } from '../../utils/helper'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+
+// assets
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
 type Props = {
 	computedMatch: IComputedMatch<{ userID: string }>
@@ -150,14 +154,15 @@ const UserPage: FC<Props> = (props) => {
 					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 				</Row>
 			)}
-			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+			<div className='content-body small'>
+				<Spin spinning={isLoading}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
-					<div className={'content-footer pt-0'}>
-						<Row className={'justify-between gap-2'}>
+					<div className={'content-footer'}>
+						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
 							<DeleteButton
 								permissions={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_DELETE]}
-								className={'mt-2-5 w-52 xl:w-60'}
+								className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
+								id={formFieldID(FORM.USER_ACCOUNT, DELETE_BUTTON_ID)}
 								onConfirm={deleteUser}
 								entityName={isMyAccountPage ? t('loc:účet') : t('loc:používateľa')}
 								type={'default'}
@@ -169,10 +174,10 @@ const UserPage: FC<Props> = (props) => {
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
-										block
 										size={'middle'}
-										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
+										icon={<EditIcon />}
 										onClick={(e) => {
 											if (hasPermission) {
 												dispatch(submit(FORM.USER_ACCOUNT))
@@ -188,10 +193,10 @@ const UserPage: FC<Props> = (props) => {
 									</Button>
 								)}
 							/>
-						</Row>
+						</div>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

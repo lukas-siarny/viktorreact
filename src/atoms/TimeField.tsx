@@ -10,7 +10,6 @@ import { DEFAULT_TIME_FORMAT, DROPDOWN_POSITION } from '../utils/enums'
 import { ReactComponent as TimerIcon } from '../assets/icons/timer-16-icon.svg'
 import { ReactComponent as RemoveIcon } from '../assets/icons/remove-select-icon.svg'
 
-// eslint-disable-next-line import/no-cycle
 import { formFieldID } from '../utils/helper'
 
 type Props = WrappedFieldProps &

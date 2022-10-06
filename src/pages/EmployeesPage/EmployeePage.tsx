@@ -21,9 +21,9 @@ import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IIn
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { decodePrice, encodePrice, filterSalonRolesByPermission, hasAuthUserPermissionToEditRole } from '../../utils/helper'
+import { decodePrice, encodePrice, filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -34,6 +34,8 @@ import { getCurrentUser } from '../../reducers/users/userActions'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon.svg'
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
+import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
@@ -289,6 +291,7 @@ const EmployeePage = (props: Props) => {
 	}
 
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
+	const { hasPermission: hasPermissionToEdit, tooltip } = hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)
 
 	return (
 		<>
@@ -297,47 +300,49 @@ const EmployeePage = (props: Props) => {
 			</Row>
 
 			{formValues?.hasActiveAccount && (
-				<div className='content-body small mt-2 mb-8'>
+				<div className='content-body small mb-8'>
 					<Spin spinning={isLoading}>
 						<EditRoleForm
 							onSubmit={editEmployeeRole}
 							salonRolesOptions={filteredSalonRolesByPermission}
-							hasPermissionToEdit={hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)}
+							hasPermissionToEdit={hasPermissionToEdit}
+							permissionTooltip={tooltip}
 						/>
 					</Spin>
 				</div>
 			)}
-			<div className='content-body small mt-2 mb-8'>
+			<div className='content-body small'>
 				<Spin spinning={isLoading}>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
-					<div className={'content-footer pt-0'}>
-						<Row
-							className={cx({
-								'justify-between': isEmployeeExists,
-								'justify-center': !isEmployeeExists
+					<div className={'content-footer'}>
+						<div
+							className={cx('flex flex-col gap-2 lg:flex-row flex-wrap', {
+								'lg:justify-between': isEmployeeExists,
+								'lg:justify-center': !isEmployeeExists
 							})}
 						>
 							{isEmployeeExists ? (
 								<DeleteButton
 									permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_DELETE]}
-									className={'mt-2-5 w-52 xl:w-60'}
+									className={'w-full lg:w-auto lg:min-w-50 xl:min-w-60'}
 									onConfirm={deleteEmployee}
 									entityName={t('loc:zamestnanca')}
 									type={'default'}
 									getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+									id={formFieldID(FORM.EMPLOYEE, DELETE_BUTTON_ID)}
 								/>
 							) : undefined}
-							<div className={`flex flex-wrap`}>
+							<div className={'flex flex-col lg:flex-row gap-2'}>
 								{isProfileInActive && (
 									<Permissions
 										allowed={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]}
 										render={(hasPermission, { openForbiddenModal }) => (
 											<Button
-												type={'primary'}
-												block
+												type={'dashed'}
 												size={'middle'}
-												className={'noti-btn m-regular mt-2-5 w-40 mr-2'}
-												htmlType={'submit'}
+												className={'noti-btn m-regular w-full lg:w-auto xl:min-w-40'}
+												htmlType={'button'}
+												icon={<EmployeesIcon />}
 												onClick={(e) => {
 													if (hasPermission) {
 														setVisible(true)
@@ -360,9 +365,9 @@ const EmployeePage = (props: Props) => {
 									render={(hasPermission, { openForbiddenModal }) => (
 										<Button
 											type={'primary'}
-											block
+											icon={<EditIcon />}
 											size={'middle'}
-											className={`noti-btn m-regular w-40 mt-2-5`}
+											className={`noti-btn m-regular w-full lg:w-auto ${isProfileInActive ? 'xl:min-w-40' : 'lg:min-w-50 xl:min-w-60'}`}
 											htmlType={'submit'}
 											onClick={(e) => {
 												if (hasPermission) {
@@ -380,36 +385,36 @@ const EmployeePage = (props: Props) => {
 									)}
 								/>
 							</div>
-							<Modal
-								className='rounded-fields'
-								title={t('loc:Pozvať do tímu')}
-								centered
-								visible={visible}
-								footer={null}
-								onCancel={() => setVisible(false)}
-								closeIcon={<CloseIcon />}
-								width={394}
-							>
-								<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
-								<Button
-									className='noti-btn'
-									onClick={() => {
-										dispatch(submit(FORM.INVITE_EMPLOYEE))
-									}}
-									block
-									size='large'
-									type='primary'
-									htmlType='submit'
-									disabled={isInviteFromSubmitting}
-									loading={isInviteFromSubmitting}
-								>
-									{t('loc:Odoslať email')}
-								</Button>
-							</Modal>
-						</Row>
+						</div>
 					</div>
 				</Spin>
 			</div>
+			<Modal
+				className='rounded-fields'
+				title={t('loc:Pozvať do tímu')}
+				centered
+				visible={visible}
+				footer={null}
+				onCancel={() => setVisible(false)}
+				closeIcon={<CloseIcon />}
+				width={394}
+			>
+				<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
+				<Button
+					className='noti-btn'
+					onClick={() => {
+						dispatch(submit(FORM.INVITE_EMPLOYEE))
+					}}
+					block
+					size='large'
+					type='primary'
+					htmlType='submit'
+					disabled={isInviteFromSubmitting}
+					loading={isInviteFromSubmitting}
+				>
+					{t('loc:Odoslať email')}
+				</Button>
+			</Modal>
 		</>
 	)
 }

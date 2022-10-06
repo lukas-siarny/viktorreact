@@ -5,8 +5,9 @@ import { Divider, Form, Button } from 'antd'
 import { useSelector } from 'react-redux'
 
 // utils
-import { ENUMERATIONS_KEYS, FORM } from '../../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, STRINGS } from '../../../utils/enums'
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // atoms
 import InputField from '../../../atoms/InputField'
@@ -19,6 +20,8 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
 import { ReactComponent as GlobeIcon } from '../../../assets/icons/globe-24.svg'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 // types
 import { ISpecialistContactForm } from '../../../types/interfaces'
@@ -56,7 +59,7 @@ const SpecialistContactForm: FC<Props> = (props) => {
 	}, [countries?.enumerationsOptions, specialistContacts.data, specialistContactID])
 
 	return (
-		<Form layout={'vertical'} className={'w-full top-0 sticky'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden'} onSubmitCapture={handleSubmit}>
 			<div className={'h-full'}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{specialistContactID ? t('loc:Upraviť špecialistu') : t('loc:Vytvoriť špecialistu')}
@@ -88,16 +91,24 @@ const SpecialistContactForm: FC<Props> = (props) => {
 					required
 				/>
 				<Field component={InputField} label={t('loc:Email')} placeholder={t('loc:Zadajte email')} name={'email'} size={'large'} disabled={disabledForm} />
-				<div className={'flex w-full justify-start mt-10 gap-2 flex-wrap'}>
-					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-						{specialistContactID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
+				<div className={'flex w-full justify-start mt-6 gap-2 flex-wrap'}>
+					<Button
+						className={'noti-btn w-full xl:w-auto xl:min-w-40'}
+						size='middle'
+						type='primary'
+						htmlType='submit'
+						disabled={submitting || pristine}
+						loading={submitting}
+						icon={specialistContactID ? <EditIcon /> : <CreateIcon />}
+					>
+						{specialistContactID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:špecialistu'))}
 					</Button>
 					{specialistContactID && (
 						<DeleteButton
 							onConfirm={onDelete}
 							entityName={''}
 							type={'default'}
-							className='w-full xl:w-40'
+							className='w-full xl:w-auto xl:min-w-40'
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 					)}
@@ -114,6 +125,6 @@ const form = reduxForm<ISpecialistContactForm, ComponentProps>({
 	destroyOnUnmount: true,
 	validate: validateSpecialistContactForm,
 	onSubmitFail: showErrorNotification
-})(SpecialistContactForm)
+})(withPromptUnsavedChanges(SpecialistContactForm))
 
 export default form

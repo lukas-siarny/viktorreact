@@ -16,6 +16,7 @@ import validateCategoryFrom from './validateIndustriesFrom'
 import { FORM, PERMISSION, SALON_PERMISSION } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -24,6 +25,7 @@ import { RootState } from '../../../reducers'
 import { IIndustriesForm } from '../../../types/interfaces'
 
 // assets
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
@@ -77,8 +79,9 @@ const IndustriesForm: FC<Props> = (props) => {
 							<Button
 								type={'primary'}
 								size={'middle'}
+								icon={<EditIcon />}
 								htmlType={'submit'}
-								className={'noti-btn m-regular w-52 xl:w-60'}
+								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								disabled={submitting || pristine}
 								loading={submitting}
 								onClick={(e) => {
@@ -111,6 +114,6 @@ const form = reduxForm<IIndustriesForm, ComponentProps>({
 			description: i18next.t('loc:Vyberte aspoň jedno odvetvie')
 		}),
 	validate: validateCategoryFrom
-})(IndustriesForm)
+})(withPromptUnsavedChanges(IndustriesForm))
 
 export default form

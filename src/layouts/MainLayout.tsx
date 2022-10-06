@@ -109,7 +109,7 @@ const MainLayout: FC<Props> = (props) => {
 
 		return (
 			<>
-				<span className='pr-4 text-xs selected-salon-text'>{t('loc:zvolený salón')}:</span>
+				<span className='hidden lg:inline-block pr-4 text-xs selected-salon-text'>{t('loc:zvolený salón')}:</span>
 				<div className={cx(labelClassname)}>{content}</div>
 			</>
 		)
@@ -123,7 +123,7 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.PARTNER]}
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
-							<Header className='shadow-md bg-notino-white sticky top-0 z-10 px-4 flex items-center w-full z-50' id={'noti-header'}>
+							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-50' id={'noti-header'}>
 								<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
 									{!hasPermission && (
 										<Button
@@ -132,7 +132,7 @@ const MainLayout: FC<Props> = (props) => {
 												history.push(t('paths:salons'))
 											}}
 											icon={<BackIcon className={'filter-invert max'} />}
-											className={'noti-btn h-8 text-notino-white self-center bg-notino-pink'}
+											className={'noti-btn h-8 text-notino-white self-center bg-notino-pink mr-2'}
 											type={'default'}
 											size={'small'}
 										>

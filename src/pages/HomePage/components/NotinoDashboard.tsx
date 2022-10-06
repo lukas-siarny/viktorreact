@@ -254,7 +254,7 @@ const NotinoDashboard: FC<Props> = () => {
 					},
 					{
 						data: notino.data.unpublishedSalons,
-						background: colors.trueGray[200],
+						background: colors.neutral[200],
 						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.NOT_PUBLISHED]),
 						label: t('loc:Nepublikované')
 					}

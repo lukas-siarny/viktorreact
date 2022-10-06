@@ -1,7 +1,6 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
 import { IServiceActions, IServicesPayload, IServicePayload, IServiceRootCategoryPayload } from './serviceActions'
-// eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { SERVICES, SERVICE, SERVICE_ROOT_CATEGORY } from './serviceTypes'
 
@@ -9,7 +8,7 @@ export const initState = {
 	services: {
 		data: null,
 		tableData: undefined,
-		options: undefined,
+		options: [],
 		isLoading: false,
 		isFailure: false
 	} as IServicesPayload & ILoadingAndFailure,

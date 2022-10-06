@@ -42,6 +42,32 @@ pipelines:
             - docker push $AWS_ECR_NAME/notino-b2b-web:development
             - IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --output json )
             - aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --image-ids "$IMAGES_TO_DELETE" || true
+    development-2:
+      - step:
+          name: Install npm modules
+          script:
+            - npm install --legacy-peer-deps
+          caches:
+            - node
+          artifacts:
+            - node_modules/**
+      - parallel:
+          - step:
+              name: Lint checking
+              script:
+                - npm run lint
+          - step:
+              name: Build and push docker image
+              script:
+                # copy .well-known files from development env
+                - cp -R ./docker/development/.well-known ./public/.well-known
+                # push source maps to sentry service
+                - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                # remove source maps from bundle build
+                - find build/static/js/ -name "*.map" -type f -delete
+                - docker build -t registry.goodrequest.com/notino-b2b-web:development-2 -f docker/development/Dockerfile.web .
+                - docker login --username $DOCKER_REGISTRY_USERNAME --password $DOCKER_REGISTRY_PASSWORD registry.goodrequest.com
+                - docker push registry.goodrequest.com/notino-b2b-web:development-2
     test:
       - step:
           name: Install npm modules
@@ -186,11 +212,18 @@ pipelines:
             services:
               - "docker"
             script:
+              - echo "127.0.0.1 s3.eu-central-1.localhost" >> /etc/hosts
+              - echo "127.0.0.1 sample-bucket.s3.eu-central-1.localhost" >> /etc/hosts
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
               - chmod +x /usr/local/bin/docker-compose
               - docker-compose up -d
-              - sleep 90
+              # needs to check/implement -> how to hold context of wait-for-it for DB service in backend
+              - sleep 75
               - npm run test:CI
+            artifacts: # store cypress images, videos and BE logs
+              - cypress/screenshots/**
+              - cypress/videos/**
+              - notino_backend/logs/**
 
 definitions:
   caches:

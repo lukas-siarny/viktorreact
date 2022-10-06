@@ -22,6 +22,7 @@ import AutocompleteField from '../../../../atoms/AutocompleteField'
 // utils
 import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
 import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
+import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
 
 // types
 import { ISalonForm, ISelectOptionItem } from '../../../../types/interfaces'
@@ -48,12 +49,12 @@ import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmeti
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
 
 type ComponentProps = {
-	disabledForm: boolean
+	disabledForm?: boolean
 	noteModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
-	loadBasicSalon: (id: string) => void
-	clearSalonForm: () => void
-	searchSalons: (search: string, page: number) => void
+	loadBasicSalon?: (id: string) => void
+	clearSalonForm?: () => void
+	searchSalons?: (search: string, page: number) => void
 	showBasicSalonsSuggestions?: boolean
 }
 
@@ -131,7 +132,7 @@ const SalonForm: FC<Props> = (props) => {
 								labelInValue
 								onSearch={searchSalons}
 								onSelect={(_value: string | ISelectOptionItem, option: ISelectOptionItem) => {
-									if (option?.extra?.salon?.id) {
+									if (option?.extra?.salon?.id && loadBasicSalon) {
 										loadBasicSalon(option?.extra.salon.id)
 									}
 								}}
@@ -157,16 +158,6 @@ const SalonForm: FC<Props> = (props) => {
 							placeholder={t('loc:Zadajte základné informácie o salóne')}
 							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
-							showLettersCount
-						/>
-						<Field
-							component={TextareaField}
-							label={t('loc:Doplňujúci popis')}
-							name={'aboutUsSecond'}
-							size={'large'}
-							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
-							disabled={disabledForm}
-							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
 							showLettersCount
 						/>
 						<Field
@@ -210,7 +201,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<Field
-							className={'m-0'}
+							className={'m-0 pb-0'}
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'gallery'}
@@ -269,6 +260,7 @@ const SalonForm: FC<Props> = (props) => {
 							component={TextareaField}
 							label={t('loc:Poznámka k parkovaniu')}
 							name={'parkingNote'}
+							className={'pb-0'}
 							size={'large'}
 							placeholder={t('loc:Zadajte poznámku k parkovaniu, napr. "Parkovanie oproti budove."')}
 							disabled={disabledForm}
@@ -284,14 +276,14 @@ const SalonForm: FC<Props> = (props) => {
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
 						<Field
-							className={'mb-0'}
+							className={'pb-0'}
 							component={SwitchField}
 							label={t('loc:Pon - Pi rovnaké otváracie hodiny')}
 							name={'sameOpenHoursOverWeek'}
 							size={'middle'}
 							disabled={disabledForm}
 						/>
-						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
+						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm, showOnDemand: true }} />
 						{noteModalControlButtons}
 					</Col>
 				</Row>
@@ -330,10 +322,10 @@ const SalonForm: FC<Props> = (props) => {
 							placeholder={t('loc:Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...')}
 							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
-							className={'mb-6'}
+							className={'pb-6'}
 						/>
 						<Field
-							className={'m-0'}
+							className={'m-0 pb-0'}
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'pricelists'}
@@ -422,6 +414,6 @@ const form = reduxForm<ISalonForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateSalonForm
-})(SalonForm)
+})(withPromptUnsavedChanges(SalonForm))
 
 export default form

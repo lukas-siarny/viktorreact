@@ -35,19 +35,18 @@ const UserAccountForm: FC<Props> = (props) => {
 					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>
-						<div className={'w-1/5'}>
-							<Field
-								className={'m-0'}
-								component={ImgUploadField}
-								name={'avatar'}
-								label={t('loc:Avatar')}
-								signUrl={URL_UPLOAD_IMAGES}
-								multiple={false}
-								maxCount={1}
-								category={UPLOAD_IMG_CATEGORIES.USER}
-							/>
-						</div>
-						<div className={'w-full'}>
+						<Field
+							className={'m-0 mr-3'}
+							component={ImgUploadField}
+							name={'avatar'}
+							label={t('loc:Avatar')}
+							signUrl={URL_UPLOAD_IMAGES}
+							multiple={false}
+							maxCount={1}
+							category={UPLOAD_IMG_CATEGORIES.USER}
+						/>
+
+						<div className={'flex-1'}>
 							<Field component={InputField} label={t('loc:Meno')} placeholder={t('loc:Zadajte meno')} name={'firstName'} size={'large'} />
 							<Field component={InputField} label={t('loc:Priezvisko')} placeholder={t('loc:Zadajte priezvisko')} name={'lastName'} size={'large'} />
 						</div>

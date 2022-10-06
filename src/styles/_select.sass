@@ -23,6 +23,9 @@
 			box-shadow: $field-shadow-focus-default
 		&:not(.ant-select-disabled):hover .ant-select-selector
 			border: 1px solid $borderColor-notino-grayDark
+		&.ant-select-disabled
+			svg
+				filter: brightness(0) saturate(100%) invert(66%) sepia(7%) saturate(473%) hue-rotate(179deg) brightness(99%) contrast(86%)
 
 .ant-select-item
 	&.ant-select-item-option-selected

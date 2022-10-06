@@ -18,6 +18,7 @@ import SelectField from '../../../atoms/SelectField'
 // utils
 import { optionRenderWithImage, showErrorNotification } from '../../../utils/helper'
 import { ENUMERATIONS_KEYS, FORM, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { ISupportContactForm } from '../../../types/interfaces'
@@ -133,6 +134,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						</Row>
 						<Field
 							component={TextareaField}
+							className={'pb-0'}
 							label={t('loc:Poznámka')}
 							name={'note'}
 							size={'large'}
@@ -150,7 +152,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
 						<Field
-							className={'mb-0'}
+							className={'mb-0 pb-0'}
 							component={SwitchField}
 							label={t('loc:Pon - Pi rovnaké otváracie hodiny')}
 							name={'sameOpenHoursOverWeek'}
@@ -172,6 +174,6 @@ const form = reduxForm<ISupportContactForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateSupportContactForm
-})(SupportContactForm)
+})(withPromptUnsavedChanges(SupportContactForm))
 
 export default form

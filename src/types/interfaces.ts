@@ -1,10 +1,12 @@
-import { SALON_STATES } from './../utils/enums'
-/* eslint-disable import/no-cycle */
 import { ColumnsType } from 'antd/lib/table'
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
-import { Paths } from './api'
 import { PaginationProps } from 'antd'
-import { Path } from 'typescript'
+
+// utils
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
+import { SALON_STATES } from './../utils/enums'
+
+// types
+import { Paths } from './api'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -35,7 +37,6 @@ export interface ILoginForm {
 	email: string
 	password: string
 }
-
 
 export interface IInviteEmployeeForm {
 	email: string
@@ -68,20 +69,31 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
-export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+// type of BE opening hours data
+export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+
+type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
+
+// type for OpeningHours component
+export type OpeningHoursTimeRanges = {
+	timeFrom: string
+	timeTo: string
+}[]
+
+export type OpeningHours = {
+	day: OpeningHoursDay
+	timeRanges: OpeningHoursTimeRanges
+	onDemand?: boolean
+}[]
 
 export interface ISalonForm {
 	salonNameFromSelect: boolean
 	id: string | null
 	name: string | null
-	nameSelect: { key: string, label: string | null; value: string | null } | null
+	nameSelect: { key: string; label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	aboutUsSecond: string | null
 	openingHours: OpeningHours
-	note: string | null
-	noteFrom: string | null
-	noteTo: string | null
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
 	country: string | null
@@ -92,9 +104,9 @@ export interface ISalonForm {
 	latitude: number | null
 	longitude: number | null
 	parkingNote: string | null
-	phones: { phonePrefixCountryCode: string | null, phone: string | null }[]
+	phones: { phonePrefixCountryCode: string | null; phone: string | null }[]
 	email: string | null
-	categoryIDs: [string, ...string[] ] | null
+	categoryIDs: [string, ...string[]] | null
 	socialLinkFB: string | null
 	socialLinkInstagram: string | null
 	socialLinkWebPage: string | null
@@ -139,7 +151,7 @@ export interface ISupportContactForm {
 	city: string
 	street: string
 	streetNumber: string
-	phones: { phonePrefixCountryCode: string, phone: string }[]
+	phones: { phonePrefixCountryCode: string; phone: string }[]
 	emails: { email: string }[]
 }
 
@@ -236,13 +248,7 @@ export interface INoteForm {
 }
 
 export interface IOpenHoursNoteForm {
-	hoursNote: {
-		note: string
-		range: {
-			dateFrom: string
-			dateTo: string
-		}
-	}
+	openingHoursNote: string
 }
 
 export interface ISearchFilter {
@@ -263,7 +269,7 @@ export interface ICustomerForm {
 	streetNumber?: string
 	countryCode?: string
 	salonID: string
-	gallery: any,
+	gallery: any
 	avatar: any
 }
 
@@ -315,7 +321,6 @@ export interface IUserAvatar {
 	alt?: string
 	text?: string
 	key?: string | number
-
 }
 
 export interface IQueryParams {
@@ -394,8 +399,7 @@ export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosme
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
 
-// TODO: change any when BE is done
-export type ISpecialistContact = any /* Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0] */
+export type ISpecialistContact = Paths.GetApiB2BAdminEnumsContactsContactId.Responses.$200['contact']
 
 export interface IPagination extends PaginationProps {
 	pageSizeOptions?: number[]
@@ -435,4 +439,47 @@ export interface IDateTimeFilterOption {
 	value: number
 	unit: 'day' | 'week'
 	name: string
+}
+
+export interface IRoleDescription {
+	key: string
+	name: string
+	permissions: {
+		description: string
+		checked: boolean
+	}[]
+}
+
+export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
+
+export interface IEnumerationOptions {
+	key: string | number
+	label: string
+	value: string | number
+	flag?: string
+}
+
+export interface IEnumerationsPayload {
+	pagination: IResponsePagination | null
+	enumerationsOptions: IEnumerationOptions[]
+}
+
+export interface IEnumerationsCountriesPayload extends IEnumerationsPayload {
+	data: CountriesData | null
+}
+
+export interface IAuthUserPayload {
+	data: ((Paths.PostApiB2BAdminAuthLogin.Responses.$200['user'] | null) & IPermissions) | null
+}
+
+export interface IEmployeePayload {
+	data: Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200 | null
+}
+
+export interface SalonPageProps {
+	isAdmin: boolean
+	backUrl?: string
+	phonePrefixCountryCode: string
+	authUser: IAuthUserPayload & ILoadingAndFailure
+	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
 }

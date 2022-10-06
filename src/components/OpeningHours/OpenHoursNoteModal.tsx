@@ -36,13 +36,7 @@ const OpenHoursNoteModal = (props: Props) => {
 
 		if (openingHoursNote) {
 			initData = {
-				hoursNote: {
-					note: openingHoursNote.note,
-					range: {
-						dateFrom: openingHoursNote.validFrom,
-						dateTo: openingHoursNote.validTo
-					}
-				}
+				openingHoursNote: openingHoursNote.note
 			}
 		}
 		dispatch(initialize(FORM.OPEN_HOURS_NOTE, initData || {}))
@@ -59,9 +53,7 @@ const OpenHoursNoteModal = (props: Props) => {
 		try {
 			const reqData = {
 				openingHoursNote: {
-					note: values?.hoursNote?.note,
-					validFrom: values?.hoursNote?.range?.dateFrom,
-					validTo: values?.hoursNote?.range?.dateTo
+					note: values?.openingHoursNote
 				}
 			}
 

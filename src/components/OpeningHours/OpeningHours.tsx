@@ -12,13 +12,13 @@ import SwitchField from '../../atoms/SwitchField'
 import TimeRangeField from '../../atoms/TimeRangeField'
 
 // helpers
-import { translateDayName, validationRequired } from '../../utils/helper'
+import { translateDayName } from '../../utils/helper'
 
 // assets
 import { ReactComponent as PlusIcon } from '../../assets/icons/plus-icon-16.svg'
 
 const TimeRangesComponent = (props: any) => {
-	const { fields, disabled } = props
+	const { fields, disabled, onDemandSwitch } = props
 	const [t] = useTranslation()
 
 	const items = fields.map((field: any, index: any) => (
@@ -30,8 +30,7 @@ const TimeRangesComponent = (props: any) => {
 				hideHelp
 				allowClear
 				size={'small'}
-				itemClassName={'m-0'}
-				validate={validationRequired}
+				itemClassName={'m-0 pb-0'}
 				disabled={disabled}
 				minuteStep={15}
 			/>
@@ -40,42 +39,73 @@ const TimeRangesComponent = (props: any) => {
 	))
 
 	return (
-		<div className={'flex items-center'}>
-			{items}
-			{items.length < 3 && (
+		<div className={'noti-opening-hours-row'}>
+			<div className={'flex items-center noti-opening-hours-ranges'}>{items}</div>
+			<div className={'flex items-center gap-2'}>
 				<Button
 					onClick={() => fields.push({ timeFrom: null, timeTo: null })}
 					icon={<PlusIcon className={'text-notino-black'} />}
 					className={'noti-btn'}
 					type={'default'}
 					size={'small'}
-					disabled={disabled}
+					disabled={disabled || items.length >= 3}
 				>
 					{t('loc:Pridať interval')}
 				</Button>
-			)}
+				{onDemandSwitch}
+			</div>
 		</div>
 	)
 }
 
+const getDayLabel = (value: any, t: any, showOnDemand = false) => {
+	const label = translateDayName(value?.day)
+
+	if (showOnDemand && value.onDemand) {
+		return `${label} - ${t('loc:Na objednávku')}`
+	}
+
+	if (isEmpty(value?.timeRanges)) {
+		return `${label} - ${t('loc:Zatvorené')}`
+	}
+
+	return label
+}
+
 const OpeningHours = (props: any) => {
-	const { fields, disabled } = props
+	const { fields, disabled, showOnDemand } = props
 	const [t] = useTranslation()
 
 	return (
-		<>
+		<div className={'noti-opening-hours'}>
 			{fields.map((field: any, index: any) => {
 				const value = fields.get(index)
+
 				return (
 					<div key={field} className={'mt-2'}>
-						<div className={'text-gray-900 font-semibold text-base'}>
-							{translateDayName(value?.day)} {isEmpty(value?.timeRanges) ? ` - ${t('loc:Zatvorené')}` : undefined}
-						</div>
-						<FieldArray props={{ disabled }} component={TimeRangesComponent} name={`${field}.timeRanges`} />
+						<div className={'text-gray-900 font-semibold text-base'}>{getDayLabel(value, t, showOnDemand)}</div>
+						<FieldArray
+							props={{
+								disabled: disabled || value.onDemand,
+								onDemandSwitch: showOnDemand && (
+									<Field
+										name={`${field}.onDemand`}
+										component={SwitchField}
+										label={t('loc:Na objednávku')}
+										size={'small'}
+										disabled={disabled}
+										className={'m-0 noti-opening-hours-on-demand-switch'}
+									/>
+								)
+							}}
+							component={TimeRangesComponent}
+							name={`${field}.timeRanges`}
+						/>
+
 						{/* show switch filed for open work hours over weekend */}
 						{index === 4 || fields.length === 1 || (fields.length === 3 && index === 0) ? (
 							<Field
-								className={'mt-3 mb-0'}
+								className={'mt-3 mb-0 pb-0'}
 								component={SwitchField}
 								label={t('loc:Otvorené cez víkend')}
 								name={'openOverWeekend'}
@@ -86,7 +116,7 @@ const OpeningHours = (props: any) => {
 					</div>
 				)
 			})}
-		</>
+		</div>
 	)
 }
 

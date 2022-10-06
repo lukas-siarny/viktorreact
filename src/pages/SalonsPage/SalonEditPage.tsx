@@ -42,6 +42,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -276,9 +277,9 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
 					type={'primary'}
-					block
+					icon={<EditIcon />}
 					size={'middle'}
-					className={cx('noti-btn m-regular', className)}
+					className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 					htmlType={'submit'}
 					onClick={(e) => {
 						if (hasPermission) {
@@ -301,7 +302,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const deleteButton = (className = '') => (
 		<DeleteButton
 			permissions={deletePermissions}
-			className={className}
+			className={cx('w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 			onConfirm={deleteSalon}
 			entityName={t('loc:salón')}
 			type={'default'}
@@ -319,7 +320,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					type={'dashed'}
 					size={'middle'}
 					icon={<EyeoffIcon />}
-					className={cx('noti-btn m-regular', className)}
+					className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 					onClick={(e) => {
 						if (hasPermission) {
 							setModalConfig({
@@ -351,12 +352,11 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 				title={disabled ? t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.') : null}
 				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 			>
-				<span className={cx({ 'cursor-not-allowed': disabled })}>
+				<span className={cx('w-full md:w-auto', { 'cursor-not-allowed': disabled })}>
 					<Button
 						type={'dashed'}
-						block
 						size={'middle'}
-						className={cx('noti-btn m-regular', className, {
+						className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className, {
 							'pointer-events-none': disabled
 						})}
 						disabled={disabled}
@@ -381,7 +381,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		}
 
 		return (
-			<div className={'content-footer pt-0'}>
+			<div className={'content-footer'}>
 				{(() => {
 					// order of cases is important to show correct buttons
 					switch (true) {
@@ -397,22 +397,22 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						case isPublished && !isPendingPublication:
 							return (
 								<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
-									<Row className={'gap-2 flex-row-reverse justify-end'}>
+									<Row className={'gap-2 flex-row-reverse justify-end w-full'}>
 										{/* if is admin show hide button */}
-										{isAdmin && hideSalonButton('w-52 lg:w-60 mt-2-5')}
-										{deleteButton('w-52 lg:w-60 mt-2-5')}
+										{isAdmin && hideSalonButton('')}
+										{deleteButton('')}
 									</Row>
-									<Row className={'gap-2 md:justify-end'}>{submitButton('w-52 lg:w-60 mt-2-5')}</Row>
+									{submitButton('')}
 								</Row>
 							)
 						// default
 						default:
 							return (
-								<Row className={'w-full gap-2 flex-col sm:flex-nowrap sm:flex-row'}>
-									{deleteButton('w-48 lg:w-60 mt-2-5')}
-									<Row className={'gap-2 flex-1 sm:justify-end'}>
-										{requestApprovalButton('w-48 lg:w-60 mt-2-5')}
-										{submitButton('w-48 lg:w-60 mt-2-5')}
+								<Row className={'w-full gap-2 flex-col md:flex-nowrap md:flex-row'}>
+									{deleteButton('')}
+									<Row className={'gap-2 flex-1 md:justify-end w-full'}>
+										{requestApprovalButton('')}
+										{submitButton('')}
 									</Row>
 								</Row>
 							)
@@ -491,7 +491,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		[t, salon?.data?.publicationDeclineReason, hiddenSalon]
 	)
 
-	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header'}>{infoMessage}</div>
+	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header z-40'}>{infoMessage}</div>
 
 	const renderContentHeaderAdmin = () =>
 		(infoMessage || isPendingPublication) && (

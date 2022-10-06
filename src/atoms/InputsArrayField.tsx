@@ -57,7 +57,7 @@ const InputsArrayField = (props: Props) => {
 					return (
 						<div key={index} className={'flex gap-2'}>
 							<Field
-								className={'flex-1 m-0'}
+								className={'flex-1 m-0 pb-0'}
 								component={type === 'text' ? InputField : InputNumberField}
 								name={`${field}.${nestedFieldName ?? entityName}`}
 								size={inputSize}

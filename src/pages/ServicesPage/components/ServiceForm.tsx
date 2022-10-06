@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactNode, useCallback, useState } from 'react'
+import React, { MouseEventHandler, ReactNode, useCallback, useState, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
@@ -105,7 +105,7 @@ const renderParameterValues = (props: any) => {
 					{showDuration && renderFromTo(fieldData?.durationFrom, fieldData?.durationTo, fieldData?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
 					{renderFromTo(fieldData?.priceFrom, fieldData?.priceTo, fieldData?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
 					<Field
-						className={'mb-0'}
+						className={'mb-0 pb-0'}
 						component={SwitchField}
 						onClick={(checked: boolean, event: Event) => event.stopPropagation()}
 						name={`${field}.useParameter`}
@@ -182,7 +182,8 @@ const renderParameterValues = (props: any) => {
 											name={`${field}.durationFrom`}
 											precision={0}
 											step={1}
-											maxChars={3}
+											min={0}
+											max={999}
 											size={'large'}
 											validate={[numberMin0, validateParameterValuePriceAndDuration]}
 											disabled={!useParameter}
@@ -198,7 +199,8 @@ const renderParameterValues = (props: any) => {
 												name={`${field}.durationTo`}
 												precision={0}
 												step={1}
-												maxChars={3}
+												min={0}
+												max={999}
 												size={'large'}
 												validate={[numberMin0, validateParameterValuePriceAndDuration]}
 												disabled={!useParameter}
@@ -231,7 +233,8 @@ const renderParameterValues = (props: any) => {
 										name={`${field}.priceFrom`}
 										precision={2}
 										step={1}
-										maxChars={5}
+										min={0}
+										// max={99999}
 										size={'large'}
 										validate={[numberMin0, validateParameterValuePriceAndDuration]}
 										disabled={!useParameter}
@@ -247,7 +250,8 @@ const renderParameterValues = (props: any) => {
 											name={`${field}.priceTo`}
 											precision={2}
 											step={1}
-											maxChars={5}
+											min={0}
+											// max={99999}
 											size={'large'}
 											validate={[numberMin0, validateParameterValuePriceAndDuration]}
 											disabled={!useParameter}
@@ -363,7 +367,7 @@ export const renderEmployees = (props: any) => {
 	)
 }
 
-const ServiceForm = (props: Props) => {
+const ServiceForm: FC<Props> = (props) => {
 	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -453,6 +457,8 @@ const ServiceForm = (props: Props) => {
 													name='durationFrom'
 													precision={0}
 													step={1}
+													min={0}
+													max={999}
 													maxChars={3}
 													size={'large'}
 													validate={[numberMin0]}
@@ -469,6 +475,8 @@ const ServiceForm = (props: Props) => {
 														name='durationTo'
 														precision={0}
 														step={1}
+														min={0}
+														max={999}
 														maxChars={3}
 														size={'large'}
 														validate={[numberMin0]}
@@ -493,6 +501,7 @@ const ServiceForm = (props: Props) => {
 													name='priceFrom'
 													precision={2}
 													step={1}
+													min={0}
 													maxChars={5}
 													size={'large'}
 													validate={[numberMin0]}
@@ -508,6 +517,7 @@ const ServiceForm = (props: Props) => {
 														name='priceTo'
 														precision={2}
 														step={1}
+														min={0}
 														maxChars={5}
 														size={'large'}
 														validate={[numberMin0]}

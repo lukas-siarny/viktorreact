@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Divider, Form, Button } from 'antd'
 
 // utils
-import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM } from '../../../utils/enums'
+import { UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, FORM, STRINGS } from '../../../utils/enums'
 import { showErrorNotification, validationString, checkUploadingBeforeSubmit } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
@@ -18,6 +18,8 @@ import Localizations from '../../../components/Localizations'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 // types
 import { ILanguageForm } from '../../../types/interfaces'
@@ -40,7 +42,7 @@ const LanguagesForm: FC<Props> = (props) => {
 	const { handleSubmit, languageID, closeForm, onDelete, submitting, pristine } = props
 
 	return (
-		<Form layout={'vertical'} className={'w-full top-0 sticky'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
+		<Form layout={'vertical'} className={'w-full top-0 sticky overflow-hidden'} onSubmitCapture={handleSubmit(checkUploadingBeforeSubmit)}>
 			<div className={'h-full '}>
 				<h3 className={'mb-0 mt-3 relative pr-7'}>
 					{languageID ? t('loc:Upraviť jazyk') : t('loc:Vytvoriť jazyk')}
@@ -61,7 +63,7 @@ const LanguagesForm: FC<Props> = (props) => {
 					noSpace
 					mainField={
 						<Field
-							className='mb-0'
+							className='mb-0 pb-0'
 							component={InputField}
 							label={t('loc:Názov jazyka (EN)')}
 							placeholder={t('loc:Zadajte názov')}
@@ -74,16 +76,24 @@ const LanguagesForm: FC<Props> = (props) => {
 				/>
 				<Field component={ImgUploadField} name='image' label={t('loc:Vlajka')} maxCount={1} signUrl={URL_UPLOAD_IMAGES} category={UPLOAD_IMG_CATEGORIES.LANGUAGE_IMAGE} />
 
-				<div className={'flex w-full justify-start mt-10 gap-2 flex-wrap'}>
-					<Button className={'noti-btn w-full xl:w-40'} size='middle' type='primary' htmlType='submit' disabled={submitting || pristine} loading={submitting}>
-						{languageID ? t('loc:Uložiť') : t('loc:Vytvoriť')}
+				<div className={'flex w-full justify-start mt-6 gap-2 flex-wrap'}>
+					<Button
+						className={'noti-btn w-full xl:w-auto xl:min-w-40'}
+						size='middle'
+						type='primary'
+						htmlType='submit'
+						disabled={submitting || pristine}
+						loading={submitting}
+						icon={languageID ? <EditIcon /> : <CreateIcon />}
+					>
+						{languageID ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:jazyk'))}
 					</Button>
 					{languageID && (
 						<DeleteButton
 							onConfirm={onDelete}
 							entityName={''}
 							type={'default'}
-							className='w-full xl:w-40'
+							className='w-full xl:w-auto xl:min-w-40'
 							getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 						/>
 					)}

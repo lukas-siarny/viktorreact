@@ -16,7 +16,7 @@ import { Paths } from '../../types/api'
 
 // utils
 import { withPermissions } from '../../utils/Permissions'
-import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, PERMISSION, SALON_PERMISSION, STRINGS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import { getPrefixCountryCode } from '../../utils/helper'
@@ -26,6 +26,9 @@ import { RootState } from '../../reducers'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+
+// assets
+import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.CUSTOMER_CREATE]
 
@@ -49,7 +52,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 				link: backUrl
 			},
 			{
-				name: t('loc:Vytvorenie zákazníka')
+				name: t('loc:Vytvoriť zákazníka')
 			}
 		]
 	}
@@ -107,9 +110,9 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 						<Row justify='center'>
 							<Button
 								type={'primary'}
-								block
+								icon={<CreateIcon />}
 								size={'middle'}
-								className={'noti-btn m-regular w-52 xl:w-60'}
+								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								htmlType={'submit'}
 								onClick={() => {
 									dispatch(submit(FORM.CUSTOMER))
@@ -117,7 +120,7 @@ const CreateCustomerPage = (props: SalonSubPageProps) => {
 								disabled={submitting || isFormPristine}
 								loading={submitting}
 							>
-								{t('loc:Uložiť')}
+								{STRINGS(t).createRecord(t('loc:zákazníka'))}
 							</Button>
 						</Row>
 					</div>

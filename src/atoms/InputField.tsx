@@ -72,7 +72,7 @@ const InputField = (props: Props) => {
 	 * 2.Focus field
 	 * 3.Blur field
 	 * 4.Form state is dirty without changes
-	
+
 	const onBlur = useCallback(
 		async (e) => {
 			// NOTE: prevent to have "" empty string as empty value

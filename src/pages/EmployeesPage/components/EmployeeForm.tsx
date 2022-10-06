@@ -6,7 +6,6 @@ import { Divider, Form, Space } from 'antd'
 // utils
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
-import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -258,6 +257,6 @@ const form = reduxForm<IEmployeeForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateEmployeeForm
-})(withPromptUnsavedChanges(EmployeeForm))
+})(EmployeeForm)
 
 export default form

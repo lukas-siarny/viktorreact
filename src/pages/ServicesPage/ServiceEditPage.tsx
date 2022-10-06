@@ -79,9 +79,15 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 		const employeeData = employees?.data?.employees?.find((employee: any) => employee?.id === employeeId)
 
 		if (form?.values?.employees?.find((employee: any) => employee?.id === employeeId)) {
+			const employeeName =
+				`${employeeData?.lastName ? employeeData.firstName || '' : ''} ${employeeData?.lastName || ''}`.trim() ||
+				employeeData?.email ||
+				employeeData?.inviteEmail ||
+				employeeData?.id
+
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Zamestnanec ${employeeData?.firstName} ${employeeData?.lastName} je už priradený!`)
+				description: i18next.t(`Zamestnanec ${employeeName} je už priradený!`)
 			})
 		} else if (employeeData) {
 			updatedEmployees.push({
@@ -155,7 +161,7 @@ const parseEmployeesInit = (employees: ServiceEmployees) => {
 			priceTo: decodePrice(employee.priceAndDurationData?.priceTo),
 			variableDuration: !!employee?.priceAndDurationData?.durationTo,
 			variablePrice: !!employee?.priceAndDurationData?.priceTo,
-			serviceCategoryParameter: parseParameterValuesInit(employee?.serviceCategoryParameter?.values).serviceCategoryParameter
+			serviceCategoryParameter: parseParameterValuesInit(employee?.serviceCategoryParameter?.values)?.serviceCategoryParameter
 		}
 	})
 }

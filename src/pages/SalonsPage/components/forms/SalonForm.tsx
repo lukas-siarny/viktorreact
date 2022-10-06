@@ -160,15 +160,18 @@ const SalonForm: FC<Props> = (props) => {
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
 							showLettersCount
 						/>
+						{
+							// TODO - remove about us 2 NOT-2458, for now only read mode
+						}
 						<Field
 							component={TextareaField}
 							label={t('loc:Doplňujúci popis')}
 							name={'aboutUsSecond'}
 							size={'large'}
 							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
-							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
 							showLettersCount
+							disabled
 						/>
 						<Field
 							component={SelectField}

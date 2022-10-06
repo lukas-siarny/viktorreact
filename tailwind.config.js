@@ -4,7 +4,7 @@ const colors = require('tailwindcss/colors')
 module.exports = {
 	// NOTE: Prefix pre všetky classy, tailwind štýly tak majú väčšiu váhu ako ant štýly
 	important: '#tailwind',
-	purge: {
+	content: {
 		enabled: process.env.NODE_ENV === 'production',
 		content: [
 			'./src/**/*.tsx',
@@ -29,11 +29,11 @@ module.exports = {
 			danger: '#D21414',
 			notino: {
 				black: colors.black,
-				grayDarker: '#404040', // trueGray-700
+				grayDarker: '#404040', // neutral-700
 				grayDark: '#808080',
 				gray: '#BFBFBF',
 				grayLight: '#E6E6E6',
-				grayLighter: '#F5F5F5', // trueGray-100
+				grayLighter: '#F5F5F5', // neutral-100
 				white: colors.white,
 				pink: '#DC0069',
 				redLight: '#EE4A4A',
@@ -46,13 +46,13 @@ module.exports = {
 				basic: colors.blue[200],
 				declined: colors.red[200],
 				pending: colors.yellow[200],
-				notPublished: colors.trueGray[200],
+				notPublished: colors.neutral[200],
 				published: colors.green[200]
 			},
 			// Tailwind colors
 			black: colors.black,
 			white: colors.white,
-			gray: colors.coolGray,
+			gray: colors.gray,
 			red: colors.red,
 			yellow: colors.amber,
 			green: colors.green,
@@ -61,7 +61,7 @@ module.exports = {
 			purple: colors.violet,
 			pink: colors.pink,
 			emerald: colors.emerald,
-			trueGray: colors.trueGray
+			trueGray: colors.neutral
 		},
 		spacing: {
 			px: '1px',

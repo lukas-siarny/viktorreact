@@ -10,7 +10,7 @@
     "node": "^16.13.0"
   },
   "scripts": {
-    "start": "REACT_APP_GOOGLE_MAPS_API_KEY=AIzaSyD6Cs7Tw5bfIaocqRl0bKUSwswLuHHc_Kw runtime-env-cra --config-name=./public/env/runtime-env.js --env-file=.env.template && cross-env npm-run-all -p start-watch translate-watch build:tailwind",
+    "start": "cross-env npm-run-all -p generate-runtime-env start-watch translate-watch build:tailwind",
     "start-watch": "cross-env DISABLE_ESLINT_PLUGIN=true SKIP_PREFLIGHT_CHECK=true REACT_APP_VERSION=$npm_package_version react-app-rewired start",
     "prebuild": "cross-env NODE_ENV=production SKIP_PREFLIGHT_CHECK=true npm-run-all -p build:tailwind rebuild:sass",
     "copy-modules": "node scripts/postBuild.js",
@@ -38,7 +38,8 @@
     "storybook": "npm run build:tailwind && start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "preinstall": "npx npm-force-resolutions",
-    "wait-for-it": "./scripts/wait-for-it.sh"
+    "wait-for-it": "./scripts/wait-for-it.sh",
+    "generate-runtime-env": "cross-env env-cmd runtime-env-cra --config-name=./public/runtime-env.js --env-file=.env.template"
   },
   "dependencies": {
     "@sentry/cli": "1.71.0",
@@ -56,6 +57,7 @@
     "cross-env": "7.0.3",
     "customize-cra": "1.0.0",
     "dayjs": "1.11.1",
+    "env-cmd": "10.1.0",
     "eslint-plugin-prettier": "4.0.0",
     "flagpack-core": "2.0.0",
     "gulp": "4.0.2",

@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactNode, useCallback, useState } from 'react'
+import React, { MouseEventHandler, ReactNode, useCallback, useState, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
@@ -365,7 +365,7 @@ export const renderEmployees = (props: any) => {
 	)
 }
 
-const ServiceForm = (props: Props) => {
+const ServiceForm: FC<Props> = (props) => {
 	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()

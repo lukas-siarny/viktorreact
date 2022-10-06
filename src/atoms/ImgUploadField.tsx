@@ -1,12 +1,14 @@
-import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
+import React, { CSSProperties, FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
-import { Form, Upload, UploadProps, Image, Popconfirm, Button } from 'antd'
+import { Form, Upload, UploadProps, Image, Popconfirm, Button, Tooltip } from 'antd'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
+import { DndProvider, useDrag, useDrop } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import cx from 'classnames'
 
 // utils
@@ -118,16 +120,56 @@ const ImgUploadField: FC<Props> = (props) => {
 		[staticMode]
 	)
 
+	const dragableUploadListItem = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: any, moveRow: any) => {
+		const type = 'DragableUploadList'
+		const ref = useRef(null)
+		const index = fileList.indexOf(file)
+		const [{ isOver, dropClassName }, drop] = useDrop({
+			accept: type,
+			collect: (monitor) => {
+				const { index: dragIndex } = monitor.getItem() || {}
+				if (dragIndex === index) {
+					return {}
+				}
+				return {
+					isOver: monitor.isOver(),
+					dropClassName: dragIndex < index ? ' drop-over-downward' : ' drop-over-upward'
+				}
+			},
+			drop: (item: any) => {
+				moveRow(item?.index, index)
+			}
+		})
+		const [, drag] = useDrag({
+			type,
+			item: { index },
+			collect: (monitor) => ({
+				isDragging: monitor.isDragging()
+			})
+		})
+		drop(drag(ref))
+		return (
+			<div
+				ref={ref}
+				className={cx('upload-draggable-list-item w-full h-full', {
+					[`${dropClassName}`]: isOver
+				})}
+			>
+				{renderGalleryImage(originNode, file, fileList, actions)}
+			</div>
+		)
+	}
+
 	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => (
 		<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
 			<div className={'ant-upload-list-item-info flex items-center justify-center'}>
-				{file.type !== 'application/pdf' ? (
-					<Image src={file.thumbUrl || file.url} alt={file.name} fallback={file.url} className='ant-upload-list-item-image' />
-				) : (
+				{file.type === 'application/pdf' || !!isFilePDF(file.url) ? (
 					<div className={'flex items-center justify-center'}>
 						<PdfIcon />
 						{file.name}
 					</div>
+				) : (
+					<Image src={file.thumbUrl || file.url} alt={file.name} fallback={file.url} className='ant-upload-list-item-image' />
 				)}
 			</div>
 			<span className={'ant-upload-list-item-actions w-full h-full'}>
@@ -176,48 +218,63 @@ const ImgUploadField: FC<Props> = (props) => {
 		</div>
 	)
 
-	const uploader = (
-		<Upload
-			id={formFieldID(form, input.name)}
-			className={cx(uploaderClassName, '-mb-2')}
-			accept={accept}
-			disabled={disabled}
-			onChange={onChange}
-			listType='picture-card'
-			multiple={multiple}
-			customRequest={(options: any) => {
-				dispatch(change(form, IMAGE_UPLOADING_PROP, true))
-				uploadImage(options, signUrl, category, imagesUrls)
-			}}
-			itemRender={renderGalleryImage}
-			fileList={input.value || []}
-			onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
-			maxCount={maxCount}
-			showUploadList={showUploadList}
-			beforeUpload={(file, fileList) => {
-				if (file.size >= maxFileSize) {
-					const messages = [getMaxSizeNotifMessage(maxFileSize)]
-					showNotifications(messages, NOTIFICATION_TYPE.NOTIFICATION)
-					return Upload.LIST_IGNORE
-				}
+	const swapElements = (array: any[], index1: number, index2: number) => {
+		array[index1] = array.splice(index2, 1, array[index1])[0]
+		return [...array]
+	}
 
-				if (fileList.length > maxCount) {
-					const { uid: uidCurrent } = file
-					const { uid: uidLast } = fileList[fileList.length - 1]
-					if (uidCurrent === uidLast)
-						showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Nahrajte maximálne {{maxCount}} súborov', { maxCount }) }], NOTIFICATION_TYPE.NOTIFICATION)
-					return Upload.LIST_IGNORE
-				}
-				return true
-			}}
-		>
-			{!staticMode && input.value.length < maxCount && (
-				<div>
-					<UploadIcon className={`text-xl ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
-					<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
-				</div>
-			)}
-		</Upload>
+	const moveRow = (dragIndex: number, hoverIndex: number) => {
+		const updatedImages = swapElements([...images], dragIndex, hoverIndex)
+		if (!isEmpty(updatedImages) && updatedImages) {
+			input.onChange([...updatedImages])
+		}
+	}
+
+	const uploader = (
+		<DndProvider backend={HTML5Backend}>
+			<Upload
+				id={formFieldID(form, input.name)}
+				className={cx(uploaderClassName, '-mb-2')}
+				accept={accept}
+				disabled={disabled}
+				onChange={onChange}
+				listType='picture-card'
+				multiple={multiple}
+				customRequest={(options: any) => {
+					dispatch(change(form, IMAGE_UPLOADING_PROP, true))
+					uploadImage(options, signUrl, category, imagesUrls)
+				}}
+				itemRender={(originNode, file, currFileList, actions) => dragableUploadListItem(originNode, file, currFileList, actions, moveRow)}
+				// itemRender={renderGalleryImage}
+				fileList={input.value || []}
+				onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
+				maxCount={maxCount}
+				showUploadList={showUploadList}
+				beforeUpload={(file, fileList) => {
+					if (file.size >= maxFileSize) {
+						const messages = [getMaxSizeNotifMessage(maxFileSize)]
+						showNotifications(messages, NOTIFICATION_TYPE.NOTIFICATION)
+						return Upload.LIST_IGNORE
+					}
+
+					if (fileList.length > maxCount) {
+						const { uid: uidCurrent } = file
+						const { uid: uidLast } = fileList[fileList.length - 1]
+						if (uidCurrent === uidLast)
+							showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Nahrajte maximálne {{maxCount}} súborov', { maxCount }) }], NOTIFICATION_TYPE.NOTIFICATION)
+						return Upload.LIST_IGNORE
+					}
+					return true
+				}}
+			>
+				{!staticMode && input.value.length < maxCount && (
+					<div>
+						<UploadIcon className={`text-xl ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
+						<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
+					</div>
+				)}
+			</Upload>
+		</DndProvider>
 	)
 
 	useEffect(() => {
@@ -245,35 +302,39 @@ const ImgUploadField: FC<Props> = (props) => {
 		>
 			{staticMode && !input.value && '-'}
 			{uploader}
-			<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
-				<Button
-					className={'w-full h-full m-0 p-0'}
-					href={`${previewUrl?.url}?response-content-disposition=attachment`}
-					target='_blank'
-					rel='noopener noreferrer'
-					type={'link'}
-					htmlType={'button'}
-					title='Download file'
-					download
-				>
-					<span role='img' aria-label='download' className='w-full h-full flex items-center justify-center'>
-						<DownloadIcon width={24} />
-					</span>
-				</Button>
-			</div>
-			<div className={'hidden'}>
-				<Image.PreviewGroup
-					preview={{
-						visible: !!previewUrl && previewUrl?.type !== 'application/pdf',
-						onVisibleChange: () => setPreviewUrl(null),
-						current: images?.findIndex((image: any) => image?.url === previewUrl?.url)
-					}}
-				>
-					{map(images, (image) => (
-						<Image key={image.url} src={image.url} fallback={image.thumbUrl} />
-					))}
-				</Image.PreviewGroup>
-			</div>
+			{!!previewUrl && (
+				<>
+					<div className={cx('download', { hidden: !previewUrl, fixed: previewUrl })}>
+						<Button
+							className={'w-full h-full m-0 p-0'}
+							href={`${previewUrl?.url}?response-content-disposition=attachment`}
+							target='_blank'
+							rel='noopener noreferrer'
+							type={'link'}
+							htmlType={'button'}
+							title='Download file'
+							download
+						>
+							<span role='img' aria-label='download' className='w-full h-full flex items-center justify-center'>
+								<DownloadIcon width={24} />
+							</span>
+						</Button>
+					</div>
+					<div className={'hidden'}>
+						<Image.PreviewGroup
+							preview={{
+								visible: !!previewUrl && (previewUrl?.type !== 'application/pdf' || !isFilePDF(previewUrl?.url)),
+								onVisibleChange: () => setPreviewUrl(null),
+								current: images?.findIndex((image: any) => image?.url === previewUrl?.url)
+							}}
+						>
+							{map(images, (image) => (
+								<Image key={image.url} src={image.url} fallback={image.thumbUrl} />
+							))}
+						</Image.PreviewGroup>
+					</div>
+				</>
+			)}
 			{openPdf()}
 		</Item>
 	)

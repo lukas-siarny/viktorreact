@@ -16,7 +16,7 @@ import SpecialistModal from './components/modals/SpecialistModal'
 import { getSalonDataForSubmission, initEmptySalonFormData, initSalonFormData, SalonInitType } from './components/salonUtils'
 
 // enums
-import { FILTER_ENTITY, FORM, PERMISSION } from '../../utils/enums'
+import { FILTER_ENTITY, FORM, PERMISSION, STRINGS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -34,6 +34,7 @@ import searchWrapper from '../../utils/filters'
 
 // assets
 import { ReactComponent as SpecialistIcon } from '../../assets/icons/specialist-24-icon.svg'
+import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -146,7 +147,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<div className='content-body mt-2'>
+			<div className='content-body'>
 				<Spin spinning={isLoading}>
 					<SalonForm
 						onSubmit={handleSubmit}
@@ -155,17 +156,17 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 						clearSalonForm={clearSalonForm}
 						searchSalons={searchSalons}
 					/>
-					<div className={'content-footer pt-0'}>
+					<div className={'content-footer'}>
 						<Row className={'w-full'} justify={'center'}>
 							<Permissions
 								allowed={permissions}
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
-										block
 										size={'middle'}
-										className={'noti-btn m-regular w-52 xl:w-60 mt-2-5'}
+										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
+										icon={<CreateIcon />}
 										onClick={(e) => {
 											if (hasPermission) {
 												dispatch(submit(FORM.SALON))
@@ -177,7 +178,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 										disabled={submitting}
 										loading={submitting}
 									>
-										{t('loc:Uložiť')}
+										{STRINGS(t).createRecord(t('loc:salón'))}
 									</Button>
 								)}
 							/>

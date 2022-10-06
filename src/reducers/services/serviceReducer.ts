@@ -8,7 +8,7 @@ export const initState = {
 	services: {
 		data: null,
 		tableData: undefined,
-		options: undefined,
+		options: [],
 		isLoading: false,
 		isFailure: false
 	} as IServicesPayload & ILoadingAndFailure,

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { change, initialize } from 'redux-form'
+import { change, initialize, startSubmit, stopSubmit } from 'redux-form'
 import { Action, compose, Dispatch } from 'redux'
 import { notification } from 'antd'
 import i18next from 'i18next'
@@ -79,9 +79,15 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 		const employeeData = employees?.data?.employees?.find((employee: any) => employee?.id === employeeId)
 
 		if (form?.values?.employees?.find((employee: any) => employee?.id === employeeId)) {
+			const employeeName =
+				`${employeeData?.lastName ? employeeData.firstName || '' : ''} ${employeeData?.lastName || ''}`.trim() ||
+				employeeData?.email ||
+				employeeData?.inviteEmail ||
+				employeeData?.id
+
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Zamestnanec ${employeeData?.firstName} ${employeeData?.lastName} je už priradený!`)
+				description: i18next.t(`Zamestnanec ${employeeName} je už priradený!`)
 			})
 		} else if (employeeData) {
 			updatedEmployees.push({
@@ -155,7 +161,7 @@ const parseEmployeesInit = (employees: ServiceEmployees) => {
 			priceTo: decodePrice(employee.priceAndDurationData?.priceTo),
 			variableDuration: !!employee?.priceAndDurationData?.durationTo,
 			variablePrice: !!employee?.priceAndDurationData?.priceTo,
-			serviceCategoryParameter: parseParameterValuesInit(employee?.serviceCategoryParameter?.values).serviceCategoryParameter
+			serviceCategoryParameter: parseParameterValuesInit(employee?.serviceCategoryParameter?.values)?.serviceCategoryParameter
 		}
 	})
 }
@@ -205,6 +211,7 @@ const ServiceEditPage = (props: Props) => {
 	}, [])
 
 	const handleSubmit = async (values: IServiceForm) => {
+		dispatch(startSubmit(FORM.SERVICE_FORM))
 		try {
 			const reqData: ServicePatch = {
 				useCategoryParameter: values.useCategoryParameter,
@@ -226,6 +233,8 @@ const ServiceEditPage = (props: Props) => {
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
+		} finally {
+			dispatch(stopSubmit(FORM.SERVICE_FORM))
 		}
 	}
 	return (

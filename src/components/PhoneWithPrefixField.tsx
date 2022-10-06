@@ -131,7 +131,8 @@ const PhoneWithPrefixField = (props: Props) => {
 			</Col>
 			<Col flex='auto'>
 				<Field
-					label={label ? ' ' : undefined}
+					className={label ? 'hidden-label' : undefined}
+					label={label}
 					component={InputField}
 					placeholder={placeholder}
 					name={phoneName}

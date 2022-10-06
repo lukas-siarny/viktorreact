@@ -134,6 +134,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						</Row>
 						<Field
 							component={TextareaField}
+							className={'pb-0'}
 							label={t('loc:Poznámka')}
 							name={'note'}
 							size={'large'}
@@ -151,7 +152,7 @@ const SupportContactForm: FC<Props> = (props) => {
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
 						<Field
-							className={'mb-0'}
+							className={'mb-0 pb-0'}
 							component={SwitchField}
 							label={t('loc:Pon - Pi rovnaké otváracie hodiny')}
 							name={'sameOpenHoursOverWeek'}

@@ -151,7 +151,7 @@ const UserPage: FC<Props> = (props) => {
 					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 				</Row>
 			)}
-			<div className='content-body small mt-2'>
+			<div className='content-body small'>
 				<Spin spinning={isLoading}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
 					<div className={'content-footer pt-0'}>

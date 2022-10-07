@@ -89,7 +89,7 @@ const CreateUserPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<div className='content-body small mt-2'>
+			<div className='content-body small'>
 				<Spin spinning={isLoading}>
 					<CreateUserAccountForm onSubmit={createUser} />
 					<div className={'content-footer'}>

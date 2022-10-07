@@ -298,7 +298,7 @@ const EmployeePage = (props: Props) => {
 			</Row>
 
 			{formValues?.hasActiveAccount && (
-				<div className='content-body small mt-2 mb-8'>
+				<div className='content-body small mb-8'>
 					<Spin spinning={isLoading}>
 						<EditRoleForm
 							onSubmit={editEmployeeRole}
@@ -309,7 +309,7 @@ const EmployeePage = (props: Props) => {
 					</Spin>
 				</div>
 			)}
-			<div className='content-body small mt-2 mb-8'>
+			<div className='content-body small'>
 				<Spin spinning={isLoading}>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 					<div className={'content-footer pt-0'}>

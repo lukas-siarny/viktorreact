@@ -125,7 +125,7 @@ const EditCategoryParamsPage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:category-parameters')} />
 			</Row>
-			<div className='content-body small mt-2'>
+			<div className='content-body small'>
 				<Spin spinning={parameter.isLoading}>
 					<CategoryParamsForm onSubmit={handleSubmit} onDelete={handleDelete} />
 				</Spin>

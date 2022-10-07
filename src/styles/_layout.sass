@@ -89,7 +89,7 @@ $inner-padding: 16px
 				svg
 					filter: invert(1)
 
-			&:active
+			&:active:not(.ant-menu-item-selected)
 				background-color: $backgroundColor-notino-grayLighter
 
 			&:hover:not(.ant-menu-item-selected)
@@ -161,10 +161,12 @@ $inner-padding: 16px
 			min-height: calc(100vh - #{$header-height} - 80px - 56px)
 	&.small
 		width: 50%
-		margin: 0 auto
+		margin-left: auto
+		margin-right: auto
 	&.medium
 		width: 75%
-		margin: 0 auto
+		margin-left: auto
+		margin-right: auto
 	&.without-content-footer
 		.floating-content-wrapper
 			min-height: calc(100vh - 80px - 81px) // 100vh - header - breadcrumbs

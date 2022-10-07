@@ -200,6 +200,7 @@ const Calendar1 = () => {
 						}
 					}}
 					weekends
+					editable
 					allDaySlot={false}
 					stickyFooterScrollbar
 					events={composedEvents}
@@ -219,7 +220,7 @@ const Calendar1 = () => {
 						<Input
 							type='text'
 							value={eventModalProps?.data?.title}
-							onChange={(value) => {
+							onChange={(value: any) => {
 								setEventModalProps({ ...eventModalProps, data: { ...eventModalProps.data, title: value } })
 							}}
 						/>

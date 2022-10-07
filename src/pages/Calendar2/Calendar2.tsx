@@ -243,7 +243,7 @@ const Calendar2 = () => {
 	const { defaultDate, views } = useMemo(
 		() => ({
 			defaultDate: new Date(2022, 9, 4),
-			views: ['day', 'work_week', 'month']
+			views: ['day', 'week', 'month']
 		}),
 		[]
 	)

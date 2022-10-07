@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { change, initialize } from 'redux-form'
+import { change, initialize, startSubmit, stopSubmit } from 'redux-form'
 import { Action, compose, Dispatch } from 'redux'
 import { notification } from 'antd'
 import i18next from 'i18next'
@@ -211,6 +211,7 @@ const ServiceEditPage = (props: Props) => {
 	}, [])
 
 	const handleSubmit = async (values: IServiceForm) => {
+		dispatch(startSubmit(FORM.SERVICE_FORM))
 		try {
 			const reqData: ServicePatch = {
 				useCategoryParameter: values.useCategoryParameter,
@@ -232,6 +233,8 @@ const ServiceEditPage = (props: Props) => {
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
+		} finally {
+			dispatch(stopSubmit(FORM.SERVICE_FORM))
 		}
 	}
 	return (

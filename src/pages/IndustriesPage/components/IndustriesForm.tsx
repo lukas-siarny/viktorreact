@@ -25,6 +25,7 @@ import { RootState } from '../../../reducers'
 import { IIndustriesForm } from '../../../types/interfaces'
 
 // assets
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 import { ReactComponent as CategoryIcon } from '../../../assets/icons/categories-24-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
@@ -78,8 +79,9 @@ const IndustriesForm: FC<Props> = (props) => {
 							<Button
 								type={'primary'}
 								size={'middle'}
+								icon={<EditIcon />}
 								htmlType={'submit'}
-								className={'noti-btn m-regular w-52 xl:w-60'}
+								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								disabled={submitting || pristine}
 								loading={submitting}
 								onClick={(e) => {

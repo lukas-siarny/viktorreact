@@ -294,7 +294,7 @@ const ImgUploadField: FC<Props> = (props) => {
 
 	return (
 		<Item
-			className={`${className ?? 'w-full'}`}
+			className={`${className ?? 'w-full'} noti-upload-item`}
 			label={label}
 			required={required}
 			help={touched && error ? error : undefined}

@@ -225,6 +225,7 @@ const SalonForm: FC<Props> = (props) => {
 							category={UPLOAD_IMG_CATEGORIES.SALON}
 							disabled={disabledForm}
 							draggable
+							selectable
 						/>
 					</Col>
 				</Row>

@@ -4,6 +4,7 @@ import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Form, Upload, UploadProps, Image, Popconfirm, Button, Checkbox } from 'antd'
+import { CheckboxValueType } from 'antd/es/checkbox/Group'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
@@ -39,6 +40,7 @@ type Props = WrappedFieldProps &
 		className?: CSSProperties
 		uploaderClassName?: string
 		draggable?: boolean
+		selectable?: boolean
 	}
 
 interface IPreviewFile {
@@ -73,7 +75,8 @@ const ImgUploadField: FC<Props> = (props) => {
 		category,
 		className = '',
 		uploaderClassName = '',
-		draggable = false
+		draggable = false,
+		selectable = false
 	} = props
 
 	const [t] = useTranslation()
@@ -81,6 +84,18 @@ const ImgUploadField: FC<Props> = (props) => {
 	const imagesUrls = useRef<ImgUploadParam>({})
 	const [previewUrl, setPreviewUrl] = useState<IPreviewFile | null>(null)
 	const [images, setImages] = useState<any[]>([])
+	const [selectedValues, setSelectedValues] = useState<CheckboxValueType[]>([])
+
+	useEffect(() => {
+		if (!isEmpty(input.value)) {
+			// filter application/pdf file
+			setImages(input.value.filter((file: any) => file.type !== 'application/pdf' || !!isFilePDF(file.url)))
+			// set selected images in gallery
+			const selected: string[] = []
+			input.value?.forEach((file: any) => file?.isCover && selected.push(file?.uid))
+			setSelectedValues(selected)
+		}
+	}, [input.value])
 
 	const onChange = async (info: UploadChangeParam<UploadFile<any>>) => {
 		if (info.file.status === 'error') {
@@ -123,7 +138,7 @@ const ImgUploadField: FC<Props> = (props) => {
 	)
 
 	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => (
-		<div className={'ant-upload-list-wrapper-box'}>
+		<>
 			<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
 				<div className={'ant-upload-list-item-info flex items-center justify-center'}>
 					{file.type === 'application/pdf' || !!isFilePDF(file.url) ? (
@@ -179,8 +194,12 @@ const ImgUploadField: FC<Props> = (props) => {
 					</div>
 				</span>
 			</div>
-			<Checkbox value={file?.uid} />
-		</div>
+			{selectable && (
+				<div className={'w-full flex items-center justify-center'}>
+					<Checkbox key={file?.uid} value={file?.uid} />
+				</div>
+			)}
+		</>
 	)
 
 	const DragableUploadListItem = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: any, moveRow: any) => {
@@ -235,9 +254,27 @@ const ImgUploadField: FC<Props> = (props) => {
 		}
 	}
 
+	const selectImage = (checkedValue: CheckboxValueType[]) => {
+		const updatedImages = images.map((image) => {
+			if (checkedValue.includes(image?.uid)) {
+				return { ...image, isCover: true }
+			}
+			return { ...image, isCover: false }
+		})
+		input.onChange([...updatedImages])
+	}
+
+	const openPdf = () => {
+		// open application pdf
+		if (previewUrl?.type === 'application/pdf') {
+			window.open(previewUrl.url)
+			setPreviewUrl(null)
+		}
+	}
+
 	const uploader = (
 		<DndProvider backend={HTML5Backend}>
-			<Checkbox.Group onChange={(checkedValue: any) => console.log('checkedValue:', checkedValue)}>
+			<Checkbox.Group value={selectedValues} onChange={selectImage}>
 				<Upload
 					id={formFieldID(form, input.name)}
 					className={cx(uploaderClassName, '-mb-2')}
@@ -288,21 +325,6 @@ const ImgUploadField: FC<Props> = (props) => {
 			</Checkbox.Group>
 		</DndProvider>
 	)
-
-	useEffect(() => {
-		if (!isEmpty(input.value)) {
-			// filter application/pdf file
-			setImages(input.value.filter((file: any) => file.type !== 'application/pdf' || !!isFilePDF(file.url)))
-		}
-	}, [input.value])
-
-	const openPdf = () => {
-		// open application pdf
-		if (previewUrl?.type === 'application/pdf') {
-			window.open(previewUrl.url)
-			setPreviewUrl(null)
-		}
-	}
 
 	return (
 		<Item

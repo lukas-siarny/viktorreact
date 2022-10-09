@@ -122,46 +122,6 @@ const ImgUploadField: FC<Props> = (props) => {
 		[staticMode]
 	)
 
-	const dragableUploadListItem = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: any, moveRow: any) => {
-		const type = 'DragableUploadList'
-		const ref = useRef(null)
-		const index = fileList.indexOf(file)
-		const [{ isOver, dropClassName }, drop] = useDrop({
-			accept: type,
-			collect: (monitor) => {
-				const { index: dragIndex } = monitor.getItem() || {}
-				if (dragIndex === index) {
-					return {}
-				}
-				return {
-					isOver: monitor.isOver(),
-					dropClassName: dragIndex < index ? ' drop-over-downward' : ' drop-over-upward'
-				}
-			},
-			drop: (item: any) => {
-				moveRow(item?.index, index)
-			}
-		})
-		const [, drag] = useDrag({
-			type,
-			item: { index },
-			collect: (monitor) => ({
-				isDragging: monitor.isDragging()
-			})
-		})
-		drop(drag(ref))
-		return (
-			<div
-				ref={ref}
-				className={cx('upload-draggable-list-item w-full h-full', {
-					[`${dropClassName}`]: isOver
-				})}
-			>
-				{renderGalleryImage(originNode, file, fileList, actions)}
-			</div>
-		)
-	}
-
 	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => (
 		<div className={'ant-upload-list-wrapper-box'}>
 			<div className={'ant-upload-list-item ant-upload-list-item-done ant-upload-list-item-list-type-picture-card p-0'}>
@@ -223,6 +183,46 @@ const ImgUploadField: FC<Props> = (props) => {
 		</div>
 	)
 
+	const DragableUploadListItem = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: any, moveRow: any) => {
+		const type = 'DragableUploadList'
+		const ref = useRef(null)
+		const index = fileList.indexOf(file)
+		const [{ isOver, dropClassName }, drop] = useDrop({
+			accept: type,
+			collect: (monitor) => {
+				const { index: dragIndex } = monitor.getItem() || {}
+				if (dragIndex === index) {
+					return {}
+				}
+				return {
+					isOver: monitor.isOver(),
+					dropClassName: dragIndex < index ? ' drop-over-downward' : ' drop-over-upward'
+				}
+			},
+			drop: (item: any) => {
+				moveRow(item?.index, index)
+			}
+		})
+		const [, drag] = useDrag({
+			type,
+			item: { index },
+			collect: (monitor) => ({
+				isDragging: monitor.isDragging()
+			})
+		})
+		drop(drag(ref))
+		return (
+			<div
+				ref={ref}
+				className={cx('upload-draggable-list-item w-full h-full', {
+					[`${dropClassName}`]: isOver
+				})}
+			>
+				{renderGalleryImage(originNode, file, fileList, actions)}
+			</div>
+		)
+	}
+
 	const swapElements = (array: any[], index1: number, index2: number) => {
 		array[index1] = array.splice(index2, 1, array[index1])[0]
 		return [...array]
@@ -251,7 +251,7 @@ const ImgUploadField: FC<Props> = (props) => {
 						uploadImage(options, signUrl, category, imagesUrls)
 					}}
 					itemRender={(originNode, file, currFileList, actions) =>
-						draggable ? dragableUploadListItem(originNode, file, currFileList, actions, moveRow) : renderGalleryImage(originNode, file, currFileList, actions)
+						draggable ? DragableUploadListItem(originNode, file, currFileList, actions, moveRow) : renderGalleryImage(originNode, file, currFileList, actions)
 					}
 					// itemRender={renderGalleryImage}
 					fileList={input.value || []}

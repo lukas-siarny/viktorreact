@@ -23,7 +23,7 @@ const Filters = (props: Props) => {
 		setVisible(activeKey)
 	}, [visible])
 
-	return search || customSearchContent ? (
+	return (search || customSearchContent) && (customContent || children) ? (
 		<Collapse activeKey={visible} ghost className='ghost-filters'>
 			<Panel
 				header={
@@ -62,7 +62,10 @@ const Filters = (props: Props) => {
 		</Collapse>
 	) : (
 		<div>
-			{/* // Ak neexistuje search tak zobrazit len children (filtre) bez collapsu lebo lava strana vyzera prazdna a nemusi byt collapsovana eg: inventar/autobusova-doprava/:id/jazdy */}
+			{/* // Ak exsituje len search alebo len childer tak zobrazit len children tak sa to zobrazi len v jednoduchom dive */}
+			<Col span={24} lg={12} xl={8}>
+				{search || customSearchContent}
+			</Col>
 			{children && children}
 		</div>
 	)

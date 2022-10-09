@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Row, Spin } from 'antd'
+import { Button, Col, Row, Spin } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { useDispatch, useSelector } from 'react-redux'
 import { initialize } from 'redux-form'
@@ -14,6 +14,7 @@ import RejectedSuggestionsFilter from './filters/RejectedSuggestionsFilter'
 import { FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams, getLinkWithEncodedBackUrl } from '../../../utils/helper'
 import { history } from '../../../utils/history'
+import { patchReq } from '../../../utils/request'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -27,6 +28,34 @@ const RejectedSalonSuggestions = () => {
 	const dispatch = useDispatch()
 
 	const salons = useSelector((state: RootState) => state.salons.rejectedSuggestions)
+	const [submitting, setSubmitting] = useState(false)
+
+	const loading = salons?.isLoading || submitting
+
+	const tableData = [
+		{
+			key: '111111111',
+			salonID: '11111111',
+			address: 'Spisska Nova Ves, Brezova 2',
+			salonMail: 'saloneamil@email.com',
+			salonName: 'Salon name',
+			userID: 'sadasdasd',
+			userLastName: 'Siarny',
+			userPhone: '+421902110244',
+			userEmail: 'lukas.siarny@gmail.com'
+		},
+		{
+			key: '2222222222',
+			salonID: '2222222222',
+			address: 'Spisska Nova Ves, Brezova 2',
+			salonMail: 'saloneamil@email.com',
+			salonName: 'Salon name',
+			userID: 'sadasdasd',
+			userLastName: 'Siarny',
+			userPhone: '+421902110244',
+			userEmail: 'lukas.siarny@gmail.com'
+		}
+	]
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -67,6 +96,19 @@ const RejectedSalonSuggestions = () => {
 			page: 1
 		}
 		setQuery(normalizeQueryParams(newQuery))
+	}
+
+	const markRejectedSalonAsDone = async (salonID: string) => {
+		try {
+			setSubmitting(true)
+			// await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, getSalonDataForSubmission(data) as any)
+			dispatch(getRejectedSuggestions({ page: query.page, limit: query.limit, order: query.order, search: query.search }))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setSubmitting(false)
+		}
 	}
 
 	const columns: Columns = [
@@ -126,6 +168,36 @@ const RejectedSalonSuggestions = () => {
 					sorter: false
 				}
 			]
+		},
+		{
+			key: 'ctaButton',
+			width: 150,
+			children: [
+				{
+					title: t('loc:Označiť ako vybavené'),
+					dataIndex: 'salonID',
+					key: 'markAsDone',
+					fixed: 'right',
+					ellipsis: true,
+					width: 150,
+					render: (_value, record) => (
+						<>
+							<Button
+								type={'primary'}
+								onClick={(e) => {
+									e.stopPropagation()
+									markRejectedSalonAsDone(record?.salonID)
+								}}
+								size={'middle'}
+								disabled={loading}
+								className={'noti-btn m-regular w-full hover:shadow-none focus:shadow-none'}
+							>
+								{t('loc:Vybavené')}
+							</Button>
+						</>
+					)
+				}
+			]
 		}
 	]
 
@@ -133,13 +205,14 @@ const RejectedSalonSuggestions = () => {
 		<Row gutter={ROW_GUTTER_X_DEFAULT}>
 			<Col span={24}>
 				<div className='content-body'>
-					<Spin spinning={salons?.isLoading}>
+					<Spin spinning={loading}>
 						<RejectedSuggestionsFilter onSubmit={handleSubmit} total={salons?.data?.pagination?.totalCount} />
 						<CustomTable
 							className='table-fixed'
 							onChange={onChangeTable}
 							columns={columns}
-							dataSource={salons?.tableData}
+							// dataSource={salons?.tableData}
+							dataSource={tableData}
 							rowClassName={'clickable-row'}
 							twoToneRows
 							scroll={{ x: 800 }}

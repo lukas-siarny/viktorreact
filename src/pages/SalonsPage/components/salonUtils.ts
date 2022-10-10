@@ -53,7 +53,6 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		payByCash: !!salonData?.payByCash,
 		otherPaymentMethods: salonData.otherPaymentMethods || null,
 		aboutUsFirst: salonData.aboutUsFirst || null,
-		aboutUsSecond: salonData.aboutUsSecond || null,
 		openOverWeekend,
 		sameOpenHoursOverWeek,
 		openingHours,
@@ -76,7 +75,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 						phone: phone.phone || null
 				  }))
 				: getPhoneDefaultValue(phonePrefixCountryCode),
-		gallery: map(salonData.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
+		gallery: map(salonData.images, (image: any) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id, isCover: image?.isCover })),
 		pricelists: map(salonData.pricelists, (file) => ({ url: file?.original, uid: file?.id, name: file?.fileName })),
 		logo: salonData.logo?.id
 			? [
@@ -118,12 +117,14 @@ export const getSalonDataForSubmission = (data: ISalonForm) => {
 	const phones = data.phones?.filter((phone) => phone?.phone)
 
 	return {
-		imageIDs: (data.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
+		imageIDs: (data.gallery || []).map((image: any) => ({
+			id: image?.id ?? image?.uid,
+			isCover: image?.isCover
+		})) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 		logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
 		name: data.salonNameFromSelect ? data.nameSelect?.label : data.name,
 		openingHours: openingHours || [],
 		aboutUsFirst: data.aboutUsFirst,
-		aboutUsSecond: data.aboutUsSecond,
 		city: data.city,
 		countryCode: data.country,
 		latitude: data.latitude,

@@ -38,7 +38,6 @@ export interface ILoginForm {
 	password: string
 }
 
-
 export interface IInviteEmployeeForm {
 	email: string
 	roleID: string
@@ -76,10 +75,9 @@ export interface ISalonForm {
 	salonNameFromSelect: boolean
 	id: string | null
 	name: string | null
-	nameSelect: { key: string, label: string | null; value: string | null } | null
+	nameSelect: { key: string; label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	aboutUsSecond: string | null
 	openingHours: OpeningHours
 	note: string | null
 	noteFrom: string | null
@@ -94,9 +92,9 @@ export interface ISalonForm {
 	latitude: number | null
 	longitude: number | null
 	parkingNote: string | null
-	phones: { phonePrefixCountryCode: string | null, phone: string | null }[]
+	phones: { phonePrefixCountryCode: string | null; phone: string | null }[]
 	email: string | null
-	categoryIDs: [string, ...string[] ] | null
+	categoryIDs: [string, ...string[]] | null
 	socialLinkFB: string | null
 	socialLinkInstagram: string | null
 	socialLinkWebPage: string | null
@@ -141,7 +139,7 @@ export interface ISupportContactForm {
 	city: string
 	street: string
 	streetNumber: string
-	phones: { phonePrefixCountryCode: string, phone: string }[]
+	phones: { phonePrefixCountryCode: string; phone: string }[]
 	emails: { email: string }[]
 }
 
@@ -265,7 +263,7 @@ export interface ICustomerForm {
 	streetNumber?: string
 	countryCode?: string
 	salonID: string
-	gallery: any,
+	gallery: any
 	avatar: any
 }
 
@@ -317,7 +315,6 @@ export interface IUserAvatar {
 	alt?: string
 	text?: string
 	key?: string | number
-
 }
 
 export interface IQueryParams {

@@ -160,19 +160,6 @@ const SalonForm: FC<Props> = (props) => {
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
 							showLettersCount
 						/>
-						{
-							// TODO - remove about us 2 NOT-2458, for now only read mode
-						}
-						<Field
-							component={TextareaField}
-							label={t('loc:Doplňujúci popis')}
-							name={'aboutUsSecond'}
-							size={'large'}
-							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
-							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
-							showLettersCount
-							disabled
-						/>
 						<Field
 							component={SelectField}
 							options={languages.enumerationsOptions}
@@ -214,7 +201,6 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<Field
-							className={'m-0 pb-0'}
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'gallery'}

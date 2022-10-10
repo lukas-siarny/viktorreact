@@ -142,8 +142,8 @@ const SpecialistModal = (props: Props) => {
 	}
 
 	return (
-		<Modal key={'noti-specialist'} visible={visible} footer={null} closable={false} className={'noti-specialist-modal'} width={450} centered onCancel={onCancel}>
-			<div className={'noti-specialist-modal-content'}>
+		<Modal key={'noti-specialist'} visible={visible} footer={null} closable={false} width={450} centered onCancel={onCancel}>
+			<div className={'noti-modal-content noti-specialist-modal-content'}>
 				<header>
 					<button type={'button'} onClick={onCancel}>
 						<CloseIcon />
@@ -166,7 +166,7 @@ const SpecialistModal = (props: Props) => {
 						</p>
 						<div>
 							<h2>{t('loc:Kontaktovať Špecialistu')}</h2>
-							<div className={'ant-form-item mb-0'}>{specialistContent()}</div>
+							<div className={'ant-form-item mb-0 pb-0'}>{specialistContent()}</div>
 						</div>
 					</main>
 				</Spin>

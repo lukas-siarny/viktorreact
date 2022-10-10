@@ -9,6 +9,7 @@ import { Columns } from '../../../types/interfaces'
 
 // components
 import CustomTable from '../../../components/CustomTable'
+import InviteModal, { PendingInviteData } from './InviteModal'
 
 // utils
 import { patchReq } from '../../../utils/request'
@@ -26,6 +27,10 @@ const PendingInvites = () => {
 	const dispatch = useDispatch()
 
 	const [submitting, setIsSubmitting] = useState(false)
+	const [inviteModalProps, setInviteModalProps] = useState<{ visible: boolean; data: PendingInviteData }>({
+		visible: false,
+		data: null
+	})
 
 	useEffect(() => {
 		if (currentUser.data?.id) {
@@ -33,16 +38,17 @@ const PendingInvites = () => {
 		}
 	}, [dispatch, currentUser.data?.id])
 
-	const acceptInvite = async (salonID: string) => {
+	const acceptInvite = async (salonID: string, accept: boolean) => {
 		if (!currentUser.data?.id) {
 			return
 		}
 
 		setIsSubmitting(true)
 		try {
-			await patchReq('/api/b2b/admin/salons/{salonID}/accept-employee-invite', { salonID }, { accept: true })
+			await patchReq('/api/b2b/admin/salons/{salonID}/accept-employee-invite', { salonID }, { accept })
 			dispatch(getPendingInvites(currentUser.data?.id))
 			dispatch(getCurrentUser())
+			setInviteModalProps({ ...inviteModalProps, visible: false, data: null })
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -64,7 +70,7 @@ const PendingInvites = () => {
 			key: 'action',
 			dataIndex: 'salon',
 			sorter: false,
-			render: (value) => {
+			render: (_value, record) => {
 				return (
 					<Button
 						type={'primary'}
@@ -72,10 +78,12 @@ const PendingInvites = () => {
 						size={'middle'}
 						className={'noti-btn m-regular'}
 						htmlType={'button'}
-						onClick={() => acceptInvite(value.id)}
+						onClick={() => {
+							setInviteModalProps({ ...inviteModalProps, visible: true, data: record })
+						}}
 						disabled={pendingInvites?.isLoading || currentUser?.isLoading || submitting}
 					>
-						{t('loc:Prijať pozvánku')}
+						{t('loc:Prezrieť pozvánku')}
 					</Button>
 				)
 			}
@@ -83,20 +91,28 @@ const PendingInvites = () => {
 	]
 
 	return !isEmpty(pendingInvites.data?.pendingEmployeeInvites) ? (
-		<Row gutter={ROW_GUTTER_X_DEFAULT}>
-			<Col span={24}>
-				<div className='content-body mt-8'>
-					<CustomTable
-						columns={columns}
-						dataSource={pendingInvites?.data?.pendingEmployeeInvites}
-						loading={pendingInvites?.isLoading || currentUser?.isLoading || submitting}
-						twoToneRows
-						pagination={false}
-						rowKey={(record) => record.salon?.id}
-					/>
-				</div>
-			</Col>
-		</Row>
+		<>
+			<Row gutter={ROW_GUTTER_X_DEFAULT}>
+				<Col span={24}>
+					<div className='content-body mt-8'>
+						<CustomTable
+							columns={columns}
+							dataSource={pendingInvites?.data?.pendingEmployeeInvites}
+							loading={pendingInvites?.isLoading || currentUser?.isLoading || submitting}
+							twoToneRows
+							pagination={false}
+							rowKey={(record) => record.salon?.id}
+						/>
+					</div>
+				</Col>
+			</Row>
+			<InviteModal
+				visible={inviteModalProps.visible}
+				onCancel={() => setInviteModalProps({ ...inviteModalProps, visible: false, data: null })}
+				data={inviteModalProps.data}
+				acceptInvite={acceptInvite}
+			/>
+		</>
 	) : null
 }
 

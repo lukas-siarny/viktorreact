@@ -12,6 +12,7 @@ import cx from 'classnames'
 
 // components
 import SalonDashboard from './SalonDashboard'
+import Statistics from '../../../components/Dashboards/Statistics'
 
 // redux
 import { RootState } from '../../../reducers'
@@ -184,7 +185,7 @@ const NotinoDashboard: FC<Props> = () => {
 							<strong>{t('loc:24 hodín')}</strong>
 						</span>
 					),
-					count: notino.data.lastUpdated?.oneDayAgo, // notino.data.lastUpdateOneDayAgo,
+					count: notino.data.lastUpdated?.oneDayAgo,
 					onClick: () => history.push(FILTER_PATHS(ranges[0].from, ranges[0].to).SALONS.publishedChanges) // 24h ago
 				},
 				{
@@ -281,22 +282,7 @@ const NotinoDashboard: FC<Props> = () => {
 				<div className='content-body dashboard-content pt-20'>
 					<div className='dashboard-grid'>
 						{dashboardData.alertData.map((item: AlertData, index: number) => {
-							const isCountMoreThan5Digits = (item.count || 0) > 9999
-
-							return (
-								<button type='button' className='grid-item stastics-box flex flex-col p-0 cursor-pointer' key={`alert_item_${index}`} onClick={item.onClick}>
-									<div className='flex-1 flex flex-col items-center w-full px-4'>
-										<div className='w-20 h-20 rounded-full flex justify-center items-center bg-yellow-200 mt-8'>
-											<span className={cx({ 'heading-3': !isCountMoreThan5Digits, 'heading-4': isCountMoreThan5Digits })}>{item.count}</span>
-										</div>
-										<span className='s-semibold pt-4 text-sm grid-item-label'>{item.label}</span>
-									</div>
-									<div className='flex justify-between items-center w-full h-12 bg-yellow-200 mt-4 px-4'>
-										<span className='heading-5 font-bold'>{t('loc:Zobraziť')}</span>
-										<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
-									</div>
-								</button>
-							)
+							return <Statistics key={`statistics_item_${index}`} title={item.label} count={item.count} onActionItemClick={item.onClick} />
 						})}
 					</div>
 

@@ -18,18 +18,20 @@ const Statistics = (props: Props) => {
 	const { title, count, actionLabel = t('loc:Zobraziť'), onActionItemClick, className = '' } = props
 
 	return (
-		<div className={`relative rounded shadow-lg bg-notino-white p-4 ${className}`}>
+		<div className={`relative rounded shadow-lg bg-notino-white p-4 min-h-40 ${className}`}>
 			<div className='w-full m-regular text-notino-grayDark mb-2'>{title}</div>
-			<h3 className='mb-2'>{count}</h3>
-			<Button
-				className='absolute bottom-4 right-4 m-semibold p-0 flex h-auto hover:text-notino-pink focus:text-notino-pink'
-				type={'link'}
-				htmlType={'button'}
-				onClick={onActionItemClick}
-			>
-				{actionLabel}
-				<ChevronIcon className='ml-2' />
-			</Button>
+			<div className='absolute bottom-4 left-4 right-4'>
+				<h3>{count}</h3>
+				<Button
+					className='float-right m-semibold p-0 flex h-auto hover:text-notino-pink focus:text-notino-pink'
+					type={'link'}
+					htmlType={'button'}
+					onClick={onActionItemClick}
+				>
+					{actionLabel}
+					<ChevronIcon className='ml-2' />
+				</Button>
+			</div>
 		</div>
 	)
 }

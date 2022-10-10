@@ -62,10 +62,11 @@ const Filters = (props: Props) => {
 		</Collapse>
 	) : (
 		<div>
-			{/* // Ak exsituje len search alebo len childer tak zobrazit len children tak sa to zobrazi len v jednoduchom dive */}
+			{/* // Ak exsituje len search */}
 			<Col span={24} lg={12} xl={8}>
 				{search || customSearchContent}
 			</Col>
+			{/* // Ak exsituje len children - search a children tu nikdy nebudu naraz, pretoze podmienka vyssie to nedovoli */}
 			{children && children}
 		</div>
 	)

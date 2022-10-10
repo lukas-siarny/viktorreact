@@ -548,3 +548,7 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`
 	}
 })
+
+export enum OPENING_HOURS_STATES {
+	CUSTOM_ORDER = 'CUSTOM_ORDER'
+}

@@ -1,9 +1,14 @@
 import i18next from 'i18next'
 import { isEmail } from 'lodash-checkit'
 import { isEmpty } from 'lodash'
+
+// interfaces
 import { ISalonForm } from '../../../../types/interfaces'
+
+// utils
 import { VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { socialMediaRegex } from '../../../../utils/regex'
+import { validateOpeningHours } from '../../../../components/OpeningHours/OpeningHoursUtils'
 
 export default (values: ISalonForm) => {
 	const errors: any = {}
@@ -134,6 +139,13 @@ export default (values: ISalonForm) => {
 		errors.socialLinkWebPage = i18next.t('loc:Zadajte správny formát adresy (napr. {{url}})', {
 			url: 'https://www.notino.com/'
 		})
+	}
+
+	if (values.openingHours) {
+		const openingHoursErrors = validateOpeningHours(values.openingHours)
+		if (!isEmpty(openingHoursErrors)) {
+			errors.openingHours = openingHoursErrors
+		}
 	}
 
 	return errors

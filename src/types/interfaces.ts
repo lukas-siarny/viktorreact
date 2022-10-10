@@ -69,7 +69,22 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
-export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+// type of BE opening hours data
+export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+
+type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
+
+// type for OpeningHours component
+export type OpeningHoursTimeRanges = {
+	timeFrom: string
+	timeTo: string
+}[]
+
+export type OpeningHours = {
+	day: OpeningHoursDay
+	timeRanges: OpeningHoursTimeRanges
+	onDemand?: boolean
+}[]
 
 export interface ISalonForm {
 	salonNameFromSelect: boolean
@@ -79,9 +94,6 @@ export interface ISalonForm {
 	aboutUsFirst: string | null
 	state?: SALON_STATES
 	openingHours: OpeningHours
-	note: string | null
-	noteFrom: string | null
-	noteTo: string | null
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
 	country: string | null
@@ -236,13 +248,7 @@ export interface INoteForm {
 }
 
 export interface IOpenHoursNoteForm {
-	hoursNote: {
-		note: string
-		range: {
-			dateFrom: string
-			dateTo: string
-		}
-	}
+	openingHoursNote: string
 }
 
 export interface ISearchFilter {

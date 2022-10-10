@@ -1,13 +1,13 @@
-import React, { CSSProperties, FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps, change } from 'redux-form'
 import { isEmpty, isEqual, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Form, Upload, UploadProps, Image, Popconfirm, Button, Checkbox } from 'antd'
-import { CheckboxValueType } from 'antd/es/checkbox/Group'
 import { UploadFile } from 'antd/lib/upload/interface'
 import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
+import { CheckboxChangeEvent } from 'antd/es/checkbox'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import update from 'immutability-helper'
@@ -85,16 +85,20 @@ const ImgUploadField: FC<Props> = (props) => {
 	const imagesUrls = useRef<ImgUploadParam>({})
 	const [previewUrl, setPreviewUrl] = useState<IPreviewFile | null>(null)
 	const [images, setImages] = useState<any[]>([])
-	const [selectedValues, setSelectedValues] = useState<CheckboxValueType[]>([])
+	const [selectedValue, setSelectedValue] = useState<string>('')
 
 	useEffect(() => {
 		if (!isEmpty(input.value)) {
 			// filter application/pdf file
 			setImages(input.value.filter((file: any) => file.type !== 'application/pdf' || !!isFilePDF(file.url)))
 			// set selected images in gallery
-			const selected: string[] = []
-			input.value?.forEach((file: any) => file?.isCover && selected.push(file?.uid))
-			setSelectedValues(selected)
+			let coverImage = ''
+			input.value?.forEach((file: any) => {
+				if (file?.isCover) {
+					coverImage = file?.uid
+				}
+			})
+			setSelectedValue(coverImage)
 		}
 	}, [input.value])
 
@@ -137,6 +141,16 @@ const ImgUploadField: FC<Props> = (props) => {
 		}),
 		[staticMode]
 	)
+
+	const selectImage = (checkedValue: CheckboxChangeEvent) => {
+		const updatedImages = images.map((image) => {
+			if (checkedValue.target.value === image?.uid && !image?.isCover) {
+				return { ...image, isCover: true }
+			}
+			return { ...image, isCover: false }
+		})
+		input.onChange([...updatedImages])
+	}
 
 	const renderGalleryImage = (originNode: ReactElement, file: UploadFile, fileList: object[], actions: { download: any; preview: any; remove: any }) => (
 		<>
@@ -197,7 +211,9 @@ const ImgUploadField: FC<Props> = (props) => {
 			</div>
 			{selectable && (
 				<div className={'w-full flex items-center justify-center'}>
-					<Checkbox key={file?.uid} value={file?.uid} />
+					<Checkbox onChange={selectImage} key={file?.uid} value={file?.uid} checked={file?.uid === selectedValue}>
+						{t('loc:Titulná foto')}
+					</Checkbox>
 				</div>
 			)}
 		</>
@@ -237,6 +253,7 @@ const ImgUploadField: FC<Props> = (props) => {
 				className={cx('upload-draggable-list-item w-full h-full', {
 					[`${dropClassName}`]: isOver
 				})}
+				style={{ cursor: 'move' }}
 			>
 				{renderGalleryImage(originNode, file, fileList, actions)}
 			</div>
@@ -255,16 +272,6 @@ const ImgUploadField: FC<Props> = (props) => {
 		)
 	}
 
-	const selectImage = (checkedValue: CheckboxValueType[]) => {
-		const updatedImages = images.map((image) => {
-			if (checkedValue.includes(image?.uid)) {
-				return { ...image, isCover: true }
-			}
-			return { ...image, isCover: false }
-		})
-		input.onChange([...updatedImages])
-	}
-
 	const openPdf = () => {
 		// open application pdf
 		if (previewUrl?.type === 'application/pdf') {
@@ -275,55 +282,50 @@ const ImgUploadField: FC<Props> = (props) => {
 
 	const uploader = (
 		<DndProvider backend={HTML5Backend}>
-			<Checkbox.Group value={selectedValues} onChange={selectImage}>
-				<Upload
-					id={formFieldID(form, input.name)}
-					className={cx(uploaderClassName, '-mb-2', { 'draggable-upload': draggable, 'selectable-upload': selectable })}
-					accept={accept}
-					disabled={disabled}
-					onChange={onChange}
-					listType='picture-card'
-					multiple={multiple}
-					customRequest={(options: any) => {
-						dispatch(change(form, IMAGE_UPLOADING_PROP, true))
-						uploadImage(options, signUrl, category, imagesUrls)
-					}}
-					itemRender={(originNode, file, currFileList, actions) =>
-						draggable ? DragableUploadListItem(originNode, file, currFileList, actions, moveRow) : renderGalleryImage(originNode, file, currFileList, actions)
+			<Upload
+				id={formFieldID(form, input.name)}
+				className={cx(uploaderClassName, '-mb-2', { 'draggable-upload': draggable, 'selectable-upload': selectable })}
+				accept={accept}
+				disabled={disabled}
+				onChange={onChange}
+				listType='picture-card'
+				multiple={multiple}
+				customRequest={(options: any) => {
+					dispatch(change(form, IMAGE_UPLOADING_PROP, true))
+					uploadImage(options, signUrl, category, imagesUrls)
+				}}
+				itemRender={(originNode, file, currFileList, actions) =>
+					draggable ? DragableUploadListItem(originNode, file, currFileList, actions, moveRow) : renderGalleryImage(originNode, file, currFileList, actions)
+				}
+				// itemRender={renderGalleryImage}
+				fileList={input.value || []}
+				onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
+				maxCount={maxCount}
+				showUploadList={showUploadList}
+				beforeUpload={(file, fileList) => {
+					if (file.size >= maxFileSize) {
+						const messages = [getMaxSizeNotifMessage(maxFileSize)]
+						showNotifications(messages, NOTIFICATION_TYPE.NOTIFICATION)
+						return Upload.LIST_IGNORE
 					}
-					// itemRender={renderGalleryImage}
-					fileList={input.value || []}
-					onPreview={(file) => setPreviewUrl({ url: file.url || get(imagesUrls, `current.[${file.uid}].url`), type: file.type || isFilePDF(file.url) })}
-					maxCount={maxCount}
-					showUploadList={showUploadList}
-					beforeUpload={(file, fileList) => {
-						if (file.size >= maxFileSize) {
-							const messages = [getMaxSizeNotifMessage(maxFileSize)]
-							showNotifications(messages, NOTIFICATION_TYPE.NOTIFICATION)
-							return Upload.LIST_IGNORE
-						}
 
-						if (fileList.length > maxCount) {
-							const { uid: uidCurrent } = file
-							const { uid: uidLast } = fileList[fileList.length - 1]
-							if (uidCurrent === uidLast)
-								showNotifications(
-									[{ type: MSG_TYPE.ERROR, message: t('loc:Nahrajte maximálne {{maxCount}} súborov', { maxCount }) }],
-									NOTIFICATION_TYPE.NOTIFICATION
-								)
-							return Upload.LIST_IGNORE
-						}
-						return true
-					}}
-				>
-					{!staticMode && input.value.length < maxCount && (
-						<div>
-							<UploadIcon className={`text-xl ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
-							<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
-						</div>
-					)}
-				</Upload>
-			</Checkbox.Group>
+					if (fileList.length > maxCount) {
+						const { uid: uidCurrent } = file
+						const { uid: uidLast } = fileList[fileList.length - 1]
+						if (uidCurrent === uidLast)
+							showNotifications([{ type: MSG_TYPE.ERROR, message: t('loc:Nahrajte maximálne {{maxCount}} súborov', { maxCount }) }], NOTIFICATION_TYPE.NOTIFICATION)
+						return Upload.LIST_IGNORE
+					}
+					return true
+				}}
+			>
+				{!staticMode && input.value.length < maxCount && (
+					<div>
+						<UploadIcon className={`text-xl ${touched && error ? 'text-red-600' : 'text-gray-600'}`} />
+						<div className={`text-sm ${touched && error ? 'text-red-600' : 'text-gray-600'}`}>{t('loc:Nahrať')}</div>
+					</div>
+				)}
+			</Upload>
 		</DndProvider>
 	)
 

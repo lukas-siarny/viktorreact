@@ -23,6 +23,9 @@ import { getRejectedSuggestions } from '../../../reducers/salons/salonsActions'
 // types
 import { ISearchFilter, Columns } from '../../../types/interfaces'
 
+// assets
+import { ReactComponent as IconCheck } from '../../../assets/icons/checker-icon.svg'
+
 const RejectedSalonSuggestions = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
@@ -156,20 +159,19 @@ const RejectedSalonSuggestions = () => {
 					ellipsis: true,
 					width: 150,
 					render: (_value, record) => (
-						<>
-							<Button
-								type={'primary'}
-								onClick={(e) => {
-									e.stopPropagation()
-									markRejectedSalonAsDone(record?.salonID)
-								}}
-								size={'middle'}
-								disabled={loading}
-								className={'noti-btn m-regular w-full hover:shadow-none focus:shadow-none'}
-							>
-								{t('loc:Vybavené')}
-							</Button>
-						</>
+						<Button
+							type={'primary'}
+							onClick={(e) => {
+								e.stopPropagation()
+								markRejectedSalonAsDone(record?.salonID)
+							}}
+							icon={<IconCheck style={{ width: 12, height: 12 }} />}
+							size={'small'}
+							disabled={loading}
+							className={'noti-btn m-regular w-full hover:shadow-none focus:shadow-none'}
+						>
+							{t('loc:Vybavené')}
+						</Button>
 					)
 				}
 			]
@@ -187,7 +189,6 @@ const RejectedSalonSuggestions = () => {
 							onChange={onChangeTable}
 							columns={columns}
 							dataSource={salons?.tableData}
-							// dataSource={tableData}
 							rowClassName={'clickable-row'}
 							twoToneRows
 							scroll={{ x: 800 }}

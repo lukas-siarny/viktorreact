@@ -10,6 +10,7 @@ import { UploadChangeParam } from 'antd/lib/upload'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import update from 'immutability-helper'
 import cx from 'classnames'
 
 // utils
@@ -242,16 +243,16 @@ const ImgUploadField: FC<Props> = (props) => {
 		)
 	}
 
-	const swapElements = (array: any[], index1: number, index2: number) => {
-		array[index1] = array.splice(index2, 1, array[index1])[0]
-		return [...array]
-	}
-
 	const moveRow = (dragIndex: number, hoverIndex: number) => {
-		const updatedImages = swapElements([...images], dragIndex, hoverIndex)
-		if (!isEmpty(updatedImages) && updatedImages) {
-			input.onChange([...updatedImages])
-		}
+		const dragRow = images[dragIndex]
+		input.onChange(
+			update([...images], {
+				$splice: [
+					[dragIndex, 1],
+					[hoverIndex, 0, dragRow]
+				]
+			})
+		)
 	}
 
 	const selectImage = (checkedValue: CheckboxValueType[]) => {
@@ -277,7 +278,7 @@ const ImgUploadField: FC<Props> = (props) => {
 			<Checkbox.Group value={selectedValues} onChange={selectImage}>
 				<Upload
 					id={formFieldID(form, input.name)}
-					className={cx(uploaderClassName, '-mb-2')}
+					className={cx(uploaderClassName, '-mb-2', { 'draggable-upload': draggable, 'selectable-upload': selectable })}
 					accept={accept}
 					disabled={disabled}
 					onChange={onChange}

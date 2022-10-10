@@ -37,6 +37,7 @@ import { history } from '../../../../utils/history'
 import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 import DateRangePickerField from '../../../../atoms/DateRangePickerField'
+import SwitchField from '../../../../atoms/SwitchField'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void
@@ -204,6 +205,9 @@ const SalonsFilterActive = (props: Props) => {
 					</Row>
 
 					<Row gutter={ROW_GUTTER_X_DEFAULT} wrap={false}>
+						<Col span={3} className={'statuses-filter-all-col'}>
+								<Field component={SwitchField} name={'statuses_all'} size={'middle'} label={t('loc:Všetky')} />
+							</Col>
 						<Row className={'flex-1'} gutter={ROW_GUTTER_X_DEFAULT}>
 							<Col span={8}>
 								<Field

@@ -29,7 +29,7 @@ const RegistrationPage: FC<Props> = () => {
 	const [t] = useTranslation()
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
 
-	const [query, setQuery] = useQueryParams({
+	const [query] = useQueryParams({
 		email: StringParam
 	})
 

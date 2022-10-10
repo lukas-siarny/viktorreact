@@ -42,6 +42,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg
 import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -76,10 +77,10 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const isLoading = salon.isLoading || phonePrefixes?.isLoading || authUser?.isLoading || isSubmittingData
 	const isPendingPublication = (salon.data && pendingStates.includes(salon.data.state)) || false
 	const isPublished = salon.data?.isPublished
-	const isBasic = salon.data?.createType === SALON_CREATE_TYPE.BASIC
 
 	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
+	const hiddenSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED && salon.data?.publicationDeclineReason
 
 	const [query, setQuery] = useQueryParams({
 		history: BooleanParam
@@ -260,9 +261,9 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			render={(hasPermission, { openForbiddenModal }) => (
 				<Button
 					type={'primary'}
-					block
+					icon={<EditIcon />}
 					size={'middle'}
-					className={cx('noti-btn m-regular', className)}
+					className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 					htmlType={'submit'}
 					onClick={(e) => {
 						if (hasPermission) {
@@ -285,7 +286,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const deleteButton = (className = '') => (
 		<DeleteButton
 			permissions={deletePermissions}
-			className={className}
+			className={cx('w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 			onConfirm={deleteSalon}
 			entityName={t('loc:salón')}
 			type={'default'}
@@ -303,7 +304,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					type={'dashed'}
 					size={'middle'}
 					icon={<EyeoffIcon />}
-					className={cx('noti-btn m-regular', className)}
+					className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className)}
 					onClick={(e) => {
 						if (hasPermission) {
 							setModalConfig({
@@ -335,12 +336,11 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 				title={disabled ? t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.') : null}
 				getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 			>
-				<span className={cx({ 'cursor-not-allowed': disabled })}>
+				<span className={cx('w-full md:w-auto', { 'cursor-not-allowed': disabled })}>
 					<Button
 						type={'dashed'}
-						block
 						size={'middle'}
-						className={cx('noti-btn m-regular', className, {
+						className={cx('noti-btn m-regular w-full md:w-auto md:min-w-45 xl:min-w-60', className, {
 							'pointer-events-none': disabled
 						})}
 						disabled={disabled}
@@ -365,32 +365,10 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		}
 
 		return (
-			<div className={'content-footer pt-0'}>
+			<div className={'content-footer'}>
 				{(() => {
+					// order of cases is important to show correct buttons
 					switch (true) {
-						// published and not basic
-						case isPublished && !isBasic:
-							return (
-								<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
-									<Row className={'gap-2 flex-row-reverse justify-end'}>
-										{/* if is admin show hide button */}
-										{isAdmin && hideSalonButton('w-52 lg:w-60 mt-2-5')}
-										{deleteButton('w-52 lg:w-60 mt-2-5')}
-									</Row>
-									<Row className={'gap-2 md:justify-end'}>{submitButton('w-52 lg:w-60 mt-2-5')}</Row>
-								</Row>
-							)
-						// not pending publication
-						case !isPendingPublication:
-							return (
-								<Row className={'w-full gap-2 flex-col sm:flex-nowrap sm:flex-row'}>
-									{deleteButton('w-48 lg:w-60 mt-2-5')}
-									<Row className={'gap-2 flex-1 sm:justify-end'}>
-										{requestApprovalButton('w-48 lg:w-60 mt-2-5')}
-										{submitButton('w-48 lg:w-60 mt-2-5')}
-									</Row>
-								</Row>
-							)
 						// pending approval
 						case isPendingPublication:
 							return (
@@ -399,8 +377,29 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 									{submitButton('mt-2-5 w-52 xl:w-60')}
 								</Row>
 							)
+						// published and not pending
+						case isPublished && !isPendingPublication:
+							return (
+								<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
+									<Row className={'gap-2 flex-row-reverse justify-end w-full'}>
+										{/* if is admin show hide button */}
+										{isAdmin && hideSalonButton('')}
+										{deleteButton('')}
+									</Row>
+									{submitButton('')}
+								</Row>
+							)
+						// default
 						default:
-							return null
+							return (
+								<Row className={'w-full gap-2 flex-col md:flex-nowrap md:flex-row'}>
+									{deleteButton('')}
+									<Row className={'gap-2 flex-1 md:justify-end w-full'}>
+										{requestApprovalButton('')}
+										{submitButton('')}
+									</Row>
+								</Row>
+							)
 					}
 				})()}
 			</div>
@@ -439,25 +438,44 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, salon.data?.state, isAdmin])
 
 	const declinedSalonMessage = useMemo(
-		() => (
-			<Alert
-				message={
-					<>
-						<strong className={'block'}>{`${t('loc:Zmeny v salóne boli zamietnuté z dôvodu')}:`}</strong>
-						<p className={'whitespace-pre-wrap m-0'}>
-							{salon?.data?.publicationDeclineReason ? `"${salon?.data?.publicationDeclineReason}"` : t('loc:Bez udania dôvodu.')}
-						</p>
-					</>
-				}
-				showIcon
-				type={'error'}
-				className={'noti-alert mb-4'}
-			/>
-		),
-		[t, salon?.data?.publicationDeclineReason]
+		() =>
+			declinedSalon ? (
+				<Alert
+					message={
+						<>
+							<strong className={'block'}>{`${t('loc:Salón bol zamietnutý z dôvodu')}:`}</strong>
+							<p className={'whitespace-pre-wrap m-0'}>
+								{salon?.data?.publicationDeclineReason ? `"${salon?.data?.publicationDeclineReason}"` : t('loc:Bez udania dôvodu.')}
+							</p>
+						</>
+					}
+					showIcon
+					type={'error'}
+					className={'noti-alert mb-4'}
+				/>
+			) : undefined,
+		[t, salon?.data?.publicationDeclineReason, declinedSalon]
 	)
 
-	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header'}>{infoMessage}</div>
+	const hiddenSalonMessage = useMemo(
+		() =>
+			hiddenSalon ? (
+				<Alert
+					message={
+						<>
+							<strong className={'block'}>{`${t('loc:Salón bol skrytý z dôvodu')}:`}</strong>
+							<p className={'whitespace-pre-wrap m-0'}>{`"${salon?.data?.publicationDeclineReason}"`}</p>
+						</>
+					}
+					showIcon
+					type={'error'}
+					className={'noti-alert mb-4'}
+				/>
+			) : undefined,
+		[t, salon?.data?.publicationDeclineReason, hiddenSalon]
+	)
+
+	const renderContentHeaderPartner = () => infoMessage && <div className={'content-header z-40'}>{infoMessage}</div>
 
 	const renderContentHeaderAdmin = () =>
 		(infoMessage || isPendingPublication) && (
@@ -525,10 +543,11 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const salonForm = (
 		<>
-			<div className='content-body mt-2'>
+			<div className='content-body'>
 				<Spin spinning={isLoading}>
 					{isAdmin ? renderContentHeaderAdmin() : renderContentHeaderPartner()}
-					{declinedSalon && declinedSalonMessage}
+					{declinedSalonMessage}
+					{hiddenSalonMessage}
 					<SalonForm
 						onSubmit={handleSubmit}
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
@@ -652,7 +671,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 							tabKey: TAB_KEYS.SALON_HISTORY,
 							tab: <>{t('loc:História salónu')}</>,
 							tabPaneContent: (
-								<div className='content-body mt-2'>
+								<div className='content-body'>
 									<SalonHistory salonID={salonID} tabKey={tabKey} />
 								</div>
 							)

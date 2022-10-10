@@ -29,6 +29,10 @@ import { RootState } from '../../reducers'
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
 
+// assets
+import { ReactComponent as EmployeesIcon } from '../../assets/icons/employees.svg'
+import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
+
 const permissions = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.EMPLOYEE_CREATE]
 
 const CreateEmployeePage = (props: SalonSubPageProps) => {
@@ -132,7 +136,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 			</Row>
 			<Spin spinning={isLoading}>
 				<h2 className={'content-body-width-small'}>{t('loc:Poslať kolegovi pozvánku')}</h2>
-				<div className='content-body small mt-2 mb-8 without-content-footer'>
+				<div className='content-body small mb-8 without-content-footer'>
 					<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
 					<Row justify={'center'}>
 						<Button
@@ -141,7 +145,8 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 							}}
 							type={'primary'}
 							size={'middle'}
-							className={'noti-btn m-regular w-52 xl:w-60'}
+							icon={<EmployeesIcon className='filter-invert max' />}
+							className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60 mt-4'}
 							htmlType={'submit'}
 							disabled={isInviteFromSubmitting || isInviteFormPristine}
 							loading={isInviteFromSubmitting}
@@ -151,16 +156,17 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 					</Row>
 				</div>
 				<div className='content-body-width-small'>
-					<Divider className={'mt-10 mb-6'}>{t('loc:alebo')}</Divider>
+					<Divider className={'my-6'}>{t('loc:alebo')}</Divider>
 				</div>
 				<h2 className={'content-body-width-small'}>{t('loc:Vytvoriť profil kolegu')}</h2>
-				<div className='content-body small mt-2 without-content-footer'>
+				<div className='content-body small without-content-footer'>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
 					<Row justify={'center'}>
 						<Button
 							type={'primary'}
 							size={'middle'}
-							className={'noti-btn m-regular w-52 xl:w-60'}
+							icon={<CreateIcon />}
+							className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60 mt-4'}
 							htmlType={'submit'}
 							onClick={() => {
 								dispatch(submit(FORM.EMPLOYEE))

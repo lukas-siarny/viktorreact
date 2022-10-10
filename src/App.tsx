@@ -8,7 +8,7 @@ import { Spin, ConfigProvider } from 'antd'
 import { Locale } from 'antd/lib/locale-provider'
 import dayjs from 'dayjs'
 
-import 'antd/dist/antd.css'
+import 'antd/dist/antd.min.css'
 
 import Routes from './routes/Routes'
 

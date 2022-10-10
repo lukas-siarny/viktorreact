@@ -161,16 +161,6 @@ const SalonForm: FC<Props> = (props) => {
 							showLettersCount
 						/>
 						<Field
-							component={TextareaField}
-							label={t('loc:Doplňujúci popis')}
-							name={'aboutUsSecond'}
-							size={'large'}
-							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
-							disabled={disabledForm}
-							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
-							showLettersCount
-						/>
-						<Field
 							component={SelectField}
 							options={languages.enumerationsOptions}
 							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}
@@ -211,7 +201,7 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<Field
-							className={'m-0'}
+							className={'m-0 pb-0'}
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'gallery'}
@@ -270,6 +260,7 @@ const SalonForm: FC<Props> = (props) => {
 							component={TextareaField}
 							label={t('loc:Poznámka k parkovaniu')}
 							name={'parkingNote'}
+							className={'pb-0'}
 							size={'large'}
 							placeholder={t('loc:Zadajte poznámku k parkovaniu, napr. "Parkovanie oproti budove."')}
 							disabled={disabledForm}
@@ -285,7 +276,7 @@ const SalonForm: FC<Props> = (props) => {
 						</h3>
 						<Divider className={'mb-3 mt-3'} />
 						<Field
-							className={'mb-0'}
+							className={'pb-0'}
 							component={SwitchField}
 							label={t('loc:Pon - Pi rovnaké otváracie hodiny')}
 							name={'sameOpenHoursOverWeek'}
@@ -331,10 +322,10 @@ const SalonForm: FC<Props> = (props) => {
 							placeholder={t('loc:Aké spôsoby platby akceptujete, napr. hotovosť, poukazy, kryptomeny,...')}
 							disabled={disabledForm}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
-							className={'mb-6'}
+							className={'pb-6'}
 						/>
 						<Field
-							className={'m-0'}
+							className={'m-0 pb-0'}
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'pricelists'}

@@ -38,7 +38,6 @@ export interface ILoginForm {
 	password: string
 }
 
-
 export interface IInviteEmployeeForm {
 	email: string
 	roleID: string
@@ -82,8 +81,8 @@ export type OpeningHoursTimeRanges = {
 }[]
 
 export type OpeningHours = {
-	day:  OpeningHoursDay
-	timeRanges: OpeningHoursTimeRanges,
+	day: OpeningHoursDay
+	timeRanges: OpeningHoursTimeRanges
 	onDemand?: boolean
 }[]
 
@@ -91,10 +90,9 @@ export interface ISalonForm {
 	salonNameFromSelect: boolean
 	id: string | null
 	name: string | null
-	nameSelect: { key: string, label: string | null; value: string | null } | null
+	nameSelect: { key: string; label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	aboutUsSecond: string | null
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -106,9 +104,9 @@ export interface ISalonForm {
 	latitude: number | null
 	longitude: number | null
 	parkingNote: string | null
-	phones: { phonePrefixCountryCode: string | null, phone: string | null }[]
+	phones: { phonePrefixCountryCode: string | null; phone: string | null }[]
 	email: string | null
-	categoryIDs: [string, ...string[] ] | null
+	categoryIDs: [string, ...string[]] | null
 	socialLinkFB: string | null
 	socialLinkInstagram: string | null
 	socialLinkWebPage: string | null
@@ -153,7 +151,7 @@ export interface ISupportContactForm {
 	city: string
 	street: string
 	streetNumber: string
-	phones: { phonePrefixCountryCode: string, phone: string }[]
+	phones: { phonePrefixCountryCode: string; phone: string }[]
 	emails: { email: string }[]
 }
 
@@ -271,7 +269,7 @@ export interface ICustomerForm {
 	streetNumber?: string
 	countryCode?: string
 	salonID: string
-	gallery: any,
+	gallery: any
 	avatar: any
 }
 
@@ -323,7 +321,6 @@ export interface IUserAvatar {
 	alt?: string
 	text?: string
 	key?: string | number
-
 }
 
 export interface IQueryParams {
@@ -402,8 +399,7 @@ export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosme
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
 
-// TODO: change any when BE is done
-export type ISpecialistContact = any /* Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0] */
+export type ISpecialistContact = Paths.GetApiB2BAdminEnumsContactsContactId.Responses.$200['contact']
 
 export interface IPagination extends PaginationProps {
 	pageSizeOptions?: number[]
@@ -443,6 +439,15 @@ export interface IDateTimeFilterOption {
 	value: number
 	unit: 'day' | 'week'
 	name: string
+}
+
+export interface IRoleDescription {
+	key: string
+	name: string
+	permissions: {
+		description: string
+		checked: boolean
+	}[]
 }
 
 export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']

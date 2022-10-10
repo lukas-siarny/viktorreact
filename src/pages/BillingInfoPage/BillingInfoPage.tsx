@@ -92,7 +92,7 @@ const BillingInfoPage = () => {
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>
-					<div className='content-body small mt-2'>
+					<div className='content-body small'>
 						<Spin spinning={salon?.isLoading}>
 							<BillingInfoForm onSubmit={handleSubmit} />
 						</Spin>

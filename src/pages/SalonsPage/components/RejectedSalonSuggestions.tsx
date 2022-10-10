@@ -14,7 +14,7 @@ import RejectedSuggestionsFilter from './filters/RejectedSuggestionsFilter'
 import { FORM, ROW_GUTTER_X_DEFAULT } from '../../../utils/enums'
 import { normalizeDirectionKeys, setOrder, normalizeQueryParams, getLinkWithEncodedBackUrl } from '../../../utils/helper'
 import { history } from '../../../utils/history'
-import { patchReq } from '../../../utils/request'
+import { deleteReq } from '../../../utils/request'
 
 // reducers
 import { RootState } from '../../../reducers'
@@ -31,31 +31,6 @@ const RejectedSalonSuggestions = () => {
 	const [submitting, setSubmitting] = useState(false)
 
 	const loading = salons?.isLoading || submitting
-
-	const tableData = [
-		{
-			key: '111111111',
-			salonID: '11111111',
-			address: 'Spisska Nova Ves, Brezova 2',
-			salonMail: 'saloneamil@email.com',
-			salonName: 'Salon name',
-			userID: 'sadasdasd',
-			userLastName: 'Siarny',
-			userPhone: '+421902110244',
-			userEmail: 'lukas.siarny@gmail.com'
-		},
-		{
-			key: '2222222222',
-			salonID: '2222222222',
-			address: 'Spisska Nova Ves, Brezova 2',
-			salonMail: 'saloneamil@email.com',
-			salonName: 'Salon name',
-			userID: 'sadasdasd',
-			userLastName: 'Siarny',
-			userPhone: '+421902110244',
-			userEmail: 'lukas.siarny@gmail.com'
-		}
-	]
 
 	const [query, setQuery] = useQueryParams({
 		search: StringParam,
@@ -101,7 +76,7 @@ const RejectedSalonSuggestions = () => {
 	const markRejectedSalonAsDone = async (salonID: string) => {
 		try {
 			setSubmitting(true)
-			// await patchReq('/api/b2b/admin/salons/{salonID}', { salonID }, getSalonDataForSubmission(data) as any)
+			await deleteReq('/api/b2b/admin/salons/{salonID}/rejected-suggestions', { salonID })
 			dispatch(getRejectedSuggestions({ page: query.page, limit: query.limit, order: query.order, search: query.search }))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -211,8 +186,8 @@ const RejectedSalonSuggestions = () => {
 							className='table-fixed'
 							onChange={onChangeTable}
 							columns={columns}
-							// dataSource={salons?.tableData}
-							dataSource={tableData}
+							dataSource={salons?.tableData}
+							// dataSource={tableData}
 							rowClassName={'clickable-row'}
 							twoToneRows
 							scroll={{ x: 800 }}

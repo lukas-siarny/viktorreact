@@ -206,8 +206,8 @@ const SalonsFilterActive = (props: Props) => {
 
 					<Row gutter={ROW_GUTTER_X_DEFAULT} wrap={false}>
 						<Col span={3} className={'statuses-filter-all-col'}>
-								<Field component={SwitchField} name={'statuses_all'} size={'middle'} label={t('loc:Všetky')} />
-							</Col>
+							<Field component={SwitchField} name={'statuses_all'} size={'middle'} label={t('loc:Všetky')} />
+						</Col>
 						<Row className={'flex-1'} gutter={ROW_GUTTER_X_DEFAULT}>
 							<Col span={8}>
 								<Field

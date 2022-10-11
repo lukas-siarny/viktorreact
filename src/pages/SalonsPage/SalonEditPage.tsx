@@ -595,7 +595,13 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					{renderContentFooter()}
 				</Spin>
 			</div>
-			<OpenHoursNoteModal visible={openingHoursModalVisble} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
+			<OpenHoursNoteModal
+				title={t('loc:Poznámka pre otváracie hodiny')}
+				visible={openingHoursModalVisble}
+				salonID={salonID}
+				openingHoursNote={salon?.data?.openingHoursNote}
+				onClose={onOpenHoursNoteModalClose}
+			/>
 			<Modal
 				key={`${modalConfig.visible}`}
 				title={modalConfig.title}

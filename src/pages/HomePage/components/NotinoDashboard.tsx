@@ -447,7 +447,6 @@ const NotinoDashboard: FC<Props> = () => {
 			graphProperties.forEach((property: string) => {
 				sum += notino.data ? notino.data[property as keyof GraphProps] : 0
 			})
-
 			if (sum === 0) {
 				return {
 					alertData,

@@ -322,8 +322,6 @@ export const renderEmployees = (props: any) => {
 					const fieldData = fields.get(index)
 					const collapsible = (fieldData?.durationFrom && fieldData?.priceFrom) || fieldData?.serviceCategoryParameter?.length > 1 ? undefined : 'disabled'
 
-					console.log({ fieldData })
-
 					return (
 						<Panel
 							header={
@@ -458,7 +456,6 @@ const ServiceForm: FC<Props> = (props) => {
 												step={1}
 												min={0}
 												max={999}
-												maxChars={3}
 												size={'large'}
 												validate={[numberMin0]}
 												required
@@ -476,7 +473,6 @@ const ServiceForm: FC<Props> = (props) => {
 													step={1}
 													min={0}
 													max={999}
-													maxChars={3}
 													size={'large'}
 													validate={[numberMin0]}
 													required
@@ -501,7 +497,6 @@ const ServiceForm: FC<Props> = (props) => {
 												precision={2}
 												step={1}
 												min={0}
-												maxChars={5}
 												size={'large'}
 												validate={[numberMin0]}
 												required
@@ -517,7 +512,6 @@ const ServiceForm: FC<Props> = (props) => {
 													precision={2}
 													step={1}
 													min={0}
-													maxChars={5}
 													size={'large'}
 													validate={[numberMin0]}
 													required

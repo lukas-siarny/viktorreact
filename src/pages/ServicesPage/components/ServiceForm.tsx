@@ -40,7 +40,6 @@ import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.s
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
 import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
-import { ReactComponent as IndustiresIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 const { Panel } = Collapse
 
@@ -328,7 +327,7 @@ export const renderEmployees = (props: any) => {
 								<div className={'flex align-center'}>
 									<div className={'title flex items-center'}>
 										<AvatarComponents className='mr-2-5 w-7 h-7' src={fieldData?.image?.resizedImages?.small} fallBackSrc={fieldData?.image?.original} />
-										{fieldData?.name || fieldData.email || fieldData.inviteEmail || fieldData.id}
+										{fieldData?.name || fieldData?.email || fieldData?.inviteEmail || fieldData?.id}
 										{fieldData?.hasActiveAccount === false && !fieldData?.inviteEmail ? <QuestionIcon className='ml-4' width={20} height={20} /> : undefined}
 										{fieldData?.hasActiveAccount === false && fieldData?.inviteEmail ? <CloudOfflineIcon className='ml-4' width={20} height={20} /> : undefined}
 									</div>
@@ -410,194 +409,186 @@ const ServiceForm: FC<Props> = (props) => {
 	)
 
 	return (
-		<>
-			<div className='content-body-width-small mb-4 flex items-start gap-2 bg-notino-grayDarker text-notino-white p-3 rounded mt-2'>
-				<IndustiresIcon className='w-6 h-6 filter-gray' style={{ flex: '0 0 auto' }} />
-				<span className='text-notino-gray'>
-					{`${service.data?.service?.category?.name} • ${service.data?.service?.category?.child?.name} • `}
-					<strong className='text-notino-pink text-base'>{service.data?.service?.category?.child?.child?.name}</strong>
-				</span>
-			</div>
-			<div className='content-body small'>
-				<Spin spinning={isLoading}>
-					<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-						<Space className={'w-full'} direction='vertical' size={36}>
-							<div>
-								<h3 className={'mb-0 mt-0 flex items-center'}>
-									<SettingIcon className={'text-notino-black mr-2'} />
-									{t('loc:Nastavenia')}
-								</h3>
-								<Divider className={'mb-3 mt-3'} />
-								{!isEmpty(formValues?.serviceCategoryParameter) && (
-									<Field className={'mb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
-								)}
-								{formValues?.useCategoryParameter ? (
-									<div className={'my-2'}>
-										<FieldArray
-											component={renderParameterValues}
-											name={'serviceCategoryParameter'}
-											salon={salon}
-											showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
-											form={form}
-											// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
-											// dispatch={dispatch}
-										/>
-									</div>
-								) : (
-									<div className={'mt-2'}>
-										<Row gutter={8} align='top' justify='center'>
-											<Col className={'mt-5'} span={8}>
-												<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
-											</Col>
-											<Col span={variableDuration ? 8 : 16}>
+		<div className='content-body small'>
+			<Spin spinning={isLoading}>
+				<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+					<div className={'flex items-center flex-wrap gap-1 mb-4'}>
+						<div className={'service-badge'}>{service.data?.service?.category?.name}</div>
+						<div className={'service-badge'}>{service.data?.service?.category?.child?.name}</div>
+						<div className={'service-badge'}>{service.data?.service?.category?.child?.child?.name}</div>
+					</div>
+					<Space className={'w-full'} direction='vertical' size={36}>
+						<div>
+							<h3 className={'mb-0 mt-0 flex items-center'}>
+								<SettingIcon className={'text-notino-black mr-2'} />
+								{t('loc:Nastavenia')}
+							</h3>
+							<Divider className={'mb-3 mt-3'} />
+							{!isEmpty(formValues?.serviceCategoryParameter) && (
+								<Field className={'mb-0'} component={SwitchField} label={t('loc:Použiť parameter')} name={'useCategoryParameter'} size={'middle'} />
+							)}
+							{formValues?.useCategoryParameter ? (
+								<div className={'my-2'}>
+									<FieldArray
+										component={renderParameterValues}
+										name={'serviceCategoryParameter'}
+										salon={salon}
+										showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
+										form={form}
+										// NOTE: DEFAULT_ACTIVE_KEYS_SERVICES - najdi vsetky komenty s tymto klucom pre spojazdnenie funkcionality
+										// dispatch={dispatch}
+									/>
+								</div>
+							) : (
+								<div className={'mt-2'}>
+									<Row gutter={8} align='top' justify='center'>
+										<Col className={'mt-5'} span={8}>
+											<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={'variableDuration'} size={'middle'} />
+										</Col>
+										<Col span={variableDuration ? 8 : 16}>
+											<Field
+												component={InputNumberField}
+												label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
+												placeholder={t('loc:min')}
+												name='durationFrom'
+												precision={0}
+												step={1}
+												min={0}
+												max={999}
+												size={'large'}
+												validate={[numberMin0]}
+												required
+											/>
+										</Col>
+
+										{variableDuration && (
+											<Col span={8}>
 												<Field
 													component={InputNumberField}
-													label={variableDuration ? t('loc:Trvanie od (minúty)') : t('loc:Trvanie (minúty)')}
+													label={t('loc:Trvanie do (minúty)')}
 													placeholder={t('loc:min')}
-													name='durationFrom'
+													name='durationTo'
 													precision={0}
 													step={1}
 													min={0}
 													max={999}
-													maxChars={3}
 													size={'large'}
 													validate={[numberMin0]}
 													required
 												/>
 											</Col>
-
-											{variableDuration && (
-												<Col span={8}>
-													<Field
-														component={InputNumberField}
-														label={t('loc:Trvanie do (minúty)')}
-														placeholder={t('loc:min')}
-														name='durationTo'
-														precision={0}
-														step={1}
-														min={0}
-														max={999}
-														maxChars={3}
-														size={'large'}
-														validate={[numberMin0]}
-														required
-													/>
-												</Col>
-											)}
-										</Row>
-										<Row gutter={8} align='top' justify='center'>
-											<Col className={'mt-5'} span={8}>
-												<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
-											</Col>
-											<Col span={variablePrice ? 8 : 16}>
+										)}
+									</Row>
+									<Row gutter={8} align='top' justify='center'>
+										<Col className={'mt-5'} span={8}>
+											<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilná cena')} name={'variablePrice'} size={'middle'} />
+										</Col>
+										<Col span={variablePrice ? 8 : 16}>
+											<Field
+												component={InputNumberField}
+												label={
+													variablePrice
+														? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
+														: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
+												}
+												placeholder={salon.data?.currency.symbol}
+												name='priceFrom'
+												precision={2}
+												step={1}
+												min={0}
+												size={'large'}
+												validate={[numberMin0]}
+												required
+											/>
+										</Col>
+										{variablePrice && (
+											<Col span={8}>
 												<Field
 													component={InputNumberField}
-													label={
-														variablePrice
-															? t('loc:Cena od ({{symbol}})', { symbol: salon.data?.currency.symbol })
-															: t('loc:Cena ({{symbol}})', { symbol: salon.data?.currency.symbol })
-													}
+													label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
 													placeholder={salon.data?.currency.symbol}
-													name='priceFrom'
+													name='priceTo'
 													precision={2}
 													step={1}
 													min={0}
-													maxChars={5}
 													size={'large'}
 													validate={[numberMin0]}
 													required
 												/>
 											</Col>
-											{variablePrice && (
-												<Col span={8}>
-													<Field
-														component={InputNumberField}
-														label={t('loc:Cena do ({{symbol}})', { symbol: salon.data?.currency.symbol })}
-														placeholder={salon.data?.currency.symbol}
-														name='priceTo'
-														precision={2}
-														step={1}
-														min={0}
-														maxChars={5}
-														size={'large'}
-														validate={[numberMin0]}
-														required
-													/>
-												</Col>
-											)}
-										</Row>{' '}
-									</div>
-								)}
+										)}
+									</Row>{' '}
+								</div>
+							)}
+						</div>
+						<div>
+							<h3 className={'mb-0 mt-0 flex items-center'}>
+								<EmployeesIcon className={'text-notino-black mr-2'} />
+								{t('loc:Priradení zamestnanci')}
+							</h3>
+							<Divider className={'mb-3 mt-3'} />
+							<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
+								<Field
+									label={t('loc:Zamestnanci')}
+									size={'large'}
+									className={'flex-1'}
+									component={SelectField}
+									allowClear
+									placeholder={t('loc:Vyberte zamestnancov')}
+									name={'employee'}
+									onSearch={searchEmployees}
+									filterOption={true}
+									options={employees?.options}
+									mode={'multiple'}
+									showSearch
+									allowInfinityScroll
+								/>
+
+								<Button
+									type={'primary'}
+									size={'middle'}
+									className={'self-start noti-btn m-regular md:mt-5'}
+									onClick={addEmployee}
+									disabled={isEmpty(formValues?.employee)}
+								>
+									{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
+								</Button>
 							</div>
-							<div>
-								<h3 className={'mb-0 mt-0 flex items-center'}>
-									<EmployeesIcon className={'text-notino-black mr-2'} />
-									{t('loc:Priradení zamestnanci')}
-								</h3>
-								<Divider className={'mb-3 mt-3'} />
-								<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
-									<Field
-										label={t('loc:Zamestnanci')}
-										size={'large'}
-										className={'flex-1'}
-										component={SelectField}
-										allowClear
-										placeholder={t('loc:Vyberte zamestnancov')}
-										name={'employee'}
-										onSearch={searchEmployees}
-										filterOption={true}
-										options={employees?.options}
-										mode={'multiple'}
-										showSearch
-										allowInfinityScroll
-									/>
+							<FieldArray
+								component={renderEmployees}
+								name={'employees'}
+								salon={salon}
+								showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
+							/>
+							<div className={'content-footer pt-0'} id={'content-footer-container'}>
+								<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
+									{serviceID ? (
+										<DeleteButton
+											className={'noti-btn mt-2-5 w-52 xl:w-60'}
+											getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+											onConfirm={onConfirmDelete}
+											entityName={t('loc:službu')}
+											permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_DELETE]}
+										/>
+									) : null}
 
 									<Button
 										type={'primary'}
-										size={'middle'}
-										className={'self-start noti-btn m-regular md:mt-5'}
-										onClick={addEmployee}
-										disabled={isEmpty(formValues?.employee)}
+										className={'noti-btn mt-2-5 w-52 xl:w-60'}
+										htmlType={'submit'}
+										icon={serviceID ? <EditIcon /> : <CreateIcon />}
+										disabled={submitting || pristine}
+										loading={submitting}
 									>
-										{formValues?.employees && formValues?.employees.length > 1 ? t('loc:Pridať zamestnancov') : t('loc:Pridať zamestnanca')}
+										{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
 									</Button>
-								</div>
-								<FieldArray
-									component={renderEmployees}
-									name={'employees'}
-									salon={salon}
-									showDuration={formValues?.serviceCategoryParameterType !== PARAMETER_TYPE.TIME}
-								/>
-								<div className={'content-footer pt-0'} id={'content-footer-container'}>
-									<Row className={cx({ 'justify-between': serviceID, 'justify-center': !serviceID }, 'w-full')}>
-										{serviceID ? (
-											<DeleteButton
-												className={'noti-btn mt-2-5 w-52 xl:w-60'}
-												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-												onConfirm={onConfirmDelete}
-												entityName={t('loc:službu')}
-												permissions={[SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SERVICE_DELETE]}
-											/>
-										) : null}
-
-										<Button
-											type={'primary'}
-											className={'noti-btn mt-2-5 w-52 xl:w-60'}
-											htmlType={'submit'}
-											icon={serviceID ? <EditIcon /> : <CreateIcon />}
-											disabled={submitting || pristine}
-											loading={submitting}
-										>
-											{serviceID ? STRINGS(t).save(t('loc:službu')) : STRINGS(t).createRecord(t('loc:službu'))}
-										</Button>
-									</Row>
-								</div>
+								</Row>
 							</div>
-						</Space>
-					</Form>
-				</Spin>
-			</div>
-		</>
+						</div>
+					</Space>
+				</Form>
+			</Spin>
+		</div>
 	)
 }
 

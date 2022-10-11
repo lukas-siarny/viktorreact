@@ -2029,3 +2029,27 @@ li.ant-list-item:hover
 			.noti-opening-hours-ranges
 				flex-direction: column
 
+.service-badge
+	padding: 4px 8px
+	background: $backgroundColor-notino-grayLight
+	font-size: 14px
+	border-radius: 4px
+	color: $textColor-notino-grayDark
+	position: relative
+	&:not(:last-of-type)
+		margin-right: 8px
+		&::after
+			content: ''
+			position: absolute
+			left: calc(100% + 5px)
+			width: 3px
+			height: 3px
+			top: 50%
+			transform: translateY(-50%)
+			border-radius: 50%
+			background-color: $textColor-notino-gray
+	&:last-of-type
+		font-weight: 700
+
+.service-divider
+	color: $textColor-notino-gray

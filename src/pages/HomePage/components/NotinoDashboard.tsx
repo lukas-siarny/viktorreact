@@ -78,7 +78,46 @@ const doughnutOptions = (clickHandlers: any[]) => {
 		}
 	} as any
 }
-console.log('🚀 ~ file: NotinoDashboard.tsx ~ line 77 ~ dayjs.locale()', dayjs.locale())
+
+const lineOptions = {
+	plugins: {
+		legend: {
+			display: false
+		}
+	},
+	responsive: true,
+	scales: {
+		x: {
+			grid: {
+				display: false,
+				borderColor: '#868686',
+				borderWidth: 2
+			},
+			ticks: {
+				color: '#000',
+				font: {
+					family: 'Public Sans'
+				}
+			}
+		},
+		y: {
+			grid: {
+				borderDash: [2, 4],
+				color: '#DFDFDF',
+				borderColor: '#868686',
+				borderWidth: 2
+			},
+			ticks: {
+				color: '#000',
+				font: {
+					family: 'Public Sans'
+				}
+			}
+		}
+	},
+	maintainAspectRatio: false
+}
+
 const monthLabels: string[] = dayjs.monthsShort()
 
 const data1 = monthLabels.map(() => Math.floor(Math.random() * 100))
@@ -86,7 +125,6 @@ const data2 = monthLabels.map(() => Math.floor(Math.random() * 100))
 const data3 = monthLabels.map(() => Math.floor(Math.random() * 100))
 
 const tableSeed = monthLabels.map((label: string, index: number) => {
-	console.log('🚀 ~ file: NotinoDashboard.tsx ~ line 118 ~ ...monthLabels.map ~ label, index', label, index)
 	return {
 		key: index,
 		dataIndex: index,
@@ -94,7 +132,6 @@ const tableSeed = monthLabels.map((label: string, index: number) => {
 		render: (value: number) => <span className='xs-regular'>{value}</span>
 	}
 })
-console.log('🚀 ~ file: NotinoDashboard.tsx ~ line 97 ~ tableSeed ~ tableSeed', tableSeed)
 
 const columns: Columns = [
 	{
@@ -187,7 +224,7 @@ const tableData = [
 	}
 ]
 
-const graphContent = (label: string, source?: any[], filter?: React.ReactNode | JSX.Element, className?: string) => {
+const doughnutContent = (label: string, source?: any[], filter?: React.ReactNode | JSX.Element, className?: string) => {
 	return (
 		<div className={`stastics-box py-4 px-6 md:py-8 md:px-12 ${className}`}>
 			<div className='flex flex-wrap justify-between w-full'>
@@ -200,44 +237,7 @@ const graphContent = (label: string, source?: any[], filter?: React.ReactNode | 
 					<div className='mt-4'>
 						<div className='h-40' style={{ height: '160px' }}>
 							<Line
-								options={{
-									plugins: {
-										legend: {
-											display: false
-										}
-									},
-									responsive: true,
-									scales: {
-										x: {
-											grid: {
-												display: false,
-												borderColor: '#868686',
-												borderWidth: 2
-											},
-											ticks: {
-												color: '#000',
-												font: {
-													family: 'Public Sans'
-												}
-											}
-										},
-										y: {
-											grid: {
-												borderDash: [2, 4],
-												color: '#DFDFDF',
-												borderColor: '#868686',
-												borderWidth: 2
-											},
-											ticks: {
-												color: '#000',
-												font: {
-													family: 'Public Sans'
-												}
-											}
-										}
-									},
-									maintainAspectRatio: false
-								}}
+								options={lineOptions}
 								data={{
 									labels: monthLabels,
 									datasets: [
@@ -302,6 +302,8 @@ const graphContent = (label: string, source?: any[], filter?: React.ReactNode | 
 	)
 }
 
+const lineContent = (label: string, source: any[], filter: React.ReactNode | JSX.Element, className?: string) => {}
+
 const getFilterRanges = () => {
 	// get dateTime range for every option: DATE_TIME_RANGE.LAST_DAY, DATE_TIME_RANGE.LAST_TWO_DAYS, DATE_TIME_RANGE.LAST_WEEK
 	const ranges = getSalonFilterRanges()
@@ -348,16 +350,15 @@ const NotinoDashboard: FC<Props> = () => {
 		// months are indexed from 0 and API has indexed months from 1
 		dispatch(getSalonsMonthStats(now.year(), now.month() + 1))
 		dispatch(getSalonsAnnualStats(now.year()))
-		console.log('🚀 ~ file: OnMount... NotinoDashboard.tsx ~ line 231 ~ useEffect ~ dayjs.locale()', dayjs.locale())
 	}, [dispatch])
 
 	const transformToStatsData = (source: ISalonsTimeStats | null) => {
 		const result = {
-			labels: [],
+			labels: [] as string[],
 			datasets: [
 				// BASIC
 				{
-					data: [],
+					data: [] as number[],
 					backgroundColor: colors.blue[200],
 					borderColor: colors.blue[200],
 					pointRadius: 1
@@ -377,9 +378,50 @@ const NotinoDashboard: FC<Props> = () => {
 					pointRadius: 1
 				}
 			],
-			columns: []
+			columns: [
+				{
+					type: 'basic',
+					summary: 0
+				},
+				{
+					type: 'pending',
+					summary: 0
+				},
+				{
+					type: 'premium',
+					summary: 0
+				}
+			]
 		}
 
+		if (source && source?.ranges) {
+			const months: string[] = dayjs.monthsShort()
+
+			Object.entries(source.ranges).forEach(([key, value]) => {
+				console.log('🚀 ~ file: NotinoDashboard.tsx ~ line 410 ~ Object.entries ~ key, value', key, value)
+				result.datasets[0].data.push(value.newBasicSalons)
+				result.datasets[1].data.push(value.nonBasicPendingPublicationSalons)
+				result.datasets[2].data.push(value.nonBasicApprovedSalons)
+
+				const prop = Number(key)
+
+				result.labels.push(source.type === 'YEAR' ? months[prop - 1] : `${prop}.`)
+				result.columns[0] = {
+					...result.columns[0],
+					[prop]: value.newBasicSalons
+				}
+				result.columns[1] = {
+					...result.columns[1],
+					[prop]: value.nonBasicPendingPublicationSalons
+				}
+				result.columns[2] = {
+					...result.columns[2],
+					[prop]: value.nonBasicApprovedSalons
+				}
+			})
+		}
+
+		console.log('🚀 ~ file: NotinoDashboard.tsx ~ line 425 ~ transformToStatsData ~ result', result)
 		return result
 	}
 
@@ -554,11 +596,11 @@ const NotinoDashboard: FC<Props> = () => {
 					) : (
 						<>
 							<Row className='mt-12 gap-4'>
-								{graphContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic, undefined, 'stastics-box-wide')}
-								{graphContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates, undefined, 'stastics-box-wide')}
+								{doughnutContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic, undefined, 'stastics-box-wide')}
+								{doughnutContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates, undefined, 'stastics-box-wide')}
 							</Row>
-							<div className='mt-12'>{graphContent(t('loc:Vývoj salónov - mesačný'), [], monthFilter)}</div>
-							<div className='mt-12'>{graphContent(t('loc:Vývoj salónov - ročný'), [], yearFilter)}</div>
+							<div className='mt-12'>{doughnutContent(t('loc:Vývoj salónov - mesačný'), [], monthFilter)}</div>
+							<div className='mt-12'>{doughnutContent(t('loc:Vývoj salónov - ročný'), [], yearFilter)}</div>
 						</>
 					)}
 				</div>

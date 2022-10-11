@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import { result } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
@@ -61,7 +62,7 @@ export const getNotinoDashboard = (): ThunkResult<Promise<INotinoDashboardPayloa
 }
 
 const getSalonTimeStats = async (year: number, month?: number): Promise<ISalonsTimeStatsPayload> => {
-	const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-development-time-stats', { ...normalizeQueryParams({ year, month }) })
+	const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-development-time-stats', { ...normalizeQueryParams({ year, month }) } as any)
 	return { data }
 }
 

@@ -42,6 +42,11 @@ const AuthRoute: FC<Props> = (props) => {
 	const isActivated = currentUser.data?.activateAt
 	const { pathname, search } = useLocation()
 
+	// if user is login and navigate from invite email template
+	if (pathname === t('paths:invite')) {
+		return isLoggedIn() ? <Redirect to={t('paths:index')} /> : <Redirect to={{ pathname: t('paths:signup'), search, state: { redirectFrom: pathname + search } }} />
+	}
+
 	if (!isLoggedIn()) {
 		return (
 			<Redirect

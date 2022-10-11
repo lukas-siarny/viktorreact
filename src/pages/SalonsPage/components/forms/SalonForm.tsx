@@ -201,7 +201,6 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<Field
-							className={'m-0 pb-0'}
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'gallery'}
@@ -211,6 +210,8 @@ const SalonForm: FC<Props> = (props) => {
 							maxCount={10}
 							category={UPLOAD_IMG_CATEGORIES.SALON}
 							disabled={disabledForm}
+							draggable
+							selectable
 						/>
 					</Col>
 				</Row>

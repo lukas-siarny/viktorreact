@@ -20,7 +20,7 @@ import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_CREATE_TYPE, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -595,7 +595,13 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					{renderContentFooter()}
 				</Spin>
 			</div>
-			<OpenHoursNoteModal visible={openingHoursModalVisble} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
+			<OpenHoursNoteModal
+				title={t('loc:Poznámka pre otváracie hodiny')}
+				visible={openingHoursModalVisble}
+				salonID={salonID}
+				openingHoursNote={salon?.data?.openingHoursNote}
+				onClose={onOpenHoursNoteModalClose}
+			/>
 			<Modal
 				key={`${modalConfig.visible}`}
 				title={modalConfig.title}

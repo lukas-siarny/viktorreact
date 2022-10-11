@@ -1903,7 +1903,7 @@ declare namespace Paths {
         }
         export interface QueryParameters {
             month?: Parameters.Month;
-            year?: Parameters.Year;
+            year: Parameters.Year;
         }
         namespace Responses {
             export interface $200 {

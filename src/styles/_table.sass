@@ -8,9 +8,16 @@
 	// Fixed table styles
 	.ant-table-thead
 		font-size: 12px
+		tr > th.ant-table-cell-fix-right.ant-table-cell-fix-right-first
+			&::after
+				bottom: -9px !important
 	.ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td
 		padding: 4px
 	&.table-fixed
+		.ant-table-tbody
+			tr > td.ant-table-cell-fix-right.ant-table-cell-fix-right-first
+				&::after
+					bottom: -4px !important
 		.ant-table-thead > tr > th
 			position: sticky
 			top: 0
@@ -33,15 +40,15 @@
 			padding: 4px 32px
 			z-index: $z-index-five
 	.ant-table-ping-left
-		td:after
+		td:after:not(.ant-table-cell-fix-right-first)
 			box-shadow: none !important
 			width: 64px
 			background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)
-		th:after
+		th:after:not(.ant-table-cell-fix-right-first)
 			box-shadow: none !important
 			width: 64px
 			background: linear-gradient(270deg, rgba(255, 255, 255, 0) 0%, #FFFFFF 100%)
-	.ant-table-ping-right
+	.ant-table-ping-right:not(.ant-table-fixed-column)
 		.ant-table-container:after
 			box-shadow: none !important
 			width: 64px

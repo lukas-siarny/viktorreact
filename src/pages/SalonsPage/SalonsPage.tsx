@@ -20,7 +20,7 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPE, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../utils/enums'
 import {
 	formatDateByLocale,
 	getLinkWithEncodedBackUrl,
@@ -84,7 +84,8 @@ const SalonsPage = () => {
 		countryCode: StringParam,
 		createType: StringParam,
 		lastUpdatedAtFrom: StringParam,
-		lastUpdatedAtTo: StringParam
+		lastUpdatedAtTo: StringParam,
+		hasSetOpeningHours: StringParam
 	})
 
 	const resetQuery = (selectedTabKey: string) => {
@@ -102,7 +103,8 @@ const SalonsPage = () => {
 			createType: undefined,
 			lastUpdatedAtFrom: undefined,
 			lastUpdatedAtTo: undefined,
-			salonState: selectedTabKey
+			salonState: selectedTabKey,
+			hasSetOpeningHours: undefined
 		})
 	}
 
@@ -122,7 +124,8 @@ const SalonsPage = () => {
 			countryCode: query.countryCode,
 			createType: query.createType,
 			lastUpdatedAtFrom: query.lastUpdatedAtFrom,
-			lastUpdatedAtTo: query.lastUpdatedAtTo
+			lastUpdatedAtTo: query.lastUpdatedAtTo,
+			hasSetOpeningHours: query.hasSetOpeningHours
 		}
 
 		switch (query.salonState) {
@@ -150,7 +153,7 @@ const SalonsPage = () => {
 					initialize(FORM.SALONS_FILTER_ACITVE, {
 						search: query.search,
 						statuses_all: query.statuses_all,
-						statuses_published: query.statuses_published,
+						statuses_published: query.createType === SALON_FILTER_CREATE_TYPES.PREMIUM ? [SALON_FILTER_STATES.PUBLISHED] : query.statuses_published,
 						statuses_changes: query.statuses_changes,
 						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
 						countryCode: query.countryCode,
@@ -158,7 +161,8 @@ const SalonsPage = () => {
 						dateFromTo: {
 							dateFrom: query.lastUpdatedAtFrom,
 							dateTo: query.lastUpdatedAtTo
-						}
+						},
+						hasSetOpeningHours: query.hasSetOpeningHours
 					})
 				)
 				dispatch(getSalons(salonsQueries))
@@ -178,7 +182,8 @@ const SalonsPage = () => {
 		query.countryCode,
 		query.createType,
 		query.lastUpdatedAtFrom,
-		query.lastUpdatedAtTo
+		query.lastUpdatedAtTo,
+		query.hasSetOpeningHours
 	])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
@@ -202,14 +207,29 @@ const SalonsPage = () => {
 	}
 
 	const handleSubmitActive = (values: ISalonsFilterActive) => {
-		const { dateFromTo, ...restValues } = values
+		const { dateFromTo, createType, statuses_published, ...restValues } = values
+		let newStatusesPublished: string[] | undefined = values.statuses_published
+
+		if (
+			query.createType === SALON_FILTER_CREATE_TYPES.PREMIUM &&
+			createType !== SALON_FILTER_CREATE_TYPES.PREMIUM &&
+			statuses_published?.find((status) => status === SALON_FILTER_STATES.PUBLISHED)
+		) {
+			newStatusesPublished = undefined
+		} else if (createType === SALON_FILTER_CREATE_TYPES.PREMIUM) {
+			newStatusesPublished = [SALON_FILTER_STATES.PUBLISHED]
+		}
+
 		const newQuery = {
 			...query,
 			...restValues,
+			statuses_published: newStatusesPublished,
+			createType,
 			lastUpdatedAtFrom: dateFromTo?.dateFrom,
 			lastUpdatedAtTo: dateFromTo?.dateTo,
 			page: 1
 		}
+
 		setQuery(newQuery)
 	}
 
@@ -403,7 +423,13 @@ const SalonsPage = () => {
 					tableColumns.lastUpdatedAt(),
 					tableColumns.createdAt()
 				]
-				filters = <SalonsFilterActive onSubmit={handleSubmitActive} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
+				filters = (
+					<SalonsFilterActive
+						onSubmit={handleSubmitActive}
+						openSalonImportsModal={() => setSalonImportsModalVisible(true)}
+						statuses_publishedDisabled={query.createType === SALON_FILTER_CREATE_TYPES.PREMIUM}
+					/>
+				)
 		}
 
 		return (

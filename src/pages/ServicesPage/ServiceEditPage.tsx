@@ -154,6 +154,8 @@ const parseEmployeesInit = (employees: ServiceEmployees) => {
 		return {
 			id: employee?.id,
 			name: employee?.fullName,
+			email: employee?.email,
+			inviteEmail: employee?.inviteEmail,
 			image: employee?.image,
 			durationFrom: employee.priceAndDurationData?.durationFrom,
 			durationTo: employee.priceAndDurationData?.durationFrom,

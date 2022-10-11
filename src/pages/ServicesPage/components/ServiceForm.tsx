@@ -40,7 +40,6 @@ import { ReactComponent as QuestionIcon } from '../../../assets/icons/question.s
 import { ReactComponent as CloudOfflineIcon } from '../../../assets/icons/cloud-offline.svg'
 import { ReactComponent as EmployeesIcon } from '../../../assets/icons/employees.svg'
 import { ReactComponent as SettingIcon } from '../../../assets/icons/setting.svg'
-import { ReactComponent as IndustiresIcon } from '../../../assets/icons/categories-24-icon.svg'
 
 const { Panel } = Collapse
 

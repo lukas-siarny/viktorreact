@@ -286,6 +286,34 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BAdminServicesServiceId {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -1852,29 +1880,39 @@ declare namespace Paths {
                         sevenDaysAgo: number;
                     };
                     nonBasicSalonsWithoutServices: number;
-                    newBasicSalons: {
-                        oneDayAgo: number;
-                        oneWeekAgo: number;
-                        currentMonth: number;
-                        months: {
-                            [name: string]: number;
-                        };
-                    };
-                    nonBasicPendingPublicationSalons: {
-                        oneDayAgo: number;
-                        oneWeekAgo: number;
-                        currentMonth: number;
-                        months: {
-                            [name: string]: number;
-                        };
-                    };
-                    nonBasicApprovedSalons: {
-                        oneDayAgo: number;
-                        oneWeekAgo: number;
-                        currentMonth: number;
-                        months: {
-                            [name: string]: number;
-                        };
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Month = number;
+            export type Year = number;
+        }
+        export interface QueryParameters {
+            month?: Parameters.Month;
+            year?: Parameters.Year;
+        }
+        namespace Responses {
+            export interface $200 {
+                type: "MONTH" | "YEAR";
+                ranges: {
+                    [name: string]: {
+                        newBasicSalons: number;
+                        nonBasicPendingPublicationSalons: number;
+                        nonBasicApprovedSalons: number;
                     };
                 };
             }
@@ -1971,6 +2009,7 @@ declare namespace Paths {
             export type CategoryFirstLevelIDs = string /* uuid */[];
             export type CountryCode = string;
             export type CreateType = "NON_BASIC" | "BASIC";
+            export type HasSetOpeningHours = boolean;
             export type LastUpdatedAtFrom = string; // date-time
             export type LastUpdatedAtTo = string; // date-time
             export type Limit = 25 | 50 | 100;
@@ -1992,6 +2031,7 @@ declare namespace Paths {
             createType?: Parameters.CreateType;
             lastUpdatedAtFrom?: Parameters.LastUpdatedAtFrom /* date-time */;
             lastUpdatedAtTo?: Parameters.LastUpdatedAtTo /* date-time */;
+            hasSetOpeningHours?: Parameters.HasSetOpeningHours;
             order?: /* Order attributes: name, fillingProgress, createdAt */ Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -2174,6 +2214,8 @@ declare namespace Paths {
                         id: string; // uuid
                         fullName?: string;
                         email?: string;
+                        phonePrefixCountryCode?: string;
+                        phone?: string; // ^\d+$
                     };
                 }[];
                 pagination: {
@@ -2215,7 +2257,6 @@ declare namespace Paths {
                     hasAllRequiredSalonApprovalData: boolean;
                     name?: string;
                     aboutUsFirst?: string;
-                    aboutUsSecond?: string;
                     openingHours?: {
                         /**
                          * example:
@@ -2297,6 +2338,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     logo?: {
                         id: string; // uuid
@@ -2465,7 +2508,6 @@ declare namespace Paths {
                     publishedSalonData?: {
                         name?: string;
                         aboutUsFirst?: string;
-                        aboutUsSecond?: string;
                         address?: {
                             countryCode?: string;
                             zipCode?: string;
@@ -2503,6 +2545,8 @@ declare namespace Paths {
                                 large: string;
                             };
                             isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
                         }[];
                         pricelists: {
                             id: string; // uuid
@@ -2882,8 +2926,9 @@ declare namespace Paths {
                     };
                     employees: {
                         id: string; // uuid
-                        fullName?: string;
                         hasActiveAccount: boolean;
+                        fullName?: string;
+                        email?: string;
                         inviteEmail?: string;
                         image: {
                             id: string; // uuid
@@ -3169,28 +3214,24 @@ declare namespace Paths {
                         lastName?: string;
                         email?: string;
                     };
-                    permissions: {
-                        salon: {
-                            salonUpdate: boolean;
-                            salonUpdateBilling: boolean;
-                            salonDelete: boolean;
-                        };
-                        service: {
-                            serviceCreate: boolean;
-                            serviceUpdate: boolean;
-                            serviceDelete: boolean;
-                        };
-                        customer: {
-                            customerCreate: boolean;
-                            customerUpdate: boolean;
-                            customerDelete: boolean;
-                        };
-                        employee: {
-                            employeeCreate: boolean;
-                            employeeInvite: boolean;
-                            employeeUpdate: boolean;
-                            employeeDelete: boolean;
-                        };
+                    role?: {
+                        id: string; // uuid
+                        name?: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        descriptions: {
+                            activated: boolean;
+                            name: string;
+                        }[];
+                        permissions: {
+                            id: string; // uuid
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
+                        createdAt: string; // date-time
+                        updatedAt: string; // date-time
+                        deletedAt?: string; // date-time
                     };
                 }[];
             }
@@ -4322,6 +4363,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     phones: {
                         phonePrefixCountryCode: string;
@@ -5211,6 +5254,8 @@ declare namespace Paths {
                                 large: string;
                             };
                             isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
                         }[];
                         logo?: {
                             id: string; // uuid
@@ -5311,7 +5356,6 @@ declare namespace Paths {
                     };
                     aboutUsSegment?: {
                         aboutUsFirst?: string;
-                        aboutUsSecond?: string;
                     };
                     addressSegment?: {
                         countryCode?: string;
@@ -6116,8 +6160,9 @@ declare namespace Paths {
                     };
                     employees: {
                         id: string; // uuid
-                        fullName?: string;
                         hasActiveAccount: boolean;
+                        fullName?: string;
+                        email?: string;
                         inviteEmail?: string;
                         image: {
                             id: string; // uuid
@@ -6387,28 +6432,24 @@ declare namespace Paths {
                         lastName?: string;
                         email?: string;
                     };
-                    permissions: {
-                        salon: {
-                            salonUpdate: boolean;
-                            salonUpdateBilling: boolean;
-                            salonDelete: boolean;
-                        };
-                        service: {
-                            serviceCreate: boolean;
-                            serviceUpdate: boolean;
-                            serviceDelete: boolean;
-                        };
-                        customer: {
-                            customerCreate: boolean;
-                            customerUpdate: boolean;
-                            customerDelete: boolean;
-                        };
-                        employee: {
-                            employeeCreate: boolean;
-                            employeeInvite: boolean;
-                            employeeUpdate: boolean;
-                            employeeDelete: boolean;
-                        };
+                    role?: {
+                        id: string; // uuid
+                        name?: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        descriptions: {
+                            activated: boolean;
+                            name: string;
+                        }[];
+                        permissions: {
+                            id: string; // uuid
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        }[];
+                        createdAt: string; // date-time
+                        updatedAt: string; // date-time
+                        deletedAt?: string; // date-time
                     };
                 }[];
             }
@@ -16488,11 +16529,6 @@ declare namespace Paths {
              * some text
              */
             aboutUsFirst?: string | null;
-            /**
-             * example:
-             * some text
-             */
-            aboutUsSecond?: string | null;
             openingHours: {
                 /**
                  * example:
@@ -16638,32 +16674,32 @@ declare namespace Paths {
              * example:
              * https://www.facebook.com/GoodRequestCom
              */
-            socialLinkFB?: string | null; // ^http[s]?:\/\/(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkFB?: string | null; // ^(https?:\/\/)?(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.instagram.com/GoodRequestCom
              */
-            socialLinkInstagram?: string | null; // ^http[s]?:\/\/(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkInstagram?: string | null; // ^(https?:\/\/)?(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.goodrequest.com/
              */
-            socialLinkWebPage?: string | null; // ^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkWebPage?: string | null; // ^(https?:\/\/)?(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.youtube.com/GoodRequestCom
              */
-            socialLinkYoutube?: string | null; // ^http[s]?:\/\/(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkYoutube?: string | null; // ^(https?:\/\/)?(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.tiktok.com/GoodRequestCom
              */
-            socialLinkTikTok?: string | null; // ^http[s]?:\/\/(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkTikTok?: string | null; // ^(https?:\/\/)?(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.pinterest.com/GoodRequestCom
              */
-            socialLinkPinterest?: string | null; // ^http[s]?:\/\/(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkPinterest?: string | null; // ^(https?:\/\/)?(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * test_notino@goodrequest.com
@@ -16684,108 +16720,10 @@ declare namespace Paths {
              * Prevod na účet
              */
             otherPaymentMethods?: string | null;
-            imageIDs: [
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?,
-                string?
-            ];
+            imageIDs: string /* uuid */[] | {
+                id: string; // uuid
+                isCover: boolean;
+            }[];
             /**
              * example:
              * 1
@@ -25615,8 +25553,9 @@ declare namespace Paths {
                     };
                     employees: {
                         id: string; // uuid
-                        fullName?: string;
                         hasActiveAccount: boolean;
+                        fullName?: string;
+                        email?: string;
                         inviteEmail?: string;
                         image: {
                             id: string; // uuid
@@ -30628,10 +30567,10 @@ declare namespace Paths {
         }
         export interface RequestBody {
             gallerySegment?: {
-                imageIDs: [
-                    string,
-                    ...string[]
-                ];
+                imageIDs: string /* uuid */[] | {
+                    id: string; // uuid
+                    isCover: boolean;
+                }[];
                 /**
                  * example:
                  * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
@@ -30741,11 +30680,6 @@ declare namespace Paths {
                  * some text
                  */
                 aboutUsFirst?: string | null;
-                /**
-                 * example:
-                 * some text
-                 */
-                aboutUsSecond?: string | null;
             } | null;
             contactInfoSegment?: {
                 phones: [
@@ -30814,32 +30748,32 @@ declare namespace Paths {
                  * example:
                  * https://www.facebook.com/GoodRequestCom
                  */
-                socialLinkFB?: string | null; // ^http[s]?:\/\/(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+                socialLinkFB?: string | null; // ^(https?:\/\/)?(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * https://www.instagram.com/GoodRequestCom
                  */
-                socialLinkInstagram?: string | null; // ^http[s]?:\/\/(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+                socialLinkInstagram?: string | null; // ^(https?:\/\/)?(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * https://www.goodrequest.com/
                  */
-                socialLinkWebPage?: string | null; // ^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+                socialLinkWebPage?: string | null; // ^(https?:\/\/)?(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * https://www.youtube.com/GoodRequestCom
                  */
-                socialLinkYoutube?: string | null; // ^http[s]?:\/\/(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+                socialLinkYoutube?: string | null; // ^(https?:\/\/)?(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * https://www.tiktok.com/GoodRequestCom
                  */
-                socialLinkTikTok?: string | null; // ^http[s]?:\/\/(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+                socialLinkTikTok?: string | null; // ^(https?:\/\/)?(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * https://www.pinterest.com/GoodRequestCom
                  */
-                socialLinkPinterest?: string | null; // ^http[s]?:\/\/(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+                socialLinkPinterest?: string | null; // ^(https?:\/\/)?(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
                 /**
                  * example:
                  * test_notino@goodrequest.com
@@ -30952,6 +30886,8 @@ declare namespace Paths {
                                 large: string;
                             };
                             isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
                         }[];
                         logo?: {
                             id: string; // uuid
@@ -31052,7 +30988,6 @@ declare namespace Paths {
                     };
                     aboutUsSegment?: {
                         aboutUsFirst?: string;
-                        aboutUsSecond?: string;
                     };
                     addressSegment?: {
                         countryCode?: string;
@@ -31918,6 +31853,8 @@ declare namespace Paths {
                                 large: string;
                             };
                             isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
                         }[];
                         logo?: {
                             id: string; // uuid
@@ -32018,7 +31955,6 @@ declare namespace Paths {
                     };
                     aboutUsSegment?: {
                         aboutUsFirst?: string;
-                        aboutUsSecond?: string;
                     };
                     addressSegment?: {
                         countryCode?: string;
@@ -40797,8 +40733,9 @@ declare namespace Paths {
                     };
                     employees: {
                         id: string; // uuid
-                        fullName?: string;
                         hasActiveAccount: boolean;
+                        fullName?: string;
+                        email?: string;
                         inviteEmail?: string;
                         image: {
                             id: string; // uuid
@@ -47304,11 +47241,6 @@ declare namespace Paths {
              * some text
              */
             aboutUsFirst?: string | null;
-            /**
-             * example:
-             * some text
-             */
-            aboutUsSecond?: string | null;
             openingHours: {
                 /**
                  * example:
@@ -47454,32 +47386,32 @@ declare namespace Paths {
              * example:
              * https://www.facebook.com/GoodRequestCom
              */
-            socialLinkFB?: string | null; // ^http[s]?:\/\/(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkFB?: string | null; // ^(https?:\/\/)?(www\.)?facebook\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.instagram.com/GoodRequestCom
              */
-            socialLinkInstagram?: string | null; // ^http[s]?:\/\/(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkInstagram?: string | null; // ^(https?:\/\/)?(www\.)?instagram\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.goodrequest.com/
              */
-            socialLinkWebPage?: string | null; // ^http[s]?:\/\/(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkWebPage?: string | null; // ^(https?:\/\/)?(www\.)?[\S]{1,50}\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.youtube.com/GoodRequestCom
              */
-            socialLinkYoutube?: string | null; // ^http[s]?:\/\/(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkYoutube?: string | null; // ^(https?:\/\/)?(www\.)?youtube\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.tiktok.com/GoodRequestCom
              */
-            socialLinkTikTok?: string | null; // ^http[s]?:\/\/(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkTikTok?: string | null; // ^(https?:\/\/)?(www\.)?tiktok\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * https://www.pinterest.com/GoodRequestCom
              */
-            socialLinkPinterest?: string | null; // ^http[s]?:\/\/(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
+            socialLinkPinterest?: string | null; // ^(https?:\/\/)?(www\.)?pinterest\.[a-zA-Z0-9()]{1,6}?\b([\S]{0,255})$
             /**
              * example:
              * test_notino@goodrequest.com
@@ -47500,7 +47432,10 @@ declare namespace Paths {
              * Prevod na účet
              */
             otherPaymentMethods?: string | null;
-            imageIDs: string /* uuid */[];
+            imageIDs: string /* uuid */[] | {
+                id: string; // uuid
+                isCover: boolean;
+            }[];
             /**
              * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
@@ -47936,90 +47871,6 @@ declare namespace Paths {
              * Lopaty123.
              */
             password: string;
-        }
-        namespace Responses {
-            export interface $200 {
-                accessToken: string;
-                refreshToken: string;
-                user: {
-                    id: string; // uuid
-                    email?: string;
-                    lastAccess?: string; // date-time
-                    activateAt?: string; // date-time
-                    firstName?: string;
-                    lastName?: string;
-                    phonePrefixCountryCode?: string;
-                    phone?: string; // ^\d+$
-                    hasBasicInfo: boolean;
-                    roles: {
-                        id: string; // uuid
-                        name?: string;
-                        permissions: {
-                            id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
-                        }[];
-                    }[];
-                    salons: {
-                        id: string; // uuid
-                        name?: string;
-                        logo?: {
-                            id: string; // uuid
-                            original: string;
-                            fileName: string;
-                            resizedImages: {
-                                thumbnail: string;
-                                small: string;
-                                medium: string;
-                                large: string;
-                            };
-                            isAutogenerated: boolean;
-                        };
-                        employeeID: string; // uuid
-                        role?: {
-                            id: string; // uuid
-                            permissions: {
-                                id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
-                            }[];
-                        };
-                    }[];
-                    disabledNotificationTypes?: ("TEST")[];
-                    image?: {
-                        id: string; // uuid
-                        original: string;
-                        fileName: string;
-                        resizedImages: {
-                            thumbnail: string;
-                            small: string;
-                            medium: string;
-                            large: string;
-                        };
-                        isAutogenerated: boolean;
-                    };
-                    createdAt: string; // date-time
-                    updatedAt: string; // date-time
-                    deletedAt?: string; // date-time
-                };
-            }
-        }
-    }
-    namespace PostApiB2BV1AuthLoginAsPartner {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            userID: string; // uuid
         }
         namespace Responses {
             export interface $200 {
@@ -50729,6 +50580,8 @@ declare namespace Paths {
                                 large: string;
                             };
                             isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
                         }[];
                         logo?: {
                             id: string; // uuid
@@ -50829,7 +50682,6 @@ declare namespace Paths {
                     };
                     aboutUsSegment?: {
                         aboutUsFirst?: string;
-                        aboutUsSecond?: string;
                     };
                     addressSegment?: {
                         countryCode?: string;
@@ -52564,6 +52416,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
   /**
+   * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdRejectedSuggestions'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.Responses.$200>
+  /**
    * getApiB2BAdminServices - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
    */
   'getApiB2BAdminServices'(
@@ -52724,13 +52584,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
   /**
-   * postApiB2BV1AuthLoginAsPartner - permissions:<ul><li>user: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li></ul>
+   * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
    */
-  'postApiB2BV1AuthLoginAsPartner'(
-    parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
-    data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
+  'getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats'(
+    parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.HeaderParameters> | null,
+    data?: any,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
+  ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
   /**
    * getApiB2BV1UsersPartners - permissions:<ul><li>user: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li></ul>
    */
@@ -54150,6 +54010,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
   }
+  ['/api/b2b/admin/salons/{salonID}/rejected-suggestions']: {
+    /**
+     * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions.Responses.$200>
+  }
   ['/api/b2b/admin/services/']: {
     /**
      * getApiB2BAdminServices - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
@@ -54334,15 +54204,15 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboard.Responses.$200>
   }
-  ['/api/b2b/v1/auth/login-as-partner']: {
+  ['/api/b2b/admin/notino-dashboard/salon-development-time-stats']: {
     /**
-     * postApiB2BV1AuthLoginAsPartner - permissions:<ul><li>user: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li></ul>
+     * getApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
      */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BV1AuthLoginAsPartner.HeaderParameters> | null,
-      data?: Paths.PostApiB2BV1AuthLoginAsPartner.RequestBody,
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.QueryParameters & Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.HeaderParameters> | null,
+      data?: any,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1AuthLoginAsPartner.Responses.$200>
+    ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
   }
   ['/api/b2b/v1/users/partners']: {
     /**

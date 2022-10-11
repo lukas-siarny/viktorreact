@@ -10,6 +10,7 @@ import timezonePlugin from 'dayjs/plugin/timezone'
 import isBetween from 'dayjs/plugin/isBetween'
 import minMax from 'dayjs/plugin/minMax'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import localeData from 'dayjs/plugin/localeData'
 
 import App from './App'
 // load theme styles with webpack
@@ -29,6 +30,7 @@ dayjs.extend(utcPlugin)
 dayjs.extend(timezonePlugin)
 dayjs.extend(minMax)
 dayjs.extend(relativeTime)
+dayjs.extend(localeData)
 
 Sentry.init({
 	release: process.env.REACT_APP_VERSION,

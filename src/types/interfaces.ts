@@ -441,13 +441,15 @@ export interface IDateTimeFilterOption {
 	name: string
 }
 
+export interface ISalonRolePermission {
+	description: string
+	checked: boolean
+}
+
 export interface IRoleDescription {
 	key: string
 	name: string
-	permissions: {
-		description: string
-		checked: boolean
-	}[]
+	permissions: ISalonRolePermission[]
 }
 
 export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']

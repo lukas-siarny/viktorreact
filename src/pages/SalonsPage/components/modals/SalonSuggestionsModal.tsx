@@ -129,7 +129,7 @@ const SalonSuggestionsModal = (props: Props) => {
 											block
 											size='middle'
 											type='primary'
-											htmlType='submit'
+											htmlType='button'
 											disabled={isSubmitting}
 										>
 											{t('loc:Áno, toto je môj salón')}
@@ -140,7 +140,7 @@ const SalonSuggestionsModal = (props: Props) => {
 											block
 											size={'middle'}
 											type={'dashed'}
-											htmlType='submit'
+											htmlType='button'
 											disabled={isSubmitting}
 										>
 											{t('loc:Nie, toto je nedorozumenie')}

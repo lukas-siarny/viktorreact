@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import cx from 'classnames'
+import { ItemType } from 'antd/lib/menu/hooks/useItems'
 
 // assets
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
@@ -28,8 +29,8 @@ import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg
 
 // utils
 import { history } from '../../utils/history'
-import { PAGE, PERMISSION } from '../../utils/enums'
-import Permissions from '../../utils/Permissions'
+import { PAGE, PERMISSION, ADMIN_PERMISSIONS } from '../../utils/enums'
+import { permitted } from '../../utils/Permissions'
 
 // redux
 import { logOutUser } from '../../reducers/users/userActions'
@@ -37,8 +38,11 @@ import { RootState } from '../../reducers'
 import { getSupportContact } from '../../reducers/supportContacts/supportContactsActions'
 
 // components
-import LanguagePicker from '../LanguagePicker'
+import { getLanguagePickerAsSubmenuItem } from '../LanguagePicker'
 import AvatarComponents from '../AvatarComponents'
+
+// types
+import { _Permissions } from '../../types/interfaces'
 
 const { Sider } = Layout
 
@@ -53,40 +57,174 @@ const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
+	const authUserPermissions = currentUser?.uniqPermissions
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 
 	const { t } = useTranslation()
 	const dispatch = useDispatch()
 	const location = useLocation()
 
-	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
+	const hasPermissions = useCallback(
+		(allowed: _Permissions = [], except: _Permissions = []) => {
+			return permitted(authUserPermissions || [], selectedSalon?.uniqPermissions, allowed, except)
+		},
+		[authUserPermissions, selectedSalon?.uniqPermissions]
+	)
 
-	const MY_ACCOUNT_MENU = (
-		<Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}>
-			<Menu.Item key='myProfile' onClick={() => history.push(t('paths:my-account'))} icon={<ProfileIcon />}>
-				{t('loc:Môj profil')}
-			</Menu.Item>
-			<Menu.Item
-				key='support'
-				onClick={() => {
+	const myAccontMenuItems: ItemType[] = useMemo(() => {
+		return [
+			{
+				key: 'myProfile',
+				label: t('loc:Môj profil'),
+				onClick: () => history.push(t('paths:my-account')),
+				icon: <ProfileIcon />
+			},
+			{
+				key: 'support',
+				label: t('loc:Potrebujete pomôcť?'),
+				onClick: () => {
 					// reset support contact data to empty in case there are some stored in redux
 					// otherwise language detection would not work correctly in t('paths:contact') page
 					dispatch(getSupportContact())
 					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
-				}}
-				icon={<HelpIcon />}
-			>
-				{t('loc:Potrebujete pomôcť?')}
-			</Menu.Item>
-			<LanguagePicker asMenuItem />
-			<Menu.Item id='logOut' key='logOut' onClick={() => dispatch(logOutUser())} icon={<LogOutIcon />}>
-				{t('loc:Odhlásiť')}
-			</Menu.Item>
-			<Menu.Divider />
-			<Menu.Item key='version' className='cursor-text' disabled icon={<VersionIcon />}>
-				<span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
-			</Menu.Item>
-		</Menu>
-	)
+				},
+				icon: <HelpIcon />
+			},
+			getLanguagePickerAsSubmenuItem(dispatch),
+			{
+				key: 'logOut',
+				id: 'logOut',
+				label: t('loc:Odhlásiť'),
+				onClick: () => dispatch(logOutUser()),
+				icon: <LogOutIcon />
+			},
+			{
+				key: 'version',
+				className: 'cursor-text',
+				icon: <VersionIcon />,
+				disabled: true,
+				label: <span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
+			}
+		]
+	}, [t, dispatch, location.pathname])
+
+	const MY_ACCOUNT_MENU = <Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement} items={myAccontMenuItems} />
+
+	const getMenuItems = useCallback(() => {
+		const getPath = (pathSuffix: string) => `${parentPath}${pathSuffix}`
+
+		const menuItems: ItemType[] = [
+			{
+				key: PAGE.HOME,
+				label: t('loc:Prehľad'),
+				onClick: () => history.push(t('paths:index')),
+				icon: <HomeIcon />
+			}
+		]
+
+		if (!salonID) {
+			// ADMIN VIEW
+			if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.USER_BROWSING])) {
+				menuItems.push({
+					key: PAGE.USERS,
+					label: t('loc:Používatelia'),
+					onClick: () => history.push(t('paths:users')),
+					icon: <UsersIcon />
+				})
+			}
+			if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT])) {
+				menuItems.push(
+					{
+						key: PAGE.CATEGORIES,
+						label: t('loc:Kategórie'),
+						onClick: () => history.push(t('paths:categories')),
+						icon: <CategoryIcon />
+					},
+					{
+						key: PAGE.CATEGORY_PARAMETERS,
+						label: t('loc:Parametre'),
+						onClick: () => history.push(t('paths:category-parameters')),
+						icon: <ParametersIcon />
+					},
+					{
+						key: PAGE.COSMETICS,
+						label: t('loc:Kozmetika'),
+						onClick: () => history.push(t('paths:cosmetics')),
+						icon: <CosmeticIcon />
+					},
+					{
+						key: PAGE.LANGUAGES,
+						label: t('loc:Jazyky'),
+						onClick: () => history.push(t('paths:languages-in-salons')),
+						icon: <LanguagesIcon />
+					},
+					{
+						key: PAGE.SUPPORT_CONTACTS,
+						label: t('loc:Podpora'),
+						onClick: () => history.push(t('paths:support-contacts')),
+						icon: <HelpIcon />
+					},
+					{
+						key: PAGE.SPECIALIST_CONTACTS,
+						label: t('loc:Špecialisti'),
+						onClick: () => history.push(t('paths:specialist-contacts')),
+						icon: <SpecialistIcon />
+					}
+				)
+			}
+			if (hasPermissions([...ADMIN_PERMISSIONS])) {
+				menuItems.push({
+					key: PAGE.SALONS,
+					label: t('loc:Salóny'),
+					onClick: () => history.push(t('paths:salons')),
+					icon: <SalonIcon />
+				})
+			}
+		} else if (salonID) {
+			// SALON VIEW
+			if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
+				menuItems.push(
+					{
+						key: PAGE.SALONS,
+						label: t('loc:Detail salónu'),
+						onClick: () => history.push(parentPath),
+						icon: <SalonIcon />
+					},
+					{
+						key: PAGE.BILLING_INFO,
+						label: t('loc:Fakturačné údaje'),
+						onClick: () => history.push(getPath(t('paths:billing-info'))),
+						icon: <InvoiceIcon />
+					},
+					{
+						key: PAGE.INDUSTRIES_AND_SERVICES,
+						label: t('loc:Odvetvia a služby'),
+						onClick: () => history.push(getPath(t('paths:industries-and-services'))),
+						icon: <IndustiresIcon />
+					},
+					{
+						key: PAGE.SERVICES_SETTINGS,
+						label: t('loc:Nastavenie služieb'),
+						onClick: () => history.push(getPath(t('paths:services-settings'))),
+						icon: <ServiceIcon />
+					},
+					{
+						key: PAGE.CUSTOMERS,
+						label: t('loc:Zákazníci'),
+						onClick: () => history.push(getPath(t('paths:customers'))),
+						icon: <CustomerIcon />
+					},
+					{
+						key: PAGE.EMPLOYEES,
+						label: t('loc:Zamestnanci'),
+						onClick: () => history.push(getPath(t('paths:employees'))),
+						icon: <EmployeesIcon />
+					}
+				)
+			}
+		}
+		return menuItems
+	}, [hasPermissions, parentPath, salonID, t])
 
 	return (
 		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0' width={230}>
@@ -96,178 +234,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				</Link>
 
 				<div className='px-2 flex flex-col flex-grow overflow-y-auto'>
-					{showNavigation && (
-						<Menu mode='inline' inlineIndent={8} selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu'>
-							<Menu.Item eventKey={PAGE.HOME} key={PAGE.HOME} onClick={() => history.push(t('paths:index'))} icon={<HomeIcon />}>
-								{t('loc:Prehľad')}
-							</Menu.Item>
-							{/* ADMIN VIEW */}
-							{!salonID && (
-								<>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_BROWSING]}>
-										<Menu.Item
-											eventKey={PAGE.USERS}
-											key={PAGE.USERS}
-											onClick={() => history.push(t('paths:users'))}
-											icon={<UsersIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.USERS })}
-										>
-											{t('loc:Používatelia')}
-										</Menu.Item>
-									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
-										<Menu.Item
-											eventKey={PAGE.CATEGORIES}
-											key={PAGE.CATEGORIES}
-											onClick={() => history.push(t('paths:categories'))}
-											icon={<CategoryIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORIES })}
-										>
-											{t('loc:Kategórie')}
-										</Menu.Item>
-									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
-										<Menu.Item
-											eventKey={PAGE.CATEGORY_PARAMETERS}
-											key={PAGE.CATEGORY_PARAMETERS}
-											onClick={() => history.push(t('paths:category-parameters'))}
-											icon={<ParametersIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.CATEGORY_PARAMETERS })}
-										>
-											{t('loc:Parametre')}
-										</Menu.Item>
-									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.ENUM_EDIT]}>
-										<Menu.Item
-											eventKey={PAGE.COSMETICS}
-											key={PAGE.COSMETICS}
-											onClick={() => history.push(t('paths:cosmetics'))}
-											icon={<CosmeticIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.COSMETICS })}
-										>
-											{t('loc:Kozmetika')}
-										</Menu.Item>
-									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-										<Menu.Item
-											eventKey={PAGE.LANGUAGES}
-											key={PAGE.LANGUAGES}
-											onClick={() => history.push(t('paths:languages-in-salons'))}
-											icon={<LanguagesIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.LANGUAGES })}
-										>
-											{t('loc:Jazyky')}
-										</Menu.Item>
-									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-										<Menu.Item
-											eventKey={PAGE.SUPPORT_CONTACTS}
-											key={PAGE.SUPPORT_CONTACTS}
-											onClick={() => history.push(t('paths:support-contacts'))}
-											icon={<HelpIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.SUPPORT_CONTACTS })}
-										>
-											{t('loc:Podpora')}
-										</Menu.Item>
-									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-										<Menu.Item
-											eventKey={PAGE.SPECIALIST_CONTACTS}
-											key={PAGE.SPECIALIST_CONTACTS}
-											onClick={() => history.push(t('paths:specialist-contacts'))}
-											icon={<SpecialistIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.SPECIALIST_CONTACTS })}
-										>
-											{t('loc:Špecialisti')}
-										</Menu.Item>
-									</Permissions>
-									<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}>
-										<Menu.Item
-											eventKey={PAGE.SALONS}
-											key={PAGE.SALONS}
-											onClick={() => history.push(t('paths:salons'))}
-											icon={<SalonIcon />}
-											// fix style issue due wrapped item into <Permission> component
-											className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
-										>
-											{t('loc:Salóny')}
-										</Menu.Item>
-									</Permissions>
-								</>
-							)}
-
-							{/* PARTNER VIEW */}
-							{salonID && (
-								<Permissions allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]}>
-									<Menu.Item
-										eventKey={PAGE.SALONS}
-										key={PAGE.SALONS}
-										onClick={() => history.push(parentPath)}
-										icon={<SalonIcon />}
-										// fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.SALONS })}
-									>
-										{t('loc:Detail salónu')}
-									</Menu.Item>
-									<Menu.Item
-										eventKey={PAGE.BILLING_INFO}
-										key={PAGE.BILLING_INFO}
-										onClick={() => history.push(getPath(t('paths:billing-info')))}
-										icon={<InvoiceIcon />}
-										// fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.BILLING_INFO })}
-									>
-										{t('loc:Fakturačné údaje')}
-									</Menu.Item>
-									<Menu.Item
-										eventKey={PAGE.INDUSTRIES_AND_SERVICES}
-										key={PAGE.INDUSTRIES_AND_SERVICES}
-										onClick={() => history.push(getPath(t('paths:industries-and-services')))}
-										icon={<IndustiresIcon />}
-										// fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.INDUSTRIES_AND_SERVICES })}
-									>
-										{t('loc:Odvetvia a služby')}
-									</Menu.Item>
-									<Menu.Item
-										eventKey={PAGE.SERVICES_SETTINGS}
-										key={PAGE.SERVICES_SETTINGS}
-										onClick={() => history.push(getPath(t('paths:services-settings')))}
-										icon={<ServiceIcon />}
-										// fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.SERVICES_SETTINGS })}
-									>
-										{t('loc:Nastavenie služieb')}
-									</Menu.Item>
-									<Menu.Item
-										eventKey={PAGE.CUSTOMERS}
-										key={PAGE.CUSTOMERS}
-										onClick={() => history.push(getPath(t('paths:customers')))}
-										icon={<CustomerIcon />} // fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.CUSTOMERS })}
-									>
-										{t('loc:Zákazníci')}
-									</Menu.Item>
-									<Menu.Item
-										eventKey={PAGE.EMPLOYEES}
-										key={PAGE.EMPLOYEES}
-										onClick={() => history.push(getPath(t('paths:employees')))}
-										icon={<EmployeesIcon />} // fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.EMPLOYEES })}
-									>
-										{t('loc:Zamestnanci')}
-									</Menu.Item>
-								</Permissions>
-							)}
-						</Menu>
-					)}
+					{showNavigation && <Menu mode='inline' inlineIndent={8} selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu' items={getMenuItems()} />}
 				</div>
 
 				<div className='p-2 pb-4'>

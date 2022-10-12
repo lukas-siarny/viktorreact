@@ -56,13 +56,13 @@ const MainLayout: FC<Props> = (props) => {
 			{
 				type: 'group',
 				key: 'group-salons',
-				className: 'px-2 pt-2 pb-0',
-				children: salonMenuItems
+				children: salonMenuItems,
+				style: { height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }
 			},
 			{
 				type: 'group',
 				key: 'group-add-salon',
-				className: 'px-2 pt-2 pb-0',
+				className: '',
 				children: [
 					{
 						type: 'divider',
@@ -71,7 +71,7 @@ const MainLayout: FC<Props> = (props) => {
 					},
 					{
 						key: 'add-salon',
-						className: 'mt-2 p-2 font-medium button-add',
+						className: 'font-medium button-add',
 						icon: <AddPurple />,
 						onClick: () => history.push(t('paths:salons/create')),
 						label: t('loc:Pridať salón')
@@ -81,7 +81,7 @@ const MainLayout: FC<Props> = (props) => {
 		]
 	}
 
-	const SALONS_MENU = <Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
+	const SALONS_MENU = <Menu className='shadow-md max-w-xs mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
 
 	/*
 				<div className={'px-2 pt-2 pb-0'} style={{ height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }}>

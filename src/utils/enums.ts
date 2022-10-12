@@ -563,3 +563,14 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 export enum OPENING_HOURS_STATES {
 	CUSTOM_ORDER = 'CUSTOM_ORDER'
 }
+
+export enum SALONS_TIME_STATS_TYPE {
+	BASIC = 'BASIC',
+	PENDING = 'PENDING',
+	PREMIUM = 'PREMIUM'
+}
+
+export enum TIME_STATS_SOURCE_TYPE {
+	MONTH = 'MONTH',
+	YEAR = 'YEAR'
+}

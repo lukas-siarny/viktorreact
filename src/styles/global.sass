@@ -1176,7 +1176,7 @@ span.ant-tag
 		overflow: hidden
 		background: $backgroundColor-notino-white
 
-	.stastics-box-wide
+	.statistics-box-wide
 		width: calc(50% - 8px)
 		.stats-circle
 			flex: 0 0 auto
@@ -2117,3 +2117,14 @@ li.ant-list-item:hover
 span.anticon.anticon-delete.w-full svg circle
 	stroke: $backgroundColor-notino-red
 	fill: $backgroundColor-notino-red
+
+th.future-divider
+	&::after
+		content: ''
+		position: absolute
+		top: 0
+		right: 4px
+		width: 1px
+		height: 8rem
+		z-index: 99
+		background-color: $backgroundColor-notino-pink

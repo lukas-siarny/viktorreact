@@ -45,7 +45,7 @@ module.exports = {
 				premium: colors.blue[700],
 				basic: colors.blue[200],
 				declined: colors.red[200],
-				pending: colors.yellow[200],
+				pending: colors.yellow[400],
 				notPublished: colors.neutral[200],
 				published: colors.green[200]
 			},

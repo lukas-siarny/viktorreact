@@ -450,7 +450,7 @@ const NotinoDashboard: FC = () => {
 				{
 					label: (
 						<span>
-							{t('loc:Zmeny v publikovaných salónoch za ')}
+							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
 							<strong>{t('loc:24 hodín')}</strong>
 						</span>
 					),
@@ -460,7 +460,7 @@ const NotinoDashboard: FC = () => {
 				{
 					label: (
 						<span>
-							{t('loc:Zmeny v publikovaných salónoch za ')}
+							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
 							<strong>{t('loc:48 hodín')}</strong>
 						</span>
 					),
@@ -470,7 +470,7 @@ const NotinoDashboard: FC = () => {
 				{
 					label: (
 						<span>
-							{t('loc:Zmeny v publikovaných salónoch za ')}
+							{`${t('loc:Zmeny v publikovaných salónoch za')} `}
 							<strong>{t('loc:týždeň')}</strong>
 						</span>
 					),

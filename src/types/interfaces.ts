@@ -441,13 +441,15 @@ export interface IDateTimeFilterOption {
 	name: string
 }
 
+export interface ISalonRolePermission {
+	description: string
+	checked: boolean
+}
+
 export interface IRoleDescription {
 	key: string
 	name: string
-	permissions: {
-		description: string
-		checked: boolean
-	}[]
+	permissions: ISalonRolePermission[]
 }
 
 export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
@@ -482,4 +484,37 @@ export interface SalonPageProps {
 	phonePrefixCountryCode: string
 	authUser: IAuthUserPayload & ILoadingAndFailure
 	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
+}
+
+export interface AlertData {
+	label: React.ReactElement
+	count: number
+	onClick: (...args: any) => any
+}
+
+export interface DashboardData {
+	alertData: AlertData[]
+	graphData: {
+		premiumVsBasic: any[]
+		salonStates: any[]
+		noSalons?: boolean
+	}
+}
+
+interface LineDataset {
+	data: number[]
+	backgroundColor: string
+	borderColor: string
+	pointRadius: number
+}
+
+export interface TimeStatsData {
+	labels: string[]
+	datasets: LineDataset[]
+	columns: any[]
+	breakIndex?: number
+}
+
+export interface TimeStats extends ILoadingAndFailure {
+	data: TimeStatsData | null
 }

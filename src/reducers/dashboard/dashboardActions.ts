@@ -1,31 +1,43 @@
 /* eslint-disable import/no-cycle */
+import { result } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types
-import { NOTINO_DASHBOARD, PARTNER_DASHBOARD } from './dashboardTypes'
+import { NOTINO_DASHBOARD, SALONS_ANNUAL_STATS, SALONS_MONTH_STATS } from './dashboardTypes'
 import { Paths } from '../../types/api'
 import { ThunkResult } from '../index'
 
 // utils
 import { getReq } from '../../utils/request'
+import { normalizeQueryParams } from '../../utils/helper'
 
-export type IDashboardActions = IResetStore | IGetNotinoDashboard | IGetPartnerDashboard
+export type IDashboardActions = IResetStore | IGetNotinoDashboard | IGetSalonsAnnualStats | IGetSalonsMonthstats
 
 interface IGetNotinoDashboard {
 	type: NOTINO_DASHBOARD
 	payload: INotinoDashboardPayload
 }
 
-// TODO in [M1.1]
-interface IGetPartnerDashboard {
-	type: PARTNER_DASHBOARD
-	payload: unknown
-}
-
 export type INotinoDashboard = Paths.GetApiB2BAdminNotinoDashboard.Responses.$200['counts']
 
 export interface INotinoDashboardPayload {
 	data: INotinoDashboard | null
+}
+
+interface IGetSalonsAnnualStats {
+	type: SALONS_ANNUAL_STATS
+	payload: ISalonsTimeStatsPayload
+}
+
+interface IGetSalonsMonthstats {
+	type: SALONS_MONTH_STATS
+	payload: ISalonsTimeStatsPayload
+}
+
+export type ISalonsTimeStats = Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200
+
+export interface ISalonsTimeStatsPayload {
+	data: ISalonsTimeStats | null
 }
 
 export const getNotinoDashboard = (): ThunkResult<Promise<INotinoDashboardPayload>> => async (dispatch) => {
@@ -48,3 +60,48 @@ export const getNotinoDashboard = (): ThunkResult<Promise<INotinoDashboardPayloa
 
 	return payload
 }
+
+const getSalonTimeStats = async (year: number, month?: number): Promise<ISalonsTimeStatsPayload> => {
+	const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-development-time-stats', { ...normalizeQueryParams({ year, month }) } as any)
+	return { data }
+}
+
+export const getSalonsAnnualStats =
+	(year: number): ThunkResult<Promise<ISalonsTimeStatsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ISalonsTimeStatsPayload
+
+		try {
+			dispatch({ type: SALONS_ANNUAL_STATS.SALONS_ANNUAL_STATS_LOAD_START })
+
+			payload = await getSalonTimeStats(year)
+
+			dispatch({ type: SALONS_ANNUAL_STATS.SALONS_ANNUAL_STATS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: SALONS_ANNUAL_STATS.SALONS_ANNUAL_STATS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getSalonsMonthStats =
+	(year: number, month?: number): ThunkResult<Promise<ISalonsTimeStatsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ISalonsTimeStatsPayload
+
+		try {
+			dispatch({ type: SALONS_MONTH_STATS.SALONS_MONTH_STATS_LOAD_START })
+
+			payload = await getSalonTimeStats(year, month)
+
+			dispatch({ type: SALONS_MONTH_STATS.SALONS_MONTH_STATS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: SALONS_MONTH_STATS.SALONS_MONTH_STATS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}

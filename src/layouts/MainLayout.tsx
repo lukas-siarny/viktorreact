@@ -81,30 +81,7 @@ const MainLayout: FC<Props> = (props) => {
 		]
 	}
 
-	const SALONS_MENU = <Menu className='shadow-md max-w-xs mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
-
-	/*
-				<div className={'px-2 pt-2 pb-0'} style={{ height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }}>
-				{salonOptions.map((item) => (
-					<Menu.Item
-						key={item.key}
-						className={cx({ 'ant-menu-item-selected': selectedSalon?.id === item.value }, 'py-2-5 px-2 mb-2 font-medium min-w-0')}
-						onClick={() => {
-							history.push(t('paths:salons/{{salonID}}', { salonID: item.value }))
-						}}
-					>
-						<AvatarComponents src={item.logo || SalonDefaultAvatar} fallBackSrc={SalonDefaultAvatar} size={24} className={'mr-2-5 header-avatar'} />
-						{item.label}
-					</Menu.Item>
-				))}
-			</div>
-			<div className={'px-2 pb-2'}>
-				<Menu.Divider className={'m-0'} />
-				<Menu.Item key='add-salon' className={'mt-2 p-2 font-medium button-add'} icon={<AddPurple />} onClick={() => history.push(t('paths:salons/create'))}>
-					{t('loc:Pridať salón')}
-				</Menu.Item>
-			</div>
-	*/
+	const SALONS_MENU = <Menu className='shadow-md max-w-xs min-w-80 mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
 
 	const getSelectedSalonLabel = (hasPermision: boolean) => {
 		const content = (

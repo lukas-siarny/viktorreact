@@ -3,7 +3,6 @@ import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-import cx from 'classnames'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 
 // assets

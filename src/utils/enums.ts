@@ -187,6 +187,12 @@ export enum TAB_KEYS {
 	SALON_HISTORY = 'SALON_HISTORY'
 }
 
+export enum SALONS_TAB_KEYS {
+	ACTIVE = 'active',
+	DELETED = 'deleted',
+	MISTAKES = 'mistakes'
+}
+
 export enum SALON_CREATE_TYPE {
 	NON_BASIC = 'NON_BASIC',
 	BASIC = 'BASIC'
@@ -355,6 +361,11 @@ export enum SALON_FILTER_CREATE_TYPES {
 export enum SALON_CREATE_TYPES {
 	BASIC = 'BASIC',
 	NON_BASIC = 'NON_BASIC'
+}
+
+export enum SALON_FILTER_OPENING_HOURS {
+	SET = 'SET',
+	NOT_SET = 'NOT_SET'
 }
 
 export enum PAGE_VIEW {
@@ -551,4 +562,15 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 
 export enum OPENING_HOURS_STATES {
 	CUSTOM_ORDER = 'CUSTOM_ORDER'
+}
+
+export enum SALONS_TIME_STATS_TYPE {
+	BASIC = 'BASIC',
+	PENDING = 'PENDING',
+	PREMIUM = 'PREMIUM'
+}
+
+export enum TIME_STATS_SOURCE_TYPE {
+	MONTH = 'MONTH',
+	YEAR = 'YEAR'
 }

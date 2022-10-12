@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Modal, Collapse, Row, Spin, Tooltip } from 'antd'
+import { Modal, Collapse, Row, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { Field } from 'redux-form'
 
@@ -8,13 +8,12 @@ import { IRoleDescription, ISelectOptionItem } from '../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../assets/icons/close-icon.svg'
-import { ReactComponent as CheckIcon } from '../assets/icons/check-icon-success-16.svg'
-import { ReactComponent as CrossedIcon } from '../assets/icons/crossed-red-16.svg'
 import { ReactComponent as InfoIcon24 } from '../assets/icons/info-icon.svg'
 import { ReactComponent as InfoIcon16 } from '../assets/icons/info-icon-16.svg'
 
 // atoms
 import SelectField from './SelectField'
+import SalonRolePermissions from './SalonRolePermissions'
 
 const { Panel } = Collapse
 
@@ -84,17 +83,7 @@ const SalonRolesField: FC<Props> = (props) => {
 							const hasPermissions = salonRole?.permissions?.length !== 0
 							return (
 								<Panel key={salonRole.key} header={<h4 className={'text-base my-2'}>{salonRole.name}</h4>} disabled={!hasPermissions} showArrow={hasPermissions}>
-									<ul className={'list-none pl-0'}>
-										{salonRole.permissions?.map((permission, i) => {
-											const icon = permission.checked ? <CheckIcon /> : <CrossedIcon />
-											return (
-												<li key={i} className={'flex items-start gap-2'}>
-													<span className={'pt-1'}>{icon}</span>
-													<span>{permission.description}</span>
-												</li>
-											)
-										})}
-									</ul>
+									<SalonRolePermissions permissions={salonRole.permissions} />
 								</Panel>
 							)
 						})}

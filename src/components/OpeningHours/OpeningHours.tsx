@@ -94,7 +94,7 @@ const OpeningHours = (props: any) => {
 										label={t('loc:Na objednávku')}
 										size={'small'}
 										disabled={disabled}
-										className={'m-0 noti-opening-hours-on-demand-switch'}
+										className={'m-0 pb-0 noti-opening-hours-on-demand-switch'}
 									/>
 								)
 							}}

@@ -63,7 +63,7 @@ const RegistrationForm: FC<Props> = (props) => {
 				name={'gdpr'}
 				customLabel={
 					<div className='text-notino-grayDark text-xs md:text-sm'>
-						<span>{t('loc:Prehlasujem, že som sa oboznámil s ')}</span>
+						<span>{`${t('loc:Prehlasujem, že som sa oboznámil s')} `}</span>
 						<a
 							onClick={(e) => e.stopPropagation()}
 							className='text-notino-grayDark hover:text-notino-pink'
@@ -73,7 +73,7 @@ const RegistrationForm: FC<Props> = (props) => {
 						>
 							<u>{t('loc:Podmienkami používania')}</u>
 						</a>
-						{t('loc: a ')}
+						{` ${t('loc:a')} `}
 						<a
 							onClick={(e) => e.stopPropagation()}
 							className='text-notino-grayDark hover:text-notino-pink'
@@ -83,7 +83,7 @@ const RegistrationForm: FC<Props> = (props) => {
 						>
 							<u>{t('loc:Zásadami spracovania osobných údajov')}</u>
 						</a>
-						<span>{t('loc: a chcem sa zaregistrovať do programu Notino Partner.')}</span>
+						<span>{` ${t('loc:a chcem sa zaregistrovať do programu Notino Partner.')}`}</span>
 					</div>
 				}
 				size={'large'}
@@ -100,9 +100,9 @@ const RegistrationForm: FC<Props> = (props) => {
 				size={'large'}
 				tooltipText={
 					<div>
-						{t(
-							'loc:Spoločnosť Notino, s.r.o. je oprávnená kontaktovať registrovaných užívateľov z dôvodu priameho marketingu. Aby sme zamedzili nevyžiadanej pošte, potvrďte, ak toto spracovanie namietate. Viac informácii v '
-						)}
+						{`${t(
+							'loc:Spoločnosť Notino, s.r.o. je oprávnená kontaktovať registrovaných užívateľov z dôvodu priameho marketingu. Aby sme zamedzili nevyžiadanej pošte, potvrďte, ak toto spracovanie namietate. Viac informácii v'
+						)} `}
 						<a
 							onClick={(e) => e.stopPropagation()}
 							className='text-notino-pink font-semibold'
@@ -121,7 +121,7 @@ const RegistrationForm: FC<Props> = (props) => {
 				</Button>
 
 				<span className='flex items-center md:justify-center text-notino-black font-medium'>
-					{t('loc:Už ste registrovaný? ')}
+					{`${t('loc:Už ste registrovaný?')} `}
 					<Link to={`${t('paths:login')}`}>
 						<Button className='p-0 ml-1 font-medium' type={'link'} htmlType={'button'}>
 							{t('loc:Prihlásiť sa')}

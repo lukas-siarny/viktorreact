@@ -19,7 +19,7 @@ const SalonApprovalModal = (props: Props) => {
 
 	return (
 		<Modal centered visible={visible} onCancel={onCancel} footer={null} closable={false} className={'p-4'} forceRender width={600}>
-			<div className={'noti-approval-modal-content'} id={'noti-approval-modal-content'}>
+			<div className={'noti-modal-content noti-approval-modal-content'} id={'noti-approval-modal-content'}>
 				<header>
 					<button type={'button'} onClick={onCancel}>
 						<CloseIcon />

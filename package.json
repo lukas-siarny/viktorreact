@@ -104,7 +104,7 @@
     "runtime-env-cra": "0.2.4",
     "sass": "1.50.1",
     "slugify": "1.6.5",
-    "smtp-tester": "2.0.0",
+    "smtp-tester": "git+https://github.com/deitch/smtp-tester.git#d50cf2691b7fb48f4930f16358c254958d397dd6",
     "symlink-dir": "5.0.1",
     "tailwindcss": "3.1.8",
     "tailwindcss-export-config": "4.1.0",

@@ -201,16 +201,16 @@ pipelines:
                 - cd notino_backend && npm install --legacy-peer-deps
               artifacts: # defining the artifacts to be passed to each future step.
                 - notino_backend/**
-          - step:
-              name: install FE deps
-              image: cypress/browsers:node16.13.0-chrome95-ff94
-              caches:
-                - cypress
-                - frontend
-              script:
-                - npm install --legacy-peer-deps && CI=false npm run build
-              artifacts: # defining the artifacts to be passed to each future step.
-                - build/**
+        #   - step:
+        #       name: install FE deps
+        #       image: cypress/browsers:node16.13.0-chrome95-ff94
+        #       caches:
+        #         - cypress
+        #         - frontend
+        #       script:
+        #         - npm install --legacy-peer-deps && CI=false npm run build
+        #       artifacts: # defining the artifacts to be passed to each future step.
+        #         - build/**
         - step:
             name: run Test
             image: cypress/browsers:node16.13.0-chrome95-ff94

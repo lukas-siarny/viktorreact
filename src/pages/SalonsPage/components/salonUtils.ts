@@ -124,7 +124,7 @@ export const getSalonDataForSubmission = (data: ISalonForm) => {
 	return {
 		imageIDs: (data.gallery || []).map((image: any) => ({
 			id: image?.id ?? image?.uid,
-			isCover: image?.isCover
+			isCover: image?.isCover ?? false
 		})) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
 		logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
 		name: data.salonNameFromSelect ? data.nameSelect?.label : data.name,

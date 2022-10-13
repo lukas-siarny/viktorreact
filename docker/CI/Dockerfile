@@ -22,5 +22,4 @@ RUN mv ./build/* /usr/share/nginx/html
 STOPSIGNAL SIGTERM
 EXPOSE 80
 
-CMD ["/bin/sh", "-c", "nginx -g \"daemon off;\""]
-# CMD ["/bin/sh", "-c", "runtime-env-cra --config-name=/usr/share/nginx/html/runtime-env.js && nginx -g \"daemon off;\""]
+CMD ["/bin/sh", "-c", "runtime-env-cra --config-name=/usr/share/nginx/html/runtime-env.js && nginx -g \"daemon off;\""]

@@ -83,7 +83,7 @@ const CreateCategoryParamsPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:category-parameters')} />
 			</Row>
-			<div className='content-body small mt-2'>
+			<div className='content-body small'>
 				<CategoryParamsForm onSubmit={handleSubmit} />
 			</div>
 		</>

@@ -63,7 +63,7 @@ const ServicePage = (props: Props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={backUrl} />
 			</Row>
-			<div className='content-body small mt-2'>{serviceID && <ServiceEditPage serviceID={serviceID} salonID={salonID} parentPath={backUrl} />}</div>
+			{serviceID && <ServiceEditPage serviceID={serviceID} salonID={salonID} parentPath={backUrl} />}
 		</>
 	)
 }

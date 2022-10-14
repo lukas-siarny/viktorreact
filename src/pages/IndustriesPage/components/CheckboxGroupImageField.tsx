@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo } from 'react'
 import cx from 'classnames'
 import { WrappedFieldInputProps, WrappedFieldProps } from 'redux-form'
-import i18next from 'i18next'
-import PopConfirmComponent, { PopConfirmComponentProps } from '../../../components/PopConfirmComponent'
+import { PopConfirmComponentProps } from '../../../components/PopConfirmComponent'
 
 export type CheckboxOption = {
 	id: string
@@ -55,31 +54,6 @@ const CheckboxGroupImageField = (props: Props) => {
 
 	const errorMsg = error && touched ? error : undefined
 
-	const getExtraActionButton = useCallback((option: CheckboxOption) => {
-		return option.extraAction?.popconfirm ? (
-			<PopConfirmComponent
-				placement={'bottom'}
-				title={i18next.t('loc:Vo formulári máte neuložené zmeny. Želáte si pokračovať ďalej?')}
-				onConfirm={option.extraAction?.action}
-				okText={i18next.t('loc:Pokračovať')}
-				{...(option.extraAction?.popconfirmProps || {})}
-				allowedButton={
-					<div>
-						<button type={'button'} disabled={option.extraAction.disabled || option.disabled}>
-							{option.extraAction.label}
-							{option.extraAction.icon}
-						</button>
-					</div>
-				}
-			/>
-		) : (
-			<button type={'button'} onClick={option.extraAction?.action} disabled={option.extraAction?.disabled || option.disabled}>
-				{option.extraAction?.label}
-				{option.extraAction?.icon}
-			</button>
-		)
-	}, [])
-
 	return (
 		<>
 			<fieldset className={cx('checkbox-group-image-fieldset', { error: errorMsg, required })}>
@@ -99,7 +73,12 @@ const CheckboxGroupImageField = (props: Props) => {
 										<span className={'label'}>{option.label}</span>
 									</div>
 								</label>
-								{option.extraAction && getExtraActionButton(option)}
+								{option.extraAction && (
+									<button type={'button'} onClick={option.extraAction?.action} disabled={option.extraAction?.disabled || option.disabled}>
+										{option.extraAction?.label}
+										{option.extraAction?.icon}
+									</button>
+								)}
 							</div>
 						)
 					})}

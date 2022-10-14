@@ -24,6 +24,7 @@ import Permissions, { withPermissions } from '../../utils/Permissions'
 // reducers
 import { getEmployees } from '../../reducers/employees/employeesActions'
 import { RootState } from '../../reducers'
+import { getServices } from '../../reducers/services/serviceActions'
 
 // types
 import { IBreadcrumbs, SalonSubPageProps, Columns } from '../../types/interfaces'
@@ -76,6 +77,10 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 
 		setPrefixOptions(prefixes)
 	}, [phonePrefixes, dispatch])
+
+	useEffect(() => {
+		dispatch(getServices({ salonID }))
+	}, [salonID, dispatch])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {
@@ -196,7 +201,7 @@ const EmployeesPage: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			<Row>
-				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={parentPath + t('paths:index')} />
+				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
 			<Row gutter={ROW_GUTTER_X_DEFAULT}>
 				<Col span={24}>

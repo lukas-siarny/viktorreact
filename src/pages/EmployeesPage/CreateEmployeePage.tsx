@@ -136,7 +136,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 			</Row>
 			<Spin spinning={isLoading}>
 				<h2 className={'content-body-width-small'}>{t('loc:Poslať kolegovi pozvánku')}</h2>
-				<div className='content-body small mt-2 mb-8 without-content-footer'>
+				<div className='content-body small mb-8 without-content-footer'>
 					<InviteForm onSubmit={inviteEmployee} salonRolesOptions={filteredSalonRolesByPermission} />
 					<Row justify={'center'}>
 						<Button
@@ -159,7 +159,7 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 					<Divider className={'my-6'}>{t('loc:alebo')}</Divider>
 				</div>
 				<h2 className={'content-body-width-small'}>{t('loc:Vytvoriť profil kolegu')}</h2>
-				<div className='content-body small mt-2 without-content-footer'>
+				<div className='content-body small without-content-footer'>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={createEmployee} />
 					<Row justify={'center'}>
 						<Button

@@ -153,7 +153,7 @@ const rootReducer = combineReducers({
 	dashboard: persistReducer(
 		{
 			key: REDUCER_KEYS.DASHBOARD,
-			storage: storageLocal
+			storage: storageSession
 		},
 		dashboardReducer
 	),

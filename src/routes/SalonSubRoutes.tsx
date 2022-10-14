@@ -242,6 +242,28 @@ const SalonSubRoutes: FC = (props) => {
 				preventShowDeletedSalon
 			/>
 			<AuthRoute
+				exact
+				path={getPath(t('paths:calendar3'))}
+				component={Calendar2}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:calendar3'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.CALENDAR3}
+				preventShowDeletedSalon
+			/>
+			<AuthRoute
+				exact
+				path={getPath(t('paths:calendar4'))}
+				component={Calendar2}
+				parentPath={url}
+				translatePathKey={getPath(t('paths:calendar4'))}
+				salonID={salonID}
+				layout={MainLayout}
+				page={PAGE.CALENDAR4}
+				preventShowDeletedSalon
+			/>
+			<AuthRoute
 				{...props}
 				component={NotFoundPage} // NOTE: for non auth route just let the user redirect on login page
 				layout={MainLayout}

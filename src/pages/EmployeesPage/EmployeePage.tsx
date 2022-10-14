@@ -291,6 +291,7 @@ const EmployeePage = (props: Props) => {
 	}
 
 	const isProfileInActive: boolean = form?.values?.hasActiveAccount === false
+	const { hasPermission: hasPermissionToEdit, tooltip } = hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)
 
 	return (
 		<>
@@ -299,17 +300,18 @@ const EmployeePage = (props: Props) => {
 			</Row>
 
 			{formValues?.hasActiveAccount && (
-				<div className='content-body small mt-2 mb-8'>
+				<div className='content-body small mb-8'>
 					<Spin spinning={isLoading}>
 						<EditRoleForm
 							onSubmit={editEmployeeRole}
 							salonRolesOptions={filteredSalonRolesByPermission}
-							hasPermissionToEdit={hasAuthUserPermissionToEditRole(salonID, currentAuthUser?.data, employee?.data, salonRoles?.data || undefined)}
+							hasPermissionToEdit={hasPermissionToEdit}
+							permissionTooltip={tooltip}
 						/>
 					</Spin>
 				</div>
 			)}
-			<div className='content-body small mt-2 mb-8'>
+			<div className='content-body small'>
 				<Spin spinning={isLoading}>
 					<EmployeeForm addService={() => addService(services, form, dispatch)} salonID={salonID} onSubmit={updateEmployee} />
 					<div className={'content-footer'}>

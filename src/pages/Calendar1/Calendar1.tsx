@@ -10,6 +10,7 @@ import FullCalendar, { DatesSetArg, FormatterInput } from '@fullcalendar/react' 
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
 import daygridPlugin from '@fullcalendar/daygrid'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
+import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
@@ -162,14 +163,14 @@ const Calendar1 = () => {
 			<Spin spinning={loadingData}>
 				<FullCalendar
 					schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
-					plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
+					plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid, resourceTimelinePlugin]}
 					timeZone='local'
 					slotLabelFormat={TIME_FORMAT}
 					eventTimeFormat={TIME_FORMAT}
 					height='auto'
 					headerToolbar={{
 						left: 'title prev,today,next',
-						right: 'resourceTimeGridDay,timeGridWeek,dayGridMonth'
+						right: 'resourceTimeGridDay,timeGridWeek,resourceTimeGridWeek,dayGridMonth,resourceTimelineWeek,resourceTimelineDay'
 					}}
 					initialView='resourceTimeGridDay'
 					initialDate={range.start}

@@ -18,6 +18,7 @@
   "index": "/",
   "industries-and-services": "/industries-and-services",
   "industries-and-services/{{industryID}}": "/industries-and-services/{{industryID}}",
+  "invite": "/invite",
   "languages-in-salons": "/languages-in-salons",
   "login": "/login",
   "my-account": "/my-account",

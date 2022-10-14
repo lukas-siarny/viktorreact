@@ -38,7 +38,6 @@ export interface ILoginForm {
 	password: string
 }
 
-
 export interface IInviteEmployeeForm {
 	email: string
 	roleID: string
@@ -70,20 +69,31 @@ export interface IUserAccountForm {
 	countryCode?: string
 }
 
-export type OpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+// type of BE opening hours data
+export type RawOpeningHours = Paths.GetApiB2BAdminSalonsSalonId.Responses.$200['salon']['openingHours']
+
+type OpeningHoursDay = NonNullable<RawOpeningHours>[0]['day']
+
+// type for OpeningHours component
+export type OpeningHoursTimeRanges = {
+	timeFrom: string
+	timeTo: string
+}[]
+
+export type OpeningHours = {
+	day: OpeningHoursDay
+	timeRanges: OpeningHoursTimeRanges
+	onDemand?: boolean
+}[]
 
 export interface ISalonForm {
 	salonNameFromSelect: boolean
 	id: string | null
 	name: string | null
-	nameSelect: { key: string, label: string | null; value: string | null } | null
+	nameSelect: { key: string; label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
-	aboutUsSecond: string | null
 	openingHours: OpeningHours
-	note: string | null
-	noteFrom: string | null
-	noteTo: string | null
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
 	country: string | null
@@ -94,9 +104,9 @@ export interface ISalonForm {
 	latitude: number | null
 	longitude: number | null
 	parkingNote: string | null
-	phones: { phonePrefixCountryCode: string | null, phone: string | null }[]
+	phones: { phonePrefixCountryCode: string | null; phone: string | null }[]
 	email: string | null
-	categoryIDs: [string, ...string[] ] | null
+	categoryIDs: [string, ...string[]] | null
 	socialLinkFB: string | null
 	socialLinkInstagram: string | null
 	socialLinkWebPage: string | null
@@ -141,7 +151,7 @@ export interface ISupportContactForm {
 	city: string
 	street: string
 	streetNumber: string
-	phones: { phonePrefixCountryCode: string, phone: string }[]
+	phones: { phonePrefixCountryCode: string; phone: string }[]
 	emails: { email: string }[]
 }
 
@@ -238,13 +248,7 @@ export interface INoteForm {
 }
 
 export interface IOpenHoursNoteForm {
-	hoursNote: {
-		note: string
-		range: {
-			dateFrom: string
-			dateTo: string
-		}
-	}
+	openingHoursNote: string
 }
 
 export interface ISearchFilter {
@@ -265,7 +269,7 @@ export interface ICustomerForm {
 	streetNumber?: string
 	countryCode?: string
 	salonID: string
-	gallery: any,
+	gallery: any
 	avatar: any
 }
 
@@ -317,7 +321,6 @@ export interface IUserAvatar {
 	alt?: string
 	text?: string
 	key?: string | number
-
 }
 
 export interface IQueryParams {
@@ -396,8 +399,7 @@ export type ICosmetic = Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosme
 
 export type ILanguage = Paths.GetApiB2BAdminEnumsLanguages.Responses.$200['languages'][0]
 
-// TODO: change any when BE is done
-export type ISpecialistContact = any /* Paths.GetApiB2BAdminEnumsCosmetics.Responses.$200['cosmetics'][0] */
+export type ISpecialistContact = Paths.GetApiB2BAdminEnumsContactsContactId.Responses.$200['contact']
 
 export interface IPagination extends PaginationProps {
 	pageSizeOptions?: number[]
@@ -439,6 +441,17 @@ export interface IDateTimeFilterOption {
 	name: string
 }
 
+export interface ISalonRolePermission {
+	description: string
+	checked: boolean
+}
+
+export interface IRoleDescription {
+	key: string
+	name: string
+	permissions: ISalonRolePermission[]
+}
+
 export type CountriesData = Paths.GetApiB2BAdminEnumsCountries.Responses.$200['countries']
 
 export interface IEnumerationOptions {
@@ -471,4 +484,37 @@ export interface SalonPageProps {
 	phonePrefixCountryCode: string
 	authUser: IAuthUserPayload & ILoadingAndFailure
 	phonePrefixes: IEnumerationsCountriesPayload & ILoadingAndFailure
+}
+
+export interface AlertData {
+	label: React.ReactElement
+	count: number
+	onClick: (...args: any) => any
+}
+
+export interface DashboardData {
+	alertData: AlertData[]
+	graphData: {
+		premiumVsBasic: any[]
+		salonStates: any[]
+		noSalons?: boolean
+	}
+}
+
+interface LineDataset {
+	data: number[]
+	backgroundColor: string
+	borderColor: string
+	pointRadius: number
+}
+
+export interface TimeStatsData {
+	labels: string[]
+	datasets: LineDataset[]
+	columns: any[]
+	breakIndex?: number
+}
+
+export interface TimeStats extends ILoadingAndFailure {
+	data: TimeStatsData | null
 }

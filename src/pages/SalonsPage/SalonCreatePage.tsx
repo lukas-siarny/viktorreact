@@ -147,7 +147,7 @@ const SalonCreatePage: FC<SalonPageProps> = (props) => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
-			<div className='content-body mt-2'>
+			<div className='content-body'>
 				<Spin spinning={isLoading}>
 					<SalonForm
 						onSubmit={handleSubmit}

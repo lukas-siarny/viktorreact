@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
-import { change, initialize, isPristine, reset, submit } from 'redux-form'
+import { initialize, isPristine, reset, submit } from 'redux-form'
 import { get } from 'lodash'
 import { compose } from 'redux'
 import { BooleanParam, useQueryParams } from 'use-query-params'
@@ -24,7 +24,7 @@ import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION
 
 // reducers
 import { RootState } from '../../reducers'
-import { ISalonPayloadData, selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
+import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
@@ -34,7 +34,7 @@ import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, SalonPageProps } from 
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formatDateByLocale, formFieldID } from '../../utils/helper'
+import { formFieldID } from '../../utils/helper'
 import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
@@ -86,7 +86,6 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		history: BooleanParam
 	})
 
-	const updateOnlyOpeningHours = useRef(false)
 	const dontUpdateFormData = useRef(false)
 
 	// change tab based on query
@@ -98,23 +97,8 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	// init form
 	useEffect(() => {
-		const initData = async (salonData: ISalonPayloadData | null) => {
-			if (updateOnlyOpeningHours.current) {
-				dispatch(
-					change(FORM.SALON, 'openingHoursNote', {
-						note: salonData?.openingHoursNote?.note,
-						noteFrom: salonData?.openingHoursNote?.validFrom,
-						noteTo: salonData?.openingHoursNote?.validTo
-					})
-				)
-				updateOnlyOpeningHours.current = false
-			} else {
-				dispatch(initialize(FORM.SALON, initSalonFormData(salonData, phonePrefixCountryCode)))
-			}
-		}
-
 		if (!dontUpdateFormData.current) {
-			initData(salon.data)
+			dispatch(initialize(FORM.SALON, initSalonFormData(salon.data, phonePrefixCountryCode)))
 			dontUpdateFormData.current = false
 		}
 	}, [salon.data, dispatch, phonePrefixCountryCode])
@@ -266,7 +250,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	}
 
 	const onOpenHoursNoteModalClose = () => {
-		updateOnlyOpeningHours.current = true
+		dontUpdateFormData.current = true
 		setOpeningHoursModalVisble(false)
 		dispatch(selectSalon(salonID))
 	}
@@ -559,7 +543,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const salonForm = (
 		<>
-			<div className='content-body mt-2'>
+			<div className='content-body'>
 				<Spin spinning={isLoading}>
 					{isAdmin ? renderContentHeaderAdmin() : renderContentHeaderPartner()}
 					{declinedSalonMessage}
@@ -575,12 +559,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 									<>
 										<div className='w-full'>
 											<h4>{t('loc:Poznámka pre otváracie hodiny')}</h4>
-											<p className='mb-0'>
-												{formatDateByLocale(salon.data.openingHoursNote.validFrom, true)}
-												{' - '}
-												{formatDateByLocale(salon.data.openingHoursNote.validTo, true)}
-											</p>
-											<i className='block text-base mt-2'>{salon.data.openingHoursNote.note}</i>
+											<i className='block mb-2 text-base'>{salon.data.openingHoursNote.note}</i>
 										</div>
 										<Button
 											type={'primary'}
@@ -616,7 +595,13 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 					{renderContentFooter()}
 				</Spin>
 			</div>
-			<OpenHoursNoteModal visible={openingHoursModalVisble} salonID={salonID} openingHoursNote={salon?.data?.openingHoursNote} onClose={onOpenHoursNoteModalClose} />
+			<OpenHoursNoteModal
+				title={t('loc:Poznámka pre otváracie hodiny')}
+				visible={openingHoursModalVisble}
+				salonID={salonID}
+				openingHoursNote={salon?.data?.openingHoursNote}
+				onClose={onOpenHoursNoteModalClose}
+			/>
 			<Modal
 				key={`${modalConfig.visible}`}
 				title={modalConfig.title}
@@ -692,7 +677,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 							tabKey: TAB_KEYS.SALON_HISTORY,
 							tab: <>{t('loc:História salónu')}</>,
 							tabPaneContent: (
-								<div className='content-body mt-2'>
+								<div className='content-body'>
 									<SalonHistory salonID={salonID} tabKey={tabKey} />
 								</div>
 							)

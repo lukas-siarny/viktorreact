@@ -161,16 +161,6 @@ const SalonForm: FC<Props> = (props) => {
 							showLettersCount
 						/>
 						<Field
-							component={TextareaField}
-							label={t('loc:Doplňujúci popis')}
-							name={'aboutUsSecond'}
-							size={'large'}
-							placeholder={t('loc:Zadajte doplňujúce informácie o salóne')}
-							disabled={disabledForm}
-							maxLength={VALIDATION_MAX_LENGTH.LENGTH_500}
-							showLettersCount
-						/>
-						<Field
 							component={SelectField}
 							options={languages.enumerationsOptions}
 							label={t('loc:Jazyky, ktorými sa dá v salóne dohovoriť')}
@@ -211,7 +201,6 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 						/>
 						<Field
-							className={'m-0 pb-0'}
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'gallery'}
@@ -221,6 +210,8 @@ const SalonForm: FC<Props> = (props) => {
 							maxCount={10}
 							category={UPLOAD_IMG_CATEGORIES.SALON}
 							disabled={disabledForm}
+							draggable
+							selectable
 						/>
 					</Col>
 				</Row>
@@ -293,7 +284,7 @@ const SalonForm: FC<Props> = (props) => {
 							size={'middle'}
 							disabled={disabledForm}
 						/>
-						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm }} />
+						<FieldArray component={OpeningHours} name={'openingHours'} props={{ disabled: disabledForm, showOnDemand: true }} />
 						{noteModalControlButtons}
 					</Col>
 				</Row>

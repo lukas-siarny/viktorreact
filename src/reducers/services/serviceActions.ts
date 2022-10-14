@@ -86,13 +86,22 @@ export const getServices =
 							name: thirdCategory?.category?.name || '-',
 							categoryFirst: parentCategory?.category?.name || '-',
 							categorySecond: secondCategory?.category?.name || '-',
-							employees: thirdCategory?.service?.employees?.map((employee) => ({
-								src: employee.image?.resizedImages?.thumbnail,
-								fallBackSrc: employee.image?.original,
-								alt: `${employee.firstName} ${employee.lastName}`,
-								text: `${employee.firstName} ${employee.lastName}`,
-								key: employee.id
-							})),
+							employees: thirdCategory?.service?.employees?.map((employee) => {
+								// TODO: remove any when BE will be done
+								const employeeName =
+									`${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() ||
+									(employee as any).email ||
+									(employee as any).inviteEmail ||
+									'-'
+
+								return {
+									src: employee.image?.resizedImages?.thumbnail,
+									fallBackSrc: employee.image?.original,
+									alt: employeeName,
+									text: employeeName,
+									key: employee.id
+								}
+							}),
 							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo), symbol) || '-',
 							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo, i18next.t('loc:min')) || '-',
 							isComplete: thirdCategory?.service?.isComplete,

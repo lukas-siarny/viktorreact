@@ -192,25 +192,25 @@ pipelines:
                 - CI=false npm run build
   custom:
     e2e:
-        - parallel:      # these 2 steps will run in parallel
-          - step:
-              name: download BE
-              image: cypress/browsers:node16.13.0-chrome95-ff94
-              script:
-                - git clone git@bitbucket.org:GoodRequest/notino_backend.git
-                - cd notino_backend && npm install --legacy-peer-deps
-              artifacts: # defining the artifacts to be passed to each future step.
-                - notino_backend/**
-          - step:
-              name: install FE deps
-              image: cypress/browsers:node16.13.0-chrome95-ff94
-              caches:
-                - cypress
-                - frontend
-              script:
-                - npm install --legacy-peer-deps && CI=false npm run build
-              artifacts: # defining the artifacts to be passed to each future step.
-                - build/**
+        # - parallel:      # these 2 steps will run in parallel
+          # - step:
+          #     name: download BE
+          #     image: cypress/browsers:node16.13.0-chrome95-ff94
+          #     script:
+          #       - git clone git@bitbucket.org:GoodRequest/notino_backend.git
+          #       # - cd notino_backend && npm install --legacy-peer-deps
+          #     artifacts: # defining the artifacts to be passed to each future step.
+          #       - notino_backend/**
+        #   - step:
+        #       name: install FE deps
+        #       image: cypress/browsers:node16.13.0-chrome95-ff94
+        #       caches:
+        #         - cypress
+        #         - frontend
+        #       script:
+        #         - npm install --legacy-peer-deps && CI=false npm run build
+        #       artifacts: # defining the artifacts to be passed to each future step.
+        #         - build/**
         - step:
             name: run Test
             image: cypress/browsers:node16.13.0-chrome95-ff94
@@ -220,6 +220,7 @@ pipelines:
             services:
               - "docker"
             script:
+              - git clone git@bitbucket.org:GoodRequest/notino_backend.git
               - echo "127.0.0.1 s3.eu-central-1.localhost" >> /etc/hosts
               - echo "127.0.0.1 sample-bucket.s3.eu-central-1.localhost" >> /etc/hosts
               - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose

@@ -198,6 +198,7 @@ const ImgUploadField: FC<Props> = (props) => {
 							htmlType={'button'}
 							className={'flex items-center justify-center m-0 p-0 w-full h-full'}
 							onClick={() => actions.preview()}
+							style={{ cursor: 'move' }}
 							target='_blank'
 							rel='noopener noreferrer'
 							title='Preview file'

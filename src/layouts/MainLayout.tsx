@@ -81,7 +81,7 @@ const MainLayout: FC<Props> = (props) => {
 		]
 	}
 
-	const SALONS_MENU = <Menu className='shadow-md max-w-xs min-w-80 mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
+	const SALONS_MENU = <Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header' items={getSalonMenuItems()} />
 
 	const getSelectedSalonLabel = (hasPermision: boolean) => {
 		const content = (

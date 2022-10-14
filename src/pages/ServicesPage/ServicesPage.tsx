@@ -108,7 +108,7 @@ const ServicesPage = (props: SalonSubPageProps) => {
 			render: (value: IUserAvatar[]) =>
 				value ? (
 					<div className={'w-full h-full flex items-center'}>
-						<AvatarGroup maxCount={3} avatars={value} maxPopoverPlacement={'right'} size={'small'} />{' '}
+						<AvatarGroup maxCount={2} avatars={value} maxPopoverPlacement={'right'} size={'small'} />{' '}
 					</div>
 				) : null
 		},

@@ -95,7 +95,7 @@ const SpecialistModal = (props: Props) => {
 				<Select
 					id={'noti-specialist-select'}
 					onChange={handleCountryChange}
-					value={specialistContact?.data?.id}
+					value={{ value: specialistContact?.data?.id }}
 					style={{ zIndex: 999 }}
 					className={'noti-select-input w-full'}
 					size={'large'}

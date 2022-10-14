@@ -98,6 +98,11 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				icon: <LogOutIcon />
 			},
 			{
+				type: 'divider',
+				key: 'divider1',
+				className: 'my-1'
+			},
+			{
 				key: 'version',
 				className: 'cursor-text',
 				icon: <VersionIcon />,

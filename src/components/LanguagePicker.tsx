@@ -5,6 +5,8 @@ import Icon from '@ant-design/icons'
 import i18next from 'i18next'
 import cx from 'classnames'
 import { useDispatch } from 'react-redux'
+import { get } from 'lodash'
+import { ItemType } from 'antd/lib/menu/hooks/useItems'
 
 // utils
 import sk_SK from 'antd/lib/locale-provider/sk_SK'
@@ -17,8 +19,6 @@ import it_IT from 'antd/lib/locale-provider/it_IT' */
 // import { useSelector } from 'react-redux'
 // eslint-disable-next-line import/no-cycle
 // import { RootState } from '../reducers'
-import { get } from 'lodash'
-import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { LANGUAGE, DEFAULT_LANGUAGE } from '../utils/enums'
 
 // hooks

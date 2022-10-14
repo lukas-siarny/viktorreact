@@ -97,7 +97,6 @@ const { Option } = Select
 
 type Props = {
 	className?: string
-	asMenuItem?: boolean
 	reloadPageAfterChange?: boolean
 }
 

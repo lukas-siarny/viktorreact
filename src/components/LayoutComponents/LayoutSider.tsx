@@ -70,74 +70,105 @@ const LayoutSider = (props: LayoutSiderProps) => {
 		[authUserPermissions, selectedSalon?.uniqPermissions]
 	)
 
-	const myAccontMenuItems: ItemType[] = useMemo(() => {
-		return [
-			{
-				key: 'myProfile',
-				label: t('loc:Môj profil'),
-				onClick: () => history.push(t('paths:my-account')),
-				icon: <ProfileIcon />
-			},
-			{
-				key: 'support',
-				label: t('loc:Potrebujete pomôcť?'),
-				onClick: () => {
-					// reset support contact data to empty in case there are some stored in redux
-					// otherwise language detection would not work correctly in t('paths:contact') page
-					dispatch(getSupportContact())
-					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
-				},
-				icon: <HelpIcon />
-			},
-			getLanguagePickerAsSubmenuItem(dispatch),
-			{
-				key: 'logOut',
-				id: 'logOut',
-				label: t('loc:Odhlásiť'),
-				onClick: () => dispatch(logOutUser()),
-				icon: <LogOutIcon />
-			},
-			{
-				type: 'divider',
-				key: 'divider1',
-				className: 'my-1'
-			},
-			{
-				key: 'version',
-				className: 'cursor-text',
-				icon: <VersionIcon />,
-				disabled: true,
-				label: <span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
-			}
-		]
-	}, [t, dispatch, location.pathname])
-
-	const MY_ACCOUNT_MENU = <Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement} items={myAccontMenuItems} />
+	// const MY_ACCOUNT_MENU = <Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement} items={myAccontMenuItems} />
 
 	const getMenuItems = useCallback(() => {
 		const getPath = (pathSuffix: string) => `${parentPath}${pathSuffix}`
 
-		const menuItems: ItemType[] = [
+		const menuItems: any[] = [
 			{
-				key: PAGE.HOME,
-				label: t('loc:Prehľad'),
-				onClick: () => history.push(t('paths:index')),
-				icon: <HomeIcon />
+				key: 'main-group',
+				type: 'group',
+				className: 'noti-sider-main-group h-full flex flex-col justify-between',
+				children: [
+					{
+						key: 'group-menu-items',
+						type: 'group',
+						className: 'overflow-y-auto h-full',
+						style: { height: `calc(100% - 48px` },
+						children: [
+							showNavigation
+								? {
+										key: PAGE.HOME,
+										label: t('loc:Prehľad'),
+										onClick: () => history.push(t('paths:index')),
+										icon: <HomeIcon />
+								  }
+								: null
+						]
+					},
+					{
+						key: 'user-account',
+						label: (
+							<Row className='flex items-center' justify='space-between'>
+								<Row className='noti-my-account'>
+									<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
+								</Row>
+
+								<ChevronIcon className='items-center' />
+							</Row>
+						),
+						onClick: (e: any) => {
+							e.preventDefalut()
+						},
+						icon: <AvatarComponents src={currentUser?.image?.original} text={`${currentUser?.firstName?.[0]}${currentUser?.lastName?.[0]}`} />,
+						children: [
+							{
+								key: 'myProfile',
+								label: t('loc:Môj profil'),
+								onClick: () => history.push(t('paths:my-account')),
+								icon: <ProfileIcon />
+							},
+							{
+								key: 'support',
+								label: t('loc:Potrebujete pomôcť?'),
+								onClick: () => {
+									// reset support contact data to empty in case there are some stored in redux
+									// otherwise language detection would not work correctly in t('paths:contact') page
+									dispatch(getSupportContact())
+									history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
+								},
+								icon: <HelpIcon />
+							},
+							getLanguagePickerAsSubmenuItem(dispatch),
+							{
+								key: 'logOut',
+								id: 'logOut',
+								label: t('loc:Odhlásiť'),
+								onClick: () => dispatch(logOutUser()),
+								icon: <LogOutIcon />
+							},
+							{
+								type: 'divider',
+								key: 'divider1',
+								className: 'my-1'
+							},
+							{
+								key: 'version',
+								className: 'cursor-text',
+								icon: <VersionIcon />,
+								disabled: true,
+								label: <span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
+							}
+						],
+						popupOffset: [-250, 48]
+					}
+				]
 			}
 		]
 
 		if (!salonID) {
 			// ADMIN VIEW
-			if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.USER_BROWSING])) {
-				menuItems.push({
+			if (showNavigation && hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.USER_BROWSING])) {
+				menuItems[0].children[0].children.push({
 					key: PAGE.USERS,
 					label: t('loc:Používatelia'),
 					onClick: () => history.push(t('paths:users')),
 					icon: <UsersIcon />
 				})
 			}
-			if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT])) {
-				menuItems.push(
+			if (showNavigation && hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT])) {
+				menuItems[0].children[0].children.push(
 					{
 						key: PAGE.CATEGORIES,
 						label: t('loc:Kategórie'),
@@ -176,8 +207,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					}
 				)
 			}
-			if (hasPermissions([...ADMIN_PERMISSIONS])) {
-				menuItems.push({
+			if (showNavigation && hasPermissions([...ADMIN_PERMISSIONS])) {
+				menuItems[0].children[0].children.push({
 					key: PAGE.SALONS,
 					label: t('loc:Salóny'),
 					onClick: () => history.push(t('paths:salons')),
@@ -186,8 +217,8 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			}
 		} else if (salonID) {
 			// SALON VIEW
-			if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
-				menuItems.push(
+			if (showNavigation && hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
+				menuItems[0].children[0].children.push(
 					{
 						key: PAGE.SALONS,
 						label: t('loc:Detail salónu'),
@@ -228,20 +259,25 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			}
 		}
 		return menuItems
-	}, [hasPermissions, parentPath, salonID, t])
+	}, [hasPermissions, parentPath, salonID, t, currentUser, showNavigation, location.pathname, dispatch])
 
 	return (
-		<Sider className='bg-white shadow-md' breakpoint='md' collapsedWidth='0' width={230}>
-			<div className='sticky top-0 flex flex-col h-screen z-50' id={'noti-sider-wrapper'}>
+		<Sider className='bg-white shadow-md z-50' breakpoint='md' /* collapsedWidth='0' */ width={230} collapsible>
+			<div id={'noti-sider-wrapper'} className='sticky top-0 flex flex-col' style={{ height: `calc(100vh - 48px` }}>
 				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`}>
 					<LogoIcon className='h-8' />
 				</Link>
 
-				<div className='px-2 flex flex-col flex-grow overflow-y-auto'>
-					{showNavigation && <Menu mode='inline' inlineIndent={8} selectedKeys={[page as string]} className='sticky top-0 noti-sider-menu' items={getMenuItems()} />}
-				</div>
+				<Menu
+					// mode='inline'
+					className='px-2 flex flex-col flex-grow noti-sider-menu'
+					style={{ height: `calc(100% - 72px` }}
+					inlineIndent={8}
+					selectedKeys={[page as string]}
+					items={getMenuItems()}
+				/>
 
-				<div className='p-2 pb-4'>
+				{/* <div className='p-2 pb-4'>
 					<Dropdown
 						overlay={MY_ACCOUNT_MENU}
 						placement='topLeft'
@@ -265,7 +301,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							</Row>
 						</div>
 					</Dropdown>
-				</div>
+				</div> */}
 			</div>
 		</Sider>
 	)

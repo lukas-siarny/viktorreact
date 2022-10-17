@@ -1,12 +1,12 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-import { ItemType } from 'antd/lib/menu/hooks/useItems'
 
 // assets
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
+import { ReactComponent as LogoCollapsedIcon } from '../../assets/icons/logoCollapsed.svg'
 import { ReactComponent as HomeIcon } from '../../assets/icons/home-24-icon.svg'
 import { ReactComponent as CategoryIcon } from '../../assets/icons/categories-24-icon.svg'
 import { ReactComponent as SalonIcon } from '../../assets/icons/salon-24-icon.svg'
@@ -55,6 +55,8 @@ export type LayoutSiderProps = {
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
 
+	const [collapsed, setCollapsed] = useState(false)
+
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
@@ -70,10 +72,61 @@ const LayoutSider = (props: LayoutSiderProps) => {
 		[authUserPermissions, selectedSalon?.uniqPermissions]
 	)
 
-	// const MY_ACCOUNT_MENU = <Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement} items={myAccontMenuItems} />
+	const getPath = (pathSuffix: string) => `${parentPath}${pathSuffix}`
 
-	const getMenuItems = useCallback(() => {
-		const getPath = (pathSuffix: string) => `${parentPath}${pathSuffix}`
+	const myAccontMenuItems = [
+		{
+			key: 'myProfile',
+			label: t('loc:Môj profil'),
+			onClick: () => history.push(t('paths:my-account')),
+			icon: <ProfileIcon />
+		},
+		{
+			key: 'support',
+			label: t('loc:Potrebujete pomôcť?'),
+			onClick: () => {
+				// reset support contact data to empty in case there are some stored in redux
+				// otherwise language detection would not work correctly in t('paths:contact') page
+				dispatch(getSupportContact())
+				history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
+			},
+			icon: <HelpIcon />
+		},
+		getLanguagePickerAsSubmenuItem(dispatch),
+		{
+			key: 'logOut',
+			id: 'logOut',
+			label: t('loc:Odhlásiť'),
+			onClick: () => dispatch(logOutUser()),
+			icon: <LogOutIcon />
+		},
+		{
+			type: 'divider',
+			key: 'divider1',
+			className: 'my-1'
+		},
+		{
+			key: 'version',
+			className: 'cursor-text',
+			icon: <VersionIcon />,
+			disabled: true,
+			label: <span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
+		}
+	]
+
+	const MY_ACCOUNT_MENU = <Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement} items={myAccontMenuItems} />
+
+	const getMenuItems = () => {
+		const mainGroupItems: any[] = [
+			showNavigation
+				? {
+						key: PAGE.HOME,
+						label: t('loc:Prehľad'),
+						onClick: () => history.push(t('paths:index')),
+						icon: <HomeIcon />
+				  }
+				: null
+		]
 
 		const menuItems: any[] = [
 			{
@@ -86,139 +139,115 @@ const LayoutSider = (props: LayoutSiderProps) => {
 						type: 'group',
 						className: 'overflow-y-auto h-full',
 						style: { height: `calc(100% - 48px` },
-						children: [
-							showNavigation
-								? {
-										key: PAGE.HOME,
-										label: t('loc:Prehľad'),
-										onClick: () => history.push(t('paths:index')),
-										icon: <HomeIcon />
-								  }
-								: null
-						]
+						children: mainGroupItems
 					},
 					{
 						key: 'user-account',
+						className: 'noti-account-menu-item',
 						label: (
-							<Row className='flex items-center' justify='space-between'>
-								<Row className='noti-my-account'>
-									<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
-								</Row>
+							<Dropdown
+								overlay={MY_ACCOUNT_MENU}
+								placement='topLeft'
+								trigger={['click']}
+								overlayStyle={{ minWidth: 214 }}
+								align={
+									collapsed
+										? {
+												offset: [54, 40]
+										  }
+										: undefined
+								}
+								getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
+							>
+								<div role='button' className='cursor-pointer' tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
+									<Row className='flex items-center' justify='space-between'>
+										<Row className='noti-my-account'>
+											<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
+										</Row>
 
-								<ChevronIcon className='items-center' />
-							</Row>
+										<ChevronIcon className='items-center' />
+									</Row>
+								</div>
+							</Dropdown>
 						),
 						onClick: (e: any) => {
 							e.preventDefalut()
 						},
-						icon: <AvatarComponents src={currentUser?.image?.original} text={`${currentUser?.firstName?.[0]}${currentUser?.lastName?.[0]}`} />,
-						children: [
-							{
-								key: 'myProfile',
-								label: t('loc:Môj profil'),
-								onClick: () => history.push(t('paths:my-account')),
-								icon: <ProfileIcon />
-							},
-							{
-								key: 'support',
-								label: t('loc:Potrebujete pomôcť?'),
-								onClick: () => {
-									// reset support contact data to empty in case there are some stored in redux
-									// otherwise language detection would not work correctly in t('paths:contact') page
-									dispatch(getSupportContact())
-									history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
-								},
-								icon: <HelpIcon />
-							},
-							getLanguagePickerAsSubmenuItem(dispatch),
-							{
-								key: 'logOut',
-								id: 'logOut',
-								label: t('loc:Odhlásiť'),
-								onClick: () => dispatch(logOutUser()),
-								icon: <LogOutIcon />
-							},
-							{
-								type: 'divider',
-								key: 'divider1',
-								className: 'my-1'
-							},
-							{
-								key: 'version',
-								className: 'cursor-text',
-								icon: <VersionIcon />,
-								disabled: true,
-								label: <span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
-							}
-						],
-						popupOffset: [-250, 48]
+						icon: (
+							<AvatarComponents
+								src={currentUser?.image?.original}
+								text={`${currentUser?.firstName?.[0]}${currentUser?.lastName?.[0]}`}
+								className={'shrink-0 grow-0'}
+							/>
+						)
 					}
 				]
 			}
 		]
 
-		if (!salonID) {
-			// ADMIN VIEW
-			if (showNavigation && hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.USER_BROWSING])) {
-				menuItems[0].children[0].children.push({
-					key: PAGE.USERS,
-					label: t('loc:Používatelia'),
-					onClick: () => history.push(t('paths:users')),
-					icon: <UsersIcon />
-				})
+		if (showNavigation) {
+			if (!salonID) {
+				// ADMIN VIEW
+				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.USER_BROWSING])) {
+					mainGroupItems.push({
+						key: PAGE.USERS,
+						label: t('loc:Používatelia'),
+						onClick: () => history.push(t('paths:users')),
+						icon: <UsersIcon />
+					})
+				}
+				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT])) {
+					mainGroupItems.push(
+						{
+							key: PAGE.CATEGORIES,
+							label: t('loc:Kategórie'),
+							onClick: () => history.push(t('paths:categories')),
+							icon: <CategoryIcon />
+						},
+						{
+							key: PAGE.CATEGORY_PARAMETERS,
+							label: t('loc:Parametre'),
+							onClick: () => history.push(t('paths:category-parameters')),
+							icon: <ParametersIcon />
+						},
+						{
+							key: PAGE.COSMETICS,
+							label: t('loc:Kozmetika'),
+							onClick: () => history.push(t('paths:cosmetics')),
+							icon: <CosmeticIcon />
+						},
+						{
+							key: PAGE.LANGUAGES,
+							label: t('loc:Jazyky'),
+							onClick: () => history.push(t('paths:languages-in-salons')),
+							icon: <LanguagesIcon />
+						},
+						{
+							key: PAGE.SUPPORT_CONTACTS,
+							label: t('loc:Podpora'),
+							onClick: () => history.push(t('paths:support-contacts')),
+							icon: <HelpIcon />
+						},
+						{
+							key: PAGE.SPECIALIST_CONTACTS,
+							label: t('loc:Špecialisti'),
+							onClick: () => history.push(t('paths:specialist-contacts')),
+							icon: <SpecialistIcon />
+						}
+					)
+				}
+				if (hasPermissions([...ADMIN_PERMISSIONS])) {
+					mainGroupItems.push({
+						key: PAGE.SALONS,
+						label: t('loc:Salóny'),
+						onClick: () => history.push(t('paths:salons')),
+						icon: <SalonIcon />
+					})
+				}
 			}
-			if (showNavigation && hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.ENUM_EDIT])) {
-				menuItems[0].children[0].children.push(
-					{
-						key: PAGE.CATEGORIES,
-						label: t('loc:Kategórie'),
-						onClick: () => history.push(t('paths:categories')),
-						icon: <CategoryIcon />
-					},
-					{
-						key: PAGE.CATEGORY_PARAMETERS,
-						label: t('loc:Parametre'),
-						onClick: () => history.push(t('paths:category-parameters')),
-						icon: <ParametersIcon />
-					},
-					{
-						key: PAGE.COSMETICS,
-						label: t('loc:Kozmetika'),
-						onClick: () => history.push(t('paths:cosmetics')),
-						icon: <CosmeticIcon />
-					},
-					{
-						key: PAGE.LANGUAGES,
-						label: t('loc:Jazyky'),
-						onClick: () => history.push(t('paths:languages-in-salons')),
-						icon: <LanguagesIcon />
-					},
-					{
-						key: PAGE.SUPPORT_CONTACTS,
-						label: t('loc:Podpora'),
-						onClick: () => history.push(t('paths:support-contacts')),
-						icon: <HelpIcon />
-					},
-					{
-						key: PAGE.SPECIALIST_CONTACTS,
-						label: t('loc:Špecialisti'),
-						onClick: () => history.push(t('paths:specialist-contacts')),
-						icon: <SpecialistIcon />
-					}
-				)
-			}
-			if (showNavigation && hasPermissions([...ADMIN_PERMISSIONS])) {
-				menuItems[0].children[0].children.push({
-					key: PAGE.SALONS,
-					label: t('loc:Salóny'),
-					onClick: () => history.push(t('paths:salons')),
-					icon: <SalonIcon />
-				})
-			}
-		} else if (salonID) {
 			// SALON VIEW
-			if (showNavigation && hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
-				menuItems[0].children[0].children.push(
+			if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
+				mainGroupItems.push(
 					{
 						key: PAGE.SALONS,
 						label: t('loc:Detail salónu'),
@@ -258,23 +287,33 @@ const LayoutSider = (props: LayoutSiderProps) => {
 				)
 			}
 		}
+
 		return menuItems
-	}, [hasPermissions, parentPath, salonID, t, currentUser, showNavigation, location.pathname, dispatch])
+	}
 
 	return (
-		<Sider className='bg-white shadow-md z-50' breakpoint='md' /* collapsedWidth='0' */ width={230} collapsible>
+		<Sider
+			className='bg-white shadow-md z-50'
+			breakpoint='md'
+			collapsedWidth={56}
+			width={230}
+			collapsible
+			collapsed={collapsed}
+			onCollapse={(isCollapsed) => setCollapsed(isCollapsed)}
+		>
 			<div id={'noti-sider-wrapper'} className='sticky top-0 flex flex-col' style={{ height: `calc(100vh - 48px` }}>
 				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`}>
-					<LogoIcon className='h-8' />
+					{collapsed ? <LogoCollapsedIcon className='h-8' /> : <LogoIcon className='h-8' />}
 				</Link>
 
 				<Menu
-					// mode='inline'
+					mode='inline'
 					className='px-2 flex flex-col flex-grow noti-sider-menu'
-					style={{ height: `calc(100% - 72px` }}
+					style={{ height: 'calc(100% - 72px' }}
 					inlineIndent={8}
 					selectedKeys={[page as string]}
 					items={getMenuItems()}
+					getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
 				/>
 
 				{/* <div className='p-2 pb-4'>

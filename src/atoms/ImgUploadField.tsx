@@ -77,7 +77,8 @@ const ImgUploadField: FC<Props> = (props) => {
 		className = '',
 		uploaderClassName = '',
 		draggable = false,
-		selectable = false
+		selectable = false,
+		tooltip
 	} = props
 
 	const [t] = useTranslation()
@@ -337,6 +338,7 @@ const ImgUploadField: FC<Props> = (props) => {
 			required={required}
 			help={touched && error ? error : undefined}
 			validateStatus={touched && error ? 'error' : undefined}
+			tooltip={tooltip}
 		>
 			{staticMode && !input.value && '-'}
 			{uploader}

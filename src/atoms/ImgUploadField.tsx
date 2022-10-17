@@ -77,7 +77,8 @@ const ImgUploadField: FC<Props> = (props) => {
 		className = '',
 		uploaderClassName = '',
 		draggable = false,
-		selectable = false
+		selectable = false,
+		tooltip
 	} = props
 
 	const [t] = useTranslation()
@@ -198,6 +199,7 @@ const ImgUploadField: FC<Props> = (props) => {
 							htmlType={'button'}
 							className={'flex items-center justify-center m-0 p-0 w-full h-full'}
 							onClick={() => actions.preview()}
+							style={{ cursor: 'move' }}
 							target='_blank'
 							rel='noopener noreferrer'
 							title='Preview file'
@@ -336,6 +338,7 @@ const ImgUploadField: FC<Props> = (props) => {
 			required={required}
 			help={touched && error ? error : undefined}
 			validateStatus={touched && error ? 'error' : undefined}
+			tooltip={tooltip}
 		>
 			{staticMode && !input.value && '-'}
 			{uploader}

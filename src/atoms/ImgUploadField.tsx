@@ -77,7 +77,8 @@ const ImgUploadField: FC<Props> = (props) => {
 		className = '',
 		uploaderClassName = '',
 		draggable = false,
-		selectable = false
+		selectable = false,
+		tooltip
 	} = props
 
 	const [t] = useTranslation()
@@ -337,6 +338,7 @@ const ImgUploadField: FC<Props> = (props) => {
 			required={required}
 			help={touched && error ? error : undefined}
 			validateStatus={touched && error ? 'error' : undefined}
+			tooltip={tooltip}
 		>
 			{staticMode && !input.value && '-'}
 			{uploader}
@@ -378,21 +380,4 @@ const ImgUploadField: FC<Props> = (props) => {
 	)
 }
 
-// NOTE: Prevent voči animácii po submitnutí formulára
-export default React.memo(ImgUploadField, (prevProps, nextProps) => {
-	const theSameError = prevProps.meta.error === nextProps.meta.error
-	const theSameTouched = prevProps.meta.touched === nextProps.meta.touched
-
-	// NOTE: Shallow fast comparision
-	if (!theSameError || !theSameTouched) {
-		return false // Rerender
-	}
-
-	// NOTE: Deep slower comparision
-	const theSameInput = isEqual(prevProps.input, nextProps.input)
-	if (!theSameInput) {
-		return false // Rerender
-	}
-
-	return true
-})
+export default React.memo(ImgUploadField)

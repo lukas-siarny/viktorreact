@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { reset, initialize } from 'redux-form'
 import { map } from 'lodash'
 import { useTranslation } from 'react-i18next'
-import { StringParam, useQueryParams } from 'use-query-params'
+import { useLocation } from 'react-router-dom'
+import queryString from 'query-string'
 
 // components
 import RegistrationForm from './components/RegistrationForm'
@@ -27,11 +28,9 @@ type Props = {}
 const RegistrationPage: FC<Props> = () => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
+	const { search } = useLocation()
+	const { email } = queryString.parse(search, { decode: false })
 	const phonePrefixes = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX])
-
-	const [query] = useQueryParams({
-		email: StringParam
-	})
 
 	const handleSubmit = async (values: IRegistrationForm) => {
 		try {
@@ -60,7 +59,7 @@ const RegistrationPage: FC<Props> = () => {
 
 		const initData = {
 			phonePrefixCountryCode,
-			email: query.email
+			email
 		}
 		dispatch(initialize(FORM.REGISTRATION, initData || {}))
 	}

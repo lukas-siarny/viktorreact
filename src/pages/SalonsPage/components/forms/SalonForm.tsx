@@ -47,6 +47,7 @@ import { ReactComponent as SocialYoutube } from '../../../../assets/icons/social
 import { ReactComponent as SocialTikTok } from '../../../../assets/icons/social-tiktok.svg'
 import { ReactComponent as CosmeticIcon } from '../../../../assets/icons/cosmetic-icon-24.svg'
 import { ReactComponent as LanguagesIcon } from '../../../../assets/icons/languages-24-icon.svg'
+import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon-16.svg'
 
 type ComponentProps = {
 	disabledForm?: boolean
@@ -204,6 +205,7 @@ const SalonForm: FC<Props> = (props) => {
 							uploaderClassName={'overflow-x-auto'}
 							component={ImgUploadField}
 							name={'gallery'}
+							tooltip={{ title: t('loc:Poradie fotiek môžete zmeniť ich presunutím pomocou Drag & Drop'), icon: <InfoIcon16 /> }}
 							label={t('loc:Fotogaléria')}
 							signUrl={URL_UPLOAD_IMAGES}
 							multiple

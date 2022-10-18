@@ -25,6 +25,7 @@ import { ReactComponent as LanguagesIcon } from '../../assets/icons/languages-24
 import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-24-icon.svg'
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
 import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
+import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -52,6 +53,9 @@ export type LayoutSiderProps = {
 	parentPath?: string
 }
 
+const SIDER_TRIGGER_HEIGHT = 48
+const LOGO_HEIGHT = 72
+
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
 
@@ -72,120 +76,21 @@ const LayoutSider = (props: LayoutSiderProps) => {
 		[authUserPermissions, selectedSalon?.uniqPermissions]
 	)
 
-	const getPath = (pathSuffix: string) => `${parentPath}${pathSuffix}`
-
-	const myAccontMenuItems = [
-		{
-			key: 'myProfile',
-			label: t('loc:Môj profil'),
-			onClick: () => history.push(t('paths:my-account')),
-			icon: <ProfileIcon />
-		},
-		{
-			key: 'support',
-			label: t('loc:Potrebujete pomôcť?'),
-			onClick: () => {
-				// reset support contact data to empty in case there are some stored in redux
-				// otherwise language detection would not work correctly in t('paths:contact') page
-				dispatch(getSupportContact())
-				history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
-			},
-			icon: <HelpIcon />
-		},
-		getLanguagePickerAsSubmenuItem(dispatch),
-		{
-			key: 'logOut',
-			id: 'logOut',
-			label: t('loc:Odhlásiť'),
-			onClick: () => dispatch(logOutUser()),
-			icon: <LogOutIcon />
-		},
-		{
-			type: 'divider',
-			key: 'divider1',
-			className: 'my-1'
-		},
-		{
-			key: 'version',
-			className: 'cursor-text',
-			icon: <VersionIcon />,
-			disabled: true,
-			label: <span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
-		}
-	]
-
-	const MY_ACCOUNT_MENU = <Menu className='noti-sider-menu' getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement} items={myAccontMenuItems} />
+	const getPath = useCallback((pathSuffix: string) => `${parentPath}${pathSuffix}`, [parentPath])
 
 	const getMenuItems = () => {
-		const mainGroupItems: any[] = [
-			showNavigation
-				? {
-						key: PAGE.HOME,
-						label: t('loc:Prehľad'),
-						onClick: () => history.push(t('paths:index')),
-						icon: <HomeIcon />
-				  }
-				: null
-		]
-
-		const menuItems: any[] = [
-			{
-				key: 'main-group',
-				type: 'group',
-				className: 'noti-sider-main-group h-full flex flex-col justify-between',
-				children: [
-					{
-						key: 'group-menu-items',
-						type: 'group',
-						className: 'overflow-y-auto h-full',
-						style: { height: `calc(100% - 48px` },
-						children: mainGroupItems
-					},
-					{
-						key: 'user-account',
-						className: 'noti-account-menu-item',
-						label: (
-							<Dropdown
-								overlay={MY_ACCOUNT_MENU}
-								placement='topLeft'
-								trigger={['click']}
-								overlayStyle={{ minWidth: 214 }}
-								align={
-									collapsed
-										? {
-												offset: [54, 40]
-										  }
-										: undefined
-								}
-								getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
-							>
-								<div role='button' className='cursor-pointer' tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
-									<Row className='flex items-center' justify='space-between'>
-										<Row className='noti-my-account'>
-											<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
-										</Row>
-
-										<ChevronIcon className='items-center' />
-									</Row>
-								</div>
-							</Dropdown>
-						),
-						onClick: (e: any) => {
-							e.preventDefalut()
-						},
-						icon: (
-							<AvatarComponents
-								src={currentUser?.image?.original}
-								text={`${currentUser?.firstName?.[0]}${currentUser?.lastName?.[0]}`}
-								className={'shrink-0 grow-0'}
-							/>
-						)
-					}
-				]
-			}
-		]
+		// main group menu items
+		const mainGroupItems: any[] = []
 
 		if (showNavigation) {
+			// ADMIN & SALON VIEW
+			mainGroupItems.push({
+				key: PAGE.HOME,
+				label: t('loc:Prehľad'),
+				onClick: () => history.push(t('paths:index')),
+				icon: <HomeIcon />
+			})
+
 			if (!salonID) {
 				// ADMIN VIEW
 				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.USER_BROWSING])) {
@@ -245,48 +150,155 @@ const LayoutSider = (props: LayoutSiderProps) => {
 					})
 				}
 			}
-			// SALON VIEW
-			if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
-				mainGroupItems.push(
-					{
-						key: PAGE.SALONS,
-						label: t('loc:Detail salónu'),
-						onClick: () => history.push(parentPath),
-						icon: <SalonIcon />
-					},
-					{
-						key: PAGE.BILLING_INFO,
-						label: t('loc:Fakturačné údaje'),
-						onClick: () => history.push(getPath(t('paths:billing-info'))),
-						icon: <InvoiceIcon />
-					},
-					{
-						key: PAGE.INDUSTRIES_AND_SERVICES,
-						label: t('loc:Odvetvia a služby'),
-						onClick: () => history.push(getPath(t('paths:industries-and-services'))),
-						icon: <IndustiresIcon />
-					},
-					{
-						key: PAGE.SERVICES_SETTINGS,
-						label: t('loc:Nastavenie služieb'),
-						onClick: () => history.push(getPath(t('paths:services-settings'))),
-						icon: <ServiceIcon />
-					},
-					{
-						key: PAGE.CUSTOMERS,
-						label: t('loc:Zákazníci'),
-						onClick: () => history.push(getPath(t('paths:customers'))),
-						icon: <CustomerIcon />
-					},
-					{
-						key: PAGE.EMPLOYEES,
-						label: t('loc:Zamestnanci'),
-						onClick: () => history.push(getPath(t('paths:employees'))),
-						icon: <EmployeesIcon />
-					}
-				)
+
+			if (salonID) {
+				// SALON VIEW
+				if (hasPermissions([...ADMIN_PERMISSIONS, PERMISSION.PARTNER])) {
+					mainGroupItems.push(
+						{
+							key: PAGE.SALONS,
+							label: t('loc:Detail salónu'),
+							onClick: () => history.push(parentPath),
+							icon: <SalonIcon />
+						},
+						{
+							key: PAGE.BILLING_INFO,
+							label: t('loc:Fakturačné údaje'),
+							onClick: () => history.push(getPath(t('paths:billing-info'))),
+							icon: <InvoiceIcon />
+						},
+						{
+							key: PAGE.INDUSTRIES_AND_SERVICES,
+							label: t('loc:Odvetvia a služby'),
+							onClick: () => history.push(getPath(t('paths:industries-and-services'))),
+							icon: <IndustiresIcon />
+						},
+						{
+							key: PAGE.SERVICES_SETTINGS,
+							label: t('loc:Nastavenie služieb'),
+							onClick: () => history.push(getPath(t('paths:services-settings'))),
+							icon: <ServiceIcon />
+						},
+						{
+							key: PAGE.CUSTOMERS,
+							label: t('loc:Zákazníci'),
+							onClick: () => history.push(getPath(t('paths:customers'))),
+							icon: <CustomerIcon />
+						},
+						{
+							key: PAGE.EMPLOYEES,
+							label: t('loc:Zamestnanci'),
+							onClick: () => history.push(getPath(t('paths:employees'))),
+							icon: <EmployeesIcon />
+						}
+					)
+				}
 			}
 		}
+
+		// account menu items
+		const myAccontMenuItems = [
+			{
+				key: 'myProfile',
+				label: t('loc:Môj profil'),
+				onClick: () => history.push(t('paths:my-account')),
+				icon: <ProfileIcon />
+			},
+			{
+				key: 'support',
+				label: t('loc:Potrebujete pomôcť?'),
+				onClick: () => {
+					// reset support contact data to empty in case there are some stored in redux
+					// otherwise language detection would not work correctly in t('paths:contact') page
+					dispatch(getSupportContact())
+					history.push({ pathname: t('paths:contact'), state: { from: location.pathname } })
+				},
+				icon: <HelpIcon />
+			},
+			getLanguagePickerAsSubmenuItem(dispatch),
+			{
+				key: 'logOut',
+				id: 'logOut',
+				label: t('loc:Odhlásiť'),
+				onClick: () => dispatch(logOutUser()),
+				icon: <LogOutIcon />
+			},
+			{
+				type: 'divider',
+				key: 'divider1',
+				className: 'my-1'
+			},
+			{
+				key: 'version',
+				className: 'cursor-text',
+				icon: <VersionIcon />,
+				disabled: true,
+				label: <span className='s-medium'>v{process.env.REACT_APP_VERSION}</span>
+			}
+		]
+
+		const menuItems: any[] = [
+			{
+				key: 'main-group',
+				type: 'group',
+				className: 'noti-sider-main-group h-full flex flex-col justify-between',
+				children: [
+					{
+						key: 'group-menu-items',
+						type: 'group',
+						className: 'overflow-y-auto',
+						style: { height: `calc(100% - ${SIDER_TRIGGER_HEIGHT}px` },
+						children: mainGroupItems
+					},
+					{
+						key: 'user-account',
+						className: 'noti-account-menu-item',
+						label: (
+							<Dropdown
+								overlay={
+									<Menu
+										className='noti-sider-menu'
+										getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
+										items={myAccontMenuItems}
+									/>
+								}
+								placement='topLeft'
+								trigger={['click']}
+								overlayStyle={{ minWidth: 214 }}
+								align={
+									collapsed
+										? {
+												offset: [54, 40]
+										  }
+										: undefined
+								}
+								getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
+							>
+								<div role='button' className='cursor-pointer' tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
+									<Row className='flex items-center' justify='space-between'>
+										<Row className='noti-my-account'>
+											<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
+										</Row>
+
+										<ChevronIcon className='items-center' />
+									</Row>
+								</div>
+							</Dropdown>
+						),
+						onClick: (e: any) => {
+							e.preventDefalut()
+						},
+						icon: (
+							<AvatarComponents
+								src={currentUser?.image?.original}
+								text={`${currentUser?.firstName?.[0]}${currentUser?.lastName?.[0]}`}
+								className={'shrink-0 grow-0'}
+							/>
+						)
+					}
+				]
+			}
+		]
 
 		return menuItems
 	}
@@ -297,50 +309,24 @@ const LayoutSider = (props: LayoutSiderProps) => {
 			breakpoint='md'
 			collapsedWidth={56}
 			width={230}
+			trigger={<ChevronRightIcon style={{ transform: !collapsed ? 'rotate(180deg)' : undefined, width: 12, height: 12 }} />}
 			collapsible
 			collapsed={collapsed}
 			onCollapse={(isCollapsed) => setCollapsed(isCollapsed)}
 		>
-			<div id={'noti-sider-wrapper'} className='sticky top-0 flex flex-col' style={{ height: `calc(100vh - 48px` }}>
-				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`}>
+			<div id={'noti-sider-wrapper'} className='flex flex-col h-full'>
+				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>
 					{collapsed ? <LogoCollapsedIcon className='h-8' /> : <LogoIcon className='h-8' />}
 				</Link>
-
 				<Menu
 					mode='inline'
 					className='px-2 flex flex-col flex-grow noti-sider-menu'
-					style={{ height: 'calc(100% - 72px' }}
+					style={{ height: `calc(100% - ${LOGO_HEIGHT}px` }}
 					inlineIndent={8}
 					selectedKeys={[page as string]}
 					items={getMenuItems()}
 					getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
 				/>
-
-				{/* <div className='p-2 pb-4'>
-					<Dropdown
-						overlay={MY_ACCOUNT_MENU}
-						placement='topLeft'
-						trigger={['click']}
-						getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
-					>
-						<div
-							role='button'
-							className='cursor-pointer hover:bg-notino-grayLighter py-2'
-							tabIndex={-1}
-							onClick={(e) => e.preventDefault()}
-							onKeyPress={(e) => e.preventDefault()}
-						>
-							<Row className='ml-2 flex items-center' justify='space-between'>
-								<Row className='noti-my-account'>
-									<AvatarComponents className='mr-2-5' src={currentUser?.image?.original} text={`${currentUser?.firstName?.[0]}${currentUser?.lastName?.[0]}`} />
-									<div className='truncate item-label flex items-center'>{t('loc:Moje konto')}</div>
-								</Row>
-
-								<ChevronIcon className='items-center' />
-							</Row>
-						</div>
-					</Dropdown>
-				</div> */}
 			</div>
 		</Sider>
 	)

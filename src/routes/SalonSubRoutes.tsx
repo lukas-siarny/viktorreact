@@ -67,10 +67,6 @@ const SalonSubRoutes: FC = (props) => {
 	const getPath = useCallback((pathSuffix: string) => `${path}${pathSuffix}`, [path])
 
 	useEffect(() => {
-		dispatch(selectSalon())
-	}, [dispatch])
-
-	useEffect(() => {
 		if (currentUser.isLoading) {
 			return
 		}

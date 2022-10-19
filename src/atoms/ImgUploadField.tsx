@@ -197,9 +197,8 @@ const ImgUploadField: FC<Props> = (props) => {
 						<Button
 							type={'link'}
 							htmlType={'button'}
-							className={'flex items-center justify-center m-0 p-0 w-full h-full'}
+							className={cx('flex items-center justify-center m-0 p-0 w-full h-full', { 'cursor-move': draggable })}
 							onClick={() => actions.preview()}
-							style={{ cursor: 'move' }}
 							target='_blank'
 							rel='noopener noreferrer'
 							title='Preview file'

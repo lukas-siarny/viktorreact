@@ -61,6 +61,7 @@ const SalonDashboard: FC = (props) => {
 							message={selectedSalon.data?.publicationDeclineReason}
 							actionLabel={t('loc:Upraviť údaje salónu')}
 							icon={<EyeOffIcon />}
+							onActionItemClick={() => history.push(basePath)}
 						/>
 					)}
 					{/* declined salon */}
@@ -71,6 +72,7 @@ const SalonDashboard: FC = (props) => {
 							subTitle={`${t('loc:Salón bol zamietnutý z dôvodu')}:`}
 							message={selectedSalon.data?.publicationDeclineReason ?? t('loc:Bez udania dôvodu.')}
 							actionLabel={t('loc:Upraviť údaje salónu')}
+							onActionItemClick={() => history.push(basePath)}
 						/>
 					)}
 

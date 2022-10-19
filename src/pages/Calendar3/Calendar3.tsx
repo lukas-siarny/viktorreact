@@ -1,30 +1,24 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-var-requires */
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { uniqueId } from 'lodash'
+import { Eventcalendar } from '@mobiscroll/react'
 
 // big calendar
-import { Calendar, dateFnsLocalizer, NavigateAction, View, Views } from 'react-big-calendar'
-import withDragAndDrop, { withDragAndDropProps } from 'react-big-calendar/lib/addons/dragAndDrop'
+import { View, Views } from 'react-big-calendar'
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 
-import format from 'date-fns/format'
-import parse from 'date-fns/parse'
-import startOfWeek from 'date-fns/startOfWeek'
-import getDay from 'date-fns/getDay'
-import cs from 'date-fns/locale/cs'
-import addHours from 'date-fns/addHours'
-import startOfHour from 'date-fns/startOfHour'
-
-import { PERMISSION } from '../../utils/enums'
+import { CALENDAR_EVENT_TYPE, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // assets
 import Avatar from '../../assets/images/avatar.png'
+import { getCalendarEmployees, getCalendarEvents, getCalendarServices } from '../../reducers/calendar/calendarActions'
+import { RootState } from '../../reducers'
 
 // utils
 
@@ -205,120 +199,42 @@ const INITIAL_CALENDAR_STATE = {
 	]
 }
 
-const locales = {
-	cs
-}
-const endOfHour = (date: Date): Date => addHours(startOfHour(date), 1)
-const now = new Date()
-const start = endOfHour(now)
-const end = addHours(start, 2)
-// The types here are `object`. Strongly consider making them better as removing `locales` caused a fatal error
-const localizer = dateFnsLocalizer({
-	format,
-	parse,
-	startOfWeek,
-	getDay,
-	locales
-})
-
-// @ts-ignore
-const DnDCalendar = withDragAndDrop(Calendar)
-
-const CustomEvent = (eventInfo: any) => {
-	console.log({ eventInfo })
-
-	return (
-		<div className={'bg-notino-black'}>
-			<div className={''}>{eventInfo.title}</div>
-		</div>
-	)
-}
-
 const Calendar3 = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [calendarStore, setCalendarStore] = useState<any>(INITIAL_CALENDAR_STATE)
-	const [calendarView, setCalendarView] = useState<View>(Views.DAY)
+	const [calendarView, setCalendarView] = useState<any>()
 
-	const { defaultDate, views } = useMemo(
-		() => ({
-			defaultDate: new Date(2022, 9, 4),
-			views: ['day', 'week', 'month']
-		}),
-		[]
-	)
+	const [events, setEvents] = useState<any>()
+	const [resources, setResources] = useState<any>()
 
-	const handleViewChange = (newView: View) => {
-		// fetch new data
-		// set new events
-		// set new view
-		setCalendarView(newView)
-	}
+	useEffect(() => {
+		;(async () => {
+			const { data: employeesData } = await dispatch(getCalendarEmployees())
+			setResources(employeesData)
+			const { data } = await dispatch(getCalendarEvents({ type: CALENDAR_EVENT_TYPE.RESERVATION }))
 
-	const handleNavigateChange = (newDate: Date, view: View, action: NavigateAction) => {
-		// fetch new data
-		// set new events
-		// set new date
-		console.log({ newDate, view, action })
-	}
+			const eventsWithResources = data?.map((event) => ({
+				...event,
+				resource: event.employeeId
+			}))
 
-	const handleRangeChange = (
-		range:
-			| Date[]
-			| {
-					start: Date
-					end: Date
-			  },
-		view?: View | undefined
-	) => {
-		// fetch new data
-		// set new events
-		// set new date
-		console.log({ range, view })
-	}
-
-	const onEventResize: withDragAndDropProps['onEventResize'] = (data) => {
-		const { start: eventStart, end: eventEnd } = data
-
-		setCalendarStore((currentEvents: any) => {
-			const firstEvent = {
-				start: new Date(eventStart),
-				end: new Date(eventEnd)
-			}
-			return { ...currentEvents, evnets: [firstEvent, ...currentEvents.events] }
-		})
-	}
-
-	const onEventDrop: withDragAndDropProps['onEventDrop'] = (data) => {
-		console.log(data)
-	}
+			setEvents(eventsWithResources)
+		})()
+	}, [dispatch])
 
 	return (
 		<div className='bg-notino-white'>
-			<DnDCalendar
-				components={{
-					day: {
-						event: CustomEvent
+			<Eventcalendar
+				data={events}
+				resources={resources}
+				groupBy={'date'}
+				view={{
+					timeline: {
+						type: 'day',
+						eventList: false
 					}
 				}}
-				defaultDate={defaultDate}
-				localizer={localizer}
-				onNavigate={handleNavigateChange}
-				onRangeChange={handleRangeChange}
-				view={calendarView}
-				onView={handleViewChange}
-				events={calendarStore.events}
-				backgroundEvents={calendarStore.backgroundEvents}
-				resources={calendarStore.resources}
-				resourceIdAccessor={(resource: any) => resource.id}
-				resourceTitleAccessor={(resource: any) => resource.resourceTitle}
-				defaultView='day'
-				views={['day', 'work_week', 'month']}
-				onEventDrop={onEventDrop}
-				onEventResize={onEventResize}
-				resizable
-				selectable
-				style={{ height: 'auto', minHeight: '100vh' }}
 			/>
 		</div>
 	)

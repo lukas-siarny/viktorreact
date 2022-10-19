@@ -282,6 +282,15 @@ const LayoutSider = (props: LayoutSiderProps) => {
 									>
 										{t('loc:React big calendar')}
 									</Menu.Item>
+									<Menu.Item
+										eventKey={PAGE.CALENDAR3}
+										key={PAGE.CALENDAR3}
+										onClick={() => history.push(getPath(t('paths:calendar3')))}
+										icon={<EmployeesIcon />} // fix style issue due wrapped item into <Permission> component
+										className={cx({ 'ant-menu-item-selected': page === PAGE.CALENDAR3 })}
+									>
+										{t('loc:Mobscroll calendar')}
+									</Menu.Item>
 								</Permissions>
 							)}
 						</Menu>

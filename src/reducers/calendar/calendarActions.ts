@@ -164,14 +164,15 @@ const mapQueryParams = (queryParams?: ICalendarQueryParams) => ({
 })
 
 export const getCalendarEvents =
-	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<void>> =>
+	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	async (dispatch) => {
+		let payload = {} as ICalendarEventsPayload
 		try {
 			dispatch({ type: EVENTS.EVENTS_LOAD_START })
 
 			const { data } = await getReq('http://localhost:7200/events' as any, { ...normalizeQueryParams(mapQueryParams(queryParams)) })
 
-			const payload = {
+			payload = {
 				data
 			}
 
@@ -181,17 +182,19 @@ export const getCalendarEvents =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+		return payload
 	}
 
 export const getCalendarReservations =
-	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<void>> =>
+	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<ICalendarReservationsPayload>> =>
 	async (dispatch) => {
+		let payload = {} as ICalendarReservationsPayload
 		try {
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
 
 			const { data } = await getReq('http://localhost:7200/reservations' as any, { ...normalizeQueryParams(mapQueryParams(queryParams)) })
 
-			const payload = {
+			payload = {
 				data
 			}
 
@@ -201,17 +204,19 @@ export const getCalendarReservations =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+		return payload
 	}
 
 export const getCalendarShifts =
-	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<void>> =>
+	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<ICalendarShiftsPayload>> =>
 	async (dispatch) => {
+		let payload = {} as ICalendarShiftsPayload
 		try {
 			dispatch({ type: SHIFTS.SHIFTS_LOAD_START })
 
 			const { data } = await getReq('http://localhost:7200/shifts' as any, { ...normalizeQueryParams(mapQueryParams(queryParams)) })
 
-			const payload = {
+			payload = {
 				data
 			}
 
@@ -221,23 +226,19 @@ export const getCalendarShifts =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+		return payload
 	}
 
 export const getCalendarTimeOff =
-	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<void>> =>
+	(queryParams?: ICalendarQueryParams): ThunkResult<Promise<ICalendarTimeOffPayload>> =>
 	async (dispatch) => {
-		const params: any = {
-			start_gte: queryParams?.start,
-			end_lte: queryParams?.end,
-			employeeID: queryParams?.employeeID
-		}
-
+		let payload = {} as ICalendarTimeOffPayload
 		try {
 			dispatch({ type: TIMEOFF.TIMEOFF_LOAD_START })
 
 			const { data } = await getReq('http://localhost:7200/timeOff' as any, { ...normalizeQueryParams(mapQueryParams(queryParams)) })
 
-			const payload = {
+			payload = {
 				data
 			}
 
@@ -247,15 +248,17 @@ export const getCalendarTimeOff =
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}
+		return payload
 	}
 
-export const getCalendarEmployees = (): ThunkResult<Promise<void>> => async (dispatch) => {
+export const getCalendarEmployees = (): ThunkResult<Promise<ICalendarEmployeesPayload>> => async (dispatch) => {
+	let payload = {} as ICalendarEmployeesPayload
 	try {
 		dispatch({ type: EMPLOYEES.EMPLOYEES_LOAD_START })
 
 		const { data } = await getReq('http://localhost:7200/employees' as any, undefined)
 
-		const payload = {
+		payload = {
 			data
 		}
 
@@ -265,15 +268,17 @@ export const getCalendarEmployees = (): ThunkResult<Promise<void>> => async (dis
 		// eslint-disable-next-line no-console
 		console.error(err)
 	}
+	return payload
 }
 
-export const getCalendarServices = (): ThunkResult<Promise<void>> => async (dispatch) => {
+export const getCalendarServices = (): ThunkResult<Promise<ICalendarServicesPayload>> => async (dispatch) => {
+	let payload = {} as ICalendarServicesPayload
 	try {
 		dispatch({ type: SERVICES.SERVICES_LOAD_START })
 
 		const { data } = await getReq('http://localhost:7200/services' as any, undefined)
 
-		const payload = {
+		payload = {
 			data
 		}
 
@@ -283,6 +288,7 @@ export const getCalendarServices = (): ThunkResult<Promise<void>> => async (disp
 		// eslint-disable-next-line no-console
 		console.error(err)
 	}
+	return payload
 }
 
 export const getCalendarEventDetail =

@@ -3,6 +3,8 @@
   "billing-info": "/billing-info",
   "calendar1": "/calendar1",
   "calendar2": "/calendar2",
+  "calendar3": "/calendar3",
+  "calendar4": "/calendar4",
   "categories": "/categories",
   "category-parameters": "/category-parameters",
   "category-parameters/create": "/category-parameters/create",

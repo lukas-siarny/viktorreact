@@ -10,7 +10,7 @@ import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_FILTER_STATES, SALON_FILTER_CREATE_TYPES, SALON_CREATE_TYPES } from '../../utils/enums'
+import { SALON_FILTER_STATES, SALON_FILTER_CREATE_TYPES, SALON_CREATE_TYPES, SALON_FILTER_OPENING_HOURS, TAB_KEYS, SALONS_TAB_KEYS } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
@@ -35,6 +35,7 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 	createType?: string | null
 	lastUpdatedAtFrom?: string | null
 	lastUpdatedAtTo?: string | null
+	hasSetOpeningHours?: string | null
 }
 
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
@@ -114,12 +115,13 @@ export const getSalons =
 
 		let statuses: any[] = []
 		let createType
+		let hasSetOpeningHours
 
-		if (queryParams.salonState === 'active') {
+		if (queryParams.salonState === SALONS_TAB_KEYS.ACTIVE) {
 			statuses = [SALON_FILTER_STATES.NOT_DELETED]
 		}
 
-		if (queryParams.salonState === 'deleted') {
+		if (queryParams.salonState === SALONS_TAB_KEYS.DELETED) {
 			statuses = [SALON_FILTER_STATES.DELETED]
 		}
 
@@ -130,20 +132,29 @@ export const getSalons =
 				createType = SALON_CREATE_TYPES.BASIC
 			} else if (queryParams.createType === SALON_FILTER_CREATE_TYPES.PREMIUM) {
 				createType = SALON_CREATE_TYPES.NON_BASIC
-				statuses = [...statuses, SALON_FILTER_STATES.PUBLISHED]
+				statuses = [...statuses, SALON_FILTER_STATES.PUBLISHED].filter((status) => status !== SALON_FILTER_STATES.NOT_PUBLISHED)
 			}
 		}
 
-		const editedQueryParams = {
-			...queryParams,
-			createType,
-			statuses: [...new Set(statuses)]
+		if (queryParams.hasSetOpeningHours === SALON_FILTER_OPENING_HOURS.SET) {
+			hasSetOpeningHours = true
+		} else if (queryParams.hasSetOpeningHours === SALON_FILTER_OPENING_HOURS.NOT_SET) {
+			hasSetOpeningHours = false
 		}
 
-		delete editedQueryParams.statuses_all
-		delete editedQueryParams.statuses_published
-		delete editedQueryParams.statuses_changes
-		delete editedQueryParams.salonState
+		const editedQueryParams = {
+			page: queryParams.page,
+			limit: queryParams.limit,
+			order: queryParams.order,
+			search: queryParams.search,
+			categoryFirstLevelIDs: queryParams.categoryFirstLevelIDs,
+			countryCode: queryParams.countryCode,
+			lastUpdatedAtFrom: queryParams.lastUpdatedAtFrom,
+			lastUpdatedAtTo: queryParams.lastUpdatedAtTo,
+			createType,
+			statuses: [...new Set(statuses)],
+			hasSetOpeningHours
+		}
 
 		try {
 			dispatch({ type: SALONS.SALONS_LOAD_START })

@@ -2,9 +2,10 @@ import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useTranslation } from 'react-i18next'
 import { Button, Form, Row } from 'antd'
+import { DataNode } from 'antd/lib/tree'
 
 // assets
-import { DataNode } from 'antd/lib/tree'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
 
 // components
 import CheckboxGroupNestedField from './CheckboxGroupNestedField'
@@ -15,6 +16,7 @@ import validateIndustryFrom from './validateIndustryFrom'
 // utils
 import { FORM, PERMISSION, SALON_PERMISSION } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // redux
 import Permissions from '../../../utils/Permissions'
@@ -44,7 +46,8 @@ const IndustryForm: FC<Props> = (props) => {
 								type={'primary'}
 								size={'middle'}
 								htmlType={'submit'}
-								className={'noti-btn m-regular w-52 xl:w-60'}
+								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
+								icon={<EditIcon />}
 								disabled={submitting || pristine}
 								loading={submitting || isLoadingTree}
 								onClick={(e) => {
@@ -73,6 +76,6 @@ const form = reduxForm<IIndustryForm, ComponentProps>({
 	destroyOnUnmount: true,
 	validate: validateIndustryFrom,
 	onSubmitFail: showErrorNotification
-})(IndustryForm)
+})(withPromptUnsavedChanges(IndustryForm))
 
 export default form

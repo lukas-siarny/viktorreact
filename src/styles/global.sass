@@ -21,6 +21,7 @@
 @import "switch"
 @import "time-range-picker"
 @import "tabs"
+@import "image"
 
 $searchProductTop: 166px
 
@@ -421,10 +422,14 @@ h4.ant-typography
 		.ant-upload-list-item-info::before
 			opacity: 0
 
-// antd descripotion
+// antd description
 .ant-descriptions-row
 	.ant-descriptions-item
 		padding-right: 7px
+
+.noti-upload-item
+	> .ant-row
+		display: block
 
 .ant-tabs-nav
 	margin: 0
@@ -972,6 +977,7 @@ span.ant-tag
 .noti-phone-prefix-array
 	.ant-form-item
 		margin: 0
+		padding-bottom: 0
 
 .noti-support-contact-wrapper
 	max-width: 640px
@@ -1098,7 +1104,7 @@ span.ant-tag
 	align-items: center
 	gap: 4px
 	padding: 8px
-	max-width: fit-content
+	width: fit-content
 	background: $backgroundColor-notino-grayLight
 	min-width: 0
 	height: 28px
@@ -1143,9 +1149,8 @@ span.ant-tag
 	display: flex
 	flex-direction: column
 
-	.partner-dashboard
-		.add-button
-			height: calc(100% - 64px)
+	.add-button
+		height: calc(100% - 64px)
 
 	.dashboard-image
 		width: 100%
@@ -1163,11 +1168,6 @@ span.ant-tag
 		grid-template-columns: repeat(auto-fill, minmax(200px, 1fr))
 		grid-gap: 16px
 
-		.grid-item
-			min-height: 192px
-			.grid-item-label
-				max-width: 230px
-
 	.stastics-box
 		width: 100%
 		box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.06), 0px 4px 6px -1px rgba(0, 0, 0, 0.1)
@@ -1176,7 +1176,7 @@ span.ant-tag
 		overflow: hidden
 		background: $backgroundColor-notino-white
 
-	.stastics-box-wide
+	.statistics-box-wide
 		width: calc(50% - 8px)
 		.stats-circle
 			flex: 0 0 auto
@@ -1590,8 +1590,9 @@ span.ant-tag .title
 		color: $textColor-notino-pink
 		transition: 300ms ease
 
-@media (min-width: 1195px)
-	.language-btn
+.language-btn
+	z-index: 2
+	@media (min-width: 1195px)
 		top: -0.25rem
 		right: 0px
 		position: absolute
@@ -1758,7 +1759,7 @@ span.ant-tag .title
 	&.is-active
 		width: 350px
 
-.noti-specialist-modal
+/*.noti-specialist-modal
 	.noti-specialist-modal-content
 		header
 			border-top-left-radius: 20px
@@ -1860,7 +1861,7 @@ svg.history-icon
 li.ant-list-item:hover
 	background: transparent
 
-.noti-approval-modal-content
+.noti-modal-content
 	header
 		border-top-left-radius: 20px
 		border-top-right-radius: 20px
@@ -1868,6 +1869,7 @@ li.ant-list-item:hover
 		width: calc(100% + 48px)
 		height: 200px
 		background: linear-gradient(180deg, rgba(18, 18, 18, 0) 60.17%, rgba(18, 18, 18, 0.85) 85.49%), url('../assets/images/salon-photo.png') center center no-repeat
+		background-color: $backgroundColor-notino-grayDark
 		background-size: cover
 		position: relative
 		display: flex
@@ -1885,7 +1887,13 @@ li.ant-list-item:hover
 			display: flex
 			flex-wrap: wrap
 			gap: 6px
-
+			display: -webkit-box
+			-webkit-line-clamp: 2
+			-webkit-box-orient: vertical
+			overflow: hidden
+			text-overflow: ellipsis
+			overflow: hidden
+			max-height: 76.8px
 			span
 				color: $textColor-notino-pink
 
@@ -1904,11 +1912,9 @@ li.ant-list-item:hover
 			outline: none
 			background-color: $backgroundColor-notino-grayLighter
 			transition: 300ms ease
-
 			svg
 				width: 16px
 				height: 16px
-
 			&:hover,
 			&:focus-visible
 				opacity: 0.8
@@ -1920,91 +1926,209 @@ li.ant-list-item:hover
 
 	main
 		margin-top: 24px
-		color: $textColor-notino-grayDark
-
 		strong
 			font-weight: 700
 			color: $textColor-notino-black
 
-		.requirements
-			padding-left: 0
-			list-style: none
-
-			li:not(:last-of-type)
-				margin-bottom: 8px
-
-			.req-list-item
-				padding: 8px 32px 8px 8px
-				border-radius: 8px
-				color: $textColor-notino-black
-				display: flex
+	&.noti-specialist-modal-content
+		header
+			background: linear-gradient(180deg, rgba(18, 18, 18, 0) 60.17%, rgba(18, 18, 18, 0.85) 85.49%), url('../assets/images/notino-specialist.jpg') center center no-repeat
+			height: 270px
+		main
+			display: flex
+			flex-direction: column
+			gap: 16px
+			p
+				padding: 0
+				margin: 0
+			ul.what-you-get-list
+				padding-left: 24px
+				margin-bottom: 0
+			h2
+				margin: 0
+			.noti-specialist-contact-wrapper
+				padding: 16px
 				background: $backgroundColor-notino-grayLighter
-				align-items: flex-start
-				gap: 8px
-				position: relative
+				border-radius: 8px
+				min-height: 160px
+			.not-found-msg
+				color: $textColor-notino-grayDark
 
-				&.req-list-item-link
-					transition: 300ms ease
-					&:hover,
-					&:focus-visible
-						background: $backgroundColor-notino-grayLight
-						color: $textColor-notino-pink
-						.arrow-icon
-							svg
-								filter: brightness(0) saturate(100%) invert(18%) sepia(56%) saturate(6696%) hue-rotate(318deg) brightness(78%) contrast(128%)
+	&.noti-approval-modal-content
+		main
+			color: $textColor-notino-grayDark
+			.requirements
+				padding-left: 0
+				list-style: none
 
-				.arrow-icon
-					width: 16px
-					height: 16px
-					position: absolute
-					right: 8px
-					top: 50%
-					transform: translateY(-50%)
-					svg
-						transition: filter 300ms ease
-						filter: brightness(0) saturate(100%) invert(0%) sepia(97%) saturate(18%) hue-rotate(265deg) brightness(95%) contrast(104%)
+				li:not(:last-of-type)
+					margin-bottom: 8px
 
-				&::before
+				.req-list-item
+					padding: 8px 32px 8px 8px
+					border-radius: 8px
+					color: $textColor-notino-black
+					display: flex
+					background: $backgroundColor-notino-grayLighter
+					align-items: flex-start
+					gap: 8px
 					position: relative
-					content: ''
-					width: 16px
-					height: 16px
-					margin-top: 4px
-					background: center center no-repeat
-					background-size: contain
-					flex: 0 0 auto
-					z-index: 2
 
-				&.employee
-					&::before
-						width: 20px
-						height: 20px
-						background-image: url("../assets/icons/employees.svg")
-				&.name
-					&::before
-						background-image: url("../assets/icons/pencil-icon-16.svg")
-				&.phone
-					&::before
-						background-image: url("../assets/icons/phone-icon-16.svg")
-				&.address
-					&::before
-						background-image: url("../assets/icons/location-16.svg")
-				&.industry
-					&::before
-						background-image: url("../assets/icons/industries.svg")
-				&.progress
-					&::before
-						background-image: url("../assets/icons/profile-icon.svg")
+					&.req-list-item-link
+						transition: 300ms ease
+						&:hover,
+						&:focus-visible
+							background: $backgroundColor-notino-grayLight
+							color: $textColor-notino-pink
+							.arrow-icon
+								svg
+									filter: brightness(0) saturate(100%) invert(18%) sepia(56%) saturate(6696%) hue-rotate(318deg) brightness(78%) contrast(128%)
 
-		.what-next
-			padding-left: 16px
-			margin-bottom: 24px
+					.arrow-icon
+						width: 16px
+						height: 16px
+						position: absolute
+						right: 8px
+						top: 50%
+						transform: translateY(-50%)
+						svg
+							transition: filter 300ms ease
+							filter: brightness(0) saturate(100%) invert(0%) sepia(97%) saturate(18%) hue-rotate(265deg) brightness(95%) contrast(104%)
+
+					&::before
+						position: relative
+						content: ''
+						width: 16px
+						height: 16px
+						margin-top: 4px
+						background: center center no-repeat
+						background-size: contain
+						flex: 0 0 auto
+						z-index: 2
+
+					&.employee
+						&::before
+							width: 20px
+							height: 20px
+							background-image: url("../assets/icons/employees.svg")
+					&.name
+						&::before
+							background-image: url("../assets/icons/pencil-icon-16.svg")
+					&.phone
+						&::before
+							background-image: url("../assets/icons/phone-icon-16.svg")
+					&.address
+						&::before
+							background-image: url("../assets/icons/location-16.svg")
+					&.industry
+						&::before
+							background-image: url("../assets/icons/industries.svg")
+					&.progress
+						&::before
+							background-image: url("../assets/icons/profile-icon.svg")
+
+			.what-next
+				padding-left: 16px
+				margin-bottom: 24px
+
+	&.noti-invite-modal-content
+		header
+			.salon-logo
+				position: absolute
+				top: 24px
+				left: 24px
+				height: 50px
+				width: 200px
+				img
+					width: auto
+					height: 50px
+					box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.08)
+					border-radius: 12px
 
 .filter-invert
 	&.min
 		filter: invert(0)
 	&.max
 		filter: invert(1)
+.filter-gray
+	filter: brightness(0) saturate(100%) invert(79%) sepia(1%) saturate(7%) hue-rotate(314deg) brightness(98%) contrast(92%)
 
 .ant-collapse-item.collapse-header-has-error
 	box-shadow: 0 0 0 1px $backgroundColor-notino-red
+
+.noti-opening-hours
+	.noti-opening-hours-row
+		display: flex
+		align-items: center
+		@media (max-width: 1200px)
+			flex-direction: column-reverse
+			align-items: flex-start
+		@media (max-width: 900px)
+			.noti-opening-hours-ranges
+				flex-direction: column
+
+.service-badge
+	padding: 4px 8px
+	background: $backgroundColor-notino-grayLight
+	font-size: 14px
+	border-radius: 4px
+	color: $textColor-notino-grayDark
+	position: relative
+	&:not(:last-of-type)
+		margin-right: 8px
+		&::after
+			content: ''
+			position: absolute
+			left: calc(100% + 5px)
+			width: 3px
+			height: 3px
+			top: 50%
+			transform: translateY(-50%)
+			border-radius: 50%
+			background-color: $textColor-notino-gray
+	&:last-of-type
+		font-weight: 700
+
+.upload-draggable-list-item
+	border-left: 1px dashed transparent
+	border-right: 1px dashed transparent
+	padding-left: 5px
+	padding-right: 5px
+
+.upload-draggable-list-item.drop-over-downward
+	border-right-color: $backgroundColor-notino-pink
+
+.upload-draggable-list-item.drop-over-upward
+	border-left-color: $backgroundColor-notino-pink
+
+.draggable-upload
+	& .ant-upload-list-picture-card-container
+		margin: 0
+		width: 116px
+		height: 158px
+
+.selectable-upload
+	& .ant-upload-list-picture-card .ant-upload-list-item
+		height: 104px
+
+.ant-upload.ant-upload-select-picture-card
+	margin-left: 8px
+
+span.anticon.anticon-delete.w-full svg circle
+	stroke: $backgroundColor-notino-red
+	fill: $backgroundColor-notino-red
+
+th.future-divider
+	&::after
+		content: ''
+		position: absolute
+		top: 0
+		right: 4px
+		width: 1px
+		height: 140px
+		z-index: 99
+		background-color: $backgroundColor-notino-pink
+
+.salon-gallery
+	.ant-form-item-control-input
+		left: -5px

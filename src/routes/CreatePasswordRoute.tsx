@@ -1,7 +1,6 @@
 import React from 'react'
 import { withTranslation, WithTranslation } from 'react-i18next'
 import { compose } from 'redux'
-import { DispatchProp } from 'react-redux'
 import qs from 'qs'
 import decode from 'jwt-decode'
 import { get } from 'lodash'
@@ -13,10 +12,8 @@ import BaseRoute from './BaseRoute'
 // utils
 import { TOKEN_AUDIENCE } from '../utils/enums'
 import { isLoggedIn } from '../utils/auth'
-import { logOutUser } from '../reducers/users/userActions'
 
 type Props = WithTranslation &
-	DispatchProp &
 	RouteProps & {
 		translatePathKey?: string
 		layout: any
@@ -24,19 +21,12 @@ type Props = WithTranslation &
 	}
 
 class CreatePasswordRoute extends Route<Props> {
-	componentDidMount() {
-		if (isLoggedIn()) {
-			const { dispatch } = this.props
-			dispatch(logOutUser(true))
-		}
-	}
-
 	render = () => {
 		// t je query param pre token (nie preklad)
 		const { t } = qs.parse(document.location.search, { ignoreQueryPrefix: true })
 
 		// if user is already logged In or token does not exist redirect to index route
-		if (!t) {
+		if (isLoggedIn() || !t) {
 			return <Redirect to={this.props.t('paths:index')} />
 		}
 

@@ -2,12 +2,10 @@
 import { FORM } from '../../../src/utils/enums'
 import { generateRandomString } from '../../support/helpers'
 
-import credentials from '../../fixtures/credentials.json'
 import user from '../../fixtures/user.json'
 
 context('Auth', () => {
-	// TODO
-	/* it('Sign up', () => {
+	it('Sign up', () => {
 		cy.clearLocalStorage()
 		cy.intercept({
 			method: 'POST',
@@ -16,10 +14,9 @@ context('Auth', () => {
 		cy.visit('/signup')
 		cy.setInputValue(FORM.REGISTRATION, 'email', `${generateRandomString(5)}_${user.emailSuffix}`)
 		cy.setInputValue(FORM.REGISTRATION, 'password', user.password)
-		cy.setInputValue(FORM.REGISTRATION, 'confirmPassword', user.password)
 		cy.setInputValue(FORM.REGISTRATION, 'phone', user.phone)
 		cy.clickButton('gdpr', FORM.REGISTRATION, true)
-		cy.clickButton('gtc', FORM.REGISTRATION, true)
+		cy.clickButton('marketing', FORM.REGISTRATION, true)
 		cy.get('form').submit()
 		cy.wait('@registration').then((interception: any) => {
 			// check status code of registration request
@@ -38,7 +35,8 @@ context('Auth', () => {
 			url: '/api/b2b/admin/auth/logout'
 		}).as('authLogout')
 		cy.visit('/')
-		cy.clickButton('logout-btn')
+		cy.get('.noti-my-account').click()
+		cy.get('#logOut').click()
 		cy.wait('@authLogout').then((interception: any) => {
 			// check status code of logout request
 			expect(interception.response.statusCode).to.equal(200)
@@ -48,7 +46,7 @@ context('Auth', () => {
 		})
 		// check redirect to login page
 		cy.location('pathname').should('eq', '/login')
-	}) */
+	})
 
 	it('Sign in', () => {
 		cy.clearLocalStorage()
@@ -57,9 +55,8 @@ context('Auth', () => {
 			url: '/api/b2b/admin/auth/login'
 		}).as('authLogin')
 		cy.visit('/login')
-		// TODO - load credentials from process env Cypress.env('auth_email') Cypress.env('auth_password')
-		cy.setInputValue(FORM.LOGIN, 'email', credentials.email)
-		cy.setInputValue(FORM.LOGIN, 'password', credentials.password)
+		cy.setInputValue(FORM.LOGIN, 'email', Cypress.env('auth_email'))
+		cy.setInputValue(FORM.LOGIN, 'password', Cypress.env('auth_password'))
 		cy.get('form').submit()
 		cy.wait('@authLogin').then((interception: any) => {
 			// check status code of login request

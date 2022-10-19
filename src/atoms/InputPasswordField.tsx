@@ -30,7 +30,6 @@ const InputPasswordField = (props: Props) => {
 		prefix,
 		disabled,
 		style,
-		customOnBlur,
 		meta: { form, error, touched },
 		hideHelp,
 		maxLength,
@@ -47,6 +46,13 @@ const InputPasswordField = (props: Props) => {
 		},
 		[input]
 	)
+	/*
+	 * This logic (onBlur, onFocus) set 'dirty/pristine' state for Form incorrectly.
+	 * Scenario:
+	 * 1.Non required field
+	 * 2.Focus field
+	 * 3.Blur field
+	 * 4.Form state is dirty without changes
 
 	const onBlur = useCallback(
 		async (e) => {
@@ -72,7 +78,7 @@ const InputPasswordField = (props: Props) => {
 			}
 		},
 		[input]
-	)
+	) */
 
 	const renderToggleIcon = (visible: boolean) => {
 		if (visible) {
@@ -96,9 +102,9 @@ const InputPasswordField = (props: Props) => {
 				id={formFieldID(form, input.name)}
 				className={cx('noti-input-password')}
 				onChange={onChange}
-				onBlur={onBlur}
+				// onBlur={onBlur}
 				size={size || 'middle'}
-				onFocus={onFocus}
+				// onFocus={onFocus}
 				value={input.value}
 				iconRender={renderToggleIcon}
 				placeholder={placeholder}

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Row, Spin } from 'antd'
-import { change, initialize, isPristine, submit } from 'redux-form'
-import { get, map, unionBy } from 'lodash'
+import { initialize, isPristine, submit } from 'redux-form'
+import { get, map } from 'lodash'
 import { compose } from 'redux'
 import cx from 'classnames'
 
@@ -13,10 +13,18 @@ import DeleteButton from '../../components/DeleteButton'
 import Breadcrumbs from '../../components/Breadcrumbs'
 import SupportContactForm from './components/SupportContactForm'
 import { scrollToTopFn } from '../../components/ScrollToTop'
-import { checkSameOpeningHours, checkWeekend, createSameOpeningHours, getDayTimeRanges, initOpeningHours, orderDaysInWeek } from '../../components/OpeningHours/OpeninhHoursUtils'
+import {
+	checkSameOpeningHours,
+	checkWeekend,
+	createSameOpeningHours,
+	initOpeningHours,
+	mapRawOpeningHoursToComponentOpeningHours,
+	orderDaysInWeek,
+	useChangeOpeningHoursFormFields
+} from '../../components/OpeningHours/OpeningHoursUtils'
 
 // enums
-import { DAY, ENUMERATIONS_KEYS, FORM, MONDAY_TO_FRIDAY, NOTIFICATION_TYPE, PERMISSION } from '../../utils/enums'
+import { ENUMERATIONS_KEYS, FORM, NOTIFICATION_TYPE, PERMISSION, STRINGS } from '../../utils/enums'
 
 // types
 import { Paths } from '../../types/api'
@@ -34,6 +42,10 @@ import { getPrefixCountryCode } from '../../utils/helper'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+
+// assets
+import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
+import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 type SupportContactPatch = Paths.PatchApiB2BAdminEnumsSupportContactsSupportContactId.RequestBody
 
@@ -84,11 +96,10 @@ const SupportContactPage: FC<Props> = (props) => {
 
 			if (data) {
 				// init data for existing supportContact
-				const openOverWeekend: boolean = checkWeekend(data?.supportContact?.openingHours)
-				const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(data?.supportContact?.openingHours)
-				const openingHours: OpeningHours = initOpeningHours(data?.supportContact?.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(
-					orderDaysInWeek
-				) as OpeningHours
+				const mappedOpeningHours = mapRawOpeningHoursToComponentOpeningHours(data?.supportContact?.openingHours)
+				const openOverWeekend: boolean = checkWeekend(mappedOpeningHours)
+				const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(mappedOpeningHours)
+				const openingHours: OpeningHours = initOpeningHours(mappedOpeningHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 
 				dispatch(
 					initialize(FORM.SUPPORT_CONTACT, {
@@ -133,41 +144,7 @@ const SupportContactPage: FC<Props> = (props) => {
 		dispatch(getSupportContacts())
 	}, [dispatch])
 
-	useEffect(() => {
-		if (sameOpenHoursOverWeekFormValue) {
-			if (openOverWeekendFormValue) {
-				// set switch same open hours over week with weekend
-				dispatch(
-					change(FORM.SUPPORT_CONTACT, 'openingHours', [
-						{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(formValues?.openingHours) },
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
-					])
-				)
-			} else {
-				// set switch same open hours over week without weekend
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', [{ day: MONDAY_TO_FRIDAY, timeRanges: getDayTimeRanges(formValues?.openingHours) }]))
-			}
-		} else {
-			// set to init values
-			// in initOpeningHours function input openOverWeekend is set to false because also we need to get weekend time Ranges
-			const openingHours: OpeningHours = initOpeningHours(formValues?.openingHours, sameOpenHoursOverWeekFormValue, false)?.sort(orderDaysInWeek)
-			if (openOverWeekendFormValue && openingHours) {
-				const updatedOpeningHours = unionBy(
-					[
-						{ day: DAY.SATURDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SATURDAY) },
-						{ day: DAY.SUNDAY, timeRanges: getDayTimeRanges(formValues?.openingHours, DAY.SUNDAY) }
-					],
-					openingHours,
-					'day'
-				)?.sort(orderDaysInWeek)
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', updatedOpeningHours))
-			} else {
-				dispatch(change(FORM.SUPPORT_CONTACT, 'openingHours', openingHours?.sort(orderDaysInWeek)))
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sameOpenHoursOverWeekFormValue, openOverWeekendFormValue])
+	useChangeOpeningHoursFormFields(FORM.SUPPORT_CONTACT, formValues?.openingHours, sameOpenHoursOverWeekFormValue, openOverWeekendFormValue)
 
 	const handleSubmit = async (data: ISupportContactForm) => {
 		try {
@@ -258,7 +235,7 @@ const SupportContactPage: FC<Props> = (props) => {
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:index')} />
 			</Row>
 			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+				<div className='content-body small'>
 					{!supportContactExists && hasEveryCountrSupportContact && (
 						<Alert
 							message={
@@ -276,12 +253,12 @@ const SupportContactPage: FC<Props> = (props) => {
 						/>
 					)}
 					<SupportContactForm onSubmit={handleSubmit} supportContactID={supportContactID} disabledForm={!supportContactExists && hasEveryCountrSupportContact} />
-					<div className={'content-footer pt-0'}>
-						<Row className={cx({ 'justify-between': supportContactExists, 'justify-center': !supportContactExists }, 'w-full')}>
+					<div className={'content-footer'}>
+						<Row className={cx('flex flex-col gap-2 md:flex-row', { 'md:justify-between': supportContactExists, 'md:justify-center': !supportContactExists })}>
 							{supportContactExists && (
 								<DeleteButton
 									permissions={permissions}
-									className={'mt-2-5 w-52 xl:w-60'}
+									className={'w-full md:w-auto md:min-w-50 xl:min-w-60'}
 									onConfirm={deleteSupportContact}
 									entityName={t('loc:podporu')}
 									type={'default'}
@@ -293,10 +270,10 @@ const SupportContactPage: FC<Props> = (props) => {
 								render={(hasPermission, { openForbiddenModal }) => (
 									<Button
 										type={'primary'}
-										block
 										size={'middle'}
-										className={'noti-btn m-regular mt-2-5 w-52 xl:w-60'}
+										className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 										htmlType={'submit'}
+										icon={supportContactExists ? <EditIcon /> : <CreateIcon />}
 										onClick={(e) => {
 											if (hasPermission) {
 												dispatch(submit(FORM.SUPPORT_CONTACT))
@@ -308,7 +285,7 @@ const SupportContactPage: FC<Props> = (props) => {
 										disabled={(!supportContactExists && hasEveryCountrSupportContact) || submitting || isFormPristine}
 										loading={submitting}
 									>
-										{t('loc:Uložiť')}
+										{supportContactExists ? t('loc:Uložiť') : STRINGS(t).createRecord(t('loc:podporu'))}
 									</Button>
 								)}
 							/>

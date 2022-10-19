@@ -1,7 +1,4 @@
-const symlinkDir = require('symlink-dir')
 const fs = require('fs')
-
-symlinkDir('./node_modules', './error_503/node_modules')
 
 try {
 	fs.unlinkSync(__dirname + "/../error_503/tailwind.config.js")

@@ -6,7 +6,7 @@ import { ThunkResult } from '../index'
 import { SERVICES, SERVICE, SERVICE_ROOT_CATEGORY } from './serviceTypes'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
-import { IUserAvatar, ISearchableWithoutPagination } from '../../types/interfaces'
+import { IUserAvatar, ISearchableWithoutPagination, ISelectOptionItem } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -54,6 +54,7 @@ export interface IGetServiceRootCategoryQueryParams {
 
 export interface IServicesPayload extends ISearchableWithoutPagination<Paths.GetApiB2BAdminServices.Responses.$200> {
 	tableData: ServicesTableData[] | undefined
+	options: ISelectOptionItem[]
 }
 
 export interface IServiceRootCategoryPayload {
@@ -85,13 +86,22 @@ export const getServices =
 							name: thirdCategory?.category?.name || '-',
 							categoryFirst: parentCategory?.category?.name || '-',
 							categorySecond: secondCategory?.category?.name || '-',
-							employees: thirdCategory?.service?.employees?.map((employee) => ({
-								src: employee.image?.resizedImages?.thumbnail,
-								fallBackSrc: employee.image?.original,
-								alt: `${employee.firstName} ${employee.lastName}`,
-								text: `${employee.firstName} ${employee.lastName}`,
-								key: employee.id
-							})),
+							employees: thirdCategory?.service?.employees?.map((employee) => {
+								// TODO: remove any when BE will be done
+								const employeeName =
+									`${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() ||
+									(employee as any).email ||
+									(employee as any).inviteEmail ||
+									'-'
+
+								return {
+									src: employee.image?.resizedImages?.thumbnail,
+									fallBackSrc: employee.image?.original,
+									alt: employeeName,
+									text: employeeName,
+									key: employee.id
+								}
+							}),
 							price: getServiceRange(decodePrice(rangePriceAndDurationData?.priceFrom), decodePrice(rangePriceAndDurationData?.priceTo), symbol) || '-',
 							duration: getServiceRange(rangePriceAndDurationData?.durationFrom, rangePriceAndDurationData?.durationTo, i18next.t('loc:min')) || '-',
 							isComplete: thirdCategory?.service?.isComplete,
@@ -101,10 +111,15 @@ export const getServices =
 				})
 			})
 
-			const servicesOptions = [{ key: '', label: '', value: '' }]
-			/* const servicesOptions = data.services.map((service) => {
-				return { label: service.category.child?.child?.name || `${service.id}`, value: service.id, key: `${service.id}-key` }
-			}) */
+			const servicesOptions: ISelectOptionItem[] = []
+
+			data.groupedServicesByCategory.forEach((firstCateogry) =>
+				firstCateogry?.category?.children.forEach((secondCategory) =>
+					secondCategory.category?.children.forEach((service) => {
+						servicesOptions.push({ key: service.service.id, label: service.category.name || service.category.id, value: service.service.id })
+					})
+				)
+			)
 			payload = {
 				data,
 				tableData,

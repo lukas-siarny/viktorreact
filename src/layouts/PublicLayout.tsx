@@ -57,7 +57,7 @@ const PublicLayout = (props: Props) => {
 											{t('loc:Späť')}
 										</Button>
 									)}
-									<LanguagePicker className='-bottom-1 right-0 absolute mb-0' reloadPageAfterChange={false} />
+									<LanguagePicker className='-bottom-1 right-0 absolute mb-0 pb-0' reloadPageAfterChange={false} />
 								</div>
 							</div>
 						</div>
@@ -84,7 +84,7 @@ const PublicLayout = (props: Props) => {
 											{t('loc:Späť')}
 										</Button>
 									)}
-									<LanguagePicker className='bottom-5 right-5 absolute mb-0' reloadPageAfterChange={false} />
+									<LanguagePicker className='bottom-5 right-5 absolute mb-0 pb-0' reloadPageAfterChange={false} />
 									{props.children}
 								</div>
 							</div>
@@ -112,7 +112,7 @@ const PublicLayout = (props: Props) => {
 											{t('loc:Späť')}
 										</Button>
 									)}
-									<LanguagePicker className='bottom-5 right-5 absolute mb-0' reloadPageAfterChange={false} />
+									<LanguagePicker className='bottom-5 right-5 absolute mb-0 pb-0' reloadPageAfterChange={false} />
 									{props.children}
 								</div>
 							</div>

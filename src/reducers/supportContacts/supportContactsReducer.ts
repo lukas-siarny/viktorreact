@@ -1,7 +1,6 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
 import { ISupportContactsPayload, ISupportContactPayload, ISupportContactsActions } from './supportContactsActions'
-// eslint-disable-next-line import/no-cycle
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { SUPPORT_CONTACTS, SUPPORT_CONTACT, SET_SUPPORT_CONTACT_OPTIONS } from './supportContactsTypes'
 

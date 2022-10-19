@@ -15,7 +15,7 @@ import { IBreadcrumbs } from '../../types/interfaces'
 
 // utils
 import { history } from '../../utils/history'
-import { FORM, PERMISSION, ENUMERATIONS_KEYS } from '../../utils/enums'
+import { FORM, PERMISSION, ENUMERATIONS_KEYS, STRINGS } from '../../utils/enums'
 import { postReq } from '../../utils/request'
 import { withPermissions } from '../../utils/Permissions'
 import { getPrefixCountryCode } from '../../utils/helper'
@@ -26,6 +26,9 @@ import { RootState } from '../../reducers'
 
 // hooks
 import useBackUrl from '../../hooks/useBackUrl'
+
+// assets
+import { ReactComponent as CreateIcon } from '../../assets/icons/plus-icon.svg'
 
 const permission: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.USER_CREATE]
 
@@ -47,7 +50,7 @@ const CreateUserPage = () => {
 				link: backUrl
 			},
 			{
-				name: t('loc:Nový používateľ')
+				name: t('loc:Vytvoriť používateľa')
 			}
 		]
 	}
@@ -89,16 +92,16 @@ const CreateUserPage = () => {
 			<Row>
 				<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 			</Row>
-			<Spin spinning={isLoading}>
-				<div className='content-body small mt-2'>
+			<div className='content-body small'>
+				<Spin spinning={isLoading}>
 					<CreateUserAccountForm onSubmit={createUser} />
 					<div className={'content-footer'}>
 						<Row justify='center'>
 							<Button
 								type={'primary'}
-								block
 								size={'middle'}
-								className={'noti-btn m-regular w-52 xl:w-60'}
+								icon={<CreateIcon />}
+								className={'noti-btn m-regular w-full md:w-auto md:min-w-50 xl:min-w-60'}
 								htmlType={'submit'}
 								onClick={() => {
 									dispatch(submit(FORM.ADMIN_CREATE_USER))
@@ -106,12 +109,12 @@ const CreateUserPage = () => {
 								disabled={submitting || isFormPristine}
 								loading={submitting}
 							>
-								{t('loc:Uložiť')}
+								{STRINGS(t).createRecord(t('loc:používateľa'))}
 							</Button>
 						</Row>
 					</div>
-				</div>
-			</Spin>
+				</Spin>
+			</div>
 		</>
 	)
 }

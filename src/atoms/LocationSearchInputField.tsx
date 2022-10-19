@@ -5,7 +5,12 @@ import { Form, Input } from 'antd'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
 import { InputProps } from 'antd/lib/input'
 import cx from 'classnames'
+
+// assets
 import { ReactComponent as SearchIcon } from '../assets/icons/search-icon-16.svg'
+
+// utils
+import { formFieldID } from '../utils/helper'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { StandaloneSearchBox } = require('react-google-maps/lib/components/places/StandaloneSearchBox')
@@ -17,6 +22,8 @@ type Props = FormItemLabelProps &
 		onPlaceSelected: (place: any) => void
 		containerElement: React.ReactNode
 		error?: boolean
+	} & {
+		form?: string
 	}
 
 type State = {
@@ -68,7 +75,7 @@ class LocationSearchInputField extends React.Component<Props, State> {
 	}
 
 	render() {
-		const { placeholder, label, required, type, style, className, error, disabled } = this.props
+		const { placeholder, label, required, type, style, className, error, disabled, form, name } = this.props
 		const { onSearchBoxMounted, onPlacesChanged, place } = this.state
 
 		return (
@@ -83,6 +90,7 @@ class LocationSearchInputField extends React.Component<Props, State> {
 						onChange={this.onChange}
 						prefix={<SearchIcon />}
 						disabled={disabled}
+						id={formFieldID(form, name)}
 					/>
 				</StandaloneSearchBox>
 			</Item>

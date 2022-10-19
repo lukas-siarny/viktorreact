@@ -5,15 +5,13 @@ import { get, has, isEmpty, split } from 'lodash'
 import i18next from 'i18next'
 import qs from 'qs'
 import rootReducer from '../reducers'
+import { logOutUser } from '../reducers/users/userActions'
 import { getAccessToken, isLoggedIn } from './auth'
 import { MSG_TYPE, NOTIFICATION_TYPE, UPLOAD_IMG_CATEGORIES } from './enums'
 import configureStore from './configureStore'
-import { history } from './history'
 
 // types
 import { IErrorMessage } from '../types/interfaces'
-
-import { logOutUser } from '../reducers/users/userActions'
 import showNotifications from './tsxHelpers'
 import { PathsDictionary } from '../types/api'
 
@@ -37,7 +35,7 @@ type DeleteUrls = {
 
 const { store } = configureStore(rootReducer)
 
-export const showErrorNotifications = (error: AxiosError | Error | unknown, typeNotification = NOTIFICATION_TYPE.NOTIFICATION) => {
+export const showErrorNotifications = (error: AxiosError | Error | unknown, typeNotification = NOTIFICATION_TYPE.NOTIFICATION, skipRedirect = false) => {
 	let messages = get(error, 'response.data.messages')
 
 	if (get(error, 'response.status') === 401) {
@@ -50,8 +48,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 			]
 		}
 		showNotifications(messages, typeNotification)
-		logOutUser()(store.dispatch, store.getState, undefined)
-		history.push(i18next.t('paths:login'))
+		logOutUser(skipRedirect)(store.dispatch, store.getState, undefined)
 	} else if (get(error, 'response.status') === 504 || get(error, 'response') === undefined || get(error, 'message') === 'Network Error') {
 		messages = [
 			{
@@ -69,6 +66,7 @@ export const showErrorNotifications = (error: AxiosError | Error | unknown, type
 
 export interface ICustomConfig extends AxiosRequestConfig {
 	messages?: IErrorMessage[]
+	skipLoginRedirect?: boolean
 }
 
 const buildHeaders = () => {
@@ -175,7 +173,7 @@ export const getReq = async <T extends keyof GetUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification)
+			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
 		}
 		if (hide) {
 			hide()
@@ -255,7 +253,7 @@ export const postReq = async <T extends keyof PostUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification)
+			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
 		}
 		if (hide) {
 			hide()
@@ -331,7 +329,7 @@ export const patchReq = async <T extends keyof PatchUrls>(
 		return res
 	} catch (e) {
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification)
+			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
 		}
 		if (hide) {
 			hide()
@@ -396,7 +394,7 @@ export const deleteReq = async <T extends keyof DeleteUrls>(
 		}
 
 		if (!axios.isCancel(e) && typeNotification) {
-			showErrorNotifications(e, typeNotification)
+			showErrorNotifications(e, typeNotification, customConfig?.skipLoginRedirect)
 		}
 		return Promise.reject(e)
 	}

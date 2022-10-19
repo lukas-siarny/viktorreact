@@ -4,12 +4,20 @@ import { isEmpty, map } from 'lodash'
 import { ISalonForm, OpeningHours } from '../../../types/interfaces'
 import { ISalonPayloadData } from '../../../reducers/selectedSalon/selectedSalonActions'
 import { IBasicSalon } from '../../../reducers/salons/salonsActions'
+import { Paths } from '../../../types/api'
 
 // enums
 import { SALON_STATES } from '../../../utils/enums'
 
 // components
-import { checkSameOpeningHours, checkWeekend, initOpeningHours, orderDaysInWeek } from '../../../components/OpeningHours/OpeninhHoursUtils'
+import {
+	checkSameOpeningHours,
+	checkWeekend,
+	createSameOpeningHours,
+	initOpeningHours,
+	mapRawOpeningHoursToComponentOpeningHours,
+	orderDaysInWeek
+} from '../../../components/OpeningHours/OpeningHoursUtils'
 
 const getPhoneDefaultValue = (phonePrefixCountryCode: string) => [
 	{
@@ -26,9 +34,10 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		return {}
 	}
 	// init data for existing salon
-	const openOverWeekend: boolean = checkWeekend(salonData.openingHours)
-	const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(salonData.openingHours)
-	const openingHours: OpeningHours = initOpeningHours(salonData.openingHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+	const mappedOpeningHours = mapRawOpeningHoursToComponentOpeningHours(salonData.openingHours)
+	const openOverWeekend: boolean = checkWeekend(mappedOpeningHours)
+	const sameOpenHoursOverWeek: boolean = checkSameOpeningHours(mappedOpeningHours)
+	const openingHours: OpeningHours = initOpeningHours(mappedOpeningHours, sameOpenHoursOverWeek, openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
 	// pre sprave zobrazenie informacnych hlasok a disabled stavov submit buttonov je potrebne dat pozor, aby isPristine fungovalo spravne = teda pri pridavani noveho fieldu je to potrebne vzdy skontrolovat
 	// napr. ak pride z BE aboutUsFirst: undefined, potom prepisem hodnotu vo formulari a opat ju vymazem, tak do reduxu sa ta prazdna hodnota uz neulozi ako undeifned ale ako null
 	// preto maju vsetky inicializacne hodnoty, pre textFieldy a textAreaFieldy fallback || null (pozri impementaciu tychto komponentov, preco sa to tam takto uklada)
@@ -52,13 +61,9 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		payByCash: !!salonData?.payByCash,
 		otherPaymentMethods: salonData.otherPaymentMethods || null,
 		aboutUsFirst: salonData.aboutUsFirst || null,
-		aboutUsSecond: salonData.aboutUsSecond || null,
 		openOverWeekend,
 		sameOpenHoursOverWeek,
 		openingHours,
-		note: salonData.openingHoursNote?.note || null,
-		noteFrom: salonData.openingHoursNote?.validFrom || null,
-		noteTo: salonData.openingHoursNote?.validTo || null,
 		latitude: salonData.address?.latitude ?? null,
 		longitude: salonData.address?.longitude ?? null,
 		city: salonData.address?.city || null,
@@ -75,7 +80,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 						phone: phone.phone || null
 				  }))
 				: getPhoneDefaultValue(phonePrefixCountryCode),
-		gallery: map(salonData.images, (image) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id })),
+		gallery: map(salonData.images, (image: any) => ({ thumbUrl: image?.resizedImages?.thumbnail, url: image?.original, uid: image?.id, isCover: image?.isCover })),
 		pricelists: map(salonData.pricelists, (file) => ({ url: file?.original, uid: file?.id, name: file?.fileName })),
 		logo: salonData.logo?.id
 			? [
@@ -109,5 +114,44 @@ export const initEmptySalonFormData = (phonePrefixCountryCode: string, salonName
 		payByCard: false,
 		payByCash: true,
 		phones: getPhoneDefaultValue(phonePrefixCountryCode)
+	}
+}
+
+export const getSalonDataForSubmission = (data: ISalonForm) => {
+	const openingHours: OpeningHours = createSameOpeningHours(data.openingHours, data.sameOpenHoursOverWeek, data.openOverWeekend)?.sort(orderDaysInWeek) as OpeningHours
+	const phones = data.phones?.filter((phone) => phone?.phone)
+
+	return {
+		imageIDs: (data.gallery || []).map((image: any) => ({
+			id: image?.id ?? image?.uid,
+			isCover: image?.isCover ?? false
+		})) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['imageIDs'],
+		logoID: map(data.logo, (image) => image?.id ?? image?.uid)[0] ?? null,
+		name: data.salonNameFromSelect ? data.nameSelect?.label : data.name,
+		openingHours: openingHours || [],
+		aboutUsFirst: data.aboutUsFirst,
+		city: data.city,
+		countryCode: data.country,
+		latitude: data.latitude,
+		longitude: data.longitude,
+		street: data.street,
+		streetNumber: data.streetNumber,
+		zipCode: data.zipCode,
+		locationNote: data.locationNote,
+		phones,
+		email: data.email,
+		socialLinkFB: data.socialLinkFB,
+		socialLinkInstagram: data.socialLinkInstagram,
+		socialLinkWebPage: data.socialLinkWebPage,
+		socialLinkTikTok: data.socialLinkTikTok,
+		socialLinkYoutube: data.socialLinkYoutube,
+		socialLinkPinterest: data.socialLinkPinterest,
+		parkingNote: data.parkingNote,
+		payByCard: !!data.payByCard,
+		payByCash: !!data.payByCash,
+		otherPaymentMethods: data.otherPaymentMethods,
+		cosmeticIDs: data.cosmeticIDs,
+		languageIDs: data.languageIDs,
+		pricelistIDs: (data.pricelists || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['pricelistIDs']
 	}
 }

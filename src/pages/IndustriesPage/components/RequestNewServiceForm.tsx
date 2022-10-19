@@ -43,7 +43,6 @@ const RequestNewService = (props: Props) => {
 				<Row>
 					<Col span={24}>
 						<Field
-							className='m-0'
 							label={t('loc:Odvetvie')}
 							component={SelectField}
 							optionRender={(itemData: any) => optionRenderWithImage(itemData, <CategoryIcon />)}
@@ -56,7 +55,7 @@ const RequestNewService = (props: Props) => {
 						/>
 					</Col>
 				</Row>
-				<Row className='mt-4'>
+				<Row>
 					<Col span={24}>
 						<Field
 							component={TextareaField}

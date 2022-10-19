@@ -4,7 +4,7 @@ const colors = require('tailwindcss/colors')
 module.exports = {
 	// NOTE: Prefix pre všetky classy, tailwind štýly tak majú väčšiu váhu ako ant štýly
 	important: '#tailwind',
-	purge: {
+	content: {
 		enabled: process.env.NODE_ENV === 'production',
 		content: [
 			'./src/**/*.tsx',
@@ -29,11 +29,11 @@ module.exports = {
 			danger: '#D21414',
 			notino: {
 				black: colors.black,
-				grayDarker: '#404040', // trueGray-700
+				grayDarker: '#404040', // neutral-700
 				grayDark: '#808080',
 				gray: '#BFBFBF',
 				grayLight: '#E6E6E6',
-				grayLighter: '#F5F5F5', // trueGray-100
+				grayLighter: '#F5F5F5', // neutral-100
 				white: colors.white,
 				pink: '#DC0069',
 				redLight: '#EE4A4A',
@@ -45,14 +45,14 @@ module.exports = {
 				premium: colors.blue[700],
 				basic: colors.blue[200],
 				declined: colors.red[200],
-				pending: colors.yellow[200],
-				notPublished: colors.trueGray[200],
+				pending: colors.yellow[400],
+				notPublished: colors.neutral[200],
 				published: colors.green[200]
 			},
 			// Tailwind colors
 			black: colors.black,
 			white: colors.white,
-			gray: colors.coolGray,
+			gray: colors.gray,
 			red: colors.red,
 			yellow: colors.amber,
 			green: colors.green,
@@ -61,7 +61,7 @@ module.exports = {
 			purple: colors.violet,
 			pink: colors.pink,
 			emerald: colors.emerald,
-			trueGray: colors.trueGray
+			trueGray: colors.neutral
 		},
 		spacing: {
 			px: '1px',
@@ -91,8 +91,10 @@ module.exports = {
 			32: '8rem',
 			36: '9rem',
 			40: '10rem',
+			45: '11.25rem',
 			44: '11rem',
 			48: '12rem',
+			50: '12.5rem',
 			52: '13rem',
 			56: '14rem',
 			60: '15rem',
@@ -492,7 +494,8 @@ module.exports = {
 		maxHeight: (theme) => ({
 			...theme('spacing'),
 			full: '100%',
-			screen: '100vh'
+			screen: '100vh',
+			...theme('spacing')
 		}),
 		maxWidth: (theme, { breakpoints }) => ({
 			none: 'none',
@@ -515,17 +518,19 @@ module.exports = {
 			...breakpoints(theme('screens')),
 			...theme('spacing')
 		}),
-		minHeight: {
+		minHeight: (theme) => ({
 			0: '0px',
 			full: '100%',
-			screen: '100vh'
-		},
-		minWidth: {
+			screen: '100vh',
+			...theme('spacing')
+		}),
+		minWidth: (theme) => ({
 			0: '0px',
 			full: '100%',
 			min: 'min-content',
-			max: 'max-content'
-		},
+			max: 'max-content',
+			...theme('spacing')
+		}),
 		objectPosition: {
 			bottom: 'bottom',
 			center: 'center',
@@ -712,8 +717,8 @@ module.exports = {
 			'-full': '-100%'
 		}),
 		width: (theme) => ({
-			auto: 'auto',
 			...theme('spacing'),
+			auto: 'auto',
 			'1/2': '50%',
 			'1/3': '33.333333%',
 			'2/3': '66.666667%',

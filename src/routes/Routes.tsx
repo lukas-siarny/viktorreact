@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 import { Switch, Route } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useDispatch } from 'react-redux'
 
 // authorized pages
 import HomePage from '../pages/HomePage/HomePage'
@@ -62,13 +61,13 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
 const Routes: FC = (props) => {
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
 
 	return (
 		<AppInit>
 			<Switch>
 				<PublicRoute {...props} exact path={t('paths:login')} component={LoginPage} layout={PublicLayout} className={'noti-login-page'} />
 				<PublicRoute {...props} exact path={t('paths:signup')} component={RegistrationPage} layout={PublicLayout} className={'noti-login-page'} />
+				<PublicRoute {...props} exact path={t('paths:invite')} component={RegistrationPage} layout={PublicLayout} className={'noti-login-page'} />
 				<PublicRoute
 					{...props}
 					exact
@@ -86,7 +85,6 @@ const Routes: FC = (props) => {
 					component={CreatePasswordPage}
 					layout={PublicLayout}
 					className={'noti-login-page'}
-					dispatch={dispatch}
 				/>
 				<AuthRoute
 					{...props}

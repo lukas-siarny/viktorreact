@@ -20,6 +20,7 @@ import { ReactComponent as LocationIcon } from '../../../assets/icons/location-1
 import { PERMISSION, SALON_PERMISSION, FORM } from '../../../utils/enums'
 import Permissions from '../../../utils/Permissions'
 import { showErrorNotification } from '../../../utils/helper'
+import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
 
 // types
 import { IBillingForm } from '../../../types/interfaces'
@@ -33,11 +34,11 @@ const BillingInfoForm = (props: Props) => {
 	const [t] = useTranslation()
 
 	return (
-		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-			<Permissions
-				allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_BILLING_UPDATE]}
-				render={(hasPermission) => (
-					<Space className={'w-full'} direction='vertical' size={36}>
+		<Permissions
+			allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_BILLING_UPDATE]}
+			render={(hasPermission) => (
+				<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
+					<Space className={'w-full'} direction='vertical' size={20}>
 						<Row>
 							<Col span={24}>
 								<h3 className={'mb-0 flex items-center'}>
@@ -147,7 +148,15 @@ const BillingInfoForm = (props: Props) => {
 
 								<Divider className={'mb-3 mt-3'} />
 								<Row justify={'space-between'}>
-									<Field className={'w-4/5'} component={InputField} label={t('loc:Ulica')} placeholder={t('loc:Zadajte ulicu')} name={'street'} size={'large'} />
+									<Field
+										className={'w-4/5'}
+										component={InputField}
+										label={t('loc:Ulica')}
+										placeholder={t('loc:Zadajte ulicu')}
+										name={'street'}
+										size={'large'}
+										disabled={!hasPermission}
+									/>
 									<Field
 										className={'w-1/6'}
 										component={InputField}
@@ -155,10 +164,19 @@ const BillingInfoForm = (props: Props) => {
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
 										size={'large'}
+										disabled={!hasPermission}
 									/>
 								</Row>
 								<Row justify={'space-between'}>
-									<Field className={'w-12/25'} component={InputField} label={t('loc:Mesto')} placeholder={t('loc:Zadajte mesto')} name={'city'} size={'large'} />
+									<Field
+										className={'w-12/25'}
+										component={InputField}
+										label={t('loc:Mesto')}
+										placeholder={t('loc:Zadajte mesto')}
+										name={'city'}
+										size={'large'}
+										disabled={!hasPermission}
+									/>
 									<Field
 										className={'w-12/25'}
 										component={InputField}
@@ -166,30 +184,31 @@ const BillingInfoForm = (props: Props) => {
 										placeholder={t('loc:Zadajte smerovacie číslo')}
 										name={'zipCode'}
 										size={'large'}
+										disabled={!hasPermission}
 									/>
 								</Row>
 							</Col>
 						</Row>
-						{hasPermission && (
-							<div className={'content-footer pt-0'}>
-								<Row className='justify-center w-full'>
-									<Button
-										type={'primary'}
-										className={'noti-btn mt-2-5 w-52 xl:w-60'}
-										htmlType={'submit'}
-										icon={<EditIcon />}
-										disabled={submitting || pristine}
-										loading={submitting}
-									>
-										{t('loc:Upraviť')}
-									</Button>
-								</Row>
-							</div>
-						)}
 					</Space>
-				)}
-			/>
-		</Form>
+					{hasPermission && (
+						<div className={'content-footer'}>
+							<Row className='justify-center w-full'>
+								<Button
+									type={'primary'}
+									className={'noti-btn w-full md:w-auto md:min-w-50 xl:min-w-60'}
+									htmlType={'submit'}
+									icon={<EditIcon />}
+									disabled={submitting || pristine}
+									loading={submitting}
+								>
+									{t('loc:Uložiť')}
+								</Button>
+							</Row>
+						</div>
+					)}
+				</Form>
+			)}
+		/>
 	)
 }
 
@@ -200,6 +219,6 @@ const form = reduxForm<IBillingForm, ComponentProps>({
 	destroyOnUnmount: true,
 	onSubmitFail: showErrorNotification,
 	validate: validateBillingInfoForm
-})(BillingInfoForm)
+})(withPromptUnsavedChanges(BillingInfoForm))
 
 export default form

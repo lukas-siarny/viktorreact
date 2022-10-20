@@ -214,7 +214,6 @@ const SalonForm: FC<Props> = (props) => {
 							disabled={disabledForm}
 							draggable
 							selectable
-							className='salon-gallery'
 						/>
 					</Col>
 				</Row>

@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import dayjs from 'dayjs'
-import { find, map } from 'lodash'
+import { find, map, reduce } from 'lodash'
 import { ICalendarEmployeesPayload, ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
 import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
 
@@ -15,7 +15,63 @@ export const composeEvents = ({ events, employees, services }: IComposeEventsDat
 		case CALENDAR_VIEW.DAY_RESERVATIONS:
 		case CALENDAR_VIEW.WEEK_RESERVATIONS:
 		case CALENDAR_VIEW.MONTH_RESERVATIONS:
-			return map(events?.data, (calendarEvent) => {
+			return reduce(
+				events?.data,
+				(acc, calendarEvent) => {
+					const employee = find(employees?.data, (e) => calendarEvent?.employeeId === e?.id)
+					const service = find(services?.data, (s) => calendarEvent?.serviceID === s?.id)
+					const event = {
+						id: calendarEvent.id,
+						resourceId: employee?.id,
+						start: calendarEvent.start,
+						end: calendarEvent.end,
+						eventType: calendarEvent.type,
+						employee,
+						allDay: false
+					}
+
+					switch (calendarEvent.type) {
+						case CALENDAR_EVENT_TYPE.SHIFT:
+						case CALENDAR_EVENT_TYPE.TIMEOFF: {
+							const bgEvents = []
+
+							const bgEvent = {
+								...event,
+								display: 'background'
+							}
+
+							const startHour = dayjs(calendarEvent.start).hour()
+							const endHour = dayjs(calendarEvent.end).hour()
+
+							// eslint-disable-next-line no-plusplus
+							for (let i = 0; i < endHour - startHour; i++) {
+								bgEvents.push({
+									...bgEvent,
+									start: dayjs(calendarEvent.start).add(i, 'hour').toISOString(),
+									end: dayjs(calendarEvent.start)
+										.add(i + 1, 'hour')
+										.toISOString()
+								})
+							}
+
+							return [...acc, ...bgEvents]
+						}
+						case CALENDAR_EVENT_TYPE.RESERVATION:
+						default:
+							return [
+								...acc,
+								{
+									...event,
+									title: calendarEvent.title,
+									service
+								}
+							]
+					}
+				},
+				[] as any[]
+			)
+
+		/* return map(events?.data, (calendarEvent) => {
 				const employee = find(employees?.data, (e) => calendarEvent?.employeeId === e?.id)
 				const service = find(services?.data, (s) => calendarEvent?.serviceID === s?.id)
 				const event = {
@@ -23,6 +79,7 @@ export const composeEvents = ({ events, employees, services }: IComposeEventsDat
 					resourceId: employee?.id,
 					start: calendarEvent.start,
 					end: calendarEvent.end,
+					eventType: calendarEvent.type,
 					employee,
 					allDay: false
 				}
@@ -31,13 +88,11 @@ export const composeEvents = ({ events, employees, services }: IComposeEventsDat
 					case CALENDAR_EVENT_TYPE.SHIFT:
 						return {
 							...event,
-							backgroundColor: '#000',
 							display: 'background'
 						}
 					case CALENDAR_EVENT_TYPE.TIMEOFF:
 						return {
 							...event,
-							backgroundColor: '#DC0069',
 							display: 'background'
 						}
 					case CALENDAR_EVENT_TYPE.RESERVATION:
@@ -48,7 +103,7 @@ export const composeEvents = ({ events, employees, services }: IComposeEventsDat
 							service
 						}
 				}
-			})
+			}) */
 		default:
 			return []
 	}

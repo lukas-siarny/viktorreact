@@ -2076,10 +2076,6 @@ li.ant-list-item:hover
 		.fc-event-main
 			padding: 2px
 
-.fc-timegrid-bg-harness
-	.fc-bg-event
-		opacity: 0.1
-
 .fc-day-today
 	background: transparent !important
 
@@ -2108,6 +2104,49 @@ li.ant-list-item:hover
 		color: $textColor-notino-gray
 	strong
 		font-size: 12px
+
+.fc-scrollgrid-section-sticky
+	top: 64px
+	position: sticky
+	background: white
+	z-index: 20
+
+.fc-timegrid-body
+	background: url("../assets/images/calendar-background.png")
+
+.fc .fc-timegrid-slot-minor
+	border-top-color: transparent
+
+.fc-theme-standard td
+	border-color: $borderColor-notino-grayLight
+
+// FC - bg events
+.noti-fc-bg-event
+	position: relative
+	width: 100%
+	height: 100%
+
+	&.shift
+		background-color: $backgroundColor-notino-grayLighter
+		opacity: 1
+	&.timeoff
+		background-color: $backgroundColor-notino-pink
+		opacity: 0.1
+
+	.noti-fc-bg-event-divider
+		position: absolute
+		left: 0
+		right: 0
+		height: 1px
+		background: $borderColor-notino-grayLight
+
+.fc-timegrid-col-bg
+	.fc-timegrid-bg-harness
+		.noti-fc-bg-event.shift
+			border-bottom: 1px solid $borderColor-notino-grayLight
+		.fc-bg-event
+			opacity: 1
+			background: transparent
 
 .noti-opening-hours
 	.noti-opening-hours-row
@@ -2181,3 +2220,7 @@ th.future-divider
 		height: 140px
 		z-index: 99
 		background-color: $backgroundColor-notino-pink
+
+.salon-gallery
+	.ant-form-item-control-input
+		left: -5px

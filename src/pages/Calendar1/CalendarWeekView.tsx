@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button, Input, Modal, Row, Spin } from 'antd'
@@ -24,6 +25,114 @@ import { getCalendarEmployees, getCalendarEvents, getCalendarServices } from '..
 import { RootState } from '../../reducers'
 import { composeEvents, composeResources } from './helpers'
 
+const resources = [
+	{
+		id: 'a',
+		title: 'Auditorium A'
+	},
+	{
+		id: 'b',
+		title: 'Auditorium B',
+		eventColor: 'green'
+	},
+	{
+		id: 'c',
+		title: 'Auditorium C',
+		eventColor: 'orange'
+	},
+	{
+		id: 'd',
+		title: 'Auditorium D',
+		children: [
+			{
+				id: 'd1',
+				title: 'Room D1'
+			},
+			{
+				id: 'd2',
+				title: 'Room D2'
+			}
+		]
+	}
+]
+
+const resources2 = [
+	{
+		id: 'emp_1',
+		employeeData: {
+			id: 'emp_1',
+			name: 'Gayle Green',
+			image: 'https://source.unsplash.com/random/24×24',
+			accent: '#2EAF00'
+		},
+		description: '09:00-17:00'
+	},
+	{
+		id: 'emp_2',
+		employeeData: {
+			id: 'emp_2',
+			name: 'Ron Witting',
+			image: 'https://source.unsplash.com/random/24×24',
+			accent: '#4656E6'
+		},
+		description: '08:00-11:00, 12:00-18:00'
+	},
+	{
+		id: 'emp_3',
+		employeeData: {
+			id: 'emp_3',
+			name: 'Dana Tromp',
+			image: 'https://source.unsplash.com/random/24×24',
+			accent: '#DC7C0C'
+		},
+		description: ''
+	},
+	{
+		id: 'emp_4',
+		employeeData: {
+			id: 'emp_4',
+			name: 'Amelia Kirlin',
+			image: 'https://source.unsplash.com/random/24×24',
+			accent: '#FF5353'
+		},
+		description: '08:00-12:00, 13:00-16:00'
+	}
+]
+
+const resourceAreaColumns = [
+	{
+		group: true,
+		field: 'day',
+		headerContent: 'Day',
+		width: 54,
+		cellContent: (args: any) => {
+			console.log(args)
+			return <div>Cell content</div>
+		}
+	},
+	{
+		field: 'employee',
+		headerContent: 'Employee',
+		width: 150,
+		employee: { name: 'Lukas' },
+		cellContent: (args: any) => {
+			console.log(args)
+			return <div>Employee cell content</div>
+		}
+	}
+]
+
+const resources3 = [
+	{ id: 'emp_1_MON', day: 'MONDAY', employee: 'Anna k' },
+	{ id: 'emp_2_MON', day: 'MONDAY', employee: 'Anna k' },
+	{ id: 'emp_3_MON', day: 'MONDAY', employee: 'Anna k' },
+	{ id: 'emp_4_MON', day: 'MONDAY', employee: 'Anna k' },
+	{ id: 'emp_1_TUE', day: 'TUESDAY', employee: 'Anna k' },
+	{ id: 'emp_2_TUE', day: 'TUESDAY', employee: 'Anna k' },
+	{ id: 'emp_3_TUE', day: 'TUESDAY', employee: 'Anna k' },
+	{ id: 'emp_4_TUE', day: 'TUESDAY', employee: 'Anna k' }
+]
+
 const TIME_FORMAT: FormatterInput = {
 	hour: '2-digit',
 	minute: '2-digit',
@@ -34,8 +143,6 @@ const TIME_FORMAT: FormatterInput = {
 const MONTH_VIEW = {
 	DAY_MAX_EVENTS: 3
 }
-
-const ROW_HEIGHT = 52
 
 const renderEventContent = (eventInfo: any) => {
 	const { event, timeText } = eventInfo || {}
@@ -86,13 +193,9 @@ const resourceLabelContent = (labelInfo: any) => {
 	const employee = labelInfo?.resource.extendedProps.employeeData || {}
 
 	return (
-		<div className='noti-fc-resource-label'>
+		<div className='noti-fc-resource-label' style={{ height: 35 }}>
 			<div className='image w-6 h-6 bg-notino-gray' style={{ background: `url("${employee.image}")` }} />
-			<div>
-				{employee.name}
-				<br />
-				<span className='description'>{labelInfo.resource.extendedProps.description}</span>
-			</div>
+			{employee.name}
 		</div>
 	)
 }
@@ -118,7 +221,7 @@ const renderMoreLinkMonth = (info: any) => {
 	)
 }
 
-const Calendar1 = () => {
+const CalendarWeekView = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -136,6 +239,8 @@ const Calendar1 = () => {
 
 	const composedEvents = composeEvents({ employees, services, events }, calendarView)
 	const composedResources = composeResources(events, employees)
+
+	console.log(composedResources)
 
 	// const [calendarStore, setCalendarStore] = useState<any>(INITIAL_CALENDAR_STATE)
 	const [eventModalProps, setEventModalProps] = useState<any>({
@@ -196,50 +301,26 @@ const Calendar1 = () => {
 					slotLabelFormat={TIME_FORMAT}
 					eventTimeFormat={TIME_FORMAT}
 					height='auto'
+					slotMinWidth={40}
 					headerToolbar={{
 						left: 'title prev,today,next',
-						right: 'resourceTimeGridDay,timeGridWeek,resourceTimeGridWeek,dayGridMonth,resourceTimelineWeek,resourceTimelineDay'
+						right: 'resourceTimelineDay'
 					}}
-					initialView='resourceTimeGridDay'
+					initialView='resourceTimelineDay'
 					initialDate={range.start}
-					// customize view
-					views={{
-						resourceTimeGridDay: {
-							duration: { days: 1 },
-							buttonText: 'Day',
-							resourceLabelContent,
-							eventContent: renderEventContent,
-							dayMinWidth: 200,
-							editable: true,
-							selectable: true
-						},
-						timeGridWeek: {
-							buttonText: 'Week',
-							eventContent: renderEventContent,
-							dayHeaderContent: dayHeaderContentWeek,
-							dayMinWidth: 130
-						},
-						dayGridMonth: {
-							buttonText: 'Month',
-							eventContent: renderEventContent,
-							dayHeaderContent: dayHeaderContentMonth,
-							dayMaxEvents: 3,
-							moreLinkContent: renderMoreLinkMonth,
-							dayMinWidth: 130
-						}
-					}}
-					weekends
-					editable
-					allDaySlot={false}
+					weekends={false}
+					// editable
 					stickyFooterScrollbar
 					events={composedEvents}
-					resources={composedResources}
+					resources={resources3}
+					resourceAreaColumns={resourceAreaColumns}
+					resourceAreaWidth={150}
+					// resourceLabelContent={resourceLabelContent}
+					// eventContent={renderEventContent}
 					select={handleSelect}
 					dateClick={handleDateClick}
 					eventClick={handleEventClick}
 					datesSet={handleDateSet}
-					// eventMinHeight={52}
-					// eventContent={renderEventContent}
 				/>
 			</Spin>
 			<Modal visible={eventModalProps.visible} onCancel={() => setEventModalProps((prevState: any) => ({ ...prevState, visible: false }))} title={'Add Event'} footer={null}>
@@ -286,4 +367,4 @@ const Calendar1 = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(Calendar1)
+export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(CalendarWeekView)

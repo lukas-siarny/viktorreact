@@ -47,6 +47,7 @@ import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 import Calendar1 from '../pages/Calendar1/Calendar1'
 import Calendar2 from '../pages/Calendar2/Calendar2'
 import Calendar3 from '../pages/Calendar3/Calendar3'
+import CalendarWeekView from '../pages/Calendar1/CalendarWeekView'
 
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
@@ -68,10 +69,6 @@ const SalonSubRoutes: FC = (props) => {
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 
 	const getPath = useCallback((pathSuffix: string) => `${path}${pathSuffix}`, [path])
-
-	useEffect(() => {
-		dispatch(selectSalon())
-	}, [dispatch])
 
 	useEffect(() => {
 		if (currentUser.isLoading) {
@@ -227,7 +224,8 @@ const SalonSubRoutes: FC = (props) => {
 			<AuthRoute
 				exact
 				path={getPath(t('paths:calendar1'))}
-				component={Calendar1}
+				// component={Calendar1}
+				component={CalendarWeekView}
 				parentPath={url}
 				translatePathKey={getPath(t('paths:calendar1'))}
 				salonID={salonID}

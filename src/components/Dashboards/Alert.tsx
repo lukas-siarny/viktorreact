@@ -22,23 +22,22 @@ const Alert = (props: Props) => {
 	return (
 		<div className={`min-w-full p-4 flex rounded shadow-lg bg-notino-white ${className}`}>
 			<div className='h-full w-6 mr-4 pt-0-5'>{icon || <ExclamationIcon />}</div>
-			<div className='flex justify-between'>
-				<div>
-					{isString(title) ? <h4>{title}</h4> : title}
-					{isString(subTitle) ? <p className='base-regular text-notino-grayDarker mb-1'>{subTitle}</p> : subTitle}
-					{isString(message) ? <div className='base-regular text-notino-grayDarker'>{message}</div> : message}
+			<div className='w-full'>
+				<div className='flex justify-between flex-start w-full flex-wrap mb-2'>
+					{isString(title) ? <h4 className='m-0'>{title}</h4> : title}
+					{actionItem || (
+						<Button
+							className='p-0 m-semibold hover:text-notino-pink focus:text-notino-pink'
+							type={'link'}
+							htmlType={'button'}
+							onClick={() => onActionItemClick && onActionItemClick()}
+						>
+							{actionLabel}
+						</Button>
+					)}
 				</div>
-
-				{actionItem || (
-					<Button
-						className='p-0 ml-2 m-semibold hover:text-notino-pink focus:text-notino-pink'
-						type={'link'}
-						htmlType={'button'}
-						onClick={() => onActionItemClick && onActionItemClick()}
-					>
-						{actionLabel}
-					</Button>
-				)}
+				{isString(subTitle) ? <p className='base-regular text-notino-grayDarker mb-1'>{subTitle}</p> : subTitle}
+				{isString(message) ? <div className='base-regular text-notino-grayDarker'>{message}</div> : message}
 			</div>
 		</div>
 	)

@@ -89,6 +89,11 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 
 	const dontUpdateFormData = useRef(false)
 
+	// load salon data
+	useEffect(() => {
+		dispatch(selectSalon(salonID))
+	}, [dispatch])
+
 	// change tab based on query
 	useEffect(() => {
 		if (query.history) {

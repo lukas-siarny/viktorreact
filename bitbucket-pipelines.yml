@@ -32,16 +32,25 @@ pipelines:
                 # remove source maps from bundle build
               artifacts:
                 - build/**
-      - step:
-          name: Build and push docker image
-          image: amazon/aws-cli
-          script:
-            - export AWS_ECR_NAME=809210427750.dkr.ecr.eu-central-1.amazonaws.com
-            - docker build -t $AWS_ECR_NAME/notino-b2b-web:development -f docker/development/Dockerfile.web .
-            - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR_NAME
-            - docker push $AWS_ECR_NAME/notino-b2b-web:development
-            - IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --output json )
-            - aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --image-ids "$IMAGES_TO_DELETE" || true
+      - parallel:
+          - step:
+              name: Build and push docker image
+              image: amazon/aws-cli
+              script:
+                - export AWS_ECR_NAME=809210427750.dkr.ecr.eu-central-1.amazonaws.com
+                - docker build -t $AWS_ECR_NAME/notino-b2b-web:development -f docker/development/Dockerfile.web .
+                - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR_NAME
+                - docker push $AWS_ECR_NAME/notino-b2b-web:development
+                - IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --output json )
+                - aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --image-ids "$IMAGES_TO_DELETE" || true
+          - step:
+              name: Build and push 503 docker image
+              image: amazon/aws-cli
+              script:
+                - export AWS_ECR_NAME=809210427750.dkr.ecr.eu-central-1.amazonaws.com
+                - docker build -t $AWS_ECR_NAME/notino-b2b-web-503:development -f docker/development/503/Dockerfile .
+                - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR_NAME
+                - docker push $AWS_ECR_NAME/notino-b2b-web-503:development
     development-2:
       - step:
           name: Install npm modules

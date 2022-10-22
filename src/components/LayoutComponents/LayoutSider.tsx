@@ -265,13 +265,13 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										{t('loc:Zamestnanci')}
 									</Menu.Item>
 									<Menu.Item
-										eventKey={PAGE.CALENDAR1}
-										key={PAGE.CALENDAR1}
-										onClick={() => history.push(getPath(t('paths:calendar1')))}
+										eventKey={PAGE.CALENDAR}
+										key={PAGE.CALENDAR}
+										onClick={() => history.push(getPath(t('paths:calendar')))}
 										icon={<EmployeesIcon />} // fix style issue due wrapped item into <Permission> component
-										className={cx({ 'ant-menu-item-selected': page === PAGE.CALENDAR1 })}
+										className={cx({ 'ant-menu-item-selected': page === PAGE.CALENDAR })}
 									>
-										{t('loc:Fullcalendar')}
+										{t('loc:Kalendár')}
 									</Menu.Item>
 									<Menu.Item
 										eventKey={PAGE.CALENDAR2}

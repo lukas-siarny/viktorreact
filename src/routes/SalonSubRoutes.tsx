@@ -225,19 +225,24 @@ const SalonSubRoutes: FC = (props) => {
 			/>
 			<AuthRoute
 				exact
-				path={getPath(t('paths:calendar1'))}
-				// component={Calendar1}
+				path={getPath(t('paths:calendar'))}
 				component={Calendar}
 				parentPath={url}
-				translatePathKey={getPath(t('paths:calendar1'))}
+				translatePathKey={getPath(t('paths:calendar'))}
 				salonID={salonID}
 				layout={MainLayout}
-				page={PAGE.CALENDAR1}
+				page={PAGE.CALENDAR}
+				extra={{
+					contentClassName: null
+				}}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute
 				exact
 				path={getPath(t('paths:calendar2'))}
+				extra={{
+					contentClassName: null
+				}}
 				component={Calendar2}
 				parentPath={url}
 				translatePathKey={getPath(t('paths:calendar2'))}

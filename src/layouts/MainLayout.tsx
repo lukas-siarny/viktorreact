@@ -29,12 +29,16 @@ const { Content } = Layout
 
 type Props = LayoutSiderProps & {
 	children: ReactNode
+	extra?: {
+		contentClassName?: string | null
+	}
 }
 
 const MainLayout: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
-	const { children } = props
+	const { children, extra } = props
+	const { contentClassName = 'p-4 px-10 main-background' } = extra || {}
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
@@ -147,7 +151,7 @@ const MainLayout: FC<Props> = (props) => {
 						)
 					}
 				/>
-				<Content className='p-4 px-10 main-background'>{children}</Content>
+				<Content className={contentClassName || undefined}>{children}</Content>
 			</Layout>
 		</Layout>
 	)

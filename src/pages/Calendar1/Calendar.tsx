@@ -9,7 +9,6 @@ import { ArrayParam, StringParam, useQueryParams } from 'use-query-params'
 import { FormatterInput } from '@fullcalendar/react' // must go before plugins
 
 // utils
-import Sider from 'antd/lib/layout/Sider'
 import { CALENDAR_VIEW, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 

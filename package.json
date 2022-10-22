@@ -43,6 +43,13 @@
 	"json-server": "json-server --watch db.json --port=7200 --delay 1000"
   },
   "dependencies": {
+	"@fullcalendar/daygrid": "5.11.3",
+    "@fullcalendar/interaction": "5.11.3",
+    "@fullcalendar/react": "5.11.2",
+    "@fullcalendar/resource-timegrid": "5.11.3",
+    "@fullcalendar/resource-timeline": "5.11.3",
+    "@fullcalendar/scrollgrid": "5.11.3",
+    "@mobiscroll/react-lite": "4.10.9",
     "@sentry/cli": "1.71.0",
     "@sentry/react": "6.19.6",
     "@sentry/tracing": "6.19.6",

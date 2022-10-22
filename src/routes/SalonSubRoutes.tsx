@@ -42,12 +42,14 @@ import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 // Billing info
 import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 
-// 404
-import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
+// calendar
 import Calendar1 from '../pages/Calendar1/Calendar1'
 import Calendar2 from '../pages/Calendar2/Calendar2'
 import Calendar3 from '../pages/Calendar3/Calendar3'
-import CalendarWeekView from '../pages/Calendar1/CalendarWeekView'
+import Calendar from '../pages/Calendar1/Calendar'
+
+// 404
+import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
 
 const redirectoToForbiddenPage = () => {
 	history.push('/403')
@@ -225,7 +227,7 @@ const SalonSubRoutes: FC = (props) => {
 				exact
 				path={getPath(t('paths:calendar1'))}
 				// component={Calendar1}
-				component={CalendarWeekView}
+				component={Calendar}
 				parentPath={url}
 				translatePathKey={getPath(t('paths:calendar1'))}
 				salonID={salonID}

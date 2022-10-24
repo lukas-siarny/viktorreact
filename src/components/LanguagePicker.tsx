@@ -1,10 +1,12 @@
 import React, { FC } from 'react'
-import { Select, Menu, Row } from 'antd'
+import { Select, Row } from 'antd'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Icon from '@ant-design/icons'
 import i18next from 'i18next'
 import cx from 'classnames'
 import { useDispatch } from 'react-redux'
+import { get } from 'lodash'
+import { ItemType } from 'antd/lib/menu/hooks/useItems'
 
 // utils
 import sk_SK from 'antd/lib/locale-provider/sk_SK'
@@ -17,7 +19,6 @@ import it_IT from 'antd/lib/locale-provider/it_IT' */
 // import { useSelector } from 'react-redux'
 // eslint-disable-next-line import/no-cycle
 // import { RootState } from '../reducers'
-import { get } from 'lodash'
 import { LANGUAGE, DEFAULT_LANGUAGE } from '../utils/enums'
 
 // hooks
@@ -93,33 +94,29 @@ export const EMPTY_NAME_LOCALIZATIONS = Object.keys(LOCALES)
 	.map((language) => ({ language }))
 
 const { Option } = Select
-const { SubMenu } = Menu
 
 type Props = {
 	className?: string
-	asMenuItem?: boolean
 	reloadPageAfterChange?: boolean
 }
 
-const LanguagePicker: FC<Props> = (props) => {
-	const { className, asMenuItem, reloadPageAfterChange = true } = props
-	const isSmallDevice = useMedia(['(max-width: 744px)'], [true], false)
-	const dispatch = useDispatch()
-
-	const options = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: LOCALES[value].icon }))
-
-	const handleLanguageChange = (value: any) => {
-		if (reloadPageAfterChange) {
-			// reload page after change language
-			// eslint-disable-next-line no-restricted-globals
-			location.reload()
-		} else {
-			// refetch countries
-			dispatch(getCountries())
-		}
-		i18next.changeLanguage(value)
+export const handleLanguageChange = (value: any, dispatch: any, reloadPageAfterChange = true) => {
+	if (reloadPageAfterChange) {
+		// reload page after change language
+		// eslint-disable-next-line no-restricted-globals
+		location.reload()
+	} else {
+		// refetch countries
+		dispatch(getCountries())
 	}
+	i18next.changeLanguage(value)
+}
 
+const options = Object.entries(LANGUAGE).map(([key, value]) => ({ label: key, value, icon: LOCALES[value].icon }))
+
+const getLanguageFlag = (countryCode: LANGUAGE) => <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} />
+
+export const getLanguagePickerAsSubmenuItem = (dispatch: any, reloadPageAfterChange = true): ItemType => {
 	let currentLanguage: LANGUAGE
 
 	switch (i18next.resolvedLanguage) {
@@ -149,41 +146,44 @@ const LanguagePicker: FC<Props> = (props) => {
 			break
 	}
 
-	const getLanguageFlag = (countryCode: LANGUAGE) => <Icon className={'language-picker-icon'} component={LOCALES[countryCode].icon} />
+	return {
+		key: 'currentLanguage',
+		className: 'language-picker',
+		label: get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase(),
+		icon: getLanguageFlag(currentLanguage),
+		popupOffset: [0, -75],
+		children: options?.map((option: any, index: number) => ({
+			key: index,
+			icon: getLanguageFlag(option.value),
+			label: option.label,
+			onClick: () => handleLanguageChange(option.value, dispatch, reloadPageAfterChange)
+		}))
+	}
+}
+
+const LanguagePicker: FC<Props> = (props) => {
+	const { className, reloadPageAfterChange = true } = props
+	const isSmallDevice = useMedia(['(max-width: 744px)'], [true], false)
+	const dispatch = useDispatch()
 
 	return (
-		<>
-			{asMenuItem ? (
-				<SubMenu
-					className={'language-picker'}
-					key='currentLanguage'
-					title={get(LOCALES[currentLanguage], 'displayAs', currentLanguage).toUpperCase()}
-					icon={getLanguageFlag(currentLanguage)}
-					// it is necessary to check whether menu is overflowing viewport everytime new language is added
-					// if so, popupOffset needs to be changed manually
-					popupOffset={[0, -75]}
-				>
-					{options?.map((option: any, index: number) => (
-						<Menu.Item onClick={() => handleLanguageChange(option.value)} key={index} icon={getLanguageFlag(option.value)}>
-							{option.label}
-						</Menu.Item>
-					))}
-				</SubMenu>
-			) : (
-				<div className={`${className} language-picker-select ant-form-item`}>
-					<Select defaultValue={i18next.resolvedLanguage} onChange={handleLanguageChange} className={'noti-select-input'} dropdownClassName={'noti-select-dropdown'}>
-						{options?.map((option: any, index: number) => (
-							<Option value={option.value} key={index}>
-								<Row className={cx('items-center', { 'justify-center': isSmallDevice })}>
-									{getLanguageFlag(option.value)}
-									{!isSmallDevice && option.label}
-								</Row>
-							</Option>
-						))}
-					</Select>
-				</div>
-			)}
-		</>
+		<div className={`${className} language-picker-select ant-form-item`}>
+			<Select
+				defaultValue={i18next.resolvedLanguage}
+				onChange={(value) => handleLanguageChange(value, dispatch, reloadPageAfterChange)}
+				className={'noti-select-input'}
+				dropdownClassName={'noti-select-dropdown'}
+			>
+				{options?.map((option: any, index: number) => (
+					<Option value={option.value} key={index}>
+						<Row className={cx('items-center', { 'justify-center': isSmallDevice })}>
+							{getLanguageFlag(option.value)}
+							{!isSmallDevice && option.label}
+						</Row>
+					</Option>
+				))}
+			</Select>
+		</div>
 	)
 }
 

@@ -27,6 +27,7 @@ type Props = WrappedFieldProps &
 		readOnly?: boolean
 		showToday?: any
 		validateTo?: string /** disable podla datumu ktory sa posle na validovanie */
+		pickerClassName?: string
 	}
 
 const DateField = (props: Props) => {
@@ -55,7 +56,12 @@ const DateField = (props: Props) => {
 		clearIcon,
 		showToday = true,
 		defaultPickerValue,
-		validateTo
+		validateTo,
+		mode,
+		open,
+		onSelect,
+		className,
+		pickerClassName
 	} = props
 
 	let value
@@ -110,13 +116,13 @@ const DateField = (props: Props) => {
 			required={required}
 			style={style}
 			help={hideHelp ? undefined : touched && error}
-			className={cx({ 'form-item-disabled': disabled, readOnly })}
+			className={cx({ 'form-item-disabled': disabled, readOnly }, className)}
 			validateStatus={error && touched ? 'error' : undefined}
 		>
 			<DatePicker
 				id={formFieldID(form, input.name)}
 				{...input}
-				className={cx('noti-date-input w-full', { 'rounded-full': rounded, 'allow-clear': allowClear })}
+				className={(cx('noti-date-input w-full', { 'rounded-full': rounded, 'allow-clear': allowClear }), pickerClassName)}
 				dropdownAlign={DROPDOWN_POSITION.BOTTOM_LEFT}
 				onBlur={() => {}}
 				onChange={(val) => {
@@ -138,6 +144,10 @@ const DateField = (props: Props) => {
 				allowClear={allowClear}
 				getPopupContainer={getPopupContainer || ((node) => node)}
 				showToday={showToday}
+				inputReadOnly={true}
+				mode={mode}
+				open={open}
+				onSelect={onSelect}
 			/>
 		</Form.Item>
 	)

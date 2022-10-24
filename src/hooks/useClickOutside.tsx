@@ -2,9 +2,22 @@ import { useEffect, RefObject } from 'react'
 
 type Event = MouseEvent | TouchEvent
 
-const useOnClickOutside = <T extends HTMLElement = HTMLElement>(ref: RefObject<T>, handler?: (event: Event) => void) => {
+const useOnClickOutside = <T extends HTMLElement = HTMLElement>(ref: RefObject<T>, handler?: (event: Event) => void, exception?: RefObject<HTMLElement>[]) => {
 	useEffect(() => {
 		const listener = (event: Event) => {
+			if (
+				exception?.length &&
+				exception.some((expetion) => {
+					const exeptionEl = expetion?.current
+					if (!exeptionEl || exeptionEl.contains((event?.target as Node) || null)) {
+						return true
+					}
+					return false
+				})
+			) {
+				return
+			}
+
 			const el = ref?.current
 			if (!el || el.contains((event?.target as Node) || null) || !handler) {
 				return

@@ -15,6 +15,8 @@
 		border-bottom: 1px solid $borderColor-notino-grayLight
 		line-height: unset
 		gap: 8px
+		position: sticky
+		top: 64px
 		.nav-left
 			flex: 1 1 50%
 			display: flex
@@ -28,15 +30,37 @@
 			display: flex
 			align-items: center
 			justify-content: flex-end
+		.nc-header-date-picker
+			height: 0
+			line-height: 0
+			padding-bottom: 0
+			.ant-form-item-row
+				height: 0
+			.ant-form-item-control,
+			.ant-form-item-control-input,
+			.ant-form-item-control-input-content
+				line-height: 0
+				min-height: 0
+			.ant-picker
+				padding: 0
+				border: 0
+				.ant-picker-input
+					display: none
 	.nc-sider-filter
 		background: $backgroundColor-notino-white
 		border-right: 1px solid $borderColor-notino-grayLight
+		position: sticky
+		top: 144px
+		height: auto
 	.nc-sider-event-management
 		background: $backgroundColor-notino-white
 		border-left: 1px solid $borderColor-notino-grayLight
+		position: sticky
+		top: 144px
+		height: auto
 	.nc-content
 		background: $backgroundColor-notino-white
-
+		height: auto
 	.nc-button
 		padding: 8px
 		outline: none
@@ -58,6 +82,9 @@
 		&.bordered
 			background: $backgroundColor-notino-white
 			border: 1px solid $textColor-notino-grayLight
+			&:hover,
+			&:focus-visible
+				background-color: $backgroundColor-notino-grayLight
 
 	.nc-button-group
 		background: $backgroundColor-notino-grayLighter
@@ -83,6 +110,24 @@
 			&.active
 				background: $backgroundColor-notino-white
 				box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+
+	.nc-button-date
+		color: $textColor-notino-black
+		background: transparent
+		border: 1px dashed transparent
+		font-size: 16px
+		line-height: 19px
+		font-weight: 600
+		outline: none
+		display: flex
+		align-items: center
+		height: 32px
+		gap: 4px
+		white-space: nowrap
+		cursor: pointer
+		text-transform: capitalize
+		&:focus-visible
+			border-color: $borderColor-notino-gray
 
 // full calendar
 .noti-fc-resource-label

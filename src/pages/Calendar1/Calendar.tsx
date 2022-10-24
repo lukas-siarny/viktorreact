@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import Layout, { Content } from 'antd/lib/layout/layout'
-import { ArrayParam, StringParam, useQueryParams } from 'use-query-params'
+import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
+import dayjs from 'dayjs'
 
 // full calendar
 import { FormatterInput } from '@fullcalendar/react' // must go before plugins
@@ -12,9 +13,11 @@ import { FormatterInput } from '@fullcalendar/react' // must go before plugins
 import { CALENDAR_VIEW, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
-// assets
+// reducers
 import { getCalendarEmployees, getCalendarEvents, getCalendarServices } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
+
+// components
 import CalendarLayoutHeader from './layout/Header'
 import SiderFilter from './layout/SiderFilter'
 import SiderEventManagement from './layout/SiderEventManagement'
@@ -31,17 +34,17 @@ const Calendar = () => {
 	const dispatch = useDispatch()
 
 	const [query, setQuery] = useQueryParams({
-		view: StringParam,
+		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
+		date: withDefault(StringParam, dayjs().format('YYYY-MM-DD')),
 		serviceID: ArrayParam,
 		employeeID: ArrayParam,
 		eventType: StringParam
 	})
 
-	const [calendarView, setCalendarView] = useState(CALENDAR_VIEW.DAY)
-	const [range, setRange] = useState({
+	/* const [range, setRange] = useState({
 		start: '2022-10-10T00:00:00',
 		end: '2022-10-10T23:59:59'
-	})
+	}) */
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState(false)
 	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState(false)
 
@@ -57,14 +60,17 @@ const Calendar = () => {
 	}, [dispatch])
 
 	useEffect(() => {
-		dispatch(getCalendarEvents({ start: range.start, end: range.end }))
-	}, [dispatch, range.start, range.end])
-
-	console.log({ siderFilterCollapsed })
+		// dispatch(getCalendarEvents({ start: range.start, end: range.end }))
+		dispatch(getCalendarEvents())
+	}, [dispatch])
 
 	return (
 		<Layout className='noti-calendar-layout'>
-			<CalendarLayoutHeader setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)} />
+			<CalendarLayoutHeader
+				calendarView={query.view as CALENDAR_VIEW}
+				setCalendarView={(newCalendarView) => setQuery({ ...query, view: newCalendarView })}
+				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
+			/>
 			<Layout hasSider>
 				<SiderFilter collapsed={siderFilterCollapsed} />
 				<Content className='nc-content'>{'content'}</Content>
@@ -72,8 +78,6 @@ const Calendar = () => {
 			</Layout>
 		</Layout>
 	)
-
-	return <div className='noti-calendar-layout'>{'Calednar'}</div>
 }
 
 export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(Calendar)

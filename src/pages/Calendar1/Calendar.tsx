@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 import { FormatterInput } from '@fullcalendar/react' // must go before plugins
 
 // utils
-import { CALENDAR_VIEW, PERMISSION } from '../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_VIEW, PERMISSION } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -45,8 +45,8 @@ const Calendar = () => {
 		start: '2022-10-10T00:00:00',
 		end: '2022-10-10T23:59:59'
 	}) */
-	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState(false)
-	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState(false)
+	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
+	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW | true>(true)
 
 	const employees = useSelector((state: RootState) => state.calendar.employees)
 	const services = useSelector((state: RootState) => state.calendar.services)
@@ -67,14 +67,16 @@ const Calendar = () => {
 	return (
 		<Layout className='noti-calendar-layout'>
 			<CalendarLayoutHeader
+				selectedDate={query.date}
 				calendarView={query.view as CALENDAR_VIEW}
 				setCalendarView={(newCalendarView) => setQuery({ ...query, view: newCalendarView })}
 				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
+				setSiderEventManagementCollapsed={setSiderEventManagementCollapsed}
 			/>
 			<Layout hasSider>
 				<SiderFilter collapsed={siderFilterCollapsed} />
 				<Content className='nc-content'>{'content'}</Content>
-				<SiderEventManagement />
+				<SiderEventManagement view={siderEventManagementCollapsed} setCollapsed={setSiderEventManagementCollapsed} />
 			</Layout>
 		</Layout>
 	)

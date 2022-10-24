@@ -579,7 +579,15 @@ export enum CALENDAR_VIEW {
 export enum CALENDAR_EVENT_TYPE {
 	RESERVATION = 'reservation',
 	SHIFT = 'shift',
-	TIMEOFF = 'timeOff'
+	TIMEOFF = 'timeOff',
+	BREAK = 'break'
+}
+
+export enum CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW {
+	RESERVATION = 'reservation',
+	SHIFT = 'shift',
+	TIMEOFF = 'timeOff',
+	BREAK = 'break'
 }
 
 export enum CALENDAR_WEEK_DAYS {

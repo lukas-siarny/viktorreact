@@ -5,7 +5,7 @@ import { Header } from 'antd/lib/layout/layout'
 import { Button, Dropdown, Menu } from 'antd'
 
 // enums
-import { CALENDAR_VIEW } from '../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_VIEW } from '../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../assets/icons/navicon-16.svg'
@@ -17,51 +17,58 @@ import { ReactComponent as BreakIcon } from '../../../assets/icons/break-icon.sv
 import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
 
 type Props = {
-	setSiderFilterCollapsed: () => void
+	selectedDate: string
 	calendarView: CALENDAR_VIEW
 	setCalendarView: (newView: CALENDAR_VIEW) => void
+	setSiderFilterCollapsed: () => void
+	setSiderEventManagementCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 }
 
 const CalendarLayoutHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagementCollapsed, selectedDate } = props
 
 	const addMenu = useMemo(() => {
-		const itemClassName = 'p-2 mb-2 font-medium min-w-0'
+		const itemClassName = 'p-2 font-medium min-w-0'
 		return (
 			<Menu
 				getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-				className={'shadow-md max-w-xs min-w-48 w-48 mt-5 p-2 noti-dropdown-header'}
+				className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'}
+				style={{ width: 200 }}
 				items={[
 					{
 						key: 'reservation',
 						label: t('loc:Rezerváciu'),
 						icon: <ServicesIcon />,
-						className: itemClassName
+						className: itemClassName,
+						onClick: () => setSiderEventManagementCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
 					},
 					{
 						key: 'shift',
 						label: t('loc:Smenu'),
 						icon: <ShiftIcon />,
-						className: itemClassName
+						className: itemClassName,
+						onClick: () => setSiderEventManagementCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
 					},
 					{
 						key: 'absence',
 						label: t('loc:Absenciu'),
 						icon: <AbsenceIcon />,
-						className: itemClassName
+						className: itemClassName,
+						onClick: () => setSiderEventManagementCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF)
 					},
 					{
 						key: 'break',
 						label: t('loc:Prestávku'),
 						icon: <BreakIcon />,
-						className: itemClassName
+						className: itemClassName,
+						onClick: () => setSiderEventManagementCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
 					}
 				]}
 			/>
 		)
-	}, [t])
+	}, [t, setSiderEventManagementCollapsed])
 
 	return (
 		<Header className={'nc-header'} id={'noti-calendar-header'}>
@@ -89,7 +96,7 @@ const CalendarLayoutHeader: FC<Props> = (props) => {
 					<ChevronLeft style={{ transform: 'rotate(180deg)' }} />
 				</button>
 				<button type={'button'} className={'mx-1'}>
-					Date
+					{selectedDate}
 				</button>
 				<button type={'button'} className={'nc-button light'}>
 					{t('loc:Dnes')}

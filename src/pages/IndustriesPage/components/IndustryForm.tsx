@@ -17,9 +17,9 @@ import validateIndustryFrom from './validateIndustryFrom'
 import { FORM, PERMISSION, SALON_PERMISSION } from '../../../utils/enums'
 import { showErrorNotification } from '../../../utils/helper'
 import { withPromptUnsavedChanges } from '../../../utils/promptUnsavedChanges'
-
-// redux
 import Permissions from '../../../utils/Permissions'
+
+// types
 import { IIndustryForm } from '../../../types/interfaces'
 
 type ComponentProps = {

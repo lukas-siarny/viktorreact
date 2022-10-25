@@ -1,17 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import {
-	ICalendarActions,
-	ICalendarEventsPayload,
-	ICalendarShiftsPayload,
-	ICalendarTimeOffPayload,
-	ICalendarEmployeesPayload,
-	ICalendarServicesPayload,
-	ICalendarEventDetailPayload,
-	ICalendarReservationsPayload
-} from './calendarActions'
+import { ICalendarActions, ICalendarEventsPayload, ICalendarEventDetailPayload } from './calendarActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { EVENTS, RESERVATIONS, SHIFTS, TIMEOFF, EMPLOYEES, SERVICES, EVENT_DETAIL } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL } from './calendarTypes'
 
 export const initState = {
 	events: {
@@ -19,31 +10,6 @@ export const initState = {
 		isLoading: false,
 		isFailure: false
 	} as ICalendarEventsPayload & ILoadingAndFailure,
-	reservations: {
-		data: null,
-		isLoading: false,
-		isFailure: false
-	} as ICalendarReservationsPayload & ILoadingAndFailure,
-	shifts: {
-		data: null,
-		isLoading: false,
-		isFailure: false
-	} as ICalendarShiftsPayload & ILoadingAndFailure,
-	timeOff: {
-		data: null,
-		isLoading: false,
-		isFailure: false
-	} as ICalendarTimeOffPayload & ILoadingAndFailure,
-	employees: {
-		data: null,
-		isLoading: false,
-		isFailure: false
-	} as ICalendarEmployeesPayload & ILoadingAndFailure,
-	services: {
-		data: null,
-		isLoading: false,
-		isFailure: false
-	} as ICalendarServicesPayload & ILoadingAndFailure,
 	eventDetail: {
 		data: null,
 		isLoading: false,
@@ -79,137 +45,12 @@ export default (state = initState, action: ICalendarActions) => {
 					data: action.payload.data
 				}
 			}
-		// Reservations
-		case RESERVATIONS.RESERVATIONS_LOAD_START:
-			return {
-				...state,
-				reservations: {
-					...state.shifts,
-					isLoading: true
-				}
-			}
-		case RESERVATIONS.RESERVATIONS_LOAD_FAIL:
-			return {
-				...state,
-				reservations: {
-					...initState.shifts,
-					isFailure: true
-				}
-			}
-		case RESERVATIONS.RESERVATIONS_LOAD_DONE:
-			return {
-				...state,
-				reservations: {
-					...initState.shifts,
-					data: action.payload.data
-				}
-			}
-		// Shifts
-		case SHIFTS.SHIFTS_LOAD_START:
-			return {
-				...state,
-				shifts: {
-					...state.shifts,
-					isLoading: true
-				}
-			}
-		case SHIFTS.SHIFTS_LOAD_FAIL:
-			return {
-				...state,
-				shifts: {
-					...initState.shifts,
-					isFailure: true
-				}
-			}
-		case SHIFTS.SHIFTS_LOAD_DONE:
-			return {
-				...state,
-				shifts: {
-					...initState.shifts,
-					data: action.payload.data
-				}
-			}
-		// TimeOff
-		case TIMEOFF.TIMEOFF_LOAD_START:
-			return {
-				...state,
-				timeOff: {
-					...state.shifts,
-					isLoading: true
-				}
-			}
-		case TIMEOFF.TIMEOFF_LOAD_FAIL:
-			return {
-				...state,
-				timeOff: {
-					...initState.shifts,
-					isFailure: true
-				}
-			}
-		case TIMEOFF.TIMEOFF_LOAD_DONE:
-			return {
-				...state,
-				timeOff: {
-					...initState.shifts,
-					data: action.payload.data
-				}
-			}
-		// Employees
-		case EMPLOYEES.EMPLOYEES_LOAD_START:
-			return {
-				...state,
-				employees: {
-					...state.shifts,
-					isLoading: true
-				}
-			}
-		case EMPLOYEES.EMPLOYEES_LOAD_FAIL:
-			return {
-				...state,
-				employees: {
-					...initState.shifts,
-					isFailure: true
-				}
-			}
-		case EMPLOYEES.EMPLOYEES_LOAD_DONE:
-			return {
-				...state,
-				employees: {
-					...initState.shifts,
-					data: action.payload.data
-				}
-			}
-		// Services
-		case SERVICES.SERVICES_LOAD_START:
-			return {
-				...state,
-				services: {
-					...state.shifts,
-					isLoading: true
-				}
-			}
-		case SERVICES.SERVICES_LOAD_FAIL:
-			return {
-				...state,
-				services: {
-					...initState.shifts,
-					isFailure: true
-				}
-			}
-		case SERVICES.SERVICES_LOAD_DONE:
-			return {
-				...state,
-				services: {
-					...initState.shifts,
-					data: action.payload.data
-				}
-			}
 		// Event detail
 		case EVENT_DETAIL.EVENT_DETAIL_LOAD_START:
 			return {
 				...state,
 				eventDetail: {
-					...state.shifts,
+					...state.eventDetail,
 					isLoading: true
 				}
 			}
@@ -217,7 +58,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				eventDetail: {
-					...initState.shifts,
+					...initState.eventDetail,
 					isFailure: true
 				}
 			}
@@ -225,7 +66,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				eventDetail: {
-					...initState.shifts,
+					...initState.eventDetail,
 					data: action.payload.data
 				}
 			}

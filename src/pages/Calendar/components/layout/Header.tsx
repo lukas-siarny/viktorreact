@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 
 // enums
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW } from '../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../assets/icons/navicon-16.svg'
@@ -20,10 +20,36 @@ import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.sv
 import { ReactComponent as ChevronDownGrayDark } from '../../../assets/icons/chevron-down-grayDark-12.svg'
 
 // components
-import DateField from '../../../atoms/DateField'
+import DateField from '../../../../atoms/DateField'
 
 // hooks
-import useOnClickOutside from '../../../hooks/useClickOutside'
+import useOnClickOutside from '../../../../hooks/useClickOutside'
+import { getFirstDayOfMonth, getFirstDayOfWeek, getLastDayOfWeek } from '../../../../utils/helper'
+
+const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
+	switch (view) {
+		case CALENDAR_VIEW.DAY:
+			return dayjs(date).format(CALENDAR_DATE_FORMAT.HEADER_DAY)
+		case CALENDAR_VIEW.WEEK: {
+			const firstDayOfWeek = getFirstDayOfWeek(date)
+			const lastDayOfWeek = getLastDayOfWeek(date)
+
+			// turn of the month
+			if (firstDayOfWeek.month() !== lastDayOfWeek.month()) {
+				return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START_TURN_OF_THE_MONTH)} - ${lastDayOfWeek.format(
+					CALENDAR_DATE_FORMAT.HEADER_WEEK_END_TURN_OF_THE_MONTH
+				)}`
+			}
+
+			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
+		}
+		case CALENDAR_VIEW.MONTH: {
+			return getFirstDayOfMonth(date).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
+		}
+		default:
+			return ''
+	}
+}
 
 type Props = {
 	selectedDate: string
@@ -44,13 +70,9 @@ const CalendarLayoutHeader: FC<Props> = (props) => {
 	const calendarDropdownRef = useRef<HTMLDivElement | null>(null)
 	const dateButtonRef = useRef<HTMLButtonElement | null>(null)
 
-	useOnClickOutside(
-		calendarDropdownRef,
-		() => {
-			setIsCalendarOpen(false)
-		},
-		[dateButtonRef]
-	)
+	useOnClickOutside([calendarDropdownRef, dateButtonRef], () => {
+		setIsCalendarOpen(false)
+	})
 
 	const addMenu = useMemo(() => {
 		const itemClassName = 'p-2 font-medium min-w-0'
@@ -141,7 +163,7 @@ const CalendarLayoutHeader: FC<Props> = (props) => {
 					visible={isCalendarOpen}
 				>
 					<button type={'button'} className={'nc-button-date mx-1'} onClick={() => setIsCalendarOpen(!isCalendarOpen)} ref={dateButtonRef}>
-						{dayjs(selectedDate).format('ddd, D MMM YYYY')}
+						{formatHeaderDate(selectedDate, calendarView)}
 						<ChevronDownGrayDark />
 					</button>
 				</Dropdown>

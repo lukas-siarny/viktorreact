@@ -43,10 +43,7 @@ import IndustryPage from '../pages/IndustriesPage/IndustryPage'
 import BillingInfoPage from '../pages/BillingInfoPage/BillingInfoPage'
 
 // calendar
-import Calendar1 from '../pages/Calendar1/Calendar1'
-import Calendar2 from '../pages/Calendar2/Calendar2'
-import Calendar3 from '../pages/Calendar3/Calendar3'
-import Calendar from '../pages/Calendar1/Calendar'
+import Calendar from '../pages/Calendar/Calendar'
 
 // 404
 import NotFoundPage from '../pages/ErrorPages/NotFoundPage'
@@ -235,42 +232,6 @@ const SalonSubRoutes: FC = (props) => {
 				extra={{
 					contentClassName: null
 				}}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				exact
-				path={getPath(t('paths:calendar2'))}
-				extra={{
-					contentClassName: null
-				}}
-				component={Calendar2}
-				parentPath={url}
-				translatePathKey={getPath(t('paths:calendar2'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.CALENDAR2}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				exact
-				path={getPath(t('paths:calendar3'))}
-				component={Calendar3}
-				parentPath={url}
-				translatePathKey={getPath(t('paths:calendar3'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.CALENDAR3}
-				preventShowDeletedSalon
-			/>
-			<AuthRoute
-				exact
-				path={getPath(t('paths:calendar4'))}
-				component={Calendar1}
-				parentPath={url}
-				translatePathKey={getPath(t('paths:calendar4'))}
-				salonID={salonID}
-				layout={MainLayout}
-				page={PAGE.CALENDAR4}
 				preventShowDeletedSalon
 			/>
 			<AuthRoute

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
@@ -14,14 +14,19 @@ import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SE
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
-import { getCalendarEmployees, getCalendarEvents, getCalendarServices } from '../../reducers/calendar/calendarActions'
+import { getCalendarEvents } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
+import { getEmployees } from '../../reducers/employees/employeesActions'
+import { getServices } from '../../reducers/services/serviceActions'
 
 // components
-import CalendarLayoutHeader from './layout/Header'
-import SiderFilter from './layout/SiderFilter'
-import SiderEventManagement from './layout/SiderEventManagement'
+import CalendarLayoutHeader from './components/layout/Header'
+import SiderFilter from './components/layout/SiderFilter'
+import SiderEventManagement from './components/layout/SiderEventManagement'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
+
+// types
+import { SalonSubPageProps } from '../../types/interfaces'
 
 const TIME_FORMAT: FormatterInput = {
 	hour: '2-digit',
@@ -30,7 +35,9 @@ const TIME_FORMAT: FormatterInput = {
 	hour12: false
 }
 
-const Calendar = () => {
+const Calendar: FC<SalonSubPageProps> = (props) => {
+	const { salonID } = props
+
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -45,21 +52,20 @@ const Calendar = () => {
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW | true>(true)
 
-	const employees = useSelector((state: RootState) => state.calendar.employees)
-	const services = useSelector((state: RootState) => state.calendar.services)
+	const employees = useSelector((state: RootState) => state.employees.employees)
+	const services = useSelector((state: RootState) => state.service.services)
 	const events = useSelector((state: RootState) => state.calendar.events)
 
 	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
 
 	useEffect(() => {
-		dispatch(getCalendarEmployees())
-		dispatch(getCalendarServices())
-	}, [dispatch])
+		dispatch(getEmployees({ salonID, page: 1, limit: 1000 }))
+		dispatch(getServices({ salonID }))
+	}, [dispatch, salonID])
 
 	useEffect(() => {
-		// dispatch(getCalendarEvents({ start: range.start, end: range.end }))
-		dispatch(getCalendarEvents())
-	}, [dispatch])
+		dispatch(getCalendarEvents({ salonID, date: query.date }, query.view as CALENDAR_VIEW))
+	}, [dispatch, salonID, query.date, query.view])
 
 	const setNewSelectedDate = (newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate

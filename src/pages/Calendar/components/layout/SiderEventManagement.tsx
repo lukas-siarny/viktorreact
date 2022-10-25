@@ -6,7 +6,7 @@ import { Button } from 'antd'
 import i18next from 'i18next'
 
 // enums
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'

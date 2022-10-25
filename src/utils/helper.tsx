@@ -1043,3 +1043,7 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')
 
 export const getFirstDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('month')
+
+export const getLastDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('week')
+
+export const getLasttDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('month')

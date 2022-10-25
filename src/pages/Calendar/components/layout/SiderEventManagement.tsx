@@ -12,8 +12,8 @@ import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../../utils/enums'
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
 type Props = {
-	view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW | true
-	setCollapsed: (view: true) => void
+	view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
+	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 }
 
 const getSiderContent = (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW | true) => {
@@ -51,11 +51,11 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const { title, content } = getSiderContent(view)
 
 	return (
-		<Sider className='nc-sider-event-management' collapsed={view === true} width={240} collapsedWidth={0} style={{ transition: 'none' }}>
+		<Sider className='nc-sider-event-management' collapsed={view === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED} width={240} collapsedWidth={0}>
 			<div className={'p-4 w-full'}>
 				<div className={'flex w-full justify-between items-start gap-1'}>
 					<h2 className={'text-base m-0'}>{title}</h2>
-					<Button className='p-0 border-none shadow-none' onClick={() => setCollapsed(true)}>
+					<Button className='p-0 border-none shadow-none' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
 						<CloseIcon style={{ width: 16, height: 16 }} />
 					</Button>
 				</div>

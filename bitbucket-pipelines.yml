@@ -1,4 +1,4 @@
-image: node:16.14.0
+image: node:16.18.0
 # be sure that clone enoughth commits
 clone:
   depth: 150
@@ -6,7 +6,59 @@ options:
   docker: true
   max-time: 20
   size: 2x
+
+definitions:
+  caches:
+    cypress: $HOME/.cache/Cypress
+    frontend: $BITBUCKET_CLONE_DIR/node_modules
+  steps:
+    - step: &npm-install
+        name: Install npm modules
+        script:
+          - npm install --legacy-peer-deps
+        caches:
+          - node
+        artifacts:
+          - node_modules/**
+    - step: &lint-check
+        name: Lint checking code
+        script:
+          - npm run lint
+
 pipelines:
+  tags:
+    'v*':
+      - step: *npm-install
+      - parallel:
+        - step: *lint-check
+        - step:
+              name: Build and push docker image
+              script:
+                # copy .well-known files from development env
+                - cp -R ./docker/development/.well-known ./public/.well-known
+                # push source maps to sentry service
+                - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
+                # remove source maps from bundle build
+                - find build/static/js/ -name "*.map" -type f -delete
+              artifacts:
+                - build/**
+      - step:
+          name: Build and push docker image
+          image: amazon/aws-cli
+          script:
+            - export AWS_ECR_NAME=809210427750.dkr.ecr.eu-central-1.amazonaws.com
+            - export AWS_TAG=$AWS_ECR_NAME/notino-b2b-web:$BITBUCKET_TAG
+            - docker build -t $AWS_TAG -f docker/production/Dockerfile.web .
+            - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR_NAME
+            - docker push $AWS_TAG
+
+            # - export AWS_ECR_NAME=809210427750.dkr.ecr.eu-central-1.amazonaws.com
+            # - docker build -t $AWS_ECR_NAME/notino-b2b-web:development-2 -f docker/development/Dockerfile.web .
+            # - aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin $AWS_ECR_NAME
+            # - docker push $AWS_ECR_NAME/notino-b2b-web:development-2
+            # - IMAGES_TO_DELETE=$( aws ecr list-images --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --filter "tagStatus=UNTAGGED" --query 'imageIds[*]' --output json )
+            # - aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --image-ids "$IMAGES_TO_DELETE" || true
+
   branches:
     development:
       - step:
@@ -30,6 +82,7 @@ pipelines:
                 # push source maps to sentry service
                 - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
                 # remove source maps from bundle build
+                - find build/static/js/ -name "*.map" -type f -delete
               artifacts:
                 - build/**
       - step:
@@ -64,6 +117,7 @@ pipelines:
                 # push source maps to sentry service
                 - REACT_APP_GOOGLE_MAPS_API_KEY=$GOOGLE_DEV_TEST_UAT_API REACT_APP_HOST=developmentServer SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN SENTRY_URL=$SENTRY_URL CI=false npm run release
                 # remove source maps from bundle build
+                - find build/static/js/ -name "*.map" -type f -delete
               artifacts:
                 - build/**
       - step:
@@ -173,19 +227,9 @@ pipelines:
             - aws ecr batch-delete-image --region $AWS_DEFAULT_REGION --repository-name notino-b2b-web --image-ids "$IMAGES_TO_DELETE" || true
   pull-requests:
     'NOT-*':
-      - step:
-          name: Install npm modules
-          script:
-            - npm install --legacy-peer-deps
-          caches:
-            - node
-          artifacts:
-            - node_modules/**
+      - step: *npm-install
       - parallel:
-          - step:
-              name: Lint checking
-              script:
-                - npm run lint
+          - step: *lint-check
           - step:
               name: Build and push docker image
               script:
@@ -215,11 +259,3 @@ pipelines:
               - cypress/screenshots/**
               - cypress/videos/**
               - notino_backend/logs/**
-
-definitions:
-  caches:
-    cypress: $HOME/.cache/Cypress
-    frontend: $BITBUCKET_CLONE_DIR/node_modules
-  services:
-    docker:
-      memory: 4092

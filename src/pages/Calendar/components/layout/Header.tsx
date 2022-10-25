@@ -10,14 +10,14 @@ import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // assets
-import { ReactComponent as NavIcon } from '../../../assets/icons/navicon-16.svg'
-import { ReactComponent as ChevronLeft } from '../../../assets/icons/chevron-left-16.svg'
-import { ReactComponent as ServicesIcon } from '../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as AbsenceIcon } from '../../../assets/icons/absence-icon.svg'
-import { ReactComponent as ShiftIcon } from '../../../assets/icons/shift-icon.svg'
-import { ReactComponent as BreakIcon } from '../../../assets/icons/break-icon.svg'
-import { ReactComponent as CreateIcon } from '../../../assets/icons/plus-icon.svg'
-import { ReactComponent as ChevronDownGrayDark } from '../../../assets/icons/chevron-down-grayDark-12.svg'
+import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
+import { ReactComponent as ChevronLeft } from '../../../../assets/icons/chevron-left-16.svg'
+import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
+import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
+import { ReactComponent as ShiftIcon } from '../../../../assets/icons/shift-icon.svg'
+import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon.svg'
+import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
+import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-grayDark-12.svg'
 
 // components
 import DateField from '../../../../atoms/DateField'

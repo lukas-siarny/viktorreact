@@ -12,7 +12,7 @@ const { Item } = Form
 type ComponentProps = {
 	checkboxGroupStyles?: React.CSSProperties
 	horizontal?: boolean
-	large?: boolean
+	size: 'small' | 'medium' | 'large'
 }
 
 type Props = WrappedFieldProps & CheckboxGroupProps & FormItemProps & ComponentProps
@@ -29,25 +29,35 @@ const CheckboxGroupField = (props: Props) => {
 		defaultValue,
 		horizontal,
 		className,
-		large
+		size = 'medium'
 	} = props
 
 	const checkboxes = map(options, (option: any) => {
 		if (typeof option === 'string') {
 			return (
-				<Checkbox key={option} value={option} className={cx({ large, 'inline-flex': horizontal })}>
+				<Checkbox key={option} value={option} className={cx({ 'inline-flex': horizontal })}>
 					{option}
 				</Checkbox>
 			)
 		}
 		return (
-			<Checkbox disabled={option.disabled} key={`${option.value}`} value={option.value} className={cx('my-1', { large, 'inline-flex': horizontal })}>
+			<Checkbox disabled={option.disabled} key={`${option.value}`} value={option.value} className={cx({ 'inline-flex': horizontal })}>
 				{option.label}
 			</Checkbox>
 		)
 	})
 	return (
-		<Item label={label} required={required} help={touched && error} className={className} validateStatus={error && touched ? 'error' : undefined} style={style}>
+		<Item
+			label={label}
+			required={required}
+			help={touched && error}
+			className={cx(className, `noti-checkbox-group noti-checkbox-group-${size}`, {
+				'noti-checkbox-group-horizontal': horizontal,
+				'noti-checkbox-group-vertical': !horizontal
+			})}
+			validateStatus={error && touched ? 'error' : undefined}
+			style={style}
+		>
 			<Checkbox.Group
 				className={'flex flex-wrap'}
 				value={input.value || []}

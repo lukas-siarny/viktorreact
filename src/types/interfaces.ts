@@ -2,7 +2,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENT_TYPE_FILTER } from '../utils/enums'
 import { SALON_STATES } from './../utils/enums'
 
 // types
@@ -517,4 +517,10 @@ export interface TimeStatsData {
 
 export interface TimeStats extends ILoadingAndFailure {
 	data: TimeStatsData | null
+}
+
+export interface ICalendarFilter {
+	employeeIDs?: string[]
+	serviceIDs?: string[]
+	eventType?: CALENDAR_EVENT_TYPE_FILTER
 }

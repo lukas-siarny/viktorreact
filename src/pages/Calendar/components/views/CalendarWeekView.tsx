@@ -17,13 +17,11 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import dayjs from 'dayjs'
-import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW, PERMISSION } from '../../../../utils/enums'
+import { CALENDAR_EVENT_TYPE, PERMISSION } from '../../../../utils/enums'
 import { withPermissions } from '../../../../utils/Permissions'
 
 // assets
-import { getCalendarEmployees, getCalendarEvents, getCalendarServices } from '../../../../reducers/calendar/calendarActions'
 import { RootState } from '../../../../reducers'
-import { composeEvents, composeResources } from '../../helpers'
 
 const resources = [
 	{
@@ -168,8 +166,8 @@ const renderEventContent = (eventInfo: any) => {
 		return (
 			<div
 				className={cx('noti-fc-bg-event', {
-					shift: extendedProps.eventType === CALENDAR_EVENT_TYPE.SHIFT,
-					timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.TIMEOFF
+					shift: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+					timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
 				})}
 			>
 				{/* dividers */}
@@ -225,23 +223,6 @@ const CalendarWeekView = () => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const [calendarView, setCalendarView] = useState(CALENDAR_VIEW.DAY_RESERVATIONS)
-	const [range, setRange] = useState({
-		start: '2022-10-10T00:00:00',
-		end: '2022-10-10T23:59:59'
-	})
-
-	const employees = useSelector((state: RootState) => state.calendar.employees)
-	const services = useSelector((state: RootState) => state.calendar.services)
-	const events = useSelector((state: RootState) => state.calendar.events)
-
-	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
-
-	const composedEvents = composeEvents({ employees, services, events }, calendarView)
-	const composedResources = composeResources(events, employees)
-
-	console.log(composedResources)
-
 	// const [calendarStore, setCalendarStore] = useState<any>(INITIAL_CALENDAR_STATE)
 	const [eventModalProps, setEventModalProps] = useState<any>({
 		visible: false,
@@ -279,91 +260,34 @@ const CalendarWeekView = () => {
 
 	const handleDateSet = (arg: DatesSetArg) => {
 		console.log({ dateSetArgs: arg })
-		setRange({ ...range, start: arg?.startStr, end: arg?.endStr })
 	}
 
-	useEffect(() => {
-		dispatch(getCalendarEmployees())
-		dispatch(getCalendarServices())
-	}, [dispatch])
-
-	useEffect(() => {
-		dispatch(getCalendarEvents({ start: range.start, end: range.end }))
-	}, [dispatch, range.start, range.end])
-
 	return (
-		<div className='bg-notino-white'>
-			<Spin spinning={loadingData}>
-				<FullCalendar
-					schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
-					plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid, resourceTimelinePlugin]}
-					timeZone='local'
-					slotLabelFormat={TIME_FORMAT}
-					eventTimeFormat={TIME_FORMAT}
-					height='auto'
-					slotMinWidth={40}
-					headerToolbar={{
-						left: 'title prev,today,next',
-						right: 'resourceTimelineDay'
-					}}
-					initialView='resourceTimelineDay'
-					initialDate={range.start}
-					weekends={false}
-					// editable
-					stickyFooterScrollbar
-					events={composedEvents}
-					resources={resources3}
-					resourceAreaColumns={resourceAreaColumns}
-					resourceAreaWidth={150}
-					// resourceLabelContent={resourceLabelContent}
-					// eventContent={renderEventContent}
-					select={handleSelect}
-					dateClick={handleDateClick}
-					eventClick={handleEventClick}
-					datesSet={handleDateSet}
-				/>
-			</Spin>
-			<Modal visible={eventModalProps.visible} onCancel={() => setEventModalProps((prevState: any) => ({ ...prevState, visible: false }))} title={'Add Event'} footer={null}>
-				<div className='flex flex-col gap-2'>
-					<div>
-						<strong>Zadajte nazov:</strong>
-						<Input
-							type='text'
-							value={eventModalProps?.data?.title}
-							onChange={(value: any) => {
-								setEventModalProps({ ...eventModalProps, data: { ...eventModalProps.data, title: value } })
-							}}
-						/>
-					</div>
-					<div>
-						<strong>Zadajte cas:</strong>
-						<span>
-							{dayjs(eventModalProps.data.start).format('D.MM - HH:mm')} - {dayjs(eventModalProps.data.end).format('D.MM - HH:mm')}
-						</span>
-					</div>
-					<Button
-						type={'primary'}
-						onClick={() => {
-							/* setCalendarStore((prevState: any) => ({
-								...prevState,
-								events: [
-									...prevState.events,
-									{
-										...eventModalProps.data
-									}
-								]
-							})) */
-							setEventModalProps({
-								visible: false,
-								data: {}
-							})
-						}}
-					>
-						{'Ulozit udalost'}
-					</Button>
-				</div>
-			</Modal>
-		</div>
+		<FullCalendar
+			schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
+			plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid, resourceTimelinePlugin]}
+			timeZone='local'
+			slotLabelFormat={TIME_FORMAT}
+			eventTimeFormat={TIME_FORMAT}
+			height='100%'
+			slotMinWidth={40}
+			headerToolbar={false}
+			initialView='resourceTimelineDay'
+			initialDate={dayjs().toISOString()}
+			weekends={false}
+			// editable
+			stickyFooterScrollbar={false}
+			events={[]}
+			resources={resources3}
+			resourceAreaColumns={resourceAreaColumns}
+			resourceAreaWidth={150}
+			// resourceLabelContent={resourceLabelContent}
+			// eventContent={renderEventContent}
+			select={handleSelect}
+			dateClick={handleDateClick}
+			eventClick={handleEventClick}
+			datesSet={handleDateSet}
+		/>
 	)
 }
 

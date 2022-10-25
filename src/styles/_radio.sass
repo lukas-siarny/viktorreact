@@ -1,0 +1,32 @@
+@import tailwind-variables
+@import "variables"
+
+.ant-form-item.noti-radio
+	&.noti-radio-vertical
+		.ant-radio-group
+			display: flex
+			flex-direction: column
+			width: 100%
+			gap: 8px
+	.ant-radio-group
+		&.ant-radio-group-small
+			gap: 4px
+			.ant-radio-wrapper
+				.ant-radio
+					font-size: 12px
+					line-height: 12px
+					input[type='radio']
+						width: 12px
+						height: 12px
+					.ant-radio-inner
+						width: 12px
+						height: 12px
+						&::after
+							width: 12px
+							height: 12px
+							margin-top: -6px
+							margin-left: -6px
+					& + span
+						font-size: 12px
+
+

@@ -1,0 +1,38 @@
+@import tailwind-variables
+@import "variables"
+
+.ant-form-item.noti-checkbox-group
+	.ant-form-item-control-input-content
+		.ant-checkbox-group
+			.ant-checkbox-wrapper
+				width: 100%
+				.ant-checkbox
+					& + span
+						word-break: break-all
+	&.noti-checkbox-group-vertical
+		.ant-checkbox-group
+			display: flex
+			flex-direction: column
+			width: 100%
+			gap: 8px
+		.ant-checkbox-wrapper + .ant-checkbox-wrapper
+			margin-left: 0
+			margin-right: 0
+	&.noti-checkbox-group-small
+		.ant-form-item-control-input-content
+			.ant-checkbox-group
+				gap: 4px
+				.ant-checkbox-wrapper
+					.ant-checkbox
+						input[type='checkbox']
+							width: 12px
+							height: 12px
+						.ant-checkbox-inner
+							width: 12px
+							height: 12px
+							&::after
+								width: 3.5px
+								height: 7px
+								border-width: 2px
+						& + span
+							font-size: 12px

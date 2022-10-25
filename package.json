@@ -39,8 +39,7 @@
     "storybook": "npm run build:tailwind && start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "wait-for-it": "./scripts/wait-for-it.sh",
-    "generate-runtime-env": "cross-env env-cmd runtime-env-cra --config-name=./public/runtime-env.js --env-file=.env.template",
-	"json-server": "json-server --watch db.json --port=7200 --delay 1000"
+    "generate-runtime-env": "cross-env env-cmd runtime-env-cra --config-name=./public/runtime-env.js --env-file=.env.template"
   },
   "dependencies": {
 	"@fullcalendar/daygrid": "5.11.3",

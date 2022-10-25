@@ -24,7 +24,8 @@ const RadioGroupField = (props: Props) => {
 		meta: { error, touched },
 		className,
 		style,
-		direction = 'horizontal'
+		direction = 'horizontal',
+		size
 	} = props
 
 	const radioOptions = map(options, (option) => {
@@ -36,7 +37,7 @@ const RadioGroupField = (props: Props) => {
 			)
 		}
 		return (
-			<Radio className={cx({ 'w-full': direction === 'vertical' })} key={`${option.value}`} value={option.value}>
+			<Radio className={option.className} key={`${option.value}`} value={option.value}>
 				{option.label}
 				{option.customContent ? option.customContent : null}
 			</Radio>
@@ -50,9 +51,13 @@ const RadioGroupField = (props: Props) => {
 			help={touched && error}
 			validateStatus={error && touched ? 'error' : undefined}
 			style={style}
-			className={cx(className, 'noti-radio', { 'noti-radio-has-error': error && touched })}
+			className={cx(className, 'noti-radio', {
+				'noti-radio-has-error': error && touched,
+				'noti-radio-horizontal': direction === 'horizontal',
+				'noti-radio-vertical': direction === 'vertical'
+			})}
 		>
-			<Radio.Group value={input.value || []} onChange={input.onChange} className={cx({ flex: direction === 'horizontal', block: direction === 'vertical' })}>
+			<Radio.Group size={size} value={input.value || []} onChange={input.onChange}>
 				{radioOptions}
 			</Radio.Group>
 		</Item>

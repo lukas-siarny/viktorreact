@@ -6,6 +6,7 @@
 	background: lime
 	height: 100%
 
+	// header
 	.nc-header
 		background: $backgroundColor-notino-white
 		height: 80px
@@ -17,6 +18,7 @@
 		gap: 8px
 		position: sticky
 		top: 64px
+		z-index: 3
 		.nav-left
 			flex: 1 1 50%
 			display: flex
@@ -46,21 +48,61 @@
 				border: 0
 				.ant-picker-input
 					display: none
+
+	.noti-calendar-main-section
+		height: calc(100vh - 144px)
+		overflow-y: hidden
+		position: sticky
+		top: 144px
+		z-index: 2
+
+	// sider filter
 	.nc-sider-filter
 		background: $backgroundColor-notino-white
 		border-right: 1px solid $borderColor-notino-grayLight
-		position: sticky
-		top: 144px
-		height: auto
+		height: 100%
+		overflow-y: auto
+		overflow-x: hidden
+		transition: none
+		.nc-filter-collapse
+			background: transparent
+			.nc-filter-panel
+				padding-bottom: 16px
+				.ant-collapse-header
+					padding: 4px 8px
+					background: $backgroundColor-notino-grayLighter
+					min-height: 0
+					.ant-collapse-header-text
+						font-size: 14px
+						line-height: 16px
+						font-weight: 600
+						overflow: hidden
+						text-overflow: ellipsis
+						white-space: nowrap
+						min-height: 0
+						max-width: calc(100% - 24px)
+					.ant-collapse-expand-icon
+						svg
+							right: 8px
+							width: 12px
+							height: 12px
+							transform: translateY(-50%)
+							transform-origin: center
+							transition: transform 250ms ease-in-out
+							&.is-active
+								transform: translateY(-50%) rotate(180deg)
+				.ant-collapse-content-box
+					padding: 8px 0 0 8px
+
 	.nc-sider-event-management
 		background: $backgroundColor-notino-white
 		border-left: 1px solid $borderColor-notino-grayLight
-		position: sticky
-		top: 144px
-		height: auto
+		height: 100%
+		overflow-y: auto
 	.nc-content
 		background: $backgroundColor-notino-white
-		height: auto
+		height: 100%
+		overflow-y: auto
 	.nc-button
 		padding: 8px
 		outline: none
@@ -178,13 +220,13 @@
 		font-size: 12px
 
 .fc-scrollgrid-section-sticky
-	top: 64px
 	position: sticky
 	background: white
 	z-index: 20
 
 .fc-timegrid-body
-	background: url("../assets/images/calendar-background.png")
+	// background: url("../assets/images/calendar-background.png")
+	background: $backgroundColor-notino-white
 
 .fc .fc-timegrid-slot-minor
 	border-top-color: transparent

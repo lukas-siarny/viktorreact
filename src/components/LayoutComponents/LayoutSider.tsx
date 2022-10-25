@@ -196,18 +196,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Kalendár'),
 							onClick: () => history.push(getPath(t('paths:calendar'))),
 							icon: <EmployeesIcon />
-						},
-						{
-							key: PAGE.CALENDAR2,
-							label: t('loc:React big calendar'),
-							onClick: () => history.push(getPath(t('paths:calendar2'))),
-							icon: <EmployeesIcon />
-						},
-						{
-							key: PAGE.CALENDAR3,
-							label: t('loc:Mobscroll'),
-							onClick: () => history.push(getPath(t('paths:calendar3'))),
-							icon: <EmployeesIcon />
 						}
 					)
 				}

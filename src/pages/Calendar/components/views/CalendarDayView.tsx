@@ -7,7 +7,7 @@ import { uniqueId } from 'lodash'
 import cx from 'classnames'
 
 // full calendar
-import FullCalendar, { DatesSetArg, FormatterInput } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { FormatterInput } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
 import daygridPlugin from '@fullcalendar/daygrid'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
@@ -15,14 +15,11 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import dayjs from 'dayjs'
 import { CALENDAR_EVENT_TYPE, PERMISSION } from '../../../../utils/enums'
 import { withPermissions } from '../../../../utils/Permissions'
 
 // assets
-import { getCalendarEmployees, getCalendarEvents, getCalendarServices } from '../../../../reducers/calendar/calendarActions'
 import { RootState } from '../../../../reducers'
-import { composeEvents, composeResources } from '../../helpers'
 
 const TIME_FORMAT: FormatterInput = {
 	hour: '2-digit',
@@ -43,8 +40,8 @@ const renderEventContent = (eventInfo: any) => {
 		return (
 			<div
 				className={cx('noti-fc-bg-event', {
-					shift: extendedProps.eventType === CALENDAR_EVENT_TYPE.SHIFT,
-					timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.TIMEOFF
+					shift: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+					timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
 				})}
 			/>
 		)
@@ -86,14 +83,7 @@ const CalendarDayView = () => {
 		end: '2022-10-10T23:59:59'
 	})
 
-	const employees = useSelector((state: RootState) => state.calendar.employees)
-	const services = useSelector((state: RootState) => state.calendar.services)
 	const events = useSelector((state: RootState) => state.calendar.events)
-
-	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
-
-	const composedEvents = composeEvents({ employees, services, events })
-	const composedResources = composeResources(events, employees)
 
 	// const [calendarStore, setCalendarStore] = useState<any>(INITIAL_CALENDAR_STATE)
 	const [eventModalProps, setEventModalProps] = useState<any>({
@@ -130,41 +120,30 @@ const CalendarDayView = () => {
 		console.log({ info })
 	}
 
-	useEffect(() => {
-		dispatch(getCalendarEmployees())
-		dispatch(getCalendarServices())
-	}, [dispatch])
-
-	useEffect(() => {
-		dispatch(getCalendarEvents({ start: range.start, end: range.end }))
-	}, [dispatch, range.start, range.end])
-
 	return (
-		<Spin spinning={loadingData}>
-			<FullCalendar
-				schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
-				plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid, resourceTimelinePlugin]}
-				timeZone='local'
-				slotLabelFormat={TIME_FORMAT}
-				eventTimeFormat={TIME_FORMAT}
-				height='auto'
-				headerToolbar={false}
-				initialView='resourceTimeGridDay}'
-				initialDate={range.start}
-				resourceLabelContent={resourceLabelContent}
-				eventContent={renderEventContent}
-				editable
-				selectable
-				weekends
-				allDaySlot={false}
-				stickyFooterScrollbar
-				events={composedEvents}
-				resources={composedResources}
-				select={handleSelect}
-				dateClick={handleDateClick}
-				eventClick={handleEventClick}
-			/>
-		</Spin>
+		<FullCalendar
+			schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
+			plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid, resourceTimelinePlugin]}
+			timeZone='local'
+			slotLabelFormat={TIME_FORMAT}
+			eventTimeFormat={TIME_FORMAT}
+			height='auto'
+			headerToolbar={false}
+			initialView={'resourceTimeGridDay'}
+			initialDate={range.start}
+			resourceLabelContent={resourceLabelContent}
+			eventContent={renderEventContent}
+			editable
+			selectable
+			weekends
+			allDaySlot={false}
+			stickyFooterScrollbar
+			events={[]}
+			resources={[]}
+			select={handleSelect}
+			dateClick={handleDateClick}
+			eventClick={handleEventClick}
+		/>
 	)
 }
 

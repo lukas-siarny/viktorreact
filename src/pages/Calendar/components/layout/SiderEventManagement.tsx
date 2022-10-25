@@ -9,7 +9,7 @@ import i18next from 'i18next'
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../../utils/enums'
 
 // assets
-import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
 type Props = {
 	view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW | true

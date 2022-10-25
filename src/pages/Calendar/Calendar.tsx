@@ -10,8 +10,10 @@ import dayjs from 'dayjs'
 import { FormatterInput } from '@fullcalendar/react' // must go before plugins
 
 // utils
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION } from '../../utils/enums'
+import { initialize } from 'redux-form'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION, CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
+import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
 // reducers
 import { getCalendarEvents } from '../../reducers/calendar/calendarActions'
@@ -23,10 +25,11 @@ import { getServices } from '../../reducers/services/serviceActions'
 import CalendarLayoutHeader from './components/layout/Header'
 import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
-import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
+import CalendarDayView from './components/views/CalendarDayView'
+import CalendarWeekView from './components/views/CalendarWeekView'
 
 // types
-import { SalonSubPageProps } from '../../types/interfaces'
+import { ICalendarFilter, SalonSubPageProps } from '../../types/interfaces'
 
 const TIME_FORMAT: FormatterInput = {
 	hour: '2-digit',
@@ -46,7 +49,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		serviceID: ArrayParam,
 		employeeID: ArrayParam,
-		eventType: StringParam
+		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
 	})
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
@@ -59,13 +62,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
 
 	useEffect(() => {
-		dispatch(getEmployees({ salonID, page: 1, limit: 1000 }))
+		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
 		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
 	useEffect(() => {
 		dispatch(getCalendarEvents({ salonID, date: query.date }, query.view as CALENDAR_VIEW))
-	}, [dispatch, salonID, query.date, query.view])
+
+		dispatch(
+			initialize(FORM.SALONS_FILTER_DELETED, {
+				eventType: query.eventType
+			})
+		)
+	}, [dispatch, salonID, query.date, query.view, query.eventType])
 
 	const setNewSelectedDate = (newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
@@ -115,6 +124,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setQuery({ ...query, date: dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY) })
 	}
 
+	const handleSubmitFilter = (values: ICalendarFilter) => {
+		setQuery({
+			...query,
+			...values
+		})
+	}
+
 	return (
 		<Layout className='noti-calendar-layout'>
 			<CalendarLayoutHeader
@@ -125,9 +141,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
 				setSiderEventManagementCollapsed={setSiderEventManagementCollapsed}
 			/>
-			<Layout hasSider>
-				<SiderFilter collapsed={siderFilterCollapsed} />
-				<Content className='nc-content'>{'content'}</Content>
+			<Layout hasSider className={'noti-calendar-main-section'}>
+				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} />
+				<Content className='nc-content'>
+					{query.view === CALENDAR_VIEW.DAY && <CalendarDayView />}
+					{query.view === CALENDAR_VIEW.WEEK && <CalendarWeekView />}
+				</Content>
 				<SiderEventManagement view={siderEventManagementCollapsed} setCollapsed={setSiderEventManagementCollapsed} />
 			</Layout>
 		</Layout>

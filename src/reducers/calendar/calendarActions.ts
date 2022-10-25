@@ -49,10 +49,7 @@ export interface ICalendarEventDetailPayload {
 }
 
 const getEventsQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_VIEW): CalendarEventsQueryParams => {
-	// NOTE: employees, services and event type filters are not supported yet
 	let params: any = {
-		// employeeID: queryParams?.employeeIDs,
-		// serviceID: queryParams?.serviceIDs,
 		salonID: queryParams.salonID,
 		eventType: queryParams?.eventType
 	}
@@ -71,14 +68,14 @@ const getEventsQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_
 				mondayBeforeFirstDayOfMonth = firstDayOfMonth.subtract(firstDayOfMonth.day() - 1, 'day')
 			}
 
-			if (firstDayOfMonth.day() !== 0) {
+			if (lastDayOfMonth.day() !== 0) {
 				sundayAfterLastDayOfMonth = lastDayOfMonth.add(7 - lastDayOfMonth.day(), 'day')
 			}
 
 			params = {
 				...params,
-				dateFrom: mondayBeforeFirstDayOfMonth,
-				dateTo: sundayAfterLastDayOfMonth
+				dateFrom: mondayBeforeFirstDayOfMonth.toISOString(),
+				dateTo: sundayAfterLastDayOfMonth.toISOString()
 			}
 			break
 		}
@@ -125,13 +122,13 @@ export const getCalendarEvents =
 	}
 
 export const getCalendarEventDetail =
-	(calendarEventID: string): ThunkResult<Promise<ICalendarEventDetailPayload>> =>
+	(salonID: string, calendarEventID: string): ThunkResult<Promise<ICalendarEventDetailPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICalendarEventDetailPayload
 		try {
 			dispatch({ type: EVENT_DETAIL.EVENT_DETAIL_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { calendarEventID } as any)
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { calendarEventID, salonID })
 
 			payload = {
 				data: data.calendarEvent

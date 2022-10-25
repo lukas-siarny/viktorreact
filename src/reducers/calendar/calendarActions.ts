@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 // types
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
+import { Paths } from '../../types/api'
 
 // enums
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
@@ -13,25 +14,18 @@ import { CALENDAR_VIEW } from '../../utils/enums'
 import { getReq } from '../../utils/request'
 import { normalizeQueryParams, getFirstDayOfWeek, getLastDayOfWeek, getFirstDayOfMonth, getLasttDayOfMonth } from '../../utils/helper'
 
-interface ICalendarEvent {
-	id?: string
-	employeeId?: string
-	serviceID?: string
-	title?: string
-	start?: string
-	end?: string
-	isShift?: boolean
-	isReservation?: boolean
-	isTimeOff?: boolean
-	type?: string
-}
+export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
+export type CalendarEvent = CalendarEvents[0]
+type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
+
+export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
 
 interface ICalendarQueryParams {
 	salonID: string
 	date: string
-	employeeID?: string
-	serviceID?: string
-	type?: string
+	employeeIDs?: string[]
+	serviceIDs?: string[]
+	eventType?: string
 }
 
 export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail
@@ -47,35 +41,26 @@ interface IGetCalendarEventDetail {
 }
 
 export interface ICalendarEventsPayload {
-	data: ICalendarEvent[] | null
+	data: CalendarEvents | null
 }
 
 export interface ICalendarEventDetailPayload {
-	data: ICalendarEvent | null
+	data: CalendarEventDetail | null
 }
 
-const getQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_VIEW) => {
-	// NOTE: employee, service and type filters not supported yet
-	const params = {
-		employeeID: queryParams?.employeeID,
-		serviceID: queryParams?.serviceID,
-		type: queryParams?.type
+const getEventsQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_VIEW): CalendarEventsQueryParams => {
+	// NOTE: employees, services and event type filters are not supported yet
+	let params: any = {
+		// employeeID: queryParams?.employeeIDs,
+		// serviceID: queryParams?.serviceIDs,
+		salonID: queryParams.salonID,
+		eventType: queryParams?.eventType
 	}
 
 	switch (view) {
-		case CALENDAR_VIEW.DAY:
-			return {
-				...params,
-				dateFrom: dayjs(queryParams.date).startOf('day').toISOString(),
-				dateTo: dayjs(queryParams.date).endOf('day').toISOString()
-			}
-		case CALENDAR_VIEW.WEEK:
-			return {
-				...params,
-				dateFrom: getFirstDayOfWeek(queryParams.date).toISOString(),
-				dateTo: getLastDayOfWeek(queryParams.date).toISOString()
-			}
 		case CALENDAR_VIEW.MONTH: {
+			// NOTE: je potrebne najst eventy aj z konca predosleho a zaciatku nasledujuceho mesiaca, aby sa vyplnilo cele mesacne view
+			// stlpce v zobrazeni - Pondelok - Nedela
 			const firstDayOfMonth = getFirstDayOfMonth(queryParams.date)
 			const lastDayOfMonth = getLasttDayOfMonth(queryParams.date)
 			let mondayBeforeFirstDayOfMonth = firstDayOfMonth
@@ -90,15 +75,31 @@ const getQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_VIEW) 
 				sundayAfterLastDayOfMonth = lastDayOfMonth.add(7 - lastDayOfMonth.day(), 'day')
 			}
 
-			return {
+			params = {
 				...params,
 				dateFrom: mondayBeforeFirstDayOfMonth,
 				dateTo: sundayAfterLastDayOfMonth
 			}
+			break
 		}
+		case CALENDAR_VIEW.WEEK:
+			params = {
+				...params,
+				dateFrom: getFirstDayOfWeek(queryParams.date).toISOString(),
+				dateTo: getLastDayOfWeek(queryParams.date).toISOString()
+			}
+			break
+		case CALENDAR_VIEW.DAY:
 		default:
-			return ''
+			params = {
+				...params,
+				dateFrom: dayjs(queryParams.date).startOf('day').toISOString(),
+				dateTo: dayjs(queryParams.date).endOf('day').toISOString()
+			}
+			break
 	}
+
+	return normalizeQueryParams(params) as CalendarEventsQueryParams
 }
 
 export const getCalendarEvents =
@@ -108,10 +109,10 @@ export const getCalendarEvents =
 		try {
 			dispatch({ type: EVENTS.EVENTS_LOAD_START })
 
-			const { data } = await getReq('http://localhost:7200/events' as any, { ...normalizeQueryParams(getQueryParams(queryParams, view)) })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', getEventsQueryParams(queryParams, view))
 
 			payload = {
-				data
+				data: data.calendarEvents
 			}
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, payload })
@@ -124,16 +125,16 @@ export const getCalendarEvents =
 	}
 
 export const getCalendarEventDetail =
-	(eventID: string): ThunkResult<Promise<ICalendarEventDetailPayload>> =>
+	(calendarEventID: string): ThunkResult<Promise<ICalendarEventDetailPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICalendarEventDetailPayload
 		try {
 			dispatch({ type: EVENT_DETAIL.EVENT_DETAIL_LOAD_START })
 
-			const { data } = await getReq('http://localhost:7200/events/{eventID}' as any, { eventID })
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { calendarEventID } as any)
 
 			payload = {
-				data
+				data: data.calendarEvent
 			}
 
 			dispatch({ type: EVENT_DETAIL.EVENT_DETAIL_LOAD_DONE, payload })

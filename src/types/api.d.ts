@@ -286,6 +286,66 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarBulkEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarBulkEventID: Parameters.CalendarBulkEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace DeleteApiB2BAdminSalonsSalonIdRejectedSuggestions {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -999,7 +1059,7 @@ declare namespace Paths {
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
+                        disabledNotificationTypes?: string[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -2020,6 +2080,7 @@ declare namespace Paths {
             export type Page = number;
             export type PendingPublication = boolean;
             export type Search = string | null;
+            export type SourceType = "IMPORT" | "NOTINO" | "PARTNER";
             export type Statuses = ("PUBLISHED" | "NOT_PUBLISHED" | "DELETED" | "NOT_DELETED" | "PENDING_PUBLICATION" | "DECLINED" | "ALL")[];
         }
         export interface QueryParameters {
@@ -2029,6 +2090,7 @@ declare namespace Paths {
             countryCode?: Parameters.CountryCode;
             pendingPublication?: Parameters.PendingPublication;
             createType?: Parameters.CreateType;
+            sourceType?: Parameters.SourceType;
             lastUpdatedAtFrom?: Parameters.LastUpdatedAtFrom /* date-time */;
             lastUpdatedAtTo?: Parameters.LastUpdatedAtTo /* date-time */;
             hasSetOpeningHours?: Parameters.HasSetOpeningHours;
@@ -2063,6 +2125,7 @@ declare namespace Paths {
                     }[];
                     pendingPublication: boolean;
                     createType: "NON_BASIC" | "BASIC";
+                    sourceType: "IMPORT" | "NOTINO" | "PARTNER";
                     fillingProgressSalon: number;
                     lastUpdatedAt?: string; // date-time
                     createdAt: string; // date-time
@@ -2106,12 +2169,20 @@ declare namespace Paths {
                 salons: {
                     id: string; // uuid
                     name?: string;
+                    email?: string; // email
+                    aboutUsFirst?: string;
+                    phones: {
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
                     address?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2148,6 +2219,7 @@ declare namespace Paths {
                     suggestionHash: string;
                     name?: string;
                     email?: string; // email
+                    aboutUsFirst?: string;
                     phones: {
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
@@ -2158,6 +2230,8 @@ declare namespace Paths {
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                 }[];
             }
@@ -2614,6 +2688,137 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2BAdminSalonsSalonIdCalendarEvents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+            export type EventType = "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+            eventType?: Parameters.EventType;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvents: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    data: {
+                        customer?: {
+                            id: string; // uuid
+                            name: string;
+                        };
+                        employee?: {
+                            id: string; // uuid
+                            firstName?: string;
+                            lastName?: string;
+                            email?: string;
+                            color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                            image: string;
+                        };
+                        service?: {
+                            id: string; // uuid
+                            name: string;
+                            icon: string;
+                        };
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvent: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    data: {
+                        customer?: {
+                            id: string; // uuid
+                            name: string;
+                        };
+                        employee?: {
+                            id: string; // uuid
+                            firstName?: string;
+                            lastName?: string;
+                            email?: string;
+                            color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                            image: string;
+                        };
+                        service?: {
+                            id: string; // uuid
+                            name: string;
+                            icon: string;
+                        };
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
     namespace GetApiB2BAdminSalonsSalonIdDashboard {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -2807,6 +3012,8 @@ declare namespace Paths {
                                             id: string; // uuid
                                             firstName: string;
                                             lastName: string;
+                                            email?: string;
+                                            inviteEmail?: string;
                                             image: {
                                                 id: string; // uuid
                                                 original: string;
@@ -3138,7 +3345,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -3676,7 +3883,7 @@ declare namespace Paths {
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
+                        disabledNotificationTypes?: string[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -4430,12 +4637,20 @@ declare namespace Paths {
                 salons: {
                     id: string; // uuid
                     name?: string;
+                    email?: string; // email
+                    aboutUsFirst?: string;
+                    phones: {
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
                     address?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -4472,6 +4687,7 @@ declare namespace Paths {
                     suggestionHash: string;
                     name?: string;
                     email?: string; // email
+                    aboutUsFirst?: string;
                     phones: {
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
@@ -4482,6 +4698,8 @@ declare namespace Paths {
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                 }[];
             }
@@ -6041,6 +6259,8 @@ declare namespace Paths {
                                             id: string; // uuid
                                             firstName: string;
                                             lastName: string;
+                                            email?: string;
+                                            inviteEmail?: string;
                                             image: {
                                                 id: string; // uuid
                                                 original: string;
@@ -6356,7 +6576,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -8193,6 +8413,31 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiMaintenanceHealth {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                status: 200 | 425;
+                details: {
+                    db: 200 | 425;
+                    redis: 200 | 425;
+                };
+            }
+        }
+    }
     namespace PatchApiB2BAdminAuthChangePassword {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -8742,7 +8987,7 @@ declare namespace Paths {
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
+                        disabledNotificationTypes?: string[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -8963,7 +9208,7 @@ declare namespace Paths {
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
+                        disabledNotificationTypes?: string[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -16957,6 +17202,109 @@ declare namespace Paths {
                         streetNumber?: string;
                     };
                 };
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarBulkEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarBulkEventID: Parameters.CalendarBulkEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            repeatEvent: {
+                untilDate: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                days: {
+                    MONDAY: boolean;
+                    TUESDAY: boolean;
+                    WEDNESDAY: boolean;
+                    THURSDAY: boolean;
+                    FRIDAY: boolean;
+                    SATURDAY: boolean;
+                    SUNDAY: boolean;
+                };
+            };
+            note?: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarBulkEvent: {
+                    id: string; // uuid
+                };
+                calendarEvents: {
+                    id: string; // uuid
+                }[];
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            note?: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
             }
         }
     }
@@ -25738,7 +26086,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -26311,7 +26659,7 @@ declare namespace Paths {
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
+                        disabledNotificationTypes?: string[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -26532,7 +26880,7 @@ declare namespace Paths {
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
+                        disabledNotificationTypes?: string[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -30609,7 +30957,7 @@ declare namespace Paths {
                  * example:
                  * 1
                  */
-                streetNumber?: string;
+                streetNumber?: string | null;
                 /**
                  * example:
                  * 49.226666
@@ -40869,106 +41217,106 @@ declare namespace Paths {
              */
             phone?: string | null; // ^\d+$
             disabledNotificationTypes?: [
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?,
-                ("TEST")?
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?,
+                string?
             ];
             /**
              * example:
@@ -41020,7 +41368,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -41212,7 +41560,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -41351,7 +41699,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -41368,6 +41716,42 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BAdminCalendarSyncSyncToken {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * Refresh token of appropriate calendar
+             */
+            refreshToken: string;
+            /**
+             * Enum defining type of calendar
+             * example:
+             * GOOGLE
+             */
+            calendarType: "GOOGLE" | "MICROSOFT" | "APPLE";
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -41882,7 +42266,7 @@ declare namespace Paths {
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
+                        disabledNotificationTypes?: string[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -47489,6 +47873,65 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiB2BAdminSalonsSalonIdCalendarEvents {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            eventType: "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            repeatEvent?: {
+                untilDate: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                days: {
+                    MONDAY: boolean;
+                    TUESDAY: boolean;
+                    WEDNESDAY: boolean;
+                    THURSDAY: boolean;
+                    FRIDAY: boolean;
+                    SATURDAY: boolean;
+                    SUNDAY: boolean;
+                };
+            };
+            note?: string;
+            employeeID: string; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                calendarBulkEvent?: {
+                    id: string; // uuid
+                };
+                calendarEvents: {
+                    id: string; // uuid
+                }[];
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PostApiB2BAdminServicesCategoryServiceSuggest {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -47646,7 +48089,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -47794,7 +48237,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -47918,7 +48361,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -48067,7 +48510,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -48598,7 +49041,7 @@ declare namespace Paths {
                                 }[];
                             };
                         }[];
-                        disabledNotificationTypes?: ("TEST")[];
+                        disabledNotificationTypes?: string[];
                         image?: {
                             id: string; // uuid
                             original: string;
@@ -51293,7 +51736,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -51472,7 +51915,7 @@ declare namespace Paths {
                             }[];
                         };
                     }[];
-                    disabledNotificationTypes?: ("TEST")[];
+                    disabledNotificationTypes?: string[];
                     image?: {
                         id: string; // uuid
                         original: string;
@@ -51495,6 +51938,14 @@ declare namespace Paths {
 }
 
 export interface OperationMethods {
+  /**
+   * postApiB2BAdminAuthLogin - permissions: NO
+   */
+  'postApiB2BAdminAuthLogin'(
+    parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
   /**
    * postApiB2BAdminAuthRefreshToken - permissions: NO
    */
@@ -52192,13 +52643,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   /**
-   * postApiB2BAdminAuthLogin - permissions: NO
+   * getApiMaintenanceHealth - permissions: NO
    */
-  'postApiB2BAdminAuthLogin'(
-    parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+  'getApiMaintenanceHealth'(
+    parameters?: Parameters<Paths.GetApiMaintenanceHealth.HeaderParameters> | null,
+    data?: any,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+  ): OperationResponse<Paths.GetApiMaintenanceHealth.Responses.$200>
   /**
    * getApiB2BAdminUsers - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li></ul>
    */
@@ -52255,6 +52706,62 @@ export interface OperationMethods {
     data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'postApiB2BAdminSalonsSalonIdCalendarEvents'(
+    parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  /**
+   * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+  /**
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
+    parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   /**
    * getApiB2BAdminSalons - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
    */
@@ -52592,6 +53099,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
   /**
+   * postApiB2BAdminCalendarSyncSyncToken - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
+   */
+  'postApiB2BAdminCalendarSyncSyncToken'(
+    parameters?: Parameters<Paths.PostApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
+  /**
    * getApiB2BV1UsersPartners - permissions:<ul><li>user: [NOTINO_ADMIN, LOGIN_AS_PARTNER]</li></ul>
    */
   'getApiB2BV1UsersPartners'(
@@ -52914,6 +53429,16 @@ export interface OperationMethods {
 }
 
 export interface PathsDictionary {
+  ['/api/b2b/admin/auth/login']: {
+    /**
+     * postApiB2BAdminAuthLogin - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+  }
   ['/api/b2b/admin/auth/refresh-token']: {
     /**
      * postApiB2BAdminAuthRefreshToken - permissions: NO
@@ -53738,15 +54263,15 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   }
-  ['/api/b2b/admin/auth/login']: {
+  ['/api/maintenance/health']: {
     /**
-     * postApiB2BAdminAuthLogin - permissions: NO
+     * getApiMaintenanceHealth - permissions: NO
      */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+    'get'(
+      parameters?: Parameters<Paths.GetApiMaintenanceHealth.HeaderParameters> | null,
+      data?: any,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+    ): OperationResponse<Paths.GetApiMaintenanceHealth.Responses.$200>
   }
   ['/api/b2b/admin/users/']: {
     /**
@@ -53815,6 +54340,68 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BAdminFilesSignUrls.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+    /**
+     * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}']: {
+    /**
+     * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
+    /**
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   }
   ['/api/b2b/admin/salons/']: {
     /**
@@ -54213,6 +54800,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminNotinoDashboardSalonDevelopmentTimeStats.Responses.$200>
+  }
+  ['/api/b2b/admin/calendar-sync/sync-token']: {
+    /**
+     * postApiB2BAdminCalendarSyncSyncToken - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminCalendarSyncSyncToken.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminCalendarSyncSyncToken.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminCalendarSyncSyncToken.Responses.$200>
   }
   ['/api/b2b/v1/users/partners']: {
     /**

@@ -334,7 +334,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	)
 
 	const requestApprovalButton = (className = '') => {
-		const disabled = isLoading || isDeletedSalon || (!isFormPristine && !isPendingPublication && !isPublished)
+		const disabled = isLoading || isDeletedSalon || (!isFormPristine && !isPendingPublication && (!isPublished || isBasic))
 
 		// / Workaround for disabled button inside tooltip: https://github.com/react-component/tooltip/issues/18
 		return (
@@ -420,17 +420,17 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			case isDeletedSalon:
 				message = null
 				break
-			case !isFormPristine && !isPendingPublication && !isPublished:
+			case isPendingPublication && !isAdmin:
+				message = t('loc:Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.')
+				break
+			case !isPendingPublication && !isFormPristine && (!isPublished || isBasic):
 				message = t('loc:V sálone boli vykonané zmeny, ktoré nie sú uložené. Pred požiadaním o schválenie je potrebné zmeny najprv uložiť.')
 				break
 			case salon.data?.state === SALON_STATES.NOT_PUBLISHED || salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED:
 				message = t('loc:Ak chcete salón publikovať, je potrebné požiadať o jeho schválenie.')
 				break
-			case !isPublished && !isPendingPublication:
+			case !isPendingPublication && isPublished && isBasic:
 				message = t('loc:V sálone sa nachádzajú nepublikované zmeny, ktoré je pred zverejnením potrebné schváliť administrátorom.')
-				break
-			case isPendingPublication && !isAdmin:
-				message = t('loc:Salón čaká na schválenie zmien. Údaje salónu, po túto dobu nie je možné editovať.')
 				break
 			default:
 				message = null
@@ -441,7 +441,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		}
 
 		return null
-	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, salon.data?.state, isAdmin])
+	}, [isPendingPublication, isFormPristine, isPublished, isDeletedSalon, t, salon.data?.state, isAdmin, isBasic])
 
 	const declinedSalonMessage = useMemo(
 		() =>

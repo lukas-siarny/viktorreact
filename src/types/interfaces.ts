@@ -140,6 +140,25 @@ export interface IServiceForm {
 	employees: any
 }
 
+export interface ICalendarReservationForm {
+	id: number
+	durationFrom: number
+	durationTo: number
+	variableDuration: boolean
+	priceFrom: number
+	priceTo: number
+	variablePrice: boolean
+	useCategoryParameter: boolean
+	serviceCategoryParameter: any
+	employees: any
+}
+
+export interface ICalendarShiftForm {}
+
+export interface ICalendarTimeOffForm {}
+
+export interface ICalendarBreakForm {}
+
 export interface ISupportContactForm {
 	id: string | null
 	note: string

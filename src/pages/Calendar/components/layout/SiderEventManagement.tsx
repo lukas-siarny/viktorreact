@@ -1,66 +1,48 @@
 import React, { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import cx from 'classnames'
 import Sider from 'antd/lib/layout/Sider'
-import { Button } from 'antd'
-import i18next from 'i18next'
 
 // enums
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../../utils/enums'
 
-// assets
-import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+// types
+import { ICalendarBreakForm, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm } from '../../../../types/interfaces'
+
+// components
+import ReservationForm from '../forms/ReservationForm'
+import ShiftForm from '../forms/ShiftForm'
+import TimeOffForm from '../forms/TimeOffForm'
+import BreakForm from '../forms/BreakForm'
 
 type Props = {
 	view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
-}
-
-const getSiderContent = (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW | true) => {
-	let title = ''
-	let content = ''
-
-	switch (view) {
-		case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
-			title = i18next.t('loc:Nová rezervácia')
-			content = 'Rezervácie formulár'
-			break
-		case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
-			title = i18next.t('loc:Nová smena')
-			content = 'Reservation content'
-			break
-		case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:
-			title = i18next.t('loc:Nová absencia')
-			content = 'Reservation content'
-			break
-		case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
-			title = i18next.t('loc:Nová prestávka')
-			content = 'Reservation content'
-			break
-		default:
-			break
-	}
-
-	return { title, content }
+	handleSubmitReservation: (values?: ICalendarReservationForm) => void
+	handleSubmitShift: (values?: ICalendarShiftForm) => void
+	handleSubmitTimeOff: (values?: ICalendarTimeOffForm) => void
+	handleSubmitBreak: (values?: ICalendarBreakForm) => void
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const [t] = useTranslation()
-	const { view, setCollapsed } = props
+	const { view, setCollapsed, handleSubmitReservation, handleSubmitTimeOff, handleSubmitShift, handleSubmitBreak } = props
 
-	const { title, content } = getSiderContent(view)
+	const getSiderContent = () => {
+		switch (view) {
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
+				return <ReservationForm setCollapsed={setCollapsed} onSubmit={handleSubmitReservation} salonID={''} addEmployee={() => console.log('employee')} />
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
+				return <ShiftForm setCollapsed={setCollapsed} onSubmit={handleSubmitShift} />
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:
+				return <TimeOffForm setCollapsed={setCollapsed} onSubmit={handleSubmitTimeOff} />
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
+				return <BreakForm setCollapsed={setCollapsed} onSubmit={handleSubmitBreak} />
+			default:
+				return null
+		}
+	}
 
 	return (
 		<Sider className='nc-sider-event-management' collapsed={view === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED} width={240} collapsedWidth={0}>
-			<div className={'p-4 w-full'}>
-				<div className={'flex w-full justify-between items-start gap-1'}>
-					<h2 className={'text-base m-0'}>{title}</h2>
-					<Button className='p-0 border-none shadow-none' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
-						<CloseIcon style={{ width: 16, height: 16 }} />
-					</Button>
-				</div>
-				{content}
-			</div>
+			<div className={'p-4 w-full'}>{getSiderContent()}</div>
 		</Sider>
 	)
 }

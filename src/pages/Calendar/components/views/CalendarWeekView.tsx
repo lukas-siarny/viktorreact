@@ -213,6 +213,7 @@ const CalendarWeekView: FC<ICalendarWeekView> = (props) => {
 			initialDate={selectedDate}
 			weekends={true}
 			// editable
+			selectable
 			stickyFooterScrollbar={false}
 			events={[]}
 			resources={resources3}

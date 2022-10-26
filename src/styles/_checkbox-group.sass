@@ -9,6 +9,8 @@
 				.ant-checkbox
 					& + span
 						word-break: break-all
+					&::after
+						display: none
 	&.noti-checkbox-group-vertical
 		.ant-checkbox-group
 			display: flex
@@ -36,3 +38,12 @@
 								border-width: 2px
 						& + span
 							font-size: 12px
+	&.noti-checkbox-group-rounded
+		.ant-checkbox-group
+			.ant-checkbox-wrapper
+				.ant-checkbox
+					.ant-checkbox-inner
+						border-radius: 50%
+					&::after
+						border-radius: 50%
+

@@ -1,8 +1,7 @@
 import React, { FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
-import Layout, { Content } from 'antd/lib/layout/layout'
+import Layout from 'antd/lib/layout/layout'
 import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash'
@@ -16,55 +15,87 @@ import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 // reducers
 import { getCalendarEvents } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
-import { getEmployees } from '../../reducers/employees/employeesActions'
-import { getServices } from '../../reducers/services/serviceActions'
+import { getEmployees, IEmployeesPayload } from '../../reducers/employees/employeesActions'
+import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 
 // components
-import CalendarLayoutHeader from './components/layout/Header'
+import CalendarHeader from './components/layout/Header'
 import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
 import CalendarContent from './components/layout/Content'
 
 // types
-import { ICalendarFilter, SalonSubPageProps } from '../../types/interfaces'
+import { ICalendarBreakForm, ICalendarFilter, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm, SalonSubPageProps } from '../../types/interfaces'
+
+const getSericeIDs = (data: IServicesPayload['options']) => {
+	return data?.map((service) => service.value) as string[]
+}
+
+const getEmployeeIDs = (data: IEmployeesPayload['options']) => {
+	return data?.map((employee) => employee.value)
+}
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID } = props
 
-	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
-	const [query, setQuery] = useQueryParams({
-		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
-		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
-		// NOTE: pojdu do query parametrov aj serviceIDs a empployIDs
-		employeeID: ArrayParam,
-		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
-	})
-
-	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
-	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
 	const events = useSelector((state: RootState) => state.calendar.events)
 
+	const [query, setQuery] = useQueryParams({
+		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
+		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
+		employeeIDs: ArrayParam,
+		serviceIDs: ArrayParam,
+		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
+	})
+
+	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
+	// const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
+	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+
 	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
 
+	/* useEffect(() => {
+		// cez jeden useEffect, options uz sice su v reduxe, ale aj tak sa caka na dotiahnute a az potom sa inicializuje form
+		// tym padom je tam trochu delay, kym sa zaskrtnu
+		const fetchData = async () => {
+			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+			const servicesData = await dispatch(getServices({ salonID }))
+
+			dispatch(
+				initialize(FORM.CALENDAR_FILTER, {
+					eventType: CALENDAR_EVENT_TYPE_FILTER.RESERVATION,
+					serviceIDs: getSericeIDs(servicesData.options),
+					employeeIDs: getEmployeeIDs(employeesData.options)
+				})
+			)
+		}
+
+		fetchData()
+	}, [dispatch, salonID]) */
+
+	// cez dva useEffecty - check je hned, avsak form sa inicializuje dva krat
 	useEffect(() => {
 		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
 		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
 	useEffect(() => {
-		dispatch(getCalendarEvents({ salonID, date: query.date }, query.view as CALENDAR_VIEW))
-
 		dispatch(
-			initialize(FORM.SALONS_FILTER_DELETED, {
-				eventType: query.eventType
+			initialize(FORM.CALENDAR_FILTER, {
+				eventType: query.eventType,
+				serviceIDs: getSericeIDs(services?.options),
+				employeeIDs: getEmployeeIDs(employees?.options)
 			})
 		)
-	}, [dispatch, salonID, query.date, query.view, query.eventType])
+	}, [query.eventType, services?.options, employees?.options, dispatch])
+
+	useEffect(() => {
+		dispatch(getCalendarEvents({ salonID, date: query.date }, query.view as CALENDAR_VIEW))
+	}, [dispatch, salonID, query.date, query.view])
 
 	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
@@ -126,25 +157,54 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})
 	}
 
+	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
+		setSiderEventManagementCollapsed(newView)
+		if (newView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED && query.eventType !== newView) {
+			setQuery({
+				...query,
+				eventType:
+					newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+			})
+		}
+	}
+
+	const handleSubmitReservation = (values?: ICalendarReservationForm) => {
+		console.log(values)
+	}
+
+	const handleSubmitShift = (values?: ICalendarShiftForm) => {
+		console.log(values)
+	}
+
+	const handleSubmitTimeOff = (values?: ICalendarTimeOffForm) => {
+		console.log(values)
+	}
+
+	const handleSubmitBreak = (values?: ICalendarBreakForm) => {
+		console.log(values)
+	}
+
 	return (
 		<Layout className='noti-calendar-layout'>
-			<CalendarLayoutHeader
+			<CalendarHeader
 				selectedDate={query.date}
 				calendarView={query.view as CALENDAR_VIEW}
 				setCalendarView={setNewCalendarView}
 				setSelectedDate={setNewSelectedDate}
 				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
-				setSiderEventManagementCollapsed={setSiderEventManagementCollapsed}
+				setSiderEventManagementCollapsed={setEventManagement}
 			/>
 			<Layout hasSider className={'noti-calendar-main-section'}>
 				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} />
-				<Content className={'nc-content'}>
-					{/* NOTE: este sa stym treba vyhrat, pripadne uplne odstranit */}
-					<div className={'nc-content-animate'} key={`${query.date} ${query.view}`}>
-						<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} />
-					</div>
-				</Content>
-				<SiderEventManagement view={siderEventManagementCollapsed} setCollapsed={setSiderEventManagementCollapsed} />
+				<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} loading={loadingData} />
+				<SiderEventManagement
+					view={siderEventManagementCollapsed}
+					setCollapsed={setEventManagement}
+					handleSubmitReservation={handleSubmitReservation}
+					handleSubmitShift={handleSubmitShift}
+					handleSubmitTimeOff={handleSubmitTimeOff}
+					handleSubmitBreak={handleSubmitBreak}
+				/>
 			</Layout>
 		</Layout>
 	)

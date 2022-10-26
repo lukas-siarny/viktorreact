@@ -13,6 +13,7 @@ type ComponentProps = {
 	checkboxGroupStyles?: React.CSSProperties
 	horizontal?: boolean
 	size: 'small' | 'medium' | 'large'
+	rounded?: boolean
 }
 
 type Props = WrappedFieldProps & CheckboxGroupProps & FormItemProps & ComponentProps
@@ -29,7 +30,8 @@ const CheckboxGroupField = (props: Props) => {
 		defaultValue,
 		horizontal,
 		className,
-		size = 'medium'
+		size = 'medium',
+		rounded
 	} = props
 
 	const checkboxes = map(options, (option: any) => {
@@ -53,7 +55,8 @@ const CheckboxGroupField = (props: Props) => {
 			help={touched && error}
 			className={cx(className, `noti-checkbox-group noti-checkbox-group-${size}`, {
 				'noti-checkbox-group-horizontal': horizontal,
-				'noti-checkbox-group-vertical': !horizontal
+				'noti-checkbox-group-vertical': !horizontal,
+				'noti-checkbox-group-rounded': rounded
 			})}
 			validateStatus={error && touched ? 'error' : undefined}
 			style={style}

@@ -60,7 +60,7 @@ type Props = {
 	setSelectedDate: (newDate: string | dayjs.Dayjs, type?: CALENDAR_SET_NEW_DATE) => void
 }
 
-const CalendarLayoutHeader: FC<Props> = (props) => {
+const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 
 	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagementCollapsed, selectedDate, setSelectedDate } = props
@@ -172,7 +172,13 @@ const CalendarLayoutHeader: FC<Props> = (props) => {
 				</button>
 			</div>
 			<div className={'nav-right'}>
-				<Dropdown overlay={addMenu} placement='bottomRight' trigger={['click']} getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}>
+				<Dropdown
+					overlay={addMenu}
+					placement='bottomRight'
+					trigger={['click']}
+					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
+					overlayClassName={'nc-overlay'}
+				>
 					<Button
 						type={'primary'}
 						onClick={(e) => e.preventDefault()}
@@ -189,4 +195,4 @@ const CalendarLayoutHeader: FC<Props> = (props) => {
 	)
 }
 
-export default CalendarLayoutHeader
+export default CalendarHeader

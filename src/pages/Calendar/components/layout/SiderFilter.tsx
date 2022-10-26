@@ -1,10 +1,10 @@
 import React, { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import cx from 'classnames'
 import Sider from 'antd/lib/layout/Sider'
 
 // types
 import { ICalendarFilter } from '../../../../types/interfaces'
+
+// components
 import CalendarFilter from '../forms/CalendarFilter'
 
 type Props = {
@@ -13,7 +13,6 @@ type Props = {
 }
 
 const SiderFilter: FC<Props> = (props) => {
-	const [t] = useTranslation()
 	const { collapsed, handleSubmit } = props
 
 	return (

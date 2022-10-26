@@ -18,6 +18,8 @@ import { CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../../../utils/enums'
 // atoms
 import RadioGroupField from '../../../../atoms/RadioGroupField'
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
+
+// types
 import { ICalendarFilter } from '../../../../types/interfaces'
 
 type ComponentProps = {}
@@ -29,8 +31,6 @@ const { Panel } = Collapse
 const CalendarFilter = (props: Props) => {
 	const { handleSubmit } = props
 	const [t] = useTranslation()
-
-	// const form = useSelector((state: RootState) => state.form?.[FORM.CALENDAR_FILTER])
 
 	const services = useSelector((state: RootState) => state.service.services)
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -51,10 +51,11 @@ const CalendarFilter = (props: Props) => {
 		[t]
 	)
 
+	// TODO: osetrit loading state
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'p-4'}>
 			<Collapse
-				className={'nc-filter-collapse mt-0'}
+				className={'nc-filter-collapse'}
 				bordered={false}
 				defaultActiveKey={[1, 2, 3]}
 				expandIconPosition={'end'}
@@ -72,11 +73,11 @@ const CalendarFilter = (props: Props) => {
 				</Panel>
 				<Panel key={2} header={t('loc:Zamestnanci')} className={'nc-filter-panel'}>
 					{/* TODO: Osetrit empty state */}
-					<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'employeeIDs'} options={employees?.options} size={'small'} />
+					<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'employeeIDs'} options={employees?.options} size={'small'} rounded />
 				</Panel>
 				<Panel key={3} header={t('loc:Služby')} className={'nc-filter-panel'}>
 					{/* TODO: Osetrit empty state */}
-					<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'serviceIDs'} options={services?.options} size={'small'} />
+					<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'serviceIDs'} options={services?.options} size={'small'} rounded />
 				</Panel>
 			</Collapse>
 		</Form>

@@ -1,36 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Modal, Row, Spin } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
-import { compose } from 'redux'
-import { uniqueId } from 'lodash'
 import cx from 'classnames'
 
 // full calendar
-import FullCalendar, { FormatterInput } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
-import daygridPlugin from '@fullcalendar/daygrid'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_EVENT_TYPE, PERMISSION } from '../../../../utils/enums'
-import { withPermissions } from '../../../../utils/Permissions'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
 
 // assets
-import { RootState } from '../../../../reducers'
-
-const TIME_FORMAT: FormatterInput = {
-	hour: '2-digit',
-	minute: '2-digit',
-	separator: '-',
-	hour12: false
-}
-
-const MONTH_VIEW = {
-	DAY_MAX_EVENTS: 3
-}
+import { ICalendarView } from '../../../../types/interfaces'
 
 const renderEventContent = (eventInfo: any) => {
 	const { event, timeText } = eventInfo || {}
@@ -74,22 +56,12 @@ const resourceLabelContent = (labelInfo: any) => {
 	)
 }
 
-const CalendarDayView = () => {
+interface ICalendarDayView extends ICalendarView {}
+
+const CalendarDayView: FC<ICalendarDayView> = (props) => {
+	const { selectedDate } = props
+
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
-
-	const [range, setRange] = useState({
-		start: '2022-10-10T00:00:00',
-		end: '2022-10-10T23:59:59'
-	})
-
-	const events = useSelector((state: RootState) => state.calendar.events)
-
-	// const [calendarStore, setCalendarStore] = useState<any>(INITIAL_CALENDAR_STATE)
-	const [eventModalProps, setEventModalProps] = useState<any>({
-		visible: false,
-		data: {}
-	})
 
 	const handleDateClick = (arg: DateClickArg) => {
 		console.log({ arg })
@@ -97,40 +69,24 @@ const CalendarDayView = () => {
 
 	const handleSelect = (info: any) => {
 		const { start, end, resource = {} } = info
-		setEventModalProps({
-			...eventModalProps,
-			visible: true,
-			data: {
-				id: uniqueId(),
-				resourceId: resource.id,
-				title: '',
-				start,
-				end,
-				allDay: false,
-				description: '',
-				accent: resource.extendedProps?.employeeData?.accent,
-				avatar: resource.extendedProps?.employeeData?.image
-			}
-		})
 	}
 
 	const handleEventClick = (info: any) => {
 		const { start, end, resource } = info
-
-		console.log({ info })
 	}
 
 	return (
 		<FullCalendar
-			schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
-			plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid, resourceTimelinePlugin]}
-			timeZone='local'
-			slotLabelFormat={TIME_FORMAT}
-			eventTimeFormat={TIME_FORMAT}
+			// key={selectedDate}
+			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
+			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
+			slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
+			eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
+			plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
 			height='auto'
 			headerToolbar={false}
 			initialView={'resourceTimeGridDay'}
-			initialDate={range.start}
+			initialDate={selectedDate}
 			resourceLabelContent={resourceLabelContent}
 			eventContent={renderEventContent}
 			editable
@@ -147,4 +103,4 @@ const CalendarDayView = () => {
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(CalendarDayView)
+export default CalendarDayView

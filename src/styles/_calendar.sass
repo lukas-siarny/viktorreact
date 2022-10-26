@@ -1,9 +1,16 @@
 @import tailwind-variables
 @import "variables"
 
+@keyframes content-animation
+	0%
+		transform: translateX(-50px)
+		opacity: 0
+	100%
+		transform: translateX(0)
+		opacity: 1
+
 // calendar layout
 .noti-calendar-layout
-	background: lime
 	height: 100%
 
 	// header
@@ -102,11 +109,24 @@
 			height: 100%
 			overflow-y: auto
 			transition: none
+
 		// main content
 		.nc-content
 			background: $backgroundColor-notino-white
 			height: 100%
 			overflow-y: auto
+			position: relative
+			.nc-content-animate
+				position: absolute
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				width: 100%
+				height: 100%
+				transform: translateX(-50px)
+				opacity: 0
+				animation: content-animation 250ms ease-out forwards
 
 	.nc-button
 		padding: 8px

@@ -5,9 +5,7 @@ import { compose } from 'redux'
 import Layout, { Content } from 'antd/lib/layout/layout'
 import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-
-// full calendar
-import { FormatterInput } from '@fullcalendar/react' // must go before plugins
+import { debounce } from 'lodash'
 
 // utils
 import { initialize } from 'redux-form'
@@ -25,18 +23,10 @@ import { getServices } from '../../reducers/services/serviceActions'
 import CalendarLayoutHeader from './components/layout/Header'
 import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
-import CalendarDayView from './components/views/CalendarDayView'
-import CalendarWeekView from './components/views/CalendarWeekView'
+import CalendarContent from './components/layout/Content'
 
 // types
 import { ICalendarFilter, SalonSubPageProps } from '../../types/interfaces'
-
-const TIME_FORMAT: FormatterInput = {
-	hour: '2-digit',
-	minute: '2-digit',
-	separator: '-',
-	hour12: false
-}
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
 	const { salonID } = props
@@ -47,7 +37,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [query, setQuery] = useQueryParams({
 		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
-		serviceID: ArrayParam,
+		// NOTE: pojdu do query parametrov aj serviceIDs a empployIDs
 		employeeID: ArrayParam,
 		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
 	})
@@ -76,7 +66,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		)
 	}, [dispatch, salonID, query.date, query.view, query.eventType])
 
-	const setNewSelectedDate = (newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
+	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
 
 		switch (type) {
@@ -121,8 +111,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			default:
 				break
 		}
+
 		setQuery({ ...query, date: dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY) })
-	}
+	}, 300)
 
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
@@ -143,9 +134,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			/>
 			<Layout hasSider className={'noti-calendar-main-section'}>
 				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} />
-				<Content className='nc-content'>
-					{query.view === CALENDAR_VIEW.DAY && <CalendarDayView />}
-					{query.view === CALENDAR_VIEW.WEEK && <CalendarWeekView />}
+				<Content className={'nc-content'}>
+					{/* NOTE: este sa stym treba vyhrat, pripadne uplne odstranit */}
+					<div className={'nc-content-animate'} key={`${query.date} ${query.view}`}>
+						<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} />
+					</div>
 				</Content>
 				<SiderEventManagement view={siderEventManagementCollapsed} setCollapsed={setSiderEventManagementCollapsed} />
 			</Layout>

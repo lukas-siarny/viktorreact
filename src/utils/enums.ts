@@ -1,6 +1,7 @@
 import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
+import { FormatterInput } from '@fullcalendar/react'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -614,6 +615,17 @@ export enum CALENDAR_SET_NEW_DATE {
 	FIND_START_SUBSTRACT = 'SUBTRACT',
 	FIND_START = 'FIND_START',
 	DEFAULT = 'DEFAULT'
+}
+
+export const CALENDAR_COMMON_SETTINGS = {
+	LICENSE_KEY: 'CC-Attribution-NonCommercial-NoDerivatives',
+	TIME_ZONE: 'local',
+	TIME_FORMAT: {
+		hour: '2-digit',
+		minute: '2-digit',
+		separator: '-',
+		hour12: false
+	} as FormatterInput
 }
 
 export enum OPENING_HOURS_STATES {

@@ -1,14 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useEffect, useState } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Modal, Row, Spin } from 'antd'
-import { useDispatch, useSelector } from 'react-redux'
-import { compose } from 'redux'
-import { uniqueId } from 'lodash'
 import cx from 'classnames'
 
 // full calendar
-import FullCalendar, { DatesSetArg, FormatterInput } from '@fullcalendar/react' // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
 import daygridPlugin from '@fullcalendar/daygrid'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
@@ -17,11 +13,10 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import dayjs from 'dayjs'
-import { CALENDAR_EVENT_TYPE, PERMISSION } from '../../../../utils/enums'
-import { withPermissions } from '../../../../utils/Permissions'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
 
-// assets
-import { RootState } from '../../../../reducers'
+// types
+import { ICalendarView } from '../../../../types/interfaces'
 
 const resources = [
 	{
@@ -131,38 +126,11 @@ const resources3 = [
 	{ id: 'emp_4_TUE', day: 'TUESDAY', employee: 'Anna k' }
 ]
 
-const TIME_FORMAT: FormatterInput = {
-	hour: '2-digit',
-	minute: '2-digit',
-	separator: '-',
-	hour12: false
-}
-
-const MONTH_VIEW = {
-	DAY_MAX_EVENTS: 3
-}
-
 const renderEventContent = (eventInfo: any) => {
 	const { event, timeText } = eventInfo || {}
 	const { extendedProps } = event || {}
 
 	if (event.display === 'background') {
-		/* const startHour = dayjs(event.start).hour()
-		const startMinutes = dayjs(event.start).minute()
-		const endHour = dayjs(event.end).hour()
-
-		const dividers = []
-
-		// eslint-disable-next-line no-plusplus
-		for (let i = 0; i < endHour - startHour; i++) {
-			let top = i * ROW_HEIGHT + 1
-			if (i === 0 && startMinutes) {
-				const minutesToPx = (startMinutes / 60) * ROW_HEIGHT
-				top += minutesToPx
-			}
-			dividers.push(<div className={'noti-fc-bg-event-divider'} style={{ top }} />)
-		} */
-
 		return (
 			<div
 				className={cx('noti-fc-bg-event', {
@@ -211,23 +179,12 @@ const dayHeaderContentMonth = (labelInfo: any) => {
 	return <div className=''>{dayjs(labelInfo.date).format('ddd D')}</div>
 }
 
-const renderMoreLinkMonth = (info: any) => {
-	return (
-		<div className=''>
-			{MONTH_VIEW.DAY_MAX_EVENTS + info.num} {'Reservations'}
-		</div>
-	)
-}
+interface ICalendarWeekView extends ICalendarView {}
 
-const CalendarWeekView = () => {
+const CalendarWeekView: FC<ICalendarWeekView> = (props) => {
+	const { selectedDate } = props
+
 	const [t] = useTranslation()
-	const dispatch = useDispatch()
-
-	// const [calendarStore, setCalendarStore] = useState<any>(INITIAL_CALENDAR_STATE)
-	const [eventModalProps, setEventModalProps] = useState<any>({
-		visible: false,
-		data: {}
-	})
 
 	const handleDateClick = (arg: DateClickArg) => {
 		console.log({ arg })
@@ -235,46 +192,26 @@ const CalendarWeekView = () => {
 
 	const handleSelect = (info: any) => {
 		const { start, end, resource = {} } = info
-		setEventModalProps({
-			...eventModalProps,
-			visible: true,
-			data: {
-				id: uniqueId(),
-				resourceId: resource.id,
-				title: '',
-				start,
-				end,
-				allDay: false,
-				description: '',
-				accent: resource.extendedProps?.employeeData?.accent,
-				avatar: resource.extendedProps?.employeeData?.image
-			}
-		})
 	}
 
 	const handleEventClick = (info: any) => {
 		const { start, end, resource } = info
-
-		console.log({ info })
-	}
-
-	const handleDateSet = (arg: DatesSetArg) => {
-		console.log({ dateSetArgs: arg })
 	}
 
 	return (
 		<FullCalendar
-			schedulerLicenseKey='CC-Attribution-NonCommercial-NoDerivatives'
-			plugins={[daygridPlugin, interactionPlugin, resourceTimeGridPlugin, scrollGrid, resourceTimelinePlugin]}
-			timeZone='local'
-			slotLabelFormat={TIME_FORMAT}
-			eventTimeFormat={TIME_FORMAT}
+			// key={selectedDate}
+			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
+			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
+			slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
+			eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
+			plugins={[interactionPlugin, scrollGrid, resourceTimelinePlugin]}
 			height='100%'
 			slotMinWidth={40}
 			headerToolbar={false}
 			initialView='resourceTimelineDay'
-			initialDate={dayjs().toISOString()}
-			weekends={false}
+			initialDate={selectedDate}
+			weekends={true}
 			// editable
 			stickyFooterScrollbar={false}
 			events={[]}
@@ -286,9 +223,8 @@ const CalendarWeekView = () => {
 			select={handleSelect}
 			dateClick={handleDateClick}
 			eventClick={handleEventClick}
-			datesSet={handleDateSet}
 		/>
 	)
 }
 
-export default compose(withPermissions([PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]))(CalendarWeekView)
+export default CalendarWeekView

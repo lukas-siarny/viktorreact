@@ -524,3 +524,7 @@ export interface ICalendarFilter {
 	serviceIDs?: string[]
 	eventType?: CALENDAR_EVENT_TYPE_FILTER
 }
+
+export interface ICalendarView {
+	selectedDate: string
+}

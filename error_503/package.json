@@ -1,6 +1,7 @@
 {
   "name": "error_503",
   "version": "0.1.0",
+  "homepage": "503/",
   "private": true,
   "engines": {
     "node": "^16.13.0"

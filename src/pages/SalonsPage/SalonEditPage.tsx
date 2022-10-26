@@ -20,7 +20,7 @@ import SalonHistory from './components/SalonHistory'
 import SalonApprovalModal from './components/modals/SalonApprovalModal'
 
 // enums
-import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS } from '../../utils/enums'
+import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION, SALON_PERMISSION, SALON_STATES, STRINGS, TAB_KEYS, SALON_CREATE_TYPE } from '../../utils/enums'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -81,12 +81,18 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const deletePermissions = [...permissions, SALON_PERMISSION.PARTNER_ADMIN, SALON_PERMISSION.SALON_DELETE]
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 	const hiddenSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED && salon.data?.publicationDeclineReason
+	const isBasic = salon.data?.createType === SALON_CREATE_TYPE.BASIC
 
 	const [query, setQuery] = useQueryParams({
 		history: BooleanParam
 	})
 
 	const dontUpdateFormData = useRef(false)
+
+	// load salon data
+	useEffect(() => {
+		dispatch(selectSalon(salonID))
+	}, [dispatch])
 
 	// change tab based on query
 	useEffect(() => {
@@ -378,7 +384,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 								</Row>
 							)
 						// published and not pending
-						case isPublished && !isPendingPublication:
+						case isPublished && !isPendingPublication && !isBasic:
 							return (
 								<Row className={'w-full gap-2 md:items-center flex-col md:flex-row md:justify-between md:flex-nowrap'}>
 									<Row className={'gap-2 flex-row-reverse justify-end w-full'}>

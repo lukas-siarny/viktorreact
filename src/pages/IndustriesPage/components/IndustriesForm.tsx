@@ -52,7 +52,7 @@ const IndustriesForm: FC<Props> = (props) => {
 			id: category.id,
 			value: category.id,
 			label: category.name,
-			image: category.image?.original,
+			image: category.image?.resizedImages?.small,
 			disabled: disabledForm,
 			extraAction: {
 				action: () => onShowMore(category.id),

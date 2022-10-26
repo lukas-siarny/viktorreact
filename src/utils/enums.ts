@@ -563,6 +563,33 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 	}
 })
 
+export enum OPENING_HOURS_STATES {
+	CUSTOM_ORDER = 'CUSTOM_ORDER'
+}
+
+export enum SALONS_TIME_STATS_TYPE {
+	BASIC = 'BASIC',
+	PENDING = 'PENDING',
+	PREMIUM = 'PREMIUM'
+}
+
+export enum TIME_STATS_SOURCE_TYPE {
+	MONTH = 'MONTH',
+	YEAR = 'YEAR'
+}
+
+// CALENDAR ENUMS
+export const CALENDAR_COMMON_SETTINGS = {
+	LICENSE_KEY: 'CC-Attribution-NonCommercial-NoDerivatives',
+	TIME_ZONE: 'local',
+	TIME_FORMAT: {
+		hour: '2-digit',
+		minute: '2-digit',
+		separator: '-',
+		hour12: false
+	} as FormatterInput
+}
+
 export enum CALENDAR_VIEW {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
 	DAY = 'DAY',
@@ -615,30 +642,4 @@ export enum CALENDAR_SET_NEW_DATE {
 	FIND_START_SUBSTRACT = 'SUBTRACT',
 	FIND_START = 'FIND_START',
 	DEFAULT = 'DEFAULT'
-}
-
-export const CALENDAR_COMMON_SETTINGS = {
-	LICENSE_KEY: 'CC-Attribution-NonCommercial-NoDerivatives',
-	TIME_ZONE: 'local',
-	TIME_FORMAT: {
-		hour: '2-digit',
-		minute: '2-digit',
-		separator: '-',
-		hour12: false
-	} as FormatterInput
-}
-
-export enum OPENING_HOURS_STATES {
-	CUSTOM_ORDER = 'CUSTOM_ORDER'
-}
-
-export enum SALONS_TIME_STATS_TYPE {
-	BASIC = 'BASIC',
-	PENDING = 'PENDING',
-	PREMIUM = 'PREMIUM'
-}
-
-export enum TIME_STATS_SOURCE_TYPE {
-	MONTH = 'MONTH',
-	YEAR = 'YEAR'
 }

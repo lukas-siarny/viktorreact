@@ -115,6 +115,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		setQuery({ ...query, date: dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY) })
 	}, 300)
 
+	const setNewCalendarView = debounce((newCalendarView: CALENDAR_VIEW) => {
+		setQuery({ ...query, view: newCalendarView })
+	}, 300)
+
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
@@ -127,7 +131,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			<CalendarLayoutHeader
 				selectedDate={query.date}
 				calendarView={query.view as CALENDAR_VIEW}
-				setCalendarView={(newCalendarView) => setQuery({ ...query, view: newCalendarView })}
+				setCalendarView={setNewCalendarView}
 				setSelectedDate={setNewSelectedDate}
 				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
 				setSiderEventManagementCollapsed={setSiderEventManagementCollapsed}

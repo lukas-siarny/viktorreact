@@ -163,7 +163,7 @@ export const createSameOpeningHours = (openingHours: OpeningHours, sameOpenHours
 				}
 			})
 		}
-		return result?.filter((openingHour) => (openingHour?.timeRanges?.length || []) > 0) as RawOpeningHours
+		return result?.filter((openingHour) => (openingHour?.timeRanges?.length || []) > 0 || openingHour.state === OPENING_HOURS_STATES.CUSTOM_ORDER) as RawOpeningHours
 	}
 	return openingHours
 		?.map((openingHour) => ({

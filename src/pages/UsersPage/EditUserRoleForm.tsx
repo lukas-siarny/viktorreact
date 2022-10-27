@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 // atoms
-import SalonRolesField from '../../atoms/SalonRolesField'
+import SelectField from '../../atoms/SelectField'
 
 // interfaces
-import { IEditUserRoleForm, IInviteEmployeeForm, ISelectOptionItem } from '../../types/interfaces'
+import { IEditUserRoleForm } from '../../types/interfaces'
 
 // utils
 import { FORM, PERMISSION } from '../../utils/enums'
@@ -22,7 +22,6 @@ import { ReactComponent as KeyIcon } from '../../assets/icons/key.svg'
 
 // reducers
 import { RootState } from '../../reducers'
-import SelectField from '../../atoms/SelectField'
 
 type ComponentProps = {}
 

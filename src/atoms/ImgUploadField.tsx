@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
-import { WrappedFieldProps, change } from 'redux-form'
-import { isEmpty, isEqual, get, map } from 'lodash'
+import { WrappedFieldProps, change, autofill } from 'redux-form'
+import { isEmpty, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Form, Upload, UploadProps, Image, Popconfirm, Button, Checkbox } from 'antd'
@@ -60,7 +60,7 @@ const isFilePDF = (fileUrl?: string): string | undefined => {
 /**
  * Umoznuje nahrat obrazky na podpisanu url
  */
-const ImgUploadField: FC<Props> = (props) => {
+const ImgUploadField: FC<Props> = (props: Props) => {
 	const {
 		label,
 		input,
@@ -111,8 +111,8 @@ const ImgUploadField: FC<Props> = (props) => {
 			values.pop()
 			input.onChange(values)
 
-			// uploading process finished
-			dispatch(change(form, IMAGE_UPLOADING_PROP, false))
+			// uploading process finished -> remove IMAGE_UPLOADING_PROP from bodyForm
+			dispatch(autofill(form, IMAGE_UPLOADING_PROP, undefined))
 		}
 		if (info.file.status === 'done' || info.file.status === 'removed') {
 			const values = getImagesFormValues(info.fileList, imagesUrls.current)
@@ -124,8 +124,8 @@ const ImgUploadField: FC<Props> = (props) => {
 			setImages(splitted[0])
 			input.onChange(sorted)
 
-			// uploading process finished
-			dispatch(change(form, IMAGE_UPLOADING_PROP, false))
+			// uploading process finished -> remove IMAGE_UPLOADING_PROP from bodyForm
+			dispatch(autofill(form, IMAGE_UPLOADING_PROP, undefined))
 		}
 		if (info.file.status === 'uploading') {
 			input.onChange(info.fileList)
@@ -144,7 +144,7 @@ const ImgUploadField: FC<Props> = (props) => {
 	)
 
 	const selectImage = (checkedValue: CheckboxChangeEvent) => {
-		const updatedImages = images.map((image) => {
+		const updatedImages = images.map((image: any) => {
 			if (checkedValue.target.value === image?.uid && !image?.isCover) {
 				return { ...image, isCover: true }
 			}

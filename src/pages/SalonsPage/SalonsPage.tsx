@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Modal, Progress, Row, Spin } from 'antd'
+import { Col, Modal, Progress, Row, Spin, Image, Tooltip } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, reset } from 'redux-form'
 
@@ -20,7 +20,7 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPE, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../utils/enums'
 import {
 	formatDateByLocale,
 	getLinkWithEncodedBackUrl,
@@ -65,6 +65,12 @@ const SalonsPage = () => {
 	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
+	const { data } = useSelector((state: RootState) => state.categories.categories)
+	// transform root categories (industries) into object, where ID is key of record, and content is { image, name }
+	const industries: { [key: string]: any } = useMemo(
+		() => data?.reduce((result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }), {}) || {},
+		[data]
+	)
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -307,13 +313,27 @@ const SalonsPage = () => {
 				...props
 			}),
 			categories: (props) => ({
-				title: t('loc:Odvetvie'),
+				title: t('loc:Odvetvia'),
 				dataIndex: 'categories',
 				key: 'categories',
-				ellipsis: true,
 				sorter: false,
 				width: '10%',
-				render: (value) => (value?.length > 0 ? value[0].name : '-'),
+				render: (value: any[]) => {
+					if (value?.length > 0) {
+						const industriesContent: any[] = value.map((category: any) => {
+							const industry = industries[category.id]
+							return (
+								<Tooltip title={industry.name}>
+									<Image src={industry.image} loading='lazy' width={32} height={32} className='pr-0-5 pb-0-5 rounded' alt={industry.name} preview={false} />
+								</Tooltip>
+							)
+						})
+
+						return <div className='flex flex-wrap'>{industriesContent}</div>
+					}
+
+					return '-'
+				},
 				...props
 			}),
 			createType: (props) => ({
@@ -361,7 +381,7 @@ const SalonsPage = () => {
 				key: 'isPublished',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
+				width: '8%',
 				render: (_value, record) => getSalonTagPublished(record.state),
 				...props
 			}),
@@ -370,7 +390,7 @@ const SalonsPage = () => {
 				key: 'changes',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
+				width: '8%',
 				render: (_value, record) => getSalonTagChanges(record.state),
 				...props
 			}),
@@ -390,7 +410,7 @@ const SalonsPage = () => {
 				...props
 			})
 		}),
-		[query.order, t]
+		[query.order, t, industries]
 	)
 
 	const getTabContent = (selectedTabKey: TAB_KEYS) => {

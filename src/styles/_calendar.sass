@@ -9,6 +9,12 @@
 		transform: translateX(0)
 		opacity: 1
 
+@keyframes calendar-select-panel-animation
+	0%
+		transform: translateX(100%)
+	100%
+		transform: translateX(0)
+
 // calendar layout
 .noti-calendar-layout
 	height: 100%
@@ -115,7 +121,7 @@
 		.nc-sider-event-management
 			background: $backgroundColor-notino-white
 			height: 100%
-			overflow-y: auto
+			overflow: hidden
 			transition: none
 			position: relative
 			&::after
@@ -127,6 +133,41 @@
 				top: 0
 				bottom: 0
 				background: $backgroundColor-notino-grayLight
+			.nc-sider-event-management-header
+				display: flex
+				align-items: center
+				gap: 8px
+				height: 50px
+				padding: 16px
+				h2
+					margin: 0
+					font-size: 16px
+					line-height: 18px
+					white-space: nowrap
+					overflow: hidden
+					text-overflow: ellipsis
+				.button-transparent
+					box-shadow: none
+					padding: 0
+					border: 0
+					height: 16px
+					svg
+						width: 16px
+						height: 16px
+			.nc-sider-event-management-content
+				height: calc(100% - 50px) // 100% - .nc-sider-event-management-header
+				overflow-y: auto
+				overflow-x: hidden
+				padding: 0 16px 16px 16px
+			.nc-select-options-panel
+				position: absolute
+				top: 0
+				bottom: 0
+				right: 0
+				left: 0
+				background: $backgroundColor-notino-white
+				transform: translateY(100%)
+				animation: calendar-select-panel-animation 250ms ease-out forwards
 
 		// main content
 		.nc-content
@@ -165,11 +206,12 @@
 				border: none
 				-webkit-box-shadow: none
 				box-shadow: none
-				background: #dadce0
+				background: $backgroundColor-notino-grayLight
 				-webkit-border-radius: 8px
 				border-radius: 8px
 				min-height: 40px
 
+	// other
 	.nc-button
 		padding: 8px
 		outline: none

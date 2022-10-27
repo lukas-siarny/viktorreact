@@ -42,7 +42,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 
 	return (
 		<Sider className='nc-sider-event-management' collapsed={view === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED} width={240} collapsedWidth={0}>
-			<div className={'p-4 w-full'}>{getSiderContent()}</div>
+			{getSiderContent()}
 		</Sider>
 	)
 }

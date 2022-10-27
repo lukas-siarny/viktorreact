@@ -39,6 +39,8 @@ import { ReactComponent as QuestionIcon } from '../../../../assets/icons/questio
 import { ReactComponent as CloudOfflineIcon } from '../../../../assets/icons/cloud-offline.svg'
 import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees.svg'
 import { ReactComponent as SettingIcon } from '../../../../assets/icons/setting.svg'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
+import CalendarSelectField from '../CalendarSelectField'
 
 const { Panel } = Collapse
 
@@ -346,7 +348,7 @@ export const renderEmployees = (props: any) => {
 }
 
 const ReservationForm: FC<Props> = (props) => {
-	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl } = props
+	const { salonID, serviceID, handleSubmit, pristine, addEmployee, backUrl, setCollapsed } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -389,7 +391,29 @@ const ReservationForm: FC<Props> = (props) => {
 
 	return (
 		<Form layout='vertical' className='w-full' onSubmitCapture={handleSubmit}>
-			<Space className={'w-full'} direction='vertical' size={36}>
+			<div className={'nc-sider-event-management-header justify-between'}>
+				<h2>{t('loc:Nová smena')}</h2>
+				<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
+					<CloseIcon />
+				</Button>
+			</div>
+			<div className={'nc-sider-event-management-content flex flex-col gap-4'}>
+				<Field
+					name={'client'}
+					component={CalendarSelectField}
+					labelSelect={{
+						label: t('loc:Vybrať klienta')
+					}}
+				/>
+				<Field
+					name={'service'}
+					component={CalendarSelectField}
+					labelSelect={{
+						label: t('loc:Vybrať službu')
+					}}
+				/>
+			</div>
+			{/* <Space className={'w-full'} direction='vertical' size={36}>
 				<div>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
 						<SettingIcon className={'text-notino-black mr-2'} />
@@ -544,7 +568,7 @@ const ReservationForm: FC<Props> = (props) => {
 						</Row>
 					</div>
 				</div>
-			</Space>
+			</Space> */}
 		</Form>
 	)
 }

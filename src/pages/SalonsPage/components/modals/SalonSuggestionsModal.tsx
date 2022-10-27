@@ -79,12 +79,7 @@ const SalonSuggestionsModal = (props: Props) => {
 					<p className={'description'}>{t('loc:Na základe vašich kontantkých informácií sme v našej datábaze našli sálony, ktoré by mohli patriť vám')}</p>
 					<div className={'cards-wrapper'}>
 						{salonSuggestions.data?.salons.map((salon) => {
-							const {
-								address: { street, streetNumber, zipCode, city, countryCode },
-								email,
-								phones
-							} = salon
-							const country = countryCode
+							const { address, email, phones } = salon
 							return (
 								<div className={'card'} key={salon.id}>
 									<div className={'card-content'}>
@@ -108,15 +103,15 @@ const SalonSuggestionsModal = (props: Props) => {
 
 											{!isEmpty(salon.address) && (
 												<li className={'address-list-item'}>
-													{street && (
+													{address?.street && (
 														<>
-															{street} {streetNumber}
+															{address.street} {address.streetNumber}
 															<br />
 														</>
 													)}
-													{zipCode} {city}
+													{address?.zipCode} {address?.city}
 													<br />
-													{country}
+													{address?.countryCode}
 												</li>
 											)}
 										</ul>

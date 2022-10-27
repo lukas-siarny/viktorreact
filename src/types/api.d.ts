@@ -2006,6 +2006,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
+            export type AssignedUserID = string; // uuid
             export type CategoryFirstLevelIDs = string /* uuid */[];
             export type CountryCode = string;
             export type CreateType = "NON_BASIC" | "BASIC";
@@ -2019,7 +2020,9 @@ declare namespace Paths {
             export type Order = string;
             export type Page = number;
             export type PendingPublication = boolean;
+            export type PremiumSourceUserType = "NOTINO" | "PARTNER";
             export type Search = string | null;
+            export type SourceType = "IMPORT" | "NOTINO" | "PARTNER";
             export type Statuses = ("PUBLISHED" | "NOT_PUBLISHED" | "DELETED" | "NOT_DELETED" | "PENDING_PUBLICATION" | "DECLINED" | "ALL")[];
         }
         export interface QueryParameters {
@@ -2029,9 +2032,12 @@ declare namespace Paths {
             countryCode?: Parameters.CountryCode;
             pendingPublication?: Parameters.PendingPublication;
             createType?: Parameters.CreateType;
+            sourceType?: Parameters.SourceType;
             lastUpdatedAtFrom?: Parameters.LastUpdatedAtFrom /* date-time */;
             lastUpdatedAtTo?: Parameters.LastUpdatedAtTo /* date-time */;
             hasSetOpeningHours?: Parameters.HasSetOpeningHours;
+            assignedUserID?: Parameters.AssignedUserID /* uuid */;
+            premiumSourceUserType?: Parameters.PremiumSourceUserType;
             order?: /* Order attributes: name, fillingProgress, createdAt */ Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -2063,8 +2069,16 @@ declare namespace Paths {
                     }[];
                     pendingPublication: boolean;
                     createType: "NON_BASIC" | "BASIC";
+                    sourceType: "IMPORT" | "NOTINO" | "PARTNER";
                     fillingProgressSalon: number;
                     lastUpdatedAt?: string; // date-time
+                    assignedUser?: {
+                        id: string; // uuid
+                        email?: string;
+                        firstName?: string;
+                        lastName?: string;
+                    };
+                    premiumSourceUserType?: "NOTINO" | "PARTNER";
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -2106,12 +2120,20 @@ declare namespace Paths {
                 salons: {
                     id: string; // uuid
                     name?: string;
+                    email?: string; // email
+                    aboutUsFirst?: string;
+                    phones: {
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
                     address?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2148,16 +2170,19 @@ declare namespace Paths {
                     suggestionHash: string;
                     name?: string;
                     email?: string; // email
+                    aboutUsFirst?: string;
                     phones: {
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
                     }[];
-                    address: {
+                    address?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                 }[];
             }
@@ -2556,6 +2581,12 @@ declare namespace Paths {
                         }[];
                         locationNote?: string;
                     };
+                    assignedUser?: {
+                        id: string; // uuid
+                        email?: string;
+                        firstName?: string;
+                        lastName?: string;
+                    };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -2807,6 +2838,8 @@ declare namespace Paths {
                                             id: string; // uuid
                                             firstName: string;
                                             lastName: string;
+                                            email?: string;
+                                            inviteEmail?: string;
                                             image: {
                                                 id: string; // uuid
                                                 original: string;
@@ -3062,6 +3095,49 @@ declare namespace Paths {
                         id: string; // uuid
                         name?: string;
                     }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2BAdminUsersNotinoUsers {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Limit = 25 | 50 | 100;
+            export type Page = number;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                users: {
+                    id: string; // uuid
+                    email?: string;
+                    firstName?: string;
+                    lastName?: string;
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -4430,12 +4506,20 @@ declare namespace Paths {
                 salons: {
                     id: string; // uuid
                     name?: string;
+                    email?: string; // email
+                    aboutUsFirst?: string;
+                    phones: {
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
                     address?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -4472,16 +4556,19 @@ declare namespace Paths {
                     suggestionHash: string;
                     name?: string;
                     email?: string; // email
+                    aboutUsFirst?: string;
                     phones: {
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
                     }[];
-                    address: {
+                    address?: {
                         countryCode?: string;
                         zipCode?: string;
                         city?: string;
                         street?: string;
                         streetNumber?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
                     };
                 }[];
             }
@@ -6041,6 +6128,8 @@ declare namespace Paths {
                                             id: string; // uuid
                                             firstName: string;
                                             lastName: string;
+                                            email?: string;
+                                            inviteEmail?: string;
                                             image: {
                                                 id: string; // uuid
                                                 original: string;
@@ -8189,6 +8278,31 @@ declare namespace Paths {
                 rating?: {
                     rate: 1 | 2 | 3 | 4 | 5; // float
                     userName: string;
+                };
+            }
+        }
+    }
+    namespace GetApiMaintenanceHealth {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                status: 200 | 425;
+                details: {
+                    db: 200 | 425;
+                    redis: 200 | 425;
                 };
             }
         }
@@ -16909,6 +17023,41 @@ declare namespace Paths {
                 salon: {
                     id: string; // uuid
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2BAdminSalonsSalonIdAssignedUser {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            assignedUserID: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -25762,6 +25911,49 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2BAdminUsersUserIdRole {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            export type UserID = string; // uuid
+        }
+        export interface PathParameters {
+            userID: /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            Parameters.UserID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+             */
+            roleID: string; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2BV1AuthChangePassword {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -30609,7 +30801,7 @@ declare namespace Paths {
                  * example:
                  * 1
                  */
-                streetNumber?: string;
+                streetNumber?: string | null;
                 /**
                  * example:
                  * 49.226666
@@ -51496,6 +51688,14 @@ declare namespace Paths {
 
 export interface OperationMethods {
   /**
+   * postApiB2BAdminAuthLogin - permissions: NO
+   */
+  'postApiB2BAdminAuthLogin'(
+    parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
+    data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+  /**
    * postApiB2BAdminAuthRefreshToken - permissions: NO
    */
   'postApiB2BAdminAuthRefreshToken'(
@@ -52192,13 +52392,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   /**
-   * postApiB2BAdminAuthLogin - permissions: NO
+   * getApiMaintenanceHealth - permissions: NO
    */
-  'postApiB2BAdminAuthLogin'(
-    parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
-    data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+  'getApiMaintenanceHealth'(
+    parameters?: Parameters<Paths.GetApiMaintenanceHealth.HeaderParameters> | null,
+    data?: any,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+  ): OperationResponse<Paths.GetApiMaintenanceHealth.Responses.$200>
   /**
    * getApiB2BAdminUsers - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li></ul>
    */
@@ -52216,6 +52416,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
   /**
+   * getApiB2BAdminUsersNotinoUsers - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li></ul>
+   */
+  'getApiB2BAdminUsersNotinoUsers'(
+    parameters?: Parameters<Paths.GetApiB2BAdminUsersNotinoUsers.QueryParameters & Paths.GetApiB2BAdminUsersNotinoUsers.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200>
+  /**
    * getApiB2BAdminUsersUserIdPendingEmployeeInvites - permissions:<ul><li>user</li></ul>
    */
   'getApiB2BAdminUsersUserIdPendingEmployeeInvites'(
@@ -52223,6 +52431,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200>
+  /**
+   * patchApiB2BAdminUsersUserIdRole - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'patchApiB2BAdminUsersUserIdRole'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdRole.PathParameters & Paths.PatchApiB2BAdminUsersUserIdRole.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminUsersUserIdRole.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdRole.Responses.$200>
   /**
    * patchApiB2BAdminEnumsCategoriesCategoryIdReorder - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, ENUM_EDIT]</li></ul>
    */
@@ -52415,6 +52631,14 @@ export interface OperationMethods {
     data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
+  /**
+   * patchApiB2BAdminSalonsSalonIdAssignedUser - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+   */
+  'patchApiB2BAdminSalonsSalonIdAssignedUser'(
+    parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.HeaderParameters> | null,
+    data?: Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.Responses.$200>
   /**
    * deleteApiB2BAdminSalonsSalonIdRejectedSuggestions - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
    */
@@ -52914,6 +53138,16 @@ export interface OperationMethods {
 }
 
 export interface PathsDictionary {
+  ['/api/b2b/admin/auth/login']: {
+    /**
+     * postApiB2BAdminAuthLogin - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
+      data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+  }
   ['/api/b2b/admin/auth/refresh-token']: {
     /**
      * postApiB2BAdminAuthRefreshToken - permissions: NO
@@ -53738,15 +53972,15 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   }
-  ['/api/b2b/admin/auth/login']: {
+  ['/api/maintenance/health']: {
     /**
-     * postApiB2BAdminAuthLogin - permissions: NO
+     * getApiMaintenanceHealth - permissions: NO
      */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BAdminAuthLogin.HeaderParameters> | null,
-      data?: Paths.PostApiB2BAdminAuthLogin.RequestBody,
+    'get'(
+      parameters?: Parameters<Paths.GetApiMaintenanceHealth.HeaderParameters> | null,
+      data?: any,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BAdminAuthLogin.Responses.$200>
+    ): OperationResponse<Paths.GetApiMaintenanceHealth.Responses.$200>
   }
   ['/api/b2b/admin/users/']: {
     /**
@@ -53766,6 +54000,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BAdminUsers.Responses.$200>
   }
+  ['/api/b2b/admin/users/notino-users']: {
+    /**
+     * getApiB2BAdminUsersNotinoUsers - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, USER_BROWSING]</li></ul>
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2BAdminUsersNotinoUsers.QueryParameters & Paths.GetApiB2BAdminUsersNotinoUsers.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200>
+  }
   ['/api/b2b/admin/users/{userID}/pending-employee-invites']: {
     /**
      * getApiB2BAdminUsersUserIdPendingEmployeeInvites - permissions:<ul><li>user</li></ul>
@@ -53775,6 +54019,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200>
+  }
+  ['/api/b2b/admin/users/{userID}/role']: {
+    /**
+     * patchApiB2BAdminUsersUserIdRole - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminUsersUserIdRole.PathParameters & Paths.PatchApiB2BAdminUsersUserIdRole.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminUsersUserIdRole.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminUsersUserIdRole.Responses.$200>
   }
   ['/api/b2b/admin/enums/categories/{categoryID}/reorder']: {
     /**
@@ -54009,6 +54263,16 @@ export interface PathsDictionary {
       data?: Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdBasicSuggestion.Responses.$200>
+  }
+  ['/api/b2b/admin/salons/{salonID}/assigned-user']: {
+    /**
+     * patchApiB2BAdminSalonsSalonIdAssignedUser - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN]</li></ul>
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.HeaderParameters> | null,
+      data?: Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdAssignedUser.Responses.$200>
   }
   ['/api/b2b/admin/salons/{salonID}/rejected-suggestions']: {
     /**

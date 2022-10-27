@@ -54,6 +54,10 @@ export interface ICreateUserForm {
 	roleID: string
 }
 
+export interface IEditUserRoleForm {
+	roleID: string
+}
+
 export interface IUserAccountForm {
 	firstName: string
 	lastName: string

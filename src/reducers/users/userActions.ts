@@ -237,7 +237,7 @@ export const getNotinoUsers =
 
 			const usersOptions: any[] = map(data?.users, (user) => ({
 				key: user?.id,
-				label: user?.firstName || user?.lastName ? `${user?.firstName} ${user?.lastName}` : user?.email,
+				label: user?.firstName && user?.lastName ? `${user?.firstName} ${user?.lastName}` : user?.email,
 				value: user?.id
 			}))
 

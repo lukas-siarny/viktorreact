@@ -99,6 +99,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	// load salon data
 	useEffect(() => {
 		dispatch(selectSalon(salonID))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch])
 
 	// change tab based on query
@@ -582,7 +583,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 			console.error(e)
 		}
 	}
-	console.log('salon', salon)
+
 	const salonForm = (
 		<>
 			<div className='content-body'>

@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 import { WrappedFieldProps, change } from 'redux-form'
-import { isEmpty, isEqual, get, map } from 'lodash'
+import { isEmpty, get, map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch } from 'react-redux'
 import { Form, Upload, UploadProps, Image, Popconfirm, Button, Checkbox } from 'antd'

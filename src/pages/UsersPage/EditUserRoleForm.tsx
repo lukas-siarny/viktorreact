@@ -11,7 +11,7 @@ import SelectField from '../../atoms/SelectField'
 import { IEditUserRoleForm } from '../../types/interfaces'
 
 // utils
-import { FORM, PERMISSION } from '../../utils/enums'
+import { FORM, PERMISSION, STRINGS } from '../../utils/enums'
 import Permissions from '../../utils/Permissions'
 
 // validate
@@ -72,7 +72,7 @@ const EditUserRoleForm: FC<Props> = (props) => {
 										}
 									}}
 								>
-									{t('loc:Upraviť rolu')}
+									{STRINGS(t).edit(t('loc:rolu'))}
 								</Button>
 							</>
 						)}

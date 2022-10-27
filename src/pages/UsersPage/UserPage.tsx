@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row, Spin } from 'antd'
-import { initialize, isPristine, submit } from 'redux-form'
+import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
 
@@ -45,8 +45,8 @@ const UserPage: FC<Props> = (props) => {
 	const { computedMatch } = props
 	const userID = computedMatch.params.userID || get(authUser, 'data.id')
 	const dispatch = useDispatch()
-	const [submitting, setSubmitting] = useState<boolean>(false)
-	const [submittingRole, setSubmittingRole] = useState<boolean>(false)
+	const submittingAccountForm = useSelector(isSubmitting(FORM.USER_ACCOUNT))
+	const submittingEditRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
 	const isMyAccountPath = computedMatch.path === t('paths:my-account')
@@ -89,7 +89,6 @@ const UserPage: FC<Props> = (props) => {
 
 	const handleUserAccountFormSubmit = async (data: any) => {
 		try {
-			setSubmitting(true)
 			const userData: any = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
@@ -103,8 +102,6 @@ const UserPage: FC<Props> = (props) => {
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
-		} finally {
-			setSubmitting(false)
 		}
 	}
 
@@ -151,11 +148,10 @@ const UserPage: FC<Props> = (props) => {
 	}
 
 	const editUserRole = async (data: IEditUserRoleForm) => {
-		if (submittingRole) {
+		if (submittingEditRoleForm) {
 			return
 		}
 		try {
-			setSubmittingRole(true)
 			await patchReq(
 				'/api/b2b/admin/users/{userID}/role',
 				{ userID },
@@ -167,8 +163,6 @@ const UserPage: FC<Props> = (props) => {
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
-		} finally {
-			setSubmittingRole(false)
 		}
 	}
 
@@ -184,14 +178,14 @@ const UserPage: FC<Props> = (props) => {
 						<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
 					</Row>
 					<div className='content-body small mb-8'>
-						<Spin spinning={isLoading || submittingRole}>
+						<Spin spinning={isLoading || submittingEditRoleForm}>
 							<EditUserRoleForm onSubmit={editUserRole} />
 						</Spin>
 					</div>
 				</>
 			)}
 			<div className='content-body small'>
-				<Spin spinning={isLoading || submitting}>
+				<Spin spinning={isLoading || submittingAccountForm}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
 					<div className={'content-footer'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
@@ -222,8 +216,8 @@ const UserPage: FC<Props> = (props) => {
 												openForbiddenModal()
 											}
 										}}
-										disabled={submitting || isFormPristine}
-										loading={submitting}
+										disabled={submittingAccountForm || isFormPristine}
+										loading={submittingAccountForm}
 									>
 										{t('loc:Uložiť')}
 									</Button>

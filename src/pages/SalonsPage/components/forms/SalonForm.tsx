@@ -52,6 +52,7 @@ import { ReactComponent as InfoIcon16 } from '../../../../assets/icons/info-icon
 type ComponentProps = {
 	disabledForm?: boolean
 	noteModalControlButtons?: React.ReactNode
+	notinoUserModalControlButtons?: React.ReactNode
 	deletedSalon?: boolean
 	loadBasicSalon?: (id: string) => void
 	clearSalonForm?: () => void
@@ -90,7 +91,18 @@ export const optionRenderSalonSearch = (itemData: any) => {
 
 const SalonForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, change, noteModalControlButtons, disabledForm, loadBasicSalon, clearSalonForm, searchSalons, showBasicSalonsSuggestions, deletedSalon } = props
+	const {
+		handleSubmit,
+		change,
+		noteModalControlButtons,
+		disabledForm,
+		loadBasicSalon,
+		clearSalonForm,
+		searchSalons,
+		showBasicSalonsSuggestions,
+		deletedSalon,
+		notinoUserModalControlButtons
+	} = props
 	const languages = useSelector((state: RootState) => state.languages.languages)
 	const cosmetics = useSelector((state: RootState) => state.cosmetics.cosmetics)
 	const formValues = useSelector((state: RootState) => state.form?.[FORM?.SALON]?.values)
@@ -161,6 +173,7 @@ const SalonForm: FC<Props> = (props) => {
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_1000}
 							showLettersCount
 						/>
+						{notinoUserModalControlButtons}
 						<Field
 							component={SelectField}
 							options={languages.enumerationsOptions}

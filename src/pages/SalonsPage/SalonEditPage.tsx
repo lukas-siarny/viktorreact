@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Alert, Button, Modal, Row, Spin, Tooltip } from 'antd'
-import { initialize, isPristine, reset, submit } from 'redux-form'
+import { destroy, initialize, isPristine, reset, submit } from 'redux-form'
 import { get } from 'lodash'
 import { compose } from 'redux'
 import { BooleanParam, useQueryParams } from 'use-query-params'
@@ -28,7 +28,7 @@ import { selectSalon } from '../../reducers/selectedSalon/selectedSalonActions'
 import { getCurrentUser } from '../../reducers/users/userActions'
 
 // types
-import { IBreadcrumbs, INoteForm, INoteModal, ISalonForm, SalonPageProps } from '../../types/interfaces'
+import { IBreadcrumbs, INoteForm, INoteModal, INotinoUserForm, ISalonForm, SalonPageProps } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -43,6 +43,7 @@ import { ReactComponent as EyeoffIcon } from '../../assets/icons/eyeoff-24.svg'
 import { ReactComponent as CheckIcon } from '../../assets/icons/check-icon.svg'
 import { ReactComponent as CloseCricleIcon } from '../../assets/icons/close-circle-icon-24.svg'
 import { ReactComponent as EditIcon } from '../../assets/icons/edit-icon.svg'
+import NotinoUserForm from './components/forms/NotinoUserForm'
 
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
@@ -65,6 +66,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const [openingHoursModalVisble, setOpeningHoursModalVisble] = useState<boolean>(false)
 	const [modalConfig, setModalConfig] = useState<INoteModal>({ title: '', fieldPlaceholderText: '', onSubmit: undefined, visible: false })
 	const [approvalModalVisible, setApprovalModalVisible] = useState(false)
+	const [visibleNotinoUserModal, setVisibleNotinoUserModal] = useState(false)
 
 	const [tabKey, setTabKey] = useState<TAB_KEYS>(TAB_KEYS.SALON_DETAIL)
 
@@ -82,6 +84,11 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const declinedSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED_DECLINED || salon.data?.state === SALON_STATES.PUBLISHED_DECLINED
 	const hiddenSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED && salon.data?.publicationDeclineReason
 	const isBasic = salon.data?.createType === SALON_CREATE_TYPE.BASIC
+
+	const assignedUserLabel =
+		salon.data?.assignedUser?.firstName && salon.data?.assignedUser?.lastName
+			? `${salon.data?.assignedUser?.firstName} ${salon.data?.assignedUser?.lastName}`
+			: salon.data?.assignedUser?.email
 
 	const [query, setQuery] = useQueryParams({
 		history: BooleanParam
@@ -179,6 +186,24 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		try {
 			await patchReq('/api/b2b/admin/salons/{salonID}/open-hours-note', { salonID }, { openingHoursNote: null }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			dispatch(reset(FORM.OPEN_HOURS_NOTE))
+			await dispatch(selectSalon(salonID))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		} finally {
+			setIsRemoving(false)
+		}
+	}
+
+	const deleteAssignedUser = async () => {
+		if (isRemoving) {
+			return
+		}
+
+		setIsRemoving(true)
+		try {
+			await patchReq('/api/b2b/admin/salons/{salonID}/assigned-user', { salonID }, { assignedUserID: null }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			dispatch(destroy(FORM.NOTINO_USER))
 			await dispatch(selectSalon(salonID))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -546,7 +571,18 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 		}
 		return null
 	}
-
+	const onSubmitNotinoUser = async (values?: INotinoUserForm) => {
+		try {
+			// fallback for allowClear true if user removed assigned user send null value
+			await patchReq('/api/b2b/admin/salons/{salonID}/assigned-user', { salonID }, { assignedUserID: (values?.assignedUser?.key as string) || null })
+			setVisibleNotinoUserModal(false)
+			await dispatch(selectSalon(salonID))
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
+	console.log('salon', salon)
 	const salonForm = (
 		<>
 			<div className='content-body'>
@@ -559,6 +595,51 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						// edit mode is turned off if salon is in approval process and user is not admin or is deleted 'read mode' only
 						disabledForm={isDeletedSalon || (isPendingPublication && !isAdmin)}
 						deletedSalon={isDeletedSalon}
+						notinoUserModalControlButtons={
+							<Row className={'flex justify-start w-full mt-4 mb-4 gap-2'}>
+								{salon?.data?.assignedUser?.id ? (
+									<>
+										<div className='w-full'>
+											<h4>{t('loc:Priradený Notino používateľ')}</h4>
+											<i className='block mb-2 text-base'>{assignedUserLabel}</i>
+										</div>
+										<Button
+											type={'primary'}
+											size={'middle'}
+											className={'noti-btn m-regular mt-2'}
+											onClick={() => {
+												setVisibleNotinoUserModal(true)
+												dispatch(
+													initialize(FORM.NOTINO_USER, {
+														assignedUser: { key: salon.data?.assignedUser?.id, value: salon.data?.assignedUser?.id, label: assignedUserLabel }
+													})
+												)
+											}}
+											disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
+										>
+											{STRINGS(t).edit(t('loc:notino používateľa'))}
+										</Button>
+										<DeleteButton
+											className={'mt-2'}
+											getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+											onConfirm={deleteAssignedUser}
+											entityName={t('loc:notino používateľa')}
+											disabled={isDeletedSalon}
+										/>
+									</>
+								) : (
+									<Button
+										type={'primary'}
+										size={'middle'}
+										className={'noti-btn m-regular mt-2'}
+										onClick={() => setVisibleNotinoUserModal(true)}
+										disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
+									>
+										{STRINGS(t).addRecord(t('loc:notino používateľa'))}
+									</Button>
+								)}
+							</Row>
+						}
 						noteModalControlButtons={
 							<Row className={'flex justify-start w-full mt-4 gap-2'}>
 								{salon?.data?.openingHoursNote ? (
@@ -624,6 +705,15 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 				closeIcon={<CloseIcon />}
 			>
 				<NoteForm onSubmit={modalConfig.onSubmit} fieldPlaceholderText={modalConfig.fieldPlaceholderText} />
+			</Modal>
+			<Modal
+				title={t('loc:Priradiť Notino používateľa')}
+				visible={visibleNotinoUserModal}
+				onCancel={() => setVisibleNotinoUserModal(false)}
+				footer={null}
+				closeIcon={<CloseIcon />}
+			>
+				<NotinoUserForm onSubmit={onSubmitNotinoUser} />
 			</Modal>
 			<SalonApprovalModal
 				visible={approvalModalVisible}

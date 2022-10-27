@@ -1,33 +1,28 @@
 import React, { FC, useCallback } from 'react'
-import { reduxForm, InjectedFormProps, Field } from 'redux-form'
-import { Form, Button, Col, Row } from 'antd'
+import { Field, InjectedFormProps, reduxForm } from 'redux-form'
+import { Button, Col, Form, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 
 // validations
-import { useDispatch } from 'react-redux'
-import validateNoteForm from './validateNoteForm'
+import { useDispatch, useSelector } from 'react-redux'
 
 // utils
-import { FILTER_ENTITY, FORM, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
-
-// validate
-import TextareaField from '../../../../atoms/TextareaField'
+import { FILTER_ENTITY, FORM } from '../../../../utils/enums'
 
 // types
-import { INoteForm } from '../../../../types/interfaces'
+import { INotinoUserForm } from '../../../../types/interfaces'
 import SelectField from '../../../../atoms/SelectField'
 import searchWrapper from '../../../../utils/filters'
+import { RootState } from '../../../../reducers'
 
-type ComponentProps = {
-	fieldPlaceholderText?: string
-}
+type ComponentProps = {}
 
-type Props = InjectedFormProps<INoteForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<INotinoUserForm, ComponentProps> & ComponentProps
 
 const NotinoUserForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit, submitting, fieldPlaceholderText } = props
-
+	const { handleSubmit, submitting } = props
+	const notinoUsers = useSelector((state: RootState) => state.user.notinoUsers)
 	const dispatch = useDispatch()
 
 	const searchNotinoUsers = useCallback(
@@ -43,16 +38,17 @@ const NotinoUserForm: FC<Props> = (props) => {
 				<Col span={24}>
 					<Field
 						component={SelectField}
-						options={[]} // TODO:
 						label={t('loc:Priradiť Notino používateľa')}
 						placeholder={t('loc:Vyberte používateľa')}
-						name={'user'} // TODO: zistit atribut name
+						name={'assignedUser'}
 						size={'large'}
+						labelInValue
 						showSearch
 						onSearch={searchNotinoUsers}
-						// loading={languages.isLoading} // TODO:
+						loading={notinoUsers.isLoading}
 						allowInfinityScroll
 						allowClear
+						disabled={submitting}
 						filterOption={false}
 						onDidMountSearch
 					/>
@@ -65,12 +61,11 @@ const NotinoUserForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<any, ComponentProps>({
+const form = reduxForm<INotinoUserForm, ComponentProps>({
 	form: FORM.NOTINO_USER,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true
-	// validate: validateNoteForm
 })(NotinoUserForm)
 
 export default form

@@ -55,7 +55,7 @@ const NotinoUserForm: FC<Props> = (props) => {
 				</Col>
 			</Row>
 			<Button className='noti-btn' block size='large' type='primary' htmlType='submit' disabled={submitting} loading={submitting}>
-				{t('loc:Odoslať')}
+				{t('loc:Uložiť')}
 			</Button>
 		</Form>
 	)

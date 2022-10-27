@@ -597,49 +597,51 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						disabledForm={isDeletedSalon || (isPendingPublication && !isAdmin)}
 						deletedSalon={isDeletedSalon}
 						notinoUserModalControlButtons={
-							<Row className={'flex justify-start w-full mt-4 mb-4 gap-2'}>
-								{salon?.data?.assignedUser?.id ? (
-									<>
-										<div className='w-full'>
-											<h4>{t('loc:Priradený Notino používateľ')}</h4>
-											<i className='block mb-2 text-base'>{assignedUserLabel}</i>
-										</div>
+							isAdmin && (
+								<Row className={'flex justify-start w-full gap-2'}>
+									{salon?.data?.assignedUser?.id ? (
+										<>
+											<div className='w-full'>
+												<h4>{t('loc:Priradený Notino používateľ')}</h4>
+												<i className='block text-base'>{assignedUserLabel}</i>
+											</div>
+											<Button
+												type={'primary'}
+												size={'middle'}
+												className={'noti-btn m-regular mt-4 mb-4'}
+												onClick={() => {
+													setVisibleNotinoUserModal(true)
+													dispatch(
+														initialize(FORM.NOTINO_USER, {
+															assignedUser: { key: salon.data?.assignedUser?.id, value: salon.data?.assignedUser?.id, label: assignedUserLabel }
+														})
+													)
+												}}
+												disabled={isDeletedSalon || isPendingPublication}
+											>
+												{STRINGS(t).edit(t('loc:notino používateľa'))}
+											</Button>
+											<DeleteButton
+												className={'mt-4 mb-4'}
+												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
+												onConfirm={deleteAssignedUser}
+												entityName={t('loc:notino používateľa')}
+												disabled={isDeletedSalon}
+											/>
+										</>
+									) : (
 										<Button
 											type={'primary'}
 											size={'middle'}
-											className={'noti-btn m-regular mt-2'}
-											onClick={() => {
-												setVisibleNotinoUserModal(true)
-												dispatch(
-													initialize(FORM.NOTINO_USER, {
-														assignedUser: { key: salon.data?.assignedUser?.id, value: salon.data?.assignedUser?.id, label: assignedUserLabel }
-													})
-												)
-											}}
-											disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
+											className={'noti-btn m-regular mt-4 mb-4'}
+											onClick={() => setVisibleNotinoUserModal(true)}
+											disabled={isDeletedSalon || isPendingPublication}
 										>
-											{STRINGS(t).edit(t('loc:notino používateľa'))}
+											{STRINGS(t).addRecord(t('loc:notino používateľa'))}
 										</Button>
-										<DeleteButton
-											className={'mt-2'}
-											getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
-											onConfirm={deleteAssignedUser}
-											entityName={t('loc:notino používateľa')}
-											disabled={isDeletedSalon}
-										/>
-									</>
-								) : (
-									<Button
-										type={'primary'}
-										size={'middle'}
-										className={'noti-btn m-regular mt-2'}
-										onClick={() => setVisibleNotinoUserModal(true)}
-										disabled={isDeletedSalon || (isPendingPublication && !isAdmin)}
-									>
-										{STRINGS(t).addRecord(t('loc:notino používateľa'))}
-									</Button>
-								)}
-							</Row>
+									)}
+								</Row>
+							)
 						}
 						noteModalControlButtons={
 							<Row className={'flex justify-start w-full mt-4 gap-2'}>

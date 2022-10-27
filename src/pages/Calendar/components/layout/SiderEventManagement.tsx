@@ -28,7 +28,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const getSiderContent = () => {
 		switch (view) {
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
-				return <ReservationForm setCollapsed={setCollapsed} onSubmit={handleSubmitReservation} salonID={''} addEmployee={() => console.log('employee')} />
+				return <ReservationForm setCollapsed={setCollapsed} onSubmit={handleSubmitReservation} addEmployee={() => console.log('employee')} />
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
 				return <ShiftForm setCollapsed={setCollapsed} onSubmit={handleSubmitShift} />
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:

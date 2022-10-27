@@ -26,6 +26,7 @@ import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
 import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
+import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -195,7 +196,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.CALENDAR,
 							label: t('loc:Kalendár'),
 							onClick: () => history.push(getPath(t('paths:calendar'))),
-							icon: <EmployeesIcon />
+							icon: <CalendarIcon />
 						}
 					)
 				}

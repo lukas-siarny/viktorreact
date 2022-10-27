@@ -598,7 +598,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 						deletedSalon={isDeletedSalon}
 						notinoUserModalControlButtons={
 							isAdmin && (
-								<Row className={'flex justify-start w-full gap-2'}>
+								<Row className={'flex justify-start w-full gap-2 pb-4'}>
 									{salon?.data?.assignedUser?.id ? (
 										<>
 											<div className='w-full'>
@@ -608,7 +608,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 											<Button
 												type={'primary'}
 												size={'middle'}
-												className={'noti-btn m-regular mt-4 mb-4'}
+												className={'noti-btn m-regular'}
 												onClick={() => {
 													setVisibleNotinoUserModal(true)
 													dispatch(
@@ -622,7 +622,6 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 												{STRINGS(t).edit(t('loc:notino používateľa'))}
 											</Button>
 											<DeleteButton
-												className={'mt-4 mb-4'}
 												getPopupContainer={() => document.getElementById('content-footer-container') || document.body}
 												onConfirm={deleteAssignedUser}
 												entityName={t('loc:notino používateľa')}
@@ -633,7 +632,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 										<Button
 											type={'primary'}
 											size={'middle'}
-											className={'noti-btn m-regular mt-4 mb-4'}
+											className={'noti-btn m-regular'}
 											onClick={() => setVisibleNotinoUserModal(true)}
 											disabled={isDeletedSalon || isPendingPublication}
 										>

@@ -20,7 +20,7 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_CREATE_TYPE, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../utils/enums'
 import {
 	formatDateByLocale,
 	getLinkWithEncodedBackUrl,

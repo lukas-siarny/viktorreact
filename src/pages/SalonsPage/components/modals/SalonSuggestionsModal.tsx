@@ -105,7 +105,7 @@ const SalonSuggestionsModal = (props: Props) => {
 												<li className={'address-list-item'}>
 													{address?.street && (
 														<>
-															{address.street} {address?.streetNumber}
+															{address.street} {address.streetNumber}
 															<br />
 														</>
 													)}

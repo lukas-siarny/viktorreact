@@ -247,6 +247,10 @@ export interface INoteForm {
 	note: string
 }
 
+export interface INotinoUserForm {
+	assignedUser: ISelectOptionItem
+}
+
 export interface IOpenHoursNoteForm {
 	openingHoursNote: string
 }

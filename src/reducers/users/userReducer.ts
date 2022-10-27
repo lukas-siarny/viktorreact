@@ -1,8 +1,8 @@
 import { RESET_STORE } from '../generalTypes'
 // eslint-disable-next-line import/no-cycle
-import { IUserActions, IUserPayload, IUsersPayload, IPendingInvitesPayload } from './userActions'
+import { IUserActions, IUserPayload, IUsersPayload, IPendingInvitesPayload, INotinoUsersPayload } from './userActions'
 import { ILoadingAndFailure, IAuthUserPayload } from '../../types/interfaces'
-import { AUTH_USER, USERS, USER, PENDING_INVITES } from './userTypes'
+import { AUTH_USER, USERS, USER, PENDING_INVITES, NOTINO_USERS } from './userTypes'
 
 export const initState = {
 	authUser: {
@@ -24,7 +24,12 @@ export const initState = {
 		data: null,
 		isLoading: false,
 		isFailure: false
-	} as IPendingInvitesPayload & ILoadingAndFailure
+	} as IPendingInvitesPayload & ILoadingAndFailure,
+	notinoUsers: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as INotinoUsersPayload & ILoadingAndFailure
 }
 
 // eslint-disable-next-line default-param-last
@@ -102,6 +107,31 @@ export default (state = initState, action: IUserActions) => {
 				...state,
 				users: {
 					...initState.users,
+					data: action.payload.data
+				}
+			}
+		// Notino users
+		case NOTINO_USERS.NOTINO_USERS_LOAD_START:
+			return {
+				...state,
+				notinoUsers: {
+					...state.notinoUsers,
+					isLoading: true
+				}
+			}
+		case NOTINO_USERS.NOTINO_USERS_LOAD_FAIL:
+			return {
+				...state,
+				notinoUsers: {
+					...initState.notinoUsers,
+					isFailure: true
+				}
+			}
+		case NOTINO_USERS.NOTINO_USERS_LOAD_DONE:
+			return {
+				...state,
+				notinoUsers: {
+					...initState.notinoUsers,
 					data: action.payload.data
 				}
 			}

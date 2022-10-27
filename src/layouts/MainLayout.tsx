@@ -1,6 +1,6 @@
 import React, { ReactNode, FC } from 'react'
 import { Layout, Row, Button, Dropdown, Menu } from 'antd'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
@@ -10,6 +10,7 @@ import LayoutSider, { LayoutSiderProps } from '../components/LayoutComponents/La
 
 // redux
 import { RootState } from '../reducers'
+import { selectSalon } from '../reducers/selectedSalon/selectedSalonActions'
 
 // utils
 import Permissions from '../utils/Permissions'
@@ -24,6 +25,9 @@ import { ReactComponent as ChevronIcon } from '../assets/icons/chevron-down.svg'
 import { ReactComponent as AddPurple } from '../assets/icons/add-icon-purple.svg'
 import SalonDefaultAvatar from '../assets/icons/salon-default-avatar.png'
 
+// hooks
+import useBackUrl from '../hooks/useBackUrl'
+
 const { Content } = Layout
 
 type Props = LayoutSiderProps & {
@@ -31,11 +35,13 @@ type Props = LayoutSiderProps & {
 }
 
 const MainLayout: FC<Props> = (props) => {
+	const dispatch = useDispatch()
 	const [t] = useTranslation()
 	const { children } = props
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
+	const [backUrl] = useBackUrl(t('paths:salons'))
 
 	const SALONS_MENU = (
 		<Menu className='shadow-md max-w-xs min-w-0 mt-5 noti-dropdown-header'>
@@ -126,7 +132,7 @@ const MainLayout: FC<Props> = (props) => {
 									{!hasPermission && (
 										<Button
 											onClick={() => {
-												history.push(t('paths:salons'))
+												history.push(backUrl)
 											}}
 											icon={<BackIcon className={'filter-invert max'} />}
 											className={'noti-btn h-8 text-notino-white self-center bg-notino-pink mr-2'}

@@ -6,7 +6,7 @@ import { get, map, flatten, uniq } from 'lodash'
 // types
 import { ThunkResult } from '../index'
 import { IJwtPayload, ISelectOptionItem, IQueryParams, ISearchable, IAuthUserPayload } from '../../types/interfaces'
-import { AUTH_USER, USER, USERS, PENDING_INVITES } from './userTypes'
+import { AUTH_USER, USER, USERS, PENDING_INVITES, NOTINO_USERS } from './userTypes'
 import { IResetStore, RESET_STORE } from '../generalTypes'
 import { Paths } from '../../types/api'
 
@@ -19,7 +19,7 @@ import { normalizeQueryParams } from '../../utils/helper'
 // actions
 import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
 
-export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites
+export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites | IGetNotinoUsers
 
 interface IGetAuthUser {
 	type: AUTH_USER
@@ -36,6 +36,11 @@ interface IGetUsers {
 	payload: IUsersPayload
 }
 
+interface IGetNotinoUsers {
+	type: NOTINO_USERS
+	payload: INotinoUsersPayload
+}
+
 interface IGetPendingInvites {
 	type: PENDING_INVITES
 	payload: IPendingInvitesPayload
@@ -50,6 +55,8 @@ export interface IUserPayload {
 }
 
 export interface IUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsers.Responses.$200> {}
+
+export interface INotinoUsersPayload extends ISearchable<Paths.GetApiB2BAdminUsersNotinoUsers.Responses.$200> {}
 
 export interface IPendingInvitesPayload {
 	data: Paths.GetApiB2BAdminUsersUserIdPendingEmployeeInvites.Responses.$200 | null
@@ -212,6 +219,36 @@ export const getUsers =
 			dispatch({ type: USERS.USERS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: USERS.USERS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+
+		return payload
+	}
+
+export const getNotinoUsers =
+	(queryParams: IGetUsersQueryParams): ThunkResult<Promise<INotinoUsersPayload>> =>
+	// eslint-disable-next-line consistent-return
+	async (dispatch) => {
+		let payload = {} as INotinoUsersPayload
+		try {
+			dispatch({ type: NOTINO_USERS.NOTINO_USERS_LOAD_START })
+			const { data } = await getReq('/api/b2b/admin/users/notino-users', { ...normalizeQueryParams(queryParams) })
+
+			const usersOptions: any[] = map(data?.users, (user) => ({
+				key: user?.id,
+				label: user?.firstName && user?.lastName ? `${user?.firstName} ${user?.lastName}` : user?.email,
+				value: user?.id
+			}))
+
+			payload = {
+				data,
+				options: usersOptions
+			}
+
+			dispatch({ type: NOTINO_USERS.NOTINO_USERS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: NOTINO_USERS.NOTINO_USERS_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

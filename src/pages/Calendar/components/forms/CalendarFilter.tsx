@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
-import { Collapse, Form } from 'antd'
+import { Button, Collapse, Form, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash'
 import { useSelector } from 'react-redux'
@@ -11,9 +11,11 @@ import { RootState } from '../../../../reducers'
 
 // assets
 import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chevron-down.svg'
+import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
 
 // utils
 import { CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../../../utils/enums'
+import { history } from '../../../../utils/history'
 
 // atoms
 import RadioGroupField from '../../../../atoms/RadioGroupField'
@@ -22,14 +24,27 @@ import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 // types
 import { ICalendarFilter } from '../../../../types/interfaces'
 
-type ComponentProps = {}
+type ComponentProps = {
+	parentPath: string
+}
 
 type Props = InjectedFormProps<ICalendarFilter, ComponentProps> & ComponentProps
 
 const { Panel } = Collapse
 
+const checkboxOptionRender = (option: any, checked?: boolean) => {
+	const { color } = option || {}
+
+	return (
+		<div className={cx('nc-checkbox-group-checkbox', { checked })}>
+			<div className={'checker'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }} />
+			{option?.label}
+		</div>
+	)
+}
+
 const CalendarFilter = (props: Props) => {
-	const { handleSubmit } = props
+	const { handleSubmit, parentPath } = props
 	const [t] = useTranslation()
 
 	const services = useSelector((state: RootState) => state.service.services)
@@ -51,7 +66,6 @@ const CalendarFilter = (props: Props) => {
 		[t]
 	)
 
-	// TODO: osetrit loading state
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'p-4'}>
 			<Collapse
@@ -72,11 +86,37 @@ const CalendarFilter = (props: Props) => {
 					/>
 				</Panel>
 				<Panel key={2} header={t('loc:Zamestnanci')} className={'nc-collapse-panel'}>
-					<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'employeeIDs'} options={employees?.options} size={'small'} rounded />
+					<Spin spinning={employees?.isLoading}>
+						<Field
+							className={'p-0 m-0'}
+							component={CheckboxGroupField}
+							name={'employeeIDs'}
+							options={employees?.options}
+							size={'small'}
+							hideChecker
+							optionRender={checkboxOptionRender}
+						/>
+					</Spin>
 				</Panel>
 				<Panel key={3} header={t('loc:Služby')} className={'nc-collapse-panel'}>
-					{/* TODO: Osetrit empty state (ale treba najprv zistit, ci vobec moze nastat stav, ze sa kolenar zobrazi, ak salon nema nastavenu sluzbu) */}
-					<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'serviceIDs'} options={services?.options} size={'small'} rounded />
+					<Spin spinning={services?.isLoading}>
+						{services?.options?.length ? (
+							<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'categoryIDs'} options={services?.options} size={'small'} rounded />
+						) : (
+							<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
+								<ServicesIcon />
+								{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
+								<Button
+									type={'primary'}
+									htmlType={'button'}
+									className={'noti-btn'}
+									onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
+								>
+									{t('loc:Priradiť služby')}
+								</Button>
+							</div>
+						)}
+					</Spin>
 				</Panel>
 			</Collapse>
 		</Form>
@@ -91,7 +131,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 300),
+	}, 600),
 	destroyOnUnmount: true
 })(CalendarFilter)
 

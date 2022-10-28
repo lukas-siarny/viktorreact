@@ -7,6 +7,7 @@ import dayjs from 'dayjs'
 
 // enums
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
+import Tooltip from 'antd/es/tooltip'
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // assets
@@ -24,6 +25,9 @@ import DateField from '../../../../atoms/DateField'
 
 // hooks
 import useOnClickOutside from '../../../../hooks/useClickOutside'
+import useMedia from '../../../../hooks/useMedia'
+
+// utils
 import { getFirstDayOfMonth, getFirstDayOfWeek, getLastDayOfWeek } from '../../../../utils/helper'
 
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
@@ -51,19 +55,39 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	}
 }
 
+const SwitchViewButton: FC<{ label: string; isSmallerDevice: boolean; className: string; onClick: () => void }> = (props) => {
+	const { label, isSmallerDevice, className, onClick } = props
+
+	const timmedLabel = isSmallerDevice ? label.slice(0, 1) : label
+
+	const button = (
+		<button type={'button'} className={className} onClick={onClick}>
+			{timmedLabel}
+		</button>
+	)
+
+	return isSmallerDevice ? (
+		<Tooltip title={label} placement={'bottom'}>
+			{button}
+		</Tooltip>
+	) : (
+		button
+	)
+}
+
 type Props = {
 	selectedDate: string
 	calendarView: CALENDAR_VIEW
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
-	setSiderEventManagementCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	setSiderEventManagement: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	setSelectedDate: (newDate: string | dayjs.Dayjs, type?: CALENDAR_SET_NEW_DATE) => void
 }
 
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagementCollapsed, selectedDate, setSelectedDate } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagement, selectedDate, setSelectedDate } = props
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -73,6 +97,8 @@ const CalendarHeader: FC<Props> = (props) => {
 	useOnClickOutside([calendarDropdownRef, dateButtonRef], () => {
 		setIsCalendarOpen(false)
 	})
+
+	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
 	const addMenu = useMemo(() => {
 		const itemClassName = 'p-2 font-medium min-w-0'
@@ -87,33 +113,33 @@ const CalendarHeader: FC<Props> = (props) => {
 						label: t('loc:Rezerváciu'),
 						icon: <ServicesIcon />,
 						className: itemClassName,
-						onClick: () => setSiderEventManagementCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
 					},
 					{
 						key: 'shift',
 						label: t('loc:Smenu'),
 						icon: <ShiftIcon />,
 						className: itemClassName,
-						onClick: () => setSiderEventManagementCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
 					},
 					{
 						key: 'absence',
 						label: t('loc:Absenciu'),
 						icon: <AbsenceIcon />,
 						className: itemClassName,
-						onClick: () => setSiderEventManagementCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF)
+						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF)
 					},
 					{
 						key: 'break',
 						label: t('loc:Prestávku'),
 						icon: <BreakIcon />,
 						className: itemClassName,
-						onClick: () => setSiderEventManagementCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
 					}
 				]}
 			/>
 		)
-	}, [t, setSiderEventManagementCollapsed])
+	}, [t, setSiderEventManagement])
 
 	const datePicker = useMemo(() => {
 		return (
@@ -137,15 +163,24 @@ const CalendarHeader: FC<Props> = (props) => {
 					<NavIcon />
 				</button>
 				<div className={'nc-button-group'}>
-					<button type={'button'} className={cx({ active: calendarView === CALENDAR_VIEW.DAY })} onClick={() => setCalendarView(CALENDAR_VIEW.DAY)}>
-						{t('loc:Deň')}
-					</button>
-					<button type={'button'} className={cx({ active: calendarView === CALENDAR_VIEW.WEEK })} onClick={() => setCalendarView(CALENDAR_VIEW.WEEK)}>
-						{t('loc:Týždeň')}
-					</button>
-					<button type={'button'} className={cx({ active: calendarView === CALENDAR_VIEW.MONTH })} onClick={() => setCalendarView(CALENDAR_VIEW.MONTH)}>
-						{t('loc:Mesiac')}
-					</button>
+					<SwitchViewButton
+						label={t('loc:Deň')}
+						className={cx({ active: calendarView === CALENDAR_VIEW.DAY })}
+						onClick={() => setCalendarView(CALENDAR_VIEW.DAY)}
+						isSmallerDevice={isSmallerDevice}
+					/>
+					<SwitchViewButton
+						label={t('loc:Týždeň')}
+						className={cx({ active: calendarView === CALENDAR_VIEW.WEEK })}
+						onClick={() => setCalendarView(CALENDAR_VIEW.WEEK)}
+						isSmallerDevice={isSmallerDevice}
+					/>
+					<SwitchViewButton
+						label={t('loc:Mesiac')}
+						className={cx({ active: calendarView === CALENDAR_VIEW.MONTH })}
+						onClick={() => setCalendarView(CALENDAR_VIEW.MONTH)}
+						isSmallerDevice={isSmallerDevice}
+					/>
 				</div>
 			</div>
 			<div className={'nav-middle'}>

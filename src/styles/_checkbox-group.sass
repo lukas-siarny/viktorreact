@@ -46,4 +46,48 @@
 						border-radius: 50%
 					&::after
 						border-radius: 50%
+	&.noti-checkbox-group-hidden
+		.ant-checkbox-group
+			.ant-checkbox-wrapper
+				.ant-checkbox
+					width: 0
+					overflow: hidden
+					& + span
+						padding-left: 0
+						display: block
+						width: 100%
 
+.nc-checkbox-group-checkbox
+	display: flex
+	gap: 8px
+	.checker
+		width: 12px
+		height: 12px
+		border-radius: 50%
+		border: 1px solid #d9d9d9
+		flex: 0 0 auto
+		margin-top: 3px
+		position: relative
+		background: $backgroundColor-notino-white
+		transition: all 0.3s ease-in-out
+		&::after
+			position: absolute
+			border: 2px solid $borderColor-notino-white
+			display: table
+			border-top: 0
+			border-left: 0
+			opacity: 1
+			transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s
+			transform: rotate(45deg) scale(0) translate(-50%, -50%)
+			content: ' '
+			border-width: 2px
+			width: 3.5px
+			height: 7px
+			top: 50%
+			left: 21.5%
+	&.checked
+		.checker
+			background: $backgroundColor-notino-black
+			border-color: $backgroundColor-notino-black
+			&::after
+				transform: rotate(45deg) scale(1) translate(-50%, -50%)

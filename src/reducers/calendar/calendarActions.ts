@@ -8,7 +8,7 @@ import { Paths } from '../../types/api'
 
 // enums
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
-import { CALENDAR_VIEW } from '../../utils/enums'
+import { CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER, CALENDAR_VIEW } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -23,9 +23,9 @@ export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvent
 interface ICalendarQueryParams {
 	salonID: string
 	date: string
-	employeeIDs?: string[]
-	serviceIDs?: string[]
-	eventType?: string
+	employeeIDs?: (string | null)[] | null
+	categoryIDs?: (string | null)[] | null
+	eventType?: CALENDAR_EVENT_TYPE_FILTER
 }
 
 export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail
@@ -51,7 +51,25 @@ export interface ICalendarEventDetailPayload {
 const getEventsQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_VIEW): CalendarEventsQueryParams => {
 	let params: any = {
 		salonID: queryParams.salonID,
-		eventType: queryParams?.eventType
+		categoryIDs: queryParams.categoryIDs,
+		employeeIDs: queryParams.employeeIDs
+	}
+
+	switch (queryParams.eventType) {
+		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
+			params = {
+				...params,
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]
+			}
+			break
+		case CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF:
+			params = {
+				...params,
+				eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]
+			}
+			break
+		default:
+			break
 	}
 
 	switch (view) {

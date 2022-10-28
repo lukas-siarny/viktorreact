@@ -36,7 +36,7 @@ const getEmployeeIDs = (data: IEmployeesPayload['options']) => {
 }
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
-	const { salonID } = props
+	const { salonID, parentPath = '' } = props
 
 	const dispatch = useDispatch()
 
@@ -44,7 +44,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		employeeIDs: ArrayParam,
-		serviceIDs: ArrayParam,
+		categoryIDs: ArrayParam,
 		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
 	})
 
@@ -54,7 +54,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	// NOTE: default je COLLAPSED, RESERVATION je len pre develeporske ucely teraz
-	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(
+	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(
 		/* CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED */ CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
 	)
 
@@ -68,7 +68,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			dispatch(
 				initialize(FORM.CALENDAR_FILTER, {
 					eventType: CALENDAR_EVENT_TYPE_FILTER.RESERVATION,
-					serviceIDs: getSericeIDs(servicesData.options),
+					categoryIDs: getSericeIDs(servicesData.options),
 					employeeIDs: getEmployeeIDs(employeesData.options)
 				})
 			)
@@ -78,8 +78,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}, [dispatch, salonID])
 
 	useEffect(() => {
-		dispatch(getCalendarEvents({ salonID, date: query.date }, query.view as CALENDAR_VIEW))
-	}, [dispatch, salonID, query.date, query.view])
+		dispatch(
+			getCalendarEvents(
+				{ salonID, date: query.date, eventType: query.eventType as CALENDAR_EVENT_TYPE_FILTER, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs },
+				query.view as CALENDAR_VIEW
+			)
+		)
+	}, [dispatch, salonID, query.date, query.view, query.eventType, query.categoryIDs, query.employeeIDs])
 
 	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
@@ -142,7 +147,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
-		setSiderEventManagementCollapsed(newView)
+		setSiderEventManagement(newView)
 		if (newView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
 			setQuery({
 				...query,
@@ -176,13 +181,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setCalendarView={setNewCalendarView}
 				setSelectedDate={setNewSelectedDate}
 				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
-				setSiderEventManagementCollapsed={setEventManagement}
+				setSiderEventManagement={setEventManagement}
 			/>
 			<Layout hasSider className={'noti-calendar-main-section'}>
-				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} />
+				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} />
 				<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} loading={loadingData} />
 				<SiderEventManagement
-					view={siderEventManagementCollapsed}
+					view={siderEventManagement}
 					setCollapsed={setEventManagement}
 					handleSubmitReservation={handleSubmitReservation}
 					handleSubmitShift={handleSubmitShift}

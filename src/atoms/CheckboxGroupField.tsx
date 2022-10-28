@@ -14,6 +14,8 @@ type ComponentProps = {
 	horizontal?: boolean
 	size: 'small' | 'medium' | 'large'
 	rounded?: boolean
+	hideChecker?: boolean
+	optionRender?: (option: any, isChecked: boolean) => React.ReactNode
 }
 
 type Props = WrappedFieldProps & CheckboxGroupProps & FormItemProps & ComponentProps
@@ -31,20 +33,24 @@ const CheckboxGroupField = (props: Props) => {
 		horizontal,
 		className,
 		size = 'medium',
-		rounded
+		rounded,
+		hideChecker,
+		optionRender
 	} = props
 
 	const checkboxes = map(options, (option: any) => {
+		const isChecked = input.value?.includes(option.value)
+
 		if (typeof option === 'string') {
 			return (
 				<Checkbox key={option} value={option} className={cx({ 'inline-flex': horizontal })}>
-					{option}
+					{optionRender ? optionRender(option, isChecked) : option}
 				</Checkbox>
 			)
 		}
 		return (
 			<Checkbox disabled={option.disabled} key={`${option.value}`} value={option.value} className={cx({ 'inline-flex': horizontal })}>
-				{option.label}
+				{optionRender ? optionRender(option, isChecked) : option.label}
 			</Checkbox>
 		)
 	})
@@ -56,7 +62,8 @@ const CheckboxGroupField = (props: Props) => {
 			className={cx(className, `noti-checkbox-group noti-checkbox-group-${size}`, {
 				'noti-checkbox-group-horizontal': horizontal,
 				'noti-checkbox-group-vertical': !horizontal,
-				'noti-checkbox-group-rounded': rounded
+				'noti-checkbox-group-rounded': rounded,
+				'noti-checkbox-group-hidden': hideChecker
 			})}
 			validateStatus={error && touched ? 'error' : undefined}
 			style={style}

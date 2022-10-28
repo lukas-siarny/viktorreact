@@ -61,7 +61,8 @@ const DateField = (props: Props) => {
 		open,
 		onSelect,
 		className,
-		pickerClassName
+		pickerClassName,
+		dropdownAlign
 	} = props
 
 	let value
@@ -123,7 +124,7 @@ const DateField = (props: Props) => {
 				id={formFieldID(form, input.name)}
 				{...input}
 				className={(cx('noti-date-input w-full', { 'rounded-full': rounded, 'allow-clear': allowClear }), pickerClassName)}
-				dropdownAlign={DROPDOWN_POSITION.BOTTOM_LEFT}
+				dropdownAlign={dropdownAlign || DROPDOWN_POSITION.BOTTOM_LEFT}
 				onBlur={() => {}}
 				onChange={(val) => {
 					if (val) {

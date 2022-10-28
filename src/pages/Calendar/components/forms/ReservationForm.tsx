@@ -1,6 +1,6 @@
 import React, { MouseEventHandler, useCallback, useState, FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form } from 'antd'
 import cx from 'classnames'
@@ -28,6 +28,7 @@ import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employ
 import CalendarSelectField from '../CalendarSelectField'
 import DateField from '../../../../atoms/DateField'
 import TextareaField from '../../../../atoms/TextareaField'
+import TimeRangeField from '../../../../atoms/TimeRangeField'
 
 type ComponentProps = {
 	addEmployee: MouseEventHandler<HTMLElement>
@@ -51,10 +52,19 @@ const ReservationForm: FC<Props> = (props) => {
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
-					<Field name={'customer'} label={t('loc:Zákazník')} component={CalendarSelectField} emptyIcon={<ProfileIcon />} entityName={t('loc:zákaznika')} required />
+					{/* <Field name={'customer'} label={t('loc:Zákazník')} component={CalendarSelectField} emptyIcon={<ProfileIcon />} entityName={t('loc:zákaznika')} required /> */}
 					<Field name={'service'} label={t('loc:Služba')} component={CalendarSelectField} emptyIcon={<ServicesIcon />} entityName={t('loc:službu')} required />
-					<Field name={'service'} label={t('loc:Zamestnanec')} component={CalendarSelectField} emptyIcon={<EmployeesIcon />} entityName={t('loc:zamestnanca')} required />
-					<Field name={'date'} label={t('loc:Dátum')} className={'pb-0'} component={DateField} required />
+					{/* <Field name={'service'} label={t('loc:Zamestnanec')} component={CalendarSelectField} emptyIcon={<EmployeesIcon />} entityName={t('loc:zamestnanca')} required /> */}
+					<Field name={'date'} label={t('loc:Dátum')} className={'pb-0'} component={DateField} dropdownAlign={{ points: ['tr', 'br'] }} required />
+					<Fields
+						names={[`timeFrom`, `timeTo`]}
+						placeholders={[t('loc:čas od'), t('loc:čas do')]}
+						component={TimeRangeField}
+						hideHelp
+						allowClear
+						itemClassName={'m-0 pb-0'}
+						minuteStep={15}
+					/>
 					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} required />
 				</Form>
 			</div>

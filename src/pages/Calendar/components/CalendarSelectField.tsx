@@ -1,16 +1,32 @@
 import React, { FC, useState } from 'react'
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import { FormItemProps } from 'antd/lib/form/FormItem'
-import { Button, Form } from 'antd'
+import { Button, Collapse, Form } from 'antd'
 import cx from 'classnames'
 import { useTranslation } from 'react-i18next'
 
 // assets
 import { ReactComponent as ChevronLeftIcon } from '../../../assets/icons/chevron-left-16.svg'
+import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // components
 import InputField from '../../../atoms/InputField'
+
+// enums
 import { FIELD_MODE, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
+
+export type CalendarSelectOption = {
+	key: string
+	value: any
+	content?: React.ReactNode
+	className?: string
+}
+
+export type CalendarSelectOptionGroup = {
+	title: React.ReactNode
+	className?: string
+	children: CalendarSelectOption[]
+}
 
 type Props = {
 	label: string
@@ -20,7 +36,7 @@ type Props = {
 	input: Omit<WrappedFieldInputProps, 'value'> & {
 		value?: {
 			label: string
-			value: string
+			value: any
 			avatar: React.ReactElement
 		} | null
 	}
@@ -28,12 +44,15 @@ type Props = {
 	disabled?: boolean
 	readOnly: boolean
 	className?: string
+	options: CalendarSelectOptionGroup[]
+	onAddNewEntity: () => void
 } & FormItemProps
 
 const { Item } = Form
+const { Panel } = Collapse
 
 const CalendarSelectField: FC<Props> = (props) => {
-	const { entityName, emptyIcon, input, label, meta, required, disabled, style, className, readOnly } = props
+	const { entityName, emptyIcon, input, label, meta, required, disabled, style, className, readOnly, options } = props
 	const [optionsOpened, setOptionsOpened] = useState(false)
 	const [zIndex, setzIndex] = useState(1)
 	const [t] = useTranslation()
@@ -49,6 +68,32 @@ const CalendarSelectField: FC<Props> = (props) => {
 	}
 
 	const onSearchOptions = () => {}
+
+	const getOptions = () => {
+		return (
+			<Collapse
+				className={'nc-filter-collapse'}
+				bordered={false}
+				defaultActiveKey={[1, 2, 3]}
+				expandIconPosition={'end'}
+				expandIcon={({ isActive }) => <ChevronDownIcon className={cx({ 'is-active': isActive })} />}
+			>
+				{options?.map((group) => {
+					return (
+						<Panel key={1} header={t('loc:Typ udalosti')} className={'nc-filter-panel'}>
+							{group.children.map((option) => {
+								return (
+									<div className={cx(option.className, 'nc-select-option')} onClick={() => input.onChange(option.value)}>
+										{option.content}
+									</div>
+								)
+							})}
+						</Panel>
+					)
+				})}
+			</Collapse>
+		)
+	}
 
 	return (
 		<>
@@ -83,14 +128,12 @@ const CalendarSelectField: FC<Props> = (props) => {
 							className={'h-10 p-0 m-0'}
 							input={{ value: '', onChange: onSearchOptions } as any}
 							meta={{ error: false, touched: false } as any}
-							size={'large'}
 							placeholder={STRINGS(t).search(entityName)}
 							name='search'
 							fieldMode={FIELD_MODE.FILTER}
 							maxLength={VALIDATION_MAX_LENGTH.LENGTH_255}
 						/>
-
-						{'Selection options'}
+						{getOptions()}
 					</div>
 				</div>
 			)}

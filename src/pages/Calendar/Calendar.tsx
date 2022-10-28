@@ -7,7 +7,7 @@ import dayjs from 'dayjs'
 import { debounce } from 'lodash'
 
 // utils
-import { initialize } from 'redux-form'
+import { change, initialize } from 'redux-form'
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION, CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
@@ -149,11 +149,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
 		setSiderEventManagement(newView)
 		if (newView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
+			const newEventType =
+				newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+
 			setQuery({
 				...query,
-				eventType:
-					newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+				eventType: newEventType
 			})
+			dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
 		}
 	}
 

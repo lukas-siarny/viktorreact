@@ -160,7 +160,7 @@ const rootReducer = combineReducers({
 	calendar: persistReducer(
 		{
 			key: REDUCER_KEYS.CALENDAR,
-			storage: storageLocal
+			storage: storageSession
 		},
 		calendarReducer
 	)

@@ -4,10 +4,10 @@ import cx from 'classnames'
 import { Header } from 'antd/lib/layout/layout'
 import { Button, Dropdown, Menu } from 'antd'
 import dayjs from 'dayjs'
-
-// enums
 import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import Tooltip from 'antd/es/tooltip'
+
+// enums
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // assets

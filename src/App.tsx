@@ -9,7 +9,6 @@ import { Locale } from 'antd/lib/locale-provider'
 import dayjs from 'dayjs'
 
 import 'antd/dist/antd.min.css'
-import '@mobiscroll/react/dist/css/mobiscroll.min.css'
 
 import Routes from './routes/Routes'
 

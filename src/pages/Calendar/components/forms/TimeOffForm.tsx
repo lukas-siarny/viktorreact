@@ -11,7 +11,7 @@ import { showErrorNotification } from '../../../../utils/helper'
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, FORM } from '../../../../utils/enums'
 
 // types
-import { ICalendarShiftForm } from '../../../../types/interfaces'
+import { ICalendarTimeOffForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
@@ -20,7 +20,7 @@ type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 }
 
-type Props = InjectedFormProps<ICalendarShiftForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ICalendarTimeOffForm, ComponentProps> & ComponentProps
 
 const CalendarTimeOffForm: FC<Props> = (props) => {
 	const { handleSubmit, setCollapsed } = props
@@ -37,7 +37,7 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ICalendarShiftForm, ComponentProps>({
+const form = reduxForm<ICalendarTimeOffForm, ComponentProps>({
 	form: FORM.CALENDAR_TIME_OFF_FORM,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

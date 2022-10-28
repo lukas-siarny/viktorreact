@@ -18,7 +18,7 @@ import { FIELD_MODE, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums
 type CalendarSelectOption = {
 	key: string
 	value: any
-	content?: React.ReactNode
+	label?: string
 	className?: string
 }
 
@@ -92,11 +92,11 @@ const CalendarSelectField: FC<Props> = (props) => {
 									<div
 										className={cx(option.className, 'nc-select-option')}
 										onClick={() => {
-											input.onChange(option.value)
+											input.onChange(option)
 											closePanel()
 										}}
 									>
-										{option.content}
+										{option.label}
 									</div>
 								)
 							})}
@@ -118,13 +118,17 @@ const CalendarSelectField: FC<Props> = (props) => {
 				validateStatus={meta.touched && meta.error}
 			>
 				<>
-					{input.value ? (
-						<div className={''}>{input.value.label}</div>
-					) : (
-						<button type={'button'} className={'nc-select-button'} onClick={openPanel}>
-							{emptyIcon} {STRINGS(t).select(entityName)}
-						</button>
-					)}
+					<button type={'button'} className={'nc-select-button'} onClick={openPanel}>
+						{input.value ? (
+							<>
+								{input.value.avatar} {input.value.label}
+							</>
+						) : (
+							<>
+								{emptyIcon} {STRINGS(t).select(entityName)}
+							</>
+						)}
+					</button>
 				</>
 			</Item>
 			{optionsOpened && (

@@ -49,12 +49,12 @@ const ReservationForm: FC<Props> = (props) => {
 				{
 					key: 'Service 1',
 					value: 'service-1-id',
-					content: <div>{'Service 1 option'}</div>
+					label: 'Service 1 option'
 				},
 				{
 					key: 'Service 2',
 					value: 'service-2-id',
-					content: <div>{'Service 2 option'}</div>
+					label: 'Service 2 option'
 				}
 			]
 		},
@@ -65,12 +65,12 @@ const ReservationForm: FC<Props> = (props) => {
 				{
 					key: 'Service 3',
 					value: 'service-3-id',
-					content: <div>{'Service 3 option'}</div>
+					label: 'Service 3 option'
 				},
 				{
 					key: 'Service 4',
 					value: 'service-4-id',
-					content: <div>{'Service 4 option'}</div>
+					label: 'Service 4 option'
 				}
 			]
 		}

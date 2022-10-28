@@ -31,16 +31,50 @@ import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 
 type ComponentProps = {
-	addEmployee: MouseEventHandler<HTMLElement>
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 }
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, pristine, addEmployee, setCollapsed } = props
+	const { handleSubmit, setCollapsed } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+
+	const serviceOptions = [
+		{
+			key: 'Odvetvie 1',
+			header: 'Odvetvie 1',
+			children: [
+				{
+					key: 'Service 1',
+					value: 'service-1-id',
+					content: <div>{'Service 1 option'}</div>
+				},
+				{
+					key: 'Service 2',
+					value: 'service-2-id',
+					content: <div>{'Service 2 option'}</div>
+				}
+			]
+		},
+		{
+			key: 'Odvetvie 2',
+			header: 'Odvetvie 2',
+			children: [
+				{
+					key: 'Service 3',
+					value: 'service-3-id',
+					content: <div>{'Service 3 option'}</div>
+				},
+				{
+					key: 'Service 4',
+					value: 'service-4-id',
+					content: <div>{'Service 4 option'}</div>
+				}
+			]
+		}
+	]
 
 	return (
 		<>
@@ -53,11 +87,19 @@ const ReservationForm: FC<Props> = (props) => {
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 					{/* <Field name={'customer'} label={t('loc:Zákazník')} component={CalendarSelectField} emptyIcon={<ProfileIcon />} entityName={t('loc:zákaznika')} required /> */}
-					<Field name={'service'} label={t('loc:Služba')} component={CalendarSelectField} emptyIcon={<ServicesIcon />} entityName={t('loc:službu')} required />
+					<Field
+						name={'service'}
+						label={t('loc:Služba')}
+						component={CalendarSelectField}
+						emptyIcon={<ServicesIcon />}
+						entityName={t('loc:službu')}
+						options={serviceOptions}
+						required
+					/>
 					{/* <Field name={'service'} label={t('loc:Zamestnanec')} component={CalendarSelectField} emptyIcon={<EmployeesIcon />} entityName={t('loc:zamestnanca')} required /> */}
 					<Field name={'date'} label={t('loc:Dátum')} className={'pb-0'} component={DateField} dropdownAlign={{ points: ['tr', 'br'] }} required />
 					<Fields
-						names={[`timeFrom`, `timeTo`]}
+						names={['timeFrom', 'timeTo']}
 						placeholders={[t('loc:čas od'), t('loc:čas do')]}
 						component={TimeRangeField}
 						hideHelp

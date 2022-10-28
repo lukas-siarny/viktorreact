@@ -141,16 +141,13 @@ export interface IServiceForm {
 }
 
 export interface ICalendarReservationForm {
-	id: number
-	durationFrom: number
-	durationTo: number
-	variableDuration: boolean
-	priceFrom: number
-	priceTo: number
-	variablePrice: boolean
-	useCategoryParameter: boolean
-	serviceCategoryParameter: any
-	employees: any
+	customerID: string
+	serviceID: string
+	employeeID: string
+	date: string
+	timeFrom: string
+	timeTo: string
+	note: string
 }
 
 export interface ICalendarShiftForm {}

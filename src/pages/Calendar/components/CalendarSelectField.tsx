@@ -15,7 +15,7 @@ import InputField from '../../../atoms/InputField'
 // enums
 import { FIELD_MODE, STRINGS, VALIDATION_MAX_LENGTH } from '../../../utils/enums'
 
-export type CalendarSelectOption = {
+type CalendarSelectOption = {
 	key: string
 	value: any
 	content?: React.ReactNode
@@ -23,7 +23,8 @@ export type CalendarSelectOption = {
 }
 
 export type CalendarSelectOptionGroup = {
-	title: React.ReactNode
+	key: string
+	header: React.ReactNode
 	className?: string
 	children: CalendarSelectOption[]
 }
@@ -51,6 +52,10 @@ type Props = {
 const { Item } = Form
 const { Panel } = Collapse
 
+const getDefaultActiveKeys = (options: CalendarSelectOptionGroup[]) => {
+	return options?.map((option) => option.key)
+}
+
 const CalendarSelectField: FC<Props> = (props) => {
 	const { entityName, emptyIcon, input, label, meta, required, disabled, style, className, readOnly, options } = props
 	const [optionsOpened, setOptionsOpened] = useState(false)
@@ -72,18 +77,25 @@ const CalendarSelectField: FC<Props> = (props) => {
 	const getOptions = () => {
 		return (
 			<Collapse
-				className={'nc-filter-collapse'}
+				className={'nc-collapse'}
 				bordered={false}
-				defaultActiveKey={[1, 2, 3]}
+				defaultActiveKey={getDefaultActiveKeys(options)}
 				expandIconPosition={'end'}
 				expandIcon={({ isActive }) => <ChevronDownIcon className={cx({ 'is-active': isActive })} />}
 			>
 				{options?.map((group) => {
 					return (
-						<Panel key={1} header={t('loc:Typ udalosti')} className={'nc-filter-panel'}>
+						<Panel key={group.key} header={group.header} className={'nc-collapse-panel'}>
 							{group.children.map((option) => {
+								// NOTE: moze sa to skusit spravit nejak inak ako cez divko
 								return (
-									<div className={cx(option.className, 'nc-select-option')} onClick={() => input.onChange(option.value)}>
+									<div
+										className={cx(option.className, 'nc-select-option')}
+										onClick={() => {
+											input.onChange(option.value)
+											closePanel()
+										}}
+									>
 										{option.content}
 									</div>
 								)

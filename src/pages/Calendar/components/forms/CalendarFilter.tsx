@@ -55,13 +55,13 @@ const CalendarFilter = (props: Props) => {
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'p-4'}>
 			<Collapse
-				className={'nc-filter-collapse'}
+				className={'nc-collapse'}
 				bordered={false}
 				defaultActiveKey={[1, 2, 3]}
 				expandIconPosition={'end'}
 				expandIcon={({ isActive }) => <ChevronDownIcon className={cx({ 'is-active': isActive })} />}
 			>
-				<Panel key={1} header={t('loc:Typ udalosti')} className={'nc-filter-panel'}>
+				<Panel key={1} header={t('loc:Typ udalosti')} className={'nc-collapse-panel'}>
 					<Field
 						className={'p-0 m-0 nc-radio-event-type'}
 						component={RadioGroupField}
@@ -71,12 +71,11 @@ const CalendarFilter = (props: Props) => {
 						size={'small'}
 					/>
 				</Panel>
-				<Panel key={2} header={t('loc:Zamestnanci')} className={'nc-filter-panel'}>
-					{/* TODO: Osetrit empty state */}
+				<Panel key={2} header={t('loc:Zamestnanci')} className={'nc-collapse-panel'}>
 					<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'employeeIDs'} options={employees?.options} size={'small'} rounded />
 				</Panel>
-				<Panel key={3} header={t('loc:Služby')} className={'nc-filter-panel'}>
-					{/* TODO: Osetrit empty state */}
+				<Panel key={3} header={t('loc:Služby')} className={'nc-collapse-panel'}>
+					{/* TODO: Osetrit empty state (ale treba najprv zistit, ci vobec moze nastat stav, ze sa kolenar zobrazi, ak salon nema nastavenu sluzbu) */}
 					<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'serviceIDs'} options={services?.options} size={'small'} rounded />
 				</Panel>
 			</Collapse>

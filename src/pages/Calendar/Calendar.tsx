@@ -40,10 +40,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const dispatch = useDispatch()
 
-	const employees = useSelector((state: RootState) => state.employees.employees)
-	const services = useSelector((state: RootState) => state.service.services)
-	const events = useSelector((state: RootState) => state.calendar.events)
-
 	const [query, setQuery] = useQueryParams({
 		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
@@ -52,15 +48,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
 	})
 
+	const employees = useSelector((state: RootState) => state.employees.employees)
+	const services = useSelector((state: RootState) => state.service.services)
+	const events = useSelector((state: RootState) => state.calendar.events)
+
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
-	// const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
-	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+	// NOTE: default je COLLAPSED, RESERVATION je len pre develeporske ucely teraz
+	const [siderEventManagementCollapsed, setSiderEventManagementCollapsed] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(
+		/* CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED */ CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
+	)
 
 	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
 
-	/* useEffect(() => {
-		// cez jeden useEffect, options uz sice su v reduxe, ale aj tak sa caka na dotiahnute a az potom sa inicializuje form
-		// tym padom je tam trochu delay, kym sa zaskrtnu
+	useEffect(() => {
 		const fetchData = async () => {
 			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
 			const servicesData = await dispatch(getServices({ salonID }))
@@ -75,23 +75,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 
 		fetchData()
-	}, [dispatch, salonID]) */
-
-	// cez dva useEffecty - check je hned, avsak form sa inicializuje dva krat
-	useEffect(() => {
-		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
-
-	useEffect(() => {
-		dispatch(
-			initialize(FORM.CALENDAR_FILTER, {
-				eventType: query.eventType,
-				serviceIDs: getSericeIDs(services?.options),
-				employeeIDs: getEmployeeIDs(employees?.options)
-			})
-		)
-	}, [query.eventType, services?.options, employees?.options, dispatch])
 
 	useEffect(() => {
 		dispatch(getCalendarEvents({ salonID, date: query.date }, query.view as CALENDAR_VIEW))
@@ -159,7 +143,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
 		setSiderEventManagementCollapsed(newView)
-		if (newView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED && query.eventType !== newView) {
+		if (newView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
 			setQuery({
 				...query,
 				eventType:

@@ -33,11 +33,14 @@ type Props = InjectedFormProps<ICalendarFilter, ComponentProps> & ComponentProps
 const { Panel } = Collapse
 
 const checkboxOptionRender = (option: any, checked?: boolean) => {
-	const { color } = option || {}
+	const { color, value } = option || {}
 
 	return (
 		<div className={cx('nc-checkbox-group-checkbox', { checked })}>
-			<div className={'checker'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }} />
+			<input type='checkbox' className='checkbox-input' value={value} checked={checked} />
+			<div className={'checker'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }}>
+				<span className={'checkbox-focus'} style={{ boxShadow: `0px 0px 4px 2px ${color || '#000'}`, border: `1px solid ${color}` }} />
+			</div>
 			{option?.label}
 		</div>
 	)

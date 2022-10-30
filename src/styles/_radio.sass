@@ -13,9 +13,10 @@
 			.ant-radio
 				input[type='radio']
 					outline: none
-					&:focus + .ant-radio-inner,
-					&:focus-visible + .ant-radio-inner
+					&:focus + .ant-radio-inner
 						box-shadow: none
+					&:focus-visible + .ant-radio-inner
+						box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.5)
 				&::after
 					display: none
 			&:hover,

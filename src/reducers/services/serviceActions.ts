@@ -62,7 +62,7 @@ export interface IServiceRootCategoryPayload {
 }
 
 export const getServices =
-	(queryParams: IGetServicesQueryParams): ThunkResult<Promise<IServicesPayload>> =>
+	(queryParams: IGetServicesQueryParams, optionsWithCategoryIdAsValue = false): ThunkResult<Promise<IServicesPayload>> =>
 	async (dispatch, getState) => {
 		let payload = {} as IServicesPayload
 		const state = getState()
@@ -116,7 +116,11 @@ export const getServices =
 			data.groupedServicesByCategory.forEach((firstCateogry) =>
 				firstCateogry?.category?.children.forEach((secondCategory) =>
 					secondCategory.category?.children.forEach((service) => {
-						servicesOptions.push({ key: service.service.id, label: service.category.name || service.category.id, value: service.service.id })
+						servicesOptions.push(
+							optionsWithCategoryIdAsValue
+								? { key: service.category.id, label: service.category.name || service.category.id, value: service.category.id }
+								: { key: service.service.id, label: service.category.name || service.category.id, value: service.service.id }
+						)
 					})
 				)
 			)

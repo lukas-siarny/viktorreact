@@ -37,7 +37,7 @@ const checkboxOptionRender = (option: any, checked?: boolean) => {
 
 	return (
 		<div className={cx('nc-checkbox-group-checkbox', { checked })}>
-			<input type='checkbox' className='checkbox-input' value={value} checked={checked} />
+			<input type='checkbox' className='checkbox-input' value={value} />
 			<div className={'checker'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }}>
 				<span className={'checkbox-focus'} style={{ boxShadow: `0px 0px 4px 2px ${color || '#000'}`, border: `1px solid ${color}` }} />
 			</div>

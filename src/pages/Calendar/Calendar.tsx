@@ -1,10 +1,10 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-import { debounce } from 'lodash'
+import { debounce, isEmpty } from 'lodash'
 import { change, initialize } from 'redux-form'
 
 // utils
@@ -53,29 +53,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const events = useSelector((state: RootState) => state.calendar.events)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
-	// NOTE: default je COLLAPSED, RESERVATION je len pre develeporske ucely teraz
-	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(
-		/* CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED */ CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
-	)
+
+	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
 
 	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
 
-	useEffect(() => {
-		const fetchData = async () => {
-			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-			const servicesData = await dispatch(getServices({ salonID }))
-
-			dispatch(
-				initialize(FORM.CALENDAR_FILTER, {
-					eventType: CALENDAR_EVENT_TYPE_FILTER.RESERVATION,
-					categoryIDs: getServiceIDs(servicesData.options),
-					employeeIDs: getEmployeeIDs(employeesData.options)
-				})
-			)
+	const filteredEmployees = useMemo(() => {
+		if (!isEmpty(query.employeeIDs)) {
+			return employees?.data?.employees.filter((employee) => query.employeeIDs?.includes(employee.id))
 		}
-
-		fetchData()
-	}, [dispatch, salonID])
+		return employees?.data?.employees
+	}, [employees?.data?.employees, query.employeeIDs])
 
 	useEffect(() => {
 		dispatch(
@@ -85,6 +73,21 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			)
 		)
 	}, [dispatch, salonID, query.date, query.view, query.eventType, query.categoryIDs, query.employeeIDs])
+
+	useEffect(() => {
+		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+		dispatch(getServices({ salonID }, true))
+	}, [dispatch, salonID])
+
+	useEffect(() => {
+		dispatch(
+			initialize(FORM.CALENDAR_FILTER, {
+				eventType: query.eventType,
+				categoryIDs: query.categoryIDs || getServiceIDs(services?.options),
+				employeeIDs: query.employeeIDs || getEmployeeIDs(employees?.options)
+			})
+		)
+	}, [dispatch, salonID, query.categoryIDs, query.employeeIDs, query.eventType, services?.options, employees.options])
 
 	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
@@ -156,7 +159,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				...query,
 				eventType: newEventType
 			})
-			dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
 		}
 	}
 
@@ -188,7 +190,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			/>
 			<Layout hasSider className={'noti-calendar-main-section'}>
 				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} />
-				<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} loading={loadingData} />
+				<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} loading={loadingData} events={events} employees={filteredEmployees} />
 				<SiderEventManagement
 					view={siderEventManagement}
 					setCollapsed={setEventManagement}

@@ -10,30 +10,35 @@ import CalendarDayView from '../views/CalendarDayView'
 import CalendarWeekView from '../views/CalendarWeekView'
 import CalendarMonthView from '../views/CalendarMonthView'
 
+// reducers
+import { ICalendarEventsPayload } from '../../../../reducers/calendar/calendarActions'
+import { Employees } from '../../../../types/interfaces'
+
 type Props = {
 	view: CALENDAR_VIEW
 	selectedDate: string
 	loading: boolean
+	events: ICalendarEventsPayload
+	employees?: Employees
 }
 
 const CalendarContent: FC<Props> = (props) => {
-	const { view, selectedDate, loading } = props
+	const { view, selectedDate, loading, events, employees } = props
 
 	const getView = () => {
 		if (view === CALENDAR_VIEW.MONTH) {
-			return <CalendarMonthView selectedDate={selectedDate} />
+			return <CalendarMonthView selectedDate={selectedDate} events={events} employees={employees} />
 		}
 
 		if (view === CALENDAR_VIEW.WEEK) {
-			return <CalendarWeekView selectedDate={selectedDate} />
+			return <CalendarWeekView selectedDate={selectedDate} events={events} employees={employees} />
 		}
 
-		return <CalendarDayView selectedDate={selectedDate} />
+		return <CalendarDayView selectedDate={selectedDate} events={events} employees={employees} />
 	}
 
 	return (
 		<Content className={'nc-content'}>
-			{/* NOTE: este sa stym treba vyhrat, pripadne uplne odstranit */}
 			<div className={'nc-content-animate'} key={`${selectedDate} ${view}`}>
 				<Spin spinning={loading}>{getView()}</Spin>
 			</div>

@@ -5,9 +5,9 @@ import Layout from 'antd/lib/layout/layout'
 import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { debounce } from 'lodash'
+import { change, initialize } from 'redux-form'
 
 // utils
-import { change, initialize } from 'redux-form'
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION, CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
@@ -27,7 +27,7 @@ import CalendarContent from './components/layout/Content'
 // types
 import { ICalendarBreakForm, ICalendarFilter, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm, SalonSubPageProps } from '../../types/interfaces'
 
-const getSericeIDs = (data: IServicesPayload['options']) => {
+const getServiceIDs = (data: IServicesPayload['options']) => {
 	return data?.map((service) => service.value) as string[]
 }
 
@@ -68,7 +68,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			dispatch(
 				initialize(FORM.CALENDAR_FILTER, {
 					eventType: CALENDAR_EVENT_TYPE_FILTER.RESERVATION,
-					categoryIDs: getSericeIDs(servicesData.options),
+					categoryIDs: getServiceIDs(servicesData.options),
 					employeeIDs: getEmployeeIDs(employeesData.options)
 				})
 			)

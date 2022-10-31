@@ -63,7 +63,7 @@ const CalendarFilter = (props: Props) => {
 			{
 				key: CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF,
 				value: CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF,
-				label: t('loc:Smena / absencia')
+				label: t('loc:Zmena / absencia')
 			}
 		],
 		[t]

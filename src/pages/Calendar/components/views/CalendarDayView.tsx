@@ -46,7 +46,7 @@ const resourceLabelContent = (labelInfo: any) => {
 
 	return (
 		<div className='noti-fc-resource-label'>
-			<div className='image w-6 h-6 bg-notino-gray' style={{ background: `url("${employee.image}")` }} />
+			<div className={`image w-6 h-6 bg-notino-gray bg-[url('${employee.image}')]`} />
 			<div>
 				{employee.name}
 				<br />

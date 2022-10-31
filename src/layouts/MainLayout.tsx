@@ -61,6 +61,8 @@ const MainLayout: FC<Props> = (props) => {
 				type: 'group',
 				key: 'group-salons',
 				children: salonMenuItems,
+				// maxHeight - 100vh - 170px - je potrebné zaistiť aby na nejakom menšom responzívnom zobrazení nešlo menu mimo obrazovku
+				// čiže odratá sa vyška headera, výška buttonu "Pridať salón" + nejake marginy, paddingy
 				style: { height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }
 			},
 			{

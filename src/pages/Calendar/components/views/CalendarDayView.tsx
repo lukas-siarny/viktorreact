@@ -1,10 +1,10 @@
-import React, { FC, useRef, useEffect } from 'react'
+import React, { FC, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // full calendar
-import FullCalendar from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -16,7 +16,7 @@ import { composeDayEventResources, composeDayViewEvents } from '../../calendarHe
 // types
 import { ICalendarView } from '../../../../types/interfaces'
 
-const renderEventContent = (data: any) => {
+const renderEventContent = (data: EventContentArg) => {
 	const { event, timeText } = data || {}
 	const { extendedProps } = event || {}
 
@@ -33,14 +33,17 @@ const renderEventContent = (data: any) => {
 		)
 	}
 
+	const diff = dayjs(event.end).diff(event.start, 'minutes')
+
 	return (
 		<div className={'nc-day-event'}>
-			<div className={'event-accent'} style={{ backgroundImage: extendedProps.employee?.accent }} />
-			<div className={'event-background'}>
+			<div className={'event-accent'} style={{ backgroundColor: extendedProps.employee?.color }} />
+			<div className={'event-background'} style={{ backgroundColor: extendedProps.employee?.color }} />
+			<div className={'event-content'}>
 				<div className={'flex flex-col gap-1'}>
-					{timeText}
-					<strong>{event.title}</strong>
-					<span className={'desc'}>{extendedProps.description}</span>
+					<span className={cx('time', { hidden: Math.abs(diff) < 45 })}>{timeText}</span>
+					<span className={'title'}>{extendedProps.customer?.name}</span>
+					<span className={'desc'}>{extendedProps.service?.name}</span>
 				</div>
 			</div>
 		</div>
@@ -61,7 +64,7 @@ const resourceLabelContent = (data: any) => {
 	)
 }
 
-const slotLabelContent = (data: any) => {
+const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { time } = data || {}
 
 	return <div className={'nc-day-slot-label'}>{dayjs().startOf('day').add(time.milliseconds, 'millisecond').format('HH:mm')}</div>
@@ -75,7 +78,7 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 	const [t] = useTranslation()
 
 	const handleDateClick = (arg: DateClickArg) => {
-		console.log({ arg })
+		// console.log({ arg })
 	}
 
 	const handleSelect = (info: any) => {

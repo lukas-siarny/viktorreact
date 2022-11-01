@@ -34,12 +34,14 @@ const renderEventContent = (data: any) => {
 	}
 
 	return (
-		<div className={'noti-fc-event'}>
+		<div className={'nc-day-event'}>
 			<div className={'event-accent'} style={{ backgroundImage: extendedProps.employee?.accent }} />
-			<div className={'flex flex-col gap-1'}>
-				{timeText}
-				<strong>{event.title}</strong>
-				<span className={'desc'}>{extendedProps.description}</span>
+			<div className={'event-background'}>
+				<div className={'flex flex-col gap-1'}>
+					{timeText}
+					<strong>{event.title}</strong>
+					<span className={'desc'}>{extendedProps.description}</span>
+				</div>
 			</div>
 		</div>
 	)
@@ -49,9 +51,9 @@ const resourceLabelContent = (data: any) => {
 	const extendedProps = data?.resource.extendedProps || {}
 
 	return (
-		<div className={'nc-day-resource-label p-4'}>
-			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ background: `url("${extendedProps.image}")` }} />
-			<div className={'info text-xs font-normal min-w-0'}>
+		<div className={'nc-day-resource-label'}>
+			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.image}")` }} />
+			<div className={'info flex flex-col justify-start text-xs font-normal min-w-0'}>
 				<span className={'name'}>{extendedProps.name}</span>
 				<span className={'description'}>{extendedProps.description}</span>
 			</div>
@@ -62,7 +64,7 @@ const resourceLabelContent = (data: any) => {
 const slotLabelContent = (data: any) => {
 	const { time } = data || {}
 
-	return <div className={'nc-slot-label-content'}>{dayjs().startOf('day').add(time.milliseconds, 'millisecond').format('HH:mm')}</div>
+	return <div className={'nc-day-slot-label'}>{dayjs().startOf('day').add(time.milliseconds, 'millisecond').format('HH:mm')}</div>
 }
 
 interface ICalendarDayView extends ICalendarView {}
@@ -86,26 +88,26 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 
 	const calendarRef = useRef<any>()
 
-	useEffect(() => {
+	/* useEffect(() => {
 		const calendarApi = calendarRef.current.getApi()
 		calendarApi.scrollToTime({
 			milliseconds: 28800000
 		})
-	}, [])
+	}, []) */
 
 	return (
 		<FullCalendar
-			ref={calendarRef}
 			// settings
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 			// slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
 			eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
 			plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
-			height='auto'
+			height='100%'
 			headerToolbar={false}
 			initialView={'resourceTimeGridDay'}
 			initialDate={selectedDate}
+			scrollTime={'08:00:00'}
 			slotDuration={'00:15:00'}
 			slotLabelInterval={'01:00:00'}
 			dayMinWidth={200}
@@ -114,7 +116,6 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 			weekends
 			allDaySlot={false}
 			stickyFooterScrollbar
-			// events & resources
 			events={composeDayViewEvents(events?.data, employees)}
 			resources={composeDayEventResources(events?.data, employees)}
 			// render hooks

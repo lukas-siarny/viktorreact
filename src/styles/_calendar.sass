@@ -15,6 +15,30 @@
 	100%
 		transform: translateX(0)
 
+
+@mixin scrollbar-styles
+	@media (pointer:fine)
+		&::-webkit-scrollbar, .hnGhZ::-webkit-scrollbar
+			width: 16px
+			height: 16px
+		&::-webkit-scrollbar
+			background: transparent
+			height: 8px
+			width: 8px
+		&::-webkit-scrollbar-thumb, .hnGhZ::-webkit-scrollbar-thumb
+			border-bottom: 4px solid #fff
+			border-left: 4px solid #fff
+			border-right: 4px solid #fff
+			border-top: 4px solid #fff
+		&::-webkit-scrollbar-thumb
+			border: none
+			-webkit-box-shadow: none
+			box-shadow: none
+			background: $backgroundColor-notino-grayLight
+			-webkit-border-radius: 8px
+			border-radius: 8px
+			min-height: 40px
+
 // calendar layout
 .noti-calendar-layout
 	height: 100%
@@ -151,8 +175,18 @@
 		.nc-content
 			background: $backgroundColor-notino-white
 			height: 100%
-			overflow-y: auto
+			overflow: hidden
 			position: relative
+			.ant-spin-nested-loading
+				position: absolute
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				width: 100%
+				height: 100%
+				.ant-spin-container
+					height: 100%
 			.nc-content-animate
 				position: absolute
 				top: 0
@@ -164,30 +198,7 @@
 				transform: translateX(-50px)
 				opacity: 0
 				animation: content-animation 250ms ease-out forwards
-			.ant-spin-nested-loading
-				height: 100%
-				.ant-spin-container
-					height: 100%
-			&::-webkit-scrollbar, .hnGhZ::-webkit-scrollbar
-				width: 16px
-				height: 16px
-			&::-webkit-scrollbar
-				background: transparent
-				height: 8px
-				width: 8px
-			&::-webkit-scrollbar-thumb, .hnGhZ::-webkit-scrollbar-thumb
-				border-bottom: 4px solid #fff
-				border-left: 4px solid #fff
-				border-right: 4px solid #fff
-				border-top: 4px solid #fff
-			&::-webkit-scrollbar-thumb
-				border: none
-				-webkit-box-shadow: none
-				box-shadow: none
-				background: $backgroundColor-notino-grayLight
-				-webkit-border-radius: 8px
-				border-radius: 8px
-				min-height: 40px
+				overflow: hidden
 
 	// other
 	.nc-collapse
@@ -321,9 +332,22 @@
 				align-self: center
 
 // full calendar
-.fc-theme-standard .fc-scrollgrid,
-.fc .fc-scrollgrid-section > td
-	// border-color: transparent
+.fc-scrollgrid-section-sticky
+	position: sticky
+	background: white
+	z-index: 20
+
+.fc-timegrid-body
+	background: $backgroundColor-notino-white
+
+.fc .fc-timegrid-slot-minor
+	border-top-color: transparent
+
+.fc-theme-standard td
+	border-color: $borderColor-notino-grayLight
+
+.fc-day-today
+	background: transparent !important
 
 // day view
 .fc-resourceTimeGridDay-view
@@ -331,6 +355,7 @@
 		border-color: transparent
 		> thead
 			.fc-col-header-cell
+				border-bottom-color: transparent
 				.fc-col-header-cell-cushion
 					display: block
 					width: 100%
@@ -344,7 +369,13 @@
 					.fc-timegrid-axis
 						border-color: transparent
 				> th:last-of-type
-					// border-right: 1px solid transparent
+					border-right: 1px solid transparent
+					border-bottom: 1px solid $borderColor-notino-grayLight
+					> .fc-scroller-harness
+						> .fc-scroller
+							@include scrollbar-styles
+							// overflow: visible !important
+							// margin-bottom: 0 !important
 		> tbody
 			> tr.fc-scrollgrid-section-body
 				// vyska najmenjsieho casoveho intervalu - teda ak mam nastavenych 15minut - tak cela hodina bude 60px vysoka (4 x 15px)
@@ -352,13 +383,15 @@
 					line-height: 15px
 					height: 15px
 				> td:first-of-type
-					> .fc-scroller-harness
+					border-bottom-color: transparent
+					/* > .fc-scroller-harness
 						overflow: visible
 						.fc-scroller
-							overflow: visible !important
+							overflow: visible scroll !important
 					.fc-timegrid-slot
 						border-color: transparent
-						transform: translateY(-50%)
+						// transform: translateY(-50%)
+						transform: translateY(-25%)
 						.fc-timegrid-slot-label-frame
 							.fc-timegrid-slot-label-cushion
 								color: $textColor-notino-grayDarker
@@ -367,96 +400,88 @@
 								padding: 0
 				> td:last-of-type
 					border-color: transparent
+					> .fc-scroller-harness
+						> .fc-scroller
+							@include scrollbar-styles
+							.fc-timegrid-event-harness
+								margin: 2px 4px 2px 2px
+								.fc-timegrid-event
+									background: transparent
+									border: none
+									box-shadow: none
+									.fc-event-main
+										padding: 0
+		> tfoot
+			> tr.fc-scrollgrid-section-footer
+				> th
+					> .fc-scroller-harness
+						> .fc-scroller
+							@include scrollbar-styles
 
-.nc-day-resource-label
-	display: flex
-	gap: 8px
-	overflow: hidden
-	min-width: 0
-	width: 100%
-	text-align: left
-	.image
-		border-radius: 50%
-		flex: 0 0 auto
-		border: 1px solid $borderColor-notino-grayLight
-		background-position: center
-	.info
+	.nc-day-resource-label
 		display: flex
-		flex-direction: column
-		justify-content: flex-start
-		.name
-			min-width: 0
-			white-space: nowrap
-			overflow: hidden
-			text-overflow: ellipsis
-			max-width: 100%
-			line-height: 13px
-		.description
-			font-size: 10px
-			color: $textColor-notino-grayDark
-			white-space: nowrap
-			overflow: hidden
-			text-overflow: ellipsis
-			max-width: 100%
-			line-height: 11px
+		gap: 8px
+		overflow: hidden
+		min-width: 0
+		width: 100%
+		text-align: left
+		padding: 16px
+		.image
+			border-radius: 50%
+			flex: 0 0 auto
+			border: 1px solid $borderColor-notino-grayLight
+			background-position: center
+		.info
+			.name
+				min-width: 0
+				white-space: nowrap
+				overflow: hidden
+				text-overflow: ellipsis
+				max-width: 100%
+				line-height: 13px
+			.description
+				font-size: 10px
+				color: $textColor-notino-grayDark
+				white-space: nowrap
+				overflow: hidden
+				text-overflow: ellipsis
+				max-width: 100%
+				line-height: 11px
 
-.nc-slot-label-content
-	width: 60px
-	text-align: center
+	.nc-day-slot-label
+		width: 60px
+		text-align: center
 
-	// transform: translateY(-25px)
-
-.fc-timegrid-event-harness
-	.fc-timegrid-event
-		background: transparent
-		border: none
-		box-shadow: none
-		.fc-event-main
-			padding: 2px
-
-.fc-day-today
-	background: transparent !important
-
-.noti-fc-event
-	width: 100%
-	height: 100%
-	background: pink
-	position: relative
-	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
-	border-radius: 4px
-	color: $textColor-notino-black
-	padding: 2px 8px
-	font-size: 10px
-	line-height: 1
-	.event-accent
-		content: ''
-		background: '#000',
-		position: absolute
-		top: 0
-		bottom: 0
-		left: 0
-		width: 4px
-		border-top-left-radius: 4px
-		border-bottom-left-radius: 4px
-	.desc
-		color: $textColor-notino-gray
-	strong
-		font-size: 12px
-
-.fc-scrollgrid-section-sticky
-	position: sticky
-	background: white
-	z-index: 20
-
-.fc-timegrid-body
-	// background: url("../assets/images/calendar-background.png")
-	background: $backgroundColor-notino-white
-
-.fc .fc-timegrid-slot-minor
-	border-top-color: transparent
-
-.fc-theme-standard td
-	border-color: $borderColor-notino-grayLight
+	.nc-day-event
+		width: 100%
+		height: 100%
+		background: $backgroundColor-notino-white
+		position: relative
+		box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+		border-radius: 4px
+		color: $textColor-notino-black
+		font-size: 10px
+		line-height: 1
+		overflow: hidden
+		.event-background
+			width: 100%
+			height: 100%
+			background: rgba($backgroundColor-notino-black, 0.05)
+			padding: 2px 8px
+		.event-accent
+			content: ''
+			background: #000,
+			position: absolute
+			top: 0
+			bottom: 0
+			left: 0
+			width: 4px
+			border-top-left-radius: 4px
+			border-bottom-left-radius: 4px
+		.desc
+			color: $textColor-notino-gray
+		strong
+			font-size: 12px
 
 // FC - bg events
 .noti-fc-bg-event

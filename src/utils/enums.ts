@@ -591,7 +591,8 @@ export const CALENDAR_COMMON_SETTINGS = {
 		minute: '2-digit',
 		separator: '-',
 		hour12: false
-	} as FormatterInput
+	} as FormatterInput,
+	SCROLL_TIME: '08:00:00'
 }
 
 export enum CALENDAR_VIEW {

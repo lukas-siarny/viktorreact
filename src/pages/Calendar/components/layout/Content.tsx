@@ -39,9 +39,11 @@ const CalendarContent: FC<Props> = (props) => {
 
 	return (
 		<Content className={'nc-content'}>
-			<div className={'nc-content-animate'} key={`${selectedDate} ${view}`}>
-				<Spin spinning={loading}>{getView()}</Spin>
-			</div>
+			<Spin spinning={loading}>
+				<div className={'nc-content-animate'} key={`${selectedDate} ${view}`}>
+					{getView()}
+				</div>
+			</Spin>
 		</Content>
 	)
 }

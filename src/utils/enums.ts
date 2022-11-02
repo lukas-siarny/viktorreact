@@ -592,7 +592,9 @@ export const CALENDAR_COMMON_SETTINGS = {
 		separator: '-',
 		hour12: false
 	} as FormatterInput,
-	SCROLL_TIME: '08:00:00'
+	SCROLL_TIME: '08:00:00',
+	SLOT_DURATION: '00:15:00',
+	SLOT_LABEL_INTERVAL: '01:00:00'
 }
 
 export enum CALENDAR_VIEW {

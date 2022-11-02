@@ -110,13 +110,14 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 			headerToolbar={false}
 			initialView={'resourceTimeGridDay'}
 			initialDate={selectedDate}
-			scrollTime={'08:00:00'}
-			slotDuration={'00:15:00'}
-			slotLabelInterval={'01:00:00'}
+			scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
+			slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
+			slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
 			dayMinWidth={200}
 			editable
 			selectable
 			weekends
+			nowIndicator
 			allDaySlot={false}
 			stickyFooterScrollbar
 			events={composeDayViewEvents(events?.data, employees)}

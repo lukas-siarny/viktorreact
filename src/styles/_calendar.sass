@@ -356,6 +356,20 @@
 .fc-resourceTimeGridDay-view
 	> table.fc-scrollgrid
 		border-color: transparent
+		.fc-timegrid-now-indicator-arrow
+			left: unset
+			right: 1px
+			width: 10px
+			height: 10px
+			background: $backgroundColor-notino-pink
+			border-radius: 50%
+			border: none
+			transform: translateY(1px)
+		.fc-timegrid-now-indicator-container
+			right: -1px
+			.fc-timegrid-now-indicator-line
+				border-color: $backgroundColor-notino-pink
+				border-top-width: 2px
 		> thead
 			.fc-col-header-cell
 				border-bottom-color: transparent
@@ -391,29 +405,50 @@
 						overflow: visible
 						.fc-scroller
 							overflow: visible scroll !important
-					.fc-timegrid-slot
-						border-color: transparent
-						// transform: translateY(-50%)
-						transform: translateY(-25%)
-						.fc-timegrid-slot-label-frame
-							.fc-timegrid-slot-label-cushion
-								color: $textColor-notino-grayDarker
-								font-size: 10px
-								line-height: 12px
-								padding: 0
+					.fc-timegrid-axis-chunk
+						table tbody
+							tr
+								height: 15px
+								.fc-timegrid-slot
+									border-color: transparent
+									.fc-timegrid-slot-label-frame
+										.fc-timegrid-slot-label-cushion
+											color: $textColor-notino-grayDarker
+											font-size: 10px
+											line-height: 12px
+											padding: 0
+											transform: translateY(-25%)
 				> td:last-of-type
 					border-color: transparent
 					> .fc-scroller-harness
 						> .fc-scroller
 							@include scrollbar-styles
-							.fc-timegrid-event-harness
-								margin: 2px 4px 2px 2px
-								.fc-timegrid-event
-									background: transparent
-									border: none
-									box-shadow: none
-									.fc-event-main
-										padding: 0
+							.fc-timegrid-cols
+								.fc-timegrid-col
+									.fc-timegrid-col-frame
+										// events col
+										.fc-timegrid-col-events
+											.fc-timegrid-event-harness
+												margin: 2px 4px 2px 2px
+												.fc-timegrid-event
+													background: transparent
+													border: none
+													box-shadow: none
+													.fc-event-main
+														padding: 0
+									/* &:first-of-type
+										.fc-timegrid-col-frame
+											.fc-timegrid-now-indicator-container
+												.fc-timegrid-now-indicator-line
+													&::before
+														content: ''
+														position: absolute
+														left: -5px
+														width: 10px
+														height: 10px
+														background: $backgroundColor-notino-pink
+														border-radius: 50%
+														transform: translateY(-6px)
 		> tfoot
 			> tr.fc-scrollgrid-section-footer
 				> th

@@ -1,45 +1,46 @@
-import React, { MouseEventHandler, useCallback, useState, FC } from 'react'
+import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
-import { useDispatch, useSelector } from 'react-redux'
-import { Button, Form } from 'antd'
-import cx from 'classnames'
+import { change, Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { useDispatch } from 'react-redux'
+import { Button, Form, Modal } from 'antd'
 
 // validate
-import validateReservationForm from './validateShiftForm'
+import { map } from 'lodash'
+import validateReservationForm from './validateReservationForm'
 
 // reducers
-import { RootState } from '../../../../reducers'
-
 // utils
-import { showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, FORM, STRINGS } from '../../../../utils/enums'
+import { formatLongQueryString, showErrorNotification } from '../../../../utils/helper'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
-import { ICalendarReservationForm } from '../../../../types/interfaces'
+import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { ReactComponent as ProfileIcon } from '../../../../assets/icons/profile-icon.svg'
-import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees.svg'
 
 // components
-import CalendarSelectField from '../CalendarSelectField'
 import DateField from '../../../../atoms/DateField'
 import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
+import SelectField from '../../../../atoms/SelectField'
+import { getReq, postReq } from '../../../../utils/request'
+import CustomerForm from '../../../CustomersPage/components/CustomerForm'
+import Permissions from '../../../../utils/Permissions'
 
 type ComponentProps = {
+	salonID: string
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 }
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed } = props
+	const { handleSubmit, setCollapsed, salonID } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
+	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
 
 	const serviceOptions = [
 		{
@@ -76,38 +77,214 @@ const ReservationForm: FC<Props> = (props) => {
 		}
 	]
 
+	const searchEmployes = useCallback(
+		async (search: string, page: number) => {
+			try {
+				const { data } = await getReq('/api/b2b/admin/employees/', {
+					search: formatLongQueryString(search),
+					page,
+					salonID
+				})
+				const selectOptions = map(data.employees, (employee) => ({
+					value: employee.id,
+					key: employee.id,
+					label: employee.firstName && employee.lastName ? `${employee.firstName} ${employee.lastName}` : employee.email
+				}))
+				return { pagination: data.pagination, data: selectOptions }
+			} catch (e) {
+				return { pagination: null, data: [] }
+			}
+		},
+		[salonID]
+	)
+
+	const searchServices = useCallback(
+		async (search: string, page: number) => {
+			try {
+				// TODO: EP na sluzby?
+				// const { data } = await getReq('/api/b2b/admin/services/', {
+				// 	search: formatLongQueryString(search),
+				// 	page,
+				// 	salonID
+				// })
+				//
+				// const selectOptions = map(data.employees, (employee) => ({
+				// 	value: employee.id,
+				// 	key: employee.id,
+				// 	label: employee.firstName && employee.lastName ? `${employee.firstName} ${employee.lastName}` : employee.email
+				// }))
+				// return { pagination: data.pagination, data: selectOptions }
+			} catch (e) {
+				return { pagination: null, data: [] }
+			}
+		},
+		[salonID]
+	)
+
+	const searchCustomers = useCallback(
+		async (search: string, page: number) => {
+			try {
+				const { data } = await getReq('/api/b2b/admin/customers/', {
+					search: formatLongQueryString(search),
+					page,
+					salonID
+				})
+				const selectOptions = map(data.customers, (customer) => ({
+					value: customer.id,
+					key: customer.id,
+					label: customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email
+				}))
+				return { pagination: data.pagination, data: selectOptions }
+			} catch (e) {
+				return { pagination: null, data: [] }
+			}
+		},
+		[salonID]
+	)
+
+	const handleSubmitCustomer = async (values: ICustomerForm) => {
+		try {
+			const customer = await postReq('/api/b2b/admin/customers/', null, {
+				firstName: values.firstName,
+				lastName: values.lastName,
+				salonID,
+				phone: values.phone,
+				phonePrefixCountryCode: values.phonePrefixCountryCode,
+				profileImageID: (values?.avatar?.[0]?.id ?? values?.avatar?.[0]?.uid) || null
+			})
+			// TODO: initnut labelInValue shape
+			dispatch(change(FORM.CALENDAR_RESERVATION_FORM, 'customer', customer.data.customer?.id))
+			setVisibleCustomerModal(false)
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		}
+	}
+
+	const modals = (
+		<Modal
+			className='rounded-fields'
+			title={t('loc:Pridať nového zákaznika')}
+			centered
+			destroyOnClose
+			onOk={() => dispatch(submit(FORM.CUSTOMER))}
+			visible={visibleCustomerModal}
+			onCancel={() => setVisibleCustomerModal(false)}
+			closeIcon={<CloseIcon />}
+		>
+			<CustomerForm onSubmit={handleSubmitCustomer} inModal />
+		</Modal>
+	)
+
 	return (
 		<>
+			{modals}
 			<div className={'nc-sider-event-management-header justify-between'}>
-				<h2>{t('loc:Nová rezervácia')}</h2>
+				<div className={'font-semibold'}>{t('loc:Nová rezervácia')}</div>
 				<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
 					<CloseIcon />
 				</Button>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
-					{/* <Field name={'customer'} label={t('loc:Zákazník')} component={CalendarSelectField} emptyIcon={<ProfileIcon />} entityName={t('loc:zákaznika')} required /> */}
+					<Permissions
+						allowed={[SALON_PERMISSION.CUSTOMER_CREATE]}
+						render={(hasPermission, { openForbiddenModal }) => (
+							<Field
+								component={SelectField}
+								label={t('loc:Zákazník')}
+								placeholder={t('loc:Vyber zákazníka')}
+								name={'customer'}
+								className={'pb-0'}
+								size={'large'}
+								suffixIcon={<ProfileIcon />}
+								update={(itemKey: number, ref: any) => ref.blur()}
+								filterOption={false}
+								allowInfinityScroll
+								showSearch
+								labelInValue
+								required
+								allowClear
+								onSearch={searchCustomers}
+								actions={[
+									{
+										title: t('loc:Nový zákaznik'),
+										// TODO: zistit ci sa ma tento field obalit do permission componentu
+										// SALON_PERMISSION.CUSTOMER_CREATE
+										onAction: hasPermission ? () => setVisibleCustomerModal(true) : openForbiddenModal
+									}
+								]}
+							/>
+						)}
+					/>
+
 					<Field
-						name={'service'}
+						component={SelectField}
+						// optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 						label={t('loc:Služba')}
-						component={CalendarSelectField}
-						emptyIcon={<ServicesIcon />}
-						entityName={t('loc:službu')}
-						options={serviceOptions}
+						suffixIcon={<ProfileIcon />}
+						placeholder={t('loc:Vyber službu')}
+						name={'service'}
+						size={'large'}
+						update={(itemKey: number, ref: any) => ref.blur()}
+						filterOption={false}
+						allowInfinityScroll
+						showSearch
+						className={'pb-0'}
+						required
+						labelInValue
+						onSearch={searchServices}
+					/>
+
+					{/* <Field */}
+					{/*	name={'service'} */}
+					{/*	label={t('loc:Služba')} */}
+					{/*	component={CalendarSelectField} */}
+					{/*	labelInValue */}
+					{/*	emptyIcon={<ServicesIcon />} */}
+					{/*	entityName={t('loc:službu')} */}
+					{/*	options={serviceOptions} */}
+					{/*	required */}
+					{/* /> */}
+					<Field
+						name={'date'}
+						label={t('loc:Dátum')}
+						className={'pb-0'}
+						pickerClassName={'w-full'}
+						component={DateField}
+						disablePast
+						placement={'bottomRight'}
+						dropdownAlign={{ points: ['tr', 'br'] }}
 						required
 					/>
-					{/* <Field name={'service'} label={t('loc:Zamestnanec')} component={CalendarSelectField} emptyIcon={<EmployeesIcon />} entityName={t('loc:zamestnanca')} required /> */}
-					<Field name={'date'} label={t('loc:Dátum')} className={'pb-0'} component={DateField} dropdownAlign={{ points: ['tr', 'br'] }} required />
 					<Fields
 						names={['timeFrom', 'timeTo']}
+						labels={[t('loc:Začiatok'), t('loc:Koniec')]}
 						placeholders={[t('loc:čas od'), t('loc:čas do')]}
 						component={TimeRangeField}
-						hideHelp
+						required
 						allowClear
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} required />
+					<Field
+						component={SelectField}
+						// optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+						label={t('loc:Zamestnanec')}
+						suffixIcon={<ProfileIcon />}
+						placeholder={t('loc:Vyber zamestnanca')}
+						name={'employee'}
+						size={'large'}
+						update={(itemKey: number, ref: any) => ref.blur()}
+						filterOption={false}
+						allowInfinityScroll
+						showSearch
+						required
+						className={'pb-0'}
+						labelInValue
+						onSearch={searchEmployes}
+					/>
+					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>

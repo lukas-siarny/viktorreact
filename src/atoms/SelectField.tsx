@@ -146,7 +146,15 @@ const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactE
 			<div className={'w-11/12 m-auto'}>{divider}</div>
 			{map(actions, (item, index) => (
 				<div className={'flex items-center h-12'} key={index}>
-					<Button key={item.title} type='link' size={'large'} htmlType='button' className={'noti-btn'} icon={item.icon || <PlusIcon />} onClick={item.onAction}>
+					<Button
+						key={item.title}
+						type='link'
+						size={'large'}
+						htmlType='button'
+						className={'noti-btn text-notino-pink'}
+						icon={item.icon || <PlusIcon />}
+						onClick={item.onAction}
+					>
 						{item.title}
 					</Button>
 				</div>

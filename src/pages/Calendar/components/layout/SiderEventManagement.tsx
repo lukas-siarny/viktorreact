@@ -14,6 +14,7 @@ import TimeOffForm from '../forms/TimeOffForm'
 import BreakForm from '../forms/BreakForm'
 
 type Props = {
+	salonID: string
 	view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	handleSubmitReservation: (values?: ICalendarReservationForm) => void
@@ -23,12 +24,12 @@ type Props = {
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const { view, setCollapsed, handleSubmitReservation, handleSubmitTimeOff, handleSubmitShift, handleSubmitBreak } = props
+	const { view, setCollapsed, handleSubmitReservation, handleSubmitTimeOff, handleSubmitShift, handleSubmitBreak, salonID } = props
 
 	const getSiderContent = () => {
 		switch (view) {
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
-				return <ReservationForm setCollapsed={setCollapsed} onSubmit={handleSubmitReservation} />
+				return <ReservationForm setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitReservation} />
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
 				return <ShiftForm setCollapsed={setCollapsed} onSubmit={handleSubmitShift} />
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:

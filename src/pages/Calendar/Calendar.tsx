@@ -161,7 +161,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleSubmitReservation = (values?: ICalendarReservationForm) => {
-		console.log(values)
+		// TODO: rezervacia
+		console.log('reservation form values', values)
 	}
 
 	const handleSubmitShift = (values?: ICalendarShiftForm) => {
@@ -190,6 +191,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} />
 				<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} loading={loadingData} />
 				<SiderEventManagement
+					salonID={salonID}
 					view={siderEventManagement}
 					setCollapsed={setEventManagement}
 					handleSubmitReservation={handleSubmitReservation}

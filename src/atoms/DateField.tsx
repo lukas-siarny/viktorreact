@@ -62,7 +62,8 @@ const DateField = (props: Props) => {
 		onSelect,
 		className,
 		pickerClassName,
-		dropdownAlign
+		dropdownAlign,
+		placement
 	} = props
 
 	let value
@@ -137,8 +138,8 @@ const DateField = (props: Props) => {
 				value={value}
 				defaultPickerValue={defaultPickerValue}
 				size={size}
-				clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
-				suffixIcon={suffixIcon || <DateSuffixIcon className={'text-blue-600'} />}
+				clearIcon={clearIcon || <RemoveIcon className={'text-gray-600'} />}
+				suffixIcon={suffixIcon || <DateSuffixIcon className={'text-gray-600'} />}
 				placeholder={placeholder}
 				disabledDate={disabledDateWrap}
 				disabled={disabled}

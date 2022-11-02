@@ -141,13 +141,13 @@ export interface IServiceForm {
 }
 
 export interface ICalendarReservationForm {
-	customerID: string
-	serviceID: string
-	employeeID: string
+	customer: string
+	service: string
+	employee: string
 	date: string
 	timeFrom: string
 	timeTo: string
-	note: string
+	note?: string
 }
 
 export interface ICalendarShiftForm {}
@@ -284,9 +284,9 @@ export interface ICustomerForm {
 	street?: string
 	streetNumber?: string
 	countryCode?: string
-	salonID: string
-	gallery: any
-	avatar: any
+	salonID?: string
+	gallery?: any
+	avatar?: any
 }
 
 export interface IEmployeeForm {

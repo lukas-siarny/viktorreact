@@ -190,7 +190,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			/>
 			<Layout hasSider className={'noti-calendar-main-section'}>
 				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} />
-				<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} loading={loadingData} events={events} employees={filteredEmployees} />
+				<CalendarContent
+					selectedDate={query.date}
+					view={query.view as CALENDAR_VIEW}
+					eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER}
+					loading={loadingData}
+					events={events}
+					employees={filteredEmployees}
+				/>
 				<SiderEventManagement
 					view={siderEventManagement}
 					setCollapsed={setEventManagement}

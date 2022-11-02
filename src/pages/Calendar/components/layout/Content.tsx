@@ -3,7 +3,7 @@ import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
 
 // enums
-import { CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_EVENT_TYPE_FILTER, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -17,30 +17,31 @@ import { Employees } from '../../../../types/interfaces'
 type Props = {
 	view: CALENDAR_VIEW
 	selectedDate: string
+	eventType: CALENDAR_EVENT_TYPE_FILTER
 	loading: boolean
 	events: ICalendarEventsPayload
 	employees?: Employees
 }
 
 const CalendarContent: FC<Props> = (props) => {
-	const { view, selectedDate, loading, events, employees } = props
+	const { view, selectedDate, eventType, loading, events, employees } = props
 
 	const getView = () => {
 		if (view === CALENDAR_VIEW.MONTH) {
-			return <CalendarMonthView selectedDate={selectedDate} events={events} employees={employees} />
+			return <CalendarMonthView selectedDate={selectedDate} events={events} employees={employees} eventType={eventType} />
 		}
 
 		if (view === CALENDAR_VIEW.WEEK) {
-			return <CalendarWeekView selectedDate={selectedDate} events={events} employees={employees} />
+			return <CalendarWeekView selectedDate={selectedDate} events={events} employees={employees} eventType={eventType} />
 		}
 
-		return <CalendarDayView selectedDate={selectedDate} events={events} employees={employees} />
+		return <CalendarDayView selectedDate={selectedDate} events={events} employees={employees} eventType={eventType} />
 	}
 
 	return (
 		<Content className={'nc-content'}>
 			<Spin spinning={loading}>
-				<div className={'nc-content-animate'} key={`${selectedDate} ${view}`}>
+				<div className={'nc-content-animate'} key={`${selectedDate} ${view} ${eventType}`}>
 					{getView()}
 				</div>
 			</Spin>

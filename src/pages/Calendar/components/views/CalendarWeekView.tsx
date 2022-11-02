@@ -133,7 +133,7 @@ const renderEventContent = (eventInfo: any) => {
 	if (event.display === 'background') {
 		return (
 			<div
-				className={cx('noti-fc-bg-event', {
+				className={cx('nc-bg-event', {
 					shift: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
 					timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
 				})}

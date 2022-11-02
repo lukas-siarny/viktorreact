@@ -51,24 +51,21 @@ export interface ICalendarEventDetailPayload {
 const getEventsQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_VIEW): CalendarEventsQueryParams => {
 	let params: any = {
 		salonID: queryParams.salonID,
-		categoryIDs: queryParams.categoryIDs,
+		// NOTE: docasne neposielat categoryIDs, kym sa nevyriesi logika s BE
+		// categoryIDs: queryParams.categoryIDs,
 		employeeIDs: queryParams.employeeIDs
 	}
 
 	switch (queryParams.eventType) {
-		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
-			params = {
-				...params,
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]
-			}
-			break
 		case CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF:
 			params = {
 				...params,
-				eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF]
+				eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]
 			}
 			break
+		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
 		default:
+			// pri rezervacii zatial tahame vsetko, takze netreba specialne filtrovat
 			break
 	}
 

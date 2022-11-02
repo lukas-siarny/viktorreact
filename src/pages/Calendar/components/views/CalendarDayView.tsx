@@ -10,44 +10,71 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../../../utils/enums'
 import { composeDayEventResources, composeDayViewEvents } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
 
-const renderEventContent = (data: EventContentArg) => {
+const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYPE_FILTER) => {
 	const { event, timeText } = data || {}
 	const { extendedProps } = event || {}
 
 	console.log({ event, timeText, extendedProps })
 
-	if (event.display === 'background') {
-		return (
-			<div
-				className={cx('noti-fc-bg-event', {
-					shift: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-					timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-				})}
-			/>
-		)
+	if (event.display === 'inverse-background') {
+		return <div className={cx('nc-bg-event not-set-availability')} />
 	}
 
-	const diff = dayjs(event.end).diff(event.start, 'minutes')
-
-	return (
-		<div className={'nc-day-event'}>
-			<div className={'event-accent'} style={{ backgroundColor: extendedProps.employee?.color }} />
-			<div className={'event-background'} style={{ backgroundColor: extendedProps.employee?.color }} />
-			<div className={'event-content'}>
-				<div className={'flex flex-col gap-1'}>
-					<span className={cx('time', { hidden: Math.abs(diff) < 45 })}>{timeText}</span>
-					<span className={'title'}>{extendedProps.customer?.name}</span>
-					<span className={'desc'}>{extendedProps.service?.name}</span>
+	switch (eventType) {
+		case CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF:
+			return (
+				<div
+					className={cx('nc-day-event', {
+						shift: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+						timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+						break: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK
+					})}
+				>
+					<div className={'flex flex-col gap-1'}>
+						<div className={'flex gap-1 items-center'}>
+							<div className={'image w-4 h-4 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.employee?.image}")` }} />
+							<span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>
+						</div>
+						<span className={'time'}>{timeText}</span>
+					</div>
 				</div>
-			</div>
-		</div>
-	)
+			)
+		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
+		default: {
+			if (event.display === 'background') {
+				return (
+					<div
+						className={cx('nc-bg-event', {
+							break: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+							timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
+						})}
+					/>
+				)
+			}
+
+			const diff = dayjs(event.end).diff(event.start, 'minutes')
+
+			return (
+				<div className={'nc-day-event reservation'}>
+					<div className={'event-accent'} style={{ backgroundColor: extendedProps.employee?.color }} />
+					<div className={'event-background'} style={{ backgroundColor: extendedProps.employee?.color }} />
+					<div className={'event-content'}>
+						<div className={'flex flex-col gap-1'}>
+							<span className={cx('time', { hidden: Math.abs(diff) < 45 })}>{timeText}</span>
+							<span className={'title'}>{extendedProps.customer?.name}</span>
+							<span className={'desc'}>{extendedProps.service?.name}</span>
+						</div>
+					</div>
+				</div>
+			)
+		}
+	}
 }
 
 const resourceLabelContent = (data: any) => {
@@ -73,7 +100,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView: FC<ICalendarDayView> = (props) => {
-	const { selectedDate, events, employees } = props
+	const { selectedDate, eventType, events, employees } = props
 
 	const [t] = useTranslation()
 
@@ -89,9 +116,9 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 		const { start, end, resource } = info
 	}
 
-	const calendarRef = useRef<any>()
+	/* const calendarRef = useRef<any>()
 
-	/* useEffect(() => {
+	useEffect(() => {
 		const calendarApi = calendarRef.current.getApi()
 		calendarApi.scrollToTime({
 			milliseconds: 28800000
@@ -120,11 +147,11 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 			nowIndicator
 			allDaySlot={false}
 			stickyFooterScrollbar
-			events={composeDayViewEvents(events?.data, employees)}
+			events={composeDayViewEvents(selectedDate, eventType, events?.data, employees)}
 			resources={composeDayEventResources(events?.data, employees)}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}
-			eventContent={renderEventContent}
+			eventContent={(args) => renderEventContent(args, eventType)}
 			slotLabelContent={slotLabelContent}
 			// handlers
 			select={handleSelect}

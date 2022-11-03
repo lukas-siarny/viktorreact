@@ -4,11 +4,24 @@ import cx from 'classnames'
 import { Header } from 'antd/lib/layout/layout'
 import { Button, Dropdown, Menu } from 'antd'
 import dayjs from 'dayjs'
-import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
+import { initialize, WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import Tooltip from 'antd/es/tooltip'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { useDispatch } from 'react-redux'
+import {
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_SET_NEW_DATE,
+	CALENDAR_VIEW,
+	DEFAULT_DATE_FORMAT,
+	DEFAULT_DATE_INPUT_FORMAT,
+	DEFAULT_DAYJS_FORMAT,
+	DEFAULT_TIME_FORMAT,
+	DEFAULT_TIME_FORMAT_HOURS,
+	DEFAULT_TIME_FORMAT_MINUTES,
+	FORM
+} from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
@@ -28,7 +41,7 @@ import useOnClickOutside from '../../../../hooks/useClickOutside'
 import useMedia from '../../../../hooks/useMedia'
 
 // utils
-import { getFirstDayOfMonth, getFirstDayOfWeek, getLastDayOfWeek } from '../../../../utils/helper'
+import { getFirstDayOfMonth, getFirstDayOfWeek, getLastDayOfWeek, roundMinutes } from '../../../../utils/helper'
 
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {
@@ -86,6 +99,7 @@ type Props = {
 
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 
 	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagement, selectedDate, setSelectedDate } = props
 
@@ -113,7 +127,21 @@ const CalendarHeader: FC<Props> = (props) => {
 						label: t('loc:Rezerváciu'),
 						icon: <ServicesIcon />,
 						className: itemClassName,
-						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+						onClick: () => {
+							// console.log('minutes', dayjs().format(DEFAULT_TIME_FORMAT_MINUTES))
+							// console.log('current date', dayjs().format(DEFAULT_DATE_INPUT_FORMAT))
+							// NOTE: initnu sa dnesny datum a cas ako najblizsia hdonota k 15 minutam
+							console.log('hodina', Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS)))
+							console.log('minuta', Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)))
+							console.log('return', roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))))
+							const initData = {
+								date: dayjs().format(DEFAULT_DAYJS_FORMAT),
+
+								timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS)))
+							}
+							dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+							setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+						}
 					},
 					{
 						key: 'shift',

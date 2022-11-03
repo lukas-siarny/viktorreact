@@ -22,7 +22,7 @@ export enum LANGUAGE {
 	IT = 'it' */
 }
 
-export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
+export const REFRESH_TOKEN_INTERVAL = 1000 * 40 // 60 * 13 // 13 minutes
 
 export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
@@ -240,7 +240,13 @@ export const DEFAULT_DATE_INIT_FORMAT = 'YYYY-MM-DD'
 
 export const DEFAULT_TIME_FORMAT = 'HH:mm'
 
+export const DEFAULT_TIME_FORMAT_MINUTES = 'mm'
+
+export const DEFAULT_TIME_FORMAT_HOURS = 'HH'
+
 export const DEFAULT_DATE_FORMAT = 'DD.MM.YYYY'
+
+export const DEFAULT_DAYJS_FORMAT = 'MM.DD.YYYY'
 
 export const DEFAULT_DATE_WITH_TIME_FORMAT = 'DD.MM.YYYY HH:mm'
 

@@ -30,7 +30,7 @@ import {
 	trimEnd,
 	repeat
 } from 'lodash'
-import { notification, Tag } from 'antd'
+import { notification, Tag, Divider } from 'antd'
 import slugify from 'slugify'
 import { submit, SubmissionError } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
@@ -890,6 +890,21 @@ export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactN
 	)
 }
 
+export const optionRenderWithAvatar = (itemData: any, imageWidth = 24, imageHeight = 24) => {
+	// Thumbnail, label, extraContent (pod labelom)
+	const { label, thumbNail, extraContent } = itemData
+	const style = { width: imageWidth, height: imageHeight }
+	return (
+		<div className='flex items-center divide-y'>
+			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbNail} alt={label} />
+			<div className={'flex flex-col leading-none'}>
+				<div>{label}</div>
+				<div>{extraContent}</div>
+			</div>
+		</div>
+	)
+}
+
 export const langaugesOptionRender = (itemData: any) => {
 	const { value, label, flag } = itemData
 	return (
@@ -1047,3 +1062,18 @@ export const getFirstDayOfMonth = (date: string | number | Date | dayjs.Dayjs) =
 export const getLastDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('week')
 
 export const getLasttDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('month')
+
+export const roundMinutes = (currentMinutes: number, currentHours: number, mod = 15): string => {
+	const diff = currentMinutes % mod
+	if (diff === 0) {
+		return `${currentHours}:${currentMinutes}`
+	}
+
+	const nearestValue = currentMinutes + mod - diff
+	// TODO: prechod z 23:46 na 00:00 nie na 24
+	if (nearestValue % 60 < 15) {
+		return `${currentHours + 1}:00`
+	}
+
+	return `${currentHours}:${nearestValue}`
+}

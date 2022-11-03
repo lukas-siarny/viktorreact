@@ -1,17 +1,17 @@
 import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, Modal } from 'antd'
 
 // validate
-import { map } from 'lodash'
+import { flatten, forEach, map } from 'lodash'
 import validateReservationForm from './validateReservationForm'
 
 // reducers
 // utils
-import { formatLongQueryString, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
+import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -28,6 +28,7 @@ import SelectField from '../../../../atoms/SelectField'
 import { getReq, postReq } from '../../../../utils/request'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 import Permissions from '../../../../utils/Permissions'
+import { RootState } from '../../../../reducers'
 
 type ComponentProps = {
 	salonID: string
@@ -41,6 +42,7 @@ const ReservationForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
+	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 
 	const serviceOptions = [
 		{
@@ -88,8 +90,11 @@ const ReservationForm: FC<Props> = (props) => {
 				const selectOptions = map(data.employees, (employee) => ({
 					value: employee.id,
 					key: employee.id,
-					label: employee.firstName && employee.lastName ? `${employee.firstName} ${employee.lastName}` : employee.email
+					label: employee.firstName && employee.lastName ? `${employee.firstName} ${employee.lastName}` : employee.email,
+					thumbNail: employee.image.resizedImages.thumbnail
+					// TODO: Available / Non Available hodnoty ak pribudne logika na BE tak doplnit ako extraContent
 				}))
+				console.log('selectOptions', selectOptions)
 				return { pagination: data.pagination, data: selectOptions }
 			} catch (e) {
 				return { pagination: null, data: [] }
@@ -101,19 +106,32 @@ const ReservationForm: FC<Props> = (props) => {
 	const searchServices = useCallback(
 		async (search: string, page: number) => {
 			try {
-				// TODO: EP na sluzby?
-				// const { data } = await getReq('/api/b2b/admin/services/', {
-				// 	search: formatLongQueryString(search),
-				// 	page,
-				// 	salonID
-				// })
-				//
-				// const selectOptions = map(data.employees, (employee) => ({
-				// 	value: employee.id,
-				// 	key: employee.id,
-				// 	label: employee.firstName && employee.lastName ? `${employee.firstName} ${employee.lastName}` : employee.email
-				// }))
-				// return { pagination: data.pagination, data: selectOptions }
+				// TODO: vyhladavanie na FE?
+				const { data } = await getReq('/api/b2b/admin/services/', {
+					salonID
+				})
+				console.log('servics', data.groupedServicesByCategory)
+				// TODO: filter na cekovanie ci je cmplete salon
+				const optData = map(data.groupedServicesByCategory, (industry) => {
+					return {
+						label: industry.category?.name,
+						key: industry.category?.id,
+						children: flatten(
+							map(industry.category?.children, (opt) =>
+								map(opt.category?.children, (service) => {
+									// TODO: is complete spravit
+									return {
+										label: service.category.name,
+										key: service.category.id
+										// disabled: true
+									}
+								})
+							)
+						)
+					}
+				})
+				console.log('optData', optData)
+				return { pagination: null, data: optData }
 			} catch (e) {
 				return { pagination: null, data: [] }
 			}
@@ -129,11 +147,21 @@ const ReservationForm: FC<Props> = (props) => {
 					page,
 					salonID
 				})
-				const selectOptions = map(data.customers, (customer) => ({
-					value: customer.id,
-					key: customer.id,
-					label: customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email
-				}))
+				console.log('data', data)
+				const selectOptions = map(data.customers, (customer) => {
+					const prefix = getCountryPrefix(countriesData.data, customer?.phonePrefixCountryCode)
+					return {
+						value: customer.id,
+						key: customer.id,
+						label: customer.firstName && customer.lastName ? `${customer.firstName} ${customer.lastName}` : customer.email,
+						thumbNail: customer.profileImage.resizedImages.thumbnail,
+						extraContent: (
+							<span className={'text-notino-grayDark text-xs'}>
+								{prefix} {customer.phone}
+							</span>
+						)
+					}
+				})
 				return { pagination: data.pagination, data: selectOptions }
 			} catch (e) {
 				return { pagination: null, data: [] }
@@ -191,6 +219,7 @@ const ReservationForm: FC<Props> = (props) => {
 						allowed={[SALON_PERMISSION.CUSTOMER_CREATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
 							<Field
+								optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
 								component={SelectField}
 								label={t('loc:Zákazník')}
 								placeholder={t('loc:Vyber zákazníka')}
@@ -209,8 +238,6 @@ const ReservationForm: FC<Props> = (props) => {
 								actions={[
 									{
 										title: t('loc:Nový zákaznik'),
-										// TODO: zistit ci sa ma tento field obalit do permission componentu
-										// SALON_PERMISSION.CUSTOMER_CREATE
 										onAction: hasPermission ? () => setVisibleCustomerModal(true) : openForbiddenModal
 									}
 								]}
@@ -220,7 +247,6 @@ const ReservationForm: FC<Props> = (props) => {
 
 					<Field
 						component={SelectField}
-						// optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
 						label={t('loc:Služba')}
 						suffixIcon={<ProfileIcon />}
 						placeholder={t('loc:Vyber službu')}
@@ -269,7 +295,7 @@ const ReservationForm: FC<Props> = (props) => {
 					/>
 					<Field
 						component={SelectField}
-						// optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
+						optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
 						label={t('loc:Zamestnanec')}
 						suffixIcon={<ProfileIcon />}
 						placeholder={t('loc:Vyber zamestnanca')}

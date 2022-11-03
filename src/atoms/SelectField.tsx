@@ -117,21 +117,47 @@ const renderMenuItemSelectedIcon = (
 	return icon
 }
 
-const getOptions = (optionRender: any, options: any) =>
-	map(options, (option) => (
-		<Option
-			key={option.key}
-			value={option.value}
-			disabled={option.disabled}
-			label={option.label}
-			extra={option.extra}
-			className={option.className}
-			style={option.level ? { paddingLeft: 16 * option.level } : undefined}
-		>
-			{optionRender ? optionRender(option) : option.label}
-		</Option>
-	))
-
+const getOptions = (optionRender: any, options: any) => {
+	console.log('options', options)
+	// TODO: zistit ci ma options[0].children a ak hej vtedy bude Groupa
+	// NOTE: ak existuje v optione children pole tak to zneman ze ma vnorene optiony a bude sa pouzivat OptGroup a druha uroven ako Option
+	return map(options, (option) => {
+		if (option.children) {
+			return (
+				<Select.OptGroup label={option.label}>
+					{map(option.children, (childrenOpt) => {
+						return (
+							<Option
+								key={childrenOpt.key}
+								value={childrenOpt.value}
+								disabled={childrenOpt.disabled}
+								label={childrenOpt.label}
+								extra={childrenOpt.extra}
+								className={childrenOpt.className}
+								style={childrenOpt.level ? { paddingLeft: 16 * childrenOpt.level } : undefined}
+							>
+								{optionRender ? optionRender(option) : childrenOpt.label}
+							</Option>
+						)
+					})}
+				</Select.OptGroup>
+			)
+		}
+		return (
+			<Option
+				key={option.key}
+				value={option.value}
+				disabled={option.disabled}
+				label={option.label}
+				extra={option.extra}
+				className={option.className}
+				style={option.level ? { paddingLeft: 16 * option.level } : undefined}
+			>
+				{optionRender ? optionRender(option) : option.label}
+			</Option>
+		)
+	})
+}
 const customDropdown = (actions: Action[] | null | undefined, menu: React.ReactElement, fetching: boolean | undefined) => {
 	const divider = isEmpty(actions) ? null : <Divider style={{ margin: 0 }} />
 
@@ -281,7 +307,7 @@ const SelectField = (props: Props) => {
 		backgroundColor,
 		clearIcon,
 		className,
-		optionLabelProp,
+		optionLabelProp = 'label',
 		open,
 		showArrow,
 		menuItemSelectedIcon,

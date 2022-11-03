@@ -105,8 +105,8 @@ const getEventsQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_
 		default:
 			params = {
 				...params,
-				dateFrom: dayjs(queryParams.date).startOf('day').toISOString(),
-				dateTo: dayjs(queryParams.date).endOf('day').toISOString()
+				dateFrom: queryParams.date,
+				dateTo: queryParams.date
 			}
 			break
 	}

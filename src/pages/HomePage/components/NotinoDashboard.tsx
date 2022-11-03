@@ -32,7 +32,7 @@ import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron
 import {
 	FILTER_PATHS,
 	SALON_FILTER_STATES,
-	SALON_CREATE_TYPES,
+	SALON_CREATE_TYPE,
 	DEFAULT_DATE_TIME_OPTIONS,
 	DATE_TIME_RANGE,
 	DEFAULT_DATE_INIT_FORMAT,
@@ -178,7 +178,7 @@ const columns = (labels: string[] = [], futureBreak = 0): Columns => [
 	}
 ]
 
-const doughnutContent = (label: string, source?: any[]) => {
+const doughnutContent = (label: string, source?: any[], onlyLegend?: boolean) => {
 	return (
 		<div className='stastics-box py-4 px-6 md:py-8 md:px-12 statistics-box-wide'>
 			<div className='flex flex-wrap justify-between w-full'>
@@ -186,21 +186,23 @@ const doughnutContent = (label: string, source?: any[]) => {
 			</div>
 			{source && (
 				<div className='flex flex-wrap justify-between w-full mt-4'>
-					<div className='graph-doughnut-wrapper w-2/5 3xl:w-12/25 flex items-center'>
-						<Doughnut
-							className={'graph-doughnut'}
-							data={{
-								labels: source.map((item: any) => item.label),
-								datasets: [
-									{
-										data: source.map((item: any) => item.data),
-										backgroundColor: source.map((item: any) => item.background)
-									}
-								]
-							}}
-							options={doughnutOptions(source)}
-						/>
-					</div>
+					{!onlyLegend && (
+						<div className='graph-doughnut-wrapper w-2/5 3xl:w-12/25 flex items-center'>
+							<Doughnut
+								className={'graph-doughnut'}
+								data={{
+									labels: source.map((item: any) => item.label),
+									datasets: [
+										{
+											data: source.map((item: any) => item.data),
+											backgroundColor: source.map((item: any) => item.background)
+										}
+									]
+								}}
+								options={doughnutOptions(source)}
+							/>
+						</div>
+					)}
 					<div className='flex flex-1 items-center right-side'>
 						<div className='w-full flex flex-col gap-4'>
 							{source.map((item: any, index: number) => (
@@ -499,7 +501,7 @@ const NotinoDashboard: FC = () => {
 					{
 						data: notino.data.basicSalons,
 						background: colors.blue[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_CREATE_TYPES.BASIC]),
+						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_CREATE_TYPE.BASIC]),
 						label: t('loc:BASIC salóny')
 					},
 					{
@@ -527,6 +529,12 @@ const NotinoDashboard: FC = () => {
 						background: colors.neutral[200],
 						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.NOT_PUBLISHED]),
 						label: t('loc:Nepublikované')
+					},
+					{
+						data: notino.data.publishedSalons,
+						background: colors.green[200],
+						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PUBLISHED]),
+						label: t('loc:Všetky publikované')
 					}
 				]
 			}
@@ -581,7 +589,7 @@ const NotinoDashboard: FC = () => {
 							{/* dougnut graphs */}
 							<Row className='mt-12 gap-4'>
 								{doughnutContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic)}
-								{doughnutContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates)}
+								{doughnutContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates, true)}
 							</Row>
 							{/* line graphs */}
 							{lineContent(

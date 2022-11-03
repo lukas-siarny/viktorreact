@@ -55,6 +55,11 @@ module.exports = {
 				notPublished: colors.neutral[200],
 				published: colors.green[200]
 			},
+			source: {
+				import: colors.cyan[700],
+				notino: '#DC0069', // notino.pink
+				partner: colors.fuchsia[700] 
+			},
 			// Tailwind colors
 			black: colors.black,
 			white: colors.white,

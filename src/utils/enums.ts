@@ -361,9 +361,10 @@ export enum SALON_FILTER_CREATE_TYPES {
 	PREMIUM = 'PREMIUM'
 }
 
-export enum SALON_CREATE_TYPES {
-	BASIC = 'BASIC',
-	NON_BASIC = 'NON_BASIC'
+export enum SALON_SOURCE_TYPE {
+	NOTINO = 'NOTINO',
+	PARTNER = 'PARTNER',
+	IMPORT = 'IMPORT'
 }
 
 export enum SALON_FILTER_OPENING_HOURS {
@@ -556,7 +557,7 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?salonState=active&statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
-		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}`,
+		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}`,
 		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.PREMIUM}`,
 		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`

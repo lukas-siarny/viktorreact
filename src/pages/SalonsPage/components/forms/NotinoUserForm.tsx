@@ -8,12 +8,14 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // utils
 import { FILTER_ENTITY, FORM } from '../../../../utils/enums'
+import searchWrapper from '../../../../utils/filters'
 
 // types
 import { INotinoUserForm } from '../../../../types/interfaces'
-import SelectField from '../../../../atoms/SelectField'
-import searchWrapper from '../../../../utils/filters'
 import { RootState } from '../../../../reducers'
+
+// atoms
+import SelectField from '../../../../atoms/SelectField'
 
 type ComponentProps = {}
 

@@ -1,4 +1,7 @@
+import React from 'react'
 import { isEmpty, map } from 'lodash'
+import { Tag } from 'antd'
+import i18next from 'i18next'
 
 // types
 import { ISalonForm, OpeningHours } from '../../../types/interfaces'
@@ -7,7 +10,7 @@ import { IBasicSalon } from '../../../reducers/salons/salonsActions'
 import { Paths } from '../../../types/api'
 
 // enums
-import { SALON_STATES } from '../../../utils/enums'
+import { SALON_STATES, SALON_CREATE_TYPE, SALON_SOURCE_TYPE } from '../../../utils/enums'
 
 // components
 import {
@@ -47,6 +50,7 @@ export const initSalonFormData = (salonData: SalonInitType | null, phonePrefixCo
 		id: salonData.id || null,
 		deletedAt: !!salonData.deletedAt,
 		state: salonData.state as SALON_STATES,
+		sourceOfPremium: salonData.premiumSourceUserType,
 		name: salonData.name || null,
 		nameSelect:
 			{
@@ -153,5 +157,139 @@ export const getSalonDataForSubmission = (data: ISalonForm) => {
 		cosmeticIDs: data.cosmeticIDs,
 		languageIDs: data.languageIDs,
 		pricelistIDs: (data.pricelists || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminSalonsSalonId.RequestBody['pricelistIDs']
+	}
+}
+
+export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.Responses.$200['salons'][0]['assignedUser']): string => {
+	if (!assignedUser) {
+		return '-'
+	}
+
+	switch (true) {
+		case !!assignedUser.firstName && !!assignedUser.lastName:
+			return `${assignedUser.firstName} ${assignedUser.lastName}`
+
+		case !!assignedUser.email:
+			return `${assignedUser.email}`
+		default:
+			return assignedUser.id
+	}
+}
+
+// salon status tags
+export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
+	if (!salonStatus) {
+		return null
+	}
+
+	switch (salonStatus) {
+		case SALON_STATES.PUBLISHED:
+		case SALON_STATES.PUBLISHED_PENDING:
+		case SALON_STATES.PUBLISHED_DECLINED:
+			return (
+				<Tag className={'noti-tag bg-status-published'}>
+					<span>{i18next.t('loc:Publikovaný')}</span>
+				</Tag>
+			)
+		default:
+			return (
+				<Tag className={'noti-tag bg-status-notPublished'}>
+					<span>{i18next.t('loc:Nepublikovaný')}</span>
+				</Tag>
+			)
+	}
+}
+
+export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false) => {
+	if (deleted) {
+		return (
+			<Tag className={'noti-tag danger'}>
+				<span>{i18next.t('loc:Vymazaný')}</span>
+			</Tag>
+		)
+	}
+
+	if (returnOnlyDeleted) {
+		return null
+	}
+
+	return (
+		<Tag className={'noti-tag info'}>
+			<span>{i18next.t('loc:Nevymazaný')}</span>
+		</Tag>
+	)
+}
+
+export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
+	if (!salonStatus) {
+		return null
+	}
+
+	switch (salonStatus) {
+		case SALON_STATES.NOT_PUBLISHED_PENDING:
+		case SALON_STATES.PUBLISHED_PENDING:
+			return (
+				<Tag className={'noti-tag bg-status-pending'}>
+					<span>{i18next.t('loc:Na schválenie')}</span>
+				</Tag>
+			)
+		case SALON_STATES.NOT_PUBLISHED_DECLINED:
+		case SALON_STATES.PUBLISHED_DECLINED:
+			return (
+				<Tag className={'noti-tag bg-status-declined'}>
+					<span>{i18next.t('loc:Zamietnuté')}</span>
+				</Tag>
+			)
+		default:
+			return null
+	}
+}
+
+export const getSalonTagCreateType = (salonStatus?: SALON_STATES, createType?: SALON_CREATE_TYPE) => {
+	if (salonStatus && createType) {
+		if (salonStatus === SALON_STATES.PUBLISHED && createType === SALON_CREATE_TYPE.NON_BASIC) {
+			return (
+				<Tag className={'noti-tag bg-status-premium'}>
+					<span>{i18next.t('loc:PREMIUM')}</span>
+				</Tag>
+			)
+		}
+
+		if (createType === SALON_CREATE_TYPE.BASIC) {
+			return (
+				<Tag className={'noti-tag bg-status-basic'}>
+					<span>{i18next.t('loc:BASIC')}</span>
+				</Tag>
+			)
+		}
+	}
+	return null
+}
+
+export const getSalonTagSourceType = (sourceType?: string | SALON_SOURCE_TYPE) => {
+	switch (sourceType) {
+		case SALON_SOURCE_TYPE.IMPORT:
+			return (
+				<Tag className={'noti-tag bg-source-import'}>
+					<span>{i18next.t('loc:Import')}</span>
+				</Tag>
+			)
+
+		case SALON_SOURCE_TYPE.NOTINO:
+			return (
+				<Tag className={'noti-tag bg-source-notino'}>
+					<span>{i18next.t('loc:Notino')}</span>
+				</Tag>
+			)
+
+		case SALON_SOURCE_TYPE.PARTNER:
+			return (
+				<Tag className={'noti-tag bg-source-partner'}>
+					<span>{i18next.t('loc:Partner')}</span>
+				</Tag>
+			)
+
+		default:
+			return null
 	}
 }

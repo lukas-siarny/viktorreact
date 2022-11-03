@@ -35,7 +35,7 @@ import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { formFieldID } from '../../utils/helper'
-import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
+import { getSalonDataForSubmission, initSalonFormData, getAssignedUserLabel } from './components/salonUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
@@ -85,10 +85,7 @@ const SalonEditPage: FC<SalonEditPageProps> = (props) => {
 	const hiddenSalon = salon.data?.state === SALON_STATES.NOT_PUBLISHED && salon.data?.publicationDeclineReason
 	const isBasic = salon.data?.createType === SALON_CREATE_TYPE.BASIC
 
-	const assignedUserLabel =
-		salon.data?.assignedUser?.firstName && salon.data?.assignedUser?.lastName
-			? `${salon.data?.assignedUser?.firstName} ${salon.data?.assignedUser?.lastName}`
-			: salon.data?.assignedUser?.email
+	const assignedUserLabel = getAssignedUserLabel(salon.data?.assignedUser)
 
 	const [query, setQuery] = useQueryParams({
 		history: BooleanParam

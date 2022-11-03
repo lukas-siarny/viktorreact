@@ -21,17 +21,10 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../utils/enums'
-import {
-	formatDateByLocale,
-	getLinkWithEncodedBackUrl,
-	getSalonTagChanges,
-	getSalonTagCreateType,
-	getSalonTagPublished,
-	normalizeDirectionKeys,
-	setOrder
-} from '../../utils/helper'
+import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
+import { getAssignedUserLabel, getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
 // reducers
 import { emptySalons, getSalons } from '../../reducers/salons/salonsActions'
@@ -91,7 +84,10 @@ const SalonsPage = () => {
 		createType: StringParam,
 		lastUpdatedAtFrom: StringParam,
 		lastUpdatedAtTo: StringParam,
-		hasSetOpeningHours: StringParam
+		hasSetOpeningHours: StringParam,
+		sourceType: StringParam,
+		assignedUserID: StringParam,
+		premiumSourceUserType: StringParam
 	})
 
 	const resetQuery = (selectedTabKey: string) => {
@@ -110,7 +106,10 @@ const SalonsPage = () => {
 			lastUpdatedAtFrom: undefined,
 			lastUpdatedAtTo: undefined,
 			salonState: selectedTabKey,
-			hasSetOpeningHours: undefined
+			hasSetOpeningHours: undefined,
+			sourceType: undefined,
+			premiumSourceUserType: undefined,
+			assignedUserID: undefined
 		})
 	}
 
@@ -131,7 +130,10 @@ const SalonsPage = () => {
 			createType: query.createType,
 			lastUpdatedAtFrom: query.lastUpdatedAtFrom,
 			lastUpdatedAtTo: query.lastUpdatedAtTo,
-			hasSetOpeningHours: query.hasSetOpeningHours
+			hasSetOpeningHours: query.hasSetOpeningHours,
+			sourceType: query.sourceType,
+			premiumSourceUserType: query.premiumSourceUserType,
+			assignedUserID: query.assignedUserID
 		}
 
 		switch (query.salonState) {
@@ -168,7 +170,10 @@ const SalonsPage = () => {
 							dateFrom: query.lastUpdatedAtFrom,
 							dateTo: query.lastUpdatedAtTo
 						},
-						hasSetOpeningHours: query.hasSetOpeningHours
+						hasSetOpeningHours: query.hasSetOpeningHours,
+						sourceType: query.sourceType,
+						premiumSourceUserType: query.premiumSourceUserType,
+						assignedUserID: query.assignedUserID
 					})
 				)
 				dispatch(getSalons(salonsQueries))
@@ -189,7 +194,10 @@ const SalonsPage = () => {
 		query.createType,
 		query.lastUpdatedAtFrom,
 		query.lastUpdatedAtTo,
-		query.hasSetOpeningHours
+		query.hasSetOpeningHours,
+		query.sourceType,
+		query.premiumSourceUserType,
+		query.assignedUserID
 	])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
@@ -297,7 +305,6 @@ const SalonsPage = () => {
 				key: 'name',
 				ellipsis: true,
 				sorter: true,
-				width: '15%',
 				sortOrder: setOrder(query.order, 'name'),
 				render: (value) => value || '-',
 				...props
@@ -308,7 +315,6 @@ const SalonsPage = () => {
 				key: 'address',
 				ellipsis: true,
 				sorter: false,
-				width: '20%',
 				render: (value) => (!isEmpty(value) ? <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</> : '-'),
 				...props
 			}),
@@ -317,7 +323,6 @@ const SalonsPage = () => {
 				dataIndex: 'categories',
 				key: 'categories',
 				sorter: false,
-				width: '10%',
 				render: (value: any[]) => {
 					if (value?.length > 0) {
 						const industriesContent: any[] = value.map((category: any) => {
@@ -342,7 +347,6 @@ const SalonsPage = () => {
 				key: 'createType',
 				ellipsis: true,
 				sorter: false,
-				width: '8%',
 				render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
 				...props
 			}),
@@ -362,7 +366,6 @@ const SalonsPage = () => {
 				key: 'lastUpdatedAt',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
 				render: (value) => (value ? formatDateByLocale(value) : '-'),
 				...props
 			}),
@@ -372,7 +375,6 @@ const SalonsPage = () => {
 				key: 'deletedAt',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
 				render: (value) => (value ? formatDateByLocale(value) : '-'),
 				...props
 			}),
@@ -381,7 +383,6 @@ const SalonsPage = () => {
 				key: 'isPublished',
 				ellipsis: true,
 				sorter: false,
-				width: '8%',
 				render: (_value, record) => getSalonTagPublished(record.state),
 				...props
 			}),
@@ -390,7 +391,6 @@ const SalonsPage = () => {
 				key: 'changes',
 				ellipsis: true,
 				sorter: false,
-				width: '8%',
 				render: (_value, record) => getSalonTagChanges(record.state),
 				...props
 			}),
@@ -407,6 +407,24 @@ const SalonsPage = () => {
 						<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
 					</Row>
 				),
+				...props
+			}),
+			assignedUser: (props) => ({
+				title: t('loc:Notino používateľ'),
+				dataIndex: 'assignedUser',
+				key: 'assignedUser',
+				ellipsis: true,
+				sorter: false,
+				render: (value: any) => getAssignedUserLabel(value),
+				...props
+			}),
+			premiumSourceUserType: (props) => ({
+				title: t('loc:Zdroj PREMIUM'),
+				dataIndex: 'premiumSourceUserType',
+				key: 'premiumSourceUserType',
+				sorter: false,
+				ellipsis: true,
+				render: (value: string) => getSalonTagSourceType(value),
 				...props
 			})
 		}),
@@ -433,15 +451,17 @@ const SalonsPage = () => {
 				break
 			default:
 				columns = [
-					tableColumns.name(),
-					tableColumns.address(),
-					tableColumns.categories(),
-					tableColumns.isPublished(),
-					tableColumns.changes(),
-					tableColumns.createType(),
+					tableColumns.name({ width: '15%' }),
+					tableColumns.address({ width: '15%' }),
+					tableColumns.categories({ width: '9%' }),
+					tableColumns.isPublished({ width: '8%' }),
+					tableColumns.changes({ width: '8%' }),
+					tableColumns.createType({ width: '6%' }),
+					tableColumns.premiumSourceUserType({ width: '6%' }),
+					tableColumns.assignedUser({ width: '10%' }),
 					tableColumns.fillingProgress(),
-					tableColumns.lastUpdatedAt(),
-					tableColumns.createdAt()
+					tableColumns.lastUpdatedAt({ width: '8%' }),
+					tableColumns.createdAt({ width: '8%' })
 				]
 				filters = (
 					<SalonsFilterActive

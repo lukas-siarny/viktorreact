@@ -721,7 +721,7 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AccountState = "UNPAIRED" | "PENDING" | "PAIRED";
-            export type Limit = 25 | 50 | 100;
+            export type Limit = number;
             /**
              * Order attributes: lastName, createdAt, status
              */
@@ -2013,7 +2013,7 @@ declare namespace Paths {
             export type HasSetOpeningHours = boolean;
             export type LastUpdatedAtFrom = string; // date-time
             export type LastUpdatedAtTo = string; // date-time
-            export type Limit = 25 | 50 | 100;
+            export type Limit = number;
             /**
              * Order attributes: name, fillingProgress, createdAt
              */
@@ -2106,7 +2106,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = number;
             export type Page = number;
             export type Search = string | null;
         }
@@ -2278,6 +2278,7 @@ declare namespace Paths {
                     state: "NOT_PUBLISHED" | "PUBLISHED" | "NOT_PUBLISHED_PENDING" | "PUBLISHED_PENDING" | "NOT_PUBLISHED_DECLINED" | "PUBLISHED_DECLINED";
                     isPublished: boolean;
                     createType: "NON_BASIC" | "BASIC";
+                    sourceType: "IMPORT" | "NOTINO" | "PARTNER";
                     publicationDeclineReason?: string;
                     hasAllRequiredSalonApprovalData: boolean;
                     name?: string;
@@ -2587,6 +2588,7 @@ declare namespace Paths {
                         firstName?: string;
                         lastName?: string;
                     };
+                    premiumSourceUserType?: "NOTINO" | "PARTNER";
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
@@ -3064,7 +3066,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = number;
             /**
              * Order attributes: fullName, email, lastAccess, activatedAt, roleName
              */
@@ -3122,7 +3124,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = number;
             export type Page = number;
             export type Search = string | null;
         }
@@ -3484,7 +3486,7 @@ declare namespace Paths {
              */
             export type AcceptLanguage = string;
             export type AccountState = "UNPAIRED" | "PENDING" | "PAIRED";
-            export type Limit = 25 | 50 | 100;
+            export type Limit = number;
             /**
              * Order attributes: lastName, createdAt, status
              */
@@ -4492,7 +4494,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = number;
             export type Page = number;
             export type Search = string | null;
         }
@@ -4593,6 +4595,7 @@ declare namespace Paths {
             export interface $200 {
                 salon: {
                     id: string; // uuid
+                    seoSlugName: string;
                     createType: "NON_BASIC" | "BASIC";
                     name?: string;
                     email?: string;
@@ -6354,7 +6357,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100;
+            export type Limit = number;
             export type Page = number;
             export type Search = string | null;
         }
@@ -6954,6 +6957,8 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
+            export type CreateType = "NON_BASIC" | "BASIC";
+            export type ExactRating = number[];
             export type LanguageIDs = string /* uuid */[];
             export type Lat = number; // float
             export type LatMy = number; // float
@@ -6979,9 +6984,11 @@ declare namespace Paths {
             priceLevel?: Parameters.PriceLevel;
             openingHoursStatus?: Parameters.OpeningHoursStatus;
             rating?: Parameters.Rating;
+            exactRating?: Parameters.ExactRating;
             languageIDs?: Parameters.LanguageIDs;
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
+            createType?: Parameters.CreateType;
             order?: /* Order attributes: distance, rating, priceLevel */ Parameters.Order;
             limit?: Parameters.Limit;
             page?: Parameters.Page;
@@ -6990,6 +6997,7 @@ declare namespace Paths {
             export interface $200 {
                 salons: {
                     id: string; // uuid
+                    seoSlugName: string;
                     createType: "NON_BASIC" | "BASIC";
                     name?: string;
                     logo?: {
@@ -7071,6 +7079,7 @@ declare namespace Paths {
             export interface $200 {
                 salonsInNeighbourhood: {
                     id: string; // uuid
+                    seoSlugName: string;
                     createType: "NON_BASIC" | "BASIC";
                     name?: string;
                     logo?: {
@@ -7120,6 +7129,7 @@ declare namespace Paths {
                 }[];
                 likedSalons: {
                     id: string; // uuid
+                    seoSlugName: string;
                     createType: "NON_BASIC" | "BASIC";
                     name?: string;
                     logo?: {
@@ -7273,6 +7283,8 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type CategoryIDs = string /* uuid */[];
             export type CosmeticIDs = string /* uuid */[];
+            export type CreateType = "NON_BASIC" | "BASIC";
+            export type ExactRating = number[];
             export type LanguageIDs = string /* uuid */[];
             export type LatMy = number; // float
             export type LatNW = number; // float
@@ -7296,9 +7308,11 @@ declare namespace Paths {
             priceLevel?: Parameters.PriceLevel;
             openingHoursStatus?: Parameters.OpeningHoursStatus;
             rating?: Parameters.Rating;
+            exactRating?: Parameters.ExactRating;
             languageIDs?: Parameters.LanguageIDs;
             cosmeticIDs?: Parameters.CosmeticIDs;
             liked?: Parameters.Liked;
+            createType?: Parameters.CreateType;
         }
         namespace Responses {
             export interface $200 {
@@ -7307,6 +7321,7 @@ declare namespace Paths {
                     lon: number; // float
                     salon: {
                         id: string; // uuid
+                        seoSlugName: string;
                         createType: "NON_BASIC" | "BASIC";
                         name?: string;
                         logo?: {
@@ -7381,6 +7396,7 @@ declare namespace Paths {
             export interface $200 {
                 salon: {
                     id: string; // uuid
+                    seoSlugName: string;
                     createType: "NON_BASIC" | "BASIC";
                     name?: string;
                     email?: string;
@@ -8278,6 +8294,1757 @@ declare namespace Paths {
                 rating?: {
                     rate: 1 | 2 | 3 | 4 | 5; // float
                     userName: string;
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebEnumsCategories {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                categories: {
+                    id: string; // uuid
+                    name?: string;
+                    parentID?: string; // uuid
+                    orderIndex: number;
+                    children: {
+                        id: string; // uuid
+                        name?: string;
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        children: {
+                            id: string; // uuid
+                            name?: string;
+                            description?: string;
+                            parentID?: string; // uuid
+                            orderIndex: number;
+                        }[];
+                    }[];
+                    image?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    } | {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    icon?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        isAutogenerated: boolean;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebEnumsCategoriesCategoryId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryID = string; // uuid
+        }
+        export interface PathParameters {
+            categoryID: Parameters.CategoryID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                category: {
+                    id: string; // uuid
+                    name?: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                        value: string | null;
+                    }[];
+                    description?: string;
+                    descriptionLocalizations: {
+                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                        value: string | null;
+                    }[];
+                    parentID?: string; // uuid
+                    orderIndex: number;
+                    image?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    } | {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    icon?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        isAutogenerated: boolean;
+                    };
+                    categoryParameter?: {
+                        id: string; // uuid
+                        name?: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        values: {
+                            id: string; // uuid
+                            value?: string;
+                            valueLocalizations?: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                        }[];
+                    };
+                    children: {
+                        id: string; // uuid
+                        name?: string;
+                        nameLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        description?: string;
+                        descriptionLocalizations: {
+                            language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                            value: string | null;
+                        }[];
+                        parentID?: string; // uuid
+                        orderIndex: number;
+                        icon?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            isAutogenerated: boolean;
+                        };
+                        categoryParameter?: {
+                            id: string; // uuid
+                            name?: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            values: {
+                                id: string; // uuid
+                                value?: string;
+                                valueLocalizations?: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                            }[];
+                        };
+                        children: {
+                            id: string; // uuid
+                            name?: string;
+                            nameLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            description?: string;
+                            descriptionLocalizations: {
+                                language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                value: string | null;
+                            }[];
+                            parentID?: string; // uuid
+                            orderIndex: number;
+                            icon?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                isAutogenerated: boolean;
+                            };
+                            categoryParameter?: {
+                                id: string; // uuid
+                                name?: string;
+                                nameLocalizations: {
+                                    language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                    value: string | null;
+                                }[];
+                                values: {
+                                    id: string; // uuid
+                                    value?: string;
+                                    valueLocalizations?: {
+                                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                                        value: string | null;
+                                    }[];
+                                }[];
+                            };
+                        }[];
+                    }[];
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebEnumsCosmetics {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Search = string | null;
+        }
+        export interface QueryParameters {
+            search?: Parameters.Search;
+        }
+        namespace Responses {
+            export interface $200 {
+                cosmetics: {
+                    id: string; // uuid
+                    name: string;
+                    image?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebEnumsCosmeticsCosmeticId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CosmeticID = string; // uuid
+        }
+        export interface PathParameters {
+            cosmeticID: Parameters.CosmeticID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                cosmetic: {
+                    id: string; // uuid
+                    name: string;
+                    image?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebEnumsLanguages {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                languages: {
+                    id: string; // uuid
+                    name?: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                        value: string | null;
+                    }[];
+                    image?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebEnumsLanguagesLanguageId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type LanguageID = string; // uuid
+        }
+        export interface PathParameters {
+            languageID: Parameters.LanguageID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                language: {
+                    id: string; // uuid
+                    name?: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                        value: string | null;
+                    }[];
+                    image?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebSalons {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryIDs = string /* uuid */[];
+            export type CosmeticIDs = string /* uuid */[];
+            export type CreateType = "NON_BASIC" | "BASIC";
+            export type ExactRating = number[];
+            export type LanguageIDs = string /* uuid */[];
+            export type Lat = number; // float
+            export type LatMy = number; // float
+            export type Liked = boolean;
+            export type Limit = 20;
+            export type Lon = number; // float
+            export type LonMy = number; // float
+            export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
+            /**
+             * Order attributes: distance, rating, priceLevel
+             */
+            export type Order = string;
+            export type Page = number;
+            export type PriceLevel = "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+            export type Rating = "ALL" | "1_0" | "1_5" | "2_0" | "2_5" | "3_0" | "3_5" | "4_0" | "4_5" | "5_0";
+        }
+        export interface QueryParameters {
+            latMy?: Parameters.LatMy /* float */;
+            lonMy?: Parameters.LonMy /* float */;
+            lat?: Parameters.Lat /* float */;
+            lon?: Parameters.Lon /* float */;
+            categoryIDs?: Parameters.CategoryIDs;
+            priceLevel?: Parameters.PriceLevel;
+            openingHoursStatus?: Parameters.OpeningHoursStatus;
+            rating?: Parameters.Rating;
+            exactRating?: Parameters.ExactRating;
+            languageIDs?: Parameters.LanguageIDs;
+            cosmeticIDs?: Parameters.CosmeticIDs;
+            liked?: Parameters.Liked;
+            createType?: Parameters.CreateType;
+            order?: /* Order attributes: distance, rating, priceLevel */ Parameters.Order;
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                salons: {
+                    id: string; // uuid
+                    seoSlugName: string;
+                    createType: "NON_BASIC" | "BASIC";
+                    name?: string;
+                    logo?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    images: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    }[];
+                    rating?: number; // float
+                    distance?: number; // float
+                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                    }[];
+                    address?: {
+                        id: string; // uuid
+                        streetNumber?: string;
+                        street?: string;
+                        city?: string;
+                        zipCode?: string;
+                        countryCode?: string;
+                    };
+                    openingHoursData?: {
+                        isOpen: boolean;
+                        message: string;
+                    };
+                    liked?: boolean;
+                }[];
+                pagination: {
+                    limit: number;
+                    page: number;
+                    totalPages: number;
+                    totalCount: number;
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsDashboard {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type LatMy = number; // float
+            export type LonMy = number; // float
+        }
+        export interface QueryParameters {
+            latMy?: Parameters.LatMy /* float */;
+            lonMy?: Parameters.LonMy /* float */;
+        }
+        namespace Responses {
+            export interface $200 {
+                salonsInNeighbourhood: {
+                    id: string; // uuid
+                    seoSlugName: string;
+                    createType: "NON_BASIC" | "BASIC";
+                    name?: string;
+                    logo?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    images: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    }[];
+                    rating?: number; // float
+                    distance?: number; // float
+                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                    }[];
+                    address?: {
+                        id: string; // uuid
+                        streetNumber?: string;
+                        street?: string;
+                        city?: string;
+                        zipCode?: string;
+                        countryCode?: string;
+                    };
+                    openingHoursData?: {
+                        isOpen: boolean;
+                        message: string;
+                    };
+                    liked?: boolean;
+                }[];
+                likedSalons: {
+                    id: string; // uuid
+                    seoSlugName: string;
+                    createType: "NON_BASIC" | "BASIC";
+                    name?: string;
+                    logo?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    images: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    }[];
+                    rating?: number; // float
+                    distance?: number; // float
+                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    categories: {
+                        id: string; // uuid
+                        name?: string;
+                    }[];
+                    address?: {
+                        id: string; // uuid
+                        streetNumber?: string;
+                        street?: string;
+                        city?: string;
+                        zipCode?: string;
+                        countryCode?: string;
+                    };
+                    openingHoursData?: {
+                        isOpen: boolean;
+                        message: string;
+                    };
+                    liked?: boolean;
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsFilter {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type LatMy = number; // float
+            export type LatNW = number; // float
+            export type LatSE = number; // float
+            export type LonMy = number; // float
+            export type LonNW = number; // float
+            export type LonSE = number; // float
+            export type Search = string;
+        }
+        export interface QueryParameters {
+            latNW?: Parameters.LatNW /* float */;
+            lonNW?: Parameters.LonNW /* float */;
+            latSE?: Parameters.LatSE /* float */;
+            lonSE?: Parameters.LonSE /* float */;
+            latMy?: Parameters.LatMy /* float */;
+            lonMy?: Parameters.LonMy /* float */;
+            search: Parameters.Search;
+        }
+        namespace Responses {
+            export interface $200 {
+                cities: {
+                    name: string;
+                    placeID: string;
+                    latitude?: number; // float
+                    longitude?: number; // float
+                }[];
+                salons: {
+                    id: string; // uuid
+                    name?: string;
+                    distance?: number; // float
+                    createType: "NON_BASIC" | "BASIC";
+                    lat?: number; // float
+                    lon?: number; // float
+                    address?: {
+                        city?: string;
+                        street?: string;
+                    };
+                }[];
+                categories: {
+                    id: string; // uuid
+                    name?: string;
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsFilterCitiesPlaceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type PlaceID = string;
+        }
+        export interface PathParameters {
+            placeID: Parameters.PlaceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                city?: {
+                    placeID: string;
+                    lat?: number; // float
+                    lon?: number; // float
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsMap {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CategoryIDs = string /* uuid */[];
+            export type CosmeticIDs = string /* uuid */[];
+            export type CreateType = "NON_BASIC" | "BASIC";
+            export type ExactRating = number[];
+            export type LanguageIDs = string /* uuid */[];
+            export type LatMy = number; // float
+            export type LatNW = number; // float
+            export type LatSE = number; // float
+            export type Liked = boolean;
+            export type LonMy = number; // float
+            export type LonNW = number; // float
+            export type LonSE = number; // float
+            export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
+            export type PriceLevel = "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+            export type Rating = "ALL" | "1_0" | "1_5" | "2_0" | "2_5" | "3_0" | "3_5" | "4_0" | "4_5" | "5_0";
+        }
+        export interface QueryParameters {
+            latNW: Parameters.LatNW /* float */;
+            lonNW: Parameters.LonNW /* float */;
+            latSE: Parameters.LatSE /* float */;
+            lonSE: Parameters.LonSE /* float */;
+            latMy?: Parameters.LatMy /* float */;
+            lonMy?: Parameters.LonMy /* float */;
+            categoryIDs?: Parameters.CategoryIDs;
+            priceLevel?: Parameters.PriceLevel;
+            openingHoursStatus?: Parameters.OpeningHoursStatus;
+            rating?: Parameters.Rating;
+            exactRating?: Parameters.ExactRating;
+            languageIDs?: Parameters.LanguageIDs;
+            cosmeticIDs?: Parameters.CosmeticIDs;
+            liked?: Parameters.Liked;
+            createType?: Parameters.CreateType;
+        }
+        namespace Responses {
+            export interface $200 {
+                mapPoints: {
+                    lat: number; // float
+                    lon: number; // float
+                    salon: {
+                        id: string; // uuid
+                        seoSlugName: string;
+                        createType: "NON_BASIC" | "BASIC";
+                        name?: string;
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        }[];
+                        rating?: number; // float
+                        distance?: number; // float
+                        priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                        categories: {
+                            id: string; // uuid
+                            name?: string;
+                        }[];
+                        address?: {
+                            id: string; // uuid
+                            streetNumber?: string;
+                            street?: string;
+                            city?: string;
+                            zipCode?: string;
+                            countryCode?: string;
+                        };
+                        openingHoursData?: {
+                            isOpen: boolean;
+                            message: string;
+                        };
+                        liked?: boolean;
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsSalonIdEmployees {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type Limit = 25 | 50 | 100 | 1000;
+            export type Page = number;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            limit?: Parameters.Limit;
+            page?: Parameters.Page;
+        }
+        namespace Responses {
+            export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string; // email
+                    image: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsSalonIdLike {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: string; // uuid
+                    liked: boolean;
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsSalonIdServices {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                groupedServicesByCategory: {
+                    category?: {
+                        id: string; // uuid
+                        name?: string;
+                        children: {
+                            category?: {
+                                id: string; // uuid
+                                name?: string;
+                                children: {
+                                    category: {
+                                        id: string; // uuid
+                                        name?: string;
+                                        description?: string;
+                                    };
+                                    service: {
+                                        id: string; // uuid
+                                        rangePriceAndDurationData: {
+                                            durationFrom?: number;
+                                            durationTo?: number;
+                                            priceFrom?: {
+                                                currency: string;
+                                                currencySymbol: string;
+                                                exponent: number;
+                                                significand: number;
+                                            };
+                                            priceTo?: {
+                                                currency: string;
+                                                currencySymbol: string;
+                                                exponent: number;
+                                                significand: number;
+                                            };
+                                        };
+                                        createdAt: string; // date-time
+                                        updatedAt: string; // date-time
+                                        deletedAt?: string; // date-time
+                                    };
+                                }[];
+                            };
+                        }[];
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsSalonIdTravelData {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type LatMy = number; // float
+            export type LonMy = number; // float
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            latMy?: Parameters.LatMy /* float */;
+            lonMy?: Parameters.LonMy /* float */;
+        }
+        namespace Responses {
+            export interface $200 {
+                id: string; // uuid
+                distance?: number; // float
+                travelTime?: number;
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsSalonIdUserRating {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DeviceID = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            deviceID: Parameters.DeviceID;
+        }
+        namespace Responses {
+            export interface $200 {
+                id: string; // uuid
+                rating?: {
+                    rate: 1 | 2 | 3 | 4 | 5; // float
+                    userName: string;
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsSeaSlugName {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SeaSlugName = string;
+        }
+        export interface PathParameters {
+            seaSlugName: Parameters.SeaSlugName;
+        }
+        namespace Responses {
+            export interface $200 {
+                salon: {
+                    id: string; // uuid
+                    seoSlugName: string;
+                    createType: "NON_BASIC" | "BASIC";
+                    name?: string;
+                    email?: string;
+                    images: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    }[];
+                    logo?: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        resizedImages: {
+                            thumbnail: string;
+                            small: string;
+                            medium: string;
+                            large: string;
+                        };
+                        isAutogenerated: boolean;
+                    };
+                    address?: {
+                        id: string; // uuid
+                        countryCode?: string;
+                        zipCode?: string;
+                        city?: string;
+                        street?: string;
+                        streetNumber?: string;
+                        description?: string;
+                        latitude?: number; // float
+                        longitude?: number; // float
+                    };
+                    formattedAddress?: string;
+                    openingHoursData?: {
+                        isOpen: boolean;
+                        message: string;
+                        openingHours: [
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            },
+                            {
+                                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                                isCurrentDate: boolean;
+                                isOpen: boolean;
+                                day: "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
+                                timeRanges: {
+                                    timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                    timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                                }[];
+                            }
+                        ];
+                        openingHoursNote?: {
+                            /**
+                             * example:
+                             * Poznámka
+                             */
+                            note: string;
+                        };
+                    };
+                    services: {
+                        id: string; // uuid
+                        name?: string;
+                        description?: string;
+                        rangePriceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                    }[];
+                    employees: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string; // email
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                    }[];
+                    aboutUsFirst?: string;
+                    cosmetics: [
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name: string;
+                            image?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?
+                    ];
+                    languages: [
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?,
+                        {
+                            id: string; // uuid
+                            name?: string;
+                            flag?: {
+                                id: string; // uuid
+                                original: string;
+                                fileName: string;
+                                resizedImages: {
+                                    thumbnail: string;
+                                    small: string;
+                                    medium: string;
+                                    large: string;
+                                };
+                                isAutogenerated: boolean;
+                            };
+                        }?
+                    ];
+                    parkingNote?: string;
+                    phones: {
+                        id: string; // uuid
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    }[];
+                    payByCard?: boolean;
+                    payByCash: boolean;
+                    otherPaymentMethods?: string;
+                    pricelists: {
+                        id: string; // uuid
+                        original: string;
+                        fileName: string;
+                        isAutogenerated: boolean;
+                    }[];
+                    socialLinkFB?: string;
+                    socialLinkInstagram?: string;
+                    socialLinkWebPage?: string;
+                    socialLinkYoutube?: string;
+                    socialLinkTikTok?: string;
+                    socialLinkPinterest?: string;
+                    ratingsData: {
+                        rating?: number; // float
+                        ratesCount: number;
+                        groupedRatings: {
+                            ONE: number;
+                            TWO: number;
+                            THREE: number;
+                            FOUR: number;
+                            FIVE: number;
+                        };
+                    };
                 };
             }
         }
@@ -16701,7 +18468,7 @@ declare namespace Paths {
              * example:
              * 1
              */
-            streetNumber?: string;
+            streetNumber?: string | null;
             /**
              * example:
              * 49.226666
@@ -41300,6 +43067,70 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2CWebSalonsSalonIdLike {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            like: boolean;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2CWebSalonsSalonIdRate {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            rate: 1 | 2 | 3 | 4 | 5; // float
+            userName: string;
+            deviceID: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PostApiB2BAdminAuthForgotPassword {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -41638,7 +43469,7 @@ declare namespace Paths {
              * example:
              * 1
              */
-            streetNumber?: string;
+            streetNumber?: string | null;
             /**
              * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
@@ -47491,7 +49322,7 @@ declare namespace Paths {
              * example:
              * 1
              */
-            streetNumber?: string;
+            streetNumber?: string | null;
             /**
              * example:
              * 49.226666
@@ -48354,7 +50185,7 @@ declare namespace Paths {
              * example:
              * 1
              */
-            streetNumber?: string;
+            streetNumber?: string | null;
             /**
              * example:
              * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
@@ -52240,6 +54071,158 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BV1PartnerContactForm.Responses.$200>
   /**
+   * getApiB2CWebSalons - permissions: NO
+   */
+  'getApiB2CWebSalons'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalons.QueryParameters & Paths.GetApiB2CWebSalons.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalons.Responses.$200>
+  /**
+   * getApiB2CWebSalonsMap - permissions: NO
+   */
+  'getApiB2CWebSalonsMap'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsMap.QueryParameters & Paths.GetApiB2CWebSalonsMap.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsMap.Responses.$200>
+  /**
+   * getApiB2CWebSalonsDashboard - permissions: NO
+   */
+  'getApiB2CWebSalonsDashboard'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsDashboard.QueryParameters & Paths.GetApiB2CWebSalonsDashboard.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsDashboard.Responses.$200>
+  /**
+   * getApiB2CWebSalonsFilter - permissions: NO
+   */
+  'getApiB2CWebSalonsFilter'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsFilter.QueryParameters & Paths.GetApiB2CWebSalonsFilter.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsFilter.Responses.$200>
+  /**
+   * getApiB2CWebSalonsFilterCitiesPlaceId - permissions: NO
+   */
+  'getApiB2CWebSalonsFilterCitiesPlaceId'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.PathParameters & Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.Responses.$200>
+  /**
+   * getApiB2CWebSalonsSeaSlugName - permissions: NO
+   */
+  'getApiB2CWebSalonsSeaSlugName'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSeaSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeaSlugName.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSeaSlugName.Responses.$200>
+  /**
+   * getApiB2CWebSalonsSalonIdServices - permissions: NO
+   */
+  'getApiB2CWebSalonsSalonIdServices'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdServices.PathParameters & Paths.GetApiB2CWebSalonsSalonIdServices.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdServices.Responses.$200>
+  /**
+   * getApiB2CWebSalonsSalonIdEmployees - permissions: NO
+   */
+  'getApiB2CWebSalonsSalonIdEmployees'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CWebSalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdEmployees.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdEmployees.Responses.$200>
+  /**
+   * getApiB2CWebSalonsSalonIdTravelData - permissions: NO
+   */
+  'getApiB2CWebSalonsSalonIdTravelData'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdTravelData.PathParameters & Paths.GetApiB2CWebSalonsSalonIdTravelData.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdTravelData.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdTravelData.Responses.$200>
+  /**
+   * getApiB2CWebSalonsSalonIdLike - permissions: NO
+   */
+  'getApiB2CWebSalonsSalonIdLike'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdLike.PathParameters & Paths.GetApiB2CWebSalonsSalonIdLike.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdLike.Responses.$200>
+  /**
+   * patchApiB2CWebSalonsSalonIdLike - permissions: NO
+   */
+  'patchApiB2CWebSalonsSalonIdLike'(
+    parameters?: Parameters<Paths.PatchApiB2CWebSalonsSalonIdLike.PathParameters & Paths.PatchApiB2CWebSalonsSalonIdLike.HeaderParameters> | null,
+    data?: Paths.PatchApiB2CWebSalonsSalonIdLike.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2CWebSalonsSalonIdLike.Responses.$200>
+  /**
+   * getApiB2CWebSalonsSalonIdUserRating - permissions: NO
+   */
+  'getApiB2CWebSalonsSalonIdUserRating'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CWebSalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdUserRating.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdUserRating.Responses.$200>
+  /**
+   * patchApiB2CWebSalonsSalonIdRate - permissions: NO
+   */
+  'patchApiB2CWebSalonsSalonIdRate'(
+    parameters?: Parameters<Paths.PatchApiB2CWebSalonsSalonIdRate.PathParameters & Paths.PatchApiB2CWebSalonsSalonIdRate.HeaderParameters> | null,
+    data?: Paths.PatchApiB2CWebSalonsSalonIdRate.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2CWebSalonsSalonIdRate.Responses.$200>
+  /**
+   * getApiB2CWebEnumsCategories - permissions: NO
+   */
+  'getApiB2CWebEnumsCategories'(
+    parameters?: Parameters<Paths.GetApiB2CWebEnumsCategories.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebEnumsCategories.Responses.$200>
+  /**
+   * getApiB2CWebEnumsCategoriesCategoryId - permissions: NO
+   */
+  'getApiB2CWebEnumsCategoriesCategoryId'(
+    parameters?: Parameters<Paths.GetApiB2CWebEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2CWebEnumsCategoriesCategoryId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebEnumsCategoriesCategoryId.Responses.$200>
+  /**
+   * getApiB2CWebEnumsCosmetics - permissions: NO
+   */
+  'getApiB2CWebEnumsCosmetics'(
+    parameters?: Parameters<Paths.GetApiB2CWebEnumsCosmetics.QueryParameters & Paths.GetApiB2CWebEnumsCosmetics.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebEnumsCosmetics.Responses.$200>
+  /**
+   * getApiB2CWebEnumsCosmeticsCosmeticId - permissions: NO
+   */
+  'getApiB2CWebEnumsCosmeticsCosmeticId'(
+    parameters?: Parameters<Paths.GetApiB2CWebEnumsCosmeticsCosmeticId.PathParameters & Paths.GetApiB2CWebEnumsCosmeticsCosmeticId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebEnumsCosmeticsCosmeticId.Responses.$200>
+  /**
+   * getApiB2CWebEnumsLanguages - permissions: NO
+   */
+  'getApiB2CWebEnumsLanguages'(
+    parameters?: Parameters<Paths.GetApiB2CWebEnumsLanguages.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebEnumsLanguages.Responses.$200>
+  /**
+   * getApiB2CWebEnumsLanguagesLanguageId - permissions: NO
+   */
+  'getApiB2CWebEnumsLanguagesLanguageId'(
+    parameters?: Parameters<Paths.GetApiB2CWebEnumsLanguagesLanguageId.PathParameters & Paths.GetApiB2CWebEnumsLanguagesLanguageId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebEnumsLanguagesLanguageId.Responses.$200>
+  /**
    * getApiB2CV1Salons - permissions: NO
    */
   'getApiB2CV1Salons'(
@@ -53783,6 +55766,194 @@ export interface PathsDictionary {
       data?: Paths.PostApiB2BV1PartnerContactForm.RequestBody,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PostApiB2BV1PartnerContactForm.Responses.$200>
+  }
+  ['/api/b2c/web/salons/']: {
+    /**
+     * getApiB2CWebSalons - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalons.QueryParameters & Paths.GetApiB2CWebSalons.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalons.Responses.$200>
+  }
+  ['/api/b2c/web/salons/map']: {
+    /**
+     * getApiB2CWebSalonsMap - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsMap.QueryParameters & Paths.GetApiB2CWebSalonsMap.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsMap.Responses.$200>
+  }
+  ['/api/b2c/web/salons/dashboard']: {
+    /**
+     * getApiB2CWebSalonsDashboard - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsDashboard.QueryParameters & Paths.GetApiB2CWebSalonsDashboard.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsDashboard.Responses.$200>
+  }
+  ['/api/b2c/web/salons/filter']: {
+    /**
+     * getApiB2CWebSalonsFilter - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsFilter.QueryParameters & Paths.GetApiB2CWebSalonsFilter.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsFilter.Responses.$200>
+  }
+  ['/api/b2c/web/salons/filter/cities/{placeID}']: {
+    /**
+     * getApiB2CWebSalonsFilterCitiesPlaceId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.PathParameters & Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{seaSlugName}']: {
+    /**
+     * getApiB2CWebSalonsSeaSlugName - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSeaSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeaSlugName.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSeaSlugName.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/services']: {
+    /**
+     * getApiB2CWebSalonsSalonIdServices - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdServices.PathParameters & Paths.GetApiB2CWebSalonsSalonIdServices.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdServices.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/employees']: {
+    /**
+     * getApiB2CWebSalonsSalonIdEmployees - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdEmployees.PathParameters & Paths.GetApiB2CWebSalonsSalonIdEmployees.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdEmployees.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdEmployees.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/travel-data']: {
+    /**
+     * getApiB2CWebSalonsSalonIdTravelData - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdTravelData.PathParameters & Paths.GetApiB2CWebSalonsSalonIdTravelData.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdTravelData.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdTravelData.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/like']: {
+    /**
+     * getApiB2CWebSalonsSalonIdLike - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdLike.PathParameters & Paths.GetApiB2CWebSalonsSalonIdLike.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdLike.Responses.$200>
+    /**
+     * patchApiB2CWebSalonsSalonIdLike - permissions: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2CWebSalonsSalonIdLike.PathParameters & Paths.PatchApiB2CWebSalonsSalonIdLike.HeaderParameters> | null,
+      data?: Paths.PatchApiB2CWebSalonsSalonIdLike.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2CWebSalonsSalonIdLike.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/user-rating']: {
+    /**
+     * getApiB2CWebSalonsSalonIdUserRating - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdUserRating.PathParameters & Paths.GetApiB2CWebSalonsSalonIdUserRating.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdUserRating.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdUserRating.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/rate']: {
+    /**
+     * patchApiB2CWebSalonsSalonIdRate - permissions: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2CWebSalonsSalonIdRate.PathParameters & Paths.PatchApiB2CWebSalonsSalonIdRate.HeaderParameters> | null,
+      data?: Paths.PatchApiB2CWebSalonsSalonIdRate.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2CWebSalonsSalonIdRate.Responses.$200>
+  }
+  ['/api/b2c/web/enums/categories/']: {
+    /**
+     * getApiB2CWebEnumsCategories - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebEnumsCategories.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebEnumsCategories.Responses.$200>
+  }
+  ['/api/b2c/web/enums/categories/{categoryID}']: {
+    /**
+     * getApiB2CWebEnumsCategoriesCategoryId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebEnumsCategoriesCategoryId.PathParameters & Paths.GetApiB2CWebEnumsCategoriesCategoryId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebEnumsCategoriesCategoryId.Responses.$200>
+  }
+  ['/api/b2c/web/enums/cosmetics/']: {
+    /**
+     * getApiB2CWebEnumsCosmetics - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebEnumsCosmetics.QueryParameters & Paths.GetApiB2CWebEnumsCosmetics.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebEnumsCosmetics.Responses.$200>
+  }
+  ['/api/b2c/web/enums/cosmetics/{cosmeticID}']: {
+    /**
+     * getApiB2CWebEnumsCosmeticsCosmeticId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebEnumsCosmeticsCosmeticId.PathParameters & Paths.GetApiB2CWebEnumsCosmeticsCosmeticId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebEnumsCosmeticsCosmeticId.Responses.$200>
+  }
+  ['/api/b2c/web/enums/languages/']: {
+    /**
+     * getApiB2CWebEnumsLanguages - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebEnumsLanguages.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebEnumsLanguages.Responses.$200>
+  }
+  ['/api/b2c/web/enums/languages/{languageID}']: {
+    /**
+     * getApiB2CWebEnumsLanguagesLanguageId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebEnumsLanguagesLanguageId.PathParameters & Paths.GetApiB2CWebEnumsLanguagesLanguageId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebEnumsLanguagesLanguageId.Responses.$200>
   }
   ['/api/b2c/v1/salons/']: {
     /**

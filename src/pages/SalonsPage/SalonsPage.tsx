@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import { ArrayParam, BooleanParam, NumberParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
-import { Col, Modal, Progress, Row, Spin } from 'antd'
+import { Col, Modal, Progress, Row, Spin, Image, Tooltip } from 'antd'
 import { SorterResult, TablePaginationConfig } from 'antd/lib/table/interface'
 import { initialize, reset } from 'redux-form'
 
@@ -21,17 +21,10 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../utils/enums'
-import {
-	formatDateByLocale,
-	getLinkWithEncodedBackUrl,
-	getSalonTagChanges,
-	getSalonTagCreateType,
-	getSalonTagPublished,
-	normalizeDirectionKeys,
-	setOrder
-} from '../../utils/helper'
+import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
+import { getAssignedUserLabel, getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
 // reducers
 import { emptySalons, getSalons } from '../../reducers/salons/salonsActions'
@@ -65,6 +58,12 @@ const SalonsPage = () => {
 	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
+	const { data } = useSelector((state: RootState) => state.categories.categories)
+	// transform root categories (industries) into object, where ID is key of record, and content is { image, name }
+	const industries: { [key: string]: any } = useMemo(
+		() => data?.reduce((result, industry) => ({ ...result, [industry.id]: { image: industry.image?.resizedImages?.thumbnail, name: industry.name } }), {}) || {},
+		[data]
+	)
 
 	useEffect(() => {
 		dispatch(getCategories())
@@ -85,7 +84,10 @@ const SalonsPage = () => {
 		createType: StringParam,
 		lastUpdatedAtFrom: StringParam,
 		lastUpdatedAtTo: StringParam,
-		hasSetOpeningHours: StringParam
+		hasSetOpeningHours: StringParam,
+		sourceType: StringParam,
+		assignedUserID: StringParam,
+		premiumSourceUserType: StringParam
 	})
 
 	const resetQuery = (selectedTabKey: string) => {
@@ -104,7 +106,10 @@ const SalonsPage = () => {
 			lastUpdatedAtFrom: undefined,
 			lastUpdatedAtTo: undefined,
 			salonState: selectedTabKey,
-			hasSetOpeningHours: undefined
+			hasSetOpeningHours: undefined,
+			sourceType: undefined,
+			premiumSourceUserType: undefined,
+			assignedUserID: undefined
 		})
 	}
 
@@ -125,7 +130,10 @@ const SalonsPage = () => {
 			createType: query.createType,
 			lastUpdatedAtFrom: query.lastUpdatedAtFrom,
 			lastUpdatedAtTo: query.lastUpdatedAtTo,
-			hasSetOpeningHours: query.hasSetOpeningHours
+			hasSetOpeningHours: query.hasSetOpeningHours,
+			sourceType: query.sourceType,
+			premiumSourceUserType: query.premiumSourceUserType,
+			assignedUserID: query.assignedUserID
 		}
 
 		switch (query.salonState) {
@@ -162,7 +170,10 @@ const SalonsPage = () => {
 							dateFrom: query.lastUpdatedAtFrom,
 							dateTo: query.lastUpdatedAtTo
 						},
-						hasSetOpeningHours: query.hasSetOpeningHours
+						hasSetOpeningHours: query.hasSetOpeningHours,
+						sourceType: query.sourceType,
+						premiumSourceUserType: query.premiumSourceUserType,
+						assignedUserID: query.assignedUserID
 					})
 				)
 				dispatch(getSalons(salonsQueries))
@@ -183,7 +194,10 @@ const SalonsPage = () => {
 		query.createType,
 		query.lastUpdatedAtFrom,
 		query.lastUpdatedAtTo,
-		query.hasSetOpeningHours
+		query.hasSetOpeningHours,
+		query.sourceType,
+		query.premiumSourceUserType,
+		query.assignedUserID
 	])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
@@ -291,7 +305,6 @@ const SalonsPage = () => {
 				key: 'name',
 				ellipsis: true,
 				sorter: true,
-				width: '15%',
 				sortOrder: setOrder(query.order, 'name'),
 				render: (value) => value || '-',
 				...props
@@ -302,18 +315,30 @@ const SalonsPage = () => {
 				key: 'address',
 				ellipsis: true,
 				sorter: false,
-				width: '20%',
 				render: (value) => (!isEmpty(value) ? <>{value?.city && value?.street ? `${value?.city}, ${value?.street}` : ''}</> : '-'),
 				...props
 			}),
 			categories: (props) => ({
-				title: t('loc:Odvetvie'),
+				title: t('loc:Odvetvia'),
 				dataIndex: 'categories',
 				key: 'categories',
-				ellipsis: true,
 				sorter: false,
-				width: '10%',
-				render: (value) => (value?.length > 0 ? value[0].name : '-'),
+				render: (value: any[]) => {
+					if (value?.length > 0) {
+						const industriesContent: any[] = value.map((category: any) => {
+							const industry = industries[category.id]
+							return (
+								<Tooltip title={industry.name}>
+									<Image src={industry.image} loading='lazy' width={32} height={32} className='pr-0-5 pb-0-5 rounded' alt={industry.name} preview={false} />
+								</Tooltip>
+							)
+						})
+
+						return <div className='flex flex-wrap'>{industriesContent}</div>
+					}
+
+					return '-'
+				},
 				...props
 			}),
 			createType: (props) => ({
@@ -322,7 +347,6 @@ const SalonsPage = () => {
 				key: 'createType',
 				ellipsis: true,
 				sorter: false,
-				width: '8%',
 				render: (_value, record) => getSalonTagCreateType(record.state, record.createType),
 				...props
 			}),
@@ -342,7 +366,6 @@ const SalonsPage = () => {
 				key: 'lastUpdatedAt',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
 				render: (value) => (value ? formatDateByLocale(value) : '-'),
 				...props
 			}),
@@ -352,7 +375,6 @@ const SalonsPage = () => {
 				key: 'deletedAt',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
 				render: (value) => (value ? formatDateByLocale(value) : '-'),
 				...props
 			}),
@@ -361,7 +383,6 @@ const SalonsPage = () => {
 				key: 'isPublished',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
 				render: (_value, record) => getSalonTagPublished(record.state),
 				...props
 			}),
@@ -370,7 +391,6 @@ const SalonsPage = () => {
 				key: 'changes',
 				ellipsis: true,
 				sorter: false,
-				width: '10%',
 				render: (_value, record) => getSalonTagChanges(record.state),
 				...props
 			}),
@@ -388,9 +408,27 @@ const SalonsPage = () => {
 					</Row>
 				),
 				...props
+			}),
+			assignedUser: (props) => ({
+				title: t('loc:Notino používateľ'),
+				dataIndex: 'assignedUser',
+				key: 'assignedUser',
+				ellipsis: true,
+				sorter: false,
+				render: (value: any) => getAssignedUserLabel(value),
+				...props
+			}),
+			premiumSourceUserType: (props) => ({
+				title: t('loc:Zdroj PREMIUM'),
+				dataIndex: 'premiumSourceUserType',
+				key: 'premiumSourceUserType',
+				sorter: false,
+				ellipsis: true,
+				render: (value: string) => getSalonTagSourceType(value),
+				...props
 			})
 		}),
-		[query.order, t]
+		[query.order, t, industries]
 	)
 
 	const getTabContent = (selectedTabKey: TAB_KEYS) => {
@@ -413,15 +451,17 @@ const SalonsPage = () => {
 				break
 			default:
 				columns = [
-					tableColumns.name(),
-					tableColumns.address(),
-					tableColumns.categories(),
-					tableColumns.isPublished(),
-					tableColumns.changes(),
-					tableColumns.createType(),
+					tableColumns.name({ width: '15%' }),
+					tableColumns.address({ width: '15%' }),
+					tableColumns.categories({ width: '9%' }),
+					tableColumns.isPublished({ width: '8%' }),
+					tableColumns.changes({ width: '8%' }),
+					tableColumns.createType({ width: '6%' }),
+					tableColumns.premiumSourceUserType({ width: '6%' }),
+					tableColumns.assignedUser({ width: '10%' }),
 					tableColumns.fillingProgress(),
-					tableColumns.lastUpdatedAt(),
-					tableColumns.createdAt()
+					tableColumns.lastUpdatedAt({ width: '8%' }),
+					tableColumns.createdAt({ width: '8%' })
 				]
 				filters = (
 					<SalonsFilterActive

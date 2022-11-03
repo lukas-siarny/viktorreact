@@ -20,9 +20,10 @@ import PhoneArrayField from '../../../../atoms/PhoneArrayField'
 import AutocompleteField from '../../../../atoms/AutocompleteField'
 
 // utils
-import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
+import { optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
 import { FORM, SALON_STATES, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES, VALIDATION_MAX_LENGTH } from '../../../../utils/enums'
 import { withPromptUnsavedChanges } from '../../../../utils/promptUnsavedChanges'
+import { getSalonTagChanges, getSalonTagDeleted, getSalonTagPublished, getSalonTagSourceType } from '../salonUtils'
 
 // types
 import { ISalonForm, ISelectOptionItem } from '../../../../types/interfaces'
@@ -120,6 +121,7 @@ const SalonForm: FC<Props> = (props) => {
 							<Row className={'py-2'} wrap={false}>
 								{!deletedSalon ? (
 									<>
+										{getSalonTagSourceType(formValues?.sourceOfPremium)}
 										{getSalonTagPublished(formValues?.state as SALON_STATES)}
 										{getSalonTagChanges(formValues?.state as SALON_STATES)}
 									</>

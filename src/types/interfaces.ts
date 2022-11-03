@@ -548,6 +548,7 @@ export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 export interface ICalendarView {
 	selectedDate: string
 	eventType: CALENDAR_EVENT_TYPE_FILTER
-	events: ICalendarEventsPayload
-	employees?: Employees
+	reservations: ICalendarEventsPayload['data']
+	shiftsTimeOffs: ICalendarEventsPayload['data']
+	employees: Employees
 }

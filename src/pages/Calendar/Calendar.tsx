@@ -13,7 +13,7 @@ import { withPermissions } from '../../utils/Permissions'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
 // reducers
-import { getCalendarEvents } from '../../reducers/calendar/calendarActions'
+import { getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
 import { getEmployees, IEmployeesPayload } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
@@ -50,13 +50,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
-	const events = useSelector((state: RootState) => state.calendar.events)
+	const reservations = useSelector((state: RootState) => state.calendar.reservations)
+	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar.shiftsTimeOffs)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 
 	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
 
-	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
+	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
 
 	const filteredEmployees = useMemo(() => {
 		if (!isEmpty(query.employeeIDs)) {
@@ -65,13 +66,47 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		return employees?.data?.employees
 	}, [employees?.data?.employees, query.employeeIDs])
 
+	/* useEffect(() => {
+		;(async () => {
+			// clear previous events
+			await dispatch(getCalendarShiftsTimeoff())
+			await dispatch(getCalendarReservations())
+			if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+				Promise.all([
+					dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW)),
+					dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
+				])
+			} else if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF) {
+				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
+			}
+		})()
+	}, [dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs]) */
+
+	/* useEffect(() => {
+		// clear previous shifts / timeoff before new requests
+		dispatch(getCalendarShiftsTimeoff())
+		dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
+		if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+			// clear previous reservations before new request
+			dispatch(getCalendarReservations())
+			dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW))
+		}
+	}, [dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs]) */
+
 	useEffect(() => {
-		dispatch(
-			getCalendarEvents(
-				{ salonID, date: query.date, eventType: query.eventType as CALENDAR_EVENT_TYPE_FILTER, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs },
-				query.view as CALENDAR_VIEW
-			)
-		)
+		// clear previous shifts / timeoff before new request
+		dispatch(getCalendarShiftsTimeoff())
+		// fetch new data
+		dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
+	}, [dispatch, salonID, query.date, query.view, query.employeeIDs, query.eventType])
+
+	useEffect(() => {
+		// clear previous reservations whenever one of the dependecnies change
+		dispatch(getCalendarReservations())
+		if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+			// fetch new data
+			dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW))
+		}
 	}, [dispatch, salonID, query.date, query.view, query.eventType, query.categoryIDs, query.employeeIDs])
 
 	useEffect(() => {
@@ -195,8 +230,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					view={query.view as CALENDAR_VIEW}
 					eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER}
 					loading={loadingData}
-					events={events}
-					employees={filteredEmployees}
+					reservations={reservations?.data || []}
+					shiftsTimeOffs={shiftsTimeOffs?.data || []}
+					employees={filteredEmployees || []}
 				/>
 				<SiderEventManagement
 					view={siderEventManagement}

@@ -1,14 +1,12 @@
 /* eslint-disable import/no-cycle */
-import dayjs from 'dayjs'
-
 // types
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
 
 // enums
-import { EVENTS, EVENT_DETAIL } from './calendarTypes'
-import { CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER, CALENDAR_VIEW } from '../../utils/enums'
+import { EVENTS, EVENT_DETAIL, RESERVATIONS, SHIFTS_TIME_OFF } from './calendarTypes'
+import { CALENDAR_VIEW, CALENDAR_EVENT_TYPE } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -20,18 +18,41 @@ type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
 
-interface ICalendarQueryParams {
+interface ICalendarEventsQueryParams {
 	salonID: string
 	date: string
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
-	eventType?: CALENDAR_EVENT_TYPE_FILTER
+	eventType?: (string | null)[] | null
 }
 
-export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarEventDetail
+interface ICalendarReservationsQueryParams {
+	salonID: string
+	date: string
+	employeeIDs?: (string | null)[] | null
+	categoryIDs?: (string | null)[] | null
+}
+
+interface ICalendarShiftsTimeOffQueryParams {
+	salonID: string
+	date: string
+	employeeIDs?: (string | null)[] | null
+}
+
+export type ICalendarActions = IResetStore | IGetCalendarEvents | IGetCalendarReservations | IGetCalendarShiftsTimeoff | IGetCalendarEventDetail
 
 interface IGetCalendarEvents {
 	type: EVENTS
+	payload: ICalendarEventsPayload
+}
+
+interface IGetCalendarReservations {
+	type: RESERVATIONS
+	payload: ICalendarEventsPayload
+}
+
+interface IGetCalendarShiftsTimeoff {
+	type: SHIFTS_TIME_OFF
 	payload: ICalendarEventsPayload
 }
 
@@ -48,33 +69,13 @@ export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }
 
-const getEventsQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_VIEW): CalendarEventsQueryParams => {
-	let params: any = {
-		salonID: queryParams.salonID,
-		// NOTE: docasne neposielat categoryIDs, kym sa nevyriesi logika s BE
-		// categoryIDs: queryParams.categoryIDs,
-		employeeIDs: queryParams.employeeIDs
-	}
-
-	switch (queryParams.eventType) {
-		case CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF:
-			params = {
-				...params,
-				eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK]
-			}
-			break
-		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
-		default:
-			// pri rezervacii zatial tahame vsetko, takze netreba specialne filtrovat
-			break
-	}
-
+const getTimeFromTo = (selectedDate: string, view: CALENDAR_VIEW) => {
 	switch (view) {
 		case CALENDAR_VIEW.MONTH: {
 			// NOTE: je potrebne najst eventy aj z konca predosleho a zaciatku nasledujuceho mesiaca, aby sa vyplnilo cele mesacne view
 			// stlpce v zobrazeni - Pondelok - Nedela
-			const firstDayOfMonth = getFirstDayOfMonth(queryParams.date)
-			const lastDayOfMonth = getLasttDayOfMonth(queryParams.date)
+			const firstDayOfMonth = getFirstDayOfMonth(selectedDate)
+			const lastDayOfMonth = getLasttDayOfMonth(selectedDate)
 			let mondayBeforeFirstDayOfMonth = firstDayOfMonth
 			let sundayAfterLastDayOfMonth = lastDayOfMonth
 
@@ -87,41 +88,42 @@ const getEventsQueryParams = (queryParams: ICalendarQueryParams, view: CALENDAR_
 				sundayAfterLastDayOfMonth = lastDayOfMonth.add(7 - lastDayOfMonth.day(), 'day')
 			}
 
-			params = {
-				...params,
+			return {
 				dateFrom: mondayBeforeFirstDayOfMonth.toISOString(),
 				dateTo: sundayAfterLastDayOfMonth.toISOString()
 			}
-			break
 		}
 		case CALENDAR_VIEW.WEEK:
-			params = {
-				...params,
-				dateFrom: getFirstDayOfWeek(queryParams.date).toISOString(),
-				dateTo: getLastDayOfWeek(queryParams.date).toISOString()
+			return {
+				dateFrom: getFirstDayOfWeek(selectedDate).toISOString(),
+				dateTo: getLastDayOfWeek(selectedDate).toISOString()
 			}
 			break
 		case CALENDAR_VIEW.DAY:
 		default:
-			params = {
-				...params,
-				dateFrom: queryParams.date,
-				dateTo: queryParams.date
+			return {
+				dateFrom: selectedDate,
+				dateTo: selectedDate
 			}
-			break
 	}
-
-	return normalizeQueryParams(params) as CalendarEventsQueryParams
 }
 
 export const getCalendarEvents =
-	(queryParams: ICalendarQueryParams, view: CALENDAR_VIEW): ThunkResult<Promise<ICalendarEventsPayload>> =>
+	(queryParams: ICalendarEventsQueryParams, view: CALENDAR_VIEW): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICalendarEventsPayload
 		try {
+			const queryParamsEditedForRequest = {
+				salonID: queryParams.salonID,
+				categoryIDs: queryParams.categoryIDs,
+				employeeIDs: queryParams.employeeIDs,
+				eventTypes: queryParams.eventType,
+				...getTimeFromTo(queryParams.date, view)
+			}
+
 			dispatch({ type: EVENTS.EVENTS_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', getEventsQueryParams(queryParams, view))
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as any)
 
 			payload = {
 				data: data.calendarEvents
@@ -130,6 +132,77 @@ export const getCalendarEvents =
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, payload })
 		} catch (err) {
 			dispatch({ type: EVENTS.EVENTS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+		return payload
+	}
+
+export const getCalendarReservations =
+	(queryParams?: ICalendarReservationsQueryParams, view?: CALENDAR_VIEW): ThunkResult<Promise<ICalendarEventsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ICalendarEventsPayload
+
+		if (!queryParams || !view) {
+			dispatch({ type: RESERVATIONS.RESERVATIONS_CLEAR })
+			return payload
+		}
+
+		try {
+			const queryParamsEditedForRequest = {
+				salonID: queryParams.salonID,
+				categoryIDs: queryParams.categoryIDs,
+				employeeIDs: queryParams.employeeIDs,
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+				...getTimeFromTo(queryParams.date, view)
+			}
+
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as any)
+
+			payload = {
+				data: data.calendarEvents
+			}
+
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
+		}
+		return payload
+	}
+
+export const getCalendarShiftsTimeoff =
+	(queryParams?: ICalendarShiftsTimeOffQueryParams, view?: CALENDAR_VIEW): ThunkResult<Promise<ICalendarEventsPayload>> =>
+	async (dispatch) => {
+		let payload = {} as ICalendarEventsPayload
+
+		if (!queryParams || !view) {
+			dispatch({ type: SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_CLEAR })
+			return payload
+		}
+
+		try {
+			const queryParamsEditedForRequest = {
+				salonID: queryParams.salonID,
+				employeeIDs: queryParams.employeeIDs,
+				eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK],
+				...getTimeFromTo(queryParams.date, view)
+			}
+
+			dispatch({ type: SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_START })
+
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as any)
+
+			payload = {
+				data: data.calendarEvents
+			}
+
+			dispatch({ type: SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_FAIL })
 			// eslint-disable-next-line no-console
 			console.error(err)
 		}

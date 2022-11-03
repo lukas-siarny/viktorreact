@@ -19,23 +19,24 @@ type Props = {
 	selectedDate: string
 	eventType: CALENDAR_EVENT_TYPE_FILTER
 	loading: boolean
-	events: ICalendarEventsPayload
-	employees?: Employees
+	reservations: ICalendarEventsPayload['data']
+	shiftsTimeOffs: ICalendarEventsPayload['data']
+	employees: Employees
 }
 
 const CalendarContent: FC<Props> = (props) => {
-	const { view, selectedDate, eventType, loading, events, employees } = props
+	const { view, selectedDate, eventType, loading, reservations, shiftsTimeOffs, employees } = props
 
 	const getView = () => {
 		if (view === CALENDAR_VIEW.MONTH) {
-			return <CalendarMonthView selectedDate={selectedDate} events={events} employees={employees} eventType={eventType} />
+			return <CalendarMonthView selectedDate={selectedDate} reservations={reservations} shiftsTimeOffs={shiftsTimeOffs} employees={employees} eventType={eventType} />
 		}
 
 		if (view === CALENDAR_VIEW.WEEK) {
-			return <CalendarWeekView selectedDate={selectedDate} events={events} employees={employees} eventType={eventType} />
+			return <CalendarWeekView selectedDate={selectedDate} reservations={reservations} shiftsTimeOffs={shiftsTimeOffs} employees={employees} eventType={eventType} />
 		}
 
-		return <CalendarDayView selectedDate={selectedDate} events={events} employees={employees} eventType={eventType} />
+		return <CalendarDayView selectedDate={selectedDate} reservations={reservations} shiftsTimeOffs={shiftsTimeOffs} employees={employees} eventType={eventType} />
 	}
 
 	return (

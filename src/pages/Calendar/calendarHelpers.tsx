@@ -11,6 +11,12 @@ import { Employees } from '../../types/interfaces'
 // utils
 import { CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../utils/enums'
 
+export const getHoursMinutesFromMinutes = (minutes: number) => {
+	const hours = Math.floor(minutes / 60)
+	const min = minutes % 60
+	return `${hours ? `${hours}${t('loc:h')}` : ''} ${min ? `${min}${t('loc:m')}` : ''}`.trim()
+}
+
 const getDateTime = (date: string, time?: string) => {
 	const [hours, minutes] = (time || '').split(':')
 
@@ -52,10 +58,11 @@ const createAllDayInverseEventsFromResourceMap = (resourcesMap: ResourceMap, sel
 		return []
 	}, [] as any[])
 
-const composeDayViewReservations = (selectedDate: string, events?: ICalendarEventsPayload['data'], employees?: Employees) => {
+const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
 	const composedEvents: any[] = []
 	// resources mapa, pre trackovanie, ci zamestnanec ma nejake volno, prestavku alebo zmenu v dany den
 	const resourcesMap = createResourceMap(employees)
+	const events = [...(reservations || []), ...(shiftsTimeOffs || [])]
 
 	events?.forEach((event) => {
 		const employeeID = event.employee?.id
@@ -129,13 +136,13 @@ const composeDayViewReservations = (selectedDate: string, events?: ICalendarEven
 	return [...composedEvents, ...allDayInverseEvents]
 }
 
-const composeDayViewAbsences = (selectedDate: string, events?: ICalendarEventsPayload['data'], employees?: Employees) => {
+const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarEventsPayload['data'], employees?: Employees) => {
 	const composedEvents: any[] = []
 
 	// resources mapa, pre trackovanie, ci zamestnanec ma nejake volno v dany den
 	const resourcesMap = createResourceMap(employees)
 
-	events?.forEach((event) => {
+	shiftsTimeOffs?.forEach((event) => {
 		const employeeID = event.employee?.id
 
 		if (employeeID) {
@@ -171,20 +178,38 @@ const composeDayViewAbsences = (selectedDate: string, events?: ICalendarEventsPa
 	return [...composedEvents, ...allDayInverseEvents]
 }
 
-export const composeDayViewEvents = (selectedDate: string, eventTypeFilter: CALENDAR_EVENT_TYPE_FILTER, events?: ICalendarEventsPayload['data'], employees?: Employees) => {
+export const composeDayViewEvents = (
+	selectedDate: string,
+	eventTypeFilter: CALENDAR_EVENT_TYPE_FILTER,
+	reservations: ICalendarEventsPayload['data'],
+	shiftsTimeOffs: ICalendarEventsPayload['data'],
+	employees: Employees
+) => {
 	switch (eventTypeFilter) {
 		case CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF:
-			return composeDayViewAbsences(selectedDate, events, employees)
+			return composeDayViewAbsences(selectedDate, shiftsTimeOffs, employees)
 		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
 		default:
-			return composeDayViewReservations(selectedDate, events, employees)
+			return composeDayViewReservations(selectedDate, reservations, shiftsTimeOffs, employees)
 	}
 }
 
-export const composeDayEventResources = (events: ICalendarEventsPayload['data'], employees?: Employees) => {
+export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees?: Employees) => {
 	return employees?.map((employee) => {
-		const employeeShifts = events
-			?.filter((event) => event.employee?.id === employee.id && event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
+		const employeeShifts: any[] = []
+		const employeeTimeOff: any[] = []
+
+		shiftsTimeOffs?.forEach((event) => {
+			if (event.employee?.id === employee.id) {
+				if (event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT) {
+					employeeShifts.push(event)
+				} else if (event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF) {
+					employeeTimeOff.push(event)
+				}
+			}
+		})
+
+		const employeeWorkingHours = employeeShifts
 			.sort((eventA, eventB) => {
 				const key1 = eventA.start
 				const key2 = eventB.start
@@ -210,7 +235,8 @@ export const composeDayEventResources = (events: ICalendarEventsPayload['data'],
 			id: employee.id,
 			name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
 			image: employee.image.resizedImages.thumbnail,
-			description: employeeShifts || t('loc:Not Available'),
+			wokringHours: employeeWorkingHours || t('loc:Not Available'),
+			isTimeOff: !!employeeTimeOff.length,
 			employeeData: employee
 		}
 	})

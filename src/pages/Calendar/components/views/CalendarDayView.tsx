@@ -145,7 +145,7 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 	const calendarRef = useRef<any>()
 
 	useEffect(() => {
-		// je potrebne pockat kym skonci animacia pri zasuvani menu a az potom updatetnut velkost
+		// je potrebne pockat kym skonci animacia zasunutia / vysunutia a az potom updatetnut velkost
 		const calendarApi = calendarRef.current.getApi()
 		setTimeout(() => calendarApi.updateSize(), 300)
 	}, [isSiderCollapsed])

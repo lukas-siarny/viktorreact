@@ -3,14 +3,17 @@ import { useTranslation } from 'react-i18next'
 import { change, Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Form, Modal } from 'antd'
+import { flatten, map } from 'lodash'
 
 // validate
-import { flatten, forEach, map } from 'lodash'
 import validateReservationForm from './validateReservationForm'
 
 // reducers
+import { RootState } from '../../../../reducers'
+
 // utils
-import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, optionRenderWithImage, showErrorNotification } from '../../../../utils/helper'
+import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
+import Permissions from '../../../../utils/Permissions'
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
@@ -19,6 +22,7 @@ import { ICalendarReservationForm, ICustomerForm } from '../../../../types/inter
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 import { ReactComponent as ProfileIcon } from '../../../../assets/icons/profile-icon.svg'
+import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
 
 // components
 import DateField from '../../../../atoms/DateField'
@@ -27,8 +31,6 @@ import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SelectField from '../../../../atoms/SelectField'
 import { getReq, postReq } from '../../../../utils/request'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
-import Permissions from '../../../../utils/Permissions'
-import { RootState } from '../../../../reducers'
 
 type ComponentProps = {
 	salonID: string
@@ -43,41 +45,6 @@ const ReservationForm: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
-
-	const serviceOptions = [
-		{
-			key: 'Odvetvie 1',
-			header: 'Odvetvie 1',
-			children: [
-				{
-					key: 'Service 1',
-					value: 'service-1-id',
-					label: 'Service 1 option'
-				},
-				{
-					key: 'Service 2',
-					value: 'service-2-id',
-					label: 'Service 2 option'
-				}
-			]
-		},
-		{
-			key: 'Odvetvie 2',
-			header: 'Odvetvie 2',
-			children: [
-				{
-					key: 'Service 3',
-					value: 'service-3-id',
-					label: 'Service 3 option'
-				},
-				{
-					key: 'Service 4',
-					value: 'service-4-id',
-					label: 'Service 4 option'
-				}
-			]
-		}
-	]
 
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
@@ -94,7 +61,6 @@ const ReservationForm: FC<Props> = (props) => {
 					thumbNail: employee.image.resizedImages.thumbnail
 					// TODO: Available / Non Available hodnoty ak pribudne logika na BE tak doplnit ako extraContent
 				}))
-				console.log('selectOptions', selectOptions)
 				return { pagination: data.pagination, data: selectOptions }
 			} catch (e) {
 				return { pagination: null, data: [] }
@@ -123,7 +89,6 @@ const ReservationForm: FC<Props> = (props) => {
 									return {
 										label: service.category.name,
 										key: service.category.id
-										// disabled: true
 									}
 								})
 							)
@@ -147,7 +112,6 @@ const ReservationForm: FC<Props> = (props) => {
 					page,
 					salonID
 				})
-				console.log('data', data)
 				const selectOptions = map(data.customers, (customer) => {
 					const prefix = getCountryPrefix(countriesData.data, customer?.phonePrefixCountryCode)
 					return {
@@ -248,7 +212,7 @@ const ReservationForm: FC<Props> = (props) => {
 					<Field
 						component={SelectField}
 						label={t('loc:Služba')}
-						suffixIcon={<ProfileIcon />}
+						suffixIcon={<ServiceIcon />}
 						placeholder={t('loc:Vyber službu')}
 						name={'service'}
 						size={'large'}
@@ -261,17 +225,6 @@ const ReservationForm: FC<Props> = (props) => {
 						labelInValue
 						onSearch={searchServices}
 					/>
-
-					{/* <Field */}
-					{/*	name={'service'} */}
-					{/*	label={t('loc:Služba')} */}
-					{/*	component={CalendarSelectField} */}
-					{/*	labelInValue */}
-					{/*	emptyIcon={<ServicesIcon />} */}
-					{/*	entityName={t('loc:službu')} */}
-					{/*	options={serviceOptions} */}
-					{/*	required */}
-					{/* /> */}
 					<Field
 						name={'date'}
 						label={t('loc:Dátum')}

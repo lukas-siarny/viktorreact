@@ -118,13 +118,11 @@ const renderMenuItemSelectedIcon = (
 }
 
 const getOptions = (optionRender: any, options: any) => {
-	console.log('options', options)
-	// TODO: zistit ci ma options[0].children a ak hej vtedy bude Groupa
 	// NOTE: ak existuje v optione children pole tak to zneman ze ma vnorene optiony a bude sa pouzivat OptGroup a druha uroven ako Option
 	return map(options, (option) => {
 		if (option.children) {
 			return (
-				<Select.OptGroup label={option.label}>
+				<Select.OptGroup key={option.key} label={option.label}>
 					{map(option.children, (childrenOpt) => {
 						return (
 							<Option
@@ -132,11 +130,10 @@ const getOptions = (optionRender: any, options: any) => {
 								value={childrenOpt.value}
 								disabled={childrenOpt.disabled}
 								label={childrenOpt.label}
-								extra={childrenOpt.extra}
 								className={childrenOpt.className}
 								style={childrenOpt.level ? { paddingLeft: 16 * childrenOpt.level } : undefined}
 							>
-								{optionRender ? optionRender(option) : childrenOpt.label}
+								{optionRender ? optionRender(childrenOpt) : childrenOpt.label}
 							</Option>
 						)
 					})}
@@ -378,7 +375,6 @@ const SelectField = (props: Props) => {
 		},
 		[selectState, allowInfinityScroll, dataSourcePath, props.onSearch]
 	)
-
 	const onSearchDebounced = useMemo(() => debounce(handleSearch, 300), [handleSearch])
 
 	const onChange = useCallback(
@@ -500,7 +496,6 @@ const SelectField = (props: Props) => {
 	}, [input.value, selectState.data])
 
 	const localFilterOption = (inputValue: any, option: any) => createSlug(option.label.toLowerCase()).indexOf(createSlug(inputValue.toLowerCase())) >= 0
-
 	const value = input.value === null || input.value === '' ? undefined : input.value
 
 	let opt = options
@@ -537,7 +532,6 @@ const SelectField = (props: Props) => {
 	if (emptyText || selectState.emptyText) {
 		notFound = <Empty className={'m-4'} image={Empty.PRESENTED_IMAGE_SIMPLE} description={selectState.emptyText || emptyText} />
 	}
-
 	const select = (
 		<Select
 			bordered={bordered}

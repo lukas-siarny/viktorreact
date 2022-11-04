@@ -15,6 +15,7 @@ import {
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
 	DEFAULT_DATE_FORMAT,
+	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_DATE_INPUT_FORMAT,
 	DEFAULT_DAYJS_FORMAT,
 	DEFAULT_TIME_FORMAT,
@@ -128,15 +129,8 @@ const CalendarHeader: FC<Props> = (props) => {
 						icon: <ServicesIcon />,
 						className: itemClassName,
 						onClick: () => {
-							// console.log('minutes', dayjs().format(DEFAULT_TIME_FORMAT_MINUTES))
-							// console.log('current date', dayjs().format(DEFAULT_DATE_INPUT_FORMAT))
-							// NOTE: initnu sa dnesny datum a cas ako najblizsia hdonota k 15 minutam
-							console.log('hodina', Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS)))
-							console.log('minuta', Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)))
-							console.log('return', roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))))
 							const initData = {
-								date: dayjs().format(DEFAULT_DAYJS_FORMAT),
-
+								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
 								timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS)))
 							}
 							dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))

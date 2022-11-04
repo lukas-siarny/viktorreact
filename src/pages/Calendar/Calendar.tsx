@@ -8,7 +8,16 @@ import { debounce } from 'lodash'
 import { change, initialize } from 'redux-form'
 
 // utils
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION, CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../utils/enums'
+import {
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_SET_NEW_DATE,
+	CALENDAR_VIEW,
+	PERMISSION,
+	CALENDAR_EVENT_TYPE_FILTER,
+	FORM,
+	NOTIFICATION_TYPE
+} from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
@@ -26,6 +35,7 @@ import CalendarContent from './components/layout/Content'
 
 // types
 import { ICalendarBreakForm, ICalendarFilter, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm, SalonSubPageProps } from '../../types/interfaces'
+import { postReq } from '../../utils/request'
 
 const getServiceIDs = (data: IServicesPayload['options']) => {
 	return data?.map((service) => service.value) as string[]
@@ -160,9 +170,33 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const handleSubmitReservation = (values?: ICalendarReservationForm) => {
+	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
 		// TODO: rezervacia
 		console.log('reservation form values', values)
+		// damske kadernictvo: "00000000-0000-0000-0000-000000000001"
+		// sluzba: "00000000-0000-0000-0000-000000000068"
+		try {
+			const reqData = {
+				start: {
+					date: values.date,
+					time: values.timeFrom
+				},
+				end: {
+					date: values.date,
+					time: values.timeTo
+				},
+				note: values.note,
+				customerID: values.customer.key as string,
+				employeeID: values.employee.key as string,
+				serviceID: '88e6e81b-48df-4df0-a79c-35762514a1cc',
+				serviceCategoryParameterValueID: '00000000-0000-0000-0000-000000000069'
+			}
+
+			await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
 	}
 
 	const handleSubmitShift = (values?: ICalendarShiftForm) => {

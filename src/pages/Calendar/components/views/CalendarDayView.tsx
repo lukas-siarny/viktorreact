@@ -1,7 +1,8 @@
-import React, { FC } from 'react'
+import React, { FC, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+import { useSelector } from 'react-redux'
 
 // full calendar
 import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
@@ -18,12 +19,13 @@ import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon-16.svg'
+import { RootState } from '../../../../reducers'
 
 const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYPE_FILTER) => {
 	const { event, timeText } = data || {}
 	const { extendedProps } = event || {}
 
-	console.log({ event, timeText, extendedProps })
+	// console.log({ event, timeText, extendedProps })
 
 	if (event.display === 'inverse-background') {
 		return <div className={cx('nc-bg-event not-set-availability')} />
@@ -95,6 +97,8 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 const resourceLabelContent = (data: any) => {
 	const extendedProps = data?.resource.extendedProps || {}
 
+	console.log(data)
+
 	return (
 		<div className={'nc-day-resource-label'}>
 			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.image}")` }} />
@@ -122,6 +126,8 @@ interface ICalendarDayView extends ICalendarView {}
 const CalendarDayView: FC<ICalendarDayView> = (props) => {
 	const { selectedDate, eventType, reservations, shiftsTimeOffs, employees } = props
 
+	const isSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
+
 	const [t] = useTranslation()
 
 	const handleDateClick = (arg: DateClickArg) => {
@@ -136,15 +142,17 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 		const { start, end, resource } = info
 	}
 
-	/* const calendarRef = useRef<any>()
+	const calendarRef = useRef<any>()
 
 	useEffect(() => {
+		// je potrebne pockat kym skonci animacia pri zasuvani menu a az potom updatetnut velkost
 		const calendarApi = calendarRef.current.getApi()
-		calendarApi.scrollToTime('02:00:00')
-	}, []) */
+		setTimeout(() => calendarApi.updateSize(), 300)
+	}, [isSiderCollapsed])
 
 	return (
 		<FullCalendar
+			ref={calendarRef}
 			// settings
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}

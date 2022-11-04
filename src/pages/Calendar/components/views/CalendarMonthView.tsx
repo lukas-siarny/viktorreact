@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 // full calendar
@@ -7,22 +7,20 @@ import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
-// utils
-
 // types
 import { ICalendarView } from '../../../../types/interfaces'
+
+// enums
 import { CALENDAR_COMMON_SETTINGS } from '../../../../utils/enums'
 
 interface ICalendarMonthView extends ICalendarView {}
 
-const CalendarMonthView: FC<ICalendarMonthView> = (props) => {
+const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarMonthView>((props, ref) => {
 	const { selectedDate } = props
-
-	const [t] = useTranslation()
 
 	return (
 		<FullCalendar
-			// key={selectedDate}
+			ref={ref}
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 			slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
@@ -41,6 +39,6 @@ const CalendarMonthView: FC<ICalendarMonthView> = (props) => {
 			firstDay={1}
 		/>
 	)
-}
+})
 
 export default CalendarMonthView

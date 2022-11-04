@@ -1,6 +1,7 @@
-import React, { FC } from 'react'
+import React, { useImperativeHandle, useRef } from 'react'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
+import FullCalendar, { CalendarApi } from '@fullcalendar/react'
 
 // enums
 import { CALENDAR_EVENT_TYPE_FILTER, CALENDAR_VIEW } from '../../../../utils/enums'
@@ -22,21 +23,66 @@ type Props = {
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees
+	onShowAllEmployees: () => void
 }
 
-const CalendarContent: FC<Props> = (props) => {
-	const { view, selectedDate, eventType, loading, reservations, shiftsTimeOffs, employees } = props
+export type CalendarApiRefs = {
+	[CALENDAR_VIEW.DAY]?: InstanceType<typeof CalendarApi>
+	[CALENDAR_VIEW.WEEK]?: InstanceType<typeof CalendarApi>
+	[CALENDAR_VIEW.MONTH]?: InstanceType<typeof CalendarApi>
+}
+
+const CalendarContent = React.forwardRef<CalendarApiRefs, Props>((props, ref) => {
+	const { view, selectedDate, eventType, loading, reservations, shiftsTimeOffs, employees, onShowAllEmployees } = props
+
+	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
+	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
+	const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
+
+	useImperativeHandle(ref, () => ({
+		[CALENDAR_VIEW.DAY]: dayView?.current?.getApi(),
+		[CALENDAR_VIEW.WEEK]: weekView?.current?.getApi(),
+		[CALENDAR_VIEW.MONTH]: monthView?.current?.getApi()
+	}))
 
 	const getView = () => {
 		if (view === CALENDAR_VIEW.MONTH) {
-			return <CalendarMonthView selectedDate={selectedDate} reservations={reservations} shiftsTimeOffs={shiftsTimeOffs} employees={employees} eventType={eventType} />
+			return (
+				<CalendarMonthView
+					ref={monthView}
+					selectedDate={selectedDate}
+					reservations={reservations}
+					shiftsTimeOffs={shiftsTimeOffs}
+					employees={employees}
+					eventType={eventType}
+				/>
+			)
 		}
 
 		if (view === CALENDAR_VIEW.WEEK) {
-			return <CalendarWeekView selectedDate={selectedDate} reservations={reservations} shiftsTimeOffs={shiftsTimeOffs} employees={employees} eventType={eventType} />
+			return (
+				<CalendarWeekView
+					ref={weekView}
+					selectedDate={selectedDate}
+					reservations={reservations}
+					shiftsTimeOffs={shiftsTimeOffs}
+					employees={employees}
+					eventType={eventType}
+				/>
+			)
 		}
 
-		return <CalendarDayView selectedDate={selectedDate} reservations={reservations} shiftsTimeOffs={shiftsTimeOffs} employees={employees} eventType={eventType} />
+		return (
+			<CalendarDayView
+				ref={dayView}
+				selectedDate={selectedDate}
+				reservations={reservations}
+				shiftsTimeOffs={shiftsTimeOffs}
+				employees={employees}
+				eventType={eventType}
+				onShowAllEmployees={onShowAllEmployees}
+			/>
+		)
 	}
 
 	return (
@@ -48,6 +94,6 @@ const CalendarContent: FC<Props> = (props) => {
 			</Spin>
 		</Content>
 	)
-}
+})
 
 export default CalendarContent

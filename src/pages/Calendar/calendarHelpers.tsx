@@ -194,8 +194,17 @@ export const composeDayViewEvents = (
 	}
 }
 
-export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees?: Employees) => {
-	return employees?.map((employee) => {
+export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
+	if (employees?.length === 0) {
+		return [
+			{
+				id: 'empty-employees',
+				emptyEmployees: true
+			}
+		]
+	}
+
+	return employees.map((employee) => {
 		const employeeShifts: any[] = []
 		const employeeTimeOff: any[] = []
 

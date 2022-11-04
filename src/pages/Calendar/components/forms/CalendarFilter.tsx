@@ -26,11 +26,18 @@ import { ICalendarFilter } from '../../../../types/interfaces'
 
 type ComponentProps = {
 	parentPath: string
+	eventType: CALENDAR_EVENT_TYPE_FILTER
 }
 
 type Props = InjectedFormProps<ICalendarFilter, ComponentProps> & ComponentProps
 
 const { Panel } = Collapse
+
+enum PANEL_KEY {
+	EVENT_TYPE = 'EVENT_TYPE',
+	EMPLOYEES = 'EMPLOYEES',
+	CATEGORIES = 'CATEGORIES'
+}
 
 const checkboxOptionRender = (option: any, checked?: boolean) => {
 	const { color, value } = option || {}
@@ -47,7 +54,7 @@ const checkboxOptionRender = (option: any, checked?: boolean) => {
 }
 
 const CalendarFilter = (props: Props) => {
-	const { handleSubmit, parentPath } = props
+	const { handleSubmit, parentPath, eventType } = props
 	const [t] = useTranslation()
 
 	const services = useSelector((state: RootState) => state.service.services)
@@ -69,16 +76,25 @@ const CalendarFilter = (props: Props) => {
 		[t]
 	)
 
+	const defaultActiveKeys = useMemo(
+		() =>
+			eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+				? [PANEL_KEY.EVENT_TYPE, PANEL_KEY.EMPLOYEES]
+				: [PANEL_KEY.EVENT_TYPE, PANEL_KEY.EMPLOYEES, PANEL_KEY.CATEGORIES],
+		[eventType]
+	)
+
 	return (
 		<Form layout='horizontal' onSubmitCapture={handleSubmit} className={'p-4'}>
 			<Collapse
 				className={'nc-collapse'}
 				bordered={false}
-				defaultActiveKey={[1, 2, 3]}
+				defaultActiveKey={defaultActiveKeys}
+				activeKey={defaultActiveKeys}
 				expandIconPosition={'end'}
 				expandIcon={({ isActive }) => <ChevronDownIcon className={cx({ 'is-active': isActive })} />}
 			>
-				<Panel key={1} header={t('loc:Typ udalosti')} className={'nc-collapse-panel'}>
+				<Panel key={PANEL_KEY.EVENT_TYPE} header={t('loc:Typ udalosti')} className={'nc-collapse-panel'}>
 					<Field
 						className={'p-0 m-0 nc-radio-event-type'}
 						component={RadioGroupField}
@@ -88,7 +104,7 @@ const CalendarFilter = (props: Props) => {
 						size={'small'}
 					/>
 				</Panel>
-				<Panel key={2} header={t('loc:Zamestnanci')} className={'nc-collapse-panel'}>
+				<Panel key={PANEL_KEY.EMPLOYEES} header={t('loc:Zamestnanci')} className={'nc-collapse-panel'}>
 					<Spin spinning={employees?.isLoading}>
 						<Field
 							className={'p-0 m-0'}
@@ -101,26 +117,28 @@ const CalendarFilter = (props: Props) => {
 						/>
 					</Spin>
 				</Panel>
-				<Panel key={3} header={t('loc:Služby')} className={'nc-collapse-panel'}>
-					<Spin spinning={services?.isLoading}>
-						{services?.options?.length ? (
-							<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'categoryIDs'} options={services?.options} size={'small'} rounded />
-						) : (
-							<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
-								<ServicesIcon />
-								{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
-								<Button
-									type={'primary'}
-									htmlType={'button'}
-									className={'noti-btn'}
-									onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
-								>
-									{t('loc:Priradiť služby')}
-								</Button>
-							</div>
-						)}
-					</Spin>
-				</Panel>
+				{eventType !== CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF && (
+					<Panel key={PANEL_KEY.CATEGORIES} header={t('loc:Služby')} className={'nc-collapse-panel'}>
+						<Spin spinning={services?.isLoading}>
+							{services?.options?.length ? (
+								<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'categoryIDs'} options={services?.options} size={'small'} rounded />
+							) : (
+								<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
+									<ServicesIcon />
+									{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
+									<Button
+										type={'primary'}
+										htmlType={'button'}
+										className={'noti-btn'}
+										onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
+									>
+										{t('loc:Priradiť služby')}
+									</Button>
+								</div>
+							)}
+						</Spin>
+					</Panel>
+				)}
 			</Collapse>
 		</Form>
 	)

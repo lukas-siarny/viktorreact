@@ -1,8 +1,7 @@
-import React, { FC, useEffect, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
+import React from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
-import { useSelector } from 'react-redux'
+import i18next from 'i18next'
 
 // full calendar
 import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
@@ -19,7 +18,6 @@ import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon-16.svg'
-import { RootState } from '../../../../reducers'
 
 const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYPE_FILTER) => {
 	const { event, timeText } = data || {}
@@ -94,10 +92,19 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 	)
 }
 
-const resourceLabelContent = (data: any) => {
+const resourceLabelContent = (data: any, onShowAllEmployees: () => void) => {
 	const extendedProps = data?.resource.extendedProps || {}
 
-	console.log(data)
+	if (extendedProps.emptyEmployees) {
+		return (
+			<div className={'nc-day-resource-label empty'}>
+				<button type={'button'} className={'nc-button bordered'} onClick={onShowAllEmployees}>
+					{i18next.t('loc:Zobraziť všetkých')}
+				</button>
+				<span className={'description'}>{i18next.t('loc:No Nie je vybratý žiadny zamestnanec')}</span>
+			</div>
+		)
+	}
 
 	return (
 		<div className={'nc-day-resource-label'}>
@@ -121,14 +128,12 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	return <div className={'nc-day-slot-label'}>{dayjs().startOf('day').add(time.milliseconds, 'millisecond').format('HH:mm')}</div>
 }
 
-interface ICalendarDayView extends ICalendarView {}
+interface ICalendarDayView extends ICalendarView {
+	onShowAllEmployees: () => void
+}
 
-const CalendarDayView: FC<ICalendarDayView> = (props) => {
-	const { selectedDate, eventType, reservations, shiftsTimeOffs, employees } = props
-
-	const isSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
-
-	const [t] = useTranslation()
+const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
+	const { selectedDate, eventType, reservations, shiftsTimeOffs, employees, onShowAllEmployees } = props
 
 	const handleDateClick = (arg: DateClickArg) => {
 		// console.log({ arg })
@@ -142,17 +147,11 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 		const { start, end, resource } = info
 	}
 
-	const calendarRef = useRef<any>()
-
-	useEffect(() => {
-		// je potrebne pockat kym skonci animacia zasunutia / vysunutia a az potom updatetnut velkost
-		const calendarApi = calendarRef.current.getApi()
-		setTimeout(() => calendarApi.updateSize(), 300)
-	}, [isSiderCollapsed])
+	const hasResources = !!employees.length
 
 	return (
 		<FullCalendar
-			ref={calendarRef}
+			ref={ref}
 			// settings
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
@@ -166,8 +165,8 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 			slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
 			slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
 			dayMinWidth={200}
-			editable
-			selectable
+			editable={hasResources}
+			selectable={hasResources}
 			weekends
 			nowIndicator
 			allDaySlot={false}
@@ -176,7 +175,7 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 			events={composeDayViewEvents(selectedDate, eventType, reservations, shiftsTimeOffs, employees)}
 			resources={composeDayEventResources(shiftsTimeOffs, employees)}
 			// render hooks
-			resourceLabelContent={resourceLabelContent}
+			resourceLabelContent={(args) => resourceLabelContent(args, onShowAllEmployees)}
 			eventContent={(args) => renderEventContent(args, eventType)}
 			slotLabelContent={slotLabelContent}
 			// handlers
@@ -185,6 +184,6 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 			eventClick={handleEventClick}
 		/>
 	)
-}
+})
 
 export default CalendarDayView

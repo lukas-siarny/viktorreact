@@ -1,14 +1,23 @@
-import React, { FC, useEffect, useState, useMemo } from 'react'
+import React, { FC, useEffect, useState, useCallback, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { debounce, isEmpty } from 'lodash'
-import { initialize } from 'redux-form'
+import { change, initialize } from 'redux-form'
 
 // utils
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION, CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../utils/enums'
+import {
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_SET_NEW_DATE,
+	CALENDAR_VIEW,
+	PERMISSION,
+	CALENDAR_EVENT_TYPE_FILTER,
+	FORM,
+	CALENDAR_COMMON_SETTINGS
+} from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
@@ -22,17 +31,17 @@ import { getServices, IServicesPayload } from '../../reducers/services/serviceAc
 import CalendarHeader from './components/layout/Header'
 import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
-import CalendarContent from './components/layout/Content'
+import CalendarContent, { CalendarApiRefs } from './components/layout/Content'
 
 // types
 import { ICalendarBreakForm, ICalendarFilter, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm, SalonSubPageProps } from '../../types/interfaces'
 
-const getServiceIDs = (data: IServicesPayload['options']) => {
+const getCategoryIDs = (data: IServicesPayload['options']) => {
 	return data?.map((service) => service.value) as string[]
 }
 
 const getEmployeeIDs = (data: IEmployeesPayload['options']) => {
-	return data?.map((employee) => employee.value)
+	return data?.map((employee) => employee.value) as string[]
 }
 
 const Calendar: FC<SalonSubPageProps> = (props) => {
@@ -53,24 +62,45 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const reservations = useSelector((state: RootState) => state.calendar.reservations)
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar.shiftsTimeOffs)
 
+	const isSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
+
+	const calendarApiRefs = useRef<CalendarApiRefs>(null)
+
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 
 	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
 
-	const filteredEmployees = useMemo(() => {
+	const firstEmployeesLoadDone = useRef(false)
+
+	const filteredEmployees = useCallback(() => {
+		// first initialization of employees
+		if (!firstEmployeesLoadDone.current) {
+			// filter employees based on query params
+			if (!isEmpty(query.employeeIDs)) {
+				return employees?.data?.employees.filter((employee) => query.employeeIDs?.includes(employee.id))
+			}
+			// return all employes as default value when there are no queryParams in the url
+			return employees?.data?.employees
+		}
+
+		// after first initialization
+		// filter employees based on query params
 		if (!isEmpty(query.employeeIDs)) {
 			return employees?.data?.employees.filter((employee) => query.employeeIDs?.includes(employee.id))
 		}
-		return employees?.data?.employees
+		// return no employees when there are no queryParams in the url
+		// (when user unchecks all options in filter, we don't want to fetch all employees as in case of initialization)
+		return []
 	}, [employees?.data?.employees, query.employeeIDs])
 
-	/* useEffect(() => {
+	useEffect(() => {
 		;(async () => {
 			// clear previous events
 			await dispatch(getCalendarShiftsTimeoff())
 			await dispatch(getCalendarReservations())
+			// fetch new events
 			if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
 				Promise.all([
 					dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW)),
@@ -80,49 +110,34 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
 			}
 		})()
-	}, [dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs]) */
-
-	/* useEffect(() => {
-		// clear previous shifts / timeoff before new requests
-		dispatch(getCalendarShiftsTimeoff())
-		dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
-		if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
-			// clear previous reservations before new request
-			dispatch(getCalendarReservations())
-			dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW))
-		}
-	}, [dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs]) */
+	}, [dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs])
 
 	useEffect(() => {
-		// clear previous shifts / timeoff before new request
-		dispatch(getCalendarShiftsTimeoff())
-		// fetch new data
-		dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
-	}, [dispatch, salonID, query.date, query.view, query.employeeIDs, query.eventType])
+		;(async () => {
+			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+			const servicesData = await dispatch(getServices({ salonID }, true))
 
-	useEffect(() => {
-		// clear previous reservations whenever one of the dependecnies change
-		dispatch(getCalendarReservations())
-		if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
-			// fetch new data
-			dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW))
-		}
-	}, [dispatch, salonID, query.date, query.view, query.eventType, query.categoryIDs, query.employeeIDs])
+			dispatch(
+				initialize(FORM.CALENDAR_FILTER, {
+					eventType: query.eventType,
+					// check if there are any values in queryParams otherwise initialize all categoryIDs and employeeIDs as checked
+					categoryIDs: query?.categoryIDs || getCategoryIDs(servicesData?.options),
+					employeeIDs: query?.employeeIDs || getEmployeeIDs(employeesData?.options)
+				})
+			)
 
-	useEffect(() => {
-		dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-		dispatch(getServices({ salonID }, true))
+			firstEmployeesLoadDone.current = true
+		})()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, salonID])
 
 	useEffect(() => {
-		dispatch(
-			initialize(FORM.CALENDAR_FILTER, {
-				eventType: query.eventType,
-				categoryIDs: query.categoryIDs || getServiceIDs(services?.options),
-				employeeIDs: query.employeeIDs || getEmployeeIDs(employees?.options)
-			})
-		)
-	}, [dispatch, salonID, query.categoryIDs, query.employeeIDs, query.eventType, services?.options, employees.options])
+		// update calendar size when main layout sider change
+		// wait for the end of sider menu animation and then update size of the calendar
+		const timeout = setTimeout(() => calendarApiRefs?.current?.[query.view as CALENDAR_VIEW]?.updateSize(), 300)
+		return () => clearTimeout(timeout)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isSiderCollapsed])
 
 	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
@@ -194,6 +209,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				...query,
 				eventType: newEventType
 			})
+			dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
 		}
 	}
 
@@ -224,15 +240,25 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setSiderEventManagement={setEventManagement}
 			/>
 			<Layout hasSider className={'noti-calendar-main-section'}>
-				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} />
+				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER} />
 				<CalendarContent
+					ref={calendarApiRefs}
 					selectedDate={query.date}
 					view={query.view as CALENDAR_VIEW}
 					eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER}
 					loading={loadingData}
 					reservations={reservations?.data || []}
 					shiftsTimeOffs={shiftsTimeOffs?.data || []}
-					employees={filteredEmployees || []}
+					employees={filteredEmployees() || []}
+					onShowAllEmployees={() => {
+						const employeeIDs = getEmployeeIDs(employees?.options)
+						setQuery({
+							...query,
+							employeeIDs
+						})
+						dispatch(change(FORM.CALENDAR_FILTER, 'employeeIDs', employeeIDs))
+						calendarApiRefs?.current?.[query.view as CALENDAR_VIEW]?.scrollToTime(CALENDAR_COMMON_SETTINGS.SCROLL_TIME)
+					}}
 				/>
 				<SiderEventManagement
 					view={siderEventManagement}

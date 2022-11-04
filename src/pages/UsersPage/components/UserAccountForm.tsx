@@ -32,7 +32,7 @@ const UserAccountForm: FC<Props> = (props) => {
 	const { handleSubmit } = props
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} id={`${FORM.USER_ACCOUNT}-form`} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
 					<h3 className={'mb-0 mt-3 flex items-center'}>

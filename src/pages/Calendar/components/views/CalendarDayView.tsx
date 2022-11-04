@@ -95,17 +95,19 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 const resourceLabelContent = (data: any, onShowAllEmployees: () => void) => {
 	const extendedProps = data?.resource.extendedProps || {}
 
+	// empty state
 	if (extendedProps.emptyEmployees) {
 		return (
 			<div className={'nc-day-resource-label empty'}>
 				<button type={'button'} className={'nc-button bordered'} onClick={onShowAllEmployees}>
 					{i18next.t('loc:Zobraziť všetkých')}
 				</button>
-				<span className={'description'}>{i18next.t('loc:No Nie je vybratý žiadny zamestnanec')}</span>
+				<span className={'description'}>{i18next.t('loc:Nie je vybratý žiaden zamestnanec')}</span>
 			</div>
 		)
 	}
 
+	// normal state
 	return (
 		<div className={'nc-day-resource-label'}>
 			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.image}")` }} />

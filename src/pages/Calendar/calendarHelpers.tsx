@@ -40,7 +40,7 @@ const createResourceMap = (employees?: Employees) =>
 	}, {} as ResourceMap) || {}
 
 const createAllDayInverseEventsFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) =>
-	Object.entries(resourcesMap).reduce((acc, [key, value]) => {
+	Object.entries({ ...resourcesMap }).reduce((acc, [key, value]) => {
 		if (!value) {
 			return [
 				...acc,
@@ -55,7 +55,7 @@ const createAllDayInverseEventsFromResourceMap = (resourcesMap: ResourceMap, sel
 				}
 			]
 		}
-		return []
+		return acc
 	}, [] as any[])
 
 const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {

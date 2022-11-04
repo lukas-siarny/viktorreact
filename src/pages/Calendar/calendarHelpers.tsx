@@ -244,7 +244,7 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 			id: employee.id,
 			name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
 			image: employee.image.resizedImages.thumbnail,
-			wokringHours: employeeWorkingHours || t('loc:Not Available'),
+			wokringHours: employeeWorkingHours || t('loc:Nedostupný'),
 			isTimeOff: !!employeeTimeOff.length,
 			employeeData: employee
 		}

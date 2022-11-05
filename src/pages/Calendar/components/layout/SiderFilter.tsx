@@ -15,14 +15,15 @@ type Props = {
 	parentPath: string
 	handleSubmit: (values: ICalendarFilter) => void
 	eventType: CALENDAR_EVENT_TYPE_FILTER
+	firstLoadDone: boolean
 }
 
 const SiderFilter: FC<Props> = (props) => {
-	const { collapsed, handleSubmit, parentPath, eventType } = props
+	const { collapsed, handleSubmit, parentPath, eventType, firstLoadDone } = props
 
 	return (
 		<Sider className='nc-sider-filter' width={230} collapsedWidth={0} collapsed={collapsed} trigger={null} collapsible>
-			<CalendarFilter onSubmit={handleSubmit} parentPath={parentPath} eventType={eventType} />
+			<CalendarFilter onSubmit={handleSubmit} parentPath={parentPath} eventType={eventType} firstLoadDone={firstLoadDone} />
 		</Sider>
 	)
 }

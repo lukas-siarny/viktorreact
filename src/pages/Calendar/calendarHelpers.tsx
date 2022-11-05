@@ -255,3 +255,7 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 export const getCustomerName = (customer: any) => {
 	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
 }
+
+export const getEmployeeName = (employee: any) => {
+	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id
+}

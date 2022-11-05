@@ -3090,9 +3090,13 @@ declare namespace Paths {
                     };
                     customer?: {
                         id: string; // uuid
-                        name: string;
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
                     };
-                    employee?: {
+                    employee: {
                         id: string; // uuid
                         firstName?: string;
                         lastName?: string;
@@ -3150,12 +3154,17 @@ declare namespace Paths {
                     reservationData?: {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
                     };
                     customer?: {
                         id: string; // uuid
-                        name: string;
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
                     };
-                    employee?: {
+                    employee: {
                         id: string; // uuid
                         firstName?: string;
                         lastName?: string;
@@ -5205,6 +5214,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5215,6 +5225,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5225,6 +5236,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5235,6 +5247,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5245,6 +5258,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5255,6 +5269,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5265,6 +5280,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             }
                         ];
                         openingHoursNote?: {
@@ -5931,6 +5947,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5941,6 +5958,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5951,6 +5969,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5961,6 +5980,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5971,6 +5991,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5981,6 +6002,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -5991,6 +6013,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             }
                         ];
                         openingHoursNote?: {
@@ -6819,9 +6842,13 @@ declare namespace Paths {
                     };
                     customer?: {
                         id: string; // uuid
-                        name: string;
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
                     };
-                    employee?: {
+                    employee: {
                         id: string; // uuid
                         firstName?: string;
                         lastName?: string;
@@ -6879,12 +6906,17 @@ declare namespace Paths {
                     reservationData?: {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
                     };
                     customer?: {
                         id: string; // uuid
-                        name: string;
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
                     };
-                    employee?: {
+                    employee: {
                         id: string; // uuid
                         firstName?: string;
                         lastName?: string;
@@ -7940,7 +7972,7 @@ declare namespace Paths {
                     }[];
                     rating?: number; // float
                     distance?: number; // float
-                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    priceLevel?: "HIGH_PRICE" | "MEDIUM_PRICE" | "LOW_PRICE";
                     categories: {
                         id: string; // uuid
                         name?: string;
@@ -7959,6 +7991,14 @@ declare namespace Paths {
                     };
                     liked?: boolean;
                 }[];
+                groupedRatings: {
+                    ZERO: number;
+                    ONE: number;
+                    TWO: number;
+                    THREE: number;
+                    FOUR: number;
+                    FIVE: number;
+                };
                 pagination: {
                     limit: number;
                     page: number;
@@ -8022,7 +8062,7 @@ declare namespace Paths {
                     }[];
                     rating?: number; // float
                     distance?: number; // float
-                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    priceLevel?: "HIGH_PRICE" | "MEDIUM_PRICE" | "LOW_PRICE";
                     categories: {
                         id: string; // uuid
                         name?: string;
@@ -8072,7 +8112,7 @@ declare namespace Paths {
                     }[];
                     rating?: number; // float
                     distance?: number; // float
-                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    priceLevel?: "HIGH_PRICE" | "MEDIUM_PRICE" | "LOW_PRICE";
                     categories: {
                         id: string; // uuid
                         name?: string;
@@ -8264,7 +8304,7 @@ declare namespace Paths {
                         }[];
                         rating?: number; // float
                         distance?: number; // float
-                        priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                        priceLevel?: "HIGH_PRICE" | "MEDIUM_PRICE" | "LOW_PRICE";
                         categories: {
                             id: string; // uuid
                             name?: string;
@@ -8363,6 +8403,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -8373,6 +8414,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -8383,6 +8425,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -8393,6 +8436,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -8403,6 +8447,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -8413,6 +8458,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -8423,6 +8469,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             }
                         ];
                         openingHoursNote?: {
@@ -8993,6 +9040,49 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type DateTo = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type EmployeeID = string | null; // uuid
+            export type SalonID = string; // uuid
+            export type ServiceCategoryParameterValueID = string | null; // uuid
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            dateTo: Parameters.DateTo /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            employeeID?: Parameters.EmployeeID /* uuid */;
+            serviceID: Parameters.ServiceID /* uuid */;
+            serviceCategoryParameterValueID?: Parameters.ServiceCategoryParameterValueID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                availableReservations: {
+                    [name: string]: {
+                        from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        employeeID: string; // uuid
+                    }[];
+                };
+            }
+        }
+    }
     namespace GetApiB2CV1SalonsSalonIdEmployees {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -9121,6 +9211,37 @@ declare namespace Paths {
                                                 exponent: number;
                                                 significand: number;
                                             };
+                                        };
+                                        serviceCategoryParameter?: {
+                                            /**
+                                             * example:
+                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                                             */
+                                            id: string; // uuid
+                                            valueType: "ENUM" | "TIME";
+                                            unitType?: "MINUTES";
+                                            name?: string;
+                                            values: {
+                                                id: string; // uuid
+                                                categoryParameterValueID: string; // uuid
+                                                value?: string;
+                                                priceAndDurationData: {
+                                                    durationFrom?: number;
+                                                    durationTo?: number;
+                                                    priceFrom?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                    priceTo?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                };
+                                            }[];
                                         };
                                         createdAt: string; // date-time
                                         updatedAt: string; // date-time
@@ -9691,7 +9812,7 @@ declare namespace Paths {
                     }[];
                     rating?: number; // float
                     distance?: number; // float
-                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    priceLevel?: "HIGH_PRICE" | "MEDIUM_PRICE" | "LOW_PRICE";
                     categories: {
                         id: string; // uuid
                         name?: string;
@@ -9710,6 +9831,14 @@ declare namespace Paths {
                     };
                     liked?: boolean;
                 }[];
+                groupedRatings: {
+                    ZERO: number;
+                    ONE: number;
+                    TWO: number;
+                    THREE: number;
+                    FOUR: number;
+                    FIVE: number;
+                };
                 pagination: {
                     limit: number;
                     page: number;
@@ -9773,7 +9902,7 @@ declare namespace Paths {
                     }[];
                     rating?: number; // float
                     distance?: number; // float
-                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    priceLevel?: "HIGH_PRICE" | "MEDIUM_PRICE" | "LOW_PRICE";
                     categories: {
                         id: string; // uuid
                         name?: string;
@@ -9823,7 +9952,7 @@ declare namespace Paths {
                     }[];
                     rating?: number; // float
                     distance?: number; // float
-                    priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                    priceLevel?: "HIGH_PRICE" | "MEDIUM_PRICE" | "LOW_PRICE";
                     categories: {
                         id: string; // uuid
                         name?: string;
@@ -10015,7 +10144,7 @@ declare namespace Paths {
                         }[];
                         rating?: number; // float
                         distance?: number; // float
-                        priceLevel?: "ALL" | "LOW_PRICE" | "MEDIUM_PRICE" | "HIGH_PRICE";
+                        priceLevel?: "HIGH_PRICE" | "MEDIUM_PRICE" | "LOW_PRICE";
                         categories: {
                             id: string; // uuid
                             name?: string;
@@ -10035,6 +10164,49 @@ declare namespace Paths {
                         liked?: boolean;
                     };
                 }[];
+            }
+        }
+    }
+    namespace GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type DateTo = string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+            export type EmployeeID = string | null; // uuid
+            export type SalonID = string; // uuid
+            export type ServiceCategoryParameterValueID = string | null; // uuid
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            dateTo: Parameters.DateTo /* ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$ */;
+            employeeID?: Parameters.EmployeeID /* uuid */;
+            serviceID: Parameters.ServiceID /* uuid */;
+            serviceCategoryParameterValueID?: Parameters.ServiceCategoryParameterValueID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                availableReservations: {
+                    [name: string]: {
+                        from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                        employeeID: string; // uuid
+                    }[];
+                };
             }
         }
     }
@@ -10166,6 +10338,37 @@ declare namespace Paths {
                                                 exponent: number;
                                                 significand: number;
                                             };
+                                        };
+                                        serviceCategoryParameter?: {
+                                            /**
+                                             * example:
+                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                                             */
+                                            id: string; // uuid
+                                            valueType: "ENUM" | "TIME";
+                                            unitType?: "MINUTES";
+                                            name?: string;
+                                            values: {
+                                                id: string; // uuid
+                                                categoryParameterValueID: string; // uuid
+                                                value?: string;
+                                                priceAndDurationData: {
+                                                    durationFrom?: number;
+                                                    durationTo?: number;
+                                                    priceFrom?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                    priceTo?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                };
+                                            }[];
                                         };
                                         createdAt: string; // date-time
                                         updatedAt: string; // date-time
@@ -10333,6 +10536,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -10343,6 +10547,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -10353,6 +10558,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -10363,6 +10569,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -10373,6 +10580,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -10383,6 +10591,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -10393,6 +10602,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             }
                         ];
                         openingHoursNote?: {
@@ -34026,6 +34236,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -34036,6 +34247,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -34046,6 +34258,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -34056,6 +34269,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -34066,6 +34280,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -34076,6 +34291,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -34086,6 +34302,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             }
                         ];
                         openingHoursNote?: {
@@ -35191,6 +35408,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -35201,6 +35419,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -35211,6 +35430,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -35221,6 +35441,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -35231,6 +35452,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -35241,6 +35463,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -35251,6 +35474,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             }
                         ];
                         openingHoursNote?: {
@@ -45031,6 +45255,9 @@ declare namespace Paths {
             export interface $200 {
                 customer?: {
                     id: string; // uuid
+                    firstName: string;
+                    lastName: string;
+                    email?: string;
                 };
                 messages: {
                     message: string;
@@ -51852,6 +52079,9 @@ declare namespace Paths {
             export interface $200 {
                 customer?: {
                     id: string; // uuid
+                    firstName: string;
+                    lastName: string;
+                    email?: string;
                 };
                 messages: {
                     message: string;
@@ -54182,6 +54412,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -54192,6 +54423,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -54202,6 +54434,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -54212,6 +54445,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -54222,6 +54456,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -54232,6 +54467,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             },
                             {
                                 date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
@@ -54242,6 +54478,7 @@ declare namespace Paths {
                                     timeFrom: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                     timeTo: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                                 }[];
+                                state?: ("CUSTOM_ORDER") | ("CUSTOM_ORDER");
                             }
                         ];
                         openingHoursNote?: {
@@ -55179,6 +55416,126 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiB2CV1SalonsSalonIdCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            customerNote?: string | null;
+            customer: {
+                firstName: string;
+                lastName: string;
+                email: string; // email
+                /**
+                 * example:
+                 * SK
+                 */
+                phonePrefixCountryCode: string;
+                /**
+                 * example:
+                 * 906047188
+                 */
+                phone: string; // ^\d+$
+            };
+            employeeID?: string | null; // uuid
+            serviceID: string; // uuid
+            serviceCategoryParameterValueID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2CWebSalonsSalonIdCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            start: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string | null; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            end: {
+                date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                time?: string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ | string /* ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$ */ // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+            };
+            customerNote?: string | null;
+            customer: {
+                firstName: string;
+                lastName: string;
+                email: string; // email
+                /**
+                 * example:
+                 * SK
+                 */
+                phonePrefixCountryCode: string;
+                /**
+                 * example:
+                 * 906047188
+                 */
+                phone: string; // ^\d+$
+            };
+            employeeID?: string | null; // uuid
+            serviceID: string; // uuid
+            serviceCategoryParameterValueID?: string | null; // uuid
+        }
+        namespace Responses {
+            export interface $200 {
+                reservationCalendarEvent: {
+                    id: string; // uuid
+                };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
 }
 
 export interface OperationMethods {
@@ -55743,6 +56100,22 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1CalendarSyncIcalEvents.Responses.$200>
   /**
+   * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
+   */
+  'getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.PathParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  /**
+   * postApiB2CWebSalonsSalonIdCalendarEventsReservations - permissions: NO
+   */
+  'postApiB2CWebSalonsSalonIdCalendarEventsReservations'(
+    parameters?: Parameters<Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+    data?: Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.Responses.$200>
+  /**
    * getApiB2CWebSalons - permissions: NO
    */
   'getApiB2CWebSalons'(
@@ -55894,6 +56267,22 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebEnumsLanguagesLanguageId.Responses.$200>
+  /**
+   * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
+   */
+  'getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable'(
+    parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.PathParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  /**
+   * postApiB2CV1SalonsSalonIdCalendarEventsReservations - permissions: NO
+   */
+  'postApiB2CV1SalonsSalonIdCalendarEventsReservations'(
+    parameters?: Parameters<Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+    data?: Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
   /**
    * getApiB2CV1Salons - permissions: NO
    */
@@ -57649,6 +58038,26 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1CalendarSyncIcalEvents.Responses.$200>
   }
+  ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/available']: {
+    /**
+     * getApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.PathParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.QueryParameters & Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  }
+  ['/api/b2c/web/salons/{salonID}/calendar-events/reservations/']: {
+    /**
+     * postApiB2CWebSalonsSalonIdCalendarEventsReservations - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+      data?: Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2CWebSalonsSalonIdCalendarEventsReservations.Responses.$200>
+  }
   ['/api/b2c/web/salons/']: {
     /**
      * getApiB2CWebSalons - permissions: NO
@@ -57836,6 +58245,26 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebEnumsLanguagesLanguageId.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/available']: {
+    /**
+     * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.PathParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.QueryParameters & Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable.Responses.$200>
+  }
+  ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/']: {
+    /**
+     * postApiB2CV1SalonsSalonIdCalendarEventsReservations - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
+      data?: Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2CV1SalonsSalonIdCalendarEventsReservations.Responses.$200>
   }
   ['/api/b2c/v1/salons/']: {
     /**

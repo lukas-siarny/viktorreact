@@ -123,7 +123,7 @@ export const getCalendarEvents =
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as any)
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
 			payload = {
 				data: data.calendarEvents
@@ -159,7 +159,7 @@ export const getCalendarReservations =
 
 			dispatch({ type: RESERVATIONS.RESERVATIONS_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as any)
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
 			payload = {
 				data: data.calendarEvents
@@ -194,7 +194,7 @@ export const getCalendarShiftsTimeoff =
 
 			dispatch({ type: SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_START })
 
-			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as any)
+			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
 			payload = {
 				data: data.calendarEvents

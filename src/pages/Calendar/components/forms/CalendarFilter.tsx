@@ -27,6 +27,7 @@ import { ICalendarFilter } from '../../../../types/interfaces'
 type ComponentProps = {
 	parentPath: string
 	eventType: CALENDAR_EVENT_TYPE_FILTER
+	firstLoadDone: boolean
 }
 
 type Props = InjectedFormProps<ICalendarFilter, ComponentProps> & ComponentProps
@@ -54,7 +55,7 @@ const checkboxOptionRender = (option: any, checked?: boolean) => {
 }
 
 const CalendarFilter = (props: Props) => {
-	const { handleSubmit, parentPath, eventType } = props
+	const { handleSubmit, parentPath, eventType, firstLoadDone } = props
 	const [t] = useTranslation()
 
 	const services = useSelector((state: RootState) => state.service.services)
@@ -90,7 +91,6 @@ const CalendarFilter = (props: Props) => {
 				className={'nc-collapse'}
 				bordered={false}
 				defaultActiveKey={defaultActiveKeys}
-				activeKey={defaultActiveKeys}
 				expandIconPosition={'end'}
 				expandIcon={({ isActive }) => <ChevronDownIcon className={cx({ 'is-active': isActive })} />}
 			>
@@ -105,7 +105,7 @@ const CalendarFilter = (props: Props) => {
 					/>
 				</Panel>
 				<Panel key={PANEL_KEY.EMPLOYEES} header={t('loc:Zamestnanci')} className={'nc-collapse-panel'}>
-					<Spin spinning={employees?.isLoading}>
+					<Spin spinning={employees?.isLoading && !firstLoadDone}>
 						<Field
 							className={'p-0 m-0'}
 							component={CheckboxGroupField}
@@ -119,7 +119,7 @@ const CalendarFilter = (props: Props) => {
 				</Panel>
 				{eventType !== CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF && (
 					<Panel key={PANEL_KEY.CATEGORIES} header={t('loc:Služby')} className={'nc-collapse-panel'}>
-						<Spin spinning={services?.isLoading}>
+						<Spin spinning={services?.isLoading && !firstLoadDone}>
 							{services?.options?.length ? (
 								<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'categoryIDs'} options={services?.options} size={'small'} rounded />
 							) : (

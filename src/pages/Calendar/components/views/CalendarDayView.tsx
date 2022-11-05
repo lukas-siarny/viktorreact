@@ -11,7 +11,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../../../utils/enums'
-import { composeDayEventResources, composeDayViewEvents, getHoursMinutesFromMinutes } from '../../calendarHelpers'
+import { composeDayEventResources, composeDayViewEvents, getCustomerName, getHoursMinutesFromMinutes } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
@@ -22,8 +22,6 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYPE_FILTER) => {
 	const { event, timeText } = data || {}
 	const { extendedProps } = event || {}
-
-	// console.log({ event, timeText, extendedProps })
 
 	if (event.display === 'inverse-background') {
 		return <div className={cx('nc-bg-event not-set-availability')} />
@@ -70,6 +68,7 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 				}
 
 				if (eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+					const customerName = getCustomerName(extendedProps.customer)
 					return (
 						<>
 							<div className={'event-accent'} style={{ backgroundColor: extendedProps.employee?.color }} />
@@ -77,8 +76,8 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 							<div className={'event-content'}>
 								<div className={'flex flex-col gap-1'}>
 									<span className={'time'}>{timeText}</span>
-									<span className={'title'}>{extendedProps.customer?.name}</span>
-									<span className={'desc'}>{extendedProps.service?.name}</span>
+									{customerName && <span className={'title'}>{customerName}</span>}
+									{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
 								</div>
 								<div className={'service-icon'} style={{ backgroundImage: `url("${extendedProps.service?.icon}")` }} />
 							</div>

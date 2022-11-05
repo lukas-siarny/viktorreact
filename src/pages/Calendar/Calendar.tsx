@@ -72,9 +72,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
 
-	const firstEmployeesLoadDone = useRef(false)
+	const firstLoadDone = useRef(false)
 
-	const filteredEmployees = useCallback(() => {
+	/* const filteredEmployees = useCallback(() => {
 		// first initialization of employees
 		if (!firstEmployeesLoadDone.current) {
 			// filter employees based on query params
@@ -129,7 +129,87 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			firstEmployeesLoadDone.current = true
 		})()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [dispatch, salonID]) */
+
+	const filteredEmployees = useCallback(() => {
+		// first load
+		if (!firstLoadDone.current) {
+			// filter employees based on query params
+			if (!isEmpty(query.employeeIDs)) {
+				return employees?.data?.employees.filter((employee) => query.employeeIDs?.includes(employee.id))
+			}
+			// return all employes as default value when there are no queryParams in the url
+			return employees?.data?.employees
+		}
+
+		// after first load
+		// filter employees based on query params
+		if (!isEmpty(query.employeeIDs)) {
+			return employees?.data?.employees.filter((employee) => query.employeeIDs?.includes(employee.id))
+		}
+		// return no employees when there are no queryParams in the url
+		// (when user unchecks all options in filter, we don't want to set all employees as in case of initialization)
+		return []
+	}, [employees?.data?.employees, query.employeeIDs])
+
+	const fetchEvents = useCallback(
+		async ({ date, employeeIDs, categoryIDs, view, eventType }) => {
+			// clear previous events
+			await dispatch(getCalendarShiftsTimeoff())
+			await dispatch(getCalendarReservations())
+			// fetch new events
+			if (eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+				Promise.all([
+					dispatch(getCalendarReservations({ salonID, date, employeeIDs, categoryIDs }, view as CALENDAR_VIEW)),
+					dispatch(getCalendarShiftsTimeoff({ salonID, date, employeeIDs }, view as CALENDAR_VIEW))
+				])
+			} else if (eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF) {
+				dispatch(getCalendarShiftsTimeoff({ salonID, date, employeeIDs }, view as CALENDAR_VIEW))
+			}
+		},
+		[dispatch, salonID]
+	)
+
+	// first data load
+	useEffect(() => {
+		;(async () => {
+			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+			const servicesData = await dispatch(getServices({ salonID }, true))
+
+			const categoryIDs = query?.categoryIDs || getCategoryIDs(servicesData?.options)
+			const employeeIDs = query?.employeeIDs || getEmployeeIDs(employeesData?.options)
+
+			fetchEvents({ date: query.date, employeeIDs, categoryIDs, view: query.view, eventType: query.eventType })
+
+			setQuery({
+				...query,
+				categoryIDs,
+				employeeIDs
+			})
+
+			firstLoadDone.current = true
+		})()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, salonID])
+
+	// data loads on change query params after first load
+	useEffect(() => {
+		if (firstLoadDone.current) {
+			// dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+			// dispatch(getServices({ salonID }, true))
+			fetchEvents({ date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs, view: query.view, eventType: query.eventType })
+		}
+	}, [fetchEvents, dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs])
+
+	useEffect(() => {
+		dispatch(
+			initialize(FORM.CALENDAR_FILTER, {
+				eventType: query.eventType,
+				categoryIDs: query?.categoryIDs,
+				employeeIDs: query?.employeeIDs
+			})
+		)
+	}, [dispatch, query.eventType, query?.categoryIDs, query?.employeeIDs])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -209,7 +289,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				...query,
 				eventType: newEventType
 			})
-			dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
+			// dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
 		}
 	}
 
@@ -256,7 +336,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							...query,
 							employeeIDs
 						})
-						dispatch(change(FORM.CALENDAR_FILTER, 'employeeIDs', employeeIDs))
+						// dispatch(change(FORM.CALENDAR_FILTER, 'employeeIDs', employeeIDs))
 						calendarApiRefs?.current?.[query.view as CALENDAR_VIEW]?.scrollToTime(CALENDAR_COMMON_SETTINGS.SCROLL_TIME)
 					}}
 				/>

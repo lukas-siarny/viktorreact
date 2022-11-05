@@ -250,3 +250,8 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 		}
 	})
 }
+
+// TODO: customer type
+export const getCustomerName = (customer: any) => {
+	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
+}

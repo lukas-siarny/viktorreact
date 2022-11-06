@@ -135,7 +135,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			fetchEvents({ date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs, view: query.view, eventType: query.eventType })
-			// NOTE: ak dotahujeme nove eventy, chceme opatovn dotahovat aj aktualnych zamestnancov a sluzby?
+			// NOTE: ak dotahujeme nove eventy, chceme opatovne dotahovat aj aktualnych zamestnancov a sluzby?
 			dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
 			dispatch(getServices({ salonID }, true))
 		}

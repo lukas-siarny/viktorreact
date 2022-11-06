@@ -3,7 +3,7 @@ import { t } from 'i18next'
 import { uniqueId } from 'lodash'
 
 // reducers
-import { ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
+import { CalendarEvent, ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
 
 // types
 import { Employees } from '../../types/interfaces'
@@ -130,7 +130,7 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 	})
 
 	// ak zamestnanec nema ziadnu zmenu, volno alebo prestavku v dany den
-	// tak vytvorime fake 'inverse-background' event, ktory zasrafuje pozadie pre cely den
+	// tak vytvorime "fake" 'inverse-background' event, ktory zasrafuje pozadie pre cely den
 	const allDayInverseEvents = createAllDayInverseEventsFromResourceMap(resourcesMap, selectedDate)
 
 	return [...composedEvents, ...allDayInverseEvents]
@@ -172,7 +172,7 @@ const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarE
 	})
 
 	// ak zamestnanec nema ziadnu zmenu v dany den
-	// tak vytvorime fake 'inverse-background' event, ktory zasrafuje pozadie pre cely den
+	// tak vytvorime "fake" 'inverse-background' event, ktory zasrafuje pozadie pre cely den
 	const allDayInverseEvents = createAllDayInverseEventsFromResourceMap(resourcesMap, selectedDate)
 
 	return [...composedEvents, ...allDayInverseEvents]
@@ -252,10 +252,10 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 }
 
 // TODO: customer type
-export const getCustomerName = (customer: any) => {
+export const getCustomerName = (customer: CalendarEvent['customer']) => {
 	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
 }
 
-export const getEmployeeName = (employee: any) => {
-	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id
+export const getEmployeeName = (employee: CalendarEvent['employee']) => {
+	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email
 }

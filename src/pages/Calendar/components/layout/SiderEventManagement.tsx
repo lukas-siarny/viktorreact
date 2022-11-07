@@ -35,7 +35,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:
 				return <TimeOffForm setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitTimeOff} />
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
-				return <BreakForm setCollapsed={setCollapsed} onSubmit={handleSubmitBreak} />
+				return <BreakForm setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitBreak} />
 			default:
 				return null
 		}

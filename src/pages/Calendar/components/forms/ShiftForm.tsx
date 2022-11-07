@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 // validate
+import cx from 'classnames'
 import validateShiftForm from './validateShiftForm'
 
 // utils
 import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, FORM, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, DAY, FORM, STRINGS } from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
 // types
@@ -28,6 +29,7 @@ import SwitchField from '../../../../atoms/SwitchField'
 
 // redux
 import { RootState } from '../../../../reducers'
+import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 type ComponentProps = {
 	salonID: string
@@ -66,6 +68,72 @@ const CalendarShiftForm: FC<Props> = (props) => {
 		[salonID]
 	)
 
+	const options = [
+		{ label: t('loc:Pondelok'), value: DAY.MONDAY },
+		{ label: t('loc:Utorok'), value: DAY.TUESDAY },
+		{ label: t('loc:Streda'), value: DAY.WEDNESDAY },
+		{ label: t('loc:Štvrtok'), value: DAY.THURSDAY },
+		{ label: t('loc:Piatok'), value: DAY.FRIDAY },
+		{ label: t('loc:Sobota'), value: DAY.SATURDAY },
+		{ label: t('loc:Nedeľa'), value: DAY.SUNDAY }
+	]
+
+	const checkboxOptionRender = (option: any, checked?: boolean) => {
+		const { color, value } = option || {}
+
+		return (
+			<div className={cx('nc-checkbox-group-checkbox flex', { checked })}>
+				<input type='checkbox' className='checkbox-input' value={value} checked={checked} />
+				<div className={'checker'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }}>
+					<span className={'checkbox-focus'} style={{ boxShadow: `0px 0px 4px 2px ${color || '#000'}`, border: `1px solid ${color}` }} />
+				</div>
+				{option?.label}
+			</div>
+		)
+	}
+	const recurringFields = formValues?.recurring && (
+		<>
+			<Field
+				className={'p-0 m-0'}
+				component={CheckboxGroupField}
+				name={'repeatOn'}
+				label={t('loc:Opakovať ďalej')}
+				options={options}
+				size={'small'}
+				hideChecker
+				horizontal
+				optionRender={checkboxOptionRender}
+			/>
+
+			<Field
+				component={SelectField}
+				label={t('loc:Každý')}
+				placeholder={t('loc:Vyberte frekvenciu')}
+				name={'every'}
+				size={'large'}
+				allowInfinityScroll
+				showSearch
+				required
+				optins={[]} // TODO: syncnut s BE
+				className={'pb-0'}
+				labelInValue
+			/>
+
+			<Field
+				component={SelectField}
+				label={t('loc:Koniec')}
+				placeholder={t('loc:Vyberte koniec')}
+				name={'end'}
+				size={'large'}
+				allowInfinityScroll
+				showSearch
+				required
+				optins={[]} // TODO: syncnut s BE
+				className={'pb-0'}
+				labelInValue
+			/>
+		</>
+	)
 	return (
 		<>
 			<div className={'nc-sider-event-management-header justify-between'}>
@@ -114,38 +182,8 @@ const CalendarShiftForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} component={SwitchField} label={t('loc:Opakovať')} />
-					{/* // TODO: opakovat v ... checkboxy? */}
-					{formValues?.recurring && (
-						<Field
-							component={SelectField}
-							label={t('loc:Každý')}
-							placeholder={t('loc:Vyberte frekvenciu')}
-							name={'every'}
-							size={'large'}
-							allowInfinityScroll
-							showSearch
-							required
-							optins={[]} // TODO: syncnut s BE
-							className={'pb-0'}
-							labelInValue
-						/>
-					)}
-					{formValues?.recurring && (
-						<Field
-							component={SelectField}
-							label={t('loc:Koniec')}
-							placeholder={t('loc:Vyberte koniec')}
-							name={'end'}
-							size={'large'}
-							allowInfinityScroll
-							showSearch
-							required
-							optins={[]} // TODO: syncnut s BE
-							className={'pb-0'}
-							labelInValue
-						/>
-					)}
+					<Field name={'recurring'} label={t('loc:Opakovať')} component={SwitchField} />
+					{recurringFields}
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>

@@ -131,7 +131,7 @@ const ImgUploadField: FC<Props> = (props: Props) => {
 			input.onChange(info.fileList)
 		}
 		if (isEmpty(info.fileList)) {
-			input.onChange(null)
+			input.onChange(multiple ? [] : null)
 		}
 	}
 

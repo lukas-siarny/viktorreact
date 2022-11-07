@@ -1,6 +1,6 @@
 import React, { ReactNode, FC } from 'react'
 import { Layout, Row, Button, Dropdown, Menu } from 'antd'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
@@ -10,7 +10,6 @@ import LayoutSider, { LayoutSiderProps } from '../components/LayoutComponents/La
 
 // redux
 import { RootState } from '../reducers'
-import { selectSalon } from '../reducers/selectedSalon/selectedSalonActions'
 
 // utils
 import Permissions from '../utils/Permissions'
@@ -35,7 +34,6 @@ type Props = LayoutSiderProps & {
 }
 
 const MainLayout: FC<Props> = (props) => {
-	const dispatch = useDispatch()
 	const [t] = useTranslation()
 	const { children } = props
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)

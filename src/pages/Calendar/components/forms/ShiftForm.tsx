@@ -1,31 +1,32 @@
 import React, { FC, useCallback } from 'react'
 import { Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { Button, Form } from 'antd'
-
-// validate
 import { map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
+
+// validate
 import validateShiftForm from './validateShiftForm'
 
 // utils
 import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, FORM, STRINGS } from '../../../../utils/enums'
+import { getReq } from '../../../../utils/request'
 
 // types
 import { ICalendarShiftForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-import SelectField from '../../../../atoms/SelectField'
 import { ReactComponent as ProfileIcon } from '../../../../assets/icons/profile-icon.svg'
-import { getReq } from '../../../../utils/request'
-import Permissions from '../../../../utils/Permissions'
-import { ReactComponent as ServiceIcon } from '../../../../assets/icons/services-24-icon.svg'
+
+// components / atoms
+import SelectField from '../../../../atoms/SelectField'
 import DateField from '../../../../atoms/DateField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
-import TextareaField from '../../../../atoms/TextareaField'
 import SwitchField from '../../../../atoms/SwitchField'
+
+// redux
 import { RootState } from '../../../../reducers'
 
 type ComponentProps = {
@@ -148,8 +149,8 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>
-				<Button onClick={() => dispatch(submit(FORM.CALENDAR_RESERVATION_FORM))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
-					{STRINGS(t).createRecord(t('loc:rezerváciu'))}
+				<Button onClick={() => dispatch(submit(FORM.CALENDAR_SHIFT_FORM))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
+					{STRINGS(t).createRecord(t('loc:zmenu'))}
 				</Button>
 			</div>
 		</>

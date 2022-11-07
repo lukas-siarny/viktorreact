@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useEffect, useState } from 'react'
 import { Layout, Menu, Dropdown, Row } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
+import cx from 'classnames'
 
 // assets
 import { ReactComponent as LogoIcon } from '../../assets/images/logo-simple.svg'
@@ -44,6 +45,7 @@ import AvatarComponents from '../AvatarComponents'
 
 // types
 import { _Permissions } from '../../types/interfaces'
+import { setIsSiderCollapsed } from '../../reducers/settings/settingsActions'
 
 const { Sider } = Layout
 
@@ -60,7 +62,8 @@ const LOGO_HEIGHT = 72
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
 
-	const [collapsed, setCollapsed] = useState(false)
+	const collapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
+	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)
 	const authUserPermissions = currentUser?.uniqPermissions
@@ -280,6 +283,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 										: undefined
 								}
 								getPopupContainer={() => document.querySelector('#noti-sider-wrapper') as HTMLElement}
+								onVisibleChange={setIsDropdownOpen}
 							>
 								<div role='button' className='cursor-pointer' tabIndex={-1} onClick={(e) => e.preventDefault()} onKeyPress={(e) => e.preventDefault()}>
 									<Row className='flex items-center' justify='space-between'>
@@ -292,9 +296,6 @@ const LayoutSider = (props: LayoutSiderProps) => {
 								</div>
 							</Dropdown>
 						),
-						onClick: (e: any) => {
-							e.preventDefalut()
-						},
 						icon: (
 							<AvatarComponents
 								src={currentUser?.image?.original}
@@ -310,16 +311,28 @@ const LayoutSider = (props: LayoutSiderProps) => {
 		return menuItems
 	}
 
+	const wasSiderRendered = useRef(false)
+
+	useEffect(() => {
+		wasSiderRendered.current = true
+	}, [])
+
 	return (
 		<Sider
-			className='bg-white shadow-md z-50 main-layout-sider'
+			className={cx('bg-white shadow-md z-50 main-layout-sider', { 'account-dropdown-opened': isDropdownOpen })}
 			breakpoint='md'
 			collapsedWidth={56}
 			width={230}
 			trigger={<ChevronRightIcon style={{ transform: !collapsed ? 'rotate(180deg)' : undefined, width: 12, height: 12 }} />}
 			collapsible
 			collapsed={collapsed}
-			onCollapse={(isCollapsed) => setCollapsed(isCollapsed)}
+			onCollapse={(isCollapsed, type) => {
+				if (type === 'clickTrigger') {
+					dispatch(setIsSiderCollapsed(isCollapsed))
+				} else if (type === 'responsive' && wasSiderRendered.current) {
+					dispatch(setIsSiderCollapsed(isCollapsed))
+				}
+			}}
 		>
 			<div id={'noti-sider-wrapper'} className='flex flex-col h-full'>
 				<Link className='flex justify-center pt-4 pb-6' to={`${t('paths:index')}`} style={{ height: LOGO_HEIGHT }}>

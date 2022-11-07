@@ -21,7 +21,7 @@ import { getServices, IServicesPayload } from '../../reducers/services/serviceAc
 import CalendarHeader from './components/layout/Header'
 import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
-import CalendarContent from './components/layout/Content'
+import CalendarContent, { CalendarApiRefs } from './components/layout/Content'
 
 // types
 import { ICalendarBreakForm, ICalendarFilter, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm, SalonSubPageProps } from '../../types/interfaces'
@@ -52,6 +52,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const reservations = useSelector((state: RootState) => state.calendar.reservations)
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar.shiftsTimeOffs)
+
+	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
+
+	const calendarApiRefs = useRef<CalendarApiRefs>(null)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
@@ -121,9 +125,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			fetchEvents({ date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs, view: query.view, eventType: query.eventType })
-			// NOTE: ak dotahujeme nove eventy, chceme opatovne dotahovat aj aktualnych zamestnancov a sluzby?
-			dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-			dispatch(getServices({ salonID }, true))
 		}
 	}, [fetchEvents, clearAllEvents, dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs])
 
@@ -136,6 +137,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			})
 		)
 	}, [dispatch, query.eventType, query?.categoryIDs, query?.employeeIDs])
+
+	useEffect(() => {
+		// update calendar size when main layout sider change
+		// wait for the end of sider menu animation and then update size of the calendar
+		const timeout = setTimeout(() => calendarApiRefs?.current?.[query.view as CALENDAR_VIEW]?.updateSize(), 300)
+		return () => clearTimeout(timeout)
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isMainLayoutSiderCollapsed])
 
 	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate

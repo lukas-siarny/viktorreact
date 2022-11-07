@@ -55,7 +55,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		employeeIDs: ArrayParam,
 		categoryIDs: ArrayParam,
-		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
+		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF)
 	})
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -65,7 +65,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	// NOTE: default je COLLAPSED, RESERVATION je len pre develeporske ucely teraz
 	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(
-		/* CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED */ CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
+		/* CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED */ CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT
 	)
 
 	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
@@ -159,8 +159,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
 		setSiderEventManagement(newView)
 		if (newView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
-			const newEventType =
-				newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+			const newEventType = newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.RESERVATION
 
 			setQuery({
 				...query,
@@ -188,8 +187,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				note: values.note,
 				customerID: values.customer.key as string,
 				employeeID: values.employee.key as string,
-				serviceID: '88e6e81b-48df-4df0-a79c-35762514a1cc',
-				serviceCategoryParameterValueID: '00000000-0000-0000-0000-000000000069'
+				serviceID: '88e6e81b-48df-4df0-a79c-35762514a1cc', // TODO:
+				serviceCategoryParameterValueID: '00000000-0000-0000-0000-000000000069' // TODO:
 			}
 
 			await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)

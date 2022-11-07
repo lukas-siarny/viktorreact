@@ -100,7 +100,7 @@ type Props = {
 
 export const isAdmin = (authUserPermissions: _Permissions = []): boolean => checkPermissions(authUserPermissions, ADMIN_PERMISSIONS)
 
-const permitted = (userPermissions: _Permissions = [], salonsPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []): boolean => {
+export const permitted = (userPermissions: _Permissions = [], salonsPermissions: _Permissions = [], allowed: _Permissions = [], except: _Permissions = []): boolean => {
 	// split into SYSTEM (index 0) and SALON (index 1) permissions
 	const allowedPermissions = partition(allowed, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]
 	const exceptedPermissions = partition(except, (permission) => isEnumValue(permission, PERMISSION)) as _Permissions[]

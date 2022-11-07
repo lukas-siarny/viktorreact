@@ -155,7 +155,7 @@ const RejectedSalonSuggestions = () => {
 					title: t('loc:Označiť ako vybavené'),
 					dataIndex: 'salonID',
 					key: 'markAsDone',
-					fixed: 'right',
+					fixed: salons?.tableData?.length ? 'right' : undefined,
 					ellipsis: true,
 					width: 150,
 					render: (_value, record) => (

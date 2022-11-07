@@ -103,8 +103,7 @@ type Props = {
 export const handleLanguageChange = (value: any, dispatch: any, reloadPageAfterChange = true) => {
 	if (reloadPageAfterChange) {
 		// reload page after change language
-		// eslint-disable-next-line no-restricted-globals
-		location.reload()
+		document.location.reload()
 	} else {
 		// refetch countries
 		dispatch(getCountries())

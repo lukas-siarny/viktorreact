@@ -142,7 +142,7 @@ const MainLayout: FC<Props> = (props) => {
 					allowed={[PERMISSION.PARTNER]}
 					render={(hasPermission) =>
 						(hasPermission || !!salonID) && (
-							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-50' id={'noti-header'}>
+							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
 								<Row className={cx({ 'justify-end': hasPermission, 'justify-between': !hasPermission }, 'min-w-0 w-full')} wrap={false}>
 									{!hasPermission && (
 										<Button

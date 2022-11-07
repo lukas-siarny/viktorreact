@@ -6,8 +6,6 @@ import cx from 'classnames'
 // full calendar
 import FullCalendar from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
-import daygridPlugin from '@fullcalendar/daygrid'
-import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
@@ -181,7 +179,7 @@ const dayHeaderContentMonth = (labelInfo: any) => {
 
 interface ICalendarWeekView extends ICalendarView {}
 
-const CalendarWeekView: FC<ICalendarWeekView> = (props) => {
+const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
 	const { selectedDate } = props
 
 	const [t] = useTranslation()
@@ -226,6 +224,6 @@ const CalendarWeekView: FC<ICalendarWeekView> = (props) => {
 			eventClick={handleEventClick}
 		/>
 	)
-}
+})
 
 export default CalendarWeekView

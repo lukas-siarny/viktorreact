@@ -2,10 +2,20 @@
 import { RESET_STORE } from '../generalTypes'
 import { ICalendarActions, ICalendarEventsPayload, ICalendarEventDetailPayload } from './calendarActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { EVENTS, EVENT_DETAIL } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, RESERVATIONS, SHIFTS_TIME_OFF } from './calendarTypes'
 
 export const initState = {
 	events: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ICalendarEventsPayload & ILoadingAndFailure,
+	reservations: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ICalendarEventsPayload & ILoadingAndFailure,
+	shiftsTimeOffs: {
 		data: null,
 		isLoading: false,
 		isFailure: false
@@ -43,6 +53,72 @@ export default (state = initState, action: ICalendarActions) => {
 				events: {
 					...initState.events,
 					data: action.payload.data
+				}
+			}
+		// Reservations
+		case RESERVATIONS.RESERVATIONS_LOAD_START:
+			return {
+				...state,
+				reservations: {
+					...state.events,
+					isLoading: true
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_LOAD_FAIL:
+			return {
+				...state,
+				reservations: {
+					...initState.events,
+					isFailure: true
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_LOAD_DONE:
+			return {
+				...state,
+				reservations: {
+					...initState.events,
+					data: action.payload.data
+				}
+			}
+		case RESERVATIONS.RESERVATIONS_CLEAR:
+			return {
+				...state,
+				reservations: {
+					...initState.events,
+					data: null
+				}
+			}
+		// Shifts / Time off
+		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_START:
+			return {
+				...state,
+				shiftsTimeOffs: {
+					...state.events,
+					isLoading: true
+				}
+			}
+		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_FAIL:
+			return {
+				...state,
+				shiftsTimeOffs: {
+					...initState.events,
+					isFailure: true
+				}
+			}
+		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_DONE:
+			return {
+				...state,
+				shiftsTimeOffs: {
+					...initState.events,
+					data: action.payload.data
+				}
+			}
+		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_CLEAR:
+			return {
+				...state,
+				reservations: {
+					...initState.events,
+					data: null
 				}
 			}
 		// Event detail

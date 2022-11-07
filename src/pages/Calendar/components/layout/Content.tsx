@@ -62,6 +62,7 @@ const CalendarContent = React.forwardRef<CalendarApiRefs, Props>((props, ref) =>
 		if (view === CALENDAR_VIEW.WEEK) {
 			return (
 				<CalendarWeekView
+					calendarApi={weekView?.current?.getApi()}
 					ref={weekView}
 					selectedDate={selectedDate}
 					reservations={reservations}

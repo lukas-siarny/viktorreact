@@ -153,11 +153,12 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	return (
 		<FullCalendar
 			ref={ref}
+			// plugins
+			plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
 			// settings
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 			eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-			plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
 			height='100%'
 			headerToolbar={false}
 			initialView={'resourceTimeGridDay'}

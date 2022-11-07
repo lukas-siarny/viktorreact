@@ -3,10 +3,10 @@
 
 @keyframes content-animation
 	0%
-		transform: translateX(-50px)
+		// left: -50px
 		opacity: 0
 	100%
-		transform: translateX(0)
+		// left: 0
 		opacity: 1
 
 @keyframes calendar-select-panel-animation
@@ -188,16 +188,24 @@
 			.nc-content-animate
 				position: absolute
 				top: 0
+				// left: -50px
+				right: 0
+				bottom: 0
+				width: 100%
+				height: 100%
+				opacity: 0
+				animation: content-animation 250ms ease-out forwards
+				overflow: hidden
+			.nc-calendar-week-wrapper
+				position: absolute
+				top: 0
 				left: 0
 				right: 0
 				bottom: 0
 				width: 100%
 				height: 100%
-				transform: translateX(-50px)
-				opacity: 0
-				animation: content-animation 250ms ease-out forwards
-				overflow: hidden
-
+				overflow-y: auto
+				overflow-x: visible
 	// other
 	.nc-collapse
 		background: transparent
@@ -622,3 +630,134 @@
 		&.break
 			border: 1px solid $borderColor-notino-gray
 			background: url("../assets/images/gray-pattern-background_40.png")
+
+// week view
+.fc-resource-timeline
+	.fc-timeline-slot-minor
+		border-color: transparent
+	> table.fc-scrollgrid
+		border-color: transparent
+		> thead
+			> tr.fc-scrollgrid-section-header
+				> th:first-of-type
+					border-right-color: transparent !important
+					> .fc-scroller-harness
+						> .fc-scroller
+							overflow: visible !important
+							> table.fc-datagrid-header
+								> thead
+									> tr
+										> th.fc-datagrid-cell:first-of-type
+											border-bottom-color: transparent
+											width: 60px !important
+				> td.fc-resource-timeline-divider
+					user-select: none
+					visibility: hidden
+					width: 0
+				> th:last-of-type
+					border-right-color: transparent !important
+					> .fc-scroller-harness
+						> .fc-scroller
+							table.fc-scrollgrid-sync-table
+								.fc-timeline-header-row
+									.fc-timeline-slot-label
+										border-left-color: transparent
+										.fc-timeline-slot-frame
+											.fc-timeline-slot-cushion
+												display: block
+												cursor: default
+												pointer-events: none
+												padding: 0
+												width: 100%
+												height: 100%
+		> tbody
+			> tr.fc-scrollgrid-section-body
+				> td:first-of-type
+					> .fc-scroller-harness
+						> .fc-scroller
+							@include scrollbar-styles
+							overflow: visible !important
+							table.fc-datagrid-body
+								> tbody > tr
+									> .fc-datagrid-cell
+										&:first-of-type:not(:last-of-type)
+											.fc-datagrid-cell-frame
+												position: relative
+												.fc-datagrid-cell-cushion
+													width: 100%
+													height: 100%
+													padding: 0
+										&:last-of-type
+											.fc-datagrid-cell-frame
+												.fc-datagrid-cell-cushion
+													padding: 0
+													min-height: 45px
+													.fc-datagrid-cell-main
+														// height: 100%
+														// display: block
+				> td.fc-resource-timeline-divider
+					user-select: none
+					visibility: hidden
+					width: 0
+				> td:last-of-type
+					border-right-color: transparent !important
+					/*> .fc-scroller-harness
+						> .fc-scroller
+							> .fc-timeline-body
+								> .fc-timeline-slots
+									.fc-timeline-slot-minor
+										border-color: transaprent !important
+					.fc-timeline-lane-frame
+						min-height: 45px
+
+	.nc-week-slot-label
+		color: $textColor-notino-grayDarker
+		font-size: 10px
+		line-height: 12px
+		height: 24px
+		display: flex
+		align-items: center
+		font-weight: 400
+
+	.nc-week-label-day
+		width: 100%
+		height: 100%
+		display: flex
+		flex-direction: column
+		justify-content: center
+		align-items: center
+		text-align: center
+		font-size: 10px
+		line-height: 11px
+		font-weight: 400
+		text-transform: capitalize
+		span
+			display: block
+		&.is-today
+			color: $textColor-notino-pink
+			font-weight: 500
+
+	.nc-week-label-resource
+		display: flex
+		gap: 4px
+		overflow: hidden
+		align-items: center
+		min-width: 0
+		width: 100%
+		text-align: left
+		padding: 8px
+		min-height: 45px
+		.image
+			border-radius: 50%
+			flex: 0 0 auto
+			border: 1px solid $borderColor-notino-grayLight
+			background-position: center
+			background-size: cover
+			background-color: $backgroundColor-notino-gray
+			width: 16px
+			height: 16px
+		.info
+			line-height: 16px
+		.absence-icon
+			margin-left: auto
+			align-self: center

@@ -21,6 +21,7 @@ const CalendarMonthView = React.forwardRef<InstanceType<typeof FullCalendar>, IC
 	return (
 		<FullCalendar
 			ref={ref}
+			// settings
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 			slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}

@@ -51,7 +51,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const dispatch = useDispatch()
 
 	const [query, setQuery] = useQueryParams({
-		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
+		// view: withDefault(StringParam, CALENDAR_VIEW.DAY),
+		view: withDefault(StringParam, CALENDAR_VIEW.WEEK),
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		employeeIDs: ArrayParam,
 		categoryIDs: ArrayParam,
@@ -112,7 +113,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		;(async () => {
 			fetchEvents({ date: query.date, employeeIDs: query?.employeeIDs, categoryIDs: query?.categoryIDs, view: query.view, eventType: query.eventType })
 
-			const employeesData = await dispatch(getEmployees({ salonID, accountState: ACCOUNT_STATE.PAIRED, page: 1, limit: 100 }))
+			// NOTE: za
+			// const employeesData = await dispatch(getEmployees({ salonID, accountState: ACCOUNT_STATE.PAIRED, page: 1, limit: 100 }))
+			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
 			const servicesData = await dispatch(getServices({ salonID }, true))
 
 			setQuery({

@@ -560,7 +560,8 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}`,
 		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.PREMIUM}`,
 		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
-		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`
+		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
+		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
 	}
 })
 

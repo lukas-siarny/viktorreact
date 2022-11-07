@@ -263,7 +263,7 @@ const NotinoDashboard: FC = () => {
 					{
 						data: notino.data.basicSalons,
 						background: colors.blue[200],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_CREATE_TYPE.BASIC]),
+						onClick: () => history.push(FILTER_PATHS().SALONS.publishedBasics),
 						label: t('loc:BASIC salóny')
 					},
 					{
@@ -350,7 +350,7 @@ const NotinoDashboard: FC = () => {
 						<>
 							{/* dougnut graphs */}
 							<Row className='mt-12 gap-4'>
-								{doughnutContent(t('loc:Premium vs. Basic salóny'), dashboardData.graphData.premiumVsBasic)}
+								{doughnutContent(t('loc:Publikované salóny - Premium vs. Basic'), dashboardData.graphData.premiumVsBasic)}
 								{doughnutContent(t('loc:Stav salónov'), dashboardData.graphData.salonStates, true)}
 							</Row>
 							{/* line graphs */}

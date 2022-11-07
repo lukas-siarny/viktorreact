@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useCallback, useRef } from 'react'
+import React, { FC, useEffect, useState, useRef, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
@@ -16,14 +16,14 @@ import {
 	PERMISSION,
 	CALENDAR_EVENT_TYPE_FILTER,
 	FORM,
-	CALENDAR_COMMON_SETTINGS
+	CALENDAR_COMMON_SETTINGS,
+	ACCOUNT_STATE
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
 // reducers
 import { getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
-import { RootState } from '../../reducers'
 import { getEmployees, IEmployeesPayload } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 
@@ -35,6 +35,7 @@ import CalendarContent, { CalendarApiRefs } from './components/layout/Content'
 
 // types
 import { ICalendarBreakForm, ICalendarFilter, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm, SalonSubPageProps } from '../../types/interfaces'
+import { RootState } from '../../reducers'
 
 const getCategoryIDs = (data: IServicesPayload['options']) => {
 	return data?.map((service) => service.value) as string[]
@@ -62,12 +63,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const reservations = useSelector((state: RootState) => state.calendar.reservations)
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar.shiftsTimeOffs)
 
-	const isSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
+	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
 
 	const calendarApiRefs = useRef<CalendarApiRefs>(null)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
-
 	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
@@ -112,7 +112,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		;(async () => {
 			fetchEvents({ date: query.date, employeeIDs: query?.employeeIDs, categoryIDs: query?.categoryIDs, view: query.view, eventType: query.eventType })
 
-			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+			const employeesData = await dispatch(getEmployees({ salonID, accountState: ACCOUNT_STATE.PAIRED, page: 1, limit: 100 }))
 			const servicesData = await dispatch(getServices({ salonID }, true))
 
 			setQuery({
@@ -135,9 +135,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			fetchEvents({ date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs, view: query.view, eventType: query.eventType })
-			// NOTE: ak dotahujeme nove eventy, chceme opatovne dotahovat aj aktualnych zamestnancov a sluzby?
-			dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
-			dispatch(getServices({ salonID }, true))
 		}
 	}, [fetchEvents, clearAllEvents, dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs])
 
@@ -157,7 +154,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		const timeout = setTimeout(() => calendarApiRefs?.current?.[query.view as CALENDAR_VIEW]?.updateSize(), 300)
 		return () => clearTimeout(timeout)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [isSiderCollapsed])
+	}, [isMainLayoutSiderCollapsed])
 
 	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate

@@ -8,7 +8,7 @@ import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import Tooltip from 'antd/es/tooltip'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, STRINGS } from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
@@ -117,7 +117,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					},
 					{
 						key: 'shift',
-						label: t('loc:Smenu'),
+						label: t('loc:Zmenu'),
 						icon: <ShiftIcon />,
 						className: itemClassName,
 						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
@@ -222,7 +222,7 @@ const CalendarHeader: FC<Props> = (props) => {
 						htmlType={'button'}
 						className={'noti-btn'}
 					>
-						{t('loc:Pridať novú')}
+						{isSmallerDevice ? STRINGS(t).addRecord('') : STRINGS(t).addRecord(t('loc:novú'))}
 					</Button>
 				</Dropdown>
 			</div>

@@ -28,7 +28,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<div className={'flex w-full justify-between items-start gap-1'}>
-				<h2 className={'text-base m-0'}>{t('loc:Nová smena')}</h2>
+				<h2 className={'text-base m-0'}>{t('loc:Nová zmena')}</h2>
 				<Button className='p-0 border-none shadow-none' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
 					<CloseIcon style={{ width: 16, height: 16 }} />
 				</Button>

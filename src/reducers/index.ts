@@ -160,7 +160,7 @@ const rootReducer = combineReducers({
 	settings: persistReducer(
 		{
 			key: REDUCER_KEYS.SETTINGS,
-			storage: storageLocal
+			storage: storageSession
 		},
 		settingsReducer
 	)

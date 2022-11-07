@@ -53,7 +53,7 @@ context('User', () => {
 		cy.visit(`/users/${userID}`)
 		cy.setInputValue(FORM.USER_ACCOUNT, 'firstName', user.firstName, false, true)
 		cy.setInputValue(FORM.USER_ACCOUNT, 'lastName', user.lastName, false, true)
-		cy.get('form').submit()
+		cy.get(`#${FORM.USER_ACCOUNT}-form`).submit()
 		cy.wait('@updateUser').then((interception: any) => {
 			// check status code of login request
 			expect(interception.response.statusCode).to.equal(200)

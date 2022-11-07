@@ -5,7 +5,7 @@ import Layout from 'antd/lib/layout/layout'
 import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { debounce, isEmpty } from 'lodash'
-import { change, initialize } from 'redux-form'
+import { initialize } from 'redux-form'
 
 // utils
 import {
@@ -225,7 +225,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				...query,
 				eventType: newEventType
 			})
-			dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
 		}
 	}
 

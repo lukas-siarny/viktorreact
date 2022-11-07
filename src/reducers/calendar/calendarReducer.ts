@@ -60,7 +60,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				reservations: {
-					...state.events,
+					...state.reservations,
 					isLoading: true
 				}
 			}
@@ -68,7 +68,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				reservations: {
-					...initState.events,
+					...initState.reservations,
 					isFailure: true
 				}
 			}
@@ -76,7 +76,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				reservations: {
-					...initState.events,
+					...initState.reservations,
 					data: action.payload.data
 				}
 			}
@@ -84,7 +84,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				reservations: {
-					...initState.events,
+					...initState.reservations,
 					data: null
 				}
 			}
@@ -93,7 +93,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				shiftsTimeOffs: {
-					...state.events,
+					...state.shiftsTimeOffs,
 					isLoading: true
 				}
 			}
@@ -101,7 +101,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				shiftsTimeOffs: {
-					...initState.events,
+					...initState.shiftsTimeOffs,
 					isFailure: true
 				}
 			}
@@ -109,7 +109,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				shiftsTimeOffs: {
-					...initState.events,
+					...initState.shiftsTimeOffs,
 					data: action.payload.data
 				}
 			}
@@ -117,7 +117,7 @@ export default (state = initState, action: ICalendarActions) => {
 			return {
 				...state,
 				reservations: {
-					...initState.events,
+					...initState.shiftsTimeOffs,
 					data: null
 				}
 			}

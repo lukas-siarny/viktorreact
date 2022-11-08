@@ -120,8 +120,8 @@ const CalendarFilter = (props: Props) => {
 				{eventType !== CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF && (
 					<Panel key={PANEL_KEY.CATEGORIES} header={t('loc:Služby')} className={'nc-collapse-panel'}>
 						<Spin spinning={services?.isLoading && !firstLoadDone}>
-							{services?.options?.length ? (
-								<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'categoryIDs'} options={services?.options} size={'small'} rounded />
+							{services?.categoriesOptions?.length ? (
+								<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'categoryIDs'} options={services?.categoriesOptions} size={'small'} rounded />
 							) : (
 								<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
 									<ServicesIcon />

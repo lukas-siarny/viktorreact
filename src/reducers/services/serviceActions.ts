@@ -55,6 +55,7 @@ export interface IGetServiceRootCategoryQueryParams {
 export interface IServicesPayload extends ISearchableWithoutPagination<Paths.GetApiB2BAdminServices.Responses.$200> {
 	tableData: ServicesTableData[] | undefined
 	options: ISelectOptionItem[]
+	categoriesOptions: ISelectOptionItem[]
 }
 
 export interface IServiceRootCategoryPayload {
@@ -62,7 +63,7 @@ export interface IServiceRootCategoryPayload {
 }
 
 export const getServices =
-	(queryParams: IGetServicesQueryParams, optionsWithCategoryIdAsValue = false): ThunkResult<Promise<IServicesPayload>> =>
+	(queryParams: IGetServicesQueryParams): ThunkResult<Promise<IServicesPayload>> =>
 	async (dispatch, getState) => {
 		let payload = {} as IServicesPayload
 		const state = getState()
@@ -112,22 +113,27 @@ export const getServices =
 			})
 
 			const servicesOptions: ISelectOptionItem[] = []
+			const categoriesOptions: ISelectOptionItem[] = []
 
 			data.groupedServicesByCategory.forEach((firstCateogry) =>
-				firstCateogry?.category?.children.forEach((secondCategory) =>
+				firstCateogry?.category?.children.forEach((secondCategory) => {
+					if (secondCategory?.category) {
+						categoriesOptions.push({
+							key: secondCategory.category.id,
+							label: secondCategory.category.name || secondCategory.category.id,
+							value: secondCategory.category.id
+						})
+					}
 					secondCategory.category?.children.forEach((service) => {
-						servicesOptions.push(
-							optionsWithCategoryIdAsValue
-								? { key: service.category.id, label: service.category.name || service.category.id, value: service.category.id }
-								: { key: service.service.id, label: service.category.name || service.category.id, value: service.service.id }
-						)
+						servicesOptions.push({ key: service.service.id, label: service.category.name || service.category.id, value: service.service.id })
 					})
-				)
+				})
 			)
 			payload = {
 				data,
 				tableData,
-				options: servicesOptions
+				options: servicesOptions,
+				categoriesOptions
 			}
 
 			dispatch({ type: SERVICES.SERVICES_LOAD_DONE, payload })

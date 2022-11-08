@@ -9,6 +9,7 @@ export const initState = {
 		data: null,
 		tableData: undefined,
 		options: [],
+		categoriesOptions: [],
 		isLoading: false,
 		isFailure: false
 	} as IServicesPayload & ILoadingAndFailure,
@@ -51,7 +52,8 @@ export default (state = initState, action: IServiceActions) => {
 					...initState.services,
 					data: action.payload.data,
 					tableData: action.payload.tableData,
-					options: action.payload.options
+					options: action.payload.options,
+					categoriesOptions: action.payload.categoriesOptions
 				}
 			}
 		// Service

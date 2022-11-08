@@ -78,23 +78,39 @@ const ReservationForm: FC<Props> = (props) => {
 				})
 				console.log('servics', data.groupedServicesByCategory)
 				// TODO: filter na cekovanie ci je cmplete salon
-				const optData = map(data.groupedServicesByCategory, (industry) => {
-					return {
-						label: industry.category?.name,
-						key: industry.category?.id,
-						children: flatten(
-							map(industry.category?.children, (opt) =>
-								map(opt.category?.children, (service) => {
-									// TODO: is complete spravit
+				// const optData = map(data.groupedServicesByCategory, (industry) => {
+				// 	return {
+				// 		label: industry.category?.name,
+				// 		key: industry.category?.id,
+				// 		children: flatten(
+				// 			map(industry.category?.children, (opt) =>
+				// 				map(opt.category?.children, (service) => {
+				// 					// TODO: is complete spravit
+				// 					return {
+				// 						label: service.category.name,
+				// 						key: service.category.id
+				// 					}
+				// 				})
+				// 			)
+				// 		)
+				// 	}
+				// })
+				const optData = flatten(
+					map(data.groupedServicesByCategory, (industry) =>
+						map(industry.category?.children, (category) => {
+							return {
+								label: category?.category?.name,
+								key: category?.category?.id,
+								children: map(category.category?.children, (item) => {
 									return {
-										label: service.category.name,
-										key: service.category.id
+										label: item.category.name,
+										key: item.category.id
 									}
 								})
-							)
-						)
-					}
-				})
+							}
+						})
+					)
+				)
 				console.log('optData', optData)
 				return { pagination: null, data: optData }
 			} catch (e) {

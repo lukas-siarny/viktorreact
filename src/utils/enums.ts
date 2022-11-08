@@ -653,3 +653,10 @@ export enum CALENDAR_SET_NEW_DATE {
 	FIND_START = 'FIND_START',
 	DEFAULT = 'DEFAULT'
 }
+
+export enum REPEAT_ON {
+	// eslint-disable-next-line @typescript-eslint/no-shadow
+	DAY = 'DAY',
+	WEEK = 'WEEK',
+	MONTH = 'MONTH'
+}

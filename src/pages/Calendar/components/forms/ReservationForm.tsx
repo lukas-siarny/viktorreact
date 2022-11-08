@@ -197,7 +197,6 @@ const ReservationForm: FC<Props> = (props) => {
 								showSearch
 								labelInValue
 								required
-								allowClear
 								onSearch={searchCustomers}
 								actions={[
 									{

@@ -104,8 +104,8 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 						dropdownAlign={{ points: ['tr', 'br'] }}
 						required
 					/>
-					<Field name={'allDay'} label={t('loc:Celý deň')} component={SwitchField} />
-					<Field name={'recurring'} component={SwitchField} label={t('loc:Opakovať')} />
+					<Field name={'allDay'} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
+					<Field name={'recurring'} className={'pb-0'} component={SwitchField} label={t('loc:Opakovať')} />
 					{/* // TODO: opakovat v ... checkboxy? */}
 					{formValues?.recurring && (
 						<Field

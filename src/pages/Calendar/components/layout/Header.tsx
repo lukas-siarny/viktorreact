@@ -115,6 +115,14 @@ const CalendarHeader: FC<Props> = (props) => {
 
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
+	const initEventForm = (eventForm: FORM) => {
+		const initData = {
+			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS)))
+		}
+		dispatch(initialize(eventForm, initData))
+	}
+
 	const addMenu = useMemo(() => {
 		const itemClassName = 'p-2 font-medium min-w-0'
 		return (
@@ -129,11 +137,7 @@ const CalendarHeader: FC<Props> = (props) => {
 						icon: <ServicesIcon />,
 						className: itemClassName,
 						onClick: () => {
-							const initData = {
-								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-								timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS)))
-							}
-							dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+							initEventForm(FORM.CALENDAR_RESERVATION_FORM)
 							setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
 						}
 					},
@@ -142,7 +146,10 @@ const CalendarHeader: FC<Props> = (props) => {
 						label: t('loc:Smenu'),
 						icon: <ShiftIcon />,
 						className: itemClassName,
-						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+						onClick: () => {
+							initEventForm(FORM.CALENDAR_SHIFT_FORM)
+							setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+						}
 					},
 					{
 						key: 'absence',
@@ -156,12 +163,15 @@ const CalendarHeader: FC<Props> = (props) => {
 						label: t('loc:Prestávku'),
 						icon: <BreakIcon />,
 						className: itemClassName,
-						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+						onClick: () => {
+							initEventForm(FORM.CALENDAR_BREAK_FORM)
+							setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+						}
 					}
 				]}
 			/>
 		)
-	}, [t, setSiderEventManagement])
+	}, [t, initEventForm, setSiderEventManagement])
 
 	const datePicker = useMemo(() => {
 		return (

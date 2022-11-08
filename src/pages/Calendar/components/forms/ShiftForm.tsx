@@ -11,7 +11,7 @@ import validateShiftForm from './validateShiftForm'
 
 // utils
 import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, DAY, FORM, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, DAY, FORM, REPEAT_ON, STRINGS } from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
 // types
@@ -79,18 +79,27 @@ const CalendarShiftForm: FC<Props> = (props) => {
 	]
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
-		const { color, value } = option || {}
-
-		return (
-			<div className={cx('nc-checkbox-group-checkbox flex', { checked })}>
-				<input type='checkbox' className='checkbox-input' value={value} checked={checked} />
-				<div className={'checker'} style={{ borderColor: color, backgroundColor: checked ? color : undefined }}>
-					<span className={'checkbox-focus'} style={{ boxShadow: `0px 0px 4px 2px ${color || '#000'}`, border: `1px solid ${color}` }} />
-				</div>
-				{option?.label}
-			</div>
-		)
+		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
 	}
+
+	// TODO: syncnut s BE
+	const everyOptions = [
+		{
+			key: REPEAT_ON.DAY,
+			label: t('loc:Deň')
+		},
+		{
+			key: REPEAT_ON.WEEK,
+			label: t('loc:Týždeň')
+		},
+		{
+			key: REPEAT_ON.MONTH,
+			label: t('loc:Mesiac')
+		}
+	]
+	// TODO: syncnut s BE
+	const endsOptions = []
+
 	const recurringFields = formValues?.recurring && (
 		<>
 			<Field
@@ -100,8 +109,8 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				label={t('loc:Opakovať ďalej')}
 				options={options}
 				size={'small'}
-				hideChecker
 				horizontal
+				hideChecker
 				optionRender={checkboxOptionRender}
 			/>
 
@@ -114,7 +123,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				allowInfinityScroll
 				showSearch
 				required
-				optins={[]} // TODO: syncnut s BE
+				options={everyOptions}
 				className={'pb-0'}
 				labelInValue
 			/>
@@ -128,7 +137,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				allowInfinityScroll
 				showSearch
 				required
-				optins={[]} // TODO: syncnut s BE
+				options={[]} // TODO: syncnut s BE
 				className={'pb-0'}
 				labelInValue
 			/>
@@ -182,7 +191,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} label={t('loc:Opakovať')} component={SwitchField} />
+					<Field name={'recurring'} label={t('loc:Opakovať')} className={'pb-0'} component={SwitchField} />
 					{recurringFields}
 				</Form>
 			</div>

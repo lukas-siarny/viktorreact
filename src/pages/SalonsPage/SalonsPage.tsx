@@ -324,9 +324,17 @@ const SalonsPage = () => {
 				key: 'categories',
 				sorter: false,
 				render: (value: any[]) => {
+					const fallback = '-'
+
 					if (value?.length > 0) {
 						const industriesContent: any[] = value.map((category: any) => {
 							const industry = industries[category.id]
+							if (!industry) {
+								// eslint-disable-next-line no-console
+								console.error('Missingy industry with ID: ', category.id)
+								return fallback
+							}
+
 							return (
 								<Tooltip title={industry.name}>
 									<Image src={industry.image} loading='lazy' width={32} height={32} className='pr-0-5 pb-0-5 rounded' alt={industry.name} preview={false} />

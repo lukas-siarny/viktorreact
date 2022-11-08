@@ -367,7 +367,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceAreaWidth={200}
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
-				initialDate={selectedDate}
+				initialDate={/* selectedDate */ '2022-11-07'}
 				weekends={true}
 				editable
 				selectable

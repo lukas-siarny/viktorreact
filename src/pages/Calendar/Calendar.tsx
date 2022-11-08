@@ -8,16 +8,7 @@ import { debounce, isEmpty } from 'lodash'
 import { initialize } from 'redux-form'
 
 // utils
-import {
-	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
-	CALENDAR_DATE_FORMAT,
-	CALENDAR_SET_NEW_DATE,
-	CALENDAR_VIEW,
-	PERMISSION,
-	CALENDAR_EVENT_TYPE_FILTER,
-	FORM,
-	ACCOUNT_STATE
-} from '../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION, CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
@@ -36,7 +27,7 @@ import CalendarContent, { CalendarApiRefs } from './components/layout/Content'
 import { ICalendarBreakForm, ICalendarFilter, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm, SalonSubPageProps } from '../../types/interfaces'
 import { RootState } from '../../reducers'
 
-const getCategoryIDs = (data: IServicesPayload['options']) => {
+const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
 }
 
@@ -111,12 +102,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		;(async () => {
 			fetchEvents({ date: query.date, employeeIDs: query?.employeeIDs, categoryIDs: query?.categoryIDs, view: query.view, eventType: query.eventType })
 
-			const employeesData = await dispatch(getEmployees({ salonID, accountState: ACCOUNT_STATE.PAIRED, page: 1, limit: 100 }))
-			const servicesData = await dispatch(getServices({ salonID }, true))
+			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
+			const servicesData = await dispatch(getServices({ salonID }))
 
 			setQuery({
 				...query,
-				categoryIDs: query?.categoryIDs || getCategoryIDs(servicesData?.options),
+				categoryIDs: query?.categoryIDs || getCategoryIDs(servicesData?.categoriesOptions),
 				employeeIDs: query?.employeeIDs || getEmployeeIDs(employeesData?.options)
 			})
 

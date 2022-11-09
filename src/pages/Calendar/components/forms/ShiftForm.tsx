@@ -1,18 +1,17 @@
-import React, { ChangeEventHandler, FC, useCallback } from 'react'
+import React, { FC, useCallback } from 'react'
 import { change, Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
-import { Button, Form } from 'antd'
+import { Button, Divider, Form } from 'antd'
 import { map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 
 // validate
 import cx from 'classnames'
-import dayjs from 'dayjs'
 import validateShiftForm from './validateShiftForm'
 
 // utils
-import { formatLongQueryString, optionRenderWithAvatar, roundMinutes, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, DAY, DEFAULT_TIME_FORMAT_HOURS, DEFAULT_TIME_FORMAT_MINUTES, ENDS_EVENT, FORM, REPEAT_ON, STRINGS } from '../../../../utils/enums'
+import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENDS_EVENT, ENDS_EVENT_OPTIONS, EVENT_TYPE_OPTIONS, FORM, SHORTCUT_DAYS_OPTIONS, STRINGS } from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
 // types
@@ -69,58 +68,9 @@ const CalendarShiftForm: FC<Props> = (props) => {
 		[salonID]
 	)
 
-	const options = [
-		{ label: t('loc:Po'), value: DAY.MONDAY },
-		{ label: t('loc:Ut'), value: DAY.TUESDAY },
-		{ label: t('loc:St'), value: DAY.WEDNESDAY },
-		{ label: t('loc:Št'), value: DAY.THURSDAY },
-		{ label: t('loc:Pi'), value: DAY.FRIDAY },
-		{ label: t('loc:So'), value: DAY.SATURDAY },
-		{ label: t('loc:Ne'), value: DAY.SUNDAY }
-	]
-
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
 	}
-
-	// TODO: syncnut s BE
-	const everyOptions = [
-		{
-			key: REPEAT_ON.DAY,
-			label: t('loc:Deň')
-		},
-		{
-			key: REPEAT_ON.WEEK,
-			label: t('loc:Týždeň')
-		},
-		{
-			key: REPEAT_ON.MONTH,
-			label: t('loc:Mesiac')
-		}
-	]
-
-	const endsOptions = [
-		{
-			key: ENDS_EVENT.WEEK,
-			label: t('loc:Týždeň')
-		},
-		{
-			key: ENDS_EVENT.MONTH,
-			label: t('loc:Mesiac')
-		},
-		{
-			key: ENDS_EVENT.THREE_MONTHS,
-			label: t('loc:Tri mesiace')
-		},
-		{
-			key: ENDS_EVENT.SIX_MONTHS,
-			label: t('loc:Šesť mesiacov')
-		},
-		{
-			key: ENDS_EVENT.YEAR,
-			label: t('loc:Rok')
-		}
-	]
 
 	const recurringFields = formValues?.recurring && (
 		<>
@@ -129,7 +79,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				component={CheckboxGroupField}
 				name={'repeatOn'}
 				label={t('loc:Opakovať ďalej')}
-				options={options}
+				options={SHORTCUT_DAYS_OPTIONS()}
 				size={'small'}
 				horizontal
 				hideChecker
@@ -157,30 +107,21 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				name={'end'}
 				size={'large'}
 				allowInfinityScroll
-				options={endsOptions}
+				options={ENDS_EVENT_OPTIONS()}
 				className={'pb-0'}
 			/>
 		</>
 	)
 
-	const onChangeAllDay = (checked: any) => {
-		if (checked) {
-			// NOTE: cely den
-			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'timeFrom', '00:00'))
-			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'timeTo', '23:59'))
-		} else {
-			// Ak nie je cely den tak zaokruhlit na najblizsiu 1/4 hodinu
-			dispatch(
-				change(FORM.CALENDAR_SHIFT_FORM, 'timeFrom', roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))))
-			)
-			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'timeTo', null))
-		}
-	}
-
 	const onChangeRecurring = (checked: any) => {
 		if (checked) {
 			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'end', ENDS_EVENT.WEEK))
 		}
+	}
+
+	const onChangeEventType = (event: any) => {
+		console.log('event', event)
+		setCollapsed(event)
 	}
 
 	return (
@@ -192,6 +133,18 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				</Button>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
+				<Field
+					component={SelectField}
+					label={t('loc:Typ eventu')}
+					placeholder={t('loc:Vyberte typ')}
+					name={'eventType'}
+					options={EVENT_TYPE_OPTIONS()}
+					size={'large'}
+					onChange={onChangeEventType}
+					filterOption={false}
+					allowInfinityScroll
+				/>
+				<Divider className={'mb-3 mt-3'} />
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 					<Field
 						component={SelectField}
@@ -232,7 +185,6 @@ const CalendarShiftForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
 					<Field name={'recurring'} onChange={onChangeRecurring} label={t('loc:Opakovať')} className={'pb-0'} component={SwitchField} />
 					{recurringFields}
 				</Form>

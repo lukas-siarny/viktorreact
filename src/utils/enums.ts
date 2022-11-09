@@ -2,6 +2,12 @@ import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { FormatterInput } from '@fullcalendar/react'
+import React from 'react'
+
+import { ReactComponent as ServicesIcon } from '../assets/icons/services-24-icon.svg'
+import { ReactComponent as ShiftIcon } from '../assets/icons/shift-icon.svg'
+import { ReactComponent as AbsenceIcon } from '../assets/icons/absence-icon.svg'
+import { ReactComponent as BreakIcon } from '../assets/icons/break-icon.svg'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'
@@ -661,6 +667,22 @@ export enum REPEAT_ON {
 	MONTH = 'MONTH'
 }
 
+// TODO: syncnut s BE ked sa prida tato moznost do formu
+const REPEAT_OPTIONS = [
+	{
+		key: REPEAT_ON.DAY,
+		label: i18next.t('loc:Deň')
+	},
+	{
+		key: REPEAT_ON.WEEK,
+		label: i18next.t('loc:Týždeň')
+	},
+	{
+		key: REPEAT_ON.MONTH,
+		label: i18next.t('loc:Mesiac')
+	}
+]
+
 export enum ENDS_EVENT {
 	WEEK = 'WEEK',
 	MONTH = 'MONTH',
@@ -668,3 +690,55 @@ export enum ENDS_EVENT {
 	SIX_MONTHS = 'SIX_MONTHS',
 	YEAR = 'YEAR'
 }
+
+export const ENDS_EVENT_OPTIONS = () => [
+	{
+		key: ENDS_EVENT.WEEK,
+		label: i18next.t('loc:Týždeň')
+	},
+	{
+		key: ENDS_EVENT.MONTH,
+		label: i18next.t('loc:Mesiac')
+	},
+	{
+		key: ENDS_EVENT.THREE_MONTHS,
+		label: i18next.t('loc:Tri mesiace')
+	},
+	{
+		key: ENDS_EVENT.SIX_MONTHS,
+		label: i18next.t('loc:Šesť mesiacov')
+	},
+	{
+		key: ENDS_EVENT.YEAR,
+		label: i18next.t('loc:Rok')
+	}
+]
+
+export const EVENT_TYPE_OPTIONS = () => [
+	{
+		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
+		label: i18next.t('loc:Rezervácia')
+	},
+	{
+		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
+		label: i18next.t('loc:Pracovná zmena')
+	},
+	{
+		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF,
+		label: i18next.t('loc:Absencia')
+	},
+	{
+		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
+		label: i18next.t('loc:Prestávka')
+	}
+]
+
+export const SHORTCUT_DAYS_OPTIONS = () => [
+	{ label: i18next.t('loc:Po'), value: DAY.MONDAY },
+	{ label: i18next.t('loc:Ut'), value: DAY.TUESDAY },
+	{ label: i18next.t('loc:St'), value: DAY.WEDNESDAY },
+	{ label: i18next.t('loc:Št'), value: DAY.THURSDAY },
+	{ label: i18next.t('loc:Pi'), value: DAY.FRIDAY },
+	{ label: i18next.t('loc:So'), value: DAY.SATURDAY },
+	{ label: i18next.t('loc:Ne'), value: DAY.SUNDAY }
+]

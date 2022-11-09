@@ -5,7 +5,7 @@ import { PaginationProps } from 'antd'
 import {
 	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENT_TYPE_FILTER, CALENDAR_WEEK_DAYS, ENDS_EVENT
 } from '../utils/enums'
-import { SALON_STATES } from './../utils/enums'
+import { SALON_STATES } from '../utils/enums'
 
 // types
 import { Paths } from './api'
@@ -157,7 +157,6 @@ export interface ICalendarShiftForm {
 	date: string
 	timeFrom: string
 	timeTo: string
-	note?: string
 	recurring?: boolean
 	repeatOn?: any
 	end?: ENDS_EVENT
@@ -169,6 +168,9 @@ export interface ICalendarTimeOffForm {
 	timeFrom: string
 	timeTo: string
 	note?: string
+	recurring?: boolean
+	repeatOn?: any
+	end?: ENDS_EVENT
 }
 
 export interface ICalendarBreakForm {
@@ -177,6 +179,9 @@ export interface ICalendarBreakForm {
 	timeFrom: string
 	timeTo: string
 	note?: string
+	recurring?: boolean
+	repeatOn?: any
+	end?: ENDS_EVENT
 }
 
 export interface ISupportContactForm {

@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Form, Modal } from 'antd'
+import { Button, Divider, Form, Modal } from 'antd'
 import { flatten, map } from 'lodash'
 
 // validate
@@ -14,7 +14,7 @@ import { RootState } from '../../../../reducers'
 // utils
 import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -184,6 +184,10 @@ const ReservationForm: FC<Props> = (props) => {
 		</Modal>
 	)
 
+	const onChangeEventType = (event: any) => {
+		setCollapsed(event)
+	}
+
 	return (
 		<>
 			{modals}
@@ -194,6 +198,18 @@ const ReservationForm: FC<Props> = (props) => {
 				</Button>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
+				<Field
+					component={SelectField}
+					label={t('loc:Typ eventu')}
+					placeholder={t('loc:Vyberte typ')}
+					name={'eventType'}
+					options={EVENT_TYPE_OPTIONS()}
+					size={'large'}
+					onChange={onChangeEventType}
+					filterOption={false}
+					allowInfinityScroll
+				/>
+				<Divider className={'mb-3 mt-3'} />
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 					<Permissions
 						allowed={[SALON_PERMISSION.CUSTOMER_CREATE]}

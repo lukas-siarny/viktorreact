@@ -4,22 +4,22 @@ import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-import { debounce, flatten, includes, map } from 'lodash'
+import { debounce, includes } from 'lodash'
 import { change, initialize } from 'redux-form'
 
 // utils
 import {
-	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
 	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_EVENT_TYPE,
+	CALENDAR_EVENT_TYPE_FILTER,
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
-	PERMISSION,
-	CALENDAR_EVENT_TYPE_FILTER,
+	DAY,
+	ENDS_EVENT,
 	FORM,
 	NOTIFICATION_TYPE,
-	CALENDAR_EVENT_TYPE,
-	ENDS_EVENT,
-	DAY
+	PERMISSION
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { computeUntilDate, getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
@@ -58,7 +58,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		employeeIDs: ArrayParam,
 		categoryIDs: ArrayParam,
-		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF)
+		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
 	})
 
 	const employees = useSelector((state: RootState) => state.employees.employees)

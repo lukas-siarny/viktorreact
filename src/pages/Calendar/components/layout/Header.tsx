@@ -239,24 +239,38 @@ const CalendarHeader: FC<Props> = (props) => {
 				</button>
 			</div>
 			<div className={'nav-right'}>
-				<Dropdown
-					overlay={addMenu}
-					placement='bottomRight'
-					trigger={['click']}
-					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-					overlayClassName={'nc-overlay'}
+				<Button
+					type={'primary'}
+					onClick={(e) => {
+						// Defaultne je rezervacia
+						// TODO: ked sa spravi rezervacia tak nastvit rezervaciu ako default
+						setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+					}}
+					icon={<CreateIcon />}
+					htmlType={'button'}
+					className={'noti-btn'}
 				>
-					<Button
-						type={'primary'}
-						onClick={(e) => e.preventDefault()}
-						onKeyPress={(e) => e.preventDefault()}
-						icon={<CreateIcon />}
-						htmlType={'button'}
-						className={'noti-btn'}
-					>
-						{t('loc:Pridať novú')}
-					</Button>
-				</Dropdown>
+					{t('loc:Pridať novú')}
+				</Button>
+
+				{/* <Dropdown */}
+				{/*	overlay={addMenu} */}
+				{/*	placement='bottomRight' */}
+				{/*	trigger={['click']} */}
+				{/*	getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement} */}
+				{/*	overlayClassName={'nc-overlay'} */}
+				{/* > */}
+				{/*	<Button */}
+				{/*		type={'primary'} */}
+				{/*		onClick={(e) => e.preventDefault()} */}
+				{/*		onKeyPress={(e) => e.preventDefault()} */}
+				{/*		icon={<CreateIcon />} */}
+				{/*		htmlType={'button'} */}
+				{/*		className={'noti-btn'} */}
+				{/*	> */}
+				{/*		{t('loc:Pridať novú')} */}
+				{/*	</Button> */}
+				{/* </Dropdown> */}
 			</div>
 		</Header>
 	)

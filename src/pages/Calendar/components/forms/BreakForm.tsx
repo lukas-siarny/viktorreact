@@ -1,16 +1,28 @@
 import React, { FC, useCallback } from 'react'
-import { Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
-import { Button, Form } from 'antd'
+import { change, Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import { Button, Divider, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { map } from 'lodash'
+import cx from 'classnames'
+import dayjs from 'dayjs'
 
 // validate
-import validateBreakForm from './validateShiftForm'
+import validateBreakForm from './validateBreakForm'
 
 // utils
-import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, FORM, STRINGS } from '../../../../utils/enums'
+import { formatLongQueryString, optionRenderWithAvatar, roundMinutes, showErrorNotification } from '../../../../utils/helper'
+import {
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	DEFAULT_TIME_FORMAT_HOURS,
+	DEFAULT_TIME_FORMAT_MINUTES,
+	ENDS_EVENT,
+	ENDS_EVENT_OPTIONS,
+	EVENT_TYPE_OPTIONS,
+	FORM,
+	SHORTCUT_DAYS_OPTIONS,
+	STRINGS
+} from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
 // types
@@ -28,6 +40,8 @@ import SwitchField from '../../../../atoms/SwitchField'
 
 // redux
 import { RootState } from '../../../../reducers'
+import TextareaField from '../../../../atoms/TextareaField'
+import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
@@ -66,6 +80,75 @@ const CalendarBreakForm: FC<Props> = (props) => {
 		[salonID]
 	)
 
+	const checkboxOptionRender = (option: any, checked?: boolean) => {
+		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
+	}
+
+	const recurringFields = formValues?.recurring && (
+		<>
+			<Field
+				className={'p-0 m-0'}
+				component={CheckboxGroupField}
+				name={'repeatOn'}
+				label={t('loc:Opakovať ďalej')}
+				options={SHORTCUT_DAYS_OPTIONS()}
+				size={'small'}
+				horizontal
+				hideChecker
+				optionRender={checkboxOptionRender}
+			/>
+			{/* // TODO: momentalne sa nebude pouzivat ak pribudne tak odkopmentovat */}
+			{/* <Field */}
+			{/*	component={SelectField} */}
+			{/*	label={t('loc:Každý')} */}
+			{/*	placeholder={t('loc:Vyberte frekvenciu')} */}
+			{/*	name={'every'} */}
+			{/*	size={'large'} */}
+			{/*	allowInfinityScroll */}
+			{/*	showSearch */}
+			{/*	required */}
+			{/*	options={everyOptions} */}
+			{/*	className={'pb-0'} */}
+			{/*	labelInValue */}
+			{/* /> */}
+
+			<Field
+				component={SelectField}
+				label={t('loc:Koniec')}
+				placeholder={t('loc:Vyberte koniec')}
+				name={'end'}
+				size={'large'}
+				allowInfinityScroll
+				options={ENDS_EVENT_OPTIONS()}
+				className={'pb-0'}
+			/>
+		</>
+	)
+
+	const onChangeEventType = (event: any) => {
+		setCollapsed(event)
+	}
+
+	const onChangeAllDay = (checked: any) => {
+		if (checked) {
+			// NOTE: cely den
+			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'timeFrom', '00:00'))
+			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'timeTo', '23:59'))
+		} else {
+			// Ak nie je cely den tak zaokruhlit na najblizsiu 1/4 hodinu
+			dispatch(
+				change(FORM.CALENDAR_BREAK_FORM, 'timeFrom', roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))))
+			)
+			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'timeTo', null))
+		}
+	}
+
+	const onChangeRecurring = (checked: any) => {
+		if (checked) {
+			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'end', ENDS_EVENT.WEEK))
+		}
+	}
+
 	return (
 		<>
 			<div className={'nc-sider-event-management-header justify-between'}>
@@ -75,6 +158,18 @@ const CalendarBreakForm: FC<Props> = (props) => {
 				</Button>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
+				<Field
+					component={SelectField}
+					label={t('loc:Typ eventu')}
+					placeholder={t('loc:Vyberte typ')}
+					name={'eventType'}
+					options={EVENT_TYPE_OPTIONS()}
+					size={'large'}
+					onChange={onChangeEventType}
+					filterOption={false}
+					allowInfinityScroll
+				/>
+				<Divider className={'mb-3 mt-3'} />
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 					<Field
 						component={SelectField}
@@ -110,42 +205,15 @@ const CalendarBreakForm: FC<Props> = (props) => {
 						placeholders={[t('loc:čas od'), t('loc:čas do')]}
 						component={TimeRangeField}
 						required
+						disabled={!!formValues?.allDay} // NOTE: ak je cely den tak sa disable stav pre pre nastavenie casu
 						allowClear
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} component={SwitchField} label={t('loc:Opakovať')} />
-					{/* // TODO: opakovat v ... checkboxy? */}
-					{formValues?.recurring && (
-						<Field
-							component={SelectField}
-							label={t('loc:Každý')}
-							placeholder={t('loc:Vyberte frekvenciu')}
-							name={'every'}
-							size={'large'}
-							allowInfinityScroll
-							showSearch
-							required
-							optins={[]} // TODO: syncnut s BE
-							className={'pb-0'}
-							labelInValue
-						/>
-					)}
-					{formValues?.recurring && (
-						<Field
-							component={SelectField}
-							label={t('loc:Koniec')}
-							placeholder={t('loc:Vyberte koniec')}
-							name={'end'}
-							size={'large'}
-							allowInfinityScroll
-							showSearch
-							required
-							optins={[]} // TODO: syncnut s BE
-							className={'pb-0'}
-							labelInValue
-						/>
-					)}
+					<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
+					<Field name={'recurring'} onChange={onChangeRecurring} className={'pb-0'} component={SwitchField} label={t('loc:Opakovať')} />
+					{recurringFields}
+					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>

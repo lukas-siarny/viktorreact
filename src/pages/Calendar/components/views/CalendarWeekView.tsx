@@ -22,7 +22,7 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 const employees = [
 	{
-		id: '27604557-0508-4f54-babf-9e8ce281d4a7',
+		id: '111_27604557-0508-4f54-babf-9e8ce281d4a7',
 		name: 'lukas.siarny@gmail.com',
 		image: 'https://d1pfrdq2i86yn4.cloudfront.net/employees/default_avatar-thumbnail.png',
 		isTimeOff: true
@@ -343,28 +343,13 @@ const events = [
 ]
 
 const resources3 = [
-	{ id: `emp_1_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[0], isFirstRow: true },
+	{ id: `emp_1_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[0] },
 	{ id: `emp_2_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[1] },
 	{ id: `emp_3_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[2] },
 	{
 		id: `emp_1_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`,
 		day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY),
-		employee: employees[0],
-		isFirstRow: true
-	},
-	{ id: `emp_2_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[1] },
-	{ id: `emp_3_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[2] }
-]
-
-const resources = [
-	{ id: `emp_1_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[0], isFirstRow: true },
-	{ id: `emp_2_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[1] },
-	{ id: `emp_3_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[2] },
-	{
-		id: `emp_1_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY),
-		employee: employees[0],
-		isFirstRow: true
+		employee: employees[0]
 	},
 	{ id: `emp_2_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[1] },
 	{ id: `emp_3_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[2] }
@@ -397,10 +382,8 @@ const resourceAreaColumns = [
 		width: 145,
 		cellContent: (args: any) => {
 			const { resource } = args || {}
-			const { extendedProps, day } = resource || {}
+			const { extendedProps } = resource || {}
 			const employee = extendedProps.employee || {}
-
-			console.log(employee)
 
 			return (
 				<div className={'nc-week-label-resource'}>
@@ -437,8 +420,6 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 	}
 
 	const diff = dayjs(event.end).diff(event.start, 'minutes')
-
-	// console.log(data)
 
 	return (
 		<div
@@ -487,87 +468,10 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 	)
 }
 
-/*
-const resourceLabelContent = (data: any) => {
-	const { resource } = data || {}
-	const { extendedProps, day } = resource || {}
-	const employee = extendedProps.employee || {}
-
-	console.log(data)
-
-	// normal state
-	return (
-		<div className={'nc-week-label-resource'}>
-			<div className={'image'} style={{ backgroundImage: `url("${employee.image}")` }} />
-			<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee.name}</span>
-			{employee.isTimeOff && (
-				<div className={'absence-icon'}>
-					<AbsenceIcon />
-				</div>
-			)}
-		</div>
-	)
-}
-*/
-
-const resourceLabelContent = (data: any) => {
-	const { resource } = data || {}
-	const { extendedProps } = resource || {}
-	const employee = extendedProps.employee || {}
-	const { day, isFirstRow } = extendedProps
-
-	console.log(data)
-
-	const dayName = dayjs(day).format('ddd')
-	const dayNumber = dayjs(day).format('D')
-	const isToday = dayjs().startOf('day').isSame(dayjs(day).startOf('day'))
-
-	// normal state
-	return (
-		<div className={'nc-week-label-resource'}>
-			<div className={'image'} style={{ backgroundImage: `url("${employee.image}")` }} />
-			<span className={'info block text-xs font-normal min-w-0 truncate max-w-full'}>{employee.name}</span>
-			{employee.isTimeOff && (
-				<div className={'absence-icon'}>
-					<AbsenceIcon />
-				</div>
-			)}
-			{isFirstRow && (
-				<div className={cx('nc-week-label-day', { 'is-today': isToday })}>
-					<span>{dayName}</span>
-					{dayNumber}
-				</div>
-			)}
-		</div>
-	)
-}
-
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { date } = data || {}
 
 	return <div className={'nc-week-slot-label'}>{dayjs(date).format('HH:mm')}</div>
-}
-
-const slotLaneContent = () => {
-	return <div className={'nc-week-slot-lane'}>{'slot labe'}</div>
-}
-
-const resourceGroupLabelContent = () => {
-	return (
-		<>
-			<div className={'nc-resource-group-label-bg'} />
-			<div className={'nc-resource-group-label-content'} />
-		</>
-	)
-}
-
-const resourceGroupLaneContent = () => {
-	return (
-		<>
-			<div className={'nc-resource-group-lane-bg'} />
-			<div className={'nc-resource-group-lane-content'} />
-		</>
-	)
 }
 
 interface ICalendarWeekView extends ICalendarView {
@@ -576,8 +480,6 @@ interface ICalendarWeekView extends ICalendarView {
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
 	const { selectedDate, calendarApi, eventType } = props
-
-	const [t] = useTranslation()
 
 	const handleDateClick = (arg: DateClickArg) => {
 		console.log({ arg })
@@ -590,50 +492,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 	const handleEventClick = (info: any) => {
 		const { start, end, resource } = info
 	}
-
-	return (
-		<div className={'nc-calendar-week-wrapper'}>
-			<FullCalendar
-				ref={ref}
-				// plugins
-				plugins={[interactionPlugin, scrollGrid, resourceTimelinePlugin]}
-				// settings
-				schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
-				timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
-				slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-				eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-				scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
-				slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
-				slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
-				height='auto'
-				slotMinWidth={30}
-				eventMinWidth={30}
-				resourceGroupField={'day'}
-				resourceAreaWidth={200}
-				headerToolbar={false}
-				initialView='resourceTimelineDay'
-				initialDate={/* selectedDate */ '2022-11-07'}
-				weekends={true}
-				editable
-				selectable
-				stickyFooterScrollbar={false}
-				nowIndicator
-				// data sources
-				events={events}
-				resources={resources3}
-				// render hooks
-				resourceLabelContent={resourceLabelContent}
-				resourceGroupLabelContent={resourceGroupLabelContent}
-				resourceGroupLaneContent={resourceGroupLaneContent}
-				slotLabelContent={slotLabelContent}
-				eventContent={(args) => renderEventContent(args, eventType)}
-				// handlers
-				select={handleSelect}
-				dateClick={handleDateClick}
-				eventClick={handleEventClick}
-			/>
-		</div>
-	)
 
 	return (
 		<div className={'nc-calendar-week-wrapper'}>
@@ -671,10 +529,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				select={handleSelect}
 				dateClick={handleDateClick}
 				eventClick={handleEventClick}
-				/* eventDrop={() => {
-					console.log('aaaa', calendarApi)
-					calendarApi?.updateSize()
-				}} */
 			/>
 		</div>
 	)

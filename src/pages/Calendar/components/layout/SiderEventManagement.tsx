@@ -18,9 +18,9 @@ type Props = {
 	view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
-	handleSubmitShift: (values?: ICalendarShiftForm) => void
-	handleSubmitTimeOff: (values?: ICalendarTimeOffForm) => void
-	handleSubmitBreak: (values?: ICalendarBreakForm) => void
+	handleSubmitShift: (values: ICalendarShiftForm) => void
+	handleSubmitTimeOff: (values: ICalendarTimeOffForm) => void
+	handleSubmitBreak: (values: ICalendarBreakForm) => void
 }
 
 const SiderEventManagement: FC<Props> = (props) => {

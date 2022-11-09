@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { ArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-import { debounce } from 'lodash'
+import { debounce, flatten, includes, map } from 'lodash'
 import { change, initialize } from 'redux-form'
 
 // utils
@@ -16,10 +16,13 @@ import {
 	PERMISSION,
 	CALENDAR_EVENT_TYPE_FILTER,
 	FORM,
-	NOTIFICATION_TYPE
+	NOTIFICATION_TYPE,
+	CALENDAR_EVENT_TYPE,
+	ENDS_EVENT,
+	DAY
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
+import { computeUntilDate, getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
 // reducers
 import { getCalendarEvents } from '../../reducers/calendar/calendarActions'
@@ -197,16 +200,50 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			console.error(e)
 		}
 	}
+	const handleSubmitShift = async (values: ICalendarShiftForm) => {
+		console.log('values', values)
+		try {
+			// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
+			const repeatEvent = values.recurring
+				? {
+						untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
+						days: {
+							MONDAY: includes(values.repeatOn, DAY.MONDAY),
+							TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
+							WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
+							THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
+							FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
+							SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
+							SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
+						}
+				  }
+				: undefined
+			const reqData = {
+				eventType: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT as CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
+				start: {
+					date: values.date,
+					time: values.timeFrom
+				},
+				end: {
+					date: values.date,
+					time: values.timeTo
+				},
+				employeeID: values.employee.key as string,
+				repeatEvent
+			}
+			await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			// TODO: initnut event a skusit UPDATE / DELETE
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
+	}
 
-	const handleSubmitShift = (values?: ICalendarShiftForm) => {
+	const handleSubmitTimeOff = (values: ICalendarTimeOffForm) => {
 		console.log(values)
 	}
 
-	const handleSubmitTimeOff = (values?: ICalendarTimeOffForm) => {
-		console.log(values)
-	}
-
-	const handleSubmitBreak = (values?: ICalendarBreakForm) => {
+	const handleSubmitBreak = (values: ICalendarBreakForm) => {
 		console.log(values)
 	}
 

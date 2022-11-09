@@ -2,7 +2,9 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENT_TYPE_FILTER } from '../utils/enums'
+import {
+	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENT_TYPE_FILTER, CALENDAR_WEEK_DAYS, ENDS_EVENT
+} from '../utils/enums'
 import { SALON_STATES } from './../utils/enums'
 
 // types
@@ -150,11 +152,32 @@ export interface ICalendarReservationForm {
 	note?: string
 }
 
-export interface ICalendarShiftForm {}
+export interface ICalendarShiftForm {
+	employee: ISelectOptionItem
+	date: string
+	timeFrom: string
+	timeTo: string
+	note?: string
+	recurring?: boolean
+	repeatOn?: any
+	end?: ENDS_EVENT
+}
 
-export interface ICalendarTimeOffForm {}
+export interface ICalendarTimeOffForm {
+	employee: ISelectOptionItem
+	date: string
+	timeFrom: string
+	timeTo: string
+	note?: string
+}
 
-export interface ICalendarBreakForm {}
+export interface ICalendarBreakForm {
+	employee: ISelectOptionItem
+	date: string
+	timeFrom: string
+	timeTo: string
+	note?: string
+}
 
 export interface ISupportContactForm {
 	id: string | null

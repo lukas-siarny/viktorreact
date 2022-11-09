@@ -1,5 +1,5 @@
-import React, { FC, useCallback } from 'react'
-import { Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
+import React, { ChangeEventHandler, FC, useCallback } from 'react'
+import { change, Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { Button, Form } from 'antd'
 import { map } from 'lodash'
 import { useTranslation } from 'react-i18next'
@@ -7,11 +7,12 @@ import { useDispatch, useSelector } from 'react-redux'
 
 // validate
 import cx from 'classnames'
+import dayjs from 'dayjs'
 import validateShiftForm from './validateShiftForm'
 
 // utils
-import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, DAY, FORM, REPEAT_ON, STRINGS } from '../../../../utils/enums'
+import { formatLongQueryString, optionRenderWithAvatar, roundMinutes, showErrorNotification } from '../../../../utils/helper'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, DAY, DEFAULT_TIME_FORMAT_HOURS, DEFAULT_TIME_FORMAT_MINUTES, ENDS_EVENT, FORM, REPEAT_ON, STRINGS } from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
 // types
@@ -69,13 +70,13 @@ const CalendarShiftForm: FC<Props> = (props) => {
 	)
 
 	const options = [
-		{ label: t('loc:Pondelok'), value: DAY.MONDAY },
-		{ label: t('loc:Utorok'), value: DAY.TUESDAY },
-		{ label: t('loc:Streda'), value: DAY.WEDNESDAY },
-		{ label: t('loc:Štvrtok'), value: DAY.THURSDAY },
-		{ label: t('loc:Piatok'), value: DAY.FRIDAY },
-		{ label: t('loc:Sobota'), value: DAY.SATURDAY },
-		{ label: t('loc:Nedeľa'), value: DAY.SUNDAY }
+		{ label: t('loc:Po'), value: DAY.MONDAY },
+		{ label: t('loc:Ut'), value: DAY.TUESDAY },
+		{ label: t('loc:St'), value: DAY.WEDNESDAY },
+		{ label: t('loc:Št'), value: DAY.THURSDAY },
+		{ label: t('loc:Pi'), value: DAY.FRIDAY },
+		{ label: t('loc:So'), value: DAY.SATURDAY },
+		{ label: t('loc:Ne'), value: DAY.SUNDAY }
 	]
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
@@ -97,8 +98,29 @@ const CalendarShiftForm: FC<Props> = (props) => {
 			label: t('loc:Mesiac')
 		}
 	]
-	// TODO: syncnut s BE
-	const endsOptions = []
+
+	const endsOptions = [
+		{
+			key: ENDS_EVENT.WEEK,
+			label: t('loc:Týždeň')
+		},
+		{
+			key: ENDS_EVENT.MONTH,
+			label: t('loc:Mesiac')
+		},
+		{
+			key: ENDS_EVENT.THREE_MONTHS,
+			label: t('loc:Tri mesiace')
+		},
+		{
+			key: ENDS_EVENT.SIX_MONTHS,
+			label: t('loc:Šesť mesiacov')
+		},
+		{
+			key: ENDS_EVENT.YEAR,
+			label: t('loc:Rok')
+		}
+	]
 
 	const recurringFields = formValues?.recurring && (
 		<>
@@ -113,20 +135,20 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				hideChecker
 				optionRender={checkboxOptionRender}
 			/>
-
-			<Field
-				component={SelectField}
-				label={t('loc:Každý')}
-				placeholder={t('loc:Vyberte frekvenciu')}
-				name={'every'}
-				size={'large'}
-				allowInfinityScroll
-				showSearch
-				required
-				options={everyOptions}
-				className={'pb-0'}
-				labelInValue
-			/>
+			{/* // TODO: momentalne sa nebude pouzivat ak pribudne tak odkopmentovat */}
+			{/* <Field */}
+			{/*	component={SelectField} */}
+			{/*	label={t('loc:Každý')} */}
+			{/*	placeholder={t('loc:Vyberte frekvenciu')} */}
+			{/*	name={'every'} */}
+			{/*	size={'large'} */}
+			{/*	allowInfinityScroll */}
+			{/*	showSearch */}
+			{/*	required */}
+			{/*	options={everyOptions} */}
+			{/*	className={'pb-0'} */}
+			{/*	labelInValue */}
+			{/* /> */}
 
 			<Field
 				component={SelectField}
@@ -135,14 +157,32 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				name={'end'}
 				size={'large'}
 				allowInfinityScroll
-				showSearch
-				required
-				options={[]} // TODO: syncnut s BE
+				options={endsOptions}
 				className={'pb-0'}
-				labelInValue
 			/>
 		</>
 	)
+
+	const onChangeAllDay = (checked: any) => {
+		if (checked) {
+			// NOTE: cely den
+			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'timeFrom', '00:00'))
+			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'timeTo', '23:59'))
+		} else {
+			// Ak nie je cely den tak zaokruhlit na najblizsiu 1/4 hodinu
+			dispatch(
+				change(FORM.CALENDAR_SHIFT_FORM, 'timeFrom', roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))))
+			)
+			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'timeTo', null))
+		}
+	}
+
+	const onChangeRecurring = (checked: any) => {
+		if (checked) {
+			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'end', ENDS_EVENT.WEEK))
+		}
+	}
+
 	return (
 		<>
 			<div className={'nc-sider-event-management-header justify-between'}>
@@ -187,11 +227,13 @@ const CalendarShiftForm: FC<Props> = (props) => {
 						placeholders={[t('loc:čas od'), t('loc:čas do')]}
 						component={TimeRangeField}
 						required
+						disabled={!!formValues?.allDay} // NOTE: ak je cely den tak sa disable stav pre pre nastavenie casu
 						allowClear
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} label={t('loc:Opakovať')} className={'pb-0'} component={SwitchField} />
+					<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
+					<Field name={'recurring'} onChange={onChangeRecurring} label={t('loc:Opakovať')} className={'pb-0'} component={SwitchField} />
 					{recurringFields}
 				</Form>
 			</div>

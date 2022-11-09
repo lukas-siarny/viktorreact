@@ -61,7 +61,9 @@ import {
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION,
 	SALON_CREATE_TYPES,
-	DEFAULT_DATE_TIME_OPTIONS
+	DEFAULT_DATE_TIME_OPTIONS,
+	ENDS_EVENT,
+	DEFAULT_DATE_INIT_FORMAT
 } from './enums'
 import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption, CountriesData, IAuthUserPayload, IEmployeePayload } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -1064,16 +1066,34 @@ export const getLastDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => 
 export const getLasttDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('month')
 
 export const roundMinutes = (currentMinutes: number, currentHours: number, mod = 15): string => {
+	const formattedCurrentHours = currentHours < 10 ? `0${currentHours}` : currentHours
 	const diff = currentMinutes % mod
 	if (diff === 0) {
-		return `${currentHours}:${currentMinutes}`
+		return `${formattedCurrentHours}:${currentMinutes}`
 	}
 
 	const nearestValue = currentMinutes + mod - diff
 	// TODO: prechod z 23:46 na 00:00 nie na 24
 	if (nearestValue % 60 < 15) {
-		return `${currentHours + 1}:00`
+		return `${currentHours + 1 < 10 ? `0${currentHours + 1}` : currentHours + 1}:00`
 	}
 
-	return `${currentHours}:${nearestValue}`
+	return `${formattedCurrentHours}:${nearestValue}`
+}
+
+export const computeUntilDate = (endsEvent: ENDS_EVENT, actualDate: string) => {
+	switch (endsEvent) {
+		case ENDS_EVENT.WEEK:
+			return dayjs(actualDate).add(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)
+		case ENDS_EVENT.MONTH:
+			return dayjs(actualDate).add(1, 'month').format(DEFAULT_DATE_INIT_FORMAT)
+		case ENDS_EVENT.THREE_MONTHS:
+			return dayjs(actualDate).add(3, 'month').format(DEFAULT_DATE_INIT_FORMAT)
+		case ENDS_EVENT.SIX_MONTHS:
+			return dayjs(actualDate).add(6, 'month').format(DEFAULT_DATE_INIT_FORMAT)
+		case ENDS_EVENT.YEAR:
+			return dayjs(actualDate).add(1, 'year').format(DEFAULT_DATE_INIT_FORMAT)
+		default:
+			return ''
+	}
 }

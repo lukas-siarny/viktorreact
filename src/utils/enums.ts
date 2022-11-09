@@ -660,3 +660,11 @@ export enum REPEAT_ON {
 	WEEK = 'WEEK',
 	MONTH = 'MONTH'
 }
+
+export enum ENDS_EVENT {
+	WEEK = 'WEEK',
+	MONTH = 'MONTH',
+	THREE_MONTHS = 'THREE_MONTHS',
+	SIX_MONTHS = 'SIX_MONTHS',
+	YEAR = 'YEAR'
+}

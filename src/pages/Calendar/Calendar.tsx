@@ -240,6 +240,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			<CalendarHeader
 				selectedDate={query.date}
 				calendarView={query.view as CALENDAR_VIEW}
+				siderFilterCollapsed={siderFilterCollapsed}
 				setCalendarView={setNewCalendarView}
 				setSelectedDate={setNewSelectedDate}
 				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}

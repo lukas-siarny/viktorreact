@@ -35,7 +35,8 @@ const CheckboxGroupField = (props: Props) => {
 		size = 'medium',
 		rounded,
 		hideChecker,
-		optionRender
+		optionRender,
+		disabled
 	} = props
 
 	const checkboxes = map(options, (option: any) => {
@@ -43,13 +44,13 @@ const CheckboxGroupField = (props: Props) => {
 
 		if (typeof option === 'string') {
 			return (
-				<Checkbox key={option} value={option} className={cx({ 'inline-flex': horizontal })}>
+				<Checkbox key={option} disabled={disabled} value={option} className={cx({ 'inline-flex': horizontal })}>
 					{optionRender ? optionRender(option, isChecked) : option}
 				</Checkbox>
 			)
 		}
 		return (
-			<Checkbox disabled={option.disabled} key={`${option.value}`} value={option.value} className={cx({ 'inline-flex': horizontal })}>
+			<Checkbox disabled={option.disabled || disabled} key={`${option.value}`} value={option.value} className={cx({ 'inline-flex': horizontal })}>
 				{optionRender ? optionRender(option, isChecked) : option.label}
 			</Checkbox>
 		)
@@ -73,6 +74,7 @@ const CheckboxGroupField = (props: Props) => {
 				value={input.value || []}
 				onChange={input.onChange}
 				defaultValue={defaultValue}
+				disabled={disabled}
 				style={{
 					...checkboxGroupStyles,
 					flexDirection: horizontal ? 'row' : 'column'

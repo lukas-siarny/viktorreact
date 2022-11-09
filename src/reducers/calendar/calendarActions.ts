@@ -98,7 +98,6 @@ const getTimeFromTo = (selectedDate: string, view: CALENDAR_VIEW) => {
 				dateFrom: getFirstDayOfWeek(selectedDate).toISOString(),
 				dateTo: getLastDayOfWeek(selectedDate).toISOString()
 			}
-			break
 		case CALENDAR_VIEW.DAY:
 		default:
 			return {
@@ -153,7 +152,7 @@ export const getCalendarReservations =
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK],
 				...getTimeFromTo(queryParams.date, view)
 			}
 

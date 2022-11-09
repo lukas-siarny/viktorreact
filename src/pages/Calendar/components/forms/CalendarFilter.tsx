@@ -117,28 +117,34 @@ const CalendarFilter = (props: Props) => {
 						/>
 					</Spin>
 				</Panel>
-				{eventType !== CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF && (
-					<Panel key={PANEL_KEY.CATEGORIES} header={t('loc:Služby')} className={'nc-collapse-panel'}>
-						<Spin spinning={services?.isLoading && !firstLoadDone}>
-							{services?.categoriesOptions?.length ? (
-								<Field className={'p-0 m-0'} component={CheckboxGroupField} name={'categoryIDs'} options={services?.categoriesOptions} size={'small'} rounded />
-							) : (
-								<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
-									<ServicesIcon />
-									{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
-									<Button
-										type={'primary'}
-										htmlType={'button'}
-										className={'noti-btn'}
-										onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
-									>
-										{t('loc:Priradiť služby')}
-									</Button>
-								</div>
-							)}
-						</Spin>
-					</Panel>
-				)}
+				<Panel key={PANEL_KEY.CATEGORIES} header={t('loc:Služby')} className={'nc-collapse-panel'}>
+					<Spin spinning={services?.isLoading && !firstLoadDone}>
+						{services?.categoriesOptions?.length ? (
+							<Field
+								className={'p-0 m-0'}
+								component={CheckboxGroupField}
+								name={'categoryIDs'}
+								options={services?.categoriesOptions}
+								size={'small'}
+								rounded
+								disabled={eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF}
+							/>
+						) : (
+							<div className={'w-full flex flex-col justify-center items-center gap-2 text-center mt-4'}>
+								<ServicesIcon />
+								{t('loc:V salóne zatiaľ nemáte priradené žiadne služby')}
+								<Button
+									type={'primary'}
+									htmlType={'button'}
+									className={'noti-btn'}
+									onClick={() => history.push(`${parentPath}${t('paths:industries-and-services')}`)}
+								>
+									{t('loc:Priradiť služby')}
+								</Button>
+							</div>
+						)}
+					</Spin>
+				</Panel>
 			</Collapse>
 		</Form>
 	)

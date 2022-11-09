@@ -78,6 +78,7 @@ const SwitchViewButton: FC<{ label: string; isSmallerDevice: boolean; className:
 type Props = {
 	selectedDate: string
 	calendarView: CALENDAR_VIEW
+	siderFilterCollapsed: boolean
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
 	setSiderEventManagement: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
@@ -87,7 +88,7 @@ type Props = {
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagement, selectedDate, setSelectedDate } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagement, selectedDate, setSelectedDate, siderFilterCollapsed } = props
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -160,7 +161,7 @@ const CalendarHeader: FC<Props> = (props) => {
 		<Header className={'nc-header'} id={'noti-calendar-header'}>
 			<div className={'nav-left'}>
 				<button type={'button'} className={'nc-button light'} onClick={() => setSiderFilterCollapsed()}>
-					<NavIcon />
+					<NavIcon style={{ transform: siderFilterCollapsed ? 'rotate(180deg)' : undefined }} />
 				</button>
 				<div className={'nc-button-group'}>
 					<SwitchViewButton

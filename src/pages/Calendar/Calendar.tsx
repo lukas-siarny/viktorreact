@@ -201,7 +201,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 	const handleSubmitShift = async (values: ICalendarShiftForm) => {
-		console.log('values', values)
 		try {
 			// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
 			const repeatEvent = values.recurring
@@ -239,12 +238,82 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const handleSubmitTimeOff = (values: ICalendarTimeOffForm) => {
-		console.log(values)
+	const handleSubmitTimeOff = async (values: ICalendarTimeOffForm) => {
+		try {
+			// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
+			const repeatEvent = values.recurring
+				? {
+						untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
+						days: {
+							MONDAY: includes(values.repeatOn, DAY.MONDAY),
+							TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
+							WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
+							THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
+							FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
+							SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
+							SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
+						}
+				  }
+				: undefined
+			const reqData = {
+				eventType: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF as CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+				start: {
+					date: values.date,
+					time: values.timeFrom
+				},
+				end: {
+					date: values.date,
+					time: values.timeTo
+				},
+				note: values.note,
+				employeeID: values.employee.key as string,
+				repeatEvent
+			}
+			await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			// TODO: initnut event a skusit UPDATE / DELETE
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
 	}
 
-	const handleSubmitBreak = (values: ICalendarBreakForm) => {
-		console.log(values)
+	const handleSubmitBreak = async (values: ICalendarBreakForm) => {
+		try {
+			// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
+			const repeatEvent = values.recurring
+				? {
+						untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
+						days: {
+							MONDAY: includes(values.repeatOn, DAY.MONDAY),
+							TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
+							WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
+							THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
+							FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
+							SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
+							SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
+						}
+				  }
+				: undefined
+			const reqData = {
+				eventType: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK as CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
+				start: {
+					date: values.date,
+					time: values.timeFrom
+				},
+				end: {
+					date: values.date,
+					time: values.timeTo
+				},
+				note: values.note,
+				employeeID: values.employee.key as string,
+				repeatEvent
+			}
+			await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			// TODO: initnut event a skusit UPDATE / DELETE
+		} catch (e) {
+			// eslint-disable-next-line no-console
+			console.error(e)
+		}
 	}
 
 	return (

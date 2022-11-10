@@ -5,23 +5,23 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 
 // atoms
-import SelectField from '../../atoms/SelectField'
+import SelectField from '../../../atoms/SelectField'
 
 // interfaces
-import { IEditUserRoleForm } from '../../types/interfaces'
+import { IEditUserRoleForm } from '../../../types/interfaces'
 
 // utils
-import { FORM, PERMISSION, STRINGS } from '../../utils/enums'
-import Permissions from '../../utils/Permissions'
+import { FORM, PERMISSION, STRINGS } from '../../../utils/enums'
+import Permissions from '../../../utils/Permissions'
 
 // validate
 import validateEditUserRoleForm from './validateEditUserRoleForm'
 
 // assets
-import { ReactComponent as KeyIcon } from '../../assets/icons/key.svg'
+import { ReactComponent as KeyIcon } from '../../../assets/icons/key.svg'
 
 // reducers
-import { RootState } from '../../reducers'
+import { RootState } from '../../../reducers'
 
 type ComponentProps = {}
 

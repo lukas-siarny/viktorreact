@@ -30,28 +30,29 @@ import { ICalendarTimeOffForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-import SelectField from '../../../../atoms/SelectField'
 import { ReactComponent as ProfileIcon } from '../../../../assets/icons/profile-icon.svg'
-import DateField from '../../../../atoms/DateField'
 
 // atoms / components
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SwitchField from '../../../../atoms/SwitchField'
+import DateField from '../../../../atoms/DateField'
+import SelectField from '../../../../atoms/SelectField'
+import TextareaField from '../../../../atoms/TextareaField'
+import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
-import TextareaField from '../../../../atoms/TextareaField'
-import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	salonID: string
+	onChangeEventType: (type: any) => any
 }
 
 type Props = InjectedFormProps<ICalendarTimeOffForm, ComponentProps> & ComponentProps
 
 const CalendarTimeOffForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -125,10 +126,6 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 		</>
 	)
 
-	const onChangeEventType = (event: any) => {
-		setCollapsed(event)
-	}
-
 	const onChangeAllDay = (checked: any) => {
 		if (checked) {
 			// NOTE: cely den
@@ -162,19 +159,20 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 				</Button>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
-				<Field
-					component={SelectField}
-					label={t('loc:Typ eventu')}
-					placeholder={t('loc:Vyberte typ')}
-					name={'eventType'}
-					options={EVENT_TYPE_OPTIONS()}
-					size={'large'}
-					onChange={onChangeEventType}
-					filterOption={false}
-					allowInfinityScroll
-				/>
-				<Divider className={'mb-3 mt-3'} />
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
+					<Field
+						component={SelectField}
+						label={t('loc:Typ eventu')}
+						placeholder={t('loc:Vyberte typ')}
+						name={'eventType'}
+						options={EVENT_TYPE_OPTIONS()}
+						size={'large'}
+						className={'pb-0'}
+						onChange={onChangeEventType}
+						filterOption={false}
+						allowInfinityScroll
+					/>
+					<Divider className={'mb-3 mt-3'} />
 					<Field
 						component={SelectField}
 						optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}

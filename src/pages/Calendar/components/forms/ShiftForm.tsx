@@ -4,9 +4,9 @@ import { Button, Divider, Form } from 'antd'
 import { map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
+import cx from 'classnames'
 
 // validate
-import cx from 'classnames'
 import validateShiftForm from './validateShiftForm'
 
 // utils
@@ -26,20 +26,21 @@ import SelectField from '../../../../atoms/SelectField'
 import DateField from '../../../../atoms/DateField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SwitchField from '../../../../atoms/SwitchField'
+import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
-import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 type ComponentProps = {
 	salonID: string
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	onChangeEventType: (type: any) => any
 }
 
 type Props = InjectedFormProps<ICalendarShiftForm, ComponentProps> & ComponentProps
 
 const CalendarShiftForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -119,11 +120,6 @@ const CalendarShiftForm: FC<Props> = (props) => {
 		}
 	}
 
-	const onChangeEventType = (event: any) => {
-		console.log('event', event)
-		setCollapsed(event)
-	}
-
 	return (
 		<>
 			<div className={'nc-sider-event-management-header justify-between'}>
@@ -133,19 +129,20 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				</Button>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
-				<Field
-					component={SelectField}
-					label={t('loc:Typ eventu')}
-					placeholder={t('loc:Vyberte typ')}
-					name={'eventType'}
-					options={EVENT_TYPE_OPTIONS()}
-					size={'large'}
-					onChange={onChangeEventType}
-					filterOption={false}
-					allowInfinityScroll
-				/>
-				<Divider className={'mb-3 mt-3'} />
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
+					<Field
+						component={SelectField}
+						label={t('loc:Typ eventu')}
+						placeholder={t('loc:Vyberte typ')}
+						name={'eventType'}
+						options={EVENT_TYPE_OPTIONS()}
+						size={'large'}
+						className={'pb-0'}
+						onChange={onChangeEventType}
+						filterOption={false}
+						allowInfinityScroll
+					/>
+					<Divider className={'mb-3 mt-3'} />
 					<Field
 						component={SelectField}
 						optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}

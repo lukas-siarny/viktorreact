@@ -15,34 +15,35 @@ import BreakForm from '../forms/BreakForm'
 
 type Props = {
 	salonID: string
-	view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
+	sidebarView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitShift: (values: ICalendarShiftForm) => void
 	handleSubmitTimeOff: (values: ICalendarTimeOffForm) => void
 	handleSubmitBreak: (values: ICalendarBreakForm) => void
+	onChangeEventType: (type: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => any
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const { view, setCollapsed, handleSubmitReservation, handleSubmitTimeOff, handleSubmitShift, handleSubmitBreak, salonID } = props
+	const { setCollapsed, handleSubmitReservation, handleSubmitTimeOff, handleSubmitShift, handleSubmitBreak, salonID, onChangeEventType, sidebarView } = props
 
 	const getSiderContent = () => {
-		switch (view) {
+		switch (sidebarView) {
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
-				return <ReservationForm setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitReservation} />
+				return <ReservationForm onChangeEventType={onChangeEventType} setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitReservation} />
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
-				return <ShiftForm setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitShift} />
+				return <ShiftForm onChangeEventType={onChangeEventType} setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitShift} />
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:
-				return <TimeOffForm setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitTimeOff} />
+				return <TimeOffForm onChangeEventType={onChangeEventType} setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitTimeOff} />
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
-				return <BreakForm setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitBreak} />
+				return <BreakForm onChangeEventType={onChangeEventType} setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitBreak} />
 			default:
 				return null
 		}
 	}
 
 	return (
-		<Sider className='nc-sider-event-management' collapsed={view === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED} width={240} collapsedWidth={0}>
+		<Sider className='nc-sider-event-management' collapsed={sidebarView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED} width={240} collapsedWidth={0}>
 			{getSiderContent()}
 		</Sider>
 	)

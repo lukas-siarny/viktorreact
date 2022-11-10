@@ -2,23 +2,19 @@ import React, { FC, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { Header } from 'antd/lib/layout/layout'
-import { Button, Dropdown, Menu } from 'antd'
+import { Button, Dropdown } from 'antd'
 import dayjs from 'dayjs'
 import { initialize, WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import Tooltip from 'antd/es/tooltip'
+import { useDispatch } from 'react-redux'
 
 // enums
-import { useDispatch } from 'react-redux'
 import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
-	DEFAULT_DATE_FORMAT,
 	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_DATE_INPUT_FORMAT,
-	DEFAULT_DAYJS_FORMAT,
-	DEFAULT_TIME_FORMAT,
 	DEFAULT_TIME_FORMAT_HOURS,
 	DEFAULT_TIME_FORMAT_MINUTES,
 	FORM
@@ -27,10 +23,6 @@ import {
 // assets
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
 import { ReactComponent as ChevronLeft } from '../../../../assets/icons/chevron-left-16.svg'
-import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-import { ReactComponent as ShiftIcon } from '../../../../assets/icons/shift-icon.svg'
-import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-grayDark-12.svg'
 
@@ -94,7 +86,7 @@ type Props = {
 	calendarView: CALENDAR_VIEW
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
-	setSiderEventManagement: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	setSelectedDate: (newDate: string | dayjs.Dayjs, type?: CALENDAR_SET_NEW_DATE) => void
 }
 
@@ -102,7 +94,7 @@ const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagement, selectedDate, setSelectedDate } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed } = props
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -114,64 +106,6 @@ const CalendarHeader: FC<Props> = (props) => {
 	})
 
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
-
-	const initEventForm = (eventForm: FORM) => {
-		const initData = {
-			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS)))
-		}
-		dispatch(initialize(eventForm, initData))
-	}
-
-	const addMenu = useMemo(() => {
-		const itemClassName = 'p-2 font-medium min-w-0'
-		return (
-			<Menu
-				getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-				className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'}
-				style={{ width: 200 }}
-				items={[
-					{
-						key: 'reservation',
-						label: t('loc:Rezerváciu'),
-						icon: <ServicesIcon />,
-						className: itemClassName,
-						onClick: () => {
-							initEventForm(FORM.CALENDAR_RESERVATION_FORM)
-							setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
-						}
-					},
-					{
-						key: 'shift',
-						label: t('loc:Smenu'),
-						icon: <ShiftIcon />,
-						className: itemClassName,
-						onClick: () => {
-							initEventForm(FORM.CALENDAR_SHIFT_FORM)
-							setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
-						}
-					},
-					{
-						key: 'absence',
-						label: t('loc:Absenciu'),
-						icon: <AbsenceIcon />,
-						className: itemClassName,
-						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF)
-					},
-					{
-						key: 'break',
-						label: t('loc:Prestávku'),
-						icon: <BreakIcon />,
-						className: itemClassName,
-						onClick: () => {
-							initEventForm(FORM.CALENDAR_BREAK_FORM)
-							setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
-						}
-					}
-				]}
-			/>
-		)
-	}, [t, initEventForm, setSiderEventManagement])
 
 	const datePicker = useMemo(() => {
 		return (
@@ -241,10 +175,15 @@ const CalendarHeader: FC<Props> = (props) => {
 			<div className={'nav-right'}>
 				<Button
 					type={'primary'}
-					onClick={(e) => {
-						// Defaultne je rezervacia
-						// TODO: ked sa spravi rezervacia tak nastvit rezervaciu ako default
-						setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+					onClick={() => {
+						// Kliknutie na pridat nastavi rezervaciu ako default
+						const initData = {
+							date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+							timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))),
+							eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
+						}
+						dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+						setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
 					}}
 					icon={<CreateIcon />}
 					htmlType={'button'}
@@ -252,25 +191,6 @@ const CalendarHeader: FC<Props> = (props) => {
 				>
 					{t('loc:Pridať novú')}
 				</Button>
-
-				{/* <Dropdown */}
-				{/*	overlay={addMenu} */}
-				{/*	placement='bottomRight' */}
-				{/*	trigger={['click']} */}
-				{/*	getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement} */}
-				{/*	overlayClassName={'nc-overlay'} */}
-				{/* > */}
-				{/*	<Button */}
-				{/*		type={'primary'} */}
-				{/*		onClick={(e) => e.preventDefault()} */}
-				{/*		onKeyPress={(e) => e.preventDefault()} */}
-				{/*		icon={<CreateIcon />} */}
-				{/*		htmlType={'button'} */}
-				{/*		className={'noti-btn'} */}
-				{/*	> */}
-				{/*		{t('loc:Pridať novú')} */}
-				{/*	</Button> */}
-				{/* </Dropdown> */}
 			</div>
 		</Header>
 	)

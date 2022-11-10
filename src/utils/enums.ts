@@ -2,12 +2,6 @@ import { orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { FormatterInput } from '@fullcalendar/react'
-import React from 'react'
-
-import { ReactComponent as ServicesIcon } from '../assets/icons/services-24-icon.svg'
-import { ReactComponent as ShiftIcon } from '../assets/icons/shift-icon.svg'
-import { ReactComponent as AbsenceIcon } from '../assets/icons/absence-icon.svg'
-import { ReactComponent as BreakIcon } from '../assets/icons/break-icon.svg'
 
 export enum KEYBOARD_KEY {
 	ENTER = 'Enter'

@@ -16,13 +16,16 @@ import {
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
 	DAY,
+	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT_HOURS,
+	DEFAULT_TIME_FORMAT_MINUTES,
 	ENDS_EVENT,
 	FORM,
 	NOTIFICATION_TYPE,
 	PERMISSION
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { computeUntilDate, getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
+import { computeUntilDate, getFirstDayOfMonth, getFirstDayOfWeek, roundMinutes } from '../../utils/helper'
 
 // reducers
 import { getCalendarEvents } from '../../reducers/calendar/calendarActions'
@@ -58,7 +61,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		employeeIDs: ArrayParam,
 		categoryIDs: ArrayParam,
-		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
+		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION),
+		sidebarView: withDefault(StringParam, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
 	})
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -66,18 +70,58 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const events = useSelector((state: RootState) => state.calendar.events)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
-	// NOTE: default je COLLAPSED, RESERVATION je len pre develeporske ucely teraz
-	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(
-		/* CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED */ CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT
-	)
 
 	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
+
+	const initEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
+		const initData = {
+			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+			timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))),
+			eventType
+		}
+		dispatch(initialize(eventForm, initData))
+	}
+
+	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
+		const newEventType =
+			newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+
+		setQuery({
+			...query,
+			eventType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
+			sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
+		})
+		dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
+	}
+
+	const onChangeEventType = (type: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
+		switch (type) {
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
+				setEventManagement(type)
+				initEventForm(FORM.CALENDAR_RESERVATION_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+				return true
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
+				setEventManagement(type)
+				initEventForm(FORM.CALENDAR_SHIFT_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+				return true
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:
+				setEventManagement(type)
+				initEventForm(FORM.CALENDAR_TIME_OFF_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF)
+				return true
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
+				setEventManagement(type)
+				initEventForm(FORM.CALENDAR_BREAK_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+				return true
+			default:
+				return ''
+		}
+	}
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
 			const servicesData = await dispatch(getServices({ salonID }))
-
+			onChangeEventType(query.sidebarView as CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) // initnutie defaultu sidebaru pri nacitani (bud REZERVACIA alebo ak je nastavene sidebarView tak podla neho)
 			dispatch(
 				initialize(FORM.CALENDAR_FILTER, {
 					eventType: CALENDAR_EVENT_TYPE_FILTER.RESERVATION,
@@ -88,6 +132,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 
 		fetchData()
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, salonID])
 
 	useEffect(() => {
@@ -159,22 +204,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		})
 	}
 
-	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
-		setSiderEventManagement(newView)
-		if (newView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
-			const newEventType = newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.RESERVATION
-
-			setQuery({
-				...query,
-				eventType: newEventType
-			})
-			dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
-		}
-	}
-
 	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
 		// TODO: rezervacia
-		console.log('reservation form values', values)
 		// damske kadernictvo: "00000000-0000-0000-0000-000000000001"
 		// sluzba: "00000000-0000-0000-0000-000000000068"
 		try {
@@ -324,14 +355,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setCalendarView={setNewCalendarView}
 				setSelectedDate={setNewSelectedDate}
 				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
-				setSiderEventManagement={setEventManagement}
+				setCollapsed={setEventManagement}
 			/>
 			<Layout hasSider className={'noti-calendar-main-section'}>
 				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} />
 				<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} loading={loadingData} />
 				<SiderEventManagement
+					onChangeEventType={onChangeEventType}
 					salonID={salonID}
-					view={siderEventManagement}
+					sidebarView={query.sidebarView as any}
 					setCollapsed={setEventManagement}
 					handleSubmitReservation={handleSubmitReservation}
 					handleSubmitShift={handleSubmitShift}

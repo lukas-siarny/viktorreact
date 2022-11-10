@@ -5,24 +5,13 @@ import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { map } from 'lodash'
 import cx from 'classnames'
-import dayjs from 'dayjs'
 
 // validate
 import validateBreakForm from './validateBreakForm'
 
 // utils
-import { formatLongQueryString, optionRenderWithAvatar, roundMinutes, showErrorNotification } from '../../../../utils/helper'
-import {
-	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
-	DEFAULT_TIME_FORMAT_HOURS,
-	DEFAULT_TIME_FORMAT_MINUTES,
-	ENDS_EVENT,
-	ENDS_EVENT_OPTIONS,
-	EVENT_TYPE_OPTIONS,
-	FORM,
-	SHORTCUT_DAYS_OPTIONS,
-	STRINGS
-} from '../../../../utils/enums'
+import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENDS_EVENT, ENDS_EVENT_OPTIONS, EVENT_TYPE_OPTIONS, FORM, SHORTCUT_DAYS_OPTIONS, STRINGS } from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
 // types
@@ -37,21 +26,22 @@ import SelectField from '../../../../atoms/SelectField'
 import DateField from '../../../../atoms/DateField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SwitchField from '../../../../atoms/SwitchField'
+import TextareaField from '../../../../atoms/TextareaField'
+import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
-import TextareaField from '../../../../atoms/TextareaField'
-import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	salonID: string
+	onChangeEventType: (type: any) => any
 }
 
 type Props = InjectedFormProps<ICalendarBreakForm, ComponentProps> & ComponentProps
 
 const CalendarBreakForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -125,24 +115,6 @@ const CalendarBreakForm: FC<Props> = (props) => {
 		</>
 	)
 
-	const onChangeEventType = (event: any) => {
-		setCollapsed(event)
-	}
-
-	const onChangeAllDay = (checked: any) => {
-		if (checked) {
-			// NOTE: cely den
-			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'timeFrom', '00:00'))
-			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'timeTo', '23:59'))
-		} else {
-			// Ak nie je cely den tak zaokruhlit na najblizsiu 1/4 hodinu
-			dispatch(
-				change(FORM.CALENDAR_BREAK_FORM, 'timeFrom', roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))))
-			)
-			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'timeTo', null))
-		}
-	}
-
 	const onChangeRecurring = (checked: any) => {
 		if (checked) {
 			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'end', ENDS_EVENT.WEEK))
@@ -158,19 +130,20 @@ const CalendarBreakForm: FC<Props> = (props) => {
 				</Button>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
-				<Field
-					component={SelectField}
-					label={t('loc:Typ eventu')}
-					placeholder={t('loc:Vyberte typ')}
-					name={'eventType'}
-					options={EVENT_TYPE_OPTIONS()}
-					size={'large'}
-					onChange={onChangeEventType}
-					filterOption={false}
-					allowInfinityScroll
-				/>
-				<Divider className={'mb-3 mt-3'} />
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
+					<Field
+						component={SelectField}
+						label={t('loc:Typ eventu')}
+						placeholder={t('loc:Vyberte typ')}
+						name={'eventType'}
+						options={EVENT_TYPE_OPTIONS()}
+						size={'large'}
+						className={'pb-0'}
+						onChange={onChangeEventType}
+						filterOption={false}
+						allowInfinityScroll
+					/>
+					<Divider className={'mb-3 mt-3'} />
 					<Field
 						component={SelectField}
 						optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
@@ -210,7 +183,6 @@ const CalendarBreakForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
 					<Field name={'recurring'} onChange={onChangeRecurring} className={'pb-0'} component={SwitchField} label={t('loc:Opakovať')} />
 					{recurringFields}
 					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />

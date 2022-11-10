@@ -14,6 +14,7 @@ import { RootState } from '../../../../reducers'
 // utils
 import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
+import { getReq, postReq } from '../../../../utils/request'
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
@@ -29,18 +30,18 @@ import DateField from '../../../../atoms/DateField'
 import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SelectField from '../../../../atoms/SelectField'
-import { getReq, postReq } from '../../../../utils/request'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 
 type ComponentProps = {
 	salonID: string
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	onChangeEventType: (type: any) => any
 }
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
@@ -76,7 +77,6 @@ const ReservationForm: FC<Props> = (props) => {
 				const { data } = await getReq('/api/b2b/admin/services/', {
 					salonID
 				})
-				console.log('servics', data.groupedServicesByCategory)
 				// TODO: filter na cekovanie ci je cmplete salon
 				// const optData = map(data.groupedServicesByCategory, (industry) => {
 				// 	return {
@@ -111,7 +111,6 @@ const ReservationForm: FC<Props> = (props) => {
 						})
 					)
 				)
-				console.log('optData', optData)
 				return { pagination: null, data: optData }
 			} catch (e) {
 				return { pagination: null, data: [] }
@@ -184,10 +183,6 @@ const ReservationForm: FC<Props> = (props) => {
 		</Modal>
 	)
 
-	const onChangeEventType = (event: any) => {
-		setCollapsed(event)
-	}
-
 	return (
 		<>
 			{modals}
@@ -198,19 +193,20 @@ const ReservationForm: FC<Props> = (props) => {
 				</Button>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
-				<Field
-					component={SelectField}
-					label={t('loc:Typ eventu')}
-					placeholder={t('loc:Vyberte typ')}
-					name={'eventType'}
-					options={EVENT_TYPE_OPTIONS()}
-					size={'large'}
-					onChange={onChangeEventType}
-					filterOption={false}
-					allowInfinityScroll
-				/>
-				<Divider className={'mb-3 mt-3'} />
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
+					<Field
+						component={SelectField}
+						label={t('loc:Typ eventu')}
+						placeholder={t('loc:Vyberte typ')}
+						name={'eventType'}
+						options={EVENT_TYPE_OPTIONS()}
+						size={'large'}
+						className={'pb-0'}
+						onChange={onChangeEventType}
+						filterOption={false}
+						allowInfinityScroll
+					/>
+					<Divider className={'mb-3 mt-3'} />
 					<Permissions
 						allowed={[SALON_PERMISSION.CUSTOMER_CREATE]}
 						render={(hasPermission, { openForbiddenModal }) => (

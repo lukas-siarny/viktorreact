@@ -30,7 +30,7 @@ import { getServices, IServicesPayload } from '../../reducers/services/serviceAc
 import CalendarHeader from './components/layout/Header'
 import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
-import CalendarContent, { CalendarApiRefs } from './components/layout/Content'
+import CalendarContent, { CalendarRefs } from './components/layout/Content'
 
 // types
 import { ICalendarBreakForm, ICalendarFilter, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm, SalonSubPageProps } from '../../types/interfaces'
@@ -64,7 +64,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
 
-	const calendarApiRefs = useRef<CalendarApiRefs>(null)
+	const calendarRefs = useRef<CalendarRefs>(null)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [siderEventManagement, setSiderEventManagement] = useState<CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW>(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
@@ -150,7 +150,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		// update calendar size when main layout sider change
 		// wait for the end of sider menu animation and then update size of the calendar
-		const timeout = setTimeout(() => calendarApiRefs?.current?.[query.view as CALENDAR_VIEW]?.updateSize(), 300)
+		const timeout = setTimeout(() => calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.updateSize(), 300)
 		return () => clearTimeout(timeout)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMainLayoutSiderCollapsed])
@@ -264,6 +264,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					firstLoadDone={firstLoadDone.current}
 				/>
 				<CalendarContent
+					ref={calendarRefs}
 					selectedDate={query.date}
 					view={query.view as CALENDAR_VIEW}
 					loading={loadingData}
@@ -276,7 +277,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							...query,
 							employeeIDs
 						})
-						calendarApiRefs?.current?.[query.view as CALENDAR_VIEW]?.scrollToTime(CALENDAR_COMMON_SETTINGS.SCROLL_TIME)
+						calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.scrollToTime(CALENDAR_COMMON_SETTINGS.SCROLL_TIME)
 					}}
 				/>
 				<SiderEventManagement

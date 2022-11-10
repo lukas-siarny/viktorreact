@@ -624,16 +624,6 @@ export enum CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW {
 	COLLAPSED = 'COLLAPSED'
 }
 
-export enum CALENDAR_WEEK_DAYS {
-	MON = 'MON',
-	TUE = 'TUE',
-	WEN = 'WEN',
-	THU = 'THU',
-	FRI = 'FRI',
-	SAT = 'SAT',
-	SUN = 'SUN'
-}
-
 export enum CALENDAR_DATE_FORMAT {
 	QUERY = 'YYYY-MM-DD',
 	HEADER_DAY = 'ddd, D MMM YY',

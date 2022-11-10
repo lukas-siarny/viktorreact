@@ -196,11 +196,6 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
-export enum SALON_CREATE_TYPE {
-	NON_BASIC = 'NON_BASIC',
-	BASIC = 'BASIC'
-}
-
 export enum PAGE {
 	SALONS = 'SALONS',
 	ENUMERATIONS = 'ENUMERATIONS',
@@ -342,7 +337,6 @@ export enum SALON_FILTER_STATES {
 	NOT_DELETED = 'NOT_DELETED',
 	PENDING_PUBLICATION = 'PENDING_PUBLICATION',
 	DECLINED = 'DECLINED',
-	PREMIUM = 'PREMIUM',
 	ALL = 'ALL'
 }
 
@@ -355,10 +349,9 @@ export enum SALON_STATES {
 	PUBLISHED_DECLINED = 'PUBLISHED_DECLINED'
 }
 
-export enum SALON_FILTER_CREATE_TYPES {
-	BASIC = 'BASIC',
+export enum SALON_CREATE_TYPE {
 	NON_BASIC = 'NON_BASIC',
-	PREMIUM = 'PREMIUM'
+	BASIC = 'BASIC'
 }
 
 export enum SALON_SOURCE_TYPE {
@@ -557,11 +550,11 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?salonState=active&statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
-		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}`,
-		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.PREMIUM}`,
+		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}`,
 		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
 		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
-		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
+		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		publishedPremiums: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
 	}
 })
 

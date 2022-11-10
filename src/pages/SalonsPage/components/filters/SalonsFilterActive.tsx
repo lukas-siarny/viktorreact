@@ -25,7 +25,7 @@ import {
 	FORM,
 	PERMISSION,
 	ROW_GUTTER_X_DEFAULT,
-	SALON_FILTER_CREATE_TYPES,
+	SALON_CREATE_TYPE,
 	SALON_FILTER_OPENING_HOURS,
 	SALON_FILTER_STATES,
 	SALON_SOURCE_TYPE,
@@ -44,7 +44,6 @@ import SwitchField from '../../../../atoms/SwitchField'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void
-	statuses_publishedDisabled?: boolean
 }
 
 export interface ISalonsFilterActive {
@@ -89,7 +88,7 @@ export const checkSalonFiltersSize = (formValues: any) =>
 	)
 
 const SalonsFilterActive = (props: Props) => {
-	const { handleSubmit, openSalonImportsModal, statuses_publishedDisabled } = props
+	const { handleSubmit, openSalonImportsModal } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -141,8 +140,8 @@ const SalonsFilterActive = (props: Props) => {
 
 	const createTypesOptions = useMemo(
 		() => [
-			{ label: t('loc:BASIC'), value: SALON_FILTER_CREATE_TYPES.BASIC, key: SALON_FILTER_CREATE_TYPES.BASIC, tagClassName: 'bg-status-basic' },
-			{ label: t('loc:PREMIUM'), value: SALON_FILTER_CREATE_TYPES.PREMIUM, key: SALON_FILTER_CREATE_TYPES.PREMIUM, tagClassName: 'bg-status-premium' }
+			{ label: t('loc:BASIC'), value: SALON_CREATE_TYPE.BASIC, key: SALON_CREATE_TYPE.BASIC, tagClassName: 'bg-status-basic' },
+			{ label: t('loc:PREMIUM'), value: SALON_CREATE_TYPE.NON_BASIC, key: SALON_CREATE_TYPE.NON_BASIC, tagClassName: 'bg-status-premium' }
 		],
 		[t]
 	)
@@ -246,7 +245,6 @@ const SalonsFilterActive = (props: Props) => {
 									onDidMountSearch
 									options={publishedOptions}
 									optionRender={statusOptionRender}
-									disabled={statuses_publishedDisabled}
 								/>
 							</Col>
 							<Col span={5}>

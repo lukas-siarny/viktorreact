@@ -20,7 +20,7 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
-import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT, SALON_FILTER_CREATE_TYPES, SALON_FILTER_STATES } from '../../utils/enums'
+import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
 import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
@@ -161,7 +161,7 @@ const SalonsPage = () => {
 					initialize(FORM.SALONS_FILTER_ACITVE, {
 						search: query.search,
 						statuses_all: query.statuses_all,
-						statuses_published: query.createType === SALON_FILTER_CREATE_TYPES.PREMIUM ? [SALON_FILTER_STATES.PUBLISHED] : query.statuses_published,
+						statuses_published: query.statuses_published,
 						statuses_changes: query.statuses_changes,
 						categoryFirstLevelIDs: query.categoryFirstLevelIDs,
 						countryCode: query.countryCode,
@@ -221,24 +221,11 @@ const SalonsPage = () => {
 	}
 
 	const handleSubmitActive = (values: ISalonsFilterActive) => {
-		const { dateFromTo, createType, statuses_published, ...restValues } = values
-		let newStatusesPublished: string[] | undefined = values.statuses_published
-
-		if (
-			query.createType === SALON_FILTER_CREATE_TYPES.PREMIUM &&
-			createType !== SALON_FILTER_CREATE_TYPES.PREMIUM &&
-			statuses_published?.find((status) => status === SALON_FILTER_STATES.PUBLISHED)
-		) {
-			newStatusesPublished = undefined
-		} else if (createType === SALON_FILTER_CREATE_TYPES.PREMIUM) {
-			newStatusesPublished = [SALON_FILTER_STATES.PUBLISHED]
-		}
+		const { dateFromTo, ...restValues } = values
 
 		const newQuery = {
 			...query,
 			...restValues,
-			statuses_published: newStatusesPublished,
-			createType,
 			lastUpdatedAtFrom: dateFromTo?.dateFrom,
 			lastUpdatedAtTo: dateFromTo?.dateTo,
 			page: 1
@@ -409,7 +396,7 @@ const SalonsPage = () => {
 				ellipsis: true,
 				sorter: true,
 				sortOrder: setOrder(query.order, 'fillingProgress'),
-				render: (value) => (
+				render: (value: number | undefined) => (
 					<Row className={'gap-2'} wrap={false}>
 						<span className={'w-9 flex-shrink-0'}>{value ? `${value}%` : ''}</span>
 						<Progress className='w-4/5' percent={value} showInfo={false} strokeColor={'#000'} />
@@ -471,13 +458,7 @@ const SalonsPage = () => {
 					tableColumns.lastUpdatedAt({ width: '8%' }),
 					tableColumns.createdAt({ width: '8%' })
 				]
-				filters = (
-					<SalonsFilterActive
-						onSubmit={handleSubmitActive}
-						openSalonImportsModal={() => setSalonImportsModalVisible(true)}
-						statuses_publishedDisabled={query.createType === SALON_FILTER_CREATE_TYPES.PREMIUM}
-					/>
-				)
+				filters = <SalonsFilterActive onSubmit={handleSubmitActive} openSalonImportsModal={() => setSalonImportsModalVisible(true)} />
 		}
 
 		return (

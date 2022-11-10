@@ -269,7 +269,7 @@ const NotinoDashboard: FC = () => {
 					{
 						data: notino.data.nonBasicSalons,
 						background: colors.blue[700],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PREMIUM]),
+						onClick: () => history.push(FILTER_PATHS().SALONS.publishedPremiums),
 						label: t('loc:PREMIUM salóny')
 					}
 				],

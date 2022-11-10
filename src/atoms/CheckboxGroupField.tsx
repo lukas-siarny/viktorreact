@@ -1,6 +1,7 @@
 // ant
 import { Checkbox, Form } from 'antd'
 import { CheckboxGroupProps } from 'antd/lib/checkbox'
+import { CheckboxValueType } from 'antd/lib/checkbox/Group'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import cx from 'classnames'
 import { map } from 'lodash'
@@ -16,6 +17,7 @@ type ComponentProps = {
 	rounded?: boolean
 	hideChecker?: boolean
 	optionRender?: (option: any, isChecked: boolean) => React.ReactNode
+	nullAsEmptyValue?: boolean
 }
 
 type Props = WrappedFieldProps & CheckboxGroupProps & FormItemProps & ComponentProps
@@ -36,7 +38,8 @@ const CheckboxGroupField = (props: Props) => {
 		rounded,
 		hideChecker,
 		optionRender,
-		disabled
+		disabled,
+		nullAsEmptyValue
 	} = props
 
 	const checkboxes = map(options, (option: any) => {
@@ -72,7 +75,13 @@ const CheckboxGroupField = (props: Props) => {
 			<Checkbox.Group
 				className={'flex flex-wrap'}
 				value={input.value || []}
-				onChange={input.onChange}
+				onChange={(checkedValue) => {
+					let newValue: CheckboxValueType[] | null = checkedValue
+					if (nullAsEmptyValue && checkedValue?.length === 0) {
+						newValue = null
+					}
+					input.onChange(newValue)
+				}}
 				defaultValue={defaultValue}
 				disabled={disabled}
 				style={{

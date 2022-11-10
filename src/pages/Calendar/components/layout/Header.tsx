@@ -27,16 +27,13 @@ import DateField from '../../../../atoms/DateField'
 import useOnClickOutside from '../../../../hooks/useClickOutside'
 import useMedia from '../../../../hooks/useMedia'
 
-// utils
-import { getFirstDayOfMonth, getFirstDayOfWeek, getLastDayOfWeek } from '../../../../utils/helper'
-
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {
 		case CALENDAR_VIEW.DAY:
 			return dayjs(date).format(CALENDAR_DATE_FORMAT.HEADER_DAY)
 		case CALENDAR_VIEW.WEEK: {
-			const firstDayOfWeek = getFirstDayOfWeek(date)
-			const lastDayOfWeek = getLastDayOfWeek(date)
+			const firstDayOfWeek = dayjs(date).startOf('week')
+			const lastDayOfWeek = dayjs(date).endOf('week')
 
 			// turn of the month
 			if (firstDayOfWeek.month() !== lastDayOfWeek.month()) {
@@ -48,7 +45,7 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
 		}
 		case CALENDAR_VIEW.MONTH: {
-			return getFirstDayOfMonth(date).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
+			return dayjs(date).startOf('month').format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
 		}
 		default:
 			return ''

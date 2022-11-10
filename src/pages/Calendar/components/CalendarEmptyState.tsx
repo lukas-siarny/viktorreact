@@ -18,7 +18,7 @@ const CalendarEmptyState: FC<Props> = (props) => {
 			<h2 className={'m-0 text-2xl text-center max-w-md'}>{title}</h2>
 			<div className={'image-wrapper'}>
 				<div className={'image-wrapper-inner'}>
-					<img src={image} alt={''} />
+					<img src={image} alt={i18next.t('loc:Kalendár neobsahuje žiadne data pre zobrazenie')} />
 				</div>
 			</div>
 			{onButtonClick && (

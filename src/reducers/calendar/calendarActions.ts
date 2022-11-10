@@ -1,4 +1,6 @@
 /* eslint-disable import/no-cycle */
+import dayjs from 'dayjs'
+
 // types
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
@@ -6,11 +8,11 @@ import { Paths } from '../../types/api'
 
 // enums
 import { EVENTS, EVENT_DETAIL, RESERVATIONS, SHIFTS_TIME_OFF } from './calendarTypes'
-import { CALENDAR_VIEW, CALENDAR_EVENT_TYPE } from '../../utils/enums'
+import { CALENDAR_VIEW, CALENDAR_EVENT_TYPE, CALENDAR_DATE_FORMAT } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
-import { normalizeQueryParams, getFirstDayOfWeek, getLastDayOfWeek, getFirstDayOfMonth, getLasttDayOfMonth } from '../../utils/helper'
+import { normalizeQueryParams } from '../../utils/helper'
 
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0]
@@ -73,30 +75,15 @@ const getTimeFromTo = (selectedDate: string, view: CALENDAR_VIEW) => {
 	switch (view) {
 		case CALENDAR_VIEW.MONTH: {
 			// NOTE: je potrebne najst eventy aj z konca predosleho a zaciatku nasledujuceho mesiaca, aby sa vyplnilo cele mesacne view
-			// stlpce v zobrazeni - Pondelok - Nedela
-			const firstDayOfMonth = getFirstDayOfMonth(selectedDate)
-			const lastDayOfMonth = getLasttDayOfMonth(selectedDate)
-			let mondayBeforeFirstDayOfMonth = firstDayOfMonth
-			let sundayAfterLastDayOfMonth = lastDayOfMonth
-
-			// 0 (Sunday) to 6 (Saturday)
-			if (firstDayOfMonth.day() !== 1) {
-				mondayBeforeFirstDayOfMonth = firstDayOfMonth.subtract(firstDayOfMonth.day() - 1, 'day')
-			}
-
-			if (lastDayOfMonth.day() !== 0) {
-				sundayAfterLastDayOfMonth = lastDayOfMonth.add(7 - lastDayOfMonth.day(), 'day')
-			}
-
 			return {
-				dateFrom: mondayBeforeFirstDayOfMonth.toISOString(),
-				dateTo: sundayAfterLastDayOfMonth.toISOString()
+				dateFrom: dayjs(selectedDate).startOf('month').startOf('week').format(CALENDAR_DATE_FORMAT.QUERY),
+				dateTo: dayjs(selectedDate).endOf('month').endOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
 			}
 		}
 		case CALENDAR_VIEW.WEEK:
 			return {
-				dateFrom: getFirstDayOfWeek(selectedDate).toISOString(),
-				dateTo: getLastDayOfWeek(selectedDate).toISOString()
+				dateFrom: dayjs(selectedDate).startOf('week').format(CALENDAR_DATE_FORMAT.QUERY),
+				dateTo: dayjs(selectedDate).endOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
 			}
 		case CALENDAR_VIEW.DAY:
 		default:
@@ -152,7 +139,7 @@ export const getCalendarReservations =
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
-				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK],
+				eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
 				...getTimeFromTo(queryParams.date, view)
 			}
 

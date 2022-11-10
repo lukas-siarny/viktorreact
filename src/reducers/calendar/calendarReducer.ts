@@ -116,7 +116,7 @@ export default (state = initState, action: ICalendarActions) => {
 		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_CLEAR:
 			return {
 				...state,
-				reservations: {
+				shiftsTimeOffs: {
 					...initState.shiftsTimeOffs,
 					data: null
 				}

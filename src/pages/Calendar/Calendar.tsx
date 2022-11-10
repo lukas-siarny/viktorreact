@@ -48,6 +48,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const dispatch = useDispatch()
 
+	/*
+		NOTE:
+		* undefined queryParam value means there is no filter applied (e.g query = { view: 'DAY', employeeIDs: undefined, date: '2022-11-03' }, url: &view=DAY&date=2022-11-03)
+		* we would set default value for employees in this case (all employes)
+		* null queryParam value means empty filter (e.g query = { view: 'DAY', employeeIDs: null, date: '2022-11-03' } => url: &view=DAY&employeeIDS&date=2022-11-03)
+		* we would set no emoployees in this case
+		* this is usefull, becouse when we first initialize page, we want to set default value (if there are no employeeIDs in the URL)
+		* but when user unchecks all employeeIDs options in the filter, we want to show no employees
+	*/
 	const [query, setQuery] = useQueryParams({
 		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),

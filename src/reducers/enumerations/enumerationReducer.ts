@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-cycle
+/* eslint-disable import/no-cycle */
 import { IEnumerationActions, IEnumerationsCurrenciesPayload } from './enumerationActions'
 import { ENUMERATIONS } from './enumerationTypes'
 import { ENUMERATIONS_KEYS } from '../../utils/enums'

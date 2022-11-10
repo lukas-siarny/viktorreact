@@ -579,3 +579,22 @@ export enum TIME_STATS_SOURCE_TYPE {
 	MONTH = 'MONTH',
 	YEAR = 'YEAR'
 }
+
+/**
+ * @returns localized texts for Sentry report dialog and common EN texts for result view
+ */
+export const ERROR_BOUNDARY_TEXTS = () => ({
+	result: {
+		subtitle: 'An unexpected error has occurred and your request cannot be completed. Please contact us about the error.',
+		buttonLabel: 'Contact about the error'
+	},
+	reportDialog: {
+		successMessage: i18next.t('loc:Vaša spätná väzba bola odoslaná. Ďakujeme!'),
+		title: i18next.t('loc:Nastala neočakávaná chyba'),
+		subtitle: i18next.t('loc:Prosím kontaktujte nás'),
+		labelName: i18next.t('loc:Meno'),
+		labelComments: i18next.t('loc:Popis chyby'),
+		labelClose: i18next.t('loc:Zatvoriť'),
+		labelSubmit: i18next.t('loc:Odoslať hlásenie o chybe')
+	}
+})

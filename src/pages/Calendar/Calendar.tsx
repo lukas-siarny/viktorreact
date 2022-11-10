@@ -277,7 +277,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							...query,
 							employeeIDs
 						})
-						calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.scrollToTime(CALENDAR_COMMON_SETTINGS.SCROLL_TIME)
 					}}
 				/>
 				<SiderEventManagement

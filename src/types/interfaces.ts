@@ -7,6 +7,7 @@ import { SALON_STATES } from './../utils/enums'
 
 // types
 import { Paths } from './api'
+import { IEmployeesPayload } from '../reducers/employees/employeesActions'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -540,6 +541,8 @@ export interface ICalendarFilter {
 	serviceIDs?: string[]
 	eventType?: CALENDAR_EVENT_TYPE_FILTER
 }
+
+export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export interface ICalendarView {
 	selectedDate: string

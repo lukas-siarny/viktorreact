@@ -11,11 +11,18 @@ import CalendarDayView from '../views/CalendarDayView'
 import CalendarWeekView from '../views/CalendarWeekView'
 import CalendarMonthView from '../views/CalendarMonthView'
 
+// types
+import { Employees } from '../../../../types/interfaces'
+import CalendarEmptyState from '../CalendarEmptyState'
+
 type Props = {
 	view: CALENDAR_VIEW
 	selectedDate: string
 	loading: boolean
 	eventType: CALENDAR_EVENT_TYPE_FILTER
+	employees: Employees
+	onShowAllEmployees: () => void
+	firstLoadDone: boolean
 }
 
 export type CalendarApiRefs = {
@@ -25,7 +32,7 @@ export type CalendarApiRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarApiRefs, Props>((props, ref) => {
-	const { view, selectedDate, loading, eventType } = props
+	const { view, selectedDate, loading, eventType, employees, onShowAllEmployees, firstLoadDone } = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -38,6 +45,10 @@ const CalendarContent = React.forwardRef<CalendarApiRefs, Props>((props, ref) =>
 	}))
 
 	const getView = () => {
+		if (firstLoadDone && !employees?.length) {
+			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />
+		}
+
 		if (view === CALENDAR_VIEW.MONTH) {
 			return <CalendarMonthView ref={monthView} selectedDate={selectedDate} />
 		}

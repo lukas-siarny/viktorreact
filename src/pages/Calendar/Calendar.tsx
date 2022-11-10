@@ -8,7 +8,16 @@ import { debounce, isEmpty } from 'lodash'
 import { initialize } from 'redux-form'
 
 // utils
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION, CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../utils/enums'
+import {
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_SET_NEW_DATE,
+	CALENDAR_VIEW,
+	PERMISSION,
+	CALENDAR_EVENT_TYPE_FILTER,
+	FORM,
+	CALENDAR_COMMON_SETTINGS
+} from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
@@ -254,7 +263,22 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER}
 					firstLoadDone={firstLoadDone.current}
 				/>
-				<CalendarContent selectedDate={query.date} view={query.view as CALENDAR_VIEW} loading={loadingData} eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER} />
+				<CalendarContent
+					selectedDate={query.date}
+					view={query.view as CALENDAR_VIEW}
+					loading={loadingData}
+					eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER}
+					employees={filteredEmployees() || []}
+					firstLoadDone={firstLoadDone.current}
+					onShowAllEmployees={() => {
+						const employeeIDs = getEmployeeIDs(employees?.options)
+						setQuery({
+							...query,
+							employeeIDs
+						})
+						calendarApiRefs?.current?.[query.view as CALENDAR_VIEW]?.scrollToTime(CALENDAR_COMMON_SETTINGS.SCROLL_TIME)
+					}}
+				/>
 				<SiderEventManagement
 					view={siderEventManagement}
 					setCollapsed={setEventManagement}

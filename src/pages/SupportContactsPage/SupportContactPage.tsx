@@ -180,6 +180,7 @@ const SupportContactPage: FC<Props> = (props) => {
 					history.push(t('paths:support-contacts/{{supportContactID}}', { supportContactID: result.data.supportContact.id }))
 				}
 			}
+			dispatch(initialize(FORM.SUPPORT_CONTACT, data))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

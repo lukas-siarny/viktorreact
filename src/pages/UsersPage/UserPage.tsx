@@ -18,7 +18,7 @@ import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../uti
 import { RootState } from '../../reducers'
 import { getCurrentUser, getUserAccountDetails, logOutUser } from '../../reducers/users/userActions'
 import { getSystemRoles } from '../../reducers/roles/rolesActions'
-import EditUserRoleForm from './EditUserRoleForm'
+import EditUserRoleForm from './components/EditUserRoleForm'
 
 // types
 import { IBreadcrumbs, IComputedMatch, IEditUserRoleForm } from '../../types/interfaces'
@@ -85,7 +85,7 @@ const UserPage: FC<Props> = (props) => {
 		}
 
 		fetchUserData()
-	}, [dispatch, userID, isMyAccountPath])
+	}, [dispatch, isMyAccountPath, userID])
 
 	const handleUserAccountFormSubmit = async (data: any) => {
 		try {
@@ -99,6 +99,7 @@ const UserPage: FC<Props> = (props) => {
 
 			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
 			if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
+			dispatch(initialize(FORM.USER_ACCOUNT, data))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -159,7 +160,8 @@ const UserPage: FC<Props> = (props) => {
 					roleID: data?.roleID
 				}
 			)
-			dispatch(getCurrentUser())
+			await dispatch(getUserAccountDetails(userID))
+			dispatch(initialize(FORM.EDIT_USER_ROLE, data))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

@@ -8,7 +8,16 @@ import { debounce, isEmpty } from 'lodash'
 import { initialize } from 'redux-form'
 
 // utils
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_DATE_FORMAT, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, PERMISSION, CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../utils/enums'
+import {
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_SET_NEW_DATE,
+	CALENDAR_VIEW,
+	PERMISSION,
+	CALENDAR_EVENT_TYPE_FILTER,
+	FORM,
+	CALENDAR_EVENTS_KEYS
+} from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 
 // reducers
@@ -49,8 +58,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
-	const reservations = useSelector((state: RootState) => state.calendar.reservations)
-	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar.shiftsTimeOffs)
+	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
+	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
 

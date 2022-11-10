@@ -640,3 +640,9 @@ export enum CALENDAR_SET_NEW_DATE {
 	FIND_START = 'FIND_START',
 	DEFAULT = 'DEFAULT'
 }
+
+export enum CALENDAR_EVENTS_KEYS {
+	EVENTS = 'events',
+	RESERVATIONS = 'reservations',
+	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
+}

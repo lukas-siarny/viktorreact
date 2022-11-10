@@ -247,7 +247,7 @@ export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
 
 export const getSalonTagCreateType = (salonStatus?: SALON_STATES, createType?: SALON_CREATE_TYPE) => {
 	if (salonStatus && createType) {
-		if (salonStatus === SALON_STATES.PUBLISHED && createType === SALON_CREATE_TYPE.NON_BASIC) {
+		if (createType === SALON_CREATE_TYPE.NON_BASIC) {
 			return (
 				<Tag className={'noti-tag bg-status-premium'}>
 					<span>{i18next.t('loc:PREMIUM')}</span>

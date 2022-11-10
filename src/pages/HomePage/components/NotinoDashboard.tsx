@@ -29,7 +29,7 @@ import { ReactComponent as PlusIcon } from '../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownIcon } from '../../../assets/icons/chevron-down.svg'
 
 // utils
-import { FILTER_PATHS, SALON_FILTER_STATES, SALON_CREATE_TYPE, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
+import { FILTER_PATHS, SALON_FILTER_STATES, SALONS_TIME_STATS_TYPE } from '../../../utils/enums'
 import { history } from '../../../utils/history'
 import { doughnutOptions, lineOptions, getFilterRanges, transformToStatsData } from './dashboardUtils'
 
@@ -269,7 +269,7 @@ const NotinoDashboard: FC = () => {
 					{
 						data: notino.data.nonBasicSalons,
 						background: colors.blue[700],
-						onClick: () => history.push(FILTER_PATHS().SALONS[SALON_FILTER_STATES.PREMIUM]),
+						onClick: () => history.push(FILTER_PATHS().SALONS.publishedPremiums),
 						label: t('loc:PREMIUM salóny')
 					}
 				],

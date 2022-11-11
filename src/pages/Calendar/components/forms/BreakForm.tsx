@@ -133,7 +133,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 					<Field
 						component={SelectField}
-						label={t('loc:Typ eventu')}
+						label={t('loc:Typ udalosti')}
 						placeholder={t('loc:Vyberte typ')}
 						name={'eventType'}
 						options={EVENT_TYPE_OPTIONS()}

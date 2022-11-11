@@ -70,54 +70,32 @@ const ReservationForm: FC<Props> = (props) => {
 		[salonID]
 	)
 
-	const searchServices = useCallback(
-		async (search: string, page: number) => {
-			try {
-				// TODO: vyhladavanie na FE?
-				const { data } = await getReq('/api/b2b/admin/services/', {
-					salonID
-				})
-				// TODO: filter na cekovanie ci je cmplete salon
-				// const optData = map(data.groupedServicesByCategory, (industry) => {
-				// 	return {
-				// 		label: industry.category?.name,
-				// 		key: industry.category?.id,
-				// 		children: flatten(
-				// 			map(industry.category?.children, (opt) =>
-				// 				map(opt.category?.children, (service) => {
-				// 					// TODO: is complete spravit
-				// 					return {
-				// 						label: service.category.name,
-				// 						key: service.category.id
-				// 					}
-				// 				})
-				// 			)
-				// 		)
-				// 	}
-				// })
-				const optData = flatten(
-					map(data.groupedServicesByCategory, (industry) =>
-						map(industry.category?.children, (category) => {
-							return {
-								label: category?.category?.name,
-								key: category?.category?.id,
-								children: map(category.category?.children, (item) => {
-									return {
-										label: item.category.name,
-										key: item.category.id
-									}
-								})
-							}
-						})
-					)
+	const searchServices = useCallback(async () => {
+		try {
+			const { data } = await getReq('/api/b2b/admin/services/', {
+				salonID
+			})
+			const optData = flatten(
+				map(data.groupedServicesByCategory, (industry) =>
+					map(industry.category?.children, (category) => {
+						return {
+							label: category?.category?.name,
+							key: category?.category?.id,
+							children: map(category.category?.children, (item) => {
+								return {
+									label: item.category.name,
+									key: item.category.id
+								}
+							})
+						}
+					})
 				)
-				return { pagination: null, data: optData }
-			} catch (e) {
-				return { pagination: null, data: [] }
-			}
-		},
-		[salonID]
-	)
+			)
+			return { pagination: null, data: optData }
+		} catch (e) {
+			return { pagination: null, data: [] }
+		}
+	}, [salonID])
 
 	const searchCustomers = useCallback(
 		async (search: string, page: number) => {
@@ -196,7 +174,7 @@ const ReservationForm: FC<Props> = (props) => {
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 					<Field
 						component={SelectField}
-						label={t('loc:Typ eventu')}
+						label={t('loc:Typ udalosti')}
 						placeholder={t('loc:Vyberte typ')}
 						name={'eventType'}
 						options={EVENT_TYPE_OPTIONS()}
@@ -246,7 +224,6 @@ const ReservationForm: FC<Props> = (props) => {
 						update={(itemKey: number, ref: any) => ref.blur()}
 						filterOption={false}
 						allowInfinityScroll
-						showSearch
 						className={'pb-0'}
 						required
 						labelInValue

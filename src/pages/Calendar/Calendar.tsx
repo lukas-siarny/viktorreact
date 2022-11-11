@@ -62,7 +62,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		employeeIDs: ArrayParam,
 		categoryIDs: ArrayParam,
 		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION),
-		sidebarView: withDefault(StringParam, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+		sidebarView: withDefault(StringParam, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
 	})
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -76,7 +76,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
 		const initData = {
 			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))),
 			eventType
 		}
 		dispatch(initialize(eventForm, initData))
@@ -121,7 +120,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		const fetchData = async () => {
 			const employeesData = await dispatch(getEmployees({ salonID, page: 1, limit: 100 }))
 			const servicesData = await dispatch(getServices({ salonID }))
-			onChangeEventType(query.sidebarView as CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) // initnutie defaultu sidebaru pri nacitani (bud REZERVACIA alebo ak je nastavene sidebarView tak podla neho)
+			if (query.sidebarView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
+				// initnutie defaultu sidebaru pri nacitani bude COLLAPSED a ak bude existovat typ formu tak sa initne dany FORM (pri skopirovani URL na druhy tab)
+				onChangeEventType(query.sidebarView as CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW)
+			}
 			dispatch(
 				initialize(FORM.CALENDAR_FILTER, {
 					eventType: CALENDAR_EVENT_TYPE_FILTER.RESERVATION,

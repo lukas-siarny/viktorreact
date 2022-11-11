@@ -10,7 +10,7 @@ import cx from 'classnames'
 import validateShiftForm from './validateShiftForm'
 
 // utils
-import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
+import { formatLongQueryString, optionRenderWithAvatar, roundMinutes, showErrorNotification } from '../../../../utils/helper'
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENDS_EVENT, ENDS_EVENT_OPTIONS, EVENT_TYPE_OPTIONS, FORM, SHORTCUT_DAYS_OPTIONS, STRINGS } from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
@@ -132,7 +132,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 					<Field
 						component={SelectField}
-						label={t('loc:Typ eventu')}
+						label={t('loc:Typ udalosti')}
 						placeholder={t('loc:Vyberte typ')}
 						name={'eventType'}
 						options={EVENT_TYPE_OPTIONS()}

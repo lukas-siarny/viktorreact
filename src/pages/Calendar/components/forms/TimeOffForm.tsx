@@ -132,14 +132,8 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 			dispatch(change(FORM.CALENDAR_TIME_OFF_FORM, 'timeFrom', '00:00'))
 			dispatch(change(FORM.CALENDAR_TIME_OFF_FORM, 'timeTo', '23:59'))
 		} else {
-			// Ak nie je cely den tak zaokruhlit na najblizsiu 1/4 hodinu
-			dispatch(
-				change(
-					FORM.CALENDAR_TIME_OFF_FORM,
-					'timeFrom',
-					roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS)))
-				)
-			)
+			// Ak nie je cely den tak vynulovat
+			dispatch(change(FORM.CALENDAR_TIME_OFF_FORM, 'timeFrom', null))
 			dispatch(change(FORM.CALENDAR_TIME_OFF_FORM, 'timeTo', null))
 		}
 	}
@@ -162,7 +156,7 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 					<Field
 						component={SelectField}
-						label={t('loc:Typ eventu')}
+						label={t('loc:Typ udalosti')}
 						placeholder={t('loc:Vyberte typ')}
 						name={'eventType'}
 						options={EVENT_TYPE_OPTIONS()}
@@ -213,9 +207,9 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 						minuteStep={15}
 					/>
 					<Field name={'allDay'} onChange={onChangeAllDay} className={'pb-0'} label={t('loc:Celý deň')} component={SwitchField} />
+					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 					<Field name={'recurring'} onChange={onChangeRecurring} className={'pb-0'} component={SwitchField} label={t('loc:Opakovať')} />
 					{recurringFields}
-					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>

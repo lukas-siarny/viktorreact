@@ -179,7 +179,6 @@ const CalendarHeader: FC<Props> = (props) => {
 						// Kliknutie na pridat nastavi rezervaciu ako default
 						const initData = {
 							date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-							timeFrom: roundMinutes(Number(dayjs().format(DEFAULT_TIME_FORMAT_MINUTES)), Number(dayjs().format(DEFAULT_TIME_FORMAT_HOURS))),
 							eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
 						}
 						dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))

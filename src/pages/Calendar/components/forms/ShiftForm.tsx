@@ -10,7 +10,7 @@ import cx from 'classnames'
 import validateShiftForm from './validateShiftForm'
 
 // utils
-import { formatLongQueryString, optionRenderWithAvatar, roundMinutes, showErrorNotification } from '../../../../utils/helper'
+import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENDS_EVENT, ENDS_EVENT_OPTIONS, EVENT_TYPE_OPTIONS, FORM, SHORTCUT_DAYS_OPTIONS, STRINGS } from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 

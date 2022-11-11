@@ -25,7 +25,7 @@ import {
 	PERMISSION
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { computeUntilDate, getFirstDayOfMonth, getFirstDayOfWeek, roundMinutes } from '../../utils/helper'
+import { computeUntilDate, getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
 // reducers
 import { getCalendarEvents } from '../../reducers/calendar/calendarActions'

@@ -9,16 +9,7 @@ import Tooltip from 'antd/es/tooltip'
 import { useDispatch } from 'react-redux'
 
 // enums
-import {
-	CALENDAR_DATE_FORMAT,
-	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
-	CALENDAR_SET_NEW_DATE,
-	CALENDAR_VIEW,
-	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT_HOURS,
-	DEFAULT_TIME_FORMAT_MINUTES,
-	FORM
-} from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, FORM } from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
@@ -34,7 +25,7 @@ import useOnClickOutside from '../../../../hooks/useClickOutside'
 import useMedia from '../../../../hooks/useMedia'
 
 // utils
-import { getFirstDayOfMonth, getFirstDayOfWeek, getLastDayOfWeek, roundMinutes } from '../../../../utils/helper'
+import { getFirstDayOfMonth, getFirstDayOfWeek, getLastDayOfWeek } from '../../../../utils/helper'
 
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {

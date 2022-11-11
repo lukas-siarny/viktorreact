@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 
@@ -58,7 +58,7 @@ const resourceLabelContent = (labelInfo: any) => {
 
 interface ICalendarDayView extends ICalendarView {}
 
-const CalendarDayView: FC<ICalendarDayView> = (props) => {
+const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const { selectedDate } = props
 
 	const [t] = useTranslation()
@@ -77,7 +77,7 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 
 	return (
 		<FullCalendar
-			// key={selectedDate}
+			ref={ref}
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 			slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
@@ -101,6 +101,6 @@ const CalendarDayView: FC<ICalendarDayView> = (props) => {
 			eventClick={handleEventClick}
 		/>
 	)
-}
+})
 
 export default CalendarDayView

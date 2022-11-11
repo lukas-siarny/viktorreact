@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React from 'react'
 import {
 	first,
@@ -37,7 +38,6 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
-// eslint-disable-next-line import/no-cycle
 import showNotifications from './tsxHelpers'
 import {
 	DEFAULT_DATE_FORMAT,

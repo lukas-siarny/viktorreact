@@ -597,7 +597,10 @@ export const CALENDAR_COMMON_SETTINGS = {
 		minute: '2-digit',
 		separator: '-',
 		hour12: false
-	} as FormatterInput
+	} as FormatterInput,
+	SCROLL_TIME: '08:00:00',
+	SLOT_DURATION: '00:15:00',
+	SLOT_LABEL_INTERVAL: '01:00:00'
 }
 
 export enum CALENDAR_VIEW {
@@ -625,16 +628,6 @@ export enum CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW {
 	TIMEOFF = 'TIMEOFF',
 	BREAK = 'BREAK',
 	COLLAPSED = 'COLLAPSED'
-}
-
-export enum CALENDAR_WEEK_DAYS {
-	MON = 'MON',
-	TUE = 'TUE',
-	WEN = 'WEN',
-	THU = 'THU',
-	FRI = 'FRI',
-	SAT = 'SAT',
-	SUN = 'SUN'
 }
 
 export enum CALENDAR_DATE_FORMAT {
@@ -736,3 +729,8 @@ export const SHORTCUT_DAYS_OPTIONS = () => [
 	{ label: i18next.t('loc:So'), value: DAY.SATURDAY },
 	{ label: i18next.t('loc:Ne'), value: DAY.SUNDAY }
 ]
+export enum CALENDAR_EVENTS_KEYS {
+	EVENTS = 'events',
+	RESERVATIONS = 'reservations',
+	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
+}

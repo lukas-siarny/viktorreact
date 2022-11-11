@@ -3,9 +3,20 @@ import { RESET_STORE } from '../generalTypes'
 import { ICalendarActions, ICalendarEventsPayload, ICalendarEventDetailPayload } from './calendarActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
+import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
 
 export const initState = {
-	events: {
+	[CALENDAR_EVENTS_KEYS.EVENTS]: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ICalendarEventsPayload & ILoadingAndFailure,
+	[CALENDAR_EVENTS_KEYS.RESERVATIONS]: {
+		data: null,
+		isLoading: false,
+		isFailure: false
+	} as ICalendarEventsPayload & ILoadingAndFailure,
+	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {
 		data: null,
 		isLoading: false,
 		isFailure: false
@@ -24,24 +35,24 @@ export default (state = initState, action: ICalendarActions) => {
 		case EVENTS.EVENTS_LOAD_START:
 			return {
 				...state,
-				events: {
-					...state.events,
+				[action.enumType]: {
+					...state[action.enumType],
 					isLoading: true
 				}
 			}
 		case EVENTS.EVENTS_LOAD_FAIL:
 			return {
 				...state,
-				events: {
-					...initState.events,
+				[action.enumType]: {
+					...initState[action.enumType],
 					isFailure: true
 				}
 			}
 		case EVENTS.EVENTS_LOAD_DONE:
 			return {
 				...state,
-				events: {
-					...initState.events,
+				[action.enumType]: {
+					...initState[action.enumType],
 					data: action.payload.data
 				}
 			}

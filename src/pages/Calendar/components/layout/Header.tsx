@@ -9,7 +9,7 @@ import Tooltip from 'antd/es/tooltip'
 import { useDispatch } from 'react-redux'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, FORM } from '../../../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, FORM, STRINGS } from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
@@ -24,16 +24,13 @@ import DateField from '../../../../atoms/DateField'
 import useOnClickOutside from '../../../../hooks/useClickOutside'
 import useMedia from '../../../../hooks/useMedia'
 
-// utils
-import { getFirstDayOfMonth, getFirstDayOfWeek, getLastDayOfWeek } from '../../../../utils/helper'
-
 const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 	switch (view) {
 		case CALENDAR_VIEW.DAY:
 			return dayjs(date).format(CALENDAR_DATE_FORMAT.HEADER_DAY)
 		case CALENDAR_VIEW.WEEK: {
-			const firstDayOfWeek = getFirstDayOfWeek(date)
-			const lastDayOfWeek = getLastDayOfWeek(date)
+			const firstDayOfWeek = dayjs(date).startOf('week')
+			const lastDayOfWeek = dayjs(date).endOf('week')
 
 			// turn of the month
 			if (firstDayOfWeek.month() !== lastDayOfWeek.month()) {
@@ -45,7 +42,7 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
 		}
 		case CALENDAR_VIEW.MONTH: {
-			return getFirstDayOfMonth(date).format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
+			return dayjs(date).startOf('month').format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
 		}
 		default:
 			return ''
@@ -75,6 +72,7 @@ const SwitchViewButton: FC<{ label: string; isSmallerDevice: boolean; className:
 type Props = {
 	selectedDate: string
 	calendarView: CALENDAR_VIEW
+	siderFilterCollapsed: boolean
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
@@ -85,7 +83,7 @@ const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed } = props
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -117,7 +115,7 @@ const CalendarHeader: FC<Props> = (props) => {
 		<Header className={'nc-header'} id={'noti-calendar-header'}>
 			<div className={'nav-left'}>
 				<button type={'button'} className={'nc-button light'} onClick={() => setSiderFilterCollapsed()}>
-					<NavIcon />
+					<NavIcon style={{ transform: siderFilterCollapsed ? 'rotate(180deg)' : undefined }} />
 				</button>
 				<div className={'nc-button-group'}>
 					<SwitchViewButton
@@ -179,7 +177,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					htmlType={'button'}
 					className={'noti-btn'}
 				>
-					{t('loc:Pridať novú')}
+					{isSmallerDevice ? STRINGS(t).addRecord('') : STRINGS(t).addRecord(t('loc:novú'))}
 				</Button>
 			</div>
 		</Header>

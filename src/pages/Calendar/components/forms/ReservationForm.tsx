@@ -8,9 +8,6 @@ import { flatten, map } from 'lodash'
 // validate
 import validateReservationForm from './validateReservationForm'
 
-// reducers
-import { RootState } from '../../../../reducers'
-
 // utils
 import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
@@ -31,6 +28,9 @@ import TextareaField from '../../../../atoms/TextareaField'
 import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SelectField from '../../../../atoms/SelectField'
 import CustomerForm from '../../../CustomersPage/components/CustomerForm'
+
+// redux
+import { RootState } from '../../../../reducers'
 
 type ComponentProps = {
 	salonID: string

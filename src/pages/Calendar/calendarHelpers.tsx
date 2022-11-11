@@ -9,7 +9,7 @@ import { CalendarEvent, ICalendarEventsPayload } from '../../reducers/calendar/c
 import { Employees } from '../../types/interfaces'
 
 // utils
-import { CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../utils/enums'
 
 export const getHoursMinutesFromMinutes = (minutes: number) => {
 	const hours = Math.floor(minutes / 60)
@@ -39,7 +39,7 @@ const createResourceMap = (employees?: Employees) =>
 		}
 	}, {} as ResourceMap) || {}
 
-const createAllDayInverseEventsFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) =>
+const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) =>
 	Object.entries({ ...resourcesMap }).reduce((acc, [key, value]) => {
 		if (!value) {
 			return [
@@ -60,21 +60,26 @@ const createAllDayInverseEventsFromResourceMap = (resourcesMap: ResourceMap, sel
 
 const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
 	const composedEvents: any[] = []
-	// resources mapa, pre trackovanie, ci zamestnanec ma nejake volno, prestavku alebo zmenu v dany den
+	// resources mapa, pre trackovanie, ci zamestnanec ma zmenu alebo dovolenku v dany den
 	const resourcesMap = createResourceMap(employees)
 	const events = [...(reservations || []), ...(shiftsTimeOffs || [])]
 
+	dayjs(selectedDate).endOf('day').subtract(15, 'minutes')
+
 	events?.forEach((event) => {
 		const employeeID = event.employee?.id
+
+		const start = getDateTime(event.start.date, event.start.time)
+		const end = getDateTime(event.end.date, event.end.time)
 
 		if (employeeID) {
 			const calendarEvent = {
 				id: event.id,
 				resourceId: employeeID,
-				start: getDateTime(event.start.date, event.start.time),
-				end: getDateTime(event.end.date, event.end.time),
+				start,
+				end,
 				eventType: event.eventType,
-				allDay: false,
+				allDay: dayjs(start).isSame(dayjs(selectedDate).startOf('day')) && dayjs(end).isAfter(dayjs(selectedDate).endOf('day').subtract(1, 'minutes')),
 				employee: event.employee
 			}
 
@@ -87,7 +92,7 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 					})
 					resourcesMap[employeeID] += 1
 					break
-				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF: {
 					composedEvents.push(
 						{
 							...calendarEvent,
@@ -101,19 +106,11 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 					)
 					resourcesMap[employeeID] += 1
 					break
-				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-					composedEvents.push(
-						{
-							...calendarEvent,
-							groupId: 'not-set-availability',
-							display: 'inverse-background'
-						},
-						{
-							...calendarEvent,
-							display: 'background'
-						}
-					)
-					resourcesMap[employeeID] += 1
+				}
+				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+					composedEvents.push({
+						...calendarEvent
+					})
 					break
 				case CALENDAR_EVENT_TYPE.RESERVATION:
 				default:
@@ -129,9 +126,9 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 		}
 	})
 
-	// ak zamestnanec nema ziadnu zmenu, volno alebo prestavku v dany den
+	// ak zamestnanec nema ziadnu zmenu alebo dovolenku v dany den
 	// tak vytvorime "fake" 'inverse-background' event, ktory zasrafuje pozadie pre cely den
-	const allDayInverseEvents = createAllDayInverseEventsFromResourceMap(resourcesMap, selectedDate)
+	const allDayInverseEvents = createAllDayInverseEventFromResourceMap(resourcesMap, selectedDate)
 
 	return [...composedEvents, ...allDayInverseEvents]
 }
@@ -146,7 +143,7 @@ const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarE
 		const employeeID = event.employee?.id
 
 		if (employeeID) {
-			const calendarEvent = {
+			composedEvents.push({
 				id: event.id,
 				resourceId: employeeID,
 				start: getDateTime(event.start.date, event.start.time),
@@ -154,28 +151,20 @@ const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarE
 				eventType: event.eventType,
 				allDay: false,
 				employee: event.employee
-			}
-
-			composedEvents.push({
-				...calendarEvent
 			})
 
-			if (event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT) {
-				composedEvents.push({
-					...calendarEvent,
-					groupId: 'not-set-availability',
-					display: 'inverse-background'
-				})
+			/* if (event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT) {
 				resourcesMap[employeeID] += 1
-			}
+			} */
 		}
 	})
 
 	// ak zamestnanec nema ziadnu zmenu v dany den
 	// tak vytvorime "fake" 'inverse-background' event, ktory zasrafuje pozadie pre cely den
-	const allDayInverseEvents = createAllDayInverseEventsFromResourceMap(resourcesMap, selectedDate)
+	// const allDayInverseEvents = createAllDayInverseEventFromResourceMap(resourcesMap, selectedDate)
 
-	return [...composedEvents, ...allDayInverseEvents]
+	// return [...composedEvents, ...allDayInverseEvents]
+	return composedEvents
 }
 
 export const composeDayViewEvents = (
@@ -195,15 +184,6 @@ export const composeDayViewEvents = (
 }
 
 export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
-	if (employees?.length === 0) {
-		return [
-			{
-				id: 'empty-employees',
-				emptyEmployees: true
-			}
-		]
-	}
-
 	return employees.map((employee) => {
 		const employeeShifts: any[] = []
 		const employeeTimeOff: any[] = []
@@ -218,7 +198,7 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 			}
 		})
 
-		const employeeWorkingHours = employeeShifts
+		/* const employeeWorkingHours = employeeShifts
 			.sort((eventA, eventB) => {
 				const key1 = eventA.start
 				const key2 = eventB.start
@@ -234,24 +214,52 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 				return 1
 			})
 			.reduce((result, cv, i, arr) => {
-				const newResult = `${result}${dayjs(getDateTime(cv.start.date, cv.start.time)).format('HH:mm')}-${dayjs(getDateTime(cv.end.date, cv.end.time)).format('HH:mm')}${
+				const newResult = `${result}${dayjs(getDateTime(cv.start.date, cv.start.time)).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(getDateTime(cv.end.date, cv.end.time)).format(CALENDAR_DATE_FORMAT.TIME)}${
 					i + 1 !== arr.length ? ', ' : ''
 				}`
 				return newResult
-			}, '')
+			}, '') */
+
+		let description = t('loc:Domyslime textik')
+
+		if (employeeShifts.length) {
+			const employeeWorkingHours =
+				employeeShifts?.length &&
+				employeeShifts.reduce((result, cv, i) => {
+					const startCv = getDateTime(cv.start.date, cv.start.time)
+					const endCv = getDateTime(cv.end.date, cv.end.time)
+
+					if (i === 0) {
+						return {
+							start: startCv,
+							end: endCv
+						}
+					}
+
+					const startResult = result.start
+					const endResult = result.end
+
+					return {
+						start: dayjs(startCv).isBefore(dayjs(startResult)) ? startCv : startResult,
+						end: dayjs(endCv).isAfter(dayjs(endResult)) ? endCv : endResult
+					}
+				}, {})
+			description = `${dayjs(employeeWorkingHours.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(employeeWorkingHours.end).format(CALENDAR_DATE_FORMAT.TIME)}`
+		} else if (employeeTimeOff.length && !employeeShifts.length) {
+			description = t('loc:Dovolenka')
+		}
 
 		return {
 			id: employee.id,
 			name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
 			image: employee.image.resizedImages.thumbnail,
-			wokringHours: employeeWorkingHours || t('loc:Nedostupný'),
+			description,
 			isTimeOff: !!employeeTimeOff.length,
 			employeeData: employee
 		}
 	})
 }
 
-// TODO: customer type
 export const getCustomerName = (customer: CalendarEvent['customer']) => {
 	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
 }

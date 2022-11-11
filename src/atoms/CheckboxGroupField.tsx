@@ -1,6 +1,7 @@
 // ant
 import { Checkbox, Form } from 'antd'
 import { CheckboxGroupProps } from 'antd/lib/checkbox'
+import { CheckboxValueType } from 'antd/lib/checkbox/Group'
 import { FormItemProps } from 'antd/lib/form/FormItem'
 import cx from 'classnames'
 import { map } from 'lodash'
@@ -16,6 +17,7 @@ type ComponentProps = {
 	rounded?: boolean
 	hideChecker?: boolean
 	optionRender?: (option: any, isChecked: boolean) => React.ReactNode
+	nullAsEmptyValue?: boolean
 }
 
 type Props = WrappedFieldProps & CheckboxGroupProps & FormItemProps & ComponentProps
@@ -35,7 +37,9 @@ const CheckboxGroupField = (props: Props) => {
 		size = 'medium',
 		rounded,
 		hideChecker,
-		optionRender
+		optionRender,
+		disabled,
+		nullAsEmptyValue
 	} = props
 
 	const checkboxes = map(options, (option: any) => {
@@ -43,13 +47,13 @@ const CheckboxGroupField = (props: Props) => {
 
 		if (typeof option === 'string') {
 			return (
-				<Checkbox key={option} value={option} className={cx({ 'inline-flex': horizontal })}>
+				<Checkbox key={option} disabled={disabled} value={option} className={cx({ 'inline-flex': horizontal })}>
 					{optionRender ? optionRender(option, isChecked) : option}
 				</Checkbox>
 			)
 		}
 		return (
-			<Checkbox disabled={option.disabled} key={`${option.value}`} value={option.value} className={cx({ 'inline-flex': horizontal })}>
+			<Checkbox disabled={option.disabled || disabled} key={`${option.value}`} value={option.value} className={cx({ 'inline-flex': horizontal })}>
 				{optionRender ? optionRender(option, isChecked) : option.label}
 			</Checkbox>
 		)
@@ -71,8 +75,15 @@ const CheckboxGroupField = (props: Props) => {
 			<Checkbox.Group
 				className={'flex flex-wrap'}
 				value={input.value || []}
-				onChange={input.onChange}
+				onChange={(checkedValue) => {
+					let newValue: CheckboxValueType[] | null = checkedValue
+					if (nullAsEmptyValue && checkedValue?.length === 0) {
+						newValue = null
+					}
+					input.onChange(newValue)
+				}}
 				defaultValue={defaultValue}
+				disabled={disabled}
 				style={{
 					...checkboxGroupStyles,
 					flexDirection: horizontal ? 'row' : 'column'

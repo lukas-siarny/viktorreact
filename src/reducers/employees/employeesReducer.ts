@@ -8,6 +8,7 @@ import { IEmployeesActions, IEmployeesPayload } from './employeesActions'
 export const initState = {
 	employees: {
 		data: null,
+		options: [],
 		isLoading: false,
 		isFailure: false
 	} as IEmployeesPayload & ILoadingAndFailure,
@@ -43,7 +44,8 @@ export default (state = initState, action: IEmployeesActions) => {
 				...state,
 				employees: {
 					...initState.employees,
-					data: action.payload.data
+					data: action.payload.data,
+					options: action.payload.options
 				}
 			}
 		// Employee

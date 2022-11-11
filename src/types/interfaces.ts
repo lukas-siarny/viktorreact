@@ -2,11 +2,12 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENT_TYPE_FILTER } from '../utils/enums'
 import { SALON_STATES } from './../utils/enums'
 
 // types
 import { Paths } from './api'
+import { IEmployeesPayload } from '../reducers/employees/employeesActions'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -139,6 +140,22 @@ export interface IServiceForm {
 	serviceCategoryParameter: any
 	employees: any
 }
+
+export interface ICalendarReservationForm {
+	customerID: string
+	serviceID: string
+	employeeID: string
+	date: string
+	timeFrom: string
+	timeTo: string
+	note: string
+}
+
+export interface ICalendarShiftForm {}
+
+export interface ICalendarTimeOffForm {}
+
+export interface ICalendarBreakForm {}
 
 export interface ISupportContactForm {
 	id: string | null
@@ -517,4 +534,16 @@ export interface TimeStatsData {
 
 export interface TimeStats extends ILoadingAndFailure {
 	data: TimeStatsData | null
+}
+
+export interface ICalendarFilter {
+	employeeIDs?: string[]
+	serviceIDs?: string[]
+	eventType?: CALENDAR_EVENT_TYPE_FILTER
+}
+
+export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
+
+export interface ICalendarView {
+	selectedDate: string
 }

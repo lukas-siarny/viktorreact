@@ -79,55 +79,56 @@ $inner-padding: 16px
 
 // Main layout
 .ant-layout.noti-main-layout
-	.noti-sider-menu
-		.ant-menu-item-group-title
-			display: none
-		.noti-sider-main-group
-			.ant-menu-item-group-list
-				height: 100%
-				overflow-x: hidden
-		.ant-menu-item
-			color: $textColor-notino-black
+	.main-layout-sider
+		.noti-sider-menu
+			.ant-menu-item-group-title
+				display: none
+			.noti-sider-main-group
+				.ant-menu-item-group-list
+					height: 100%
+					overflow-x: hidden
+			.ant-menu-item
+				color: $textColor-notino-black
 
-			&.ant-menu-item-selected
-				color: $textColor-notino-white
-				background-color: $backgroundColor-notino-black
-				svg
-					filter: invert(1)
+				&.ant-menu-item-selected
+					color: $textColor-notino-white
+					background-color: $backgroundColor-notino-black
+					svg
+						filter: invert(1)
 
-			&:active:not(.ant-menu-item-selected)
-				background-color: $backgroundColor-notino-grayLighter
+				&:active:not(.ant-menu-item-selected)
+					background-color: $backgroundColor-notino-grayLighter
 
-			&:hover:not(.ant-menu-item-selected)
-				background-color: $backgroundColor-notino-grayLighter
+				&:hover:not(.ant-menu-item-selected)
+					background-color: $backgroundColor-notino-grayLighter
 
-		&.ant-menu-inline, &.ant-menu-inline-collapsed
-			.ant-menu-item, .ant-menu-submenu .ant-menu-submenu-title
-				display: flex
-				align-items: center
+			&.ant-menu-inline, &.ant-menu-inline-collapsed
+				.ant-menu-item, .ant-menu-submenu .ant-menu-submenu-title
+					display: flex
+					align-items: center
 
-			.ant-menu-item:not(:last-child)
-				margin-bottom: 4px
+				.ant-menu-item:not(:last-child)
+					margin-bottom: 4px
 
-			.ant-menu-submenu
-				.ant-menu-submenu-title
-					&::after
-						position: absolute
-						top: 0
-						right: 0
-						bottom: 0
-						border-right: 3px solid $borderColor-notino-black
-						transform: scaleY(0.0001)
-						opacity: 0
-						transition: transform 0.15s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 0.15s cubic-bezier(0.215, 0.61, 0.355, 1)
-						content: ''
-				&.ant-menu-submenu-selected > .ant-menu-submenu-title
-					&::after
-						transform: scaleY(1)
-						opacity: 1
-						transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1)
+				.ant-menu-submenu
+					.ant-menu-submenu-title
+						&::after
+							position: absolute
+							top: 0
+							right: 0
+							bottom: 0
+							border-right: 3px solid $borderColor-notino-black
+							transform: scaleY(0.0001)
+							opacity: 0
+							transition: transform 0.15s cubic-bezier(0.215, 0.61, 0.355, 1), opacity 0.15s cubic-bezier(0.215, 0.61, 0.355, 1)
+							content: ''
+					&.ant-menu-submenu-selected > .ant-menu-submenu-title
+						&::after
+							transform: scaleY(1)
+							opacity: 1
+							transition: transform 0.15s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.15s cubic-bezier(0.645, 0.045, 0.355, 1)
 
-	.ant-layout-sider
+	.main-layout-sider.ant-layout-sider
 		position: sticky
 		height: 100vh
 		top: 0

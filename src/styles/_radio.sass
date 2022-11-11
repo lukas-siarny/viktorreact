@@ -1,0 +1,44 @@
+@import tailwind-variables
+@import "variables"
+
+.ant-form-item.noti-radio
+	&.noti-radio-vertical
+		.ant-radio-group
+			display: flex
+			flex-direction: column
+			width: 100%
+			gap: 8px
+	.ant-radio-group
+		.ant-radio-wrapper
+			.ant-radio
+				input[type='radio']
+					outline: none
+					&:focus + .ant-radio-inner
+						box-shadow: none
+					&:focus-visible + .ant-radio-inner
+						box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.5)
+				&::after
+					display: none
+			&:hover,
+			&:focus-visible
+				.ant-radio .ant-radio-inner
+					border-color: $borderColor-notino-black
+		&.ant-radio-group-small
+			gap: 4px
+			.ant-radio-wrapper
+				.ant-radio
+					font-size: 12px
+					line-height: 12px
+					input[type='radio']
+						width: 12px
+						height: 12px
+					.ant-radio-inner
+						width: 12px
+						height: 12px
+						&::after
+							width: 12px
+							height: 12px
+							margin-top: -6px
+							margin-left: -6px
+					& + span
+						font-size: 12px

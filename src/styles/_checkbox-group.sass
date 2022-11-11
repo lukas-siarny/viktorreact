@@ -1,0 +1,136 @@
+@import tailwind-variables
+@import "variables"
+
+.ant-form-item.noti-checkbox-group
+	.ant-form-item-control-input-content
+		.ant-checkbox-group
+			.ant-checkbox-wrapper
+				width: 100%
+				.ant-checkbox
+					& + span
+						word-break: break-all
+						transition: 300ms ease-in-out
+					&::after
+						display: none
+					input[type='checkbox']
+						&:focus-visible
+							~ .ant-checkbox-inner
+								box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.5)
+					.ant-checkbox-inner
+						transition: 300ms ease-in-out
+				&.ant-checkbox-wrapper-disabled
+					.ant-checkbox-disabled
+						.ant-checkbox-inner
+							border-color: $borderColor-notino-gray !important
+						&.ant-checkbox-checked
+							.ant-checkbox-inner
+								background-color: $borderColor-notino-gray
+								&::after
+									border-color: $borderColor-notino-grayLight
+						& + span
+							color: $textColor-notino-gray
+	&.noti-checkbox-group-vertical
+		.ant-checkbox-group
+			display: flex
+			flex-direction: column
+			width: 100%
+			gap: 8px
+		.ant-checkbox-wrapper + .ant-checkbox-wrapper
+			margin-left: 0
+			margin-right: 0
+	&.noti-checkbox-group-small
+		.ant-form-item-control-input-content
+			.ant-checkbox-group
+				gap: 4px
+				.ant-checkbox-wrapper
+					.ant-checkbox
+						input[type='checkbox']
+							width: 12px
+							height: 12px
+						.ant-checkbox-inner
+							width: 12px
+							height: 12px
+							&::after
+								width: 3.5px
+								height: 7px
+								border-width: 2px
+						& + span
+							font-size: 12px
+	&.noti-checkbox-group-rounded
+		.ant-checkbox-group
+			.ant-checkbox-wrapper
+				.ant-checkbox
+					.ant-checkbox-inner
+						border-radius: 50%
+					&::after
+						border-radius: 50%
+	&.noti-checkbox-group-hidden
+		.ant-checkbox-group
+			.ant-checkbox-wrapper
+				.ant-checkbox
+					display: none
+					& + span
+						padding-left: 0
+						display: block
+						width: 100%
+
+.nc-checkbox-group-checkbox
+	display: flex
+	position: relative
+	gap: 8px
+	.checker
+		width: 12px
+		height: 12px
+		border-radius: 50%
+		border: 1px solid #d9d9d9
+		flex: 0 0 auto
+		margin-top: 3px
+		position: relative
+		background: $backgroundColor-notino-white
+		transition: all 0.3s ease-in-out
+		position: relative
+		&::after
+			position: absolute
+			border: 2px solid $borderColor-notino-white
+			display: table
+			border-top: 0
+			border-left: 0
+			opacity: 1
+			transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s
+			transform: rotate(45deg) scale(0) translate(-50%, -50%)
+			content: ' '
+			border-width: 2px
+			width: 3.5px
+			height: 7px
+			top: 50%
+			left: 21.5%
+		.checkbox-focus
+			position: absolute
+			top: -1px
+			left: -1px
+			right: -1px
+			bottom: -1px
+			border-radius: 50%
+			opacity: 0
+			transition: 0.3s ease-in-out
+			transform: scale(0)
+			transform-origin: center
+	.checkbox-input
+		position: absolute
+		width: 12px
+		height: 12px
+		top: 0
+		left: 0
+		opacity: 0
+		box-shadow: 0px 0px 4px 2px #000
+		&:focus-visible
+			~ .checker
+				.checkbox-focus
+					opacity: 0.5
+					transform: scale(1)
+	&.checked
+		.checker
+			background: $backgroundColor-notino-black
+			border-color: $backgroundColor-notino-black
+			&::after
+				transform: rotate(45deg) scale(1) translate(-50%, -50%)

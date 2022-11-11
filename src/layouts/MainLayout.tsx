@@ -30,12 +30,16 @@ const { Content } = Layout
 
 type Props = LayoutSiderProps & {
 	children: ReactNode
+	extra?: {
+		contentClassName?: string | null
+	}
 }
 
 const MainLayout: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const [t] = useTranslation()
-	const { children } = props
+	const { children, extra } = props
+	const { contentClassName = 'p-4 px-10 main-background' } = extra || {}
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
@@ -57,6 +61,8 @@ const MainLayout: FC<Props> = (props) => {
 				type: 'group',
 				key: 'group-salons',
 				children: salonMenuItems,
+				// maxHeight - 100vh - 170px - je potrebné zaistiť aby na nejakom menšom responzívnom zobrazení nešlo menu mimo obrazovku
+				// čiže odratá sa vyška headera, výška buttonu "Pridať salón" + nejake marginy, paddingy
 				style: { height: salonOptions?.length > 8 ? 400 : 'auto', maxHeight: 'calc(100vh - 170px)', overflowY: 'auto' }
 			},
 			{
@@ -166,7 +172,7 @@ const MainLayout: FC<Props> = (props) => {
 						)
 					}
 				/>
-				<Content className='p-4 px-10 main-background'>{children}</Content>
+				<Content className={contentClassName || undefined}>{children}</Content>
 			</Layout>
 		</Layout>
 	)

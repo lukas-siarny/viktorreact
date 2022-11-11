@@ -27,6 +27,7 @@ import { ReactComponent as ParametersIcon } from '../../assets/icons/parameters-
 import { ReactComponent as IndustiresIcon } from '../../assets/icons/industries.svg'
 import { ReactComponent as InvoiceIcon } from '../../assets/icons/invoice-24.svg'
 import { ReactComponent as ChevronRightIcon } from '../../assets/icons/chevron-right.svg'
+import { ReactComponent as CalendarIcon } from '../../assets/icons/calendar-24.svg'
 
 // utils
 import { history } from '../../utils/history'
@@ -193,6 +194,12 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							label: t('loc:Zamestnanci'),
 							onClick: () => history.push(getPath(t('paths:employees'))),
 							icon: <EmployeesIcon />
+						},
+						{
+							key: PAGE.CALENDAR,
+							label: t('loc:Kalendár'),
+							onClick: () => history.push(getPath(t('paths:calendar'))),
+							icon: <CalendarIcon />
 						}
 					)
 				}
@@ -312,7 +319,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 
 	return (
 		<Sider
-			className={cx('bg-white shadow-md z-50', { 'account-dropdown-opened': isDropdownOpen })}
+			className={cx('bg-white shadow-md z-50 main-layout-sider', { 'account-dropdown-opened': isDropdownOpen })}
 			breakpoint='md'
 			collapsedWidth={56}
 			width={230}

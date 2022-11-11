@@ -1,5 +1,5 @@
+/* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-// eslint-disable-next-line import/no-cycle
 import { ISpecialistContactPayload, ISpecialistContactsPayload, ISpecialistsContactsActions } from './specialistContactsActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
 import { SPECIALIST_CONTACTS, SPECIALIST_CONTACT } from './specialistContactsTypes'

@@ -1,0 +1,425 @@
+@import tailwind-variables
+@import "variables"
+
+@keyframes content-animation
+	0%
+		opacity: 0
+	100%
+		opacity: 1
+
+@keyframes calendar-select-panel-animation
+	0%
+		transform: translateX(100%)
+	100%
+		transform: translateX(0)
+
+// calendar layout
+.noti-calendar-layout
+	height: 100%
+
+	// header
+	.nc-header
+		background: $backgroundColor-notino-white
+		height: 80px
+		display: flex
+		align-items: center
+		padding: 16px
+		border-bottom: 1px solid $borderColor-notino-grayLight
+		line-height: unset
+		gap: 8px
+		position: sticky
+		top: 64px
+		z-index: 3
+		.nav-left
+			flex: 1 1 50%
+			display: flex
+			align-items: center
+			gap: 16px
+		.nav-middle
+			display: flex
+			align-items: center
+		.nav-right
+			flex: 1 1 50%
+			display: flex
+			align-items: center
+			justify-content: flex-end
+		.nc-header-date-picker
+			height: 0
+			line-height: 0
+			padding-bottom: 0
+			.ant-form-item-row
+				height: 0
+			.ant-form-item-control,
+			.ant-form-item-control-input,
+			.ant-form-item-control-input-content
+				line-height: 0
+				min-height: 0
+			.ant-picker
+				padding: 0
+				border: 0
+				.ant-picker-input
+					display: none
+
+	// main section
+	.noti-calendar-main-section
+		height: calc(100vh - 144px)
+		overflow-y: hidden
+		position: sticky
+		top: 144px
+		z-index: 2
+
+		// sider filter
+		.nc-sider-filter
+			background: $backgroundColor-notino-white
+			height: 100%
+			overflow-y: auto
+			overflow-x: hidden
+			transition: none
+			position: relative
+			border-right: 1px solid $backgroundColor-notino-grayLight
+			margin-left: 1px
+
+		// sider event management
+		.nc-sider-event-management
+			background: $backgroundColor-notino-white
+			height: 100%
+			overflow: hidden
+			transition: none
+			position: relative
+			&::after
+				content: ''
+				display: block
+				position: absolute
+				width: 1px
+				left: 0
+				top: 0
+				bottom: 0
+				background: $backgroundColor-notino-grayLight
+			.nc-sider-event-management-header
+				display: flex
+				align-items: center
+				gap: 8px
+				height: 50px
+				padding: 16px
+				h2
+					margin: 0
+					font-size: 16px
+					line-height: 18px
+					white-space: nowrap
+					overflow: hidden
+					text-overflow: ellipsis
+				.button-transparent
+					box-shadow: none
+					padding: 0
+					border: 0
+					height: 16px
+					svg
+						width: 16px
+						height: 16px
+			.nc-sider-event-management-content
+				height: calc(100% - 50px) // 100% - .nc-sider-event-management-header
+				overflow-y: auto
+				overflow-x: hidden
+				padding: 0 16px 16px 16px
+				&.main-panel
+					height: calc(100% - 114px) // 100% - .nc-sider-event-management-header - .nc-sider-event-management-footer
+			.nc-sider-event-management-footer
+				height: 64px
+				padding: 8px 16px 16px 16px
+				> button
+					height: 40px
+			.nc-select-options-panel
+				position: absolute
+				top: 0
+				bottom: 0
+				right: 0
+				left: 0
+				background: $backgroundColor-notino-white
+				transform: translateY(100%)
+				animation: calendar-select-panel-animation 150ms ease-in-out forwards
+
+		// main content
+		.nc-content
+			background: $backgroundColor-notino-white
+			height: 100%
+			overflow-y: auto
+			position: relative
+			.nc-content-animate
+				position: absolute
+				top: 0
+				left: 0
+				right: 0
+				bottom: 0
+				width: 100%
+				height: 100%
+				opacity: 0
+				animation: content-animation 250ms ease-out forwards
+			.ant-spin-nested-loading
+				height: 100%
+				.ant-spin-container
+					height: 100%
+			&::-webkit-scrollbar, .hnGhZ::-webkit-scrollbar
+				width: 16px
+				height: 16px
+			&::-webkit-scrollbar
+				background: transparent
+				height: 8px
+				width: 8px
+			&::-webkit-scrollbar-thumb, .hnGhZ::-webkit-scrollbar-thumb
+				border-bottom: 4px solid #fff
+				border-left: 4px solid #fff
+				border-right: 4px solid #fff
+				border-top: 4px solid #fff
+			&::-webkit-scrollbar-thumb
+				border: none
+				-webkit-box-shadow: none
+				box-shadow: none
+				background: $backgroundColor-notino-grayLight
+				-webkit-border-radius: 8px
+				border-radius: 8px
+				min-height: 40px
+
+	// other
+	.nc-collapse
+		background: transparent
+		.nc-collapse-panel
+			padding-bottom: 16px
+			.ant-collapse-header
+				padding: 4px 8px
+				background: $backgroundColor-notino-grayLighter
+				min-height: 0
+				.ant-collapse-header-text
+					font-size: 14px
+					line-height: 16px
+					font-weight: 600
+					overflow: hidden
+					text-overflow: ellipsis
+					white-space: nowrap
+					min-height: 0
+					max-width: calc(100% - 24px)
+				.ant-collapse-expand-icon
+					svg
+						right: 8px
+						width: 12px
+						height: 12px
+						transform: translateY(-50%)
+						transform-origin: center
+						transition: transform 250ms ease-in-out
+						&.is-active
+							transform: translateY(-50%) rotate(180deg)
+			.ant-collapse-content-box
+				padding: 8px 0 0 8px
+	.nc-button
+		padding: 8px
+		outline: none
+		border-radius: 4px
+		color: $textColor-notino-black
+		font-size: 14px
+		line-height: 16px
+		font-weight: 400
+		cursor: pointer
+		transition: all 300ms ease-in-out
+		height: 32px
+
+		&.light
+			background: $backgroundColor-notino-grayLighter
+			border: none
+			&:hover,
+			&:focus-visible
+				background-color: $backgroundColor-notino-grayLight
+		&.bordered
+			background: $backgroundColor-notino-white
+			border: 1px solid $textColor-notino-grayLight
+			&:hover,
+			&:focus-visible
+				background-color: $backgroundColor-notino-grayLight
+
+	.nc-button-group
+		background: $backgroundColor-notino-grayLighter
+		padding: 2px
+		border-radius: 4px
+		button
+			color: $textColor-notino-black
+			background: transparent
+			border-radius: 4px
+			font-size: 14px
+			line-height: 16px
+			font-weight: 400
+			border: none
+			outline: none
+			padding: 6px 10px
+			cursor: pointer
+			height: 28px
+			transition: all 300ms ease-in-out
+			&:not(.active)
+				&:hover,
+				&:focus-visible
+					background-color: $backgroundColor-notino-grayLight
+			&.active
+				background: $backgroundColor-notino-white
+				box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+
+	.nc-button-date
+		color: $textColor-notino-black
+		background: transparent
+		border: 1px dashed transparent
+		font-size: 16px
+		line-height: 19px
+		font-weight: 600
+		outline: none
+		display: flex
+		align-items: center
+		height: 32px
+		gap: 4px
+		white-space: nowrap
+		cursor: pointer
+		text-transform: capitalize
+		transition: all 300ms ease-in-out
+		&:focus-visible
+			border-color: $borderColor-notino-gray
+
+	.nc-select
+		.nc-select-button
+			min-height: 40px
+			display: flex
+			gap: 4px
+			width: 100%
+			padding: 12px
+			font-size: 14px
+			line-height: 16px
+			font-weight: 400
+			border-radius: 8px
+			background: $backgroundColor-notino-grayLighter
+			outline: none
+			border: none
+			cursor: pointer
+			transition: all 300ms ease-in-out
+			position: relative
+			text-align: left
+			&:hover,
+			&:focus-visible
+				background-color: $backgroundColor-notino-grayLight
+			svg
+				width: 16px
+				height: 16px
+				flex: 0 0 auto
+			&::after
+				content: url('../assets/icons/chevron-right-gray-dark-16.svg')
+				margin-left: auto
+				width: 16px
+				height: 16px
+				align-self: center
+
+.noti-fc-empty
+	.image-wrapper
+		width: 100%
+		max-width: 440px
+		.image-wrapper-inner
+			width: 100%
+			height: 0
+			position: relative
+			padding-bottom: 63.5%
+			img
+				position: absolute
+				top: 0
+				left: 0
+				width: 100%
+				height: 100%
+
+
+// full calendar
+.fc-theme-standard .fc-scrollgrid,
+.fc .fc-scrollgrid-section > td
+	border-color: transparent
+
+// day view
+.noti-fc-resource-label
+	display: flex
+	align-items: flex-start
+	.image
+		border-radius: 50%
+		flex: 0 0 auto
+	.description
+		font-size: 10px
+		color: $textColor-notino-gray
+
+.fc-timegrid-event-harness
+	.fc-timegrid-event
+		background: transparent
+		border: none
+		box-shadow: none
+		.fc-event-main
+			padding: 2px
+
+.fc-day-today
+	background: transparent !important
+
+.noti-fc-event
+	width: 100%
+	height: 100%
+	background: #fff
+	position: relative
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+	border-radius: 4px
+	color: $textColor-notino-black
+	padding: 2px 8px
+	font-size: 10px
+	line-height: 1
+	.event-accent
+		content: ''
+		background: '#000',
+		position: absolute
+		top: 0
+		bottom: 0
+		left: 0
+		width: 4px
+		border-top-left-radius: 4px
+		border-bottom-left-radius: 4px
+	.desc
+		color: $textColor-notino-gray
+	strong
+		font-size: 12px
+
+.fc-scrollgrid-section-sticky
+	position: sticky
+	background: white
+	z-index: 20
+
+.fc-timegrid-body
+	// background: url("../assets/images/calendar-background.png")
+	background: $backgroundColor-notino-white
+
+.fc .fc-timegrid-slot-minor
+	border-top-color: transparent
+
+.fc-theme-standard td
+	border-color: $borderColor-notino-grayLight
+
+// FC - bg events
+.noti-fc-bg-event
+	position: relative
+	width: 100%
+	height: 100%
+
+	&.shift
+		background-color: $backgroundColor-notino-grayLighter
+		opacity: 1
+	&.timeoff
+		background-color: $backgroundColor-notino-pink
+		opacity: 0.1
+
+	.noti-fc-bg-event-divider
+		position: absolute
+		left: 0
+		right: 0
+		height: 1px
+		background: $borderColor-notino-grayLight
+
+.fc-timegrid-col-bg
+	.fc-timegrid-bg-harness
+		.noti-fc-bg-event.shift
+			border-bottom: 1px solid $borderColor-notino-grayLight
+		.fc-bg-event
+			opacity: 1
+			background: transparent
+

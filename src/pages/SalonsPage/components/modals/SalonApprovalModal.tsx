@@ -38,14 +38,14 @@ const SalonApprovalModal = (props: Props) => {
 					</p>
 					<h2>{t('loc:Pred schválením je potrebné')}</h2>
 					<ul className={'requirements'}>
-						<li>
+						{/* <li>
 							<Link to={parentPath + t('paths:employees')} className={'req-list-item req-list-item-link employee'}>
 								{t('loc:priradiť aspoň 1 zamestnanca do salónu, ktorý má aktívny účet v Notino B2B Partner')}
 								<span className='arrow-icon'>
 									<ChevronDownIcon style={{ transform: 'rotate(-90deg)' }} />
 								</span>
 							</Link>
-						</li>
+						</li> */}
 						<li className={'req-list-item name'}>{t('loc:mať vyplnený názov salónu')}</li>
 						<li className={'req-list-item phone'}>{t('loc:mať uvedené aspoň 1 telefónne číslo')}</li>
 						<li className={'req-list-item address'}>{t('loc:mať vyplnenú adresu salónu')}</li>

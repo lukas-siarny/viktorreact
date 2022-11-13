@@ -72,7 +72,11 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 		const start = getDateTime(event.start.date, event.start.time)
 		const end = getDateTime(event.end.date, event.end.time)
 
-		if (employeeID) {
+		// NOTE: Co s eventom, ktory ma start > end ?
+		// FC v takom pripade hodi null na end a automaticky ho vytvori na hodinu
+		// bude na to nejaka validacia vo formulari na vytvaranie?
+		// zatial taky event v FC odignorujem
+		if (employeeID && dayjs(start).isBefore(end)) {
 			const calendarEvent = {
 				id: event.id,
 				resourceId: employeeID,
@@ -87,6 +91,9 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 					composedEvents.push({
 						...calendarEvent,
+						// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
+						// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
+						end: dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end,
 						groupId: 'not-set-availability',
 						display: 'inverse-background'
 					})
@@ -96,6 +103,9 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 					composedEvents.push(
 						{
 							...calendarEvent,
+							// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
+							// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
+							end: dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end,
 							groupId: 'not-set-availability',
 							display: 'inverse-background'
 						},

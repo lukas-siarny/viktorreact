@@ -38,6 +38,8 @@ const renderEventContent = (data: EventContentArg) => {
 		)
 	}
 
+	console.log({ event: extendedProps.eventType === CALENDAR_EVENT_TYPE.RESERVATION ? event : undefined })
+
 	const diff = dayjs(event.end).diff(event.start, 'minutes')
 	const timeText = `${dayjs(event.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(event.end).format(CALENDAR_DATE_FORMAT.TIME)}`
 
@@ -142,6 +144,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	}
 
 	const hasResources = !!employees.length
+
+	console.log({ events: composeDayViewEvents(selectedDate, eventType, reservations, shiftsTimeOffs, employees) })
 
 	return (
 		<FullCalendar

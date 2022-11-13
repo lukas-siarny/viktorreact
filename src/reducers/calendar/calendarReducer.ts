@@ -2,20 +2,21 @@
 import { RESET_STORE } from '../generalTypes'
 import { ICalendarActions, ICalendarEventsPayload, ICalendarEventDetailPayload } from './calendarActions'
 import { ILoadingAndFailure } from '../../types/interfaces'
-import { EVENTS, EVENT_DETAIL, RESERVATIONS, SHIFTS_TIME_OFF } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL } from './calendarTypes'
+import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
 
 export const initState = {
-	events: {
+	[CALENDAR_EVENTS_KEYS.EVENTS]: {
 		data: null,
 		isLoading: false,
 		isFailure: false
 	} as ICalendarEventsPayload & ILoadingAndFailure,
-	reservations: {
+	[CALENDAR_EVENTS_KEYS.RESERVATIONS]: {
 		data: null,
 		isLoading: false,
 		isFailure: false
 	} as ICalendarEventsPayload & ILoadingAndFailure,
-	shiftsTimeOffs: {
+	[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS]: {
 		data: null,
 		isLoading: false,
 		isFailure: false
@@ -34,91 +35,25 @@ export default (state = initState, action: ICalendarActions) => {
 		case EVENTS.EVENTS_LOAD_START:
 			return {
 				...state,
-				events: {
-					...state.events,
+				[action.enumType]: {
+					...state[action.enumType],
 					isLoading: true
 				}
 			}
 		case EVENTS.EVENTS_LOAD_FAIL:
 			return {
 				...state,
-				events: {
-					...initState.events,
+				[action.enumType]: {
+					...initState[action.enumType],
 					isFailure: true
 				}
 			}
 		case EVENTS.EVENTS_LOAD_DONE:
 			return {
 				...state,
-				events: {
-					...initState.events,
+				[action.enumType]: {
+					...initState[action.enumType],
 					data: action.payload.data
-				}
-			}
-		// Reservations
-		case RESERVATIONS.RESERVATIONS_LOAD_START:
-			return {
-				...state,
-				reservations: {
-					...state.reservations,
-					isLoading: true
-				}
-			}
-		case RESERVATIONS.RESERVATIONS_LOAD_FAIL:
-			return {
-				...state,
-				reservations: {
-					...initState.reservations,
-					isFailure: true
-				}
-			}
-		case RESERVATIONS.RESERVATIONS_LOAD_DONE:
-			return {
-				...state,
-				reservations: {
-					...initState.reservations,
-					data: action.payload.data
-				}
-			}
-		case RESERVATIONS.RESERVATIONS_CLEAR:
-			return {
-				...state,
-				reservations: {
-					...initState.reservations,
-					data: null
-				}
-			}
-		// Shifts / Time off
-		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_START:
-			return {
-				...state,
-				shiftsTimeOffs: {
-					...state.shiftsTimeOffs,
-					isLoading: true
-				}
-			}
-		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_FAIL:
-			return {
-				...state,
-				shiftsTimeOffs: {
-					...initState.shiftsTimeOffs,
-					isFailure: true
-				}
-			}
-		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_LOAD_DONE:
-			return {
-				...state,
-				shiftsTimeOffs: {
-					...initState.shiftsTimeOffs,
-					data: action.payload.data
-				}
-			}
-		case SHIFTS_TIME_OFF.SHIFTS_TIME_OFF_CLEAR:
-			return {
-				...state,
-				reservations: {
-					...initState.shiftsTimeOffs,
-					data: null
 				}
 			}
 		// Event detail

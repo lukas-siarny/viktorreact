@@ -39,7 +39,7 @@ export const getCountries = (): ThunkResult<Promise<ICountriesPayload>> => async
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES_PHONE_PREFIX })
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.COUNTRIES })
 
-		const response = await getReq('/api/b2b/admin/enums/countries', undefined, undefined, undefined, undefined, true)
+		const response = await getReq('/api/b2b/admin/enums/countries/', undefined, undefined, undefined, undefined, true)
 		const data: any[] = map(get(response, 'data.countries', []), (item, index) => ({
 			key: index + 1,
 			...item
@@ -95,7 +95,7 @@ export const getCurrencies = (): ThunkResult<Promise<IEnumerationsCurrenciesPayl
 
 	try {
 		dispatch({ type: ENUMERATIONS.ENUMERATIONS_LOAD_START, enumType: ENUMERATIONS_KEYS.CURRENCIES })
-		const response = await getReq('/api/b2b/admin/enums/currencies', undefined, undefined, undefined, undefined, true)
+		const response = await getReq('/api/b2b/admin/enums/currencies/', undefined, undefined, undefined, undefined, true)
 
 		const data: any[] = map(get(response, 'data.currencies', []), (item, index) => ({
 			key: index + 1,

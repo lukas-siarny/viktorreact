@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useRef } from 'react'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
-import FullCalendar, { CalendarApi } from '@fullcalendar/react'
+import FullCalendar from '@fullcalendar/react'
 
 // enums
 import { CALENDAR_EVENT_TYPE_FILTER, CALENDAR_VIEW } from '../../../../utils/enums'
@@ -10,10 +10,13 @@ import { CALENDAR_EVENT_TYPE_FILTER, CALENDAR_VIEW } from '../../../../utils/enu
 import CalendarDayView from '../views/CalendarDayView'
 import CalendarWeekView from '../views/CalendarWeekView'
 import CalendarMonthView from '../views/CalendarMonthView'
+import CalendarEmptyState from '../CalendarEmptyState'
+
+// types
+import { Employees } from '../../../../types/interfaces'
 
 // reducers
 import { ICalendarEventsPayload } from '../../../../reducers/calendar/calendarActions'
-import { Employees } from '../../../../types/interfaces'
 
 type Props = {
 	view: CALENDAR_VIEW
@@ -24,28 +27,33 @@ type Props = {
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees
 	onShowAllEmployees: () => void
+	showEmptyState: boolean
 }
 
-export type CalendarApiRefs = {
-	[CALENDAR_VIEW.DAY]?: InstanceType<typeof CalendarApi>
-	[CALENDAR_VIEW.WEEK]?: InstanceType<typeof CalendarApi>
-	[CALENDAR_VIEW.MONTH]?: InstanceType<typeof CalendarApi>
+export type CalendarRefs = {
+	[CALENDAR_VIEW.DAY]?: InstanceType<typeof FullCalendar> | null
+	[CALENDAR_VIEW.WEEK]?: InstanceType<typeof FullCalendar> | null
+	[CALENDAR_VIEW.MONTH]?: InstanceType<typeof FullCalendar> | null
 }
 
-const CalendarContent = React.forwardRef<CalendarApiRefs, Props>((props, ref) => {
-	const { view, selectedDate, eventType, loading, reservations, shiftsTimeOffs, employees, onShowAllEmployees } = props
+const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
+	const { view, selectedDate, loading, eventType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState } = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
 
 	useImperativeHandle(ref, () => ({
-		[CALENDAR_VIEW.DAY]: dayView?.current?.getApi(),
-		[CALENDAR_VIEW.WEEK]: weekView?.current?.getApi(),
-		[CALENDAR_VIEW.MONTH]: monthView?.current?.getApi()
+		[CALENDAR_VIEW.DAY]: dayView?.current,
+		[CALENDAR_VIEW.WEEK]: weekView?.current,
+		[CALENDAR_VIEW.MONTH]: monthView?.current
 	}))
 
 	const getView = () => {
+		if (showEmptyState) {
+			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />
+		}
+
 		if (view === CALENDAR_VIEW.MONTH) {
 			return (
 				<CalendarMonthView

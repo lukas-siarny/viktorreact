@@ -1,7 +1,6 @@
 import React from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
-import i18next from 'i18next'
 
 // full calendar
 import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
@@ -10,7 +9,7 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
 import { composeDayEventResources, composeDayViewEvents, getCustomerName, getHoursMinutesFromMinutes } from '../../calendarHelpers'
 
 // types
@@ -18,9 +17,10 @@ import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon-16.svg'
+import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
 
-const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYPE_FILTER) => {
-	const { event, timeText } = data || {}
+const renderEventContent = (data: EventContentArg) => {
+	const { event } = data || {}
 	const { extendedProps } = event || {}
 
 	if (event.display === 'inverse-background') {
@@ -39,6 +39,7 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 	}
 
 	const diff = dayjs(event.end).diff(event.start, 'minutes')
+	const timeText = `${dayjs(event.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(event.end).format(CALENDAR_DATE_FORMAT.TIME)}`
 
 	return (
 		<div
@@ -52,59 +53,51 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 			})}
 		>
 			{(() => {
-				if (eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF) {
-					return (
-						<div className={'event-content'}>
-							<div className={'flex gap-1 justify-between min-w-0'}>
-								<div className={'flex gap-1 min-w-0'}>
-									<div className={'avatar w-4 h-4 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.employee?.image}")` }} />
-									<span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>
-								</div>
-								<span className={'duration'}>{getHoursMinutesFromMinutes(diff)}</span>
-							</div>
-							<span className={'time'}>{timeText}</span>
-						</div>
-					)
-				}
-
-				if (eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
-					const customerName = getCustomerName(extendedProps.customer)
-					return (
-						<>
-							<div className={'event-accent'} style={{ backgroundColor: extendedProps.employee?.color }} />
-							<div className={'event-background'} style={{ backgroundColor: extendedProps.employee?.color }} />
+				switch (extendedProps.eventType) {
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK: {
+						return (
 							<div className={'event-content'}>
-								<div className={'flex flex-col gap-1'}>
-									<span className={'time'}>{timeText}</span>
-									{customerName && <span className={'title'}>{customerName}</span>}
-									{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
+								<div className={'flex gap-1 justify-between min-w-0'}>
+									<div className={'flex items-center gap-1 min-w-0'}>
+										<span className={'color'} style={{ backgroundColor: extendedProps.employee?.color }} />
+										{extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
+										{extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
+										<span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>
+									</div>
+									<span className={'duration'}>{getHoursMinutesFromMinutes(diff)}</span>
 								</div>
-								<div className={'service-icon'} style={{ backgroundImage: `url("${extendedProps.service?.icon}")` }} />
+								<span className={'time'}>{timeText}</span>
 							</div>
-						</>
-					)
+						)
+					}
+					case CALENDAR_EVENT_TYPE.RESERVATION:
+					default: {
+						const customerName = getCustomerName(extendedProps.customer)
+						return (
+							<>
+								<div className={'event-accent'} style={{ backgroundColor: extendedProps.employee?.color }} />
+								<div className={'event-background'} style={{ backgroundColor: extendedProps.employee?.color }} />
+								<div className={'event-content'}>
+									<div className={'flex flex-col gap-1'}>
+										<span className={'time'}>{timeText}</span>
+										{customerName && <span className={'title'}>{customerName}</span>}
+										{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
+									</div>
+									<div className={'service-icon'} style={{ backgroundImage: `url("${extendedProps.service?.icon}")` }} />
+								</div>
+							</>
+						)
+					}
 				}
-
-				return null
 			})()}
 		</div>
 	)
 }
 
-const resourceLabelContent = (data: any, onShowAllEmployees: () => void) => {
+const resourceLabelContent = (data: any) => {
 	const extendedProps = data?.resource.extendedProps || {}
-
-	// empty state
-	if (extendedProps.emptyEmployees) {
-		return (
-			<div className={'nc-day-resource-label empty'}>
-				<button type={'button'} className={'nc-button bordered'} onClick={onShowAllEmployees}>
-					{i18next.t('loc:Zobraziť všetkých')}
-				</button>
-				<span className={'description'}>{i18next.t('loc:Nie je vybratý žiaden zamestnanec')}</span>
-			</div>
-		)
-	}
 
 	// normal state
 	return (
@@ -112,7 +105,7 @@ const resourceLabelContent = (data: any, onShowAllEmployees: () => void) => {
 			<div className={'image w-6 h-6 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.image}")` }} />
 			<div className={'info flex flex-col justify-start text-xs font-normal min-w-0'}>
 				<span className={'name'}>{extendedProps.name}</span>
-				<span className={'description'}>{extendedProps.wokringHours}</span>
+				<span className={'description'}>{extendedProps.description}</span>
 			</div>
 			{extendedProps.isTimeOff && (
 				<div className={'absence-icon'}>
@@ -126,7 +119,7 @@ const resourceLabelContent = (data: any, onShowAllEmployees: () => void) => {
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { time } = data || {}
 
-	return <div className={'nc-day-slot-label'}>{dayjs().startOf('day').add(time.milliseconds, 'millisecond').format('HH:mm')}</div>
+	return <div className={'nc-day-slot-label'}>{dayjs().startOf('day').add(time.milliseconds, 'millisecond').format(CALENDAR_DATE_FORMAT.TIME)}</div>
 }
 
 interface ICalendarDayView extends ICalendarView {
@@ -134,7 +127,7 @@ interface ICalendarDayView extends ICalendarView {
 }
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { selectedDate, eventType, reservations, shiftsTimeOffs, employees, onShowAllEmployees } = props
+	const { selectedDate, eventType, reservations, shiftsTimeOffs, employees } = props
 
 	const handleDateClick = (arg: DateClickArg) => {
 		// console.log({ arg })
@@ -149,6 +142,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	}
 
 	const hasResources = !!employees.length
+
+	console.log({ events: composeDayViewEvents(selectedDate, eventType, reservations, shiftsTimeOffs, employees) })
 
 	return (
 		<FullCalendar
@@ -177,8 +172,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			events={composeDayViewEvents(selectedDate, eventType, reservations, shiftsTimeOffs, employees)}
 			resources={composeDayEventResources(shiftsTimeOffs, employees)}
 			// render hooks
-			resourceLabelContent={(args) => resourceLabelContent(args, onShowAllEmployees)}
-			eventContent={(args) => renderEventContent(args, eventType)}
+			resourceLabelContent={resourceLabelContent}
+			eventContent={renderEventContent}
 			slotLabelContent={slotLabelContent}
 			// handlers
 			select={handleSelect}

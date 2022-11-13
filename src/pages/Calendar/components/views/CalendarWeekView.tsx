@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 
@@ -11,8 +10,8 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../../../utils/enums'
-import { getCustomerName, getHoursMinutesFromMinutes } from '../../calendarHelpers'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../../../utils/enums'
+import { composeWeekResources, composeWeekViewEvents, getCustomerName, getHoursMinutesFromMinutes, getWeekViewIntialdDate } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
@@ -20,7 +19,7 @@ import { ICalendarView } from '../../../../types/interfaces'
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon-16.svg'
 
-const employees = [
+/* const employees = [
 	{
 		id: '111_27604557-0508-4f54-babf-9e8ce281d4a7',
 		name: 'lukas.siarny@gmail.com',
@@ -340,20 +339,7 @@ const events = [
 		employee: 'b699c13e-4f46-4166-a5b4-82e606eb6291',
 		display: 'background'
 	}
-]
-
-const resources3 = [
-	{ id: `emp_1_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[0] },
-	{ id: `emp_2_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[1] },
-	{ id: `emp_3_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[2] },
-	{
-		id: `emp_1_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY),
-		employee: employees[0]
-	},
-	{ id: `emp_2_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[1] },
-	{ id: `emp_3_${dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY)}`, day: dayjs().add(1, 'day').format(CALENDAR_DATE_FORMAT.QUERY), employee: employees[2] }
-]
+] */
 
 const resourceAreaColumns = [
 	{
@@ -362,7 +348,10 @@ const resourceAreaColumns = [
 		headerContent: null,
 		width: 55,
 		cellContent: (args: any) => {
-			const { groupValue: date } = args || {}
+			const { groupValue, fieldValue } = args || {}
+
+			// ked je len jeden zamestnanec tak to posiela fieldValue, ak viacero tak groupValue
+			const date = groupValue || fieldValue
 
 			const dayName = dayjs(date).format('ddd')
 			const dayNumber = dayjs(date).format('D')
@@ -479,7 +468,7 @@ interface ICalendarWeekView extends ICalendarView {
 }
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { selectedDate, calendarApi, eventType } = props
+	const { selectedDate, calendarApi, eventType, shiftsTimeOffs, reservations, employees } = props
 
 	const handleDateClick = (arg: DateClickArg) => {
 		console.log({ arg })
@@ -512,15 +501,15 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceAreaWidth={200}
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
-				initialDate={/* selectedDate */ '2022-11-07'}
+				initialDate={getWeekViewIntialdDate(selectedDate)}
 				weekends={true}
 				editable
 				selectable
-				stickyFooterScrollbar={false}
+				stickyFooterScrollbar
 				nowIndicator
 				// data sources
-				events={events}
-				resources={resources3}
+				events={composeWeekViewEvents(selectedDate, eventType, reservations, shiftsTimeOffs, employees)}
+				resources={composeWeekResources(selectedDate, shiftsTimeOffs, employees)}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
 				slotLabelContent={slotLabelContent}

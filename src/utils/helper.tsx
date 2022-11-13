@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import React from 'react'
 import {
 	first,
@@ -37,7 +38,6 @@ import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
-// eslint-disable-next-line import/no-cycle
 import showNotifications from './tsxHelpers'
 import {
 	DEFAULT_DATE_FORMAT,
@@ -1039,11 +1039,3 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 		}
 	}, {})
 }
-
-export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')
-
-export const getFirstDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('month')
-
-export const getLastDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('week')
-
-export const getLasttDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('month')

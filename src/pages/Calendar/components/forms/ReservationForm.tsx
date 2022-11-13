@@ -1,15 +1,11 @@
-import React, { MouseEventHandler, useCallback, useState, FC } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Button, Form } from 'antd'
-import cx from 'classnames'
 
 // validate
 import validateReservationForm from './validateShiftForm'
-
-// reducers
-import { RootState } from '../../../../reducers'
 
 // utils
 import { showErrorNotification } from '../../../../utils/helper'
@@ -20,9 +16,7 @@ import { ICalendarReservationForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
-import { ReactComponent as ProfileIcon } from '../../../../assets/icons/profile-icon.svg'
 import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as EmployeesIcon } from '../../../../assets/icons/employees.svg'
 
 // components
 import CalendarSelectField from '../CalendarSelectField'

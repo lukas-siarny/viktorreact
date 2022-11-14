@@ -246,11 +246,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			...values
 		})
 	}
-
+	const handleDeleteEvent = () => {
+		// TODO: switch nad deletom z query kontorlvoat calendar view
+	}
 	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
 		// TODO: rezervacia
 		// damske kadernictvo: "00000000-0000-0000-0000-000000000001"
 		// sluzba: "00000000-0000-0000-0000-000000000068"
+		console.log(values)
 		try {
 			const reqData = {
 				start: {
@@ -264,8 +267,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				note: values.note,
 				customerID: values.customer.key as string,
 				employeeID: values.employee.key as string,
-				serviceID: '88e6e81b-48df-4df0-a79c-35762514a1cc', // TODO:
-				serviceCategoryParameterValueID: '00000000-0000-0000-0000-000000000069' // TODO:
+				serviceID: 'd9274f67-6d27-47f4-bdb5-6a3c8a91b907',
+				serviceCategoryParameterValueID: '00000000-0000-0000-0000-000000000001' // TODO:
 			}
 
 			await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
@@ -421,6 +424,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				<SiderEventManagement
 					onChangeEventType={onChangeEventType}
 					salonID={salonID}
+					handleDeleteEvent={handleDeleteEvent}
 					sidebarView={query.sidebarView as any}
 					setCollapsed={setEventManagement}
 					handleSubmitReservation={handleSubmitReservation}

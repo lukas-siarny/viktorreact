@@ -31,17 +31,19 @@ import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
+import DeleteButton from '../../../../components/DeleteButton'
 
 type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	salonID: string
 	onChangeEventType: (type: any) => any
+	handleDeleteEvent: () => any
 }
 
 type Props = InjectedFormProps<ICalendarBreakForm, ComponentProps> & ComponentProps
 
 const CalendarBreakForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -124,10 +126,21 @@ const CalendarBreakForm: FC<Props> = (props) => {
 	return (
 		<>
 			<div className={'nc-sider-event-management-header justify-between'}>
-				<div className={'font-semibold'}>{t('loc:Nová absencia')}</div>
-				<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
-					<CloseIcon />
-				</Button>
+				<div className={'font-semibold'}>{t('loc:Nová prestávka')}</div>
+				<div className={'flex-center'}>
+					<DeleteButton
+						placement={'bottom'}
+						entityName={t('loc:prestávku')}
+						className={'bg-transparent mr-4'}
+						onClick={handleDeleteEvent}
+						onlyIcon
+						smallIcon
+						size={'small'}
+					/>
+					<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
+						<CloseIcon />
+					</Button>
+				</div>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
@@ -190,7 +203,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 			</div>
 			<div className={'nc-sider-event-management-footer'}>
 				<Button onClick={() => dispatch(submit(FORM.CALENDAR_BREAK_FORM))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
-					{STRINGS(t).createRecord(t('loc:dovolenku'))}
+					{STRINGS(t).createRecord(t('loc:prestávku'))}
 				</Button>
 			</div>
 		</>

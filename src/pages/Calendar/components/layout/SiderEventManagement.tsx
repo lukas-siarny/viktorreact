@@ -2,7 +2,7 @@ import React, { FC } from 'react'
 import Sider from 'antd/lib/layout/Sider'
 
 // enums
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
 
 // types
 import { ICalendarBreakForm, ICalendarReservationForm, ICalendarShiftForm, ICalendarTimeOffForm } from '../../../../types/interfaces'
@@ -22,21 +22,54 @@ type Props = {
 	handleSubmitTimeOff: (values: ICalendarTimeOffForm) => void
 	handleSubmitBreak: (values: ICalendarBreakForm) => void
 	onChangeEventType: (type: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => any
+	handleDeleteEvent: () => any
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const { setCollapsed, handleSubmitReservation, handleSubmitTimeOff, handleSubmitShift, handleSubmitBreak, salonID, onChangeEventType, sidebarView } = props
+	const { setCollapsed, handleSubmitReservation, handleSubmitTimeOff, handleSubmitShift, handleSubmitBreak, salonID, onChangeEventType, sidebarView, handleDeleteEvent } = props
 
 	const getSiderContent = () => {
 		switch (sidebarView) {
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
-				return <ReservationForm onChangeEventType={onChangeEventType} setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitReservation} />
+				return (
+					<ReservationForm
+						onChangeEventType={onChangeEventType}
+						handleDeleteEvent={handleDeleteEvent}
+						setCollapsed={setCollapsed}
+						salonID={salonID}
+						onSubmit={handleSubmitReservation}
+					/>
+				)
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
-				return <ShiftForm onChangeEventType={onChangeEventType} setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitShift} />
+				return (
+					<ShiftForm
+						onChangeEventType={onChangeEventType}
+						handleDeleteEvent={handleDeleteEvent}
+						setCollapsed={setCollapsed}
+						salonID={salonID}
+						onSubmit={handleSubmitShift}
+					/>
+				)
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:
-				return <TimeOffForm onChangeEventType={onChangeEventType} setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitTimeOff} />
+				return (
+					<TimeOffForm
+						onChangeEventType={onChangeEventType}
+						handleDeleteEvent={handleDeleteEvent}
+						setCollapsed={setCollapsed}
+						salonID={salonID}
+						onSubmit={handleSubmitTimeOff}
+					/>
+				)
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
-				return <BreakForm onChangeEventType={onChangeEventType} setCollapsed={setCollapsed} salonID={salonID} onSubmit={handleSubmitBreak} />
+				return (
+					<BreakForm
+						onChangeEventType={onChangeEventType}
+						handleDeleteEvent={handleDeleteEvent}
+						setCollapsed={setCollapsed}
+						salonID={salonID}
+						onSubmit={handleSubmitBreak}
+					/>
+				)
 			default:
 				return null
 		}

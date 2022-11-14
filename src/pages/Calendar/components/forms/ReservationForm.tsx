@@ -12,7 +12,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -31,17 +31,19 @@ import CustomerForm from '../../../CustomersPage/components/CustomerForm'
 
 // redux
 import { RootState } from '../../../../reducers'
+import DeleteButton from '../../../../components/DeleteButton'
 
 type ComponentProps = {
 	salonID: string
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	onChangeEventType: (type: any) => any
+	handleDeleteEvent: () => any
 }
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
@@ -75,6 +77,7 @@ const ReservationForm: FC<Props> = (props) => {
 			const { data } = await getReq('/api/b2b/admin/services/', {
 				salonID
 			})
+			console.log('data', data)
 			const optData = flatten(
 				map(data.groupedServicesByCategory, (industry) =>
 					map(industry.category?.children, (category) => {
@@ -84,13 +87,14 @@ const ReservationForm: FC<Props> = (props) => {
 							children: map(category.category?.children, (item) => {
 								return {
 									label: item.category.name,
-									key: item.category.id
+									key: item.service.id
 								}
 							})
 						}
 					})
 				)
 			)
+			console.log('formated services', optData)
 			return { pagination: null, data: optData }
 		} catch (e) {
 			return { pagination: null, data: [] }
@@ -166,9 +170,20 @@ const ReservationForm: FC<Props> = (props) => {
 			{modals}
 			<div className={'nc-sider-event-management-header justify-between'}>
 				<div className={'font-semibold'}>{t('loc:Nová rezervácia')}</div>
-				<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
-					<CloseIcon />
-				</Button>
+				<div className={'flex-center'}>
+					<DeleteButton
+						placement={'bottom'}
+						entityName={t('loc:rezerváciu')}
+						className={'bg-transparent mr-4'}
+						onClick={handleDeleteEvent}
+						onlyIcon
+						smallIcon
+						size={'small'}
+					/>
+					<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
+						<CloseIcon />
+					</Button>
+				</div>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>

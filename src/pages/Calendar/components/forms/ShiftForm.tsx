@@ -30,17 +30,19 @@ import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
 
 // redux
 import { RootState } from '../../../../reducers'
+import DeleteButton from '../../../../components/DeleteButton'
 
 type ComponentProps = {
 	salonID: string
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	onChangeEventType: (type: any) => any
+	handleDeleteEvent: () => any
 }
 
 type Props = InjectedFormProps<ICalendarShiftForm, ComponentProps> & ComponentProps
 
 const CalendarShiftForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -124,9 +126,20 @@ const CalendarShiftForm: FC<Props> = (props) => {
 		<>
 			<div className={'nc-sider-event-management-header justify-between'}>
 				<div className={'font-semibold'}>{t('loc:Nová zmena')}</div>
-				<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
-					<CloseIcon />
-				</Button>
+				<div className={'flex-center'}>
+					<DeleteButton
+						placement={'bottom'}
+						entityName={t('loc:zmenu')}
+						className={'bg-transparent mr-4'}
+						onClick={handleDeleteEvent}
+						onlyIcon
+						smallIcon
+						size={'small'}
+					/>
+					<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
+						<CloseIcon />
+					</Button>
+				</div>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>

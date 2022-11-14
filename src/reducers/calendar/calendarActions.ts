@@ -73,8 +73,8 @@ const getTimeFromTo = (selectedDate: string, view: CALENDAR_VIEW) => {
 		}
 		case CALENDAR_VIEW.WEEK:
 			return {
-				dateFrom: dayjs(selectedDate).startOf('week').format(CALENDAR_DATE_FORMAT.QUERY),
-				dateTo: dayjs(selectedDate).endOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
+				dateFrom: dayjs(selectedDate).startOf('week').toISOString(),
+				dateTo: dayjs(selectedDate).endOf('week').toISOString()
 			}
 		case CALENDAR_VIEW.DAY:
 		default:

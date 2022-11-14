@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { t } from 'i18next'
+import i18next, { t } from 'i18next'
 import { uniqueId } from 'lodash'
 
 // reducers
@@ -9,7 +9,7 @@ import { CalendarEvent, ICalendarEventsPayload } from '../../reducers/calendar/c
 import { Employees } from '../../types/interfaces'
 
 // utils
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../utils/enums'
 
 export const getHoursMinutesFromMinutes = (minutes: number) => {
 	const hours = Math.floor(minutes / 60)
@@ -28,7 +28,7 @@ const getDateTime = (date: string, time?: string) => {
 }
 
 export const getCustomerName = (customer: CalendarEvent['customer']) => {
-	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
+	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email || i18next.t('loc:Nezńamy zákazník')
 }
 
 export const getEmployeeName = (employee: CalendarEvent['employee']) => {
@@ -276,6 +276,7 @@ interface EmployeeWeekResource {
 	id: string
 	name: string
 	image: string
+	employeeColor?: string
 	isTimeOff: boolean
 	employeeData: Employees[0]
 }
@@ -292,6 +293,7 @@ export const composeWeekResources = (selectedDate: string, shiftsTimeOffs: ICale
 			return {
 				id: getWeekDayResourceID(employee.id, weekDay),
 				day: weekDay,
+				eventBackgroundColor: employee.color,
 				employee: {
 					id: employee.id,
 					name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
@@ -305,7 +307,7 @@ export const composeWeekResources = (selectedDate: string, shiftsTimeOffs: ICale
 	}, [] as any[])
 }
 
-export const getWeekViewIntialdDate = (selectedDate: string) => {
+export const getWeekViewSelectedDate = (selectedDate: string) => {
 	const weekDays = getWeekDays(selectedDate)
 	const today = dayjs().startOf('day')
 	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : selectedDate
@@ -332,11 +334,12 @@ const composeWeekViewReservations = (selectedDate: string, reservations: ICalend
 	const events = [...(reservations || []), ...(shiftsTimeOffs || [])]
 
 	events?.forEach((event) => {
-		const start = getDateTime(event.start.date, event.start.time)
-		const end = getDateTime(event.end.date, event.end.time)
+		const startOriginal = getDateTime(event.start.date, event.start.time)
+		const start = getDateTime(selectedDate, event.start.time)
+		const end = getDateTime(selectedDate, event.end.time)
 
 		const employeeID = event.employee?.id
-		const weekDayIndex = weekDays.findIndex((weekDay) => dayjs(weekDay).startOf('day').isSame(dayjs(start).startOf('day')))
+		const weekDayIndex = weekDays.findIndex((weekDay) => dayjs(weekDay).startOf('day').isSame(dayjs(startOriginal).startOf('day')))
 
 		if (employeeID && dayjs(start).isBefore(end) && weekDayIndex >= 0) {
 			const resourceId = getWeekDayResourceID(employeeID, weekDays[weekDayIndex])
@@ -347,7 +350,8 @@ const composeWeekViewReservations = (selectedDate: string, reservations: ICalend
 				end,
 				eventType: event.eventType,
 				allDay: dayjs(start).isSame(dayjs(selectedDate).startOf('day')) && dayjs(end).isAfter(dayjs(selectedDate).endOf('day').subtract(1, 'minutes')),
-				employee: event.employee
+				employee: event.employee,
+				eventData: event
 			}
 
 			switch (calendarEvent.eventType) {
@@ -356,7 +360,10 @@ const composeWeekViewReservations = (selectedDate: string, reservations: ICalend
 						...calendarEvent,
 						// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
 						// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
-						end: dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end,
+						end:
+							dayjs(end).diff(start, 'minutes') < CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION
+								? dayjs(start).add(CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION, 'minutes').toISOString()
+								: end,
 						groupId: 'not-set-availability',
 						display: 'inverse-background'
 					})
@@ -374,6 +381,7 @@ const composeWeekViewReservations = (selectedDate: string, reservations: ICalend
 						},
 						{
 							...calendarEvent,
+							end: dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end,
 							display: 'background'
 						}
 					)
@@ -411,19 +419,20 @@ const composeWeekViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendar
 	const weekDays = getWeekDays(selectedDate)
 
 	shiftsTimeOffs?.forEach((event) => {
-		const start = getDateTime(event.start.date, event.start.time)
-		const end = getDateTime(event.end.date, event.end.time)
+		const startOriginal = getDateTime(event.start.date, event.start.time)
+		const start = getDateTime(selectedDate, event.start.time)
+		const end = getDateTime(selectedDate, event.end.time)
 
 		const employeeID = event.employee?.id
-		const weekDayIndex = weekDays.findIndex((weekDay) => dayjs(weekDay).startOf('day').isSame(dayjs(start).startOf('day')))
+		const weekDayIndex = weekDays.findIndex((weekDay) => dayjs(weekDay).startOf('day').isSame(dayjs(startOriginal).startOf('day')))
 
 		if (employeeID && dayjs(start).isBefore(end) && weekDayIndex >= 0) {
 			const resourceId = getWeekDayResourceID(employeeID, weekDays[weekDayIndex])
 			composedEvents.push({
 				id: event.id,
 				resourceId,
-				start: getDateTime(event.start.date, event.start.time),
-				end: getDateTime(event.end.date, event.end.time),
+				start,
+				end,
 				eventType: event.eventType,
 				allDay: dayjs(start).isSame(dayjs(selectedDate).startOf('day')) && dayjs(end).isAfter(dayjs(selectedDate).endOf('day').subtract(1, 'minutes')),
 				employee: event.employee

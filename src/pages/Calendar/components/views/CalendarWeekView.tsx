@@ -10,14 +10,15 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, getCustomerName, getHoursMinutesFromMinutes, getWeekViewIntialdDate } from '../../calendarHelpers'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../../../utils/enums'
+import { composeWeekResources, composeWeekViewEvents, getCustomerName, getHoursMinutesFromMinutes, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon-16.svg'
+import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
 
 /* const employees = [
 	{
@@ -38,14 +39,14 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 		image: 'https://d1pfrdq2i86yn4.cloudfront.net/employees/603b0c9d-22aa-4c6f-89e2-b714198d2943_NdtrLNijKPdzHIHjcFiOYiMHrDmrEJ3eqbdJZWaeofE-2048x1536-thumbnail.jpg',
 		isTimeOff: false
 	}
-]
+] */
 
-const events = [
+const events2 = [
 	{
 		id: 'e17c0f52-f17f-43df-a6ed-5bca16cdc0e5',
-		resourceId: `emp_1_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		start: '2022-11-07T07:30:00.000Z',
-		end: '2022-11-07T09:00:00.000Z',
+		resourceId: '2022-11-14_27604557-0508-4f54-babf-9e8ce281d4a7',
+		start: '2022-11-14T07:30:00.000Z',
+		end: '2022-11-14T09:00:00.000Z',
 		eventType: 'RESERVATION',
 		title: 'event title',
 		allDay: false,
@@ -77,9 +78,9 @@ const events = [
 	},
 	{
 		id: 'cffc1c98-3601-405e-92e7-a2f1093e9145',
-		resourceId: `emp_1_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		start: '2022-11-07T09:30:00.000Z',
-		end: '2022-11-07T10:00:00.000Z',
+		resourceId: '2022-11-14_8b85a04d-bf48-4bea-9bee-71c81d506c0f',
+		start: '2022-11-14T09:30:00.000Z',
+		end: '2022-11-14T10:00:00.000Z',
 		eventType: 'RESERVATION',
 		allDay: false,
 		title: 'event title',
@@ -111,9 +112,9 @@ const events = [
 	},
 	{
 		id: 'aeaca15c-e18c-40cb-929c-97f0ca8fa082',
-		resourceId: `emp_1_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		start: '2022-11-07T14:00:00.000Z',
-		end: '2022-11-07T17:00:00.000Z',
+		resourceId: '2022-11-14_8b85a04d-bf48-4bea-9bee-71c81d506c0f',
+		start: '2022-11-14T14:00:00.000Z',
+		end: '2022-11-14T17:00:00.000Z',
 		eventType: 'RESERVATION',
 		allDay: false,
 		title: 'event title',
@@ -145,9 +146,9 @@ const events = [
 	},
 	{
 		id: '5b03c371-23df-461a-add1-17318c58637e',
-		resourceId: `emp_2_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		start: '2022-11-07T08:15:00.000Z',
-		end: '2022-11-07T09:45:00.000Z',
+		resourceId: '2022-11-16_8b85a04d-bf48-4bea-9bee-71c81d506c0f',
+		start: '2022-11-14T08:15:00.000Z',
+		end: '2022-11-14T09:45:00.000Z',
 		eventType: 'RESERVATION',
 		allDay: false,
 		title: 'event title',
@@ -177,9 +178,9 @@ const events = [
 	},
 	{
 		id: '2bad91ce-ac50-4689-8c8b-8cd4d04803ba',
-		resourceId: `emp_2_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		start: '2022-11-07T09:45:00.000Z',
-		end: '2022-11-07T11:00:00.000Z',
+		resourceId: '2022-11-16_8b85a04d-bf48-4bea-9bee-71c81d506c0f',
+		start: '2022-11-14T09:45:00.000Z',
+		end: '2022-11-14T11:00:00.000Z',
 		eventType: 'RESERVATION',
 		allDay: false,
 		title: 'event title',
@@ -209,9 +210,9 @@ const events = [
 	},
 	{
 		id: '1fe2c840-08af-4239-b3b2-3f07cb2407e5',
-		resourceId: `emp_2_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		start: '2022-11-07T13:00:00.000Z',
-		end: '2022-11-07T15:00:00.000Z',
+		resourceId: '2022-11-16_b699c13e-4f46-4166-a5b4-82e606eb6291',
+		start: '2022-11-14T13:00:00.000Z',
+		end: '2022-11-14T15:00:00.000Z',
 		eventType: 'RESERVATION',
 		allDay: false,
 		title: 'event title',
@@ -240,10 +241,10 @@ const events = [
 		}
 	},
 	{
-		id: `emp_3_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
+		id: '2022-11-17_27604557-0508-4f54-babf-9e8ce281d4a7',
 		resourceId: '27604557-0508-4f54-babf-9e8ce281d4a7',
-		start: '2022-11-07T08:00:00.000Z',
-		end: '2022-11-07T08:15:00.000Z',
+		start: '2022-11-14T08:00:00.000Z',
+		end: '2022-11-14T08:15:00.000Z',
 		eventType: 'RESERVATION',
 		allDay: false,
 		title: 'some title',
@@ -273,9 +274,9 @@ const events = [
 	},
 	{
 		id: '648153e6-38fd-4495-9aaf-ddc9a9aa9877',
-		resourceId: `emp_3_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
-		start: '2022-11-07T13:00:00.000Z',
-		end: '2022-11-07T16:30:00.000Z',
+		resourceId: '2022-11-17_8b85a04d-bf48-4bea-9bee-71c81d506c0f',
+		start: '2022-11-14T13:00:00.000Z',
+		end: '2022-11-14T16:30:00.000Z',
 		eventType: 'RESERVATION',
 		allDay: false,
 		title: 'event title',
@@ -302,7 +303,7 @@ const events = [
 			phonePrefixCountryCode: 'SK',
 			phone: '902111222'
 		}
-	},
+	} /* ,
 	{
 		id: '67',
 		resourceId: `emp_1_${dayjs().format(CALENDAR_DATE_FORMAT.QUERY)}`,
@@ -338,8 +339,8 @@ const events = [
 		allDay: false,
 		employee: 'b699c13e-4f46-4166-a5b4-82e606eb6291',
 		display: 'background'
-	}
-] */
+	} */
+]
 
 const resourceAreaColumns = [
 	{
@@ -389,8 +390,8 @@ const resourceAreaColumns = [
 	}
 ]
 
-const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYPE_FILTER) => {
-	const { event, timeText } = data || {}
+const renderEventContent = (data: EventContentArg) => {
+	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
 
 	if (event.display === 'inverse-background') {
@@ -409,10 +410,11 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 	}
 
 	const diff = dayjs(event.end).diff(event.start, 'minutes')
+	const timeText = `${dayjs(event.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(event.end).format(CALENDAR_DATE_FORMAT.TIME)}`
 
 	return (
 		<div
-			className={cx('nc-week-event', {
+			className={cx('nc-week-event fc-event-title-container', {
 				reservation: extendedProps.eventType === CALENDAR_EVENT_TYPE.RESERVATION,
 				shift: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
 				timeoff: extendedProps.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
@@ -422,6 +424,41 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 			})}
 		>
 			{(() => {
+				switch (extendedProps.eventType) {
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+					case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK: {
+						return (
+							<div className={'event-content fc-sticky'}>
+								<div className={'flex gap-1 justify-between min-w-0'}>
+									<div className={'flex gap-1 min-w-0'}>
+										<div className={'avatar w-4 h-4 bg-notino-gray bg-cover'} style={{ backgroundImage: `url("${extendedProps.employee?.image}")` }} />
+										<span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>
+									</div>
+									<span className={'duration'}>{getHoursMinutesFromMinutes(diff)}</span>
+								</div>
+								<span className={'time'}>{timeText}</span>
+							</div>
+						)
+					}
+					case CALENDAR_EVENT_TYPE.RESERVATION:
+					default: {
+						return (
+							<>
+								<div className={'event-accent'} style={{ backgroundColor }} />
+								<div className={'event-background'} style={{ backgroundColor }} />
+								<div className={'event-content'}>
+									<span className={'title'}>{getCustomerName(extendedProps.customer)}</span>
+									{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
+									<div className={'service-icon'} style={{ backgroundImage: `url("${extendedProps.service?.icon}")` }} />
+								</div>
+							</>
+						)
+					}
+				}
+			})()}
+
+			{/* (() => {
 				if (eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF) {
 					return (
 						<div className={'event-content'}>
@@ -452,7 +489,7 @@ const renderEventContent = (data: EventContentArg, eventType: CALENDAR_EVENT_TYP
 				}
 
 				return null
-			})()}
+			})() */}
 		</div>
 	)
 }
@@ -482,6 +519,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		const { start, end, resource } = info
 	}
 
+	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate)
+
 	return (
 		<div className={'nc-calendar-week-wrapper'}>
 			<FullCalendar
@@ -497,23 +536,24 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
 				slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
 				height='auto'
-				slotMinWidth={30}
+				slotMinWidth={25}
+				eventMinWidth={25}
 				resourceAreaWidth={200}
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
-				initialDate={getWeekViewIntialdDate(selectedDate)}
+				initialDate={weekViewSelectedDate}
 				weekends={true}
 				editable
 				selectable
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
-				events={composeWeekViewEvents(selectedDate, eventType, reservations, shiftsTimeOffs, employees)}
-				resources={composeWeekResources(selectedDate, shiftsTimeOffs, employees)}
+				events={composeWeekViewEvents(weekViewSelectedDate, eventType, reservations, shiftsTimeOffs, employees)}
+				resources={composeWeekResources(weekViewSelectedDate, shiftsTimeOffs, employees)}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
 				slotLabelContent={slotLabelContent}
-				eventContent={(args) => renderEventContent(args, eventType)}
+				eventContent={renderEventContent}
 				// handlers
 				select={handleSelect}
 				dateClick={handleDateClick}

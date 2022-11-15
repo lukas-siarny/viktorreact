@@ -454,6 +454,13 @@ export interface IIndustryForm {
 	categoryIDs: string[]
 }
 
+export interface IReservationSystemSettingsForm {
+	enabledReservations?: boolean | null
+	maxDaysB2cCreateReservation?: number | null
+	maxHoursB2cCreateReservationBeforeStart?: number | null
+	maxHoursB2cCancelReservationBeforeStart?: number | null
+}
+
 export type NameLocalizationsItem = {
 	language: string
 	value: string

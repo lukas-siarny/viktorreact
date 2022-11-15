@@ -45,8 +45,6 @@ const App = () => {
 		})
 	}, [])
 
-	console.log(dayjs().startOf('week').toISOString())
-
 	return (
 		<Suspense
 			fallback={

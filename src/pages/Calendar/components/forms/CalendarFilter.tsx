@@ -14,7 +14,7 @@ import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chev
 import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
 
 // utils
-import { CALENDAR_EVENT_TYPE_FILTER, FORM } from '../../../../utils/enums'
+import { CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../../../utils/enums'
 import { history } from '../../../../utils/history'
 
 // atoms
@@ -26,7 +26,7 @@ import { ICalendarFilter } from '../../../../types/interfaces'
 
 type ComponentProps = {
 	parentPath: string
-	eventType: CALENDAR_EVENT_TYPE_FILTER
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
 type Props = InjectedFormProps<ICalendarFilter, ComponentProps> & ComponentProps
@@ -54,7 +54,7 @@ const checkboxOptionRender = (option: any, checked?: boolean) => {
 }
 
 const CalendarFilter = (props: Props) => {
-	const { handleSubmit, parentPath, eventType } = props
+	const { handleSubmit, parentPath, eventsViewType } = props
 	const [t] = useTranslation()
 
 	const services = useSelector((state: RootState) => state.service.services)
@@ -63,13 +63,13 @@ const CalendarFilter = (props: Props) => {
 	const eventTypeOptions = useMemo(
 		() => [
 			{
-				key: CALENDAR_EVENT_TYPE_FILTER.RESERVATION,
-				value: CALENDAR_EVENT_TYPE_FILTER.RESERVATION,
+				key: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
+				value: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
 				label: t('loc:Rezervácia')
 			},
 			{
-				key: CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF,
-				value: CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF,
+				key: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
+				value: CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF,
 				label: t('loc:Zmena / absencia')
 			}
 		],
@@ -78,10 +78,10 @@ const CalendarFilter = (props: Props) => {
 
 	const defaultActiveKeys = useMemo(
 		() =>
-			eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+			eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF
 				? [PANEL_KEY.EVENT_TYPE, PANEL_KEY.EMPLOYEES]
 				: [PANEL_KEY.EVENT_TYPE, PANEL_KEY.EMPLOYEES, PANEL_KEY.CATEGORIES],
-		[eventType]
+		[eventsViewType]
 	)
 
 	return (
@@ -127,7 +127,7 @@ const CalendarFilter = (props: Props) => {
 								options={services?.categoriesOptions}
 								size={'small'}
 								rounded
-								disabled={eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF}
+								disabled={eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF}
 								nullAsEmptyValue
 							/>
 						) : (

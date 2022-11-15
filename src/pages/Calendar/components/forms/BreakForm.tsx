@@ -12,8 +12,8 @@ import validateBreakForm from './validateBreakForm'
 // utils
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
+	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
-	CALENDAR_EVENT_TYPE_FILTER,
 	ENDS_EVENT,
 	ENDS_EVENT_OPTIONS,
 	EVENT_TYPE_OPTIONS,
@@ -49,14 +49,14 @@ type ComponentProps = {
 	handleDeleteEvent: () => any
 	eventId?: string | null
 	searchEmployes: (search: string, page: number) => Promise<any>
-	eventType: CALENDAR_EVENT_TYPE_FILTER
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_BREAK_FORM
 
 const CalendarBreakForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes, eventType } = props
+	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes, eventsViewType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: any = useSelector((state: RootState) => getFormValues(formName)(state))
@@ -145,7 +145,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 								label={t('loc:Typ udalosti')}
 								placeholder={t('loc:Vyberte typ')}
 								name={'eventType'}
-								options={EVENT_TYPE_OPTIONS(eventType)}
+								options={EVENT_TYPE_OPTIONS(eventsViewType)}
 								size={'large'}
 								className={'pb-0'}
 								onChange={onChangeEventType}

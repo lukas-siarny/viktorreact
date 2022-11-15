@@ -57,7 +57,8 @@ export enum FILTER_ENTITY {
 	SALON = 'SALON',
 	SERVICE = 'SERVICE',
 	USER = 'USER',
-	BASIC_SALON = 'BASIC_SALON'
+	BASIC_SALON = 'BASIC_SALON',
+	NOTINO_USER = 'NOTINO_USER'
 }
 
 export enum TABS_TYPE {
@@ -106,6 +107,7 @@ export enum FORM {
 	ROLE_FORM = 'ROLE_FORM',
 	ADMIN_CREATE_USER = 'ADMIN_CREATE_USER',
 	ADMIN_UPDATE_USER = 'ADMIN_UPDATE_USER',
+	EDIT_USER_ROLE = 'EDIT_USER_ROLE',
 	SERVICE_FORM = 'SERVICE_FORM',
 	REQUEST_NEW_SERVICE_FORM = 'REQUEST_NEW_SERVICE_FORM',
 	CUSTOMERS_FILTER = 'CUSTOMERS_FILTER',
@@ -116,6 +118,7 @@ export enum FORM {
 	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	NOTE = 'NOTE',
+	NOTINO_USER = 'NOTINO_USER',
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
 	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM',
 	SALON_HISTORY_FILTER = 'SALON_HISTORY_FILTER',
@@ -199,11 +202,6 @@ export enum SALONS_TAB_KEYS {
 	MISTAKES = 'mistakes'
 }
 
-export enum SALON_CREATE_TYPE {
-	NON_BASIC = 'NON_BASIC',
-	BASIC = 'BASIC'
-}
-
 export enum PAGE {
 	SALONS = 'SALONS',
 	ENUMERATIONS = 'ENUMERATIONS',
@@ -253,6 +251,9 @@ export const DEFAULT_DATE_WITH_TIME_FORMAT = 'DD.MM.YYYY HH:mm'
 export const EN_DATE_WITH_TIME_FORMAT = 'MMM DD YYYY HH:mm'
 
 export const EN_DATE_WITHOUT_TIME_FORMAT = 'DD.MM.YYYY'
+
+export const DATE_TIME_PARSER_DATE_FORMAT = 'YYYY-MM-DD'
+export const DATE_TIME_PARSER_FORMAT = `${DATE_TIME_PARSER_DATE_FORMAT}:HH:mm`
 
 export const INVALID_DATE_FORMAT = 'INVALID_DATE_FORMAT'
 
@@ -352,7 +353,6 @@ export enum SALON_FILTER_STATES {
 	NOT_DELETED = 'NOT_DELETED',
 	PENDING_PUBLICATION = 'PENDING_PUBLICATION',
 	DECLINED = 'DECLINED',
-	PREMIUM = 'PREMIUM',
 	ALL = 'ALL'
 }
 
@@ -365,15 +365,15 @@ export enum SALON_STATES {
 	PUBLISHED_DECLINED = 'PUBLISHED_DECLINED'
 }
 
-export enum SALON_FILTER_CREATE_TYPES {
-	BASIC = 'BASIC',
+export enum SALON_CREATE_TYPE {
 	NON_BASIC = 'NON_BASIC',
-	PREMIUM = 'PREMIUM'
+	BASIC = 'BASIC'
 }
 
-export enum SALON_CREATE_TYPES {
-	BASIC = 'BASIC',
-	NON_BASIC = 'NON_BASIC'
+export enum SALON_SOURCE_TYPE {
+	NOTINO = 'NOTINO',
+	PARTNER = 'PARTNER',
+	IMPORT = 'IMPORT'
 }
 
 export enum SALON_FILTER_OPENING_HOURS {
@@ -566,10 +566,11 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?salonState=active&statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
-		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}`,
-		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.PREMIUM}`,
+		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}`,
 		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
-		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`
+		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
+		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		publishedPremiums: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
 	}
 })
 
@@ -617,7 +618,7 @@ export enum CALENDAR_EVENT_TYPE {
 	EMPLOYEE_BREAK = 'EMPLOYEE_BREAK'
 }
 
-export enum CALENDAR_EVENT_TYPE_FILTER {
+export enum CALENDAR_EVENTS_VIEW_TYPE {
 	RESERVATION = 'RESERVATION',
 	EMPLOYEE_SHIFT_TIME_OFF = 'EMPLOYEE_SHIFT_TIME_OFF'
 }
@@ -701,8 +702,8 @@ export const ENDS_EVENT_OPTIONS = () => [
 	}
 ]
 
-export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENT_TYPE_FILTER) => {
-	if (eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
+	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 		return filter(
 			[
 				{
@@ -725,7 +726,7 @@ export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENT_TYPE_FILTER) => {
 			(item) => item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION || item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF
 		)
 	}
-	if (eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF) {
+	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 		return filter(
 			[
 				{
@@ -804,3 +805,21 @@ export const getDayNameFromNumber = (day: number) => {
 			return null
 	}
 }
+/**
+ * @returns localized texts for Sentry report dialog and common EN texts for result view
+ */
+export const ERROR_BOUNDARY_TEXTS = () => ({
+	result: {
+		subtitle: 'An unexpected error has occurred and your request cannot be completed. Please contact us about the error.',
+		buttonLabel: 'Contact about the error'
+	},
+	reportDialog: {
+		successMessage: i18next.t('loc:Vaša spätná väzba bola odoslaná. Ďakujeme!'),
+		title: i18next.t('loc:Nastala neočakávaná chyba'),
+		subtitle: i18next.t('loc:Prosím kontaktujte nás'),
+		labelName: i18next.t('loc:Meno'),
+		labelComments: i18next.t('loc:Popis chyby'),
+		labelClose: i18next.t('loc:Zatvoriť'),
+		labelSubmit: i18next.t('loc:Odoslať hlásenie o chybe')
+	}
+})

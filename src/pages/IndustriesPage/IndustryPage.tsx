@@ -251,7 +251,7 @@ const IndustryPage = (props: Props) => {
 							<Divider className={'mb-3 mt-3'} />
 
 							<header className={'category-select-header mb-4'}>
-								<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.original}")` }} />
+								<div className={'image'} style={{ backgroundImage: `url("${rootCategory?.image?.resizedImages?.small}")` }} />
 								<div className={'count'}>{`${selectedServicesLength} ${t('loc:z')} ${servicesLength}`}</div>
 								<span className={'label'}>{rootCategory?.name}</span>
 							</header>

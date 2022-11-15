@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Button, Row, Spin } from 'antd'
-import { initialize, isPristine, submit } from 'redux-form'
+import { initialize, isPristine, isSubmitting, submit } from 'redux-form'
 import { get } from 'lodash'
 import cx from 'classnames'
 
@@ -17,9 +17,11 @@ import { DELETE_BUTTON_ID, FORM, NOTIFICATION_TYPE, PERMISSION } from '../../uti
 // reducers
 import { RootState } from '../../reducers'
 import { getCurrentUser, getUserAccountDetails, logOutUser } from '../../reducers/users/userActions'
+import { getSystemRoles } from '../../reducers/roles/rolesActions'
+import EditUserRoleForm from './components/EditUserRoleForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, IEditUserRoleForm } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -43,7 +45,8 @@ const UserPage: FC<Props> = (props) => {
 	const { computedMatch } = props
 	const userID = computedMatch.params.userID || get(authUser, 'data.id')
 	const dispatch = useDispatch()
-	const [submitting, setSubmitting] = useState<boolean>(false)
+	const submittingAccountForm = useSelector(isSubmitting(FORM.USER_ACCOUNT))
+	const submittingEditRoleForm = useSelector(isSubmitting(FORM.EDIT_USER_ROLE))
 	const [isRemoving, setIsRemoving] = useState<boolean>(false)
 	const userAccountDetail = useSelector((state: RootState) => (userID ? state.user.user : state.user.authUser)) as any
 	const isMyAccountPath = computedMatch.path === t('paths:my-account')
@@ -61,28 +64,31 @@ const UserPage: FC<Props> = (props) => {
 
 	const isLoading = userAccountDetail.isLoading || isRemoving
 
-	const fetchUserData = async () => {
-		const { data } = await dispatch(getUserAccountDetails(userID))
-		if (!data?.user?.id) {
-			history.push('/404')
+	useEffect(() => {
+		const fetchUserData = async () => {
+			const { data } = await dispatch(getUserAccountDetails(userID))
+			if (!data?.user?.id) {
+				history.push('/404')
+			}
+
+			dispatch(
+				initialize(FORM.USER_ACCOUNT, {
+					...get(data, 'user'),
+					avatar: data?.user?.image ? [{ url: data?.user?.image?.original, uid: data?.user?.image?.id }] : null
+				})
+			)
+
+			if (!isMyAccountPath) {
+				dispatch(getSystemRoles())
+				dispatch(initialize(FORM.EDIT_USER_ROLE, { roleID: data?.user?.roles[0].id }))
+			}
 		}
 
-		dispatch(
-			initialize(FORM.USER_ACCOUNT, {
-				...get(data, 'user'),
-				avatar: data?.user?.image ? [{ url: data?.user?.image?.original, uid: data?.user?.image?.id }] : null
-			})
-		)
-	}
-
-	useEffect(() => {
 		fetchUserData()
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, userID])
+	}, [dispatch, isMyAccountPath, userID])
 
 	const handleUserAccountFormSubmit = async (data: any) => {
 		try {
-			setSubmitting(true)
 			const userData: any = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
@@ -93,11 +99,10 @@ const UserPage: FC<Props> = (props) => {
 
 			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)
 			if (!userID || authUser.data?.id === userID) dispatch(getCurrentUser())
+			dispatch(initialize(FORM.USER_ACCOUNT, data))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
-		} finally {
-			setSubmitting(false)
 		}
 	}
 
@@ -143,6 +148,26 @@ const UserPage: FC<Props> = (props) => {
 		}
 	}
 
+	const editUserRole = async (data: IEditUserRoleForm) => {
+		if (submittingEditRoleForm) {
+			return
+		}
+		try {
+			await patchReq(
+				'/api/b2b/admin/users/{userID}/role',
+				{ userID },
+				{
+					roleID: data?.roleID
+				}
+			)
+			await dispatch(getUserAccountDetails(userID))
+			dispatch(initialize(FORM.EDIT_USER_ROLE, data))
+		} catch (error: any) {
+			// eslint-disable-next-line no-console
+			console.error(error.message)
+		}
+	}
+
 	const hideClass = cx({
 		hidden: !userID
 	})
@@ -150,12 +175,19 @@ const UserPage: FC<Props> = (props) => {
 	return (
 		<>
 			{!isMyAccountPath && (
-				<Row className={hideClass}>
-					<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
-				</Row>
+				<>
+					<Row className={hideClass}>
+						<Breadcrumbs breadcrumbs={breadcrumbs} backButtonPath={t('paths:users')} />
+					</Row>
+					<div className='content-body small mb-8'>
+						<Spin spinning={isLoading || submittingEditRoleForm}>
+							<EditUserRoleForm onSubmit={editUserRole} />
+						</Spin>
+					</div>
+				</>
 			)}
 			<div className='content-body small'>
-				<Spin spinning={isLoading}>
+				<Spin spinning={isLoading || submittingAccountForm}>
 					<UserAccountForm onSubmit={handleUserAccountFormSubmit} />
 					<div className={'content-footer'}>
 						<div className={'flex flex-col gap-2 md:flex-row md:justify-between'}>
@@ -186,8 +218,8 @@ const UserPage: FC<Props> = (props) => {
 												openForbiddenModal()
 											}
 										}}
-										disabled={submitting || isFormPristine}
-										loading={submitting}
+										disabled={submittingAccountForm || isFormPristine}
+										loading={submittingAccountForm}
 									>
 										{t('loc:Uložiť')}
 									</Button>

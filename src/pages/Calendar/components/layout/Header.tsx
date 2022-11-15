@@ -11,8 +11,8 @@ import { useDispatch } from 'react-redux'
 // enums
 import {
 	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
-	CALENDAR_EVENT_TYPE_FILTER,
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
 	DEFAULT_DATE_INIT_FORMAT,
@@ -86,14 +86,14 @@ type Props = {
 	setSiderFilterCollapsed: () => void
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	setSelectedDate: (newDate: string | dayjs.Dayjs, type?: CALENDAR_SET_NEW_DATE) => void
-	eventType: CALENDAR_EVENT_TYPE_FILTER
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed, eventType } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed, eventsViewType } = props
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -177,7 +177,7 @@ const CalendarHeader: FC<Props> = (props) => {
 					onClick={() => {
 						// Kliknutie na pridat nastavi rezervaciu ako default
 						// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastv pracovnu zmenu
-						if (eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+						if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 							const initData = {
 								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
 								eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION

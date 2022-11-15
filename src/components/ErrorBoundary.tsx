@@ -1,6 +1,9 @@
 import React from 'react'
 import * as Sentry from '@sentry/react'
 import { Result, Button } from 'antd'
+import i18next from 'i18next'
+
+import { ERROR_BOUNDARY_TEXTS } from '../utils/enums'
 
 class ErrorBoundary extends React.Component {
 	state = {
@@ -24,31 +27,33 @@ class ErrorBoundary extends React.Component {
 
 	render() {
 		if (this.state.error) {
-			// TODO: texty + preklady
+			const { language } = i18next
+			const texts = ERROR_BOUNDARY_TEXTS()
+
 			return (
 				<div className={'error-page-wrapper'}>
 					<Result
 						status='500'
 						title='500'
-						subTitle='Vyskytla sa neočakávaná chyba a vaša žiadosť nemôže byť dokončená. Prosím kontaktujte nás o chybe.'
+						subTitle={texts.result.subtitle}
 						extra={
 							<Button onClick={() => this.setState({ isOpen: true })} type='primary'>
-								Kontaktovať o chybe
+								{texts.result.buttonLabel}
 							</Button>
 						}
 					/>
 					{this.state.isOpen &&
 						Sentry.showReportDialog({
 							eventId: this.state.eventId,
-							successMessage: 'Vaša spätná väzba bola odoslaná. Ďakujeme!',
-							title: 'Nastala neočakávaná chyba',
-							subtitle: 'Prosím kontaktujte nás',
+							successMessage: texts.reportDialog.successMessage,
+							title: texts.reportDialog.title,
+							subtitle: texts.reportDialog.subtitle,
 							subtitle2: '',
-							labelName: 'Meno',
-							labelComments: 'Popis chyby',
-							labelClose: 'Zatvoriť',
-							labelSubmit: 'Odoslať hlásenie o chybe',
-							lang: 'sk'
+							labelName: texts.reportDialog.labelName,
+							labelComments: texts.reportDialog.labelComments,
+							labelClose: texts.reportDialog.labelClose,
+							labelSubmit: texts.reportDialog.labelSubmit,
+							lang: language
 						})}
 				</div>
 			)

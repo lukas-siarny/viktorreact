@@ -548,7 +548,7 @@ export interface TimeStats extends ILoadingAndFailure {
 export interface ICalendarFilter {
 	employeeIDs?: string[]
 	serviceIDs?: string[]
-	eventType?: CALENDAR_EVENTS_VIEW_TYPE
+	eventsViewType?: CALENDAR_EVENTS_VIEW_TYPE
 }
 
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']

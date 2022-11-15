@@ -60,7 +60,7 @@ const CalendarFilter = (props: Props) => {
 	const services = useSelector((state: RootState) => state.service.services)
 	const employees = useSelector((state: RootState) => state.employees.employees)
 
-	const eventTypeOptions = useMemo(
+	const eventsViewTypeOptions = useMemo(
 		() => [
 			{
 				key: CALENDAR_EVENTS_VIEW_TYPE.RESERVATION,
@@ -98,7 +98,7 @@ const CalendarFilter = (props: Props) => {
 						className={'p-0 m-0 nc-radio-event-type'}
 						component={RadioGroupField}
 						name={'eventsViewType'}
-						options={eventTypeOptions}
+						options={eventsViewTypeOptions}
 						direction={'vertical'}
 						size={'small'}
 					/>

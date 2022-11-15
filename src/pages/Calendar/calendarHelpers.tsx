@@ -19,13 +19,13 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 
 	switch (view) {
 		case CALENDAR_VIEW.MONTH: {
-			const start = dayjs(selectedDate).startOf('month').startOf('day')
-			const end = dayjs(selectedDate).endOf('month').startOf('day')
+			const start = dayjs(selectedDate).startOf('month')
+			const end = dayjs(selectedDate).endOf('month')
 			result = {
 				...result,
 				view,
-				start: monthViewFull ? dayjs(selectedDate).startOf('week') : start,
-				end: monthViewFull ? dayjs(selectedDate).endOf('week').add(1, 'week') : end
+				start: monthViewFull ? start.startOf('week') : start,
+				end: monthViewFull ? end.endOf('week').add(1, 'week') : end
 			}
 			break
 		}

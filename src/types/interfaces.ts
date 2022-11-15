@@ -547,7 +547,7 @@ export interface TimeStats extends ILoadingAndFailure {
 
 export interface ICalendarFilter {
 	employeeIDs?: string[]
-	serviceIDs?: string[]
+	categoryIDs?: string[]
 	eventsViewType?: CALENDAR_EVENTS_VIEW_TYPE
 }
 

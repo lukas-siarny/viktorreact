@@ -281,6 +281,7 @@ const EmployeePage = (props: Props) => {
 			)
 			dispatch(getEmployee(employeeID))
 			dispatch(getCurrentUser())
+			dispatch(initialize(FORM.EDIT_EMPLOYEE_ROLE, data))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)

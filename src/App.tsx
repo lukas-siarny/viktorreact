@@ -10,6 +10,7 @@ import dayjs from 'dayjs'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import updateLocale from 'dayjs/plugin/updateLocale'
+import isToday from 'dayjs/plugin/isToday'
 
 import 'antd/dist/antd.min.css'
 
@@ -36,6 +37,7 @@ const { store, persistor } = configureStore(rootReducer)
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 dayjs.extend(updateLocale)
+dayjs.extend(isToday)
 
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)

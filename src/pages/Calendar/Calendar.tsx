@@ -24,6 +24,7 @@ import {
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { computeUntilDate, getAssignedUserLabel, getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
+import { deleteReq, patchReq, postReq } from '../../utils/request'
 
 // reducers
 import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
@@ -39,7 +40,6 @@ import CalendarContent, { CalendarRefs } from './components/layout/Content'
 
 // types
 import { ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, SalonSubPageProps } from '../../types/interfaces'
-import { deleteReq, patchReq, postReq } from '../../utils/request'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -83,7 +83,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
 
-	const initEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
+	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
 		const initData = {
 			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
 			eventType
@@ -91,27 +91,29 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		dispatch(initialize(eventForm, initData))
 	}
 
-	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
-		// TODO: co sa ma setnut sem pre eventType pre CALENDAR_FILTER ?
-		// NOTE: ak je collapsed tak nastavit sidebarView na COLLAPSED a vynulovat eventId
-		if (newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
-			setQuery({
-				...query,
-				eventId: undefined,
-				sidebarView: newView // COLLAPSED
-			})
-		} else {
-			const newEventType =
-				newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+	const setEventManagement = useCallback(
+		(newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
+			// NOTE: ak je collapsed tak nastavit sidebarView na COLLAPSED a vynulovat eventId
+			if (newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
+				setQuery({
+					...query,
+					eventId: undefined,
+					sidebarView: newView // COLLAPSED
+				})
+			} else {
+				const newEventType =
+					newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
 
-			setQuery({
-				...query,
-				eventType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
-				sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
-			})
-			dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
-		}
-	}
+				setQuery({
+					...query,
+					eventType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
+					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
+				})
+				dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
+			}
+		},
+		[dispatch, query, setQuery]
+	)
 
 	const initUpdateEventForm = async () => {
 		try {
@@ -120,6 +122,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				date: data?.start.date,
 				timeFrom: data?.start.time,
 				timeTo: data?.end.time,
+				note: data?.note,
 				employee: {
 					value: data?.employee.id,
 					key: data?.employee.id,
@@ -166,23 +169,36 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		return query?.employeeIDs === null ? [] : employees?.data?.employees
 	}, [employees?.data?.employees, query.employeeIDs])
 
+	// Zmena selectu event type v draweri
 	const onChangeEventType = (type: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
 		switch (type) {
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
-				setEventManagement(type)
-				initEventForm(FORM.CALENDAR_RESERVATION_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+				setQuery({
+					...query,
+					sidebarView: type
+				})
+				initCreateEventForm(FORM.CALENDAR_RESERVATION_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
 				return true
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
-				setEventManagement(type)
-				initEventForm(FORM.CALENDAR_SHIFT_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+				setQuery({
+					...query,
+					sidebarView: type
+				})
+				initCreateEventForm(FORM.CALENDAR_SHIFT_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
 				return true
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF:
-				setEventManagement(type)
-				initEventForm(FORM.CALENDAR_TIME_OFF_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF)
+				setQuery({
+					...query,
+					sidebarView: type
+				})
+				initCreateEventForm(FORM.CALENDAR_TIME_OFF_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF)
 				return true
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
-				setEventManagement(type)
-				initEventForm(FORM.CALENDAR_BREAK_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+				setQuery({
+					...query,
+					sidebarView: type
+				})
+				initCreateEventForm(FORM.CALENDAR_BREAK_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
 				return true
 			default:
 				return ''
@@ -199,6 +215,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// initnutie defaultu sidebaru pri nacitani bude COLLAPSED a ak bude existovat typ formu tak sa initne dany FORM (pri skopirovani URL na druhy tab)
 			onChangeEventType(query.sidebarView as CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW)
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
 
 	useEffect(() => {
@@ -428,6 +445,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			<CalendarHeader
 				setCollapsed={setEventManagement}
 				selectedDate={query.date}
+				eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER}
 				calendarView={query.view as CALENDAR_VIEW}
 				siderFilterCollapsed={siderFilterCollapsed}
 				setCalendarView={setNewCalendarView}
@@ -454,6 +472,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				<SiderEventManagement
 					onChangeEventType={onChangeEventType}
 					salonID={salonID}
+					eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER}
 					eventId={query.eventId}
 					handleDeleteEvent={handleDeleteEvent}
 					sidebarView={query.sidebarView as CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW}

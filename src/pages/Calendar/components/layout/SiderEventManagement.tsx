@@ -3,7 +3,7 @@ import Sider from 'antd/lib/layout/Sider'
 
 // enums
 import { map } from 'lodash'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_EVENT_TYPE_FILTER } from '../../../../utils/enums'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm } from '../../../../types/interfaces'
@@ -25,10 +25,11 @@ type Props = {
 	onChangeEventType: (type: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => any
 	handleDeleteEvent: () => any
 	eventId?: string | null
+	eventType: CALENDAR_EVENT_TYPE_FILTER
 }
 
 const SiderEventManagement: FC<Props> = (props) => {
-	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, onChangeEventType, sidebarView, handleDeleteEvent, eventId } = props
+	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, onChangeEventType, sidebarView, handleDeleteEvent, eventId, eventType } = props
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
 			try {
@@ -68,6 +69,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						salonID={salonID}
 						searchEmployes={searchEmployes}
 						onSubmit={handleSubmitReservation}
+						eventType={eventType}
 					/>
 				)
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
@@ -79,6 +81,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						searchEmployes={searchEmployes}
 						eventId={eventId}
 						onSubmit={handleSubmitEvent}
+						eventType={eventType}
 					/>
 				)
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF:
@@ -90,6 +93,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						searchEmployes={searchEmployes}
 						eventId={eventId}
 						onSubmit={handleSubmitEvent}
+						eventType={eventType}
 					/>
 				)
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
@@ -101,6 +105,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						searchEmployes={searchEmployes}
 						eventId={eventId}
 						onSubmit={handleSubmitEvent}
+						eventType={eventType}
 					/>
 				)
 			default:

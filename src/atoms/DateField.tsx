@@ -62,8 +62,7 @@ const DateField = (props: Props) => {
 		onSelect,
 		className,
 		pickerClassName,
-		dropdownAlign,
-		placement
+		dropdownAlign
 	} = props
 
 	let value

@@ -13,6 +13,7 @@ import validateTimeOffForm from './validateTimeOffForm'
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
 	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_EVENT_TYPE_FILTER,
 	ENDS_EVENT,
 	ENDS_EVENT_OPTIONS,
 	EVENT_TYPE_OPTIONS,
@@ -48,13 +49,14 @@ type ComponentProps = {
 	handleDeleteEvent: () => any
 	eventId?: string | null
 	searchEmployes: (search: string, page: number) => Promise<any>
+	eventType: CALENDAR_EVENT_TYPE_FILTER
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_TIME_OFF_FORM
 
 const CalendarTimeOffForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes } = props
+	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes, eventType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -156,7 +158,7 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 								label={t('loc:Typ udalosti')}
 								placeholder={t('loc:Vyberte typ')}
 								name={'eventType'}
-								options={EVENT_TYPE_OPTIONS()}
+								options={EVENT_TYPE_OPTIONS(eventType)}
 								size={'large'}
 								className={'pb-0'}
 								onChange={onChangeEventType}

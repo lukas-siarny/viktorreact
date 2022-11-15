@@ -31,7 +31,7 @@ import {
 	trimEnd,
 	repeat
 } from 'lodash'
-import { notification, Tag, Divider } from 'antd'
+import { notification, Tag } from 'antd'
 import slugify from 'slugify'
 import { submit, SubmissionError } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'

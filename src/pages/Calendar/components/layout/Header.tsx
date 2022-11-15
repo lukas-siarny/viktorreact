@@ -9,7 +9,16 @@ import Tooltip from 'antd/es/tooltip'
 import { useDispatch } from 'react-redux'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, DEFAULT_DATE_INIT_FORMAT, FORM, STRINGS } from '../../../../utils/enums'
+import {
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_EVENT_TYPE_FILTER,
+	CALENDAR_SET_NEW_DATE,
+	CALENDAR_VIEW,
+	DEFAULT_DATE_INIT_FORMAT,
+	FORM,
+	STRINGS
+} from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
@@ -77,13 +86,14 @@ type Props = {
 	setSiderFilterCollapsed: () => void
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	setSelectedDate: (newDate: string | dayjs.Dayjs, type?: CALENDAR_SET_NEW_DATE) => void
+	eventType: CALENDAR_EVENT_TYPE_FILTER
 }
 
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed, eventType } = props
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -166,12 +176,22 @@ const CalendarHeader: FC<Props> = (props) => {
 					type={'primary'}
 					onClick={() => {
 						// Kliknutie na pridat nastavi rezervaciu ako default
-						const initData = {
-							date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-							eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
+						// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastv pracovnu zmenu
+						if (eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+							const initData = {
+								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+								eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
+							}
+							dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+						} else {
+							const initData = {
+								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+								eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT
+							}
+							dispatch(initialize(FORM.CALENDAR_SHIFT_FORM, initData))
+							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
 						}
-						dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
-						setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
 					}}
 					icon={<CreateIcon />}
 					htmlType={'button'}

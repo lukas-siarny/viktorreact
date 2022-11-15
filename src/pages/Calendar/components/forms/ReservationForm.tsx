@@ -12,7 +12,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_EVENT_TYPE_FILTER, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -39,12 +39,13 @@ type ComponentProps = {
 	onChangeEventType: (type: any) => any
 	handleDeleteEvent: () => any
 	searchEmployes: (search: string, page: number) => Promise<any>
+	eventType: CALENDAR_EVENT_TYPE_FILTER
 }
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent, searchEmployes } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent, searchEmployes, eventType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
@@ -168,7 +169,7 @@ const ReservationForm: FC<Props> = (props) => {
 						label={t('loc:Typ udalosti')}
 						placeholder={t('loc:Vyberte typ')}
 						name={'eventType'}
-						options={EVENT_TYPE_OPTIONS()}
+						options={EVENT_TYPE_OPTIONS(eventType)}
 						size={'large'}
 						className={'pb-0'}
 						onChange={onChangeEventType}

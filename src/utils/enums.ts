@@ -1,4 +1,4 @@
-import { orderBy } from 'lodash'
+import { filter, orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { FormatterInput } from '@fullcalendar/react'
@@ -654,22 +654,6 @@ export enum REPEAT_ON {
 	MONTH = 'MONTH'
 }
 
-// TODO: syncnut s BE ked sa prida tato moznost do formu
-const REPEAT_OPTIONS = [
-	{
-		key: REPEAT_ON.DAY,
-		label: i18next.t('loc:Deň')
-	},
-	{
-		key: REPEAT_ON.WEEK,
-		label: i18next.t('loc:Týždeň')
-	},
-	{
-		key: REPEAT_ON.MONTH,
-		label: i18next.t('loc:Mesiac')
-	}
-]
-
 export enum ENDS_EVENT {
 	WEEK = 'WEEK',
 	MONTH = 'MONTH',
@@ -717,24 +701,72 @@ export const ENDS_EVENT_OPTIONS = () => [
 	}
 ]
 
-export const EVENT_TYPE_OPTIONS = () => [
-	{
-		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
-		label: i18next.t('loc:Rezervácia')
-	},
-	{
-		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
-		label: i18next.t('loc:Pracovná zmena')
-	},
-	{
-		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
-		label: i18next.t('loc:Absencia')
-	},
-	{
-		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
-		label: i18next.t('loc:Prestávka')
+export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENT_TYPE_FILTER) => {
+	if (eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+		return filter(
+			[
+				{
+					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
+					label: i18next.t('loc:Rezervácia')
+				},
+				{
+					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
+					label: i18next.t('loc:Pracovná zmena')
+				},
+				{
+					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
+					label: i18next.t('loc:Absencia')
+				},
+				{
+					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
+					label: i18next.t('loc:Prestávka')
+				}
+			],
+			(item) => item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION || item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF
+		)
 	}
-]
+	if (eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF) {
+		return filter(
+			[
+				{
+					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
+					label: i18next.t('loc:Rezervácia')
+				},
+				{
+					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
+					label: i18next.t('loc:Pracovná zmena')
+				},
+				{
+					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
+					label: i18next.t('loc:Absencia')
+				},
+				{
+					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
+					label: i18next.t('loc:Prestávka')
+				}
+			],
+			(item) => item.key !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
+		)
+	}
+	return [
+		{
+			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
+			label: i18next.t('loc:Rezervácia')
+		},
+		{
+			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
+			label: i18next.t('loc:Pracovná zmena')
+		},
+		{
+			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
+			label: i18next.t('loc:Absencia')
+		},
+		{
+			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
+			label: i18next.t('loc:Prestávka')
+		}
+	]
+}
 
 export const SHORTCUT_DAYS_OPTIONS = () => [
 	{ label: i18next.t('loc:Po'), value: DAY.MONDAY },

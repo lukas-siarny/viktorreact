@@ -1,9 +1,8 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { change, Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { Button, Divider, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
-import { map } from 'lodash'
 import cx from 'classnames'
 
 // validate
@@ -11,9 +10,10 @@ import dayjs from 'dayjs'
 import validateBreakForm from './validateBreakForm'
 
 // utils
-import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
+import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
 	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_EVENT_TYPE_FILTER,
 	ENDS_EVENT,
 	ENDS_EVENT_OPTIONS,
 	EVENT_TYPE_OPTIONS,
@@ -23,7 +23,6 @@ import {
 	SHORTCUT_DAYS_OPTIONS,
 	STRINGS
 } from '../../../../utils/enums'
-import { getReq } from '../../../../utils/request'
 
 // types
 import { ICalendarEventForm } from '../../../../types/interfaces'
@@ -50,13 +49,14 @@ type ComponentProps = {
 	handleDeleteEvent: () => any
 	eventId?: string | null
 	searchEmployes: (search: string, page: number) => Promise<any>
+	eventType: CALENDAR_EVENT_TYPE_FILTER
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 const formName = FORM.CALENDAR_BREAK_FORM
 
 const CalendarBreakForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes } = props
+	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes, eventType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: any = useSelector((state: RootState) => getFormValues(formName)(state))
@@ -145,7 +145,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 								label={t('loc:Typ udalosti')}
 								placeholder={t('loc:Vyberte typ')}
 								name={'eventType'}
-								options={EVENT_TYPE_OPTIONS()}
+								options={EVENT_TYPE_OPTIONS(eventType)}
 								size={'large'}
 								className={'pb-0'}
 								onChange={onChangeEventType}

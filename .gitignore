@@ -18,3 +18,5 @@ public/runtime-env.js
 
 src/styles/main.css
 src/styles/tailwind-variables.sass
+
+cypress/videos/*

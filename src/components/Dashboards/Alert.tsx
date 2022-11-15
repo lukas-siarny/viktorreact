@@ -22,8 +22,8 @@ const Alert = (props: Props) => {
 	return (
 		<div className={`min-w-full p-4 flex rounded shadow-lg bg-notino-white ${className}`}>
 			<div className='h-full w-6 mr-4 pt-0-5'>{icon || <ExclamationIcon />}</div>
-			<div className='flex justify-between'>
-				<div>
+			<div className='flex justify-between w-full'>
+				<div className='flex-1'>
 					{isString(title) ? <h4>{title}</h4> : title}
 					{isString(subTitle) ? <p className='base-regular text-notino-grayDarker mb-1'>{subTitle}</p> : subTitle}
 					{isString(message) ? <div className='base-regular text-notino-grayDarker'>{message}</div> : message}

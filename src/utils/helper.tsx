@@ -31,7 +31,7 @@ import {
 	trimEnd,
 	repeat
 } from 'lodash'
-import { notification, Tag } from 'antd'
+import { notification } from 'antd'
 import slugify from 'slugify'
 import { submit, SubmissionError } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
@@ -53,14 +53,12 @@ import {
 	LANGUAGE,
 	EN_DATE_WITH_TIME_FORMAT,
 	EN_DATE_WITHOUT_TIME_FORMAT,
-	SALON_STATES,
 	IMAGE_UPLOADING_PROP,
 	DEFAULT_PHONE_PREFIX,
 	QUERY_LIMIT,
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION,
-	SALON_CREATE_TYPES,
 	DEFAULT_DATE_TIME_OPTIONS,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT
@@ -757,95 +755,6 @@ export const getCountryNameFromNameLocalizations = (nameLocalizations?: { value:
 	return countryTranslation?.value
 }
 
-// salon status tags
-export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
-	if (!salonStatus) {
-		return null
-	}
-
-	switch (salonStatus) {
-		case SALON_STATES.PUBLISHED:
-		case SALON_STATES.PUBLISHED_PENDING:
-		case SALON_STATES.PUBLISHED_DECLINED:
-			return (
-				<Tag className={'noti-tag bg-status-published'}>
-					<span>{i18next.t('loc:Publikovaný')}</span>
-				</Tag>
-			)
-		default:
-			return (
-				<Tag className={'noti-tag bg-status-notPublished'}>
-					<span>{i18next.t('loc:Nepublikovaný')}</span>
-				</Tag>
-			)
-	}
-}
-
-export const getSalonTagDeleted = (deleted?: boolean, returnOnlyDeleted = false) => {
-	if (deleted) {
-		return (
-			<Tag className={'noti-tag danger'}>
-				<span>{i18next.t('loc:Vymazaný')}</span>
-			</Tag>
-		)
-	}
-
-	if (returnOnlyDeleted) {
-		return null
-	}
-
-	return (
-		<Tag className={'noti-tag info'}>
-			<span>{i18next.t('loc:Nevymazaný')}</span>
-		</Tag>
-	)
-}
-
-export const getSalonTagChanges = (salonStatus?: SALON_STATES) => {
-	if (!salonStatus) {
-		return null
-	}
-
-	switch (salonStatus) {
-		case SALON_STATES.NOT_PUBLISHED_PENDING:
-		case SALON_STATES.PUBLISHED_PENDING:
-			return (
-				<Tag className={'noti-tag bg-status-pending'}>
-					<span>{i18next.t('loc:Na schválenie')}</span>
-				</Tag>
-			)
-		case SALON_STATES.NOT_PUBLISHED_DECLINED:
-		case SALON_STATES.PUBLISHED_DECLINED:
-			return (
-				<Tag className={'noti-tag bg-status-declined'}>
-					<span>{i18next.t('loc:Zamietnuté')}</span>
-				</Tag>
-			)
-		default:
-			return null
-	}
-}
-
-export const getSalonTagCreateType = (salonStatus?: SALON_STATES, createType?: SALON_CREATE_TYPES) => {
-	if (salonStatus && createType) {
-		if (salonStatus === SALON_STATES.PUBLISHED && createType === SALON_CREATE_TYPES.NON_BASIC) {
-			return (
-				<Tag className={'noti-tag bg-status-premium text-color-white'}>
-					<span>{i18next.t('loc:PREMIUM')}</span>
-				</Tag>
-			)
-		}
-
-		if (createType === SALON_CREATE_TYPES.BASIC) {
-			return (
-				<Tag className={'noti-tag bg-status-basic'}>
-					<span>{i18next.t('loc:BASIC')}</span>
-				</Tag>
-			)
-		}
-	}
-	return null
-}
 /**
  * Remove accent and transform to lower case
  * Usefull for searching on FE

@@ -55,6 +55,10 @@ export interface ICreateUserForm {
 	roleID: string
 }
 
+export interface IEditUserRoleForm {
+	roleID: string
+}
+
 export interface IUserAccountForm {
 	firstName: string
 	lastName: string
@@ -94,6 +98,7 @@ export interface ISalonForm {
 	nameSelect: { key: string; label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
+	sourceOfPremium?: string,
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -262,6 +267,10 @@ export interface IStructuredAddress {
 
 export interface INoteForm {
 	note: string
+}
+
+export interface INotinoUserForm {
+	assignedUser: ISelectOptionItem
 }
 
 export interface IOpenHoursNoteForm {

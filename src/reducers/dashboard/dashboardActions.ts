@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import { result } from 'lodash'
 import { IResetStore } from '../generalTypes'
 
 // types

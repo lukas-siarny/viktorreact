@@ -5,7 +5,7 @@ import { FILTER_ENTITY } from './enums'
 
 // reducers
 import { getSalons, getBasicSalons } from '../reducers/salons/salonsActions'
-import { getUsers } from '../reducers/users/userActions'
+import { getNotinoUsers, getUsers } from '../reducers/users/userActions'
 import { getEmployees } from '../reducers/employees/employeesActions'
 
 const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResult<Promise<ISearchable<any>>>) => {
@@ -21,6 +21,8 @@ const getSearchFn = (type: FILTER_ENTITY): ((params: IQueryParams) => ThunkResul
 
 		case FILTER_ENTITY.USER:
 			return getUsers
+		case FILTER_ENTITY.NOTINO_USER:
+			return getNotinoUsers
 		default:
 			throw new Error(`Unsupported entity type for filtering:${type}`)
 	}

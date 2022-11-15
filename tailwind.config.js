@@ -1,16 +1,22 @@
 const colors = require('tailwindcss/colors')
-
 // NOTE: zistit ci sa da vytiahnut premenna z tohto suboru (eg. danger farba) do TS suboru (do css sa da cez theme() funkciu)
+
+
 module.exports = {
 	// NOTE: Prefix pre všetky classy, tailwind štýly tak majú väčšiu váhu ako ant štýly
 	important: '#tailwind',
-	content: {
-		enabled: process.env.NODE_ENV === 'production',
-		content: [
-			'./src/**/*.tsx',
-			'./public/**/*.html'
-		]
-	},
+	content: [
+		'./src/**/*.tsx',
+		'./public/**/*.html'
+	],
+	// https://tailwindcss.com/docs/content-configuration#safelisting-classes
+	// https://github.com/tailwindlabs/tailwindcss/discussions/6347
+	// NOTE: Pri developmente ignoruje compiler vsetky classy a nepouziva JiT
+	safelist: process.env.NODE_ENV === 'production' ? [] : [
+		{
+			pattern: /.*/
+		}
+	],
 	presets: [],
 	theme: {
 		screens: {
@@ -48,6 +54,11 @@ module.exports = {
 				pending: colors.yellow[400],
 				notPublished: colors.neutral[200],
 				published: colors.green[200]
+			},
+			source: {
+				import: colors.cyan[700],
+				notino: '#DC0069', // notino.pink
+				partner: colors.fuchsia[700] 
 			},
 			// Tailwind colors
 			black: colors.black,

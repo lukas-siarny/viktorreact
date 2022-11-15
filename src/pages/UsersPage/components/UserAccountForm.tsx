@@ -20,6 +20,9 @@ import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
 import { showErrorNotification } from '../../../utils/helper'
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
 
+// assets
+import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
+
 type ComponentProps = {}
 
 type Props = InjectedFormProps<IUserAccountForm, ComponentProps> & ComponentProps
@@ -29,10 +32,12 @@ const UserAccountForm: FC<Props> = (props) => {
 	const { handleSubmit } = props
 
 	return (
-		<Form layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
+		<Form layout={'vertical'} id={`${FORM.USER_ACCOUNT}-form`} className={'form'} onSubmitCapture={handleSubmit}>
 			<Col className={'flex'}>
 				<Row className={'w-full mx-9 h-full block'} justify='center'>
-					<h3 className={'mb-0 mt-3'}>{t('loc:Osobné údaje')}</h3>
+					<h3 className={'mb-0 mt-3 flex items-center'}>
+						<InfoIcon className={'text-notino-black mr-2'} /> {t('loc:Osobné údaje')}
+					</h3>
 					<Divider className={'mb-3 mt-3'} />
 					<div className={'flex space-between w-full'}>
 						<Field

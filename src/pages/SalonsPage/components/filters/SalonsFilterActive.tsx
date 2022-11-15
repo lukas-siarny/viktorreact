@@ -1,9 +1,9 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { Button, Col, Divider, Form, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { debounce, filter, isEmpty, isNil, size } from 'lodash'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import cx from 'classnames'
 
 // components
@@ -25,13 +25,16 @@ import {
 	FORM,
 	PERMISSION,
 	ROW_GUTTER_X_DEFAULT,
-	SALON_FILTER_CREATE_TYPES,
+	SALON_CREATE_TYPE,
 	SALON_FILTER_OPENING_HOURS,
-	SALON_FILTER_STATES
+	SALON_FILTER_STATES,
+	SALON_SOURCE_TYPE,
+	FILTER_ENTITY
 } from '../../../../utils/enums'
 import { getLinkWithEncodedBackUrl, optionRenderWithImage, validationString, getSalonFilterRanges } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { history } from '../../../../utils/history'
+import searchWrapper from '../../../../utils/filters'
 
 // atoms
 import InputField from '../../../../atoms/InputField'
@@ -41,7 +44,6 @@ import SwitchField from '../../../../atoms/SwitchField'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void
-	statuses_publishedDisabled?: boolean
 }
 
 export interface ISalonsFilterActive {
@@ -86,12 +88,21 @@ export const checkSalonFiltersSize = (formValues: any) =>
 	)
 
 const SalonsFilterActive = (props: Props) => {
-	const { handleSubmit, openSalonImportsModal, statuses_publishedDisabled } = props
+	const { handleSubmit, openSalonImportsModal } = props
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 
 	const form = useSelector((state: RootState) => state.form?.[FORM.SALONS_FILTER_ACITVE])
 	const categories = useSelector((state: RootState) => state.categories.categories)
 	const countries = useSelector((state: RootState) => state.enumerationsStore[ENUMERATIONS_KEYS.COUNTRIES])
+	const notinoUsers = useSelector((state: RootState) => state.user.notinoUsers)
+
+	const searchNotinoUsers = useCallback(
+		async (search: string, page: number) => {
+			return searchWrapper(dispatch, { page, search }, FILTER_ENTITY.NOTINO_USER)
+		},
+		[dispatch]
+	)
 
 	const publishedOptions = useMemo(
 		() => [
@@ -114,10 +125,23 @@ const SalonsFilterActive = (props: Props) => {
 		[t]
 	)
 
+	const premiumSourceOptions = useMemo(
+		() => [
+			{ label: t('loc:Notino'), value: SALON_SOURCE_TYPE.NOTINO, key: SALON_SOURCE_TYPE.NOTINO, tagClassName: 'bg-source-notino' },
+			{ label: t('loc:Partner'), value: SALON_SOURCE_TYPE.PARTNER, key: SALON_SOURCE_TYPE.PARTNER, tagClassName: 'bg-source-partner' }
+		],
+		[t]
+	)
+
+	const sourceOptions = useMemo(
+		() => [...premiumSourceOptions, { label: t('loc:Import'), value: SALON_SOURCE_TYPE.IMPORT, key: SALON_SOURCE_TYPE.IMPORT, tagClassName: 'bg-source-import' }],
+		[t, premiumSourceOptions]
+	)
+
 	const createTypesOptions = useMemo(
 		() => [
-			{ label: t('loc:BASIC'), value: SALON_FILTER_CREATE_TYPES.BASIC, key: SALON_FILTER_CREATE_TYPES.BASIC, tagClassName: 'bg-status-basic' },
-			{ label: t('loc:PREMIUM'), value: SALON_FILTER_CREATE_TYPES.PREMIUM, key: SALON_FILTER_CREATE_TYPES.PREMIUM, tagClassName: 'bg-status-premium' }
+			{ label: t('loc:BASIC'), value: SALON_CREATE_TYPE.BASIC, key: SALON_CREATE_TYPE.BASIC, tagClassName: 'bg-status-basic' },
+			{ label: t('loc:PREMIUM'), value: SALON_CREATE_TYPE.NON_BASIC, key: SALON_CREATE_TYPE.NON_BASIC, tagClassName: 'bg-status-premium' }
 		],
 		[t]
 	)
@@ -209,7 +233,7 @@ const SalonsFilterActive = (props: Props) => {
 							<Field component={SwitchField} name={'statuses_all'} size={'middle'} label={t('loc:Všetky')} />
 						</Col>
 						<Row className={'flex-1'} gutter={ROW_GUTTER_X_DEFAULT}>
-							<Col span={8}>
+							<Col span={5}>
 								<Field
 									component={SelectField}
 									name={'statuses_published'}
@@ -221,10 +245,9 @@ const SalonsFilterActive = (props: Props) => {
 									onDidMountSearch
 									options={publishedOptions}
 									optionRender={statusOptionRender}
-									disabled={statuses_publishedDisabled}
 								/>
 							</Col>
-							<Col span={8}>
+							<Col span={5}>
 								<Field
 									component={SelectField}
 									name={'statuses_changes'}
@@ -238,7 +261,7 @@ const SalonsFilterActive = (props: Props) => {
 									optionRender={statusOptionRender}
 								/>
 							</Col>
-							<Col span={8}>
+							<Col span={4}>
 								<Field
 									component={SelectField}
 									name={'createType'}
@@ -252,13 +275,41 @@ const SalonsFilterActive = (props: Props) => {
 									optionRender={statusOptionRender}
 								/>
 							</Col>
+							<Col span={5}>
+								<Field
+									component={SelectField}
+									name={'sourceType'}
+									placeholder={t('loc:Zdroj vytvorenia')}
+									className={'statuses-filter-select'}
+									allowClear
+									size={'large'}
+									filterOptions
+									onDidMountSearch
+									options={sourceOptions}
+									optionRender={statusOptionRender}
+								/>
+							</Col>
+							<Col span={5}>
+								<Field
+									component={SelectField}
+									name={'premiumSourceUserType'}
+									placeholder={t('loc:Zdroj PREMIUM')}
+									className={'statuses-filter-select'}
+									allowClear
+									size={'large'}
+									filterOptions
+									onDidMountSearch
+									options={premiumSourceOptions}
+									optionRender={statusOptionRender}
+								/>
+							</Col>
 						</Row>
 					</Row>
 					<Divider className={'mt-0 mb-4'} />
 
 					<Row gutter={ROW_GUTTER_X_DEFAULT}>
 						<Row className={'flex-1 items-center'} gutter={ROW_GUTTER_X_DEFAULT}>
-							<Col span={6}>
+							<Col span={5}>
 								<Field
 									component={SelectField}
 									name={'categoryFirstLevelIDs'}
@@ -274,7 +325,7 @@ const SalonsFilterActive = (props: Props) => {
 									disabled={categories?.isLoading}
 								/>
 							</Col>
-							<Col span={6}>
+							<Col span={4}>
 								<Field
 									component={SelectField}
 									optionRender={(itemData: any) => optionRenderWithImage(itemData, <GlobeIcon />)}
@@ -289,7 +340,7 @@ const SalonsFilterActive = (props: Props) => {
 									disabled={countries?.isLoading}
 								/>
 							</Col>
-							<Col span={6}>
+							<Col span={5}>
 								<Field
 									className={'w-full'}
 									rangePickerClassName={'w-full'}
@@ -303,7 +354,7 @@ const SalonsFilterActive = (props: Props) => {
 									allowEmpty={[false, false]}
 								/>
 							</Col>
-							<Col span={6}>
+							<Col span={5}>
 								<Field
 									component={SelectField}
 									name={'hasSetOpeningHours'}
@@ -313,6 +364,21 @@ const SalonsFilterActive = (props: Props) => {
 									filterOptions
 									onDidMountSearch
 									options={openingHoursOptions}
+								/>
+							</Col>
+							<Col span={5}>
+								<Field
+									component={SelectField}
+									placeholder={t('loc:Priradený Notino používateľ')}
+									name={'assignedUserID'}
+									size={'middle'}
+									showSearch
+									onSearch={searchNotinoUsers}
+									loading={notinoUsers.isLoading}
+									allowInfinityScroll
+									allowClear
+									filterOption={false}
+									onDidMountSearch
 								/>
 							</Col>
 						</Row>

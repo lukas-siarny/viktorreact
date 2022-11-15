@@ -92,6 +92,7 @@ const EditCategoryParamsPage = (props: Props) => {
 			}
 			await patchReq('/api/b2b/admin/enums/category-parameters/{categoryParameterID}', { categoryParameterID: parameterID }, reqBody)
 			dispatch(getCategoryParameter(parameterID))
+			dispatch(initialize(FORM.CATEGORY_PARAMS, formData))
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -115,7 +116,7 @@ const EditCategoryParamsPage = (props: Props) => {
 				link: backUrl
 			},
 			{
-				name: t('loc:Vytvoriť parameter kategórie')
+				name: t('loc:Upraviť parameter kategórie')
 			}
 		]
 	}

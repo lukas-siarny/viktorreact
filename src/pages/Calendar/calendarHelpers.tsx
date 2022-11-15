@@ -5,6 +5,7 @@ import { uniqueId } from 'lodash'
 
 // reducers
 import { CalendarEvent, ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
+import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
 
 // types
 import { Employees } from '../../types/interfaces'
@@ -16,8 +17,8 @@ export const getCustomerName = (customer: CalendarEvent['customer']) => {
 	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
 }
 
-export const getEmployeeName = (employee: CalendarEvent['employee']) => {
-	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email
+export const getEmployeeName = (employee: CalendarEvent['employee'] | NonNullable<IEmployeesPayload['data']>['employees'][0]) => {
+	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.id
 }
 
 /**
@@ -87,7 +88,7 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 			return [
 				...acc,
 				{
-					id: uniqueId(Math.random().toString()),
+					id: uniqueId((Math.random() * Math.random()).toString()),
 					resourceId: key,
 					start: dayjs(selectedDate).startOf('day').toISOString(),
 					end: dayjs(selectedDate).startOf('day').add(1, 'seconds').toISOString(),
@@ -99,6 +100,9 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 		}
 		return acc
 	}, [] as any[])
+
+const isAllDayEvent = (selectedDate: string, start: string, end: string) =>
+	dayjs(start).isSame(dayjs(selectedDate).startOf('day')) && dayjs(end).isAfter(dayjs(selectedDate).endOf('day').subtract(1, 'minutes'))
 
 const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
 	const composedEvents: any[] = []
@@ -125,17 +129,19 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 				start,
 				end,
 				eventType: event.eventType,
-				allDay: dayjs(start).isSame(dayjs(selectedDate).startOf('day')) && dayjs(end).isAfter(dayjs(selectedDate).endOf('day').subtract(1, 'minutes')),
+				allDay: isAllDayEvent(selectedDate, start, end),
 				employee: event.employee
 			}
+
+			// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
+			// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
+			const bgEventEnd = dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end
 
 			switch (calendarEvent.eventType) {
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 					composedEvents.push({
 						...calendarEvent,
-						// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
-						// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
-						end: dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end,
+						end: bgEventEnd,
 						groupId: 'not-set-availability',
 						display: 'inverse-background'
 					})
@@ -145,14 +151,13 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 					composedEvents.push(
 						{
 							...calendarEvent,
-							// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
-							// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
-							end: dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end,
+							end: bgEventEnd,
 							groupId: 'not-set-availability',
 							display: 'inverse-background'
 						},
 						{
 							...calendarEvent,
+							end: bgEventEnd,
 							display: 'background'
 						}
 					)
@@ -185,7 +190,7 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 	return [...composedEvents, ...allDayInverseEvents]
 }
 
-const composeDayViewAbsences = (shiftsTimeOffs: ICalendarEventsPayload['data']) => {
+const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarEventsPayload['data']) => {
 	const composedEvents: any[] = []
 
 	shiftsTimeOffs?.forEach((event) => {
@@ -198,7 +203,7 @@ const composeDayViewAbsences = (shiftsTimeOffs: ICalendarEventsPayload['data']) 
 				start: event.startDateTime,
 				end: event.endDateTime,
 				eventType: event.eventType,
-				allDay: false,
+				allDay: isAllDayEvent(selectedDate, event.startDateTime, event.endDateTime),
 				employee: event.employee
 			})
 		}
@@ -215,7 +220,7 @@ export const composeDayViewEvents = (
 ) => {
 	switch (eventTypeFilter) {
 		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
-			return composeDayViewAbsences(shiftsTimeOffs)
+			return composeDayViewAbsences(selectedDate, shiftsTimeOffs)
 		case CALENDAR_EVENTS_VIEW_TYPE.RESERVATION:
 		default:
 			return composeDayViewReservations(selectedDate, reservations, shiftsTimeOffs, employees)
@@ -240,27 +245,25 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 		let description = t('loc:Nenastavená zmena')
 
 		if (employeeShifts.length) {
-			const employeeWorkingHours =
-				employeeShifts?.length &&
-				employeeShifts.reduce((result, cv, i) => {
-					const startCv = cv.startDateTime
-					const endCv = cv.endDateTime
+			const employeeWorkingHours = employeeShifts.reduce((result, cv, i) => {
+				const startCv = cv.startDateTime
+				const endCv = cv.endDateTime
 
-					if (i === 0) {
-						return {
-							start: startCv,
-							end: endCv
-						}
-					}
-
-					const startResult = result.start
-					const endResult = result.end
-
+				if (i === 0) {
 					return {
-						start: dayjs(startCv).isBefore(dayjs(startResult)) ? startCv : startResult,
-						end: dayjs(endCv).isAfter(dayjs(endResult)) ? endCv : endResult
+						start: startCv,
+						end: endCv
 					}
-				}, {})
+				}
+
+				const startResult = result.start
+				const endResult = result.end
+
+				return {
+					start: dayjs(startCv).isBefore(dayjs(startResult)) ? startCv : startResult,
+					end: dayjs(endCv).isAfter(dayjs(endResult)) ? endCv : endResult
+				}
+			}, {})
 			description = `${dayjs(employeeWorkingHours.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(employeeWorkingHours.end).format(CALENDAR_DATE_FORMAT.TIME)}`
 		} else if (employeeTimeOff.length && !employeeShifts.length) {
 			description = t('loc:Dovolenka')
@@ -268,7 +271,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 
 		return {
 			id: employee.id,
-			name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
+			name: getEmployeeName(employee),
 			eventBackgroundColor: employee.color,
 			image: employee.image.resizedImages.thumbnail,
 			description,

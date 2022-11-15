@@ -145,9 +145,7 @@ interface ICalendarDayView extends ICalendarView {
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees } = props
 
-	const handleDateClick = (arg: DateClickArg) => {
-		// console.log({ arg })
-	}
+	const handleDateClick = (arg: DateClickArg) => {}
 
 	const handleSelect = (info: any) => {
 		const { start, end, resource = {} } = info

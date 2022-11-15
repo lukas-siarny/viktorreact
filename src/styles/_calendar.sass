@@ -357,15 +357,15 @@
 	position: relative
 	width: 100%
 	height: 100%
-	background-size: 32px 32px
 	background-position: top left
 	&.not-set-availability
 		opacity: 0.4
+		background-size: 32px 32px
 		background-image: url("../assets/images/gray-pattern-background.png")
 	&.timeoff
 		opacity: 0.4
-		background-size: 32px 32px
-		background-image: url("../assets/images/pink-pattern-background.png")
+		background-size: 100px 50px
+		background-image: url("../assets/images/gray-bold-background-pattern-dark.png")
 
 .fc-timegrid-col-bg
 	.fc-timegrid-bg-harness
@@ -375,6 +375,7 @@
 
 // day view
 .fc-resourceTimeGridDay-view
+	// vyska najmenjsieho casoveho intervalu - teda ak mam nastavenych 15minut - tak cela hodina bude 60px vysoka (4 x 15px)
 	font-size: 15px
 	line-height: 15px
 	.fc-timegrid-slot
@@ -423,10 +424,6 @@
 							@include scrollbar-styles
 		> tbody
 			> tr.fc-scrollgrid-section-body
-				// vyska najmenjsieho casoveho intervalu - teda ak mam nastavenych 15minut - tak cela hodina bude 60px vysoka (4 x 15px)
-				/* .fc-timegrid-slot
-					line-height: 15px
-					height: 15px
 				> td:first-of-type
 					border-bottom-color: transparent
 					> .fc-scroller-harness
@@ -475,7 +472,6 @@
 										height: 15px
 								.fc-timegrid-col
 									.fc-timegrid-col-frame
-										// events col
 										.fc-timegrid-col-events
 											.fc-timegrid-event-harness
 												margin: 2px 4px 2px 2px

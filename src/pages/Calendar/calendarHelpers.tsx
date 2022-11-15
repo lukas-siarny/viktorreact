@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import dayjs from 'dayjs'
 import { t } from 'i18next'
 import { uniqueId } from 'lodash'
@@ -9,7 +10,66 @@ import { CalendarEvent, ICalendarEventsPayload } from '../../reducers/calendar/c
 import { Employees } from '../../types/interfaces'
 
 // utils
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../utils/enums'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
+
+export const getCustomerName = (customer: CalendarEvent['customer']) => {
+	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
+}
+
+export const getEmployeeName = (employee: CalendarEvent['employee']) => {
+	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email
+}
+
+/**
+ * monthViewFull = true;
+ * prida datumy aj z konca predosleho a zaciatku nasledujuceho mesiaca (do konca tyzdna + dalsi tyzden, tak to zobrazuje FC), aby sa vyplnilo cele mesacne view
+ * monthViewFull = false;
+ * vrati klasicky zaciatok a koniec mesiaca
+ */
+
+export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, monthViewFull = true, format: string | false = CALENDAR_DATE_FORMAT.QUERY) => {
+	let result = {
+		view,
+		start: dayjs(selectedDate).startOf('day'),
+		end: dayjs(selectedDate).endOf('day')
+	}
+
+	switch (view) {
+		case CALENDAR_VIEW.MONTH: {
+			const start = dayjs(selectedDate).startOf('month').startOf('day')
+			const end = dayjs(selectedDate).endOf('month').startOf('day')
+			result = {
+				...result,
+				view,
+				start: monthViewFull ? dayjs(selectedDate).startOf('week') : start,
+				end: monthViewFull ? dayjs(selectedDate).endOf('week').add(1, 'week') : end
+			}
+			break
+		}
+		case CALENDAR_VIEW.WEEK: {
+			result = {
+				...result,
+				view,
+				start: dayjs(selectedDate).startOf('week'),
+				end: dayjs(selectedDate).endOf('week')
+			}
+			break
+		}
+		default:
+			break
+	}
+
+	return {
+		view: result.view,
+		start: format ? result.start.format(format) : result.start.toISOString(),
+		end: format ? result.end.format(format) : result.end.toISOString()
+	}
+}
+
+export const isRangeAleardySelected = (view: CALENDAR_VIEW, currentSelectedDate: string, newSelectedDate: string | dayjs.Dayjs) => {
+	const { start, end } = getSelectedDateRange(view, currentSelectedDate, false)
+	return dayjs(newSelectedDate).isSameOrAfter(start) && dayjs(newSelectedDate).isSameOrBefore(end)
+}
 
 export const getHoursMinutesFromMinutes = (minutes: number) => {
 	const hours = Math.floor(minutes / 60)
@@ -179,15 +239,15 @@ const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarE
 
 export const composeDayViewEvents = (
 	selectedDate: string,
-	eventTypeFilter: CALENDAR_EVENT_TYPE_FILTER,
+	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
 	employees: Employees
 ) => {
 	switch (eventTypeFilter) {
-		case CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF:
+		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
 			return composeDayViewAbsences(selectedDate, shiftsTimeOffs, employees)
-		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
+		case CALENDAR_EVENTS_VIEW_TYPE.RESERVATION:
 		default:
 			return composeDayViewReservations(selectedDate, reservations, shiftsTimeOffs, employees)
 	}
@@ -268,12 +328,4 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 			employeeData: employee
 		}
 	})
-}
-
-export const getCustomerName = (customer: CalendarEvent['customer']) => {
-	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
-}
-
-export const getEmployeeName = (employee: CalendarEvent['employee']) => {
-	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email
 }

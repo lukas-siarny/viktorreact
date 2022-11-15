@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ISettingsActions } from './settingsActions'
-import { SET_IS_SIDER_COLLAPSED } from './settingsTypes'
+import { ISettingsActions } from './helperSettingsActions'
+import { SET_IS_SIDER_COLLAPSED } from './helperSettingsTypes'
 
 export const initState = {
 	isSiderCollapsed: false

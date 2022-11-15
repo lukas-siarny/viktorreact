@@ -129,7 +129,7 @@ interface ICalendarDayView extends ICalendarView {
 }
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { selectedDate, eventType, reservations, shiftsTimeOffs, employees } = props
+	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees } = props
 
 	const handleDateClick = (arg: DateClickArg) => {
 		// console.log({ arg })
@@ -144,8 +144,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	}
 
 	const hasResources = !!employees.length
-
-	console.log({ events: composeDayViewEvents(selectedDate, eventType, reservations, shiftsTimeOffs, employees) })
 
 	return (
 		<FullCalendar
@@ -170,7 +168,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			allDaySlot={false}
 			stickyFooterScrollbar
 			// data sources
-			events={composeDayViewEvents(selectedDate, eventType, reservations, shiftsTimeOffs, employees)}
+			events={composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)}
 			resources={composeDayEventResources(shiftsTimeOffs, employees)}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}

@@ -10,7 +10,7 @@ import { IQueryParams, ISearchable } from '../../types/interfaces'
 
 // utils
 import { getReq } from '../../utils/request'
-import { SALON_FILTER_STATES, SALON_FILTER_CREATE_TYPES, SALON_CREATE_TYPES, SALON_FILTER_OPENING_HOURS, TAB_KEYS, SALONS_TAB_KEYS } from '../../utils/enums'
+import { SALON_FILTER_STATES, SALON_FILTER_OPENING_HOURS, SALONS_TAB_KEYS } from '../../utils/enums'
 import { normalizeQueryParams } from '../../utils/helper'
 
 export type ISalonsActions = IResetStore | IGetSalons | IGetSalon | IGetSuggestedSalons | IGeBasictSalon | IGetBasicSalons | IGetSalonHistory | IGetRejectedSuggestions
@@ -36,6 +36,9 @@ export interface IGetSalonsQueryParams extends IQueryParams {
 	lastUpdatedAtFrom?: string | null
 	lastUpdatedAtTo?: string | null
 	hasSetOpeningHours?: string | null
+	sourceType?: string | null
+	premiumSourceUserType?: string | null
+	assignedUserID?: string | null
 }
 
 export interface IGetSalonsHistoryQueryParams extends IQueryParams {
@@ -114,7 +117,6 @@ export const getSalons =
 		let payload = {} as ISalonsPayload
 
 		let statuses: any[] = []
-		let createType
 		let hasSetOpeningHours
 
 		if (queryParams.salonState === SALONS_TAB_KEYS.ACTIVE) {
@@ -127,13 +129,6 @@ export const getSalons =
 
 		if (!queryParams.statuses_all) {
 			statuses = [...statuses, ...(queryParams.statuses_published || []), ...(queryParams.statuses_changes || [])]
-
-			if (queryParams.createType === SALON_FILTER_CREATE_TYPES.BASIC) {
-				createType = SALON_CREATE_TYPES.BASIC
-			} else if (queryParams.createType === SALON_FILTER_CREATE_TYPES.PREMIUM) {
-				createType = SALON_CREATE_TYPES.NON_BASIC
-				statuses = [...statuses, SALON_FILTER_STATES.PUBLISHED].filter((status) => status !== SALON_FILTER_STATES.NOT_PUBLISHED)
-			}
 		}
 
 		if (queryParams.hasSetOpeningHours === SALON_FILTER_OPENING_HOURS.SET) {
@@ -151,9 +146,12 @@ export const getSalons =
 			countryCode: queryParams.countryCode,
 			lastUpdatedAtFrom: queryParams.lastUpdatedAtFrom,
 			lastUpdatedAtTo: queryParams.lastUpdatedAtTo,
-			createType,
+			createType: queryParams.createType,
 			statuses: [...new Set(statuses)],
-			hasSetOpeningHours
+			hasSetOpeningHours,
+			sourceType: queryParams.sourceType,
+			premiumSourceUserType: queryParams.premiumSourceUserType,
+			assignedUserID: queryParams.assignedUserID
 		}
 
 		try {

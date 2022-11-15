@@ -1,6 +1,4 @@
 /* eslint-disable import/no-cycle */
-import dayjs from 'dayjs'
-
 // types
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
@@ -8,14 +6,18 @@ import { Paths } from '../../types/api'
 
 // enums
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
-import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, CALENDAR_DATE_FORMAT } from '../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
-import { normalizeQueryParams } from '../../utils/helper'
+import { getSelectedDateRange } from '../../pages/Calendar/calendarHelpers'
+import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
-export type CalendarEvent = CalendarEvents[0]
+export type CalendarEvent = CalendarEvents[0] & {
+	startDateTime: string
+	endDateTime: string
+}
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -55,34 +57,11 @@ interface IGetCalendarEventDetail {
 }
 
 export interface ICalendarEventsPayload {
-	data: CalendarEvents | null
+	data: CalendarEvent[] | null
 }
 
 export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
-}
-
-const getTimeFromTo = (selectedDate: string, view: CALENDAR_VIEW) => {
-	switch (view) {
-		case CALENDAR_VIEW.MONTH: {
-			// NOTE: je potrebne najst eventy aj z konca predosleho a zaciatku nasledujuceho mesiaca (do konca tyzdna + dalsi tyzden, tak to zobrazuje FC), aby sa vyplnilo cele mesacne view
-			return {
-				dateFrom: dayjs(selectedDate).startOf('month').startOf('week').format(CALENDAR_DATE_FORMAT.QUERY),
-				dateTo: dayjs(selectedDate).endOf('month').endOf('week').add(1, 'week').format(CALENDAR_DATE_FORMAT.QUERY)
-			}
-		}
-		case CALENDAR_VIEW.WEEK:
-			return {
-				dateFrom: dayjs(selectedDate).startOf('week').format(CALENDAR_DATE_FORMAT.QUERY),
-				dateTo: dayjs(selectedDate).endOf('week').format(CALENDAR_DATE_FORMAT.QUERY)
-			}
-		case CALENDAR_VIEW.DAY:
-		default:
-			return {
-				dateFrom: selectedDate,
-				dateTo: selectedDate
-			}
-	}
 }
 
 export const getCalendarEvents =
@@ -96,12 +75,15 @@ export const getCalendarEvents =
 		}
 
 		try {
+			const { start, end } = getSelectedDateRange(view, queryParams.date)
+
 			const queryParamsEditedForRequest = {
 				salonID: queryParams.salonID,
 				categoryIDs: queryParams.categoryIDs,
 				employeeIDs: queryParams.employeeIDs,
 				eventTypes: queryParams.eventTypes,
-				...getTimeFromTo(queryParams.date, view)
+				dateFrom: start,
+				dateTo: end
 			}
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
@@ -109,7 +91,11 @@ export const getCalendarEvents =
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
 			payload = {
-				data: data.calendarEvents
+				data: data.calendarEvents.map((event) => ({
+					...event,
+					startDateTime: getDateTime(event.start.date, event.start.time),
+					endDateTime: getDateTime(event.end.date, event.end.time)
+				}))
 			}
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })

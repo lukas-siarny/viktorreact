@@ -23,7 +23,7 @@ import languagesReducer from './languages/languagesReducer'
 import dashboardReducer from './dashboard/dashboardReducer'
 import specialistContactsReducer from './specialistContacts/specialistContactsReducer'
 import calendarReducer from './calendar/calendarReducer'
-import settingsReducer from './settings/settingsReducer'
+import helperSettingsReducer from './helperSettings/helperSettingsReducer'
 
 export const REDUCER_KEYS = {
 	FORMS: 'FORMS',
@@ -43,7 +43,7 @@ export const REDUCER_KEYS = {
 	LANGUAGES: 'LANGUAGES',
 	DASHBOARD: 'DASHBOARD',
 	CALENDAR: 'CALENDAR',
-	SETTINGS: 'SETTINGS'
+	HELPER_SETTINGS: 'HELPER_SETTINGS'
 }
 
 const rootReducer = combineReducers({
@@ -166,12 +166,12 @@ const rootReducer = combineReducers({
 		},
 		calendarReducer
 	),
-	settings: persistReducer(
+	helperSettings: persistReducer(
 		{
-			key: REDUCER_KEYS.SETTINGS,
-			storage: storageLocal
+			key: REDUCER_KEYS.HELPER_SETTINGS,
+			storage: storageSession
 		},
-		settingsReducer
+		helperSettingsReducer
 	)
 })
 

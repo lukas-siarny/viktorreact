@@ -2,7 +2,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENT_TYPE_FILTER } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE } from '../utils/enums'
 import { SALON_STATES } from './../utils/enums'
 
 // types
@@ -56,6 +56,10 @@ export interface ICreateUserForm {
 	roleID: string
 }
 
+export interface IEditUserRoleForm {
+	roleID: string
+}
+
 export interface IUserAccountForm {
 	firstName: string
 	lastName: string
@@ -95,6 +99,7 @@ export interface ISalonForm {
 	nameSelect: { key: string; label: string | null; value: string | null } | null
 	aboutUsFirst: string | null
 	state?: SALON_STATES
+	sourceOfPremium?: string,
 	openingHours: OpeningHours
 	sameOpenHoursOverWeek: boolean
 	openOverWeekend: boolean
@@ -263,6 +268,10 @@ export interface IStructuredAddress {
 
 export interface INoteForm {
 	note: string
+}
+
+export interface INotinoUserForm {
+	assignedUser: ISelectOptionItem
 }
 
 export interface IOpenHoursNoteForm {
@@ -540,14 +549,14 @@ export interface TimeStats extends ILoadingAndFailure {
 export interface ICalendarFilter {
 	employeeIDs?: string[]
 	categoryIDs?: string[]
-	eventType?: CALENDAR_EVENT_TYPE_FILTER
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export interface ICalendarView {
 	selectedDate: string
-	eventType: CALENDAR_EVENT_TYPE_FILTER
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees

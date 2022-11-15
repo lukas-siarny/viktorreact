@@ -12,7 +12,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -38,46 +38,23 @@ type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	onChangeEventType: (type: any) => any
 	handleDeleteEvent: () => any
+	searchEmployes: (search: string, page: number) => Promise<any>
 }
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent, searchEmployes } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
-
-	const searchEmployes = useCallback(
-		async (search: string, page: number) => {
-			try {
-				const { data } = await getReq('/api/b2b/admin/employees/', {
-					search: formatLongQueryString(search),
-					page,
-					salonID
-				})
-				const selectOptions = map(data.employees, (employee) => ({
-					value: employee.id,
-					key: employee.id,
-					label: employee.firstName && employee.lastName ? `${employee.firstName} ${employee.lastName}` : employee.email,
-					thumbNail: employee.image.resizedImages.thumbnail
-					// TODO: Available / Non Available hodnoty ak pribudne logika na BE tak doplnit ako extraContent
-				}))
-				return { pagination: data.pagination, data: selectOptions }
-			} catch (e) {
-				return { pagination: null, data: [] }
-			}
-		},
-		[salonID]
-	)
 
 	const searchServices = useCallback(async () => {
 		try {
 			const { data } = await getReq('/api/b2b/admin/services/', {
 				salonID
 			})
-			console.log('data', data)
 			const optData = flatten(
 				map(data.groupedServicesByCategory, (industry) =>
 					map(industry.category?.children, (category) => {
@@ -94,7 +71,6 @@ const ReservationForm: FC<Props> = (props) => {
 					})
 				)
 			)
-			console.log('formated services', optData)
 			return { pagination: null, data: optData }
 		} catch (e) {
 			return { pagination: null, data: [] }

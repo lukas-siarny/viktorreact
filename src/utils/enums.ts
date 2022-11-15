@@ -625,7 +625,7 @@ export enum CALENDAR_EVENT_TYPE_FILTER {
 export enum CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW {
 	RESERVATION = 'RESERVATION',
 	SHIFT = 'SHIFT',
-	TIMEOFF = 'TIMEOFF',
+	TIME_OFF = 'TIME_OFF',
 	BREAK = 'BREAK',
 	COLLAPSED = 'COLLAPSED'
 }
@@ -727,7 +727,7 @@ export const EVENT_TYPE_OPTIONS = () => [
 		label: i18next.t('loc:Pracovná zmena')
 	},
 	{
-		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF,
+		key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
 		label: i18next.t('loc:Absencia')
 	},
 	{

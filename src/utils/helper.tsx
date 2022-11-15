@@ -1097,3 +1097,19 @@ export const computeUntilDate = (endsEvent: ENDS_EVENT, actualDate: string) => {
 			return ''
 	}
 }
+
+export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.Responses.$200['salons'][0]['assignedUser']): string => {
+	if (!assignedUser) {
+		return '-'
+	}
+
+	switch (true) {
+		case !!assignedUser.firstName && !!assignedUser.lastName:
+			return `${assignedUser.firstName} ${assignedUser.lastName}`
+
+		case !!assignedUser.email:
+			return `${assignedUser.email}`
+		default:
+			return assignedUser.id
+	}
+}

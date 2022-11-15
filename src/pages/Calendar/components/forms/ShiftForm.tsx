@@ -1,7 +1,6 @@
-import React, { FC, useCallback } from 'react'
+import React, { FC } from 'react'
 import { change, Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { Button, Divider, Form } from 'antd'
-import { map } from 'lodash'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
@@ -11,7 +10,7 @@ import dayjs from 'dayjs'
 import validateShiftForm from './validateShiftForm'
 
 // utils
-import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
+import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
 	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
 	ENDS_EVENT,
@@ -23,7 +22,6 @@ import {
 	SHORTCUT_DAYS_OPTIONS,
 	STRINGS
 } from '../../../../utils/enums'
-import { getReq } from '../../../../utils/request'
 
 // types
 import { ICalendarEventForm } from '../../../../types/interfaces'
@@ -44,44 +42,21 @@ import { RootState } from '../../../../reducers'
 import DeleteButton from '../../../../components/DeleteButton'
 
 type ComponentProps = {
-	salonID: string
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	onChangeEventType: (type: any) => any
 	handleDeleteEvent: () => any
 	eventId?: string | null
+	searchEmployes: (search: string, page: number) => Promise<any>
 }
-
+const formName = FORM.CALENDAR_SHIFT_FORM
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 
 const CalendarShiftForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent, eventId } = props
+	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
-	const formValues: any = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_SHIFT_FORM)(state))
-
-	const searchEmployes = useCallback(
-		async (search: string, page: number) => {
-			try {
-				const { data } = await getReq('/api/b2b/admin/employees/', {
-					search: formatLongQueryString(search),
-					page,
-					salonID
-				})
-				const selectOptions = map(data.employees, (employee) => ({
-					value: employee.id,
-					key: employee.id,
-					label: employee.firstName && employee.lastName ? `${employee.firstName} ${employee.lastName}` : employee.email,
-					thumbNail: employee.image.resizedImages.thumbnail
-					// TODO: Available / Non Available hodnoty ak pribudne logika na BE tak doplnit ako extraContent
-				}))
-				return { pagination: data.pagination, data: selectOptions }
-			} catch (e) {
-				return { pagination: null, data: [] }
-			}
-		},
-		[salonID]
-	)
+	const formValues: any = useSelector((state: RootState) => getFormValues(formName)(state))
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
@@ -126,9 +101,9 @@ const CalendarShiftForm: FC<Props> = (props) => {
 
 	const onChangeRecurring = (checked: any) => {
 		if (checked) {
-			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'end', ENDS_EVENT.WEEK))
+			dispatch(change(formName, 'end', ENDS_EVENT.WEEK))
 			const repeatDay = getDayNameFromNumber(dayjs(formValues?.date).day()) // NOTE: .day() vrati cislo od 0 do 6 co predstavuje nedela az sobota
-			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'repeatOn', repeatDay))
+			dispatch(change(formName, 'repeatOn', repeatDay))
 		}
 	}
 
@@ -222,7 +197,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>
-				<Button onClick={() => dispatch(submit(FORM.CALENDAR_SHIFT_FORM))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
+				<Button onClick={() => dispatch(submit(formName))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
 					{eventId ? STRINGS(t).edit(t('loc:zmenu')) : STRINGS(t).createRecord(t('loc:zmenu'))}
 				</Button>
 			</div>
@@ -231,7 +206,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 }
 
 const form = reduxForm<ICalendarEventForm, ComponentProps>({
-	form: FORM.CALENDAR_SHIFT_FORM,
+	form: formName,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,

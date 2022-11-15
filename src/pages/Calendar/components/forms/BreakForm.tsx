@@ -7,11 +7,22 @@ import { map } from 'lodash'
 import cx from 'classnames'
 
 // validate
+import dayjs from 'dayjs'
 import validateBreakForm from './validateBreakForm'
 
 // utils
 import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENDS_EVENT, ENDS_EVENT_OPTIONS, EVENT_TYPE_OPTIONS, FORM, SHORTCUT_DAYS_OPTIONS, STRINGS } from '../../../../utils/enums'
+import {
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	ENDS_EVENT,
+	ENDS_EVENT_OPTIONS,
+	EVENT_TYPE_OPTIONS,
+	EVERY_REPEAT_OPTIONS,
+	FORM,
+	getDayNameFromNumber,
+	SHORTCUT_DAYS_OPTIONS,
+	STRINGS
+} from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
 // types
@@ -35,42 +46,20 @@ import DeleteButton from '../../../../components/DeleteButton'
 
 type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
-	salonID: string
 	onChangeEventType: (type: any) => any
 	handleDeleteEvent: () => any
+	eventId?: string | null
+	searchEmployes: (search: string, page: number) => Promise<any>
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
+const formName = FORM.CALENDAR_BREAK_FORM
 
 const CalendarBreakForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent } = props
+	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
-	const formValues: any = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_BREAK_FORM)(state))
-
-	const searchEmployes = useCallback(
-		async (search: string, page: number) => {
-			try {
-				const { data } = await getReq('/api/b2b/admin/employees/', {
-					search: formatLongQueryString(search),
-					page,
-					salonID
-				})
-				const selectOptions = map(data.employees, (employee) => ({
-					value: employee.id,
-					key: employee.id,
-					label: employee.firstName && employee.lastName ? `${employee.firstName} ${employee.lastName}` : employee.email,
-					thumbNail: employee.image.resizedImages.thumbnail
-					// TODO: Available / Non Available hodnoty ak pribudne logika na BE tak doplnit ako extraContent
-				}))
-				return { pagination: data.pagination, data: selectOptions }
-			} catch (e) {
-				return { pagination: null, data: [] }
-			}
-		},
-		[salonID]
-	)
+	const formValues: any = useSelector((state: RootState) => getFormValues(formName)(state))
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
@@ -89,20 +78,16 @@ const CalendarBreakForm: FC<Props> = (props) => {
 				hideChecker
 				optionRender={checkboxOptionRender}
 			/>
-			{/* // TODO: momentalne sa nebude pouzivat ak pribudne tak odkopmentovat */}
-			{/* <Field */}
-			{/*	component={SelectField} */}
-			{/*	label={t('loc:Každý')} */}
-			{/*	placeholder={t('loc:Vyberte frekvenciu')} */}
-			{/*	name={'every'} */}
-			{/*	size={'large'} */}
-			{/*	allowInfinityScroll */}
-			{/*	showSearch */}
-			{/*	required */}
-			{/*	options={everyOptions} */}
-			{/*	className={'pb-0'} */}
-			{/*	labelInValue */}
-			{/* /> */}
+			<Field
+				component={SelectField}
+				label={t('loc:Každý')}
+				placeholder={t('loc:Vyberte frekvenciu')}
+				name={'every'}
+				size={'large'}
+				options={EVERY_REPEAT_OPTIONS()}
+				className={'pb-0'}
+				allowClear
+			/>
 
 			<Field
 				component={SelectField}
@@ -119,44 +104,57 @@ const CalendarBreakForm: FC<Props> = (props) => {
 
 	const onChangeRecurring = (checked: any) => {
 		if (checked) {
-			dispatch(change(FORM.CALENDAR_BREAK_FORM, 'end', ENDS_EVENT.WEEK))
+			dispatch(change(formName, 'end', ENDS_EVENT.WEEK))
+			const repeatDay = getDayNameFromNumber(dayjs(formValues?.date).day()) // NOTE: .day() vrati cislo od 0 do 6 co predstavuje nedela az sobota
+			dispatch(change(formName, 'repeatOn', repeatDay))
 		}
 	}
 
 	return (
 		<>
 			<div className={'nc-sider-event-management-header justify-between'}>
-				<div className={'font-semibold'}>{t('loc:Nová prestávka')}</div>
+				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(t('loc:prestávku')) : STRINGS(t).createRecord(t('loc:prestávku'))}</div>
 				<div className={'flex-center'}>
-					<DeleteButton
-						placement={'bottom'}
-						entityName={t('loc:prestávku')}
-						className={'bg-transparent mr-4'}
-						onClick={handleDeleteEvent}
-						onlyIcon
-						smallIcon
-						size={'small'}
-					/>
-					<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
+					{eventId && (
+						<DeleteButton
+							placement={'bottom'}
+							entityName={t('loc:dovolenku')}
+							className={'bg-transparent mr-4'}
+							onConfirm={handleDeleteEvent}
+							onlyIcon
+							smallIcon
+							size={'small'}
+						/>
+					)}
+					<Button
+						className='button-transparent'
+						onClick={() => {
+							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
+						}}
+					>
 						<CloseIcon />
 					</Button>
 				</div>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
-					<Field
-						component={SelectField}
-						label={t('loc:Typ udalosti')}
-						placeholder={t('loc:Vyberte typ')}
-						name={'eventType'}
-						options={EVENT_TYPE_OPTIONS()}
-						size={'large'}
-						className={'pb-0'}
-						onChange={onChangeEventType}
-						filterOption={false}
-						allowInfinityScroll
-					/>
-					<Divider className={'mb-3 mt-3'} />
+					{!eventId && (
+						<>
+							<Field
+								component={SelectField}
+								label={t('loc:Typ udalosti')}
+								placeholder={t('loc:Vyberte typ')}
+								name={'eventType'}
+								options={EVENT_TYPE_OPTIONS()}
+								size={'large'}
+								className={'pb-0'}
+								onChange={onChangeEventType}
+								filterOption={false}
+								allowInfinityScroll
+							/>
+							<Divider className={'mb-3 mt-3'} />
+						</>
+					)}
 					<Field
 						component={SelectField}
 						optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
@@ -170,6 +168,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 						allowInfinityScroll
 						showSearch
 						required
+						disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 						className={'pb-0'}
 						labelInValue
 						onSearch={searchEmployes}
@@ -196,14 +195,14 @@ const CalendarBreakForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} onChange={onChangeRecurring} className={'pb-0'} component={SwitchField} label={t('loc:Opakovať')} />
+					<Field name={'recurring'} disabled={eventId} onChange={onChangeRecurring} className={'pb-0'} component={SwitchField} label={t('loc:Opakovať')} />
 					{recurringFields}
 					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>
-				<Button onClick={() => dispatch(submit(FORM.CALENDAR_BREAK_FORM))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
-					{STRINGS(t).createRecord(t('loc:prestávku'))}
+				<Button onClick={() => dispatch(submit(formName))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
+					{eventId ? STRINGS(t).edit(t('loc:prestávku')) : STRINGS(t).createRecord(t('loc:prestávku'))}
 				</Button>
 			</div>
 		</>
@@ -211,7 +210,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 }
 
 const form = reduxForm<ICalendarEventForm, ComponentProps>({
-	form: FORM.CALENDAR_BREAK_FORM,
+	form: formName,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,

@@ -163,30 +163,9 @@ export interface ICalendarEventForm {
 	repeatOn?: any
 	every?: EVERY_REPEAT
 	end?: ENDS_EVENT
+	note?: string
 	eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
 }
-
-// export interface ICalendarTimeOffForm {
-// 	employee: ISelectOptionItem
-// 	date: string
-// 	timeFrom: string
-// 	timeTo: string
-// 	note?: string
-// 	recurring?: boolean
-// 	repeatOn?: any
-// 	end?: ENDS_EVENT
-// }
-//
-// export interface ICalendarBreakForm {
-// 	employee: ISelectOptionItem
-// 	date: string
-// 	timeFrom: string
-// 	timeTo: string
-// 	note?: string
-// 	recurring?: boolean
-// 	repeatOn?: any
-// 	end?: ENDS_EVENT
-// }
 
 export interface ISupportContactForm {
 	id: string | null

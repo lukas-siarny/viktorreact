@@ -23,7 +23,7 @@ import {
 	PERMISSION
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { computeUntilDate, getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
+import { computeUntilDate, getAssignedUserLabel, getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
 
 // reducers
 import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
@@ -76,7 +76,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
 	const events = useSelector((state: RootState) => state.calendar.events)
-	const event = useSelector((state: RootState) => state.calendar.eventDetail)
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
@@ -99,7 +98,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			setQuery({
 				...query,
 				eventId: undefined,
-				sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
+				sidebarView: newView // COLLAPSED
 			})
 		} else {
 			const newEventType =
@@ -115,7 +114,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const initUpdateEventForm = async () => {
-		// TODO: switche pre ostatne
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
 			const initData = {
@@ -125,7 +123,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				employee: {
 					value: data?.employee.id,
 					key: data?.employee.id,
-					label: data?.employee.firstName
+					label: getAssignedUserLabel({
+						id: data?.employee.id as string,
+						firstName: data?.employee.firstName,
+						lastName: data?.employee.lastName,
+						email: data?.employee.email
+					})
 				}
 			}
 			if (!data) {
@@ -133,7 +136,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
 				return
 			}
-			console.log('data from detail', data)
 			switch (data.eventType) {
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 					// eslint-disable-next-line consistent-return
@@ -153,6 +155,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			console.error(e)
 		}
 	}
+
 	const filteredEmployees = useCallback(() => {
 		// filter employees based on employeeIDs in the url queryParams (if there are any)
 		if (!isEmpty(query.employeeIDs)) {
@@ -173,9 +176,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setEventManagement(type)
 				initEventForm(FORM.CALENDAR_SHIFT_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
 				return true
-			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF:
+			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF:
 				setEventManagement(type)
-				initEventForm(FORM.CALENDAR_TIME_OFF_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF)
+				initEventForm(FORM.CALENDAR_TIME_OFF_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF)
 				return true
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
 				setEventManagement(type)
@@ -322,7 +325,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
 		// TODO: rezervacia - NOT-2815
-		console.log(values)
 		try {
 			const reqData = {
 				start: {
@@ -349,7 +351,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm) => {
-			console.log('values', values)
 			try {
 				// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
 				const repeatEvent = values.recurring
@@ -378,7 +379,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						time: values.timeTo
 					},
 					employeeID: values.employee.key as string,
-					repeatEvent
+					repeatEvent,
+					note: values.note
 				}
 				// UPDATE event shift
 				if (query.eventId) {
@@ -391,7 +393,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							date: values.date,
 							time: values.timeTo
 						},
-						repeatEvent
+						note: values.note
 					}
 					// NOTE: ak existuje eventId je otvoreny detail a bude sa patchovat
 					await patchReq(
@@ -420,84 +422,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		},
 		[query, salonID, setEventManagement, setQuery]
 	)
-
-	// const handleSubmitTimeOff = async (values: ICalendarTimeOffForm) => {
-	// 	try {
-	// 		// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
-	// 		const repeatEvent = values.recurring
-	// 			? {
-	// 					untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
-	// 					days: {
-	// 						MONDAY: includes(values.repeatOn, DAY.MONDAY),
-	// 						TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
-	// 						WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
-	// 						THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
-	// 						FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
-	// 						SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
-	// 						SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
-	// 					}
-	// 			  }
-	// 			: undefined
-	// 		const reqData = {
-	// 			eventType: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF as CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-	// 			start: {
-	// 				date: values.date,
-	// 				time: values.timeFrom
-	// 			},
-	// 			end: {
-	// 				date: values.date,
-	// 				time: values.timeTo
-	// 			},
-	// 			note: values.note,
-	// 			employeeID: values.employee.key as string,
-	// 			repeatEvent
-	// 		}
-	// 		await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-	// 		// TODO: initnut event a skusit UPDATE / DELETE
-	// 	} catch (e) {
-	// 		// eslint-disable-next-line no-console
-	// 		console.error(e)
-	// 	}
-	// }
-
-	// const handleSubmitBreak = async (values: ICalendarBreakForm) => {
-	// 	try {
-	// 		// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
-	// 		const repeatEvent = values.recurring
-	// 			? {
-	// 					untilDate: computeUntilDate(values.end as ENDS_EVENT, values.date),
-	// 					days: {
-	// 						MONDAY: includes(values.repeatOn, DAY.MONDAY),
-	// 						TUESDAY: includes(values.repeatOn, DAY.TUESDAY),
-	// 						WEDNESDAY: includes(values.repeatOn, DAY.WEDNESDAY),
-	// 						THURSDAY: includes(values.repeatOn, DAY.THURSDAY),
-	// 						FRIDAY: includes(values.repeatOn, DAY.FRIDAY),
-	// 						SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
-	// 						SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
-	// 					}
-	// 			  }
-	// 			: undefined
-	// 		const reqData = {
-	// 			eventType: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK as CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-	// 			start: {
-	// 				date: values.date,
-	// 				time: values.timeFrom
-	// 			},
-	// 			end: {
-	// 				date: values.date,
-	// 				time: values.timeTo
-	// 			},
-	// 			note: values.note,
-	// 			employeeID: values.employee.key as string,
-	// 			repeatEvent
-	// 		}
-	// 		await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-	// 		// TODO: initnut event a skusit UPDATE / DELETE
-	// 	} catch (e) {
-	// 		// eslint-disable-next-line no-console
-	// 		console.error(e)
-	// 	}
-	// }
 
 	return (
 		<Layout className='noti-calendar-layout'>
@@ -535,9 +459,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					sidebarView={query.sidebarView as CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW}
 					setCollapsed={setEventManagement}
 					handleSubmitReservation={handleSubmitReservation}
-					// handleSubmitShift={handleSubmitShift}
-					// handleSubmitTimeOff={handleSubmitTimeOff}
-					// handleSubmitBreak={handleSubmitBreak}
 					handleSubmitEvent={handleSubmitEvent}
 				/>
 			</Layout>

@@ -43,7 +43,8 @@ export const getEmployees =
 					// show name if exist at least last name otherwise show fallback values
 					label: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
 					value: employee.id,
-					key: `${employee.id}-key`
+					key: `${employee.id}-key`,
+					color: employee.color
 				}
 			})
 

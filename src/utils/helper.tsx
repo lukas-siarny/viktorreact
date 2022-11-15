@@ -59,7 +59,9 @@ import {
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION,
-	DEFAULT_DATE_TIME_OPTIONS
+	DEFAULT_DATE_TIME_OPTIONS,
+	DATE_TIME_PARSER_DATE_FORMAT,
+	DATE_TIME_PARSER_FORMAT
 } from './enums'
 import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption, CountriesData, IAuthUserPayload, IEmployeePayload } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -744,7 +746,7 @@ export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, 
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 
 export const getCountryPrefix = (countriesData: CountriesData | null, countryCode?: string) => {
-	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode?.toLocaleLowerCase())
+	const country = countriesData?.find((c) => c.code.toLowerCase() === countryCode?.toLowerCase())
 	return country?.phonePrefix
 }
 
@@ -947,4 +949,8 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 			[value.name]: [now.subtract(value.value, value.unit), now]
 		}
 	}, {})
+}
+
+export const getDateTime = (date: string, time: string) => {
+	return dayjs(`${dayjs(date).format(DATE_TIME_PARSER_DATE_FORMAT)}:${time}`, DATE_TIME_PARSER_FORMAT).toISOString()
 }

@@ -168,7 +168,7 @@ const CalendarHeader: FC<Props> = (props) => {
 						isSmallerDevice={isSmallerDevice}
 					/>
 					<SwitchViewButton
-						label={t('loc:week-calendar-header')}
+						label={t('loc:Týždeň')}
 						className={cx({ active: calendarView === CALENDAR_VIEW.WEEK })}
 						onClick={() => setCalendarView(CALENDAR_VIEW.WEEK)}
 						isSmallerDevice={isSmallerDevice}

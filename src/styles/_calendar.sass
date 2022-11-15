@@ -338,11 +338,6 @@
 
 
 // full calendar
-.fc-scrollgrid-section-sticky
-	position: sticky
-	background: white
-	z-index: 20
-
 .fc-timegrid-body
 	background: $backgroundColor-notino-white
 
@@ -376,10 +371,19 @@
 	.fc-timegrid-bg-harness
 		.fc-bg-event
 			opacity: 1
-			background: transparent
+			background-color: transparent !important
 
 // day view
 .fc-resourceTimeGridDay-view
+	font-size: 15px
+	line-height: 15px
+	.fc-timegrid-slot
+		line-height: 15px
+		height: 15px
+	.fc-scrollgrid-section-sticky
+		position: sticky
+		background: white
+		z-index: 20
 	> table.fc-scrollgrid
 		border-color: transparent
 		.fc-timegrid-now-indicator-arrow
@@ -408,7 +412,6 @@
 			> th
 				line-height: 1
 				&:first-of-type
-					// border-right: 1px solid transparent
 					background: transparent
 					.fc-timegrid-axis
 						border-color: transparent
@@ -418,28 +421,41 @@
 					> .fc-scroller-harness
 						> .fc-scroller
 							@include scrollbar-styles
-							// overflow: visible !important
-							// margin-bottom: 0 !important
 		> tbody
 			> tr.fc-scrollgrid-section-body
 				// vyska najmenjsieho casoveho intervalu - teda ak mam nastavenych 15minut - tak cela hodina bude 60px vysoka (4 x 15px)
-				.fc-timegrid-slot
+				/* .fc-timegrid-slot
 					line-height: 15px
 					height: 15px
 				> td:first-of-type
 					border-bottom-color: transparent
 					> .fc-scroller-harness
-						transform: translateY(-56px)
-						height: calc(100% + 56px)
+						transform: translateY(-58px) // vyska hlavicky 56px + 2px nejake bordre
+						height: calc(100% + 58px) // vyska hlavicky 56px + 2px nejake bordre
+						&::before,
+						&::after
+							content: ''
+							position: absolute
+							left: 0
+							right: 0
+							height: 30px
+							z-index: 3
+						&::after
+							bottom: 0
+							background: linear-gradient(0deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+						&::before
+							top: 0
+							background: linear-gradient(180deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
 						.fc-scroller
-							padding-top: 56px
+							padding-top: 58px
 							.fc-timegrid-axis-chunk
 								table tbody
 									tr
+										line-height: 15px
 										height: 15px
 										.fc-timegrid-slot
 											border-color: transparent
-											transform: translateY(-50%)
+											// transform: translateY(-50%)
 											.fc-timegrid-slot-label-frame
 												.fc-timegrid-slot-label-cushion
 													color: $textColor-notino-grayDarker
@@ -450,27 +466,19 @@
 					border-color: transparent
 					> .fc-scroller-harness
 						> .fc-scroller
-							// @include scrollbar-styles
+							.fc-timegrid-body
+								line-height: 15px
 							.fc-timegrid-cols
+								> table
+									tr
+										line-height: 15px
+										height: 15px
 								.fc-timegrid-col
 									.fc-timegrid-col-frame
 										// events col
 										.fc-timegrid-col-events
 											.fc-timegrid-event-harness
 												margin: 2px 4px 2px 2px
-									/* &:first-of-type
-										.fc-timegrid-col-frame
-											.fc-timegrid-now-indicator-container
-												.fc-timegrid-now-indicator-line
-													&::before
-														content: ''
-														position: absolute
-														left: -5px
-														width: 10px
-														height: 10px
-														background: $backgroundColor-notino-pink
-														border-radius: 50%
-														transform: translateY(-6px)
 		> tfoot
 			> tr.fc-scrollgrid-section-footer
 				> th:first-of-type
@@ -482,9 +490,19 @@
 .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link
 	box-shadow: none
 .fc-timegrid-event
-	background: transparent
+	background-color: transparent !important
 	border: none
 	box-shadow: none
+	margin-bottom: 0
+	&:focus
+		&::before
+			display: none
+		&::after
+			display: none
+	&:focus-visible
+		.fc-event-main
+			.nc-day-event
+				box-shadow: $boxShadow-2xl
 	.fc-event-main
 		padding: 0
 
@@ -497,8 +515,10 @@
 			color: $textColor-notino-black
 			font-size: 10px
 			line-height: 11px
-			overflow: hidden
+			contain: paint
 			box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+			outline: 1px solid transparent
+			outline-offset: -1px
 			.event-background
 				content: ''
 				position: absolute
@@ -522,13 +542,15 @@
 				z-index: 2
 			.event-content
 				width: 100%
-				height: 100%
-				position: relative
+				position: sticky
+				top: 0
+				max-height: 100%
 				z-index: 3
 				word-break: break-all
 				.time
 					font-weight: 400
 					color: $textColor-notino-black
+					flex: 0 0 auto
 				.desc
 					color: $textColor-notino-grayDarker
 					font-weight: 400
@@ -538,75 +560,110 @@
 			&.reservation
 				.event-content
 					padding: 2px 8px
-					.time
-						margin-right: 10px
-				.service-icon
-					width: 10px
-					height: 10px
+					.event-info
+						display: flex
+						flex-direction: column
+						align-items: flex-start
+						gap: 4px
+						.title-wrapper
+							display: inline-flex
+							align-items: flex-start
+							margin-right: 24px
+							gap: 4px
+							.state
+								margin-top: 3px
+								width: 4px
+								height: 4px
+								border-radius: 50%
+								background-color: $backgroundColor-notino-black
+								flex: 0 0 auto
+				.icons
 					position: absolute
 					right: 4px
 					top: 2px
-					background-size: contain
-					backgrounc-position: center center
-					background-repeat: no-repeat
-					background-image: url("../assets/icons/service-icon-10.svg")
-				&.min-15,
-				&.event-45
+					display: flex
+					gap: 4px
+					.icon
+						width: 10px
+						height: 10px
+						background-size: contain
+						backgrounc-position: center center
+						background-repeat: no-repeat
+						flex: 0 0 auto
+						&.service
+							background-image: url("../assets/icons/service-icon-10.svg")
+						&.customer
+							background-image: url("../assets/icons/customer-10.svg")
+				&.min-15
 					.event-content
-						.title
-							margin-right: 10px
-						.time
-							display: none
+						padding-top: 0
+						padding-bottom: 0
+						.event-info
+							flex-direction: row
+							margin-right: 24px
+							.title-wrapper
+								margin-right: 0
+							.desc
+								display: none
+					.icons
+						top: 0
 			&.shift,
 			&.timeoff,
 			&.break
+				outline-color: $borderColor-notino-grayLight
 				.event-content
-					padding: 4px
 					display: flex
 					flex-direction: column
 					gap: 4px
-					.title
-						word-break: keep-all
-						white-space: nowrap
-						overflow: hidden
-						text-overflow: ellipsis
-						line-height: 11px
-					.time
-						color: $textColor-notino-grayDark
-					.color
-						flex: 0 0 auto
-						width: 10px
-						height: 10px
-						border-radius: 50%
-					.icon
-						flex: 0 0 auto
-					.duration
-						display: inline-block
-						white-space: nowrap
-						word-break: keep-all
-						color: $textColor-notino-grayDark
+					.event-info
+						display: flex
+						min-width: 0
+						justify-content: space-between
+						gap: 4px
+						.title
+							word-break: keep-all
+							white-space: nowrap
+							overflow: hidden
+							text-overflow: ellipsis
+							line-height: 11px
+						.time
+							color: $textColor-notino-grayDark
+						.color
+							flex: 0 0 auto
+							width: 6px
+							height: 6px
+							border-radius: 50%
+						.icon
+							flex: 0 0 auto
+						.duration
+							display: inline-block
+							white-space: nowrap
+							word-break: keep-all
+							color: $textColor-notino-grayDark
 				&.min-15
 					.event-content
 						padding: 0 4px
-						.title
-							margin-top: 0
-						.color
-							display: none
-						.icon
-							display: none
-						.duration
-							margin-top: 0
+						.event-info
+							.title
+								margin-top: 0
+							.icon
+								width: 11px
+								height: 11px
+							.duration
+								margin-top: 0
 
 			&.shift
-				border: 1px solid $borderColor-notino-grayDark
+				.event-content
+					padding: 2px 4px
 			&.timeoff,
 			&.break
-				border: 1px solid $borderColor-notino-pink
-				background: url("../assets/images/pink-pattern-background_40.png")
+				background: url("../assets/images/gray-bold-background-pattern.png")
+				background-size: 100px 50px
 				.event-content
-					.time
-						color: $textColor-notino-grayDarker
-
+					padding: 4px
+					.event-info
+						.time
+							color: $textColor-notino-grayDarker
 
 .nc-day-resource-label
 	display: flex
@@ -621,7 +678,7 @@
 	.image
 		border-radius: 50%
 		flex: 0 0 auto
-		border: 1px solid $borderColor-notino-grayLight
+		border: 2px solid $borderColor-notino-grayLight
 		background-position: center
 	.name
 		min-width: 0

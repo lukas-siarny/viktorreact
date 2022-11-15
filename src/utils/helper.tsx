@@ -61,7 +61,9 @@ import {
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION,
 	SALON_CREATE_TYPES,
-	DEFAULT_DATE_TIME_OPTIONS
+	DEFAULT_DATE_TIME_OPTIONS,
+	DATE_TIME_PARSER_DATE_FORMAT,
+	DATE_TIME_PARSER_FORMAT
 } from './enums'
 import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption, CountriesData, IAuthUserPayload, IEmployeePayload } from '../types/interfaces'
 import { phoneRegEx } from './regex'
@@ -1040,12 +1042,6 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 	}, {})
 }
 
-export const getDateTime = (date: string, time?: string) => {
-	const [hours, minutes] = (time || '').split(':')
-
-	if (Number.isInteger(Number(hours)) && Number.isInteger(Number(minutes))) {
-		return dayjs(date).add(Number(hours), 'hours').add(Number(minutes), 'minutes').toISOString()
-	}
-
-	return dayjs(date).toISOString()
+export const getDateTime = (date: string, time: string) => {
+	return dayjs(`${dayjs(date).format(DATE_TIME_PARSER_DATE_FORMAT)}:${time}`, DATE_TIME_PARSER_FORMAT).toISOString()
 }

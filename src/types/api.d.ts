@@ -730,6 +730,25 @@ declare namespace Paths {
             }
         }
     }
+    namespace DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId {
+        namespace Parameters {
+            /**
+             * example:
+             * 12DXXS
+             */
+            export type DeviceID = string;
+        }
+        export interface PathParameters {
+            deviceID: /**
+             * example:
+             * 12DXXS
+             */
+            Parameters.DeviceID;
+        }
+        namespace Responses {
+            export type $200 = "";
+        }
+    }
     namespace GetApiB2BAdminCustomers {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -944,13 +963,14 @@ declare namespace Paths {
                     lastName?: string;
                     email?: string;
                     inviteEmail?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    hasActiveAccount: boolean;
                     role?: {
                         id: string; // uuid
                         name: string;
                     };
-                    phonePrefixCountryCode?: string;
-                    phone?: string; // ^\d+$
-                    hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
                         name?: string;
@@ -1039,6 +1059,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -1152,7 +1173,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -1175,7 +1196,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -1201,7 +1222,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -2128,7 +2149,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2163,7 +2184,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -3155,6 +3176,18 @@ declare namespace Paths {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
                     };
                     customer?: {
                         id: string; // uuid
@@ -3232,6 +3265,7 @@ declare namespace Paths {
                         firstName?: string;
                         lastName?: string;
                         email?: string; // email
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -3375,6 +3409,37 @@ declare namespace Paths {
                                                 significand: number;
                                             };
                                         };
+                                        serviceCategoryParameter?: {
+                                            /**
+                                             * example:
+                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                                             */
+                                            id: string; // uuid
+                                            valueType: "ENUM" | "TIME";
+                                            unitType?: "MINUTES";
+                                            name?: string;
+                                            values: {
+                                                id: string; // uuid
+                                                categoryParameterValueID: string; // uuid
+                                                value?: string;
+                                                priceAndDurationData: {
+                                                    durationFrom?: number;
+                                                    durationTo?: number;
+                                                    priceFrom?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                    priceTo?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                };
+                                            }[];
+                                        };
                                         employeesCount: number;
                                         employees: {
                                             id: string; // uuid
@@ -3382,6 +3447,7 @@ declare namespace Paths {
                                             lastName: string;
                                             email?: string;
                                             inviteEmail?: string;
+                                            color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                                             image: {
                                                 id: string; // uuid
                                                 original: string;
@@ -3509,6 +3575,7 @@ declare namespace Paths {
                         fullName?: string;
                         email?: string;
                         inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -3733,7 +3800,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -3756,7 +3823,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -3849,7 +3916,7 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -4095,13 +4162,14 @@ declare namespace Paths {
                     lastName?: string;
                     email?: string;
                     inviteEmail?: string;
+                    phonePrefixCountryCode?: string;
+                    phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    hasActiveAccount: boolean;
                     role?: {
                         id: string; // uuid
                         name: string;
                     };
-                    phonePrefixCountryCode?: string;
-                    phone?: string; // ^\d+$
-                    hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
                         name?: string;
@@ -4180,6 +4248,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -4293,7 +4362,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -4316,7 +4385,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -4342,7 +4411,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -4964,7 +5033,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -5176,6 +5245,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     logo?: {
                         id: string; // uuid
@@ -6907,6 +6978,18 @@ declare namespace Paths {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
                     };
                     customer?: {
                         id: string; // uuid
@@ -6984,6 +7067,7 @@ declare namespace Paths {
                         firstName?: string;
                         lastName?: string;
                         email?: string; // email
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -7068,6 +7152,37 @@ declare namespace Paths {
                                                 significand: number;
                                             };
                                         };
+                                        serviceCategoryParameter?: {
+                                            /**
+                                             * example:
+                                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                                             */
+                                            id: string; // uuid
+                                            valueType: "ENUM" | "TIME";
+                                            unitType?: "MINUTES";
+                                            name?: string;
+                                            values: {
+                                                id: string; // uuid
+                                                categoryParameterValueID: string; // uuid
+                                                value?: string;
+                                                priceAndDurationData: {
+                                                    durationFrom?: number;
+                                                    durationTo?: number;
+                                                    priceFrom?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                    priceTo?: {
+                                                        currency: string;
+                                                        currencySymbol: string;
+                                                        exponent: number;
+                                                        significand: number;
+                                                    };
+                                                };
+                                            }[];
+                                        };
                                         employeesCount: number;
                                         employees: {
                                             id: string; // uuid
@@ -7075,6 +7190,7 @@ declare namespace Paths {
                                             lastName: string;
                                             email?: string;
                                             inviteEmail?: string;
+                                            color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                                             image: {
                                                 id: string; // uuid
                                                 original: string;
@@ -7202,6 +7318,7 @@ declare namespace Paths {
                         fullName?: string;
                         email?: string;
                         inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -7367,7 +7484,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -7390,7 +7507,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -7483,12 +7600,134 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
                     };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CV1CalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservations: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    customerNote?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        price: {
+                            from?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            to?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: string;
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: string;
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -7969,6 +8208,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     rating?: number; // float
                     distance?: number; // float
@@ -8059,6 +8300,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     rating?: number; // float
                     distance?: number; // float
@@ -8109,6 +8352,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     rating?: number; // float
                     distance?: number; // float
@@ -8301,6 +8546,8 @@ declare namespace Paths {
                                 large: string;
                             };
                             isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
                         }[];
                         rating?: number; // float
                         distance?: number; // float
@@ -8365,6 +8612,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     logo?: {
                         id: string; // uuid
@@ -9077,7 +9326,6 @@ declare namespace Paths {
                     [name: string]: {
                         from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                         to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                        employeeID: string; // uuid
                     }[];
                 };
             }
@@ -9330,6 +9578,314 @@ declare namespace Paths {
                     rate: 1 | 2 | 3 | 4 | 5; // float
                     userName: string;
                 };
+            }
+        }
+    }
+    namespace GetApiB2CV1ServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: string; // uuid
+                    useCategoryParameter: boolean;
+                    noteForPriceAndDuration?: string;
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    serviceCategoryParameter?: {
+                        /**
+                         * example:
+                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                         */
+                        id: string; // uuid
+                        valueType: "ENUM" | "TIME";
+                        unitType?: "MINUTES";
+                        name?: string;
+                        values: {
+                            id: string; // uuid
+                            categoryParameterValueID: string; // uuid
+                            value?: string;
+                            priceAndDurationData: {
+                                durationFrom?: number;
+                                durationTo?: number;
+                                priceFrom?: {
+                                    currency: string;
+                                    currencySymbol: string;
+                                    exponent: number;
+                                    significand: number;
+                                };
+                                priceTo?: {
+                                    currency: string;
+                                    currencySymbol: string;
+                                    exponent: number;
+                                    significand: number;
+                                };
+                            };
+                        }[];
+                    };
+                    rangePriceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    settings: {
+                        enabledB2cReservations: boolean;
+                        autoApproveReservatons: boolean;
+                    };
+                    employees: {
+                        id: string; // uuid
+                        hasActiveAccount: boolean;
+                        fullName?: string;
+                        email?: string;
+                        inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        hasOverriddenPricesAndDurationData: boolean;
+                        priceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                        serviceCategoryParameter?: {
+                            /**
+                             * example:
+                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                             */
+                            id: string; // uuid
+                            valueType: "ENUM" | "TIME";
+                            unitType?: "MINUTES";
+                            name?: string;
+                            values: {
+                                id: string; // uuid
+                                categoryParameterValueID: string; // uuid
+                                value?: string;
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                            }[];
+                        };
+                    }[];
+                    category: {
+                        id: string; // uuid
+                        description?: string;
+                        name?: string;
+                        child: {
+                            id: string; // uuid
+                            description?: string;
+                            name?: string;
+                            child?: {
+                                id: string; // uuid
+                                description?: string;
+                                name?: string;
+                            };
+                        };
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
+    namespace GetApiB2CWebCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservations: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    customerNote?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        price: {
+                            from?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            to?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: string;
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: string;
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
             }
         }
     }
@@ -9643,6 +10199,40 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2CWebEnumsCountries {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        namespace Responses {
+            export interface $200 {
+                countries: {
+                    code: string;
+                    name?: string;
+                    nameLocalizations: {
+                        language: "sk" | "cs" | "en" | "hu" | "ro" | "bg" | "it";
+                        value: string | null;
+                    }[];
+                    currencyCode: string | null;
+                    flag?: string;
+                    phonePrefix: string;
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
+            }
+        }
+    }
     namespace GetApiB2CWebEnumsLanguages {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -9809,6 +10399,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     rating?: number; // float
                     distance?: number; // float
@@ -9899,6 +10491,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     rating?: number; // float
                     distance?: number; // float
@@ -9949,6 +10543,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     rating?: number; // float
                     distance?: number; // float
@@ -10141,6 +10737,8 @@ declare namespace Paths {
                                 large: string;
                             };
                             isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
                         }[];
                         rating?: number; // float
                         distance?: number; // float
@@ -10204,7 +10802,6 @@ declare namespace Paths {
                     [name: string]: {
                         from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                         to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
-                        employeeID: string; // uuid
                     }[];
                 };
             }
@@ -10460,7 +11057,7 @@ declare namespace Paths {
             }
         }
     }
-    namespace GetApiB2CWebSalonsSeaSlugName {
+    namespace GetApiB2CWebSalonsSeoSlugName {
         export interface HeaderParameters {
             "accept-language"?: /**
              * example:
@@ -10474,10 +11071,10 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type SeaSlugName = string;
+            export type SeoSlugName = string;
         }
         export interface PathParameters {
-            seaSlugName: Parameters.SeaSlugName;
+            seoSlugName: Parameters.SeoSlugName;
         }
         namespace Responses {
             export interface $200 {
@@ -10498,6 +11095,8 @@ declare namespace Paths {
                             large: string;
                         };
                         isAutogenerated: boolean;
+                        orderIndex: number;
+                        isCover: boolean;
                     }[];
                     logo?: {
                         id: string; // uuid
@@ -11173,6 +11772,192 @@ declare namespace Paths {
             }
         }
     }
+    namespace GetApiB2CWebServicesServiceId {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type ServiceID = string; // uuid
+        }
+        export interface PathParameters {
+            serviceID: Parameters.ServiceID /* uuid */;
+        }
+        namespace Responses {
+            export interface $200 {
+                service: {
+                    id: string; // uuid
+                    useCategoryParameter: boolean;
+                    noteForPriceAndDuration?: string;
+                    priceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    serviceCategoryParameter?: {
+                        /**
+                         * example:
+                         * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                         */
+                        id: string; // uuid
+                        valueType: "ENUM" | "TIME";
+                        unitType?: "MINUTES";
+                        name?: string;
+                        values: {
+                            id: string; // uuid
+                            categoryParameterValueID: string; // uuid
+                            value?: string;
+                            priceAndDurationData: {
+                                durationFrom?: number;
+                                durationTo?: number;
+                                priceFrom?: {
+                                    currency: string;
+                                    currencySymbol: string;
+                                    exponent: number;
+                                    significand: number;
+                                };
+                                priceTo?: {
+                                    currency: string;
+                                    currencySymbol: string;
+                                    exponent: number;
+                                    significand: number;
+                                };
+                            };
+                        }[];
+                    };
+                    rangePriceAndDurationData: {
+                        durationFrom?: number;
+                        durationTo?: number;
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    settings: {
+                        enabledB2cReservations: boolean;
+                        autoApproveReservatons: boolean;
+                    };
+                    employees: {
+                        id: string; // uuid
+                        hasActiveAccount: boolean;
+                        fullName?: string;
+                        email?: string;
+                        inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        hasOverriddenPricesAndDurationData: boolean;
+                        priceAndDurationData: {
+                            durationFrom?: number;
+                            durationTo?: number;
+                            priceFrom?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            priceTo?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                        serviceCategoryParameter?: {
+                            /**
+                             * example:
+                             * 3d960bf6-2a68-41e6-8e26-3a0c221bf818
+                             */
+                            id: string; // uuid
+                            valueType: "ENUM" | "TIME";
+                            unitType?: "MINUTES";
+                            name?: string;
+                            values: {
+                                id: string; // uuid
+                                categoryParameterValueID: string; // uuid
+                                value?: string;
+                                priceAndDurationData: {
+                                    durationFrom?: number;
+                                    durationTo?: number;
+                                    priceFrom?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                    priceTo?: {
+                                        currency: string;
+                                        currencySymbol: string;
+                                        exponent: number;
+                                        significand: number;
+                                    };
+                                };
+                            }[];
+                        };
+                    }[];
+                    category: {
+                        id: string; // uuid
+                        description?: string;
+                        name?: string;
+                        child: {
+                            id: string; // uuid
+                            description?: string;
+                            name?: string;
+                            child?: {
+                                id: string; // uuid
+                                description?: string;
+                                name?: string;
+                            };
+                        };
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                };
+            }
+        }
+    }
     namespace GetApiMaintenanceHealth {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -11607,6 +12392,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -11720,7 +12506,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -11743,7 +12529,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -11769,7 +12555,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -11828,6 +12614,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -11941,7 +12728,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -11964,7 +12751,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -11990,7 +12777,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -20041,6 +20828,7 @@ declare namespace Paths {
                     SATURDAY: boolean;
                     SUNDAY: boolean;
                 };
+                week?: 1 | 2;
             };
             note?: string | null;
         }
@@ -28834,6 +29622,7 @@ declare namespace Paths {
                         fullName?: string;
                         email?: string;
                         inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -28988,7 +29777,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -29011,7 +29800,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -29491,6 +30280,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -29604,7 +30394,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -29627,7 +30417,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -29653,7 +30443,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -29712,6 +30502,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -29825,7 +30616,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -29848,7 +30639,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -29874,7 +30665,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -34952,6 +35743,7 @@ declare namespace Paths {
                     SATURDAY: boolean;
                     SUNDAY: boolean;
                 };
+                week?: 1 | 2;
             };
             note?: string | null;
         }
@@ -44328,6 +45120,7 @@ declare namespace Paths {
                         fullName?: string;
                         email?: string;
                         inviteEmail?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                         image: {
                             id: string; // uuid
                             original: string;
@@ -44584,7 +45377,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -44607,7 +45400,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -44840,7 +45633,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -44863,7 +45656,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -44979,7 +45772,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -45002,7 +45795,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -45257,7 +46050,7 @@ declare namespace Paths {
                     id: string; // uuid
                     firstName: string;
                     lastName: string;
-                    email?: string;
+                    email?: string; // email
                 };
                 messages: {
                     message: string;
@@ -45436,6 +46229,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -45549,7 +46343,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -45572,7 +46366,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -45598,7 +46392,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -51223,6 +52017,7 @@ declare namespace Paths {
                     SATURDAY: boolean;
                     SUNDAY: boolean;
                 };
+                week?: 1 | 2;
             } | null;
             note?: string | null;
             employeeID: string; // uuid
@@ -51418,7 +52213,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -51441,7 +52236,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -51566,7 +52361,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -51589,7 +52384,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -51690,7 +52485,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -51713,7 +52508,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -51839,7 +52634,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -51862,7 +52657,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -52081,7 +52876,7 @@ declare namespace Paths {
                     id: string; // uuid
                     firstName: string;
                     lastName: string;
-                    email?: string;
+                    email?: string; // email
                 };
                 messages: {
                     message: string;
@@ -52260,6 +53055,7 @@ declare namespace Paths {
                     inviteEmail?: string;
                     phonePrefixCountryCode?: string;
                     phone?: string; // ^\d+$
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
                     hasActiveAccount: boolean;
                     salon: {
                         id: string; // uuid
@@ -52373,7 +53169,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -52396,7 +53192,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -52422,7 +53218,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -54272,52 +55068,6 @@ declare namespace Paths {
             }
         }
     }
-    namespace PostApiB2BV1PushNotificationsSubscribe {
-        export interface HeaderParameters {
-            "accept-language": /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            /**
-             * example:
-             * 12DXXS
-             */
-            deviceID: string;
-            /**
-             * example:
-             * abc
-             */
-            token: string;
-            /**
-             * example:
-             * ANDROID
-             */
-            platform: "IOS" | "ANDROID";
-            /**
-             * example:
-             * DEBUG
-             */
-            mode: "DEBUG" | "RELEASE";
-            /**
-             * example:
-             * Samsung A50
-             */
-            name?: string | null;
-        }
-        namespace Responses {
-            export type $200 = "";
-        }
-    }
     namespace PostApiB2BV1Salons {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -55045,6 +55795,7 @@ declare namespace Paths {
                     SATURDAY: boolean;
                     SUNDAY: boolean;
                 };
+                week?: 1 | 2;
             } | null;
             note?: string | null;
             employeeID: string; // uuid
@@ -55103,6 +55854,41 @@ declare namespace Paths {
                 reservationCalendarEvent: {
                     id: string; // uuid
                 };
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PostApiB2BV1SalonsSalonIdUserInvite {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type SalonID = string; // uuid
+        }
+        export interface PathParameters {
+            salonID: Parameters.SalonID /* uuid */;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * test.user1@goodrequest.com
+             */
+            email: string; // email
+        }
+        namespace Responses {
+            export interface $200 {
                 messages: {
                     message: string;
                     type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
@@ -55190,7 +55976,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -55213,7 +55999,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -55257,37 +56043,6 @@ declare namespace Paths {
             export type AcceptLanguage = string;
         }
         export interface RequestBody {
-        }
-        namespace Responses {
-            export interface $200 {
-                messages: {
-                    message: string;
-                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
-                }[];
-            }
-        }
-    }
-    namespace PostApiB2BV1UsersInvite {
-        export interface HeaderParameters {
-            "accept-language"?: /**
-             * example:
-             * sk
-             */
-            Parameters.AcceptLanguage;
-        }
-        namespace Parameters {
-            /**
-             * example:
-             * sk
-             */
-            export type AcceptLanguage = string;
-        }
-        export interface RequestBody {
-            /**
-             * example:
-             * test.user1@goodrequest.com
-             */
-            email: string; // email
         }
         namespace Responses {
             export interface $200 {
@@ -55369,7 +56124,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -55392,7 +56147,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -55468,6 +56223,60 @@ declare namespace Paths {
             export interface $200 {
                 reservationCalendarEvent: {
                     id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: string;
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: string;
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -55528,6 +56337,60 @@ declare namespace Paths {
             export interface $200 {
                 reservationCalendarEvent: {
                     id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    note?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: string;
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: string;
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 };
                 messages: {
                     message: string;
@@ -55536,9 +56399,221 @@ declare namespace Paths {
             }
         }
     }
+    namespace PostApiMaintenanceNotifications {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            notificationType: "EMAIL" | "PUSH";
+            bulkNotifications?: {
+                language: string;
+                recipient: {
+                    email?: any;
+                    token?: any;
+                    platform?: any;
+                };
+            };
+            notifications?: {
+                type: ("CREATE_USER" | "EMPLOYEE_INVITE" | "FORGOT_PASSWORD" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "PARTNER_CONTACT_FORM" | "RESEND_USER_ACTIVATION" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "SUGGEST_CATEGORY_SERVICE" | "UNPUBLISH_SALON" | "USER_INVITE" | "USER_REGISTRATION" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CANCELLED" | "RESERVATION_CHANGED" | "RESERVATION_CONFIRMED" | "RESERVATION_REJECTED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER") | ("RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CANCELLED" | "RESERVATION_CHANGED" | "RESERVATION_CONFIRMED" | "RESERVATION_REJECTED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER");
+                language: string;
+                recipient: {
+                    email?: string;
+                    token?: string;
+                    platform?: string;
+                };
+                data?: {
+                    token: string;
+                } | {
+                    salonName: string;
+                } | {
+                    token: string;
+                } | {
+                    attachments?: {
+                        filename?: string;
+                        content?: any;
+                    }[];
+                    globalErrors: string[];
+                } | {
+                    email: string; // email
+                    attachments?: {
+                        filename?: string;
+                        content?: any;
+                    }[];
+                } | {
+                    attachments?: {
+                        filename?: string;
+                        content?: any;
+                    }[];
+                } | {
+                    salonName: string;
+                    partnerFullname: string;
+                    email: string; // email
+                    phone: string;
+                    vatNumber?: string;
+                } | {
+                    code: string;
+                } | {
+                    salonName: string;
+                } | {
+                    salonName: string;
+                    reason: string;
+                } | {
+                    salonName: string;
+                    servicesSuggestionEmails: string /* email */[];
+                    email: string; // email
+                    phone: string;
+                    description: string;
+                } | {
+                    salonName: string;
+                    reason: string;
+                } | {
+                    salonName: string;
+                } | {
+                    code: string;
+                    attachments?: {
+                        filename?: string;
+                        content?: any;
+                    }[];
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                };
+            }[];
+        }
+        namespace Responses {
+            export interface $200 {
+            }
+        }
+    }
+    namespace PutApiB2BV1PushNotificationsSubscribe {
+        export interface HeaderParameters {
+            "accept-language": /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 12DXXS
+             */
+            deviceID: string;
+            /**
+             * example:
+             * abc
+             */
+            token: string;
+            /**
+             * example:
+             * ANDROID
+             */
+            platform: "IOS" | "ANDROID";
+            /**
+             * example:
+             * DEBUG
+             */
+            mode: "DEBUG" | "RELEASE";
+            /**
+             * example:
+             * Samsung A50
+             */
+            name?: string | null;
+        }
+        namespace Responses {
+            export type $200 = "";
+        }
+    }
+    namespace PutApiB2CV1PushNotificationsSubscribe {
+        export interface HeaderParameters {
+            "accept-language": /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+        }
+        export interface RequestBody {
+            /**
+             * example:
+             * 12DXXS
+             */
+            deviceID: string;
+            /**
+             * example:
+             * abc
+             */
+            token: string;
+            /**
+             * example:
+             * ANDROID
+             */
+            platform: "IOS" | "ANDROID";
+            /**
+             * example:
+             * DEBUG
+             */
+            mode: "DEBUG" | "RELEASE";
+            /**
+             * example:
+             * Samsung A50
+             */
+            name?: string | null;
+        }
+        namespace Responses {
+            export type $200 = "";
+        }
+    }
 }
 
 export interface OperationMethods {
+  /**
+   * postApiMaintenanceNotifications - permissions: NO
+   */
+  'postApiMaintenanceNotifications'(
+    parameters?: Parameters<Paths.PostApiMaintenanceNotifications.HeaderParameters> | null,
+    data?: Paths.PostApiMaintenanceNotifications.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiMaintenanceNotifications.Responses.$200>
   /**
    * postApiB2BAdminAuthLogin - permissions: NO
    */
@@ -56068,13 +57143,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1EnumsCurrencies.Responses.$200>
   /**
-   * postApiB2BV1PushNotificationsSubscribe - permissions: NO
+   * putApiB2BV1PushNotificationsSubscribe - permissions: NO
    */
-  'postApiB2BV1PushNotificationsSubscribe'(
-    parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
-    data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
+  'putApiB2BV1PushNotificationsSubscribe'(
+    parameters?: Parameters<Paths.PutApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
+    data?: Paths.PutApiB2BV1PushNotificationsSubscribe.RequestBody,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
+  ): OperationResponse<Paths.PutApiB2BV1PushNotificationsSubscribe.Responses.$200>
   /**
    * deleteApiB2BV1PushNotificationsUnsubscribeDeviceId - permissions: NO
    */
@@ -56156,13 +57231,13 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.Responses.$200>
   /**
-   * getApiB2CWebSalonsSeaSlugName - permissions: NO
+   * getApiB2CWebSalonsSeoSlugName - permissions: NO
    */
-  'getApiB2CWebSalonsSeaSlugName'(
-    parameters?: Parameters<Paths.GetApiB2CWebSalonsSeaSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeaSlugName.HeaderParameters> | null,
+  'getApiB2CWebSalonsSeoSlugName'(
+    parameters?: Parameters<Paths.GetApiB2CWebSalonsSeoSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeoSlugName.HeaderParameters> | null,
     data?: any,
     config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.GetApiB2CWebSalonsSeaSlugName.Responses.$200>
+  ): OperationResponse<Paths.GetApiB2CWebSalonsSeoSlugName.Responses.$200>
   /**
    * getApiB2CWebSalonsSalonIdServices - permissions: NO
    */
@@ -56267,6 +57342,30 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebEnumsLanguagesLanguageId.Responses.$200>
+  /**
+   * getApiB2CWebEnumsCountries - permissions: NO
+   */
+  'getApiB2CWebEnumsCountries'(
+    parameters?: Parameters<Paths.GetApiB2CWebEnumsCountries.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebEnumsCountries.Responses.$200>
+  /**
+   * getApiB2CWebServicesServiceId - permissions: NO
+   */
+  'getApiB2CWebServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2CWebServicesServiceId.PathParameters & Paths.GetApiB2CWebServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebServicesServiceId.Responses.$200>
+  /**
+   * getApiB2CWebCalendarEventsReservations - permissions: NO
+   */
+  'getApiB2CWebCalendarEventsReservations'(
+    parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservations.QueryParameters & Paths.GetApiB2CWebCalendarEventsReservations.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservations.Responses.$200>
   /**
    * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
    */
@@ -56436,6 +57535,38 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   /**
+   * putApiB2CV1PushNotificationsSubscribe - permissions: NO
+   */
+  'putApiB2CV1PushNotificationsSubscribe'(
+    parameters?: Parameters<Paths.PutApiB2CV1PushNotificationsSubscribe.HeaderParameters> | null,
+    data?: Paths.PutApiB2CV1PushNotificationsSubscribe.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PutApiB2CV1PushNotificationsSubscribe.Responses.$200>
+  /**
+   * deleteApiB2CV1PushNotificationsUnsubscribeDeviceId - permissions: NO
+   */
+  'deleteApiB2CV1PushNotificationsUnsubscribeDeviceId'(
+    parameters?: Parameters<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
+  /**
+   * getApiB2CV1ServicesServiceId - permissions: NO
+   */
+  'getApiB2CV1ServicesServiceId'(
+    parameters?: Parameters<Paths.GetApiB2CV1ServicesServiceId.PathParameters & Paths.GetApiB2CV1ServicesServiceId.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1ServicesServiceId.Responses.$200>
+  /**
+   * getApiB2CV1CalendarEventsReservations - permissions: NO
+   */
+  'getApiB2CV1CalendarEventsReservations'(
+    parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservations.QueryParameters & Paths.GetApiB2CV1CalendarEventsReservations.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservations.Responses.$200>
+  /**
    * getApiMaintenanceHealth - permissions: NO
    */
   'getApiMaintenanceHealth'(
@@ -56516,7 +57647,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
   /**
-   * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
    */
   'postApiB2BAdminSalonsSalonIdCalendarEventsReservations'(
     parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
@@ -56524,7 +57655,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
@@ -56532,7 +57663,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
   /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
@@ -56540,7 +57671,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
@@ -56556,7 +57687,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
   /**
-   * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
    */
   'postApiB2BAdminSalonsSalonIdCalendarEvents'(
     parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -56564,7 +57695,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
   /**
-   * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_READ]</li></ul>
    */
   'getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -56572,7 +57703,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -56580,7 +57711,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -56588,7 +57719,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
@@ -56596,7 +57727,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
@@ -56980,14 +58111,6 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
   /**
-   * postApiB2BV1UsersInvite - permissions:<ul><li>user: [PARTNER]</li></ul>
-   */
-  'postApiB2BV1UsersInvite'(
-    parameters?: Parameters<Paths.PostApiB2BV1UsersInvite.HeaderParameters> | null,
-    data?: Paths.PostApiB2BV1UsersInvite.RequestBody,
-    config?: AxiosRequestConfig  
-  ): OperationResponse<Paths.PostApiB2BV1UsersInvite.Responses.$200>
-  /**
    * postApiB2BV1FilesSignUrls - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, USER_BROWSING, USER_CREATE, USER_EDIT, USER_DELETE, ENUM_EDIT, LOGIN_AS_PARTNER]</li></ul>
    */
   'postApiB2BV1FilesSignUrls'(
@@ -57164,6 +58287,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
   /**
+   * postApiB2BV1SalonsSalonIdUserInvite - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+   */
+  'postApiB2BV1SalonsSalonIdUserInvite'(
+    parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdUserInvite.PathParameters & Paths.PostApiB2BV1SalonsSalonIdUserInvite.HeaderParameters> | null,
+    data?: Paths.PostApiB2BV1SalonsSalonIdUserInvite.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdUserInvite.Responses.$200>
+  /**
    * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
    */
   'patchApiB2BV1SalonsSalonIdInvoice'(
@@ -57228,7 +58359,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1SalonsSalonIdSettings.Responses.$200>
   /**
-   * getApiB2BV1Services - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
+   * getApiB2BV1Services - permissions:<ul><li>user: [PARTNER]</li></ul>
    */
   'getApiB2BV1Services'(
     parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
@@ -57236,7 +58367,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1Services.Responses.$200>
   /**
-   * getApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * getApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
    */
   'getApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -57244,7 +58375,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * patchApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+   * patchApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
    */
   'patchApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -57252,7 +58383,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * deleteApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
+   * deleteApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
    */
   'deleteApiB2BV1ServicesServiceId'(
     parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -57260,7 +58391,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BV1ServicesServiceId.Responses.$200>
   /**
-   * postApiB2BV1ServicesCategoryServiceSuggest - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+   * postApiB2BV1ServicesCategoryServiceSuggest - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
    */
   'postApiB2BV1ServicesCategoryServiceSuggest'(
     parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,
@@ -57382,6 +58513,16 @@ export interface OperationMethods {
 }
 
 export interface PathsDictionary {
+  ['/api/maintenance/notifications']: {
+    /**
+     * postApiMaintenanceNotifications - permissions: NO
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiMaintenanceNotifications.HeaderParameters> | null,
+      data?: Paths.PostApiMaintenanceNotifications.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiMaintenanceNotifications.Responses.$200>
+  }
   ['/api/b2b/admin/auth/login']: {
     /**
      * postApiB2BAdminAuthLogin - permissions: NO
@@ -57762,7 +58903,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.DeleteApiB2BAdminEnumsContactsContactId.Responses.$200>
   }
-  ['/api/b2b/admin/enums/countries']: {
+  ['/api/b2b/admin/enums/countries/']: {
     /**
      * getApiB2BAdminEnumsCountries - permissions: NO
      */
@@ -57772,7 +58913,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminEnumsCountries.Responses.$200>
   }
-  ['/api/b2b/admin/enums/currencies']: {
+  ['/api/b2b/admin/enums/currencies/']: {
     /**
      * getApiB2BAdminEnumsCurrencies - permissions: NO
      */
@@ -57978,7 +59119,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsSupportContacts.Responses.$200>
   }
-  ['/api/b2b/v1/enums/countries']: {
+  ['/api/b2b/v1/enums/countries/']: {
     /**
      * getApiB2BV1EnumsCountries - permissions: NO
      */
@@ -57988,7 +59129,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1EnumsCountries.Responses.$200>
   }
-  ['/api/b2b/v1/enums/currencies']: {
+  ['/api/b2b/v1/enums/currencies/']: {
     /**
      * getApiB2BV1EnumsCurrencies - permissions: NO
      */
@@ -58000,13 +59141,13 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/push-notifications/subscribe']: {
     /**
-     * postApiB2BV1PushNotificationsSubscribe - permissions: NO
+     * putApiB2BV1PushNotificationsSubscribe - permissions: NO
      */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
-      data?: Paths.PostApiB2BV1PushNotificationsSubscribe.RequestBody,
+    'put'(
+      parameters?: Parameters<Paths.PutApiB2BV1PushNotificationsSubscribe.HeaderParameters> | null,
+      data?: Paths.PutApiB2BV1PushNotificationsSubscribe.RequestBody,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1PushNotificationsSubscribe.Responses.$200>
+    ): OperationResponse<Paths.PutApiB2BV1PushNotificationsSubscribe.Responses.$200>
   }
   ['/api/b2b/v1/push-notifications/unsubscribe/{deviceID}']: {
     /**
@@ -58108,15 +59249,15 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebSalonsFilterCitiesPlaceId.Responses.$200>
   }
-  ['/api/b2c/web/salons/{seaSlugName}']: {
+  ['/api/b2c/web/salons/{seoSlugName}']: {
     /**
-     * getApiB2CWebSalonsSeaSlugName - permissions: NO
+     * getApiB2CWebSalonsSeoSlugName - permissions: NO
      */
     'get'(
-      parameters?: Parameters<Paths.GetApiB2CWebSalonsSeaSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeaSlugName.HeaderParameters> | null,
+      parameters?: Parameters<Paths.GetApiB2CWebSalonsSeoSlugName.PathParameters & Paths.GetApiB2CWebSalonsSeoSlugName.HeaderParameters> | null,
       data?: any,
       config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.GetApiB2CWebSalonsSeaSlugName.Responses.$200>
+    ): OperationResponse<Paths.GetApiB2CWebSalonsSeoSlugName.Responses.$200>
   }
   ['/api/b2c/web/salons/{salonID}/services']: {
     /**
@@ -58245,6 +59386,36 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebEnumsLanguagesLanguageId.Responses.$200>
+  }
+  ['/api/b2c/web/enums/countries/']: {
+    /**
+     * getApiB2CWebEnumsCountries - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebEnumsCountries.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebEnumsCountries.Responses.$200>
+  }
+  ['/api/b2c/web/services/{serviceID}']: {
+    /**
+     * getApiB2CWebServicesServiceId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebServicesServiceId.PathParameters & Paths.GetApiB2CWebServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebServicesServiceId.Responses.$200>
+  }
+  ['/api/b2c/web/calendar-events/reservations/']: {
+    /**
+     * getApiB2CWebCalendarEventsReservations - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservations.QueryParameters & Paths.GetApiB2CWebCalendarEventsReservations.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservations.Responses.$200>
   }
   ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/available']: {
     /**
@@ -58454,6 +59625,46 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1EnumsLanguagesLanguageId.Responses.$200>
   }
+  ['/api/b2c/v1/push-notifications/subscribe']: {
+    /**
+     * putApiB2CV1PushNotificationsSubscribe - permissions: NO
+     */
+    'put'(
+      parameters?: Parameters<Paths.PutApiB2CV1PushNotificationsSubscribe.HeaderParameters> | null,
+      data?: Paths.PutApiB2CV1PushNotificationsSubscribe.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PutApiB2CV1PushNotificationsSubscribe.Responses.$200>
+  }
+  ['/api/b2c/v1/push-notifications/unsubscribe/{deviceID}']: {
+    /**
+     * deleteApiB2CV1PushNotificationsUnsubscribeDeviceId - permissions: NO
+     */
+    'delete'(
+      parameters?: Parameters<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.PathParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.DeleteApiB2CV1PushNotificationsUnsubscribeDeviceId.Responses.$200>
+  }
+  ['/api/b2c/v1/services/{serviceID}']: {
+    /**
+     * getApiB2CV1ServicesServiceId - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1ServicesServiceId.PathParameters & Paths.GetApiB2CV1ServicesServiceId.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1ServicesServiceId.Responses.$200>
+  }
+  ['/api/b2c/v1/calendar-events/reservations/']: {
+    /**
+     * getApiB2CV1CalendarEventsReservations - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservations.QueryParameters & Paths.GetApiB2CV1CalendarEventsReservations.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservations.Responses.$200>
+  }
   ['/api/maintenance/health']: {
     /**
      * getApiMaintenanceHealth - permissions: NO
@@ -58554,7 +59765,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/']: {
     /**
-     * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
@@ -58564,7 +59775,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
@@ -58572,7 +59783,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
     /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
@@ -58582,7 +59793,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
@@ -58600,7 +59811,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
     /**
-     * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -58610,7 +59821,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}']: {
     /**
-     * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_READ]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -58618,7 +59829,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
     /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -58626,7 +59837,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
     /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -58636,7 +59847,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
@@ -58644,7 +59855,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
     /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
@@ -59100,16 +60311,6 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1UsersUserIdPendingEmployeeInvites.Responses.$200>
   }
-  ['/api/b2b/v1/users/invite']: {
-    /**
-     * postApiB2BV1UsersInvite - permissions:<ul><li>user: [PARTNER]</li></ul>
-     */
-    'post'(
-      parameters?: Parameters<Paths.PostApiB2BV1UsersInvite.HeaderParameters> | null,
-      data?: Paths.PostApiB2BV1UsersInvite.RequestBody,
-      config?: AxiosRequestConfig  
-    ): OperationResponse<Paths.PostApiB2BV1UsersInvite.Responses.$200>
-  }
   ['/api/b2b/v1/files/sign-urls']: {
     /**
      * postApiB2BV1FilesSignUrls - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER, USER_BROWSING, USER_CREATE, USER_EDIT, USER_DELETE, ENUM_EDIT, LOGIN_AS_PARTNER]</li></ul>
@@ -59314,6 +60515,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1SalonsSalonIdDashboard.Responses.$200>
   }
+  ['/api/b2b/v1/salons/{salonID}/user-invite']: {
+    /**
+     * postApiB2BV1SalonsSalonIdUserInvite - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
+     */
+    'post'(
+      parameters?: Parameters<Paths.PostApiB2BV1SalonsSalonIdUserInvite.PathParameters & Paths.PostApiB2BV1SalonsSalonIdUserInvite.HeaderParameters> | null,
+      data?: Paths.PostApiB2BV1SalonsSalonIdUserInvite.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PostApiB2BV1SalonsSalonIdUserInvite.Responses.$200>
+  }
   ['/api/b2b/v1/salons/{salonID}/invoice']: {
     /**
      * patchApiB2BV1SalonsSalonIdInvoice - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SALON_BILLING_UPDATE]</li></ul>
@@ -59396,7 +60607,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/services/']: {
     /**
-     * getApiB2BV1Services - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li></ul>
+     * getApiB2BV1Services - permissions:<ul><li>user: [PARTNER]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1Services.QueryParameters & Paths.GetApiB2BV1Services.HeaderParameters> | null,
@@ -59406,7 +60617,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/services/{serviceID}']: {
     /**
-     * getApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * getApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BV1ServicesServiceId.PathParameters & Paths.GetApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -59414,7 +60625,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * patchApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+     * patchApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BV1ServicesServiceId.PathParameters & Paths.PatchApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -59422,7 +60633,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BV1ServicesServiceId.Responses.$200>
     /**
-     * deleteApiB2BV1ServicesServiceId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
+     * deleteApiB2BV1ServicesServiceId - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BV1ServicesServiceId.PathParameters & Paths.DeleteApiB2BV1ServicesServiceId.HeaderParameters> | null,
@@ -59432,7 +60643,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/v1/services/category-service-suggest']: {
     /**
-     * postApiB2BV1ServicesCategoryServiceSuggest - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
+     * postApiB2BV1ServicesCategoryServiceSuggest - permissions:<ul><li>user: [PARTNER]</li><li>salon: [PARTNER_ADMIN, SERVICE_UPDATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BV1ServicesCategoryServiceSuggest.HeaderParameters> | null,

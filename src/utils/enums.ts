@@ -57,7 +57,8 @@ export enum FILTER_ENTITY {
 	SALON = 'SALON',
 	SERVICE = 'SERVICE',
 	USER = 'USER',
-	BASIC_SALON = 'BASIC_SALON'
+	BASIC_SALON = 'BASIC_SALON',
+	NOTINO_USER = 'NOTINO_USER'
 }
 
 export enum TABS_TYPE {
@@ -116,6 +117,7 @@ export enum FORM {
 	SUPPORT_CONTACTS_FILTER = 'SUPPORT_CONTACTS_FILTER',
 	SUPPORT_CONTACT = 'SUPPORT_CONTACT',
 	NOTE = 'NOTE',
+	NOTINO_USER = 'NOTINO_USER',
 	EDIT_EMPLOYEE_ROLE = 'EDIT_EMPLOYEE_ROLE',
 	SALON_IMPORTS_FORM = 'SALON_IMPORTS_FORM',
 	SALON_HISTORY_FILTER = 'SALON_HISTORY_FILTER',
@@ -127,11 +129,15 @@ export enum FORM {
 	SPECIALIST_CONTACT_FILTER = 'SPECIALIST_CONTACT_FILTER',
 	SALON_BILLING_INFO = 'SALON_BILLING_INFO',
 	FILTER_REJECTED_SUGGESTIONS = 'FILTER_REJECTED_SUGGESTIONS',
+<<<<<<< HEAD
 	CALENDAR_FILTER = 'CALENDAR_FILTER',
 	CALENDAR_RESERVATION_FORM = 'CALENDAR_RESERVATION_FORM',
 	CALENDAR_SHIFT_FORM = 'CALENDAR_SHIFT_FORM',
 	CALENDAR_TIME_OFF_FORM = 'CALENDAR_TIME_OFF_FORM',
 	CALENDAR_BREAK_FORM = 'CALENDAR_BREAK_FORM'
+=======
+	EDIT_USER_ROLE = 'EDIT_USER_ROLE'
+>>>>>>> af4a46b9420f9600bb096f33d863d7a26198fcd1
 }
 
 // System permissions
@@ -197,11 +203,6 @@ export enum SALONS_TAB_KEYS {
 	ACTIVE = 'active',
 	DELETED = 'deleted',
 	MISTAKES = 'mistakes'
-}
-
-export enum SALON_CREATE_TYPE {
-	NON_BASIC = 'NON_BASIC',
-	BASIC = 'BASIC'
 }
 
 export enum PAGE {
@@ -346,7 +347,6 @@ export enum SALON_FILTER_STATES {
 	NOT_DELETED = 'NOT_DELETED',
 	PENDING_PUBLICATION = 'PENDING_PUBLICATION',
 	DECLINED = 'DECLINED',
-	PREMIUM = 'PREMIUM',
 	ALL = 'ALL'
 }
 
@@ -359,15 +359,15 @@ export enum SALON_STATES {
 	PUBLISHED_DECLINED = 'PUBLISHED_DECLINED'
 }
 
-export enum SALON_FILTER_CREATE_TYPES {
-	BASIC = 'BASIC',
+export enum SALON_CREATE_TYPE {
 	NON_BASIC = 'NON_BASIC',
-	PREMIUM = 'PREMIUM'
+	BASIC = 'BASIC'
 }
 
-export enum SALON_CREATE_TYPES {
-	BASIC = 'BASIC',
-	NON_BASIC = 'NON_BASIC'
+export enum SALON_SOURCE_TYPE {
+	NOTINO = 'NOTINO',
+	PARTNER = 'PARTNER',
+	IMPORT = 'IMPORT'
 }
 
 export enum SALON_FILTER_OPENING_HOURS {
@@ -560,10 +560,11 @@ export const FILTER_PATHS = (from?: string, to?: string) => ({
 		[SALON_FILTER_STATES.NOT_PUBLISHED]: `${i18next.t('paths:salons')}?salonState=active&statuses_published=${SALON_FILTER_STATES.NOT_PUBLISHED}`,
 		[SALON_FILTER_STATES.DECLINED]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.DECLINED}`,
 		[SALON_FILTER_STATES.PENDING_PUBLICATION]: `${i18next.t('paths:salons')}?salonState=active&statuses_changes=${SALON_FILTER_STATES.PENDING_PUBLICATION}`,
-		[SALON_CREATE_TYPES.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.BASIC}`,
-		[SALON_FILTER_STATES.PREMIUM]: `${i18next.t('paths:salons')}?createType=${SALON_FILTER_CREATE_TYPES.PREMIUM}`,
+		[SALON_CREATE_TYPE.BASIC]: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}`,
 		publishedChanges: `${i18next.t('paths:salons')}?salonState=active&lastUpdatedAtFrom=${from}&lastUpdatedAtTo=${to}`,
-		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`
+		rejectedSuggestions: `${i18next.t('paths:salons')}?salonState=mistakes`,
+		publishedBasics: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`,
+		publishedPremiums: `${i18next.t('paths:salons')}?createType=${SALON_CREATE_TYPE.NON_BASIC}&statuses_published=${SALON_FILTER_STATES.PUBLISHED}`
 	}
 })
 
@@ -646,3 +647,21 @@ export enum CALENDAR_EVENTS_KEYS {
 	RESERVATIONS = 'reservations',
 	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
 }
+/**
+ * @returns localized texts for Sentry report dialog and common EN texts for result view
+ */
+export const ERROR_BOUNDARY_TEXTS = () => ({
+	result: {
+		subtitle: 'An unexpected error has occurred and your request cannot be completed. Please contact us about the error.',
+		buttonLabel: 'Contact about the error'
+	},
+	reportDialog: {
+		successMessage: i18next.t('loc:Vaša spätná väzba bola odoslaná. Ďakujeme!'),
+		title: i18next.t('loc:Nastala neočakávaná chyba'),
+		subtitle: i18next.t('loc:Prosím kontaktujte nás'),
+		labelName: i18next.t('loc:Meno'),
+		labelComments: i18next.t('loc:Popis chyby'),
+		labelClose: i18next.t('loc:Zatvoriť'),
+		labelSubmit: i18next.t('loc:Odoslať hlásenie o chybe')
+	}
+})

@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Spin } from 'antd'
 import { get } from 'lodash'
+import * as Sentry from '@sentry/react'
 
 // utils
 import { setIntervalImmediately } from '../utils/helper'
@@ -52,6 +53,14 @@ const AppInit: FC = (props) => {
 			}
 		}
 	}, [currentUser, dispatch, selectedSalon])
+
+	useEffect(() => {
+		Sentry.setUser(currentUser.data ? { id: currentUser.data.id } : null)
+
+		return () => {
+			Sentry.setUser(null)
+		}
+	}, [currentUser.data])
 
 	return loading ? (
 		<div className={'suspense-loading-spinner'}>

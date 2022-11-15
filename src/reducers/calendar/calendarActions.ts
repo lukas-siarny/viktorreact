@@ -10,11 +10,14 @@ import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE } from '../../
 
 // utils
 import { getReq } from '../../utils/request'
-import { normalizeQueryParams } from '../../utils/helper'
 import { getSelectedDateRange } from '../../pages/Calendar/calendarHelpers'
+import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
-export type CalendarEvent = CalendarEvents[0]
+export type CalendarEvent = CalendarEvents[0] & {
+	startDateTime: string
+	endDateTime: string
+}
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -54,7 +57,7 @@ interface IGetCalendarEventDetail {
 }
 
 export interface ICalendarEventsPayload {
-	data: CalendarEvents | null
+	data: CalendarEvent[] | null
 }
 
 export interface ICalendarEventDetailPayload {
@@ -88,7 +91,11 @@ export const getCalendarEvents =
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
 			payload = {
-				data: data.calendarEvents
+				data: data.calendarEvents.map((event) => ({
+					...event,
+					startDateTime: getDateTime(event.start.date, event.start.time),
+					endDateTime: getDateTime(event.end.date, event.end.time)
+				}))
 			}
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })

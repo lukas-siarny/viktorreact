@@ -1039,3 +1039,13 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 		}
 	}, {})
 }
+
+export const getDateTime = (date: string, time?: string) => {
+	const [hours, minutes] = (time || '').split(':')
+
+	if (Number.isInteger(Number(hours)) && Number.isInteger(Number(minutes))) {
+		return dayjs(date).add(Number(hours), 'hours').add(Number(minutes), 'minutes').toISOString()
+	}
+
+	return dayjs(date).toISOString()
+}

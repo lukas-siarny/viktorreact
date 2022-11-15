@@ -71,6 +71,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 
+	console.log({ reservations, shiftsTimeOffs })
+
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
 
 	const calendarRefs = useRef<CalendarRefs>(null)
@@ -138,10 +140,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
 
-		if (isRangeAleardySelected(query.view as CALENDAR_VIEW, query.date, newDate)) {
-			return
-		}
-
 		switch (type) {
 			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
 				newQueryDate = dayjs(newDate)
@@ -158,6 +156,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				break
 			default:
 				break
+		}
+
+		if (isRangeAleardySelected(query.view as CALENDAR_VIEW, query.date, newQueryDate)) {
+			return
 		}
 
 		setQuery({ ...query, date: dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY) })

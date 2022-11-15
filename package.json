@@ -1,6 +1,6 @@
 {
   "name": "notino_b2b_web",
-  "version": "1.2.0",
+  "version": "2.0.0",
   "main": "src/index.ts",
   "repository": "git@bitbucket.org:GoodRequest/notino_b2b_web.git",
   "author": "Jan Cvencek <jan.cvencek@goodrequest.com>",
@@ -42,7 +42,7 @@
     "generate-runtime-env": "cross-env env-cmd runtime-env-cra --config-name=./public/runtime-env.js --env-file=.env.template"
   },
   "dependencies": {
-	"@fullcalendar/daygrid": "5.11.3",
+    "@fullcalendar/daygrid": "5.11.3",
     "@fullcalendar/interaction": "5.11.3",
     "@fullcalendar/react": "5.11.2",
     "@fullcalendar/resource-timegrid": "5.11.3",

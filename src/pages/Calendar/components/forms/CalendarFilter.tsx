@@ -97,7 +97,7 @@ const CalendarFilter = (props: Props) => {
 					<Field
 						className={'p-0 m-0 nc-radio-event-type'}
 						component={RadioGroupField}
-						name={'eventType'}
+						name={'eventsViewType'}
 						options={eventTypeOptions}
 						direction={'vertical'}
 						size={'small'}

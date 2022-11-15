@@ -120,7 +120,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
-				eventType: query.eventsViewType,
+				eventsViewType: query.eventsViewType,
 				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : query?.categoryIDs,
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})

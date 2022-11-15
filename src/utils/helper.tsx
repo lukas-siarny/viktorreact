@@ -746,7 +746,7 @@ export const isEnumValue = <T extends { [k: string]: string }>(checkValue: any, 
 	typeof checkValue === 'string' && Object.values(enumObject).includes(checkValue)
 
 export const getCountryPrefix = (countriesData: CountriesData | null, countryCode?: string) => {
-	const country = countriesData?.find((c) => c.code.toLocaleLowerCase() === countryCode?.toLocaleLowerCase())
+	const country = countriesData?.find((c) => c.code.toLowerCase() === countryCode?.toLowerCase())
 	return country?.phonePrefix
 }
 

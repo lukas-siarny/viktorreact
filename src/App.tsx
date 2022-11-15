@@ -7,6 +7,9 @@ import { QueryParamProvider, ExtendedStringifyOptions, transformSearchStringJson
 import { Spin, ConfigProvider } from 'antd'
 import { Locale } from 'antd/lib/locale-provider'
 import dayjs from 'dayjs'
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
+import updateLocale from 'dayjs/plugin/updateLocale'
 
 import 'antd/dist/antd.min.css'
 
@@ -30,6 +33,10 @@ const queryStringifyOptions: ExtendedStringifyOptions = {
 
 const { store, persistor } = configureStore(rootReducer)
 
+dayjs.extend(isSameOrBefore)
+dayjs.extend(isSameOrAfter)
+dayjs.extend(updateLocale)
+
 const App = () => {
 	const [antdLocale, setAntdLocale] = useState<Locale | undefined>(undefined)
 
@@ -39,6 +46,11 @@ const App = () => {
 			document.documentElement.setAttribute('lang', language)
 			setAntdLocale(locale.antD)
 			dayjs.locale(locale.ISO_639)
+			if (locale.ISO_639 === LANGUAGE.EN) {
+				dayjs.updateLocale(locale.ISO_639, {
+					weekStart: 1
+				})
+			}
 		})
 	}, [])
 

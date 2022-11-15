@@ -19,6 +19,7 @@ import {
 	CALENDAR_EVENTS_KEYS
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
+import { isRangeAleardySelected } from './calendarHelpers'
 
 // reducers
 import { getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
@@ -137,19 +138,23 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
 
+		if (isRangeAleardySelected(query.view as CALENDAR_VIEW, query.date, newDate)) {
+			return
+		}
+
 		switch (type) {
 			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
 				newQueryDate = dayjs(newDate)
-					.startOf(query.view.toLocaleLowerCase() as dayjs.OpUnitType)
-					.add(1, query.view.toLocaleLowerCase() as dayjs.OpUnitType)
+					.startOf(query.view.toLowerCase() as dayjs.OpUnitType)
+					.add(1, query.view.toLowerCase() as dayjs.OpUnitType)
 				break
 			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
 				newQueryDate = dayjs(newDate)
-					.startOf(query.view.toLocaleLowerCase() as dayjs.OpUnitType)
-					.subtract(1, query.view.toLocaleLowerCase() as dayjs.OpUnitType)
+					.startOf(query.view.toLowerCase() as dayjs.OpUnitType)
+					.subtract(1, query.view.toLowerCase() as dayjs.OpUnitType)
 				break
 			case CALENDAR_SET_NEW_DATE.FIND_START:
-				newQueryDate = dayjs(newDate).startOf(query.view.toLocaleLowerCase() as dayjs.OpUnitType)
+				newQueryDate = dayjs(newDate).startOf(query.view.toLowerCase() as dayjs.OpUnitType)
 				break
 			default:
 				break

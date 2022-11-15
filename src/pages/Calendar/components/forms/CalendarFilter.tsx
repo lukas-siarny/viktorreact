@@ -93,7 +93,7 @@ const CalendarFilter = (props: Props) => {
 				expandIconPosition={'end'}
 				expandIcon={({ isActive }) => <ChevronDownIcon className={cx({ 'is-active': isActive })} />}
 			>
-				<Panel key={PANEL_KEY.EVENT_TYPE} header={t('loc:Typ udalosti')} className={'nc-collapse-panel'}>
+				<Panel key={PANEL_KEY.EVENT_TYPE} header={t('loc:Zobrazenie')} className={'nc-collapse-panel'}>
 					<Field
 						className={'p-0 m-0 nc-radio-event-type'}
 						component={RadioGroupField}

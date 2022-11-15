@@ -15,7 +15,7 @@ import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENDS_EVENT, ENDS_EVENT_OPTIONS, E
 import { getReq } from '../../../../utils/request'
 
 // types
-import { ICalendarBreakForm } from '../../../../types/interfaces'
+import { ICalendarEventForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
@@ -40,7 +40,7 @@ type ComponentProps = {
 	handleDeleteEvent: () => any
 }
 
-type Props = InjectedFormProps<ICalendarBreakForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 
 const CalendarBreakForm: FC<Props> = (props) => {
 	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent } = props
@@ -210,7 +210,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ICalendarBreakForm, ComponentProps>({
+const form = reduxForm<ICalendarEventForm, ComponentProps>({
 	form: FORM.CALENDAR_BREAK_FORM,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

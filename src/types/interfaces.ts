@@ -3,7 +3,8 @@ import { PaginationProps } from 'antd'
 
 // utils
 import {
-	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENT_TYPE_FILTER, ENDS_EVENT
+	GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENT_TYPE_FILTER, ENDS_EVENT, EVERY_REPEAT,
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
 } from '../utils/enums'
 import { SALON_STATES } from '../utils/enums'
 
@@ -153,37 +154,39 @@ export interface ICalendarReservationForm {
 	note?: string
 }
 
-export interface ICalendarShiftForm {
+export interface ICalendarEventForm {
 	employee: ISelectOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
 	recurring?: boolean
 	repeatOn?: any
+	every?: EVERY_REPEAT
 	end?: ENDS_EVENT
+	eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
 }
 
-export interface ICalendarTimeOffForm {
-	employee: ISelectOptionItem
-	date: string
-	timeFrom: string
-	timeTo: string
-	note?: string
-	recurring?: boolean
-	repeatOn?: any
-	end?: ENDS_EVENT
-}
-
-export interface ICalendarBreakForm {
-	employee: ISelectOptionItem
-	date: string
-	timeFrom: string
-	timeTo: string
-	note?: string
-	recurring?: boolean
-	repeatOn?: any
-	end?: ENDS_EVENT
-}
+// export interface ICalendarTimeOffForm {
+// 	employee: ISelectOptionItem
+// 	date: string
+// 	timeFrom: string
+// 	timeTo: string
+// 	note?: string
+// 	recurring?: boolean
+// 	repeatOn?: any
+// 	end?: ENDS_EVENT
+// }
+//
+// export interface ICalendarBreakForm {
+// 	employee: ISelectOptionItem
+// 	date: string
+// 	timeFrom: string
+// 	timeTo: string
+// 	note?: string
+// 	recurring?: boolean
+// 	repeatOn?: any
+// 	end?: ENDS_EVENT
+// }
 
 export interface ISupportContactForm {
 	id: string | null

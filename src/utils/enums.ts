@@ -678,6 +678,22 @@ export enum ENDS_EVENT {
 	YEAR = 'YEAR'
 }
 
+export enum EVERY_REPEAT {
+	ONE_WEEK = 1,
+	TWO_WEEKS = 2
+}
+
+export const EVERY_REPEAT_OPTIONS = () => [
+	{
+		key: EVERY_REPEAT.ONE_WEEK,
+		label: i18next.t('loc:Týždeň')
+	},
+	{
+		key: EVERY_REPEAT.TWO_WEEKS,
+		label: i18next.t('loc:Dva týždne')
+	}
+]
+
 export const ENDS_EVENT_OPTIONS = () => [
 	{
 		key: ENDS_EVENT.WEEK,
@@ -729,8 +745,30 @@ export const SHORTCUT_DAYS_OPTIONS = () => [
 	{ label: i18next.t('loc:So'), value: DAY.SATURDAY },
 	{ label: i18next.t('loc:Ne'), value: DAY.SUNDAY }
 ]
+
 export enum CALENDAR_EVENTS_KEYS {
 	EVENTS = 'events',
 	RESERVATIONS = 'reservations',
 	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
+}
+
+export const getDayNameFromNumber = (day: number) => {
+	switch (day) {
+		case 0: // prvy den dayjs.day() -> nedela
+			return DAY.SUNDAY
+		case 1:
+			return DAY.MONDAY
+		case 2:
+			return DAY.TUESDAY
+		case 3:
+			return DAY.WEDNESDAY
+		case 4:
+			return DAY.THURSDAY
+		case 5:
+			return DAY.FRIDAY
+		case 6:
+			return DAY.SATURDAY
+		default:
+			return null
+	}
 }

@@ -1,10 +1,10 @@
 import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
 
-import { ICalendarTimeOffForm } from '../../../../types/interfaces'
+import { ICalendarEventForm } from '../../../../types/interfaces'
 
-const validateTimeOffForm = (values?: ICalendarTimeOffForm) => {
-	const errors: FormErrors<ICalendarTimeOffForm> = {}
+const validateTimeOffForm = (values?: ICalendarEventForm) => {
+	const errors: FormErrors<ICalendarEventForm> = {}
 
 	if (!values?.date) {
 		errors.date = i18next.t('loc:Toto pole je povinné')

@@ -1,9 +1,9 @@
 import i18next from 'i18next'
 import { FormErrors } from 'redux-form'
-import { ICalendarShiftForm } from '../../../../types/interfaces'
+import { ICalendarEventForm } from '../../../../types/interfaces'
 
-const validateShiftForm = (values?: ICalendarShiftForm) => {
-	const errors: FormErrors<ICalendarShiftForm> = {}
+const validateShiftForm = (values?: ICalendarEventForm) => {
+	const errors: FormErrors<ICalendarEventForm> = {}
 
 	if (!values?.date) {
 		errors.date = i18next.t('loc:Toto pole je povinné')

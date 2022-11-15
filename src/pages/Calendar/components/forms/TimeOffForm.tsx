@@ -15,7 +15,7 @@ import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENDS_EVENT, ENDS_EVENT_OPTIONS, E
 import { getReq } from '../../../../utils/request'
 
 // types
-import { ICalendarTimeOffForm } from '../../../../types/interfaces'
+import { ICalendarEventForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
@@ -40,7 +40,7 @@ type ComponentProps = {
 	handleDeleteEvent: () => any
 }
 
-type Props = InjectedFormProps<ICalendarTimeOffForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 
 const CalendarTimeOffForm: FC<Props> = (props) => {
 	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent } = props
@@ -223,7 +223,7 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 	)
 }
 
-const form = reduxForm<ICalendarTimeOffForm, ComponentProps>({
+const form = reduxForm<ICalendarEventForm, ComponentProps>({
 	form: FORM.CALENDAR_TIME_OFF_FORM,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

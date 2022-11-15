@@ -3176,6 +3176,18 @@ declare namespace Paths {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
                     };
                     customer?: {
                         id: string; // uuid
@@ -6966,6 +6978,18 @@ declare namespace Paths {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
                     };
                     customer?: {
                         id: string; // uuid
@@ -7582,6 +7606,128 @@ declare namespace Paths {
                         updatedAt: string; // date-time
                         deletedAt?: string; // date-time
                     };
+                }[];
+            }
+        }
+    }
+    namespace GetApiB2CV1CalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservations: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    customerNote?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        price: {
+                            from?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            to?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: string;
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: string;
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
                 }[];
             }
         }
@@ -9618,6 +9764,128 @@ declare namespace Paths {
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
                 };
+            }
+        }
+    }
+    namespace GetApiB2CWebCalendarEventsReservations {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type DateFrom = string; // date-time
+            export type DateTo = string; // date-time
+        }
+        export interface QueryParameters {
+            dateFrom: Parameters.DateFrom /* date-time */;
+            dateTo: Parameters.DateTo /* date-time */;
+        }
+        namespace Responses {
+            export interface $200 {
+                reservations: {
+                    id: string; // uuid
+                    eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
+                    start: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    end: {
+                        date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                        time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
+                    };
+                    customerNote?: string;
+                    reservationData?: {
+                        state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
+                        createSourceType: "ONLINE" | "OFFLINE";
+                        employeeAssignmentType: "USER" | "SYSTEM";
+                        price: {
+                            from?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                            to?: {
+                                currency: string;
+                                currencySymbol: string;
+                                exponent: number;
+                                significand: number;
+                            };
+                        };
+                    };
+                    customer?: {
+                        id: string; // uuid
+                        firstName: string;
+                        lastName: string;
+                        email?: string;
+                        phonePrefixCountryCode: string;
+                        phone: string; // ^\d+$
+                    };
+                    employee: {
+                        id: string; // uuid
+                        firstName?: string;
+                        lastName?: string;
+                        email?: string;
+                        color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                        image: string;
+                    };
+                    service?: {
+                        id: string; // uuid
+                        name?: string;
+                        icon?: string;
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
+                    };
+                    salon: {
+                        id: string; // uuid
+                        name?: string;
+                        rating?: number; // float
+                        logo?: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                        };
+                        images: {
+                            id: string; // uuid
+                            original: string;
+                            fileName: string;
+                            resizedImages: {
+                                thumbnail: string;
+                                small: string;
+                                medium: string;
+                                large: string;
+                            };
+                            isAutogenerated: boolean;
+                            orderIndex: number;
+                            isCover: boolean;
+                        }[];
+                        phones: {
+                            id: string; // uuid
+                            phonePrefixCountryCode: string;
+                            phone: string; // ^\d+$
+                        }[];
+                        formattedAddress?: string;
+                    };
+                    createdAt: string; // date-time
+                    updatedAt: string; // date-time
+                    deletedAt?: string; // date-time
+                }[];
             }
         }
     }
@@ -55969,6 +56237,18 @@ declare namespace Paths {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
                     };
                     customer?: {
                         id: string; // uuid
@@ -55997,18 +56277,6 @@ declare namespace Paths {
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
-                };
-                priceFrom?: {
-                    currency: string;
-                    currencySymbol: string;
-                    exponent: number;
-                    significand: number;
-                };
-                priceTo?: {
-                    currency: string;
-                    currencySymbol: string;
-                    exponent: number;
-                    significand: number;
                 };
                 messages: {
                     message: string;
@@ -56083,6 +56351,18 @@ declare namespace Paths {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
+                        priceFrom?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
+                        priceTo?: {
+                            currency: string;
+                            currencySymbol: string;
+                            exponent: number;
+                            significand: number;
+                        };
                     };
                     customer?: {
                         id: string; // uuid
@@ -56111,18 +56391,6 @@ declare namespace Paths {
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
                     deletedAt?: string; // date-time
-                };
-                priceFrom?: {
-                    currency: string;
-                    currencySymbol: string;
-                    exponent: number;
-                    significand: number;
-                };
-                priceTo?: {
-                    currency: string;
-                    currencySymbol: string;
-                    exponent: number;
-                    significand: number;
                 };
                 messages: {
                     message: string;
@@ -56157,7 +56425,7 @@ declare namespace Paths {
                 };
             };
             notifications?: {
-                type: ("IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER") | ("RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER");
+                type: ("CREATE_USER" | "EMPLOYEE_INVITE" | "FORGOT_PASSWORD" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_FULL_SUCCESS" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "PARTNER_CONTACT_FORM" | "RESEND_USER_ACTIVATION" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "SUGGEST_CATEGORY_SERVICE" | "UNPUBLISH_SALON" | "USER_INVITE" | "USER_REGISTRATION" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CANCELLED" | "RESERVATION_CHANGED" | "RESERVATION_CONFIRMED" | "RESERVATION_REJECTED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER") | ("RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CANCELLED" | "RESERVATION_CHANGED" | "RESERVATION_CONFIRMED" | "RESERVATION_REJECTED" | "RESERVATION_REMINDER" | "IMPORT_SALONS_FAILURE" | "IMPORT_SALONS_PARTIAL_SUCCESS" | "IMPORT_SALONS_FULL_SUCCESS" | "FORGOT_PASSWORD" | "EMPLOYEE_INVITE" | "RESOLVE_PUBLICATION_APPROVED" | "RESOLVE_PUBLICATION_DECLINED" | "UNPUBLISH_SALON" | "SUGGEST_CATEGORY_SERVICE" | "USER_INVITE" | "CREATE_USER" | "RESEND_USER_ACTIVATION" | "USER_REGISTRATION" | "PARTNER_CONTACT_FORM" | "RESERVATION_AWAITING_APPROVAL" | "RESERVATION_CONFIRMED" | "RESERVATION_CHANGED" | "RESERVATION_REJECTED" | "RESERVATION_CANCELLED" | "RESERVATION_REMINDER");
                 language: string;
                 recipient: {
                     email?: string;
@@ -56172,19 +56440,19 @@ declare namespace Paths {
                     token: string;
                 } | {
                     attachments?: {
-                        filename: string;
+                        filename?: string;
                         content?: any;
                     }[];
                     globalErrors: string[];
                 } | {
                     email: string; // email
                     attachments?: {
-                        filename: string;
+                        filename?: string;
                         content?: any;
                     }[];
                 } | {
                     attachments?: {
-                        filename: string;
+                        filename?: string;
                         content?: any;
                     }[];
                 } | {
@@ -56195,18 +56463,6 @@ declare namespace Paths {
                     vatNumber?: string;
                 } | {
                     code: string;
-                } | {
-                    [key: string]: any;
-                } | {
-                    [key: string]: any;
-                } | {
-                    [key: string]: any;
-                } | {
-                    [key: string]: any;
-                } | {
-                    [key: string]: any;
-                } | {
-                    [key: string]: any;
                 } | {
                     salonName: string;
                 } | {
@@ -56226,9 +56482,27 @@ declare namespace Paths {
                 } | {
                     code: string;
                     attachments?: {
-                        filename: string;
+                        filename?: string;
                         content?: any;
                     }[];
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
+                } | {
+                    calendarEventID: string; // uuid
+                    salonID: string; // uuid
                 };
             }[];
         }
@@ -57085,6 +57359,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebServicesServiceId.Responses.$200>
   /**
+   * getApiB2CWebCalendarEventsReservations - permissions: NO
+   */
+  'getApiB2CWebCalendarEventsReservations'(
+    parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservations.QueryParameters & Paths.GetApiB2CWebCalendarEventsReservations.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservations.Responses.$200>
+  /**
    * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
    */
   'getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable'(
@@ -57276,6 +57558,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1ServicesServiceId.Responses.$200>
+  /**
+   * getApiB2CV1CalendarEventsReservations - permissions: NO
+   */
+  'getApiB2CV1CalendarEventsReservations'(
+    parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservations.QueryParameters & Paths.GetApiB2CV1CalendarEventsReservations.HeaderParameters> | null,
+    data?: any,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservations.Responses.$200>
   /**
    * getApiMaintenanceHealth - permissions: NO
    */
@@ -59117,6 +59407,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebServicesServiceId.Responses.$200>
   }
+  ['/api/b2c/web/calendar-events/reservations/']: {
+    /**
+     * getApiB2CWebCalendarEventsReservations - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CWebCalendarEventsReservations.QueryParameters & Paths.GetApiB2CWebCalendarEventsReservations.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservations.Responses.$200>
+  }
   ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/available']: {
     /**
      * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
@@ -59354,6 +59654,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1ServicesServiceId.Responses.$200>
+  }
+  ['/api/b2c/v1/calendar-events/reservations/']: {
+    /**
+     * getApiB2CV1CalendarEventsReservations - permissions: NO
+     */
+    'get'(
+      parameters?: Parameters<Paths.GetApiB2CV1CalendarEventsReservations.QueryParameters & Paths.GetApiB2CV1CalendarEventsReservations.HeaderParameters> | null,
+      data?: any,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservations.Responses.$200>
   }
   ['/api/maintenance/health']: {
     /**

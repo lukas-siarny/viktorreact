@@ -7,15 +7,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 
 // validate
+import dayjs from 'dayjs'
 import validateShiftForm from './validateShiftForm'
 
 // utils
 import { formatLongQueryString, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
-import { CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENDS_EVENT, ENDS_EVENT_OPTIONS, EVENT_TYPE_OPTIONS, FORM, SHORTCUT_DAYS_OPTIONS, STRINGS } from '../../../../utils/enums'
+import {
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	ENDS_EVENT,
+	ENDS_EVENT_OPTIONS,
+	EVENT_TYPE_OPTIONS,
+	EVERY_REPEAT_OPTIONS,
+	FORM,
+	getDayNameFromNumber,
+	SHORTCUT_DAYS_OPTIONS,
+	STRINGS
+} from '../../../../utils/enums'
 import { getReq } from '../../../../utils/request'
 
 // types
-import { ICalendarShiftForm } from '../../../../types/interfaces'
+import { ICalendarEventForm } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
@@ -37,12 +48,13 @@ type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	onChangeEventType: (type: any) => any
 	handleDeleteEvent: () => any
+	eventId?: string | null
 }
 
-type Props = InjectedFormProps<ICalendarShiftForm, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 
 const CalendarShiftForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent, eventId } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 
@@ -88,20 +100,16 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				hideChecker
 				optionRender={checkboxOptionRender}
 			/>
-			{/* // TODO: momentalne sa nebude pouzivat ak pribudne tak odkopmentovat */}
-			{/* <Field */}
-			{/*	component={SelectField} */}
-			{/*	label={t('loc:Každý')} */}
-			{/*	placeholder={t('loc:Vyberte frekvenciu')} */}
-			{/*	name={'every'} */}
-			{/*	size={'large'} */}
-			{/*	allowInfinityScroll */}
-			{/*	showSearch */}
-			{/*	required */}
-			{/*	options={everyOptions} */}
-			{/*	className={'pb-0'} */}
-			{/*	labelInValue */}
-			{/* /> */}
+			<Field
+				component={SelectField}
+				label={t('loc:Každý')}
+				placeholder={t('loc:Vyberte frekvenciu')}
+				name={'every'}
+				size={'large'}
+				options={EVERY_REPEAT_OPTIONS()}
+				className={'pb-0'}
+				allowClear
+			/>
 
 			<Field
 				component={SelectField}
@@ -119,43 +127,56 @@ const CalendarShiftForm: FC<Props> = (props) => {
 	const onChangeRecurring = (checked: any) => {
 		if (checked) {
 			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'end', ENDS_EVENT.WEEK))
+			const repeatDay = getDayNameFromNumber(dayjs(formValues?.date).day()) // NOTE: .day() vrati cislo od 0 do 6 co predstavuje nedela az sobota
+			dispatch(change(FORM.CALENDAR_SHIFT_FORM, 'repeatOn', repeatDay))
 		}
 	}
 
 	return (
 		<>
 			<div className={'nc-sider-event-management-header justify-between'}>
-				<div className={'font-semibold'}>{t('loc:Nová zmena')}</div>
+				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(t('loc:zmenu')) : STRINGS(t).createRecord(t('loc:zmenu'))}</div>
 				<div className={'flex-center'}>
-					<DeleteButton
-						placement={'bottom'}
-						entityName={t('loc:zmenu')}
-						className={'bg-transparent mr-4'}
-						onClick={handleDeleteEvent}
-						onlyIcon
-						smallIcon
-						size={'small'}
-					/>
-					<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
+					{eventId && (
+						<DeleteButton
+							placement={'bottom'}
+							entityName={t('loc:zmenu')}
+							className={'bg-transparent mr-4'}
+							onConfirm={handleDeleteEvent}
+							onlyIcon
+							smallIcon
+							size={'small'}
+						/>
+					)}
+					<Button
+						className='button-transparent'
+						onClick={() => {
+							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
+						}}
+					>
 						<CloseIcon />
 					</Button>
 				</div>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
-					<Field
-						component={SelectField}
-						label={t('loc:Typ udalosti')}
-						placeholder={t('loc:Vyberte typ')}
-						name={'eventType'}
-						options={EVENT_TYPE_OPTIONS()}
-						size={'large'}
-						className={'pb-0'}
-						onChange={onChangeEventType}
-						filterOption={false}
-						allowInfinityScroll
-					/>
-					<Divider className={'mb-3 mt-3'} />
+					{!eventId && (
+						<>
+							<Field
+								component={SelectField}
+								label={t('loc:Typ udalosti')}
+								placeholder={t('loc:Vyberte typ')}
+								name={'eventType'}
+								options={EVENT_TYPE_OPTIONS()}
+								size={'large'}
+								className={'pb-0'}
+								onChange={onChangeEventType}
+								filterOption={false}
+								allowInfinityScroll
+							/>
+							<Divider className={'mb-3 mt-3'} />
+						</>
+					)}
 					<Field
 						component={SelectField}
 						optionRender={(itemData: any) => optionRenderWithAvatar(itemData)}
@@ -168,6 +189,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 						filterOption={false}
 						allowInfinityScroll
 						showSearch
+						disabled={eventId} // NOTE: ak je detail tak sa neda menit zamestnanec
 						required
 						className={'pb-0'}
 						labelInValue
@@ -195,20 +217,20 @@ const CalendarShiftForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} onChange={onChangeRecurring} label={t('loc:Opakovať')} className={'pb-0'} component={SwitchField} />
+					<Field name={'recurring'} disabled={eventId} onChange={onChangeRecurring} label={t('loc:Opakovať')} className={'pb-0'} component={SwitchField} />
 					{recurringFields}
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>
 				<Button onClick={() => dispatch(submit(FORM.CALENDAR_SHIFT_FORM))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
-					{STRINGS(t).createRecord(t('loc:zmenu'))}
+					{eventId ? STRINGS(t).edit(t('loc:zmenu')) : STRINGS(t).createRecord(t('loc:zmenu'))}
 				</Button>
 			</div>
 		</>
 	)
 }
 
-const form = reduxForm<ICalendarShiftForm, ComponentProps>({
+const form = reduxForm<ICalendarEventForm, ComponentProps>({
 	form: FORM.CALENDAR_SHIFT_FORM,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

@@ -80,7 +80,7 @@ const ReservationForm: FC<Props> = (props) => {
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
-					{/* <Field name={'customer'} label={t('loc:Zákazník')} component={CalendarSelectField} emptyIcon={<ProfileIcon />} entityName={t('loc:zákaznika')} required /> */}
+					{/* <Field name={'customer'} label={t('loc:Zákazník')} component={CalendarSelectField} emptyIcon={<ProfileIcon />} entityName={t('loc:zákazníka')} required /> */}
 					<Field
 						name={'service'}
 						label={t('loc:Služba')}

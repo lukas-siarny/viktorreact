@@ -1173,7 +1173,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -1196,7 +1196,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -1222,7 +1222,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -2149,7 +2149,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2184,7 +2184,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -2796,6 +2796,7 @@ declare namespace Paths {
                         maxHoursB2cCreateReservationBeforeStart: number;
                         maxHoursB2cCancelReservationBeforeStart: number;
                         enabledCustomerReservationNotes: boolean;
+                        minutesIntervalBetweenB2CReservations: number;
                     };
                     premiumSourceUserType?: "NOTINO" | "PARTNER";
                     createdAt: string; // date-time
@@ -3093,6 +3094,14 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    image: string;
+                }[];
                 calendarEvents: {
                     id: string; // uuid
                     eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
@@ -3800,7 +3809,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -3823,7 +3832,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -3916,7 +3925,7 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -4362,7 +4371,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -4385,7 +4394,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -4411,7 +4420,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -5033,7 +5042,7 @@ declare namespace Paths {
                     }[];
                     permissions: {
                         id: string; // uuid
-                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                        name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                     }[];
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -6575,6 +6584,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
                         };
                     };
                     permissions: {
@@ -6895,6 +6905,14 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    image: string;
+                }[];
                 calendarEvents: {
                     id: string; // uuid
                     eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
@@ -7484,7 +7502,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -7507,7 +7525,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -7600,7 +7618,7 @@ declare namespace Paths {
                         }[];
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                         createdAt: string; // date-time
                         updatedAt: string; // date-time
@@ -9323,11 +9341,12 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 availableReservations: {
-                    [name: string]: {
+                    date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    items: {
                         from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                         to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[];
-                };
+                }[];
             }
         }
     }
@@ -10799,11 +10818,12 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 availableReservations: {
-                    [name: string]: {
+                    date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    items: {
                         from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                         to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[];
-                };
+                }[];
             }
         }
     }
@@ -12506,7 +12526,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -12529,7 +12549,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -12555,7 +12575,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -12728,7 +12748,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -12751,7 +12771,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -12777,7 +12797,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -21492,6 +21512,7 @@ declare namespace Paths {
                 maxHoursB2cCreateReservationBeforeStart?: null | number;
                 maxHoursB2cCancelReservationBeforeStart?: null | number;
                 enabledCustomerReservationNotes?: boolean | null;
+                minutesIntervalBetweenB2CReservations?: null | number;
             } | null;
         }
         namespace Responses {
@@ -29777,7 +29798,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -29800,7 +29821,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -30394,7 +30415,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -30417,7 +30438,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -30443,7 +30464,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -30616,7 +30637,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -30639,7 +30660,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -30665,7 +30686,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -35584,6 +35605,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
                         };
                     };
                     permissions: {
@@ -36757,6 +36779,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
                         };
                     };
                     permissions: {
@@ -36990,6 +37013,7 @@ declare namespace Paths {
                 maxHoursB2cCreateReservationBeforeStart?: null | number;
                 maxHoursB2cCancelReservationBeforeStart?: null | number;
                 enabledCustomerReservationNotes?: boolean | null;
+                minutesIntervalBetweenB2CReservations?: null | number;
             } | null;
         }
         namespace Responses {
@@ -45377,7 +45401,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -45400,7 +45424,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -45633,7 +45657,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -45656,7 +45680,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -45772,7 +45796,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -45795,7 +45819,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -46343,7 +46367,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -46366,7 +46390,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -46392,7 +46416,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -52213,7 +52237,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -52236,7 +52260,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -52361,7 +52385,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -52384,7 +52408,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -52485,7 +52509,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -52508,7 +52532,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -52634,7 +52658,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -52657,7 +52681,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -53169,7 +53193,7 @@ declare namespace Paths {
                             name?: string;
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         }[];
                         salons: {
@@ -53192,7 +53216,7 @@ declare namespace Paths {
                                 id: string; // uuid
                                 permissions: {
                                     id: string; // uuid
-                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                    name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                                 }[];
                             };
                         }[];
@@ -53218,7 +53242,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     };
                     createdAt: string; // date-time
@@ -55719,6 +55743,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
                         };
                     };
                     permissions: {
@@ -55976,7 +56001,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -55999,7 +56024,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -56124,7 +56149,7 @@ declare namespace Paths {
                         name?: string;
                         permissions: {
                             id: string; // uuid
-                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                            name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                         }[];
                     }[];
                     salons: {
@@ -56147,7 +56172,7 @@ declare namespace Paths {
                             id: string; // uuid
                             permissions: {
                                 id: string; // uuid
-                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE";
+                                name: "NOTINO_SUPER_ADMIN" | "NOTINO_ADMIN" | "PARTNER" | "USER_BROWSING" | "USER_CREATE" | "USER_EDIT" | "USER_DELETE" | "ENUM_EDIT" | "LOGIN_AS_PARTNER" | "USER_ROLE_EDIT" | "PARTNER_ADMIN" | "SALON_UPDATE" | "SALON_DELETE" | "SALON_BILLING_UPDATE" | "SERVICE_CREATE" | "SERVICE_UPDATE" | "SERVICE_DELETE" | "EMPLOYEE_CREATE" | "EMPLOYEE_UPDATE" | "EMPLOYEE_DELETE" | "CUSTOMER_CREATE" | "CUSTOMER_UPDATE" | "CUSTOMER_DELETE" | "CALENDAR_EVENT_CREATE" | "CALENDAR_EVENT_UPDATE" | "CALENDAR_EVENT_DELETE" | "CALENDAR_EVENT_READ";
                             }[];
                         };
                     }[];
@@ -57647,7 +57672,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminFilesSignUrls.Responses.$200>
   /**
-   * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
    */
   'postApiB2BAdminSalonsSalonIdCalendarEventsReservations'(
     parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
@@ -57655,7 +57680,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
@@ -57663,7 +57688,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
   /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
@@ -57671,7 +57696,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
@@ -57687,7 +57712,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
   /**
-   * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
    */
   'postApiB2BAdminSalonsSalonIdCalendarEvents'(
     parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -57695,7 +57720,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
   /**
-   * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_READ]</li></ul>
    */
   'getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -57703,7 +57728,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -57711,7 +57736,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -57719,7 +57744,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
   /**
-   * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
    */
   'patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
     parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
@@ -57727,7 +57752,7 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
   /**
-   * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+   * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
    */
   'deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId'(
     parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
@@ -59765,7 +59790,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/']: {
     /**
-     * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * postApiB2BAdminSalonsSalonIdCalendarEventsReservations - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEventsReservations.HeaderParameters> | null,
@@ -59775,7 +59800,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
@@ -59783,7 +59808,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.Responses.$200>
     /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventId.HeaderParameters> | null,
@@ -59793,7 +59818,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsReservationsCalendarEventIdState.HeaderParameters> | null,
@@ -59811,7 +59836,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200>
     /**
-     * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * postApiB2BAdminSalonsSalonIdCalendarEvents - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_CREATE]</li></ul>
      */
     'post'(
       parameters?: Parameters<Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters & Paths.PostApiB2BAdminSalonsSalonIdCalendarEvents.HeaderParameters> | null,
@@ -59821,7 +59846,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}']: {
     /**
-     * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * getApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_READ]</li></ul>
      */
     'get'(
       parameters?: Parameters<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -59829,7 +59854,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
     /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -59837,7 +59862,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200>
     /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.HeaderParameters> | null,
@@ -59847,7 +59872,7 @@ export interface PathsDictionary {
   }
   ['/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}']: {
     /**
-     * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * patchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_UPDATE]</li></ul>
      */
     'patch'(
       parameters?: Parameters<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,
@@ -59855,7 +59880,7 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.PatchApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.Responses.$200>
     /**
-     * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon</li></ul>
+     * deleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId - permissions:<ul><li>user: [NOTINO_SUPER_ADMIN, NOTINO_ADMIN, PARTNER]</li><li>salon: [CALENDAR_EVENT_DELETE]</li></ul>
      */
     'delete'(
       parameters?: Parameters<Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.PathParameters & Paths.DeleteApiB2BAdminSalonsSalonIdCalendarEventsBulkCalendarBulkEventId.HeaderParameters> | null,

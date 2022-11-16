@@ -4,7 +4,7 @@ import cx from 'classnames'
 import { WrappedFieldProps } from 'redux-form'
 import { InputProps } from 'antd/lib/input'
 import { FormItemLabelProps } from 'antd/lib/form/FormItemLabel'
-import { trimStart } from 'lodash'
+import { trimStart, trim } from 'lodash'
 import { FIELD_MODE } from '../utils/enums'
 import { formFieldID } from '../utils/helper'
 import { ReactComponent as SearchIcon } from '../assets/icons/search-icon.svg'
@@ -15,7 +15,7 @@ const { Item } = Form
 type Props = WrappedFieldProps &
 	InputProps &
 	FormItemLabelProps & {
-		customOnBlur?: (value: string | null) => any
+		customOnBlur?: (value?: string | null) => any
 		customOnChange?: (value: string | null) => any
 		hideHelp?: boolean
 		rounded?: boolean
@@ -41,6 +41,7 @@ const InputField = (props: Props) => {
 		readOnly,
 		className,
 		customOnChange,
+		customOnBlur,
 		allowClear,
 		suffix,
 		addonBefore,
@@ -65,18 +66,11 @@ const InputField = (props: Props) => {
 		[input, customOnChange]
 	)
 
-	/*
-	 * This logic (onBlur, onFocus) set 'dirty' state for Form incorrectly.
-	 * Scenario:
-	 * 1.Non required field
-	 * 2.Focus field
-	 * 3.Blur field
-	 * 4.Form state is dirty without changes
-
 	const onBlur = useCallback(
 		async (e) => {
 			// NOTE: prevent to have "" empty string as empty value
-			const val = e.target.value ? trim(e.target.value) : null
+			const val = e.target.value ? trim(e.target.value) : undefined
+
 			// NOTE: wait until redux-form "BLUR" action is finished
 			await input.onBlur(val)
 
@@ -96,7 +90,7 @@ const InputField = (props: Props) => {
 			}
 		},
 		[input]
-	) */
+	)
 
 	return (
 		<Item
@@ -112,10 +106,10 @@ const InputField = (props: Props) => {
 				id={formFieldID(form, input.name)}
 				className={cx('noti-input', { 'noti-input-filter': fieldMode === FIELD_MODE.FILTER })}
 				onChange={onChange}
-				// onBlur={onBlur}
+				onBlur={onBlur}
 				addonBefore={addonBefore}
 				size={size || 'middle'}
-				// onFocus={onFocus}
+				onFocus={onFocus}
 				value={input.value}
 				placeholder={placeholder}
 				type={type || 'text'}

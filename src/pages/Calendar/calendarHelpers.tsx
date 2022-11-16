@@ -1,59 +1,85 @@
+/* eslint-disable import/no-cycle */
 import dayjs from 'dayjs'
-import i18next, { t } from 'i18next'
+import { t } from 'i18next'
 import { uniqueId } from 'lodash'
 
 // reducers
-import { CalendarEvent, ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
+import { ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
 
 // types
 import { Employees } from '../../types/interfaces'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_EVENT_TYPE_FILTER } from '../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
+import { getAssignedUserLabel, getDateTime } from '../../utils/helper'
+
+/**
+ * monthViewFull = true;
+ * prida datumy aj z konca predosleho a zaciatku nasledujuceho mesiaca (do konca tyzdna + dalsi tyzden, tak to zobrazuje FC), aby sa vyplnilo cele mesacne view
+ * monthViewFull = false;
+ * vrati klasicky zaciatok a koniec mesiaca
+ */
+
+export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, monthViewFull = true, format: string | false = CALENDAR_DATE_FORMAT.QUERY) => {
+	let result = {
+		view,
+		start: dayjs(selectedDate).startOf('day'),
+		end: dayjs(selectedDate).endOf('day')
+	}
+
+	switch (view) {
+		case CALENDAR_VIEW.MONTH: {
+			const start = dayjs(selectedDate).startOf('month')
+			const end = dayjs(selectedDate).endOf('month')
+			result = {
+				...result,
+				view,
+				start: monthViewFull ? start.startOf('week') : start,
+				end: monthViewFull ? end.endOf('week').add(1, 'week') : end
+			}
+			break
+		}
+		case CALENDAR_VIEW.WEEK: {
+			result = {
+				...result,
+				view,
+				start: dayjs(selectedDate).startOf('week'),
+				end: dayjs(selectedDate).endOf('week')
+			}
+			break
+		}
+		default:
+			break
+	}
+
+	return {
+		view: result.view,
+		start: format ? result.start.format(format) : result.start.toISOString(),
+		end: format ? result.end.format(format) : result.end.toISOString()
+	}
+}
+
+export const isRangeAleardySelected = (view: CALENDAR_VIEW, currentSelectedDate: string, newSelectedDate: string | dayjs.Dayjs) => {
+	const { start, end } = getSelectedDateRange(view, currentSelectedDate, false)
+	return dayjs(newSelectedDate).isSameOrAfter(start) && dayjs(newSelectedDate).isSameOrBefore(end)
+}
 
 export const getHoursMinutesFromMinutes = (minutes: number) => {
 	const hours = Math.floor(minutes / 60)
 	const min = minutes % 60
-	return `${hours ? `${hours}${t('loc:h')}` : ''} ${min ? `${min}${t('loc:m')}` : ''}`.trim()
-}
-
-const getDateTime = (date: string, time?: string) => {
-	const [hours, minutes] = (time || '').split(':')
-
-	if (Number.isInteger(Number(hours)) && Number.isInteger(Number(minutes))) {
-		return dayjs(date).add(Number(hours), 'hours').add(Number(minutes), 'minutes').toISOString()
-	}
-
-	return dayjs(date).toISOString()
-}
-
-export const getCustomerName = (customer: CalendarEvent['customer']) => {
-	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email || i18next.t('loc:Nezńamy zákazník')
-}
-
-export const getEmployeeName = (employee: CalendarEvent['employee']) => {
-	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email
+	return `${hours ? `${hours}${'h'}` : ''} ${min ? `${min}${'m'}` : ''}`.trim()
 }
 
 type ResourceMap = {
 	[key: string]: number
 }
-
-const createDayViewResourcesMap = (employees?: Employees) =>
-	employees?.reduce((resources, employee) => {
-		return {
-			...resources,
-			[employee.id]: 0
-		}
-	}, {} as ResourceMap) || {}
-
 const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, selectedDate: string) =>
 	Object.entries({ ...resourcesMap }).reduce((acc, [key, value]) => {
 		if (!value) {
 			return [
 				...acc,
 				{
-					id: uniqueId(),
+					id: uniqueId((Math.random() * Math.random()).toString()),
 					resourceId: key,
 					start: dayjs(selectedDate).startOf('day').toISOString(),
 					end: dayjs(selectedDate).startOf('day').add(1, 'seconds').toISOString(),
@@ -66,22 +92,33 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 		return acc
 	}, [] as any[])
 
+// allDay true, iba eventy, ktore prechadzaju celym vybranym dnom v kalendari
+// cize event co zacina o 8:00 a konci o 12:00 nasledujuceho dna bude stale allDay false
+// vsetko od 00:00 - 23:58:59 je all
+const isAllDayEvent = (selectedDate: string, eventStart: string, eventEnd: string) => {
+	const startOfSelectedDate = dayjs(selectedDate).startOf('day')
+	const endOfSelectedDate = dayjs(selectedDate).endOf('day')
+	return dayjs(dayjs(eventStart)).isSameOrBefore(startOfSelectedDate) && dayjs(eventEnd).isSameOrAfter(endOfSelectedDate.subtract(1, 'minutes'))
+}
+
 const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
 	const composedEvents: any[] = []
 	// resources mapa, pre trackovanie, ci zamestnanec ma zmenu alebo dovolenku v dany den
-	const resourcesMap = createDayViewResourcesMap(employees)
+	const resourcesMap = employees?.reduce((resources, employee) => {
+		return {
+			...resources,
+			[employee.id]: 0
+		}
+	}, {} as ResourceMap)
+
 	const events = [...(reservations || []), ...(shiftsTimeOffs || [])]
 
 	events?.forEach((event) => {
 		const employeeID = event.employee?.id
 
-		const start = getDateTime(event.start.date, event.start.time)
-		const end = getDateTime(event.end.date, event.end.time)
+		const start = event.startDateTime
+		const end = event.endDateTime
 
-		// NOTE: Co s eventom, ktory ma start > end ?
-		// FC v takom pripade hodi null na end a automaticky ho vytvori na hodinu
-		// bude na to nejaka validacia vo formulari na vytvaranie?
-		// zatial taky event v FC odignorujem
 		if (employeeID && dayjs(start).isBefore(end)) {
 			const calendarEvent = {
 				id: event.id,
@@ -89,17 +126,19 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 				start,
 				end,
 				eventType: event.eventType,
-				allDay: dayjs(start).isSame(dayjs(selectedDate).startOf('day')) && dayjs(end).isAfter(dayjs(selectedDate).endOf('day').subtract(1, 'minutes')),
+				allDay: isAllDayEvent(selectedDate, start, end),
 				employee: event.employee
 			}
+
+			// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
+			// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
+			const bgEventEnd = dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end
 
 			switch (calendarEvent.eventType) {
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 					composedEvents.push({
 						...calendarEvent,
-						// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
-						// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
-						end: dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end,
+						end: bgEventEnd,
 						groupId: 'not-set-availability',
 						display: 'inverse-background'
 					})
@@ -109,14 +148,13 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 					composedEvents.push(
 						{
 							...calendarEvent,
-							// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
-							// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
-							end: dayjs(end).diff(start, 'minutes') < 15 ? dayjs(start).add(15, 'minutes').toISOString() : end,
+							end: bgEventEnd,
 							groupId: 'not-set-availability',
 							display: 'inverse-background'
 						},
 						{
 							...calendarEvent,
+							end: bgEventEnd,
 							display: 'background'
 						}
 					)
@@ -149,11 +187,8 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 	return [...composedEvents, ...allDayInverseEvents]
 }
 
-const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarEventsPayload['data'], employees?: Employees) => {
+const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarEventsPayload['data']) => {
 	const composedEvents: any[] = []
-
-	// resources mapa, pre trackovanie, ci zamestnanec ma nejake volno v dany den
-	const resourcesMap = createDayViewResourcesMap(employees)
 
 	shiftsTimeOffs?.forEach((event) => {
 		const employeeID = event.employee?.id
@@ -162,44 +197,34 @@ const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarE
 			composedEvents.push({
 				id: event.id,
 				resourceId: employeeID,
-				start: getDateTime(event.start.date, event.start.time),
-				end: getDateTime(event.end.date, event.end.time),
+				start: event.startDateTime,
+				end: event.endDateTime,
 				eventType: event.eventType,
 				allDay: false,
 				employee: event.employee
 			})
-
-			/* if (event.eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT) {
-				resourcesMap[employeeID] += 1
-			} */
 		}
 	})
-
-	// ak zamestnanec nema ziadnu zmenu v dany den
-	// tak vytvorime "fake" 'inverse-background' event, ktory zasrafuje pozadie pre cely den
-	// const allDayInverseEvents = createAllDayInverseEventFromResourceMap(resourcesMap, selectedDate)
-
-	// return [...composedEvents, ...allDayInverseEvents]
 	return composedEvents
 }
 
 export const composeDayViewEvents = (
 	selectedDate: string,
-	eventTypeFilter: CALENDAR_EVENT_TYPE_FILTER,
+	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
 	employees: Employees
 ) => {
 	switch (eventTypeFilter) {
-		case CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF:
-			return composeDayViewAbsences(selectedDate, shiftsTimeOffs, employees)
-		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
+		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
+			return composeDayViewAbsences(selectedDate, shiftsTimeOffs)
+		case CALENDAR_EVENTS_VIEW_TYPE.RESERVATION:
 		default:
 			return composeDayViewReservations(selectedDate, reservations, shiftsTimeOffs, employees)
 	}
 }
 
-export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
+export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
 	return employees.map((employee) => {
 		const employeeShifts: any[] = []
 		const employeeTimeOff: any[] = []
@@ -214,30 +239,28 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 			}
 		})
 
-		let description = t('loc:Domyslime textik')
+		let description = t('loc:Nenastavená zmena')
 
 		if (employeeShifts.length) {
-			const employeeWorkingHours =
-				employeeShifts?.length &&
-				employeeShifts.reduce((result, cv, i) => {
-					const startCv = getDateTime(cv.start.date, cv.start.time)
-					const endCv = getDateTime(cv.end.date, cv.end.time)
+			const employeeWorkingHours = employeeShifts.reduce((result, cv, i) => {
+				const startCv = cv.startDateTime
+				const endCv = cv.endDateTime
 
-					if (i === 0) {
-						return {
-							start: startCv,
-							end: endCv
-						}
-					}
-
-					const startResult = result.start
-					const endResult = result.end
-
+				if (i === 0) {
 					return {
-						start: dayjs(startCv).isBefore(dayjs(startResult)) ? startCv : startResult,
-						end: dayjs(endCv).isAfter(dayjs(endResult)) ? endCv : endResult
+						start: startCv,
+						end: endCv
 					}
-				}, {} as { start: string; end: string })
+				}
+
+				const startResult = result.start
+				const endResult = result.end
+
+				return {
+					start: dayjs(startCv).isBefore(dayjs(startResult)) ? startCv : startResult,
+					end: dayjs(endCv).isAfter(dayjs(endResult)) ? endCv : endResult
+				}
+			}, {} as { start: string; end: string })
 			description = `${dayjs(employeeWorkingHours.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(employeeWorkingHours.end).format(CALENDAR_DATE_FORMAT.TIME)}`
 		} else if (employeeTimeOff.length && !employeeShifts.length) {
 			description = t('loc:Dovolenka')
@@ -245,7 +268,13 @@ export const composeDayEventResources = (shiftsTimeOffs: ICalendarEventsPayload[
 
 		return {
 			id: employee.id,
-			name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
+			name: getAssignedUserLabel({
+				id: employee.id,
+				firstName: employee.firstName,
+				lastName: employee?.lastName,
+				email: employee.email
+			}),
+			eventBackgroundColor: employee.color,
 			image: employee.image.resizedImages.thumbnail,
 			description,
 			isTimeOff: !!employeeTimeOff.length,
@@ -313,8 +342,12 @@ export const getWeekViewSelectedDate = (selectedDate: string) => {
 	return weekDays.some((day) => dayjs(day).startOf('day').isSame(today)) ? today.format(CALENDAR_DATE_FORMAT.QUERY) : selectedDate
 }
 
-const createWeekViewResourcesMap = (weekDays: string[], employees: Employees) =>
-	weekDays?.reduce((resources, weekDay) => {
+const composeWeekViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
+	const composedEvents: any[] = []
+	const weekDays = getWeekDays(selectedDate)
+
+	// resources mapa, pre trackovanie, ci zamestnanec ma zmenu alebo dovolenku v dany den
+	const resourcesMap = weekDays?.reduce((resources, weekDay) => {
 		return {
 			...resources,
 			...employees.reduce((resourcesDay, employee) => {
@@ -324,17 +357,11 @@ const createWeekViewResourcesMap = (weekDays: string[], employees: Employees) =>
 				}
 			}, {} as ResourceMap)
 		}
-	}, {} as ResourceMap) || {}
-
-const composeWeekViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
-	const composedEvents: any[] = []
-	const weekDays = getWeekDays(selectedDate)
-	// resources mapa, pre trackovanie, ci zamestnanec ma zmenu alebo dovolenku v dany den
-	const resourcesMap = createWeekViewResourcesMap(weekDays, employees)
+	}, {} as ResourceMap)
 	const events = [...(reservations || []), ...(shiftsTimeOffs || [])]
 
 	events?.forEach((event) => {
-		const startOriginal = getDateTime(event.start.date, event.start.time)
+		const startOriginal = event.startDateTime
 		const start = getDateTime(selectedDate, event.start.time)
 		const end = getDateTime(selectedDate, event.end.time)
 
@@ -444,15 +471,15 @@ const composeWeekViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendar
 
 export const composeWeekViewEvents = (
 	selectedDate: string,
-	eventTypeFilter: CALENDAR_EVENT_TYPE_FILTER,
+	eventTypeFilter: CALENDAR_EVENTS_VIEW_TYPE,
 	reservations: ICalendarEventsPayload['data'],
 	shiftsTimeOffs: ICalendarEventsPayload['data'],
 	employees: Employees
 ) => {
 	switch (eventTypeFilter) {
-		case CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF:
+		case CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF:
 			return composeWeekViewAbsences(selectedDate, shiftsTimeOffs, employees)
-		case CALENDAR_EVENT_TYPE_FILTER.RESERVATION:
+		case CALENDAR_EVENTS_VIEW_TYPE.RESERVATION:
 		default:
 			return composeWeekViewReservations(selectedDate, reservations, shiftsTimeOffs, employees)
 	}

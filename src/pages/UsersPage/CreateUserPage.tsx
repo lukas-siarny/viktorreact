@@ -58,7 +58,7 @@ const CreateUserPage = () => {
 	const fetchData = async () => {
 		const phonePrefixCountryCode = getPrefixCountryCode(map(phonePrefixes?.data, (item) => item.code))
 		dispatch(initialize(FORM.ADMIN_CREATE_USER, { phonePrefixCountryCode }))
-		dispatch(getSystemRoles(true))
+		dispatch(getSystemRoles())
 	}
 
 	useEffect(() => {

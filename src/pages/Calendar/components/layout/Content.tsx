@@ -4,7 +4,7 @@ import { Spin } from 'antd'
 import FullCalendar from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_EVENT_TYPE_FILTER, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -21,10 +21,10 @@ import { ICalendarEventsPayload } from '../../../../reducers/calendar/calendarAc
 type Props = {
 	view: CALENDAR_VIEW
 	selectedDate: string
-	eventType: CALENDAR_EVENT_TYPE_FILTER
 	loading: boolean
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	employees: Employees
 	onShowAllEmployees: () => void
 	showEmptyState: boolean
@@ -37,7 +37,7 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, selectedDate, loading, eventType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState } = props
+	const { view, selectedDate, loading, eventsViewType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState } = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -62,7 +62,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					reservations={reservations}
 					shiftsTimeOffs={shiftsTimeOffs}
 					employees={employees}
-					eventType={eventType}
+					eventsViewType={eventsViewType}
 				/>
 			)
 		}
@@ -76,7 +76,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					reservations={reservations}
 					shiftsTimeOffs={shiftsTimeOffs}
 					employees={employees}
-					eventType={eventType}
+					eventsViewType={eventsViewType}
 				/>
 			)
 		}
@@ -88,7 +88,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				reservations={reservations}
 				shiftsTimeOffs={shiftsTimeOffs}
 				employees={employees}
-				eventType={eventType}
+				eventsViewType={eventsViewType}
 				onShowAllEmployees={onShowAllEmployees}
 			/>
 		)
@@ -97,7 +97,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	return (
 		<Content className={'nc-content'}>
 			<Spin spinning={loading}>
-				<div className={'nc-content-animate'} key={`${selectedDate} ${view} ${eventType}`}>
+				<div className={'nc-content-animate'} key={`${selectedDate} ${view} ${eventsViewType}`}>
 					{getView()}
 				</div>
 			</Spin>

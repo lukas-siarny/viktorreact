@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 
-import { SET_IS_SIDER_COLLAPSED } from './settingsTypes'
+import { SET_IS_SIDER_COLLAPSED } from './helperSettingsTypes'
 
 // types
 import { ThunkResult } from '../index'

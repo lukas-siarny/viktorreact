@@ -1010,6 +1010,10 @@ export const computeUntilDate = (endsEvent: ENDS_EVENT, actualDate: string) => {
 	}
 }
 
+export const getDateTime = (date: string, time: string) => {
+	return dayjs(`${dayjs(date).format(DATE_TIME_PARSER_DATE_FORMAT)}:${time}`, DATE_TIME_PARSER_FORMAT).toISOString()
+}
+
 export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.Responses.$200['salons'][0]['assignedUser']): string => {
 	if (!assignedUser) {
 		return '-'
@@ -1024,8 +1028,4 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 		default:
 			return assignedUser.id
 	}
-}
-
-export const getDateTime = (date: string, time: string) => {
-	return dayjs(`${dayjs(date).format(DATE_TIME_PARSER_DATE_FORMAT)}:${time}`, DATE_TIME_PARSER_FORMAT).toISOString()
 }

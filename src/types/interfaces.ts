@@ -6,6 +6,7 @@ import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVEN
 
 // types
 import { Paths } from './api'
+import { ICalendarEventsPayload } from '../reducers/calendar/calendarActions'
 import { IEmployeesPayload } from '../reducers/employees/employeesActions'
 
 export interface IErrorMessage {
@@ -561,4 +562,8 @@ export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export interface ICalendarView {
 	selectedDate: string
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+	reservations: ICalendarEventsPayload['data']
+	shiftsTimeOffs: ICalendarEventsPayload['data']
+	employees: Employees
 }

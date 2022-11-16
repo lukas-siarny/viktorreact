@@ -15,10 +15,15 @@ import CalendarEmptyState from '../CalendarEmptyState'
 // types
 import { Employees } from '../../../../types/interfaces'
 
+// reducers
+import { ICalendarEventsPayload } from '../../../../reducers/calendar/calendarActions'
+
 type Props = {
 	view: CALENDAR_VIEW
 	selectedDate: string
 	loading: boolean
+	reservations: ICalendarEventsPayload['data']
+	shiftsTimeOffs: ICalendarEventsPayload['data']
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 	employees: Employees
 	onShowAllEmployees: () => void
@@ -32,7 +37,7 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, selectedDate, loading, eventsViewType, onShowAllEmployees, showEmptyState } = props
+	const { view, selectedDate, loading, eventsViewType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState } = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -50,14 +55,42 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}
 
 		if (view === CALENDAR_VIEW.MONTH) {
-			return <CalendarMonthView ref={monthView} selectedDate={selectedDate} />
+			return (
+				<CalendarMonthView
+					ref={monthView}
+					selectedDate={selectedDate}
+					reservations={reservations}
+					shiftsTimeOffs={shiftsTimeOffs}
+					employees={employees}
+					eventsViewType={eventsViewType}
+				/>
+			)
 		}
 
 		if (view === CALENDAR_VIEW.WEEK) {
-			return <CalendarWeekView ref={weekView} selectedDate={selectedDate} />
+			return (
+				<CalendarWeekView
+					ref={weekView}
+					selectedDate={selectedDate}
+					reservations={reservations}
+					shiftsTimeOffs={shiftsTimeOffs}
+					employees={employees}
+					eventsViewType={eventsViewType}
+				/>
+			)
 		}
 
-		return <CalendarDayView ref={dayView} selectedDate={selectedDate} />
+		return (
+			<CalendarDayView
+				ref={dayView}
+				selectedDate={selectedDate}
+				reservations={reservations}
+				shiftsTimeOffs={shiftsTimeOffs}
+				employees={employees}
+				eventsViewType={eventsViewType}
+				onShowAllEmployees={onShowAllEmployees}
+			/>
+		)
 	}
 
 	return (

@@ -49,8 +49,8 @@ const SiderEventManagement: FC<Props> = (props) => {
 						lastName: employee.lastName,
 						email: employee.email
 					}),
+					borderColor: employee.color,
 					thumbNail: employee.image.resizedImages.thumbnail
-					// TODO: Available / Non Available hodnoty ak pribudne logika na BE tak doplnit ako extraContent
 				}))
 				return { pagination: data.pagination, data: selectOptions }
 			} catch (e) {
@@ -69,6 +69,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						handleDeleteEvent={handleDeleteEvent}
 						setCollapsed={setCollapsed}
 						salonID={salonID}
+						eventId={eventId}
 						searchEmployes={searchEmployes}
 						onSubmit={handleSubmitReservation}
 						eventsViewType={eventsViewType}

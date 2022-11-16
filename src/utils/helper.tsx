@@ -954,3 +954,19 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 export const getDateTime = (date: string, time: string) => {
 	return dayjs(`${dayjs(date).format(DATE_TIME_PARSER_DATE_FORMAT)}:${time}`, DATE_TIME_PARSER_FORMAT).toISOString()
 }
+
+export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.Responses.$200['salons'][0]['assignedUser']): string => {
+	if (!assignedUser) {
+		return '-'
+	}
+
+	switch (true) {
+		case !!assignedUser.firstName && !!assignedUser.lastName:
+			return `${assignedUser.firstName} ${assignedUser.lastName}`
+
+		case !!assignedUser.email:
+			return `${assignedUser.email}`
+		default:
+			return assignedUser.id
+	}
+}

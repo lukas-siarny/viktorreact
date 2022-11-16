@@ -67,6 +67,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 
 	return (
 		<FullCalendar
+			ref={ref}
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 			slotLabelFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}

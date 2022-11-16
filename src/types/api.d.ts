@@ -2796,6 +2796,7 @@ declare namespace Paths {
                         maxHoursB2cCreateReservationBeforeStart: number;
                         maxHoursB2cCancelReservationBeforeStart: number;
                         enabledCustomerReservationNotes: boolean;
+                        minutesIntervalBetweenB2CReservations: number;
                     };
                     premiumSourceUserType?: "NOTINO" | "PARTNER";
                     createdAt: string; // date-time
@@ -3093,6 +3094,14 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    image: string;
+                }[];
                 calendarEvents: {
                     id: string; // uuid
                     eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
@@ -6575,6 +6584,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
                         };
                     };
                     permissions: {
@@ -6895,6 +6905,14 @@ declare namespace Paths {
         }
         namespace Responses {
             export interface $200 {
+                employees: {
+                    id: string; // uuid
+                    firstName?: string;
+                    lastName?: string;
+                    email?: string;
+                    color: string; // ^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$
+                    image: string;
+                }[];
                 calendarEvents: {
                     id: string; // uuid
                     eventType: "RESERVATION" | "EMPLOYEE_SHIFT" | "EMPLOYEE_BREAK" | "EMPLOYEE_TIME_OFF";
@@ -9323,11 +9341,12 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 availableReservations: {
-                    [name: string]: {
+                    date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    items: {
                         from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                         to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[];
-                };
+                }[];
             }
         }
     }
@@ -10799,11 +10818,12 @@ declare namespace Paths {
         namespace Responses {
             export interface $200 {
                 availableReservations: {
-                    [name: string]: {
+                    date: string; // ^(\d{4})[-]((0[1-9])|(1[012]))[-]((0[1-9])|([12][0-9])|(3[01]))$
+                    items: {
                         from: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                         to: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     }[];
-                };
+                }[];
             }
         }
     }
@@ -21492,6 +21512,7 @@ declare namespace Paths {
                 maxHoursB2cCreateReservationBeforeStart?: null | number;
                 maxHoursB2cCancelReservationBeforeStart?: null | number;
                 enabledCustomerReservationNotes?: boolean | null;
+                minutesIntervalBetweenB2CReservations?: null | number;
             } | null;
         }
         namespace Responses {
@@ -35584,6 +35605,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
                         };
                     };
                     permissions: {
@@ -36757,6 +36779,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
                         };
                     };
                     permissions: {
@@ -36990,6 +37013,7 @@ declare namespace Paths {
                 maxHoursB2cCreateReservationBeforeStart?: null | number;
                 maxHoursB2cCancelReservationBeforeStart?: null | number;
                 enabledCustomerReservationNotes?: boolean | null;
+                minutesIntervalBetweenB2CReservations?: null | number;
             } | null;
         }
         namespace Responses {
@@ -55719,6 +55743,7 @@ declare namespace Paths {
                             maxHoursB2cCreateReservationBeforeStart: number;
                             maxHoursB2cCancelReservationBeforeStart: number;
                             enabledCustomerReservationNotes: boolean;
+                            minutesIntervalBetweenB2CReservations: number;
                         };
                     };
                     permissions: {

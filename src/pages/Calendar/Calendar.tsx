@@ -225,6 +225,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					ref={calendarRefs}
 					selectedDate={query.date}
 					view={query.view as CALENDAR_VIEW}
+					reservations={reservations?.data || []}
+					shiftsTimeOffs={shiftsTimeOffs?.data || []}
 					loading={loadingData}
 					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 					employees={filteredEmployees() || []}

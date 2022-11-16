@@ -14,11 +14,12 @@ import {
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
 	PERMISSION,
-	CALENDAR_EVENT_TYPE_FILTER,
+	CALENDAR_EVENTS_VIEW_TYPE,
 	FORM,
 	CALENDAR_EVENTS_KEYS
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
+import { isRangeAleardySelected } from './calendarHelpers'
 
 // reducers
 import { getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
@@ -62,7 +63,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		employeeIDs: DelimitedArrayParam,
 		categoryIDs: DelimitedArrayParam,
-		eventType: withDefault(StringParam, CALENDAR_EVENT_TYPE_FILTER.RESERVATION)
+		eventsViewType: withDefault(StringParam, CALENDAR_EVENTS_VIEW_TYPE.RESERVATION)
 	})
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
@@ -70,7 +71,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
 	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 
-	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
+	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 
 	const calendarRefs = useRef<CalendarRefs>(null)
 
@@ -105,26 +106,26 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			// fetch new events
-			if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.RESERVATION) {
+			if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 				Promise.all([
 					dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW)),
 					dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
 				])
-			} else if (query.eventType === CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF) {
+			} else if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
 			}
 		})()
-	}, [dispatch, salonID, query.date, query.view, query.eventType, query.employeeIDs, query.categoryIDs])
+	}, [dispatch, salonID, query.date, query.view, query.eventsViewType, query.employeeIDs, query.categoryIDs])
 
 	useEffect(() => {
 		dispatch(
 			initialize(FORM.CALENDAR_FILTER, {
-				eventType: query.eventType,
+				eventsViewType: query.eventsViewType,
 				categoryIDs: query?.categoryIDs === undefined ? getCategoryIDs(services?.categoriesOptions) : query?.categoryIDs,
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, query.eventType, query?.categoryIDs, query?.employeeIDs, services?.categoriesOptions, employees?.options])
+	}, [dispatch, query.eventsViewType, query?.categoryIDs, query?.employeeIDs, services?.categoriesOptions, employees?.options])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -140,19 +141,23 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		switch (type) {
 			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
 				newQueryDate = dayjs(newDate)
-					.startOf(query.view.toLocaleLowerCase() as dayjs.OpUnitType)
-					.add(1, query.view.toLocaleLowerCase() as dayjs.OpUnitType)
+					.startOf(query.view.toLowerCase() as dayjs.OpUnitType)
+					.add(1, query.view.toLowerCase() as dayjs.OpUnitType)
 				break
 			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
 				newQueryDate = dayjs(newDate)
-					.startOf(query.view.toLocaleLowerCase() as dayjs.OpUnitType)
-					.subtract(1, query.view.toLocaleLowerCase() as dayjs.OpUnitType)
+					.startOf(query.view.toLowerCase() as dayjs.OpUnitType)
+					.subtract(1, query.view.toLowerCase() as dayjs.OpUnitType)
 				break
 			case CALENDAR_SET_NEW_DATE.FIND_START:
-				newQueryDate = dayjs(newDate).startOf(query.view.toLocaleLowerCase() as dayjs.OpUnitType)
+				newQueryDate = dayjs(newDate).startOf(query.view.toLowerCase() as dayjs.OpUnitType)
 				break
 			default:
 				break
+		}
+
+		if (isRangeAleardySelected(query.view as CALENDAR_VIEW, query.date, newQueryDate)) {
+			return
 		}
 
 		setQuery({ ...query, date: dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY) })
@@ -172,12 +177,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const setEventManagement = (newView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
 		setSiderEventManagement(newView)
 		if (newView !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED) {
-			const newEventType =
-				newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENT_TYPE_FILTER.RESERVATION : CALENDAR_EVENT_TYPE_FILTER.EMPLOYEE_SHIFT_TIME_OFF
+			const newEventsViewType =
+				newView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION ? CALENDAR_EVENTS_VIEW_TYPE.RESERVATION : CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF
 
 			setQuery({
 				...query,
-				eventType: newEventType
+				eventsViewType: newEventsViewType
 			})
 		}
 	}
@@ -210,13 +215,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setSiderEventManagement={setEventManagement}
 			/>
 			<Layout hasSider className={'noti-calendar-main-section'}>
-				<SiderFilter collapsed={siderFilterCollapsed} handleSubmit={handleSubmitFilter} parentPath={parentPath} eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER} />
+				<SiderFilter
+					collapsed={siderFilterCollapsed}
+					handleSubmit={handleSubmitFilter}
+					parentPath={parentPath}
+					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+				/>
 				<CalendarContent
 					ref={calendarRefs}
 					selectedDate={query.date}
 					view={query.view as CALENDAR_VIEW}
 					loading={loadingData}
-					eventType={query.eventType as CALENDAR_EVENT_TYPE_FILTER}
+					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 					employees={filteredEmployees() || []}
 					showEmptyState={query?.employeeIDs === null}
 					onShowAllEmployees={() => {

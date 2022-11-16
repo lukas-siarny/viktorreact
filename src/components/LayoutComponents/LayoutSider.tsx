@@ -46,7 +46,7 @@ import AvatarComponents from '../AvatarComponents'
 
 // types
 import { _Permissions } from '../../types/interfaces'
-import { setIsSiderCollapsed } from '../../reducers/settings/settingsActions'
+import { setIsSiderCollapsed } from '../../reducers/helperSettings/helperSettingsActions'
 
 const { Sider } = Layout
 
@@ -63,7 +63,7 @@ const LOGO_HEIGHT = 72
 const LayoutSider = (props: LayoutSiderProps) => {
 	const { page, showNavigation = true, salonID, parentPath } = props
 
-	const collapsed = useSelector((state: RootState) => state.settings.isSiderCollapsed)
+	const collapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
 	const currentUser = useSelector((state: RootState) => state.user.authUser.data)

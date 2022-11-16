@@ -10,7 +10,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
-import { composeDayViewResources, composeDayViewEvents, getCustomerName, getHoursMinutesFromMinutes } from '../../calendarHelpers'
+import { composeDayViewResources, composeDayViewEvents, getHoursMinutesFromMinutes } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
@@ -18,6 +18,9 @@ import { ICalendarView } from '../../../../types/interfaces'
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon-16.svg'
 import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
+
+// utils
+import { getAssignedUserLabel } from '../../../../utils/helper'
 
 const renderEventContent = (data: EventContentArg) => {
 	const { event, backgroundColor } = data || {}
@@ -77,7 +80,12 @@ const renderEventContent = (data: EventContentArg) => {
 					}
 					case CALENDAR_EVENT_TYPE.RESERVATION:
 					default: {
-						const customerName = getCustomerName(extendedProps.customer)
+						const customerName = getAssignedUserLabel({
+							id: extendedProps.customer?.id,
+							firstName: extendedProps.customer?.firstName,
+							lastName: extendedProps.customer?.lastName,
+							email: extendedProps.customer?.email
+						})
 						return (
 							<>
 								<div className={'event-accent'} style={{ backgroundColor }} />

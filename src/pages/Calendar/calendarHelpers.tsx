@@ -4,22 +4,14 @@ import { t } from 'i18next'
 import { uniqueId } from 'lodash'
 
 // reducers
-import { CalendarEvent, ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
-import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
+import { ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
 
 // types
 import { Employees } from '../../types/interfaces'
 
 // utils
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'
-
-export const getCustomerName = (customer: CalendarEvent['customer']) => {
-	return `${customer?.lastName ? customer?.firstName || '' : ''} ${customer?.lastName || ''}`.trim() || customer?.email
-}
-
-export const getEmployeeName = (employee: CalendarEvent['employee'] | NonNullable<IEmployeesPayload['data']>['employees'][0]) => {
-	return `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.id
-}
+import { getAssignedUserLabel } from '../../utils/helper'
 
 /**
  * monthViewFull = true;
@@ -75,7 +67,7 @@ export const isRangeAleardySelected = (view: CALENDAR_VIEW, currentSelectedDate:
 export const getHoursMinutesFromMinutes = (minutes: number) => {
 	const hours = Math.floor(minutes / 60)
 	const min = minutes % 60
-	return `${hours ? `${hours}${t('loc:h')}` : ''} ${min ? `${min}${t('loc:m')}` : ''}`.trim()
+	return `${hours ? `${hours}${'h'}` : ''} ${min ? `${min}${'m'}` : ''}`.trim()
 }
 
 type ResourceMap = {
@@ -271,7 +263,12 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 
 		return {
 			id: employee.id,
-			name: getEmployeeName(employee),
+			name: getAssignedUserLabel({
+				id: employee.id,
+				firstName: employee.firstName,
+				lastName: employee?.lastName,
+				email: employee.email
+			}),
 			eventBackgroundColor: employee.color,
 			image: employee.image.resizedImages.thumbnail,
 			description,

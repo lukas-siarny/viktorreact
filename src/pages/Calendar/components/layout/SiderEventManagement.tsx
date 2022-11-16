@@ -1,8 +1,8 @@
 import React, { FC, useCallback } from 'react'
 import Sider from 'antd/lib/layout/Sider'
+import { map } from 'lodash'
 
 // enums
-import { map } from 'lodash'
 import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../../utils/enums'
 
 // types
@@ -13,6 +13,8 @@ import ReservationForm from '../forms/ReservationForm'
 import ShiftForm from '../forms/ShiftForm'
 import TimeOffForm from '../forms/TimeOffForm'
 import BreakForm from '../forms/BreakForm'
+
+// utils
 import { getReq } from '../../../../utils/request'
 import { formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
 

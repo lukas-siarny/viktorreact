@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
 import { change, Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { Button, Divider, Form } from 'antd'
-
-// validate
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+
+// validate
 import validateTimeOffForm from './validateTimeOffForm'
 
 // utils
@@ -73,7 +73,7 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 				component={CheckboxGroupField}
 				name={'repeatOn'}
 				label={t('loc:Opakovať ďalej')}
-				options={SHORTCUT_DAYS_OPTIONS()}
+				options={SHORTCUT_DAYS_OPTIONS(2)}
 				size={'small'}
 				horizontal
 				hideChecker

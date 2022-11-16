@@ -4,9 +4,9 @@ import { Button, Divider, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
+import dayjs from 'dayjs'
 
 // validate
-import dayjs from 'dayjs'
 import validateBreakForm from './validateBreakForm'
 
 // utils
@@ -38,10 +38,10 @@ import TimeRangeField from '../../../../atoms/TimeRangeField'
 import SwitchField from '../../../../atoms/SwitchField'
 import TextareaField from '../../../../atoms/TextareaField'
 import CheckboxGroupField from '../../../../atoms/CheckboxGroupField'
+import DeleteButton from '../../../../components/DeleteButton'
 
 // redux
 import { RootState } from '../../../../reducers'
-import DeleteButton from '../../../../components/DeleteButton'
 
 type ComponentProps = {
 	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
@@ -72,7 +72,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 				component={CheckboxGroupField}
 				name={'repeatOn'}
 				label={t('loc:Opakovať ďalej')}
-				options={SHORTCUT_DAYS_OPTIONS()}
+				options={SHORTCUT_DAYS_OPTIONS(2)}
 				size={'small'}
 				horizontal
 				hideChecker

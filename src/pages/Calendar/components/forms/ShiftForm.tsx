@@ -4,9 +4,9 @@ import { Button, Divider, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
+import dayjs from 'dayjs'
 
 // validate
-import dayjs from 'dayjs'
 import validateShiftForm from './validateShiftForm'
 
 // utils
@@ -71,7 +71,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				component={CheckboxGroupField}
 				name={'repeatOn'}
 				label={t('loc:Opakovať ďalej')}
-				options={SHORTCUT_DAYS_OPTIONS()}
+				options={SHORTCUT_DAYS_OPTIONS(2)}
 				size={'small'}
 				horizontal
 				hideChecker

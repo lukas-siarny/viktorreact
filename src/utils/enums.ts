@@ -703,53 +703,7 @@ export const ENDS_EVENT_OPTIONS = () => [
 ]
 
 export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
-	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-		return filter(
-			[
-				{
-					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
-					label: i18next.t('loc:Rezervácia')
-				},
-				{
-					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
-					label: i18next.t('loc:Pracovná zmena')
-				},
-				{
-					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
-					label: i18next.t('loc:Absencia')
-				},
-				{
-					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
-					label: i18next.t('loc:Prestávka')
-				}
-			],
-			(item) => item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION || item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF
-		)
-	}
-	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-		return filter(
-			[
-				{
-					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
-					label: i18next.t('loc:Rezervácia')
-				},
-				{
-					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
-					label: i18next.t('loc:Pracovná zmena')
-				},
-				{
-					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
-					label: i18next.t('loc:Absencia')
-				},
-				{
-					key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
-					label: i18next.t('loc:Prestávka')
-				}
-			],
-			(item) => item.key !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
-		)
-	}
-	return [
+	const options = [
 		{
 			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
 			label: i18next.t('loc:Rezervácia')
@@ -767,16 +721,26 @@ export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
 			label: i18next.t('loc:Prestávka')
 		}
 	]
+	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+		// rezervacia a break
+		return filter(options, (item) => item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION || item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+	}
+	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
+		// shift, break a vacation
+		return filter(options, (item) => item.key !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+	}
+	// vsetky optiony
+	return options
 }
 
-export const SHORTCUT_DAYS_OPTIONS = () => [
-	{ label: i18next.t('loc:Po'), value: DAY.MONDAY },
-	{ label: i18next.t('loc:Ut'), value: DAY.TUESDAY },
-	{ label: i18next.t('loc:St'), value: DAY.WEDNESDAY },
-	{ label: i18next.t('loc:Št'), value: DAY.THURSDAY },
-	{ label: i18next.t('loc:Pi'), value: DAY.FRIDAY },
-	{ label: i18next.t('loc:So'), value: DAY.SATURDAY },
-	{ label: i18next.t('loc:Ne'), value: DAY.SUNDAY }
+export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
+	{ label: i18next.t('loc:Pondelok').substring(0, length), value: DAY.MONDAY },
+	{ label: i18next.t('loc:Utorok').substring(0, length), value: DAY.TUESDAY },
+	{ label: i18next.t('loc:Streda').substring(0, length), value: DAY.WEDNESDAY },
+	{ label: i18next.t('loc:Štvrtok').substring(0, length), value: DAY.THURSDAY },
+	{ label: i18next.t('loc:Piatok').substring(0, length), value: DAY.FRIDAY },
+	{ label: i18next.t('loc:Sobota').substring(0, length), value: DAY.SATURDAY },
+	{ label: i18next.t('loc:Nedeľa').substring(0, length), value: DAY.SUNDAY }
 ]
 
 export enum CALENDAR_EVENTS_KEYS {

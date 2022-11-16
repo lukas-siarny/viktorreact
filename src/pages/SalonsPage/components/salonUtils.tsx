@@ -160,22 +160,6 @@ export const getSalonDataForSubmission = (data: ISalonForm) => {
 	}
 }
 
-export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.Responses.$200['salons'][0]['assignedUser']): string => {
-	if (!assignedUser) {
-		return '-'
-	}
-
-	switch (true) {
-		case !!assignedUser.firstName && !!assignedUser.lastName:
-			return `${assignedUser.firstName} ${assignedUser.lastName}`
-
-		case !!assignedUser.email:
-			return `${assignedUser.email}`
-		default:
-			return assignedUser.id
-	}
-}
-
 // salon status tags
 export const getSalonTagPublished = (salonStatus?: SALON_STATES) => {
 	if (!salonStatus) {

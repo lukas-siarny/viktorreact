@@ -5,25 +5,26 @@ import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { debounce, includes, isEmpty } from 'lodash'
-import { change, initialize } from 'redux-form'
+import { initialize } from 'redux-form'
 
 // utils
 import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
 	CALENDAR_EVENT_TYPE,
+	CALENDAR_EVENTS_KEYS,
+	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
 	DAY,
 	DEFAULT_DATE_INIT_FORMAT,
 	ENDS_EVENT,
-	CALENDAR_EVENTS_VIEW_TYPE,
 	FORM,
 	NOTIFICATION_TYPE,
 	PERMISSION
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { computeUntilDate, getAssignedUserLabel, getFirstDayOfMonth, getFirstDayOfWeek } from '../../utils/helper'
+import { computeUntilDate, getAssignedUserLabel } from '../../utils/helper'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { isRangeAleardySelected } from './calendarHelpers'
 
@@ -76,12 +77,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const employees = useSelector((state: RootState) => state.employees.employees)
 	const services = useSelector((state: RootState) => state.service.services)
-	const events = useSelector((state: RootState) => state.calendar.events)
+	const reservations = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.RESERVATIONS])
+	const shiftsTimeOffs = useSelector((state: RootState) => state.calendar[CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS])
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
 
-	const loadingData = employees?.isLoading || services?.isLoading || events?.isLoading
+	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => {
@@ -99,7 +101,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				setQuery({
 					...query,
 					eventId: undefined,
-					sidebarView: newView // COLLAPSED
+					sidebarView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED
 				})
 			} else {
 				const newEventType =
@@ -110,7 +112,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					eventsViewType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
 					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
 				})
-				dispatch(change(FORM.CALENDAR_FILTER, 'eventType', newEventType))
 			}
 		},
 		[dispatch, query, setQuery]
@@ -142,17 +143,16 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 			switch (data.eventType) {
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-					// eslint-disable-next-line consistent-return
-					return dispatch(initialize(FORM.CALENDAR_SHIFT_FORM, initData))
+					dispatch(initialize(FORM.CALENDAR_SHIFT_FORM, initData))
+					break
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-					// eslint-disable-next-line consistent-return
-					return dispatch(initialize(FORM.CALENDAR_TIME_OFF_FORM, initData))
+					dispatch(initialize(FORM.CALENDAR_TIME_OFF_FORM, initData))
+					break
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-					// eslint-disable-next-line consistent-return
-					return dispatch(initialize(FORM.CALENDAR_BREAK_FORM, initData))
+					dispatch(initialize(FORM.CALENDAR_BREAK_FORM, initData))
+					break
 				default:
-					// eslint-disable-next-line consistent-return
-					return dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+					dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
 			}
 		} catch (e) {
 			// eslint-disable-next-line no-console
@@ -179,30 +179,30 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					sidebarView: type
 				})
 				initCreateEventForm(FORM.CALENDAR_RESERVATION_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
-				return true
+				break
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
 				setQuery({
 					...query,
 					sidebarView: type
 				})
 				initCreateEventForm(FORM.CALENDAR_SHIFT_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
-				return true
+				break
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF:
 				setQuery({
 					...query,
 					sidebarView: type
 				})
 				initCreateEventForm(FORM.CALENDAR_TIME_OFF_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF)
-				return true
+				break
 			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
 				setQuery({
 					...query,
 					sidebarView: type
 				})
 				initCreateEventForm(FORM.CALENDAR_BREAK_FORM, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
-				return true
+				break
 			default:
-				return ''
+				break
 		}
 	}
 
@@ -268,24 +268,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		let newQueryDate: string | dayjs.Dayjs = newDate
 
 		switch (type) {
-			// find start of week / month and add value
 			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
 				newQueryDate = dayjs(newDate)
 					.startOf(query.view.toLowerCase() as dayjs.OpUnitType)
 					.add(1, query.view.toLowerCase() as dayjs.OpUnitType)
 				break
-			// find start of week / month and subtract value
 			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
 				newQueryDate = dayjs(newDate)
 					.startOf(query.view.toLowerCase() as dayjs.OpUnitType)
 					.subtract(1, query.view.toLowerCase() as dayjs.OpUnitType)
 				break
-			// find start of week / month
-			// day - use value as it is
 			case CALENDAR_SET_NEW_DATE.FIND_START:
 				newQueryDate = dayjs(newDate).startOf(query.view.toLowerCase() as dayjs.OpUnitType)
 				break
-			// use value as it is for every view
 			default:
 				break
 		}
@@ -340,8 +335,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				note: values.note,
 				customerID: values.customer.key as string,
 				employeeID: values.employee.key as string,
-				serviceID: 'd9274f67-6d27-47f4-bdb5-6a3c8a91b907', // TODO:
-				serviceCategoryParameterValueID: '00000000-0000-0000-0000-000000000001' // TODO:
+				serviceID: 'd9274f67-6d27-47f4-bdb5-6a3c8a91b907' // TODO:
+				// serviceCategoryParameterValueID: '00000000-0000-0000-0000-000000000001' // TODO:
 			}
 
 			await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)

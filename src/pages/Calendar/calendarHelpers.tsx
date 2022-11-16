@@ -93,8 +93,9 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 		return acc
 	}, [] as any[])
 
-const isAllDayEvent = (selectedDate: string, start: string, end: string) =>
-	dayjs(start).isSame(dayjs(selectedDate).startOf('day')) && dayjs(end).isAfter(dayjs(selectedDate).endOf('day').subtract(1, 'minutes'))
+const isAllDayEvent = (start: string, end: string) => {
+	return dayjs(end).diff(dayjs(start), 'minutes') >= 1439 // (24h * 60m) - 1m = 23:59
+}
 
 const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
 	const composedEvents: any[] = []
@@ -121,7 +122,7 @@ const composeDayViewReservations = (selectedDate: string, reservations: ICalenda
 				start,
 				end,
 				eventType: event.eventType,
-				allDay: isAllDayEvent(selectedDate, start, end),
+				allDay: isAllDayEvent(start, end),
 				employee: event.employee
 			}
 
@@ -195,7 +196,7 @@ const composeDayViewAbsences = (selectedDate: string, shiftsTimeOffs: ICalendarE
 				start: event.startDateTime,
 				end: event.endDateTime,
 				eventType: event.eventType,
-				allDay: isAllDayEvent(selectedDate, event.startDateTime, event.endDateTime),
+				allDay: false,
 				employee: event.employee
 			})
 		}

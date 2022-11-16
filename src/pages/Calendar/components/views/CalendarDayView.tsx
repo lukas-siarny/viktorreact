@@ -16,7 +16,7 @@ import { composeDayViewResources, composeDayViewEvents, getHoursMinutesFromMinut
 import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
-import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon-16.svg'
+import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
 import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
 
 // utils

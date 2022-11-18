@@ -107,8 +107,7 @@ const renderEventContent = (data: EventContentArg) => {
 				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
 				'multiday-event-last': isLastMultiDaylEventInCurrentRange
 			})}
-			// NOTE: len docasne, viac sa mi to ak paci
-			style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
+			// style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
 		>
 			{(() => {
 				switch (eventType) {
@@ -218,7 +217,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				editable
 				selectable
 				stickyFooterScrollbar
-				nowIndicator
+				// TODO: now indicator
+				// nowIndicator
 				// data sources
 				events={composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)}
 				resources={composeWeekResources(weekDays, shiftsTimeOffs, employees)}

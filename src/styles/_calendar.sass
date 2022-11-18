@@ -405,6 +405,7 @@
 // daily view
 .fc-resourceTimeGridDay-view
 	// vyska najmenjsieho casoveho intervalu - teda ak mam nastavenych 15minut - tak cela hodina bude 60px vysoka (4 x 15px)
+	// ak zmeminme tuto vysku, je potrebne upravit aj min-height eventu .nc-day-event
 	font-size: 15px
 	line-height: 15px
 	.fc-timegrid-slot
@@ -534,6 +535,7 @@
 		.nc-day-event
 			width: 100%
 			height: 100%
+			min-height: 12px // ak sa zmeni vyska dielka v tabulke, je potrebne upravit aj tuto min-height (15px (vyska riadika .fc-timegrid-slot) - 2*2px (margin-top + bottom .fc-timegrid-event-harness))
 			background: $backgroundColor-notino-white
 			position: relative
 			border-radius: 4px
@@ -659,9 +661,8 @@
 			&.shift,
 			&.timeoff,
 			&.break
-				// NOTE: len docasne, viac sa mi to ak paci
-				// outline-color: $borderColor-notino-grayLight
-				outline-color: $borderColor-notino-gray
+				outline-color: $borderColor-notino-grayLight
+				// outline-color: $borderColor-notino-gray // tmavsia verzia
 				.event-content
 					display: flex
 					flex-direction: column
@@ -1093,9 +1094,8 @@
 			&.shift,
 			&.timeoff,
 			&.break
-				// NOTE: len docasne, viac sa mi to ak paci
-				// outline-color: $borderColor-notino-grayLight
-				outline-color: $borderColor-notino-gray
+				outline-color: $borderColor-notino-grayLight
+				// outline-color: $borderColor-notino-gray // tmavsia verzia
 				.event-content
 					padding: 4px
 					display: flex
@@ -1158,8 +1158,8 @@
 						.duration
 							display: none
 			&.shift
-				// outline-color: $borderColor-notino-grayLight
-				outline-color: $borderColor-notino-grayDark
+				outline-color: $borderColor-notino-grayLight
+				// outline-color: $borderColor-notino-grayDark
 				&.min-45,
 				&.min-30,
 				&.min-15

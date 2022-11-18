@@ -58,8 +58,7 @@ const renderEventContent = (data: EventContentArg) => {
 				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
 				'multiday-event-last': isLastMultiDaylEventInCurrentRange
 			})}
-			// NOTE: len docasne, viac sa mi to
-			style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
+			// style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
 		>
 			{(() => {
 				switch (eventType) {
@@ -189,7 +188,9 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
 			fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
 			eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
-			eventMinHeight={0} // je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
+			// je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
+			// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
+			// eventMinHeight={0}
 			dayMinWidth={240}
 			editable={hasResources}
 			selectable={hasResources}

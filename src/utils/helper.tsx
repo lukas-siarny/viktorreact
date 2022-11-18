@@ -59,10 +59,13 @@ import {
 	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
 	SALON_PERMISSION,
-	DEFAULT_DATE_TIME_OPTIONS,
+	ENDS_EVENT,
+	DEFAULT_DATE_INIT_FORMAT,
 	DATE_TIME_PARSER_DATE_FORMAT,
-	DATE_TIME_PARSER_FORMAT
+	DATE_TIME_PARSER_FORMAT,
+	DEFAULT_DATE_TIME_OPTIONS
 } from './enums'
+
 import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption, CountriesData, IAuthUserPayload, IEmployeePayload } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
@@ -801,6 +804,21 @@ export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactN
 	)
 }
 
+export const optionRenderWithAvatar = (itemData: any, imageWidth = 24, imageHeight = 24) => {
+	// Thumbnail, label, extraContent (pod labelom)
+	const { label, thumbNail, extraContent } = itemData
+	const style = { width: imageWidth, height: imageHeight }
+	return (
+		<div className='flex items-center divide-y'>
+			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbNail} alt={label} />
+			<div className={'flex flex-col leading-none'}>
+				<div>{label}</div>
+				<div>{extraContent}</div>
+			</div>
+		</div>
+	)
+}
+
 export const langaugesOptionRender = (itemData: any) => {
 	const { value, label, flag } = itemData
 	return (
@@ -949,6 +967,47 @@ export const getSalonFilterRanges = (values?: IDateTimeFilterOption[]): { [key: 
 			[value.name]: [now.subtract(value.value, value.unit), now]
 		}
 	}, {})
+}
+
+export const getFirstDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('week')
+
+export const getFirstDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).startOf('month')
+
+export const getLastDayOfWeek = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('week')
+
+export const getLasttDayOfMonth = (date: string | number | Date | dayjs.Dayjs) => dayjs(date).endOf('month')
+
+export const roundMinutes = (currentMinutes: number, currentHours: number, mod = 15): string => {
+	const formattedCurrentHours = currentHours < 10 ? `0${currentHours}` : currentHours
+	const diff = currentMinutes % mod
+	if (diff === 0) {
+		return `${formattedCurrentHours}:${currentMinutes}`
+	}
+
+	const nearestValue = currentMinutes + mod - diff
+	// TODO: prechod z 23:46 na 00:00 nie na 24
+	if (nearestValue % 60 < 15) {
+		return `${currentHours + 1 < 10 ? `0${currentHours + 1}` : currentHours + 1}:00`
+	}
+
+	return `${formattedCurrentHours}:${nearestValue}`
+}
+
+export const computeUntilDate = (endsEvent: ENDS_EVENT, actualDate: string) => {
+	switch (endsEvent) {
+		case ENDS_EVENT.WEEK:
+			return dayjs(actualDate).add(1, 'week').format(DEFAULT_DATE_INIT_FORMAT)
+		case ENDS_EVENT.MONTH:
+			return dayjs(actualDate).add(1, 'month').format(DEFAULT_DATE_INIT_FORMAT)
+		case ENDS_EVENT.THREE_MONTHS:
+			return dayjs(actualDate).add(3, 'month').format(DEFAULT_DATE_INIT_FORMAT)
+		case ENDS_EVENT.SIX_MONTHS:
+			return dayjs(actualDate).add(6, 'month').format(DEFAULT_DATE_INIT_FORMAT)
+		case ENDS_EVENT.YEAR:
+			return dayjs(actualDate).add(1, 'year').format(DEFAULT_DATE_INIT_FORMAT)
+		default:
+			return ''
+	}
 }
 
 export const getDateTime = (date: string, time: string) => {

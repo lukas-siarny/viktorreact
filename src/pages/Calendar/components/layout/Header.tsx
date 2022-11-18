@@ -2,21 +2,27 @@ import React, { FC, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { Header } from 'antd/lib/layout/layout'
-import { Button, Dropdown, Menu } from 'antd'
+import { Button, Dropdown } from 'antd'
 import dayjs from 'dayjs'
-import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
+import { initialize, WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import Tooltip from 'antd/es/tooltip'
+import { useDispatch } from 'react-redux'
 
 // enums
-import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, STRINGS } from '../../../../utils/enums'
+import {
+	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENTS_VIEW_TYPE,
+	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
+	CALENDAR_SET_NEW_DATE,
+	CALENDAR_VIEW,
+	DEFAULT_DATE_INIT_FORMAT,
+	FORM,
+	STRINGS
+} from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
 import { ReactComponent as ChevronLeft } from '../../../../assets/icons/chevron-left-16.svg'
-import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
-import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-import { ReactComponent as ShiftIcon } from '../../../../assets/icons/shift-icon.svg'
-import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon.svg'
 import { ReactComponent as CreateIcon } from '../../../../assets/icons/plus-icon.svg'
 import { ReactComponent as ChevronDownGrayDark } from '../../../../assets/icons/chevron-down-grayDark-12.svg'
 
@@ -78,14 +84,16 @@ type Props = {
 	siderFilterCollapsed: boolean
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
-	setSiderEventManagement: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
 	setSelectedDate: (newDate: string | dayjs.Dayjs, type?: CALENDAR_SET_NEW_DATE) => void
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
 
 const CalendarHeader: FC<Props> = (props) => {
 	const [t] = useTranslation()
+	const dispatch = useDispatch()
 
-	const { setSiderFilterCollapsed, calendarView, setCalendarView, setSiderEventManagement, selectedDate, setSelectedDate, siderFilterCollapsed } = props
+	const { setSiderFilterCollapsed, calendarView, setCalendarView, selectedDate, setSelectedDate, setCollapsed, siderFilterCollapsed, eventsViewType } = props
 
 	const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
@@ -97,47 +105,6 @@ const CalendarHeader: FC<Props> = (props) => {
 	})
 
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
-
-	const addMenu = useMemo(() => {
-		const itemClassName = 'p-2 font-medium min-w-0'
-		return (
-			<Menu
-				getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-				className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'}
-				style={{ width: 200 }}
-				items={[
-					{
-						key: 'reservation',
-						label: t('loc:Rezerváciu'),
-						icon: <ServicesIcon />,
-						className: itemClassName,
-						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
-					},
-					{
-						key: 'shift',
-						label: t('loc:Zmenu'),
-						icon: <ShiftIcon />,
-						className: itemClassName,
-						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
-					},
-					{
-						key: 'absence',
-						label: t('loc:Absenciu'),
-						icon: <AbsenceIcon />,
-						className: itemClassName,
-						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIMEOFF)
-					},
-					{
-						key: 'break',
-						label: t('loc:Prestávku'),
-						icon: <BreakIcon />,
-						className: itemClassName,
-						onClick: () => setSiderEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
-					}
-				]}
-			/>
-		)
-	}, [t, setSiderEventManagement])
 
 	const datePicker = useMemo(() => {
 		return (
@@ -205,24 +172,33 @@ const CalendarHeader: FC<Props> = (props) => {
 				</button>
 			</div>
 			<div className={'nav-right'}>
-				<Dropdown
-					overlay={addMenu}
-					placement='bottomRight'
-					trigger={['click']}
-					getPopupContainer={() => document.querySelector('#noti-calendar-header') as HTMLElement}
-					overlayClassName={'nc-overlay'}
+				<Button
+					type={'primary'}
+					onClick={() => {
+						// Kliknutie na pridat nastavi rezervaciu ako default
+						// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastv pracovnu zmenu
+						if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+							const initData = {
+								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+								eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
+							}
+							dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+						} else {
+							const initData = {
+								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
+								eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT
+							}
+							dispatch(initialize(FORM.CALENDAR_SHIFT_FORM, initData))
+							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+						}
+					}}
+					icon={<CreateIcon />}
+					htmlType={'button'}
+					className={'noti-btn'}
 				>
-					<Button
-						type={'primary'}
-						onClick={(e) => e.preventDefault()}
-						onKeyPress={(e) => e.preventDefault()}
-						icon={<CreateIcon />}
-						htmlType={'button'}
-						className={'noti-btn'}
-					>
-						{isSmallerDevice ? STRINGS(t).addRecord('') : STRINGS(t).addRecord(t('loc:novú'))}
-					</Button>
-				</Dropdown>
+					{isSmallerDevice ? STRINGS(t).addRecord('') : STRINGS(t).addRecord(t('loc:novú'))}
+				</Button>
 			</div>
 		</Header>
 	)

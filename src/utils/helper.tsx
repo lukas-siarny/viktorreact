@@ -806,8 +806,8 @@ export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactN
 
 export const optionRenderWithAvatar = (itemData: any, imageWidth = 24, imageHeight = 24) => {
 	// Thumbnail, label, extraContent (pod labelom)
-	const { label, thumbNail, extraContent } = itemData
-	const style = { width: imageWidth, height: imageHeight }
+	const { label, thumbNail, extraContent, borderColor } = itemData
+	const style = { width: imageWidth, height: imageHeight, border: `2px solid ${borderColor}` }
 	return (
 		<div className='flex items-center divide-y'>
 			<img className={'rounded-full mr-2'} width={imageWidth} height={imageHeight} style={style} src={thumbNail} alt={label} />

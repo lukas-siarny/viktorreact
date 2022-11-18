@@ -9,7 +9,7 @@ import { flatten, map } from 'lodash'
 import validateReservationForm from './validateReservationForm'
 
 // utils
-import { formatLongQueryString, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
+import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
 import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
@@ -40,12 +40,14 @@ type ComponentProps = {
 	handleDeleteEvent: () => any
 	searchEmployes: (search: string, page: number) => Promise<any>
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+	eventId?: string | null
 }
+const formName = FORM.CALENDAR_RESERVATION_FORM
 
 type Props = InjectedFormProps<ICalendarReservationForm, ComponentProps> & ComponentProps
 
 const ReservationForm: FC<Props> = (props) => {
-	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent, searchEmployes, eventsViewType } = props
+	const { handleSubmit, setCollapsed, salonID, onChangeEventType, handleDeleteEvent, searchEmployes, eventsViewType, eventId } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
@@ -118,8 +120,18 @@ const ReservationForm: FC<Props> = (props) => {
 				phonePrefixCountryCode: values.phonePrefixCountryCode,
 				profileImageID: (values?.avatar?.[0]?.id ?? values?.avatar?.[0]?.uid) || null
 			})
-			// TODO: initnut labelInValue shape
-			dispatch(change(FORM.CALENDAR_RESERVATION_FORM, 'customer', customer.data.customer?.id))
+			dispatch(
+				change(formName, 'customer', {
+					id: customer.data.customer?.id,
+					key: customer.data.customer?.id,
+					value: getAssignedUserLabel({
+						id: customer.data.customer?.id as string,
+						firstName: customer.data.customer?.firstName,
+						lastName: customer.data.customer?.lastName,
+						email: customer.data.customer?.email
+					})
+				})
+			)
 			setVisibleCustomerModal(false)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -146,37 +158,48 @@ const ReservationForm: FC<Props> = (props) => {
 		<>
 			{modals}
 			<div className={'nc-sider-event-management-header justify-between'}>
-				<div className={'font-semibold'}>{t('loc:Nová rezervácia')}</div>
+				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(t('loc:rezerváciu')) : STRINGS(t).createRecord(t('loc:rezerváciu'))}</div>
 				<div className={'flex-center'}>
-					<DeleteButton
-						placement={'bottom'}
-						entityName={t('loc:rezerváciu')}
-						className={'bg-transparent mr-4'}
-						onClick={handleDeleteEvent}
-						onlyIcon
-						smallIcon
-						size={'small'}
-					/>
-					<Button className='button-transparent' onClick={() => setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)}>
+					{eventId && (
+						<DeleteButton
+							placement={'bottom'}
+							entityName={t('loc:rezervácia')}
+							className={'bg-transparent mr-4'}
+							onConfirm={handleDeleteEvent}
+							onlyIcon
+							smallIcon
+							size={'small'}
+						/>
+					)}
+					<Button
+						className='button-transparent'
+						onClick={() => {
+							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
+						}}
+					>
 						<CloseIcon />
 					</Button>
 				</div>
 			</div>
 			<div className={'nc-sider-event-management-content main-panel'}>
 				<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
-					<Field
-						component={SelectField}
-						label={t('loc:Typ udalosti')}
-						placeholder={t('loc:Vyberte typ')}
-						name={'eventType'}
-						options={EVENT_TYPE_OPTIONS(eventsViewType)}
-						size={'large'}
-						className={'pb-0'}
-						onChange={onChangeEventType}
-						filterOption={false}
-						allowInfinityScroll
-					/>
-					<Divider className={'mb-3 mt-3'} />
+					{!eventId && (
+						<>
+							<Field
+								component={SelectField}
+								label={t('loc:Typ udalosti')}
+								placeholder={t('loc:Vyberte typ')}
+								name={'eventType'}
+								options={EVENT_TYPE_OPTIONS(eventsViewType)}
+								size={'large'}
+								className={'pb-0'}
+								onChange={onChangeEventType}
+								filterOption={false}
+								allowInfinityScroll
+							/>
+							<Divider className={'mb-3 mt-3'} />
+						</>
+					)}
 					<Permissions
 						allowed={[SALON_PERMISSION.CUSTOMER_CREATE]}
 						render={(hasPermission, { openForbiddenModal }) => (
@@ -264,8 +287,8 @@ const ReservationForm: FC<Props> = (props) => {
 				</Form>
 			</div>
 			<div className={'nc-sider-event-management-footer'}>
-				<Button onClick={() => dispatch(submit(FORM.CALENDAR_RESERVATION_FORM))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
-					{STRINGS(t).createRecord(t('loc:rezerváciu'))}
+				<Button onClick={() => dispatch(submit(formName))} htmlType={'submit'} type={'primary'} block className={'noti-btn self-end'}>
+					{eventId ? STRINGS(t).edit(t('loc:rezerváciu')) : STRINGS(t).createRecord(t('loc:rezerváciu'))}
 				</Button>
 			</div>
 		</>
@@ -273,7 +296,7 @@ const ReservationForm: FC<Props> = (props) => {
 }
 
 const form = reduxForm<ICalendarReservationForm, ComponentProps>({
-	form: FORM.CALENDAR_RESERVATION_FORM,
+	form: formName,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,
 	destroyOnUnmount: true,

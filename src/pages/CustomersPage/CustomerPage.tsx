@@ -116,7 +116,7 @@ const CustomerPage = (props: Props) => {
 					streetNumber: data.streetNumber,
 					zipCode: data.zipCode,
 					phone: data.phone,
-					phonePrefixCountryCode: data.phonePrefixCountryCode,
+					phonePrefixCountryCode: data?.phonePrefixCountryCode,
 					galleryImageIDs:
 						((data?.gallery || []).map((image: any) => image?.id ?? image?.uid) as Paths.PatchApiB2BAdminCustomersCustomerId.RequestBody['galleryImageIDs']) || null,
 					profileImageID: (data?.avatar?.[0]?.id ?? data?.avatar?.[0]?.uid) || null

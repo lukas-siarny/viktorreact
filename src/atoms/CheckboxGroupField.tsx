@@ -47,13 +47,13 @@ const CheckboxGroupField = (props: Props) => {
 
 		if (typeof option === 'string') {
 			return (
-				<Checkbox key={option} disabled={disabled} value={option} className={cx({ 'inline-flex': horizontal })}>
+				<Checkbox key={option} value={option} disabled={disabled} className={cx({ horizontal })}>
 					{optionRender ? optionRender(option, isChecked) : option}
 				</Checkbox>
 			)
 		}
 		return (
-			<Checkbox disabled={option.disabled || disabled} key={`${option.value}`} value={option.value} className={cx({ 'inline-flex': horizontal })}>
+			<Checkbox disabled={option.disabled || disabled} key={`${option.value}`} value={option.value} className={cx({ horizontal })}>
 				{optionRender ? optionRender(option, isChecked) : option.label}
 			</Checkbox>
 		)

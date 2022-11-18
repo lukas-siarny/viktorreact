@@ -34,8 +34,8 @@ import { IBreadcrumbs, INoteForm, INoteModal, INotinoUserForm, ISalonForm, Salon
 import { deleteReq, patchReq } from '../../utils/request'
 import { history } from '../../utils/history'
 import Permissions, { withPermissions } from '../../utils/Permissions'
-import { formFieldID } from '../../utils/helper'
-import { getSalonDataForSubmission, initSalonFormData, getAssignedUserLabel } from './components/salonUtils'
+import { formFieldID, getAssignedUserLabel } from '../../utils/helper'
+import { getSalonDataForSubmission, initSalonFormData } from './components/salonUtils'
 
 // assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'

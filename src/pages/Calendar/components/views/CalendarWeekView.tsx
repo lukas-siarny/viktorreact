@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react'
+import React, { useMemo } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 
@@ -11,7 +11,7 @@ import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, getHoursMinutesFromMinutes, getWeekViewSelectedDate } from '../../calendarHelpers'
+import { composeWeekResources, composeWeekViewEvents, getHoursMinutesFromMinutes, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
@@ -72,7 +72,7 @@ const resourceAreaColumns = [
 const renderEventContent = (data: EventContentArg) => {
 	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
-	const { eventType } = extendedProps || {}
+	const { eventType, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange } = extendedProps || {}
 
 	if (event.display === 'inverse-background') {
 		return <div className={cx('nc-bg-event not-set-availability')} />
@@ -100,7 +100,12 @@ const renderEventContent = (data: EventContentArg) => {
 				timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
 				break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
 				'min-15': Math.abs(diff) <= 15,
-				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 15
+				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
+				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
+				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
+				'multiday-event': isMultiDayEvent,
+				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
+				'multiday-event-last': isLastMultiDaylEventInCurrentRange
 			})}
 			// NOTE: len docasne, viac sa mi to ak paci
 			style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
@@ -183,7 +188,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 		const { start, end, resource } = info
 	}
 
-	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate)
+	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
+	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
 
 	return (
 		<div className={'nc-calendar-week-wrapper'}>
@@ -199,9 +205,11 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
 				slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
 				slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
+				fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
+				eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
 				height='auto'
 				slotMinWidth={25} // ak sa zmeni tato hodnota, je potrebne upravit min-width v _calendar.sass => .nc-week-event
-				eventMinWidth={25} // rovnaka hodnota ako slotMinWidth
+				eventMinWidth={25}
 				resourceAreaWidth={200}
 				headerToolbar={false}
 				initialView='resourceTimelineDay'
@@ -212,8 +220,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				stickyFooterScrollbar
 				nowIndicator
 				// data sources
-				events={composeWeekViewEvents(weekViewSelectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)}
-				resources={composeWeekResources(weekViewSelectedDate, shiftsTimeOffs, employees)}
+				events={composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)}
+				resources={composeWeekResources(weekDays, shiftsTimeOffs, employees)}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
 				slotLabelContent={slotLabelContent}

@@ -25,7 +25,7 @@ import { getAssignedUserLabel } from '../../../../utils/helper'
 const renderEventContent = (data: EventContentArg) => {
 	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
-	const { eventType } = extendedProps || {}
+	const { eventType, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange } = extendedProps || {}
 
 	if (event.display === 'inverse-background') {
 		return <div className={cx('nc-bg-event not-set-availability')} />
@@ -53,7 +53,10 @@ const renderEventContent = (data: EventContentArg) => {
 				timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
 				break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
 				'min-15': Math.abs(diff) <= 15,
-				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 15
+				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 15,
+				'multiday-event': isMultiDayEvent,
+				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
+				'multiday-event-last': isLastMultiDaylEventInCurrentRange
 			})}
 			// NOTE: len docasne, viac sa mi to
 			style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
@@ -184,6 +187,9 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
 			slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
 			slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
+			fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
+			eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
+			eventMinHeight={0} // je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
 			dayMinWidth={240}
 			editable={hasResources}
 			selectable={hasResources}

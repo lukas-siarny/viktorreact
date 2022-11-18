@@ -41,6 +41,20 @@
 	&::-webkit-scrollbar
 		display: none
 
+@mixin arrow-right($color: $borderColor-notino-grayDarker, $size: 4px)
+	width: 0
+	height: 0
+	border-top: $size solid transparent
+	border-bottom: $size solid transparent
+	border-left: $size solid $color
+
+@mixin arrow-left($color: $borderColor-notino-grayDarker, $size: 4px)
+	width: 0
+	height: 0
+	border-top: $size solid transparent
+	border-bottom: $size solid transparent
+	border-right: $size solid  $color
+
 // calendar layout
 .noti-calendar-layout
 	height: 100%
@@ -189,8 +203,8 @@
 				bottom: 0
 				width: 100%
 				height: 100%
-				// opacity: 0
-				// animation: content-animation 250ms ease-out forwards
+				opacity: 0
+				animation: content-animation 250ms ease-out forwards
 				overflow: hidden
 			.nc-calendar-week-wrapper
 				position: absolute
@@ -388,7 +402,7 @@
 			opacity: 1
 			background-color: transparent !important
 
-// day view
+// daily view
 .fc-resourceTimeGridDay-view
 	// vyska najmenjsieho casoveho intervalu - teda ak mam nastavenych 15minut - tak cela hodina bude 60px vysoka (4 x 15px)
 	font-size: 15px
@@ -568,6 +582,29 @@
 				.title
 					font-weight: 600
 					color: $textColor-notino-black
+			&.multiday-event
+				.time
+					display: inline-flex
+					align-items: center
+					gap: 2px
+				&:not(.multiday-event-first):not(.multiday-event-last)
+					.time
+						&::before
+							content: ''
+							@include arrow-left
+						&::after
+							content: ''
+							@include arrow-right
+				&.multiday-event-first
+					.time
+						&::after
+							content: ''
+							@include arrow-right
+				&.multiday-event-last
+					.time
+						&::before
+							content: ''
+							@include arrow-left
 			&.reservation
 				.event-content
 					padding: 2px 8px
@@ -722,7 +759,7 @@
 	width: 60px
 	text-align: center
 
-// week view
+// weekly view
 .fc-resource-timeline
 	.fc-timeline-slot-minor
 		border-color: transparent
@@ -735,6 +772,15 @@
 				border-right-color: transparent !important
 				background: transparent
 				> .fc-scroller-harness
+					&::before
+						content: ''
+						position: absolute
+						left: 0
+						width: 55px
+						height: 25px
+						z-index: 3
+						top: 0
+						background: linear-gradient(180deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
 					> .fc-scroller
 						overflow: visible !important
 						> table.fc-datagrid-header
@@ -754,6 +800,20 @@
 					margin-left: -145px
 					background: $backgroundColor-notino-white
 					border-bottom: 1px solid $borderColor-notino-grayLight
+					&::before,
+					&::after
+						content: ''
+						position: absolute
+						top: 0
+						bottom: 0
+						width: 30px
+						z-index: 3
+					&::after
+						left: 0
+						background: linear-gradient(90deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
+					&::before
+						right: 0
+						background: linear-gradient(270deg, rgba(255,255,255,1) 38%, rgba(255,255,255,0.47102591036414565) 80%, rgba(255,255,255,0.3981967787114846) 100%)
 					> .fc-scroller
 						padding-left: 145px
 						@include hide-scrollbar
@@ -910,6 +970,30 @@
 				z-index: 3
 				.time
 					white-space: nowrap
+					position: relative
+			&.multiday-event
+				.time
+					display: inline-flex
+					align-items: center
+					gap: 2px
+				&:not(.multiday-event-first):not(.multiday-event-last)
+					.time
+						&::before
+							content: ''
+							@include arrow-left
+						&::after
+							content: ''
+							@include arrow-right
+				&.multiday-event-first
+					.time
+						&::after
+							content: ''
+							@include arrow-right
+				&.multiday-event-last
+					.time
+						&::before
+							content: ''
+							@include arrow-left
 			&.reservation
 				.event-content
 					padding: 2px 4px 2px 8px
@@ -1042,26 +1126,55 @@
 						color: $textColor-notino-grayDark
 						margin-left: auto
 				&.min-15,
-				&.min-45
+				&.min-45,
+				&.min-30
 					.event-content
+						padding-left: 2px
+						padding-right: 2px
 						.sticky-container
-							width: 16px
 							.event-info
 								margin-right: 0
 								.color
 									display: none
-				&.min-15
+								.time
+									display: none
+				&.min-75
 					.event-content
-						.duration
-							display: none
+						.sticky-container
+							.event-info
+								.time
+									display: none
 
 
 			&.timeoff,
 			&.break
 				background: url("../assets/images/gray-bold-background-pattern.png")
+				&.min-15,
+				&.min-30
+					.event-content
+						.sticky-container
+							display: flex
+							justify-content: center
+						.duration
+							display: none
 			&.shift
 				// outline-color: $borderColor-notino-grayLight
 				outline-color: $borderColor-notino-grayDark
+				&.min-45,
+				&.min-30,
+				&.min-15
+					.event-content
+						justify-content: center
+						.sticky-container
+							display: none
+						.duration
+							margin-left: unset
+							word-break: break-all
+							white-space: normal
+							position: sticky
+							left: 0
+							text-align: center
+
 
 
 .nc-week-slot-label

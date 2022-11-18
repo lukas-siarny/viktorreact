@@ -99,8 +99,7 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 	return dayjs(dayjs(eventStart)).isSameOrBefore(startOfSelectedDate) && dayjs(eventEnd).isSameOrAfter(endOfSelectedDate.subtract(1, 'minutes'))
 } */
 
-// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvori na vysku tohto min dielika
-// preto treba tieto inverse-background evnety tiez takto upravit, aby sa potom neprekryvali srafy
+// ak je dlzka bg eventu mensia ako min dielik v kalendari (u nas 15 minut), tak ho to vytvorime ako 15 minutovy, lebo to vyzera divne potom
 const getBgEventEnd = (start: string, end: string) =>
 	dayjs(end).diff(start, 'minutes') < CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION ? dayjs(start).add(CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION, 'minutes').toISOString() : end
 
@@ -120,7 +119,7 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 	originalEvent: event.originalEvent
 })
 
-/*
+/**
  * Daily view helpers
  */
 const composeDayViewReservations = (selectedDate: string, reservations: ICalendarEventsPayload['data'], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees) => {
@@ -290,7 +289,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 	})
 }
 
-/*
+/**
  * Weekly view helpers
  */
 export const getWeekDays = (selectedDate: string) => {
@@ -301,13 +300,6 @@ export const getWeekDays = (selectedDate: string) => {
 	}
 	return weekDays
 }
-
-/* const weekDayResources = [
-	{ id: `employeeID1_mondayDate`, day: mondayDate, employee: employee1Data },
-	{ id: `employeeID2_mondayDate`, day: mondayDate, employee: employee2Data },
-	{ id: `employeeID1_tuesdayDate`, day: tuesdayDate, employee: employee1Data },
-	{ id: `employeeID2_tuesdayDate`, day: tuesdayDate, employee: employee2Data }
-] */
 
 const getWeekDayResourceID = (employeeID: string, weekDay: string) => `${weekDay}_${employeeID}`
 
@@ -321,6 +313,16 @@ interface EmployeeWeekResource {
 }
 
 type WeekDayResource = { id: string; day: string; employee: EmployeeWeekResource }
+
+/**
+ * Returns e.g.
+	const weekDayResources = [
+		{ id: `employeeID1_mondayDate`, day: mondayDate, employee: employee1Data },
+		{ id: `employeeID2_mondayDate`, day: mondayDate, employee: employee2Data },
+		{ id: `employeeID1_tuesdayDate`, day: tuesdayDate, employee: employee1Data },
+		{ id: `employeeID2_tuesdayDate`, day: tuesdayDate, employee: employee2Data }
+]
+*/
 
 export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalendarEventsPayload['data'], employees: Employees): WeekDayResource[] => {
 	return weekDays.reduce((resources, weekDay) => {

@@ -72,8 +72,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			* but when user unchecks all employeeIDs options in the filter, we want to show no employees
 	*/
 	const [query, setQuery] = useQueryParams({
-		// view: withDefault(StringParam, CALENDAR_VIEW.DAY),
-		view: withDefault(StringParam, CALENDAR_VIEW.WEEK),
+		view: withDefault(StringParam, CALENDAR_VIEW.DAY),
 		date: withDefault(StringParam, dayjs().format(CALENDAR_DATE_FORMAT.QUERY)),
 		employeeIDs: DelimitedArrayParam,
 		categoryIDs: DelimitedArrayParam,
@@ -294,6 +293,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				break
 		}
 
+		// TODO: toto treba trochu upravit => povolit zmenit query paramater, ale nedotiahnut nove data ak sa jedna o rovnaky range
+		// teraz tam je nesulad, ak uzivatel v tyzdenom view vybere datum z rovnakeho rangu, tak tym ze sa ten datum nesetne do query
+		// tak pri prepnuti na denne view sa potom nedotiahne datum vybraty v kalendari
 		if (isRangeAleardySelected(query.view as CALENDAR_VIEW, query.date, newQueryDate)) {
 			return
 		}

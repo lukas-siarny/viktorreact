@@ -148,7 +148,7 @@ export interface IServiceForm {
 
 export interface ICalendarReservationForm {
 	customer: ISelectOptionItem
-	service: any
+	service: ISelectOptionItem
 	employee: ISelectOptionItem
 	date: string
 	timeFrom: string

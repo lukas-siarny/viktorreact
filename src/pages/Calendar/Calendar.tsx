@@ -157,8 +157,30 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 					dispatch(initialize(FORM.CALENDAR_BREAK_FORM, initData))
 					break
+				case CALENDAR_EVENT_TYPE.RESERVATION:
+					dispatch(
+						initialize(FORM.CALENDAR_RESERVATION_FORM, {
+							...initData,
+							service: {
+								id: data?.service?.id,
+								key: data?.service?.id,
+								value: data?.service?.name
+							},
+							customer: {
+								value: data?.customer?.id,
+								key: data?.customer?.id,
+								label: getAssignedUserLabel({
+									id: data?.customer?.id as string,
+									firstName: data?.customer?.firstName,
+									lastName: data?.customer?.lastName,
+									email: data?.customer?.email
+								})
+							}
+						})
+					)
+					break
 				default:
-					dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
+					break
 			}
 		} catch (e) {
 			// eslint-disable-next-line no-console
@@ -321,7 +343,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		try {
 			setIsRemoving(true)
 			const calendarEventID = query.eventId as string
-			await deleteReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { salonID, calendarEventID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			// DELETE reservation
+			if (query.sidebarView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION) {
+				await deleteReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
+					{ salonID, calendarEventID },
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+			} else {
+				// DELETE event shift / vacation / break
+				await deleteReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { salonID, calendarEventID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			}
 			setEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
@@ -332,7 +366,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
-		// TODO: rezervacia - NOT-2815
 		try {
 			const reqData = {
 				start: {
@@ -346,11 +379,36 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				note: values.note,
 				customerID: values.customer.key as string,
 				employeeID: values.employee.key as string,
-				serviceID: 'd9274f67-6d27-47f4-bdb5-6a3c8a91b907' // TODO:
-				// serviceCategoryParameterValueID: '00000000-0000-0000-0000-000000000001' // TODO:
+				serviceID: values.service.key as string
 			}
-
-			await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+			if (query.eventId) {
+				// UPDATE
+				await patchReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
+					{ salonID, calendarEventID: query.eventId },
+					reqData,
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+				setEventManagement(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
+			} else {
+				// CREATE
+				const { data } = await postReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/',
+					{ salonID },
+					reqData,
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+				// TODO: ked bude detail z kalendara tak toto ZMAZAT!!! - detail sa bude initovat len z bunky kalendara alebo efektu pri skopirovania URL
+				const reservationCalendarEventId = data.reservationCalendarEvent.id
+				setQuery({
+					...query,
+					eventId: reservationCalendarEventId
+				})
+			}
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)

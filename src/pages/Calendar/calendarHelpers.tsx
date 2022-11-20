@@ -65,10 +65,15 @@ export const isRangeAleardySelected = (view: CALENDAR_VIEW, currentSelectedDate:
 }
 
 export const getHoursMinutesFromMinutes = (minutes: number) => {
-	const hours = Math.floor(minutes / 60)
-	const min = minutes % 60
-	return `${hours ? `${hours}${'h'}` : ''} ${min ? `${min}${'m'}` : ''}`.trim()
+	const days = Math.floor(minutes / 1440)
+	const hoursLeft = minutes % 1440
+	const hours = Math.floor(hoursLeft / 60)
+	const min = hoursLeft % 60
+
+	return `${days ? `${days}${'d'} ${hours}h` : ''} ${!days && hours ? `${hours}${'h'}` : ''} ${min ? `${min}${'m'}` : ''}`.trim()
 }
+
+export const getTimeText = (start: Date | null, end: Date | null) => `${dayjs(start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(end).format(CALENDAR_DATE_FORMAT.TIME)}`
 
 type ResourceMap = {
 	[key: string]: number
@@ -103,12 +108,32 @@ const createAllDayInverseEventFromResourceMap = (resourcesMap: ResourceMap, sele
 const getBgEventEnd = (start: string, end: string) =>
 	dayjs(end).diff(start, 'minutes') < CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION ? dayjs(start).add(CALENDAR_COMMON_SETTINGS.EVENT_MIN_DURATION, 'minutes').toISOString() : end
 
-const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string) => ({
+export interface ICalendarEventCardData {
+	id: string
+	resourceId: string
+	start: string
+	end: string
+	eventType: CALENDAR_EVENT_TYPE
+	editable: boolean
+	resourceEditable: boolean
+	allDay: boolean
+	isMultiDayEvent?: boolean
+	isLastMultiDaylEventInCurrentRange?: boolean
+	isFirstMultiDayEventInCurrentRange?: boolean
+	employee?: CalendarEvent['employee']
+	reservationData?: CalendarEvent['reservationData']
+	service?: CalendarEvent['service']
+	customer?: CalendarEvent['customer']
+	note?: CalendarEvent['note']
+	originalEvent: CalendarEvent
+}
+
+const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string, end: string): ICalendarEventCardData => ({
 	id: event.id,
 	resourceId,
 	start,
 	end,
-	eventType: event.eventType,
+	eventType: event.eventType as CALENDAR_EVENT_TYPE,
 	editable: !event.isMultiDayEvent,
 	resourceEditable: !event.isMultiDayEvent,
 	allDay: false,
@@ -116,7 +141,7 @@ const createBaseEvent = (event: CalendarEvent, resourceId: string, start: string
 	isMultiDayEvent: event.isMultiDayEvent,
 	isLastMultiDaylEventInCurrentRange: event.isLastMultiDaylEventInCurrentRange,
 	isFirstMultiDayEventInCurrentRange: event.isFirstMultiDayEventInCurrentRange,
-	originalEvent: event.originalEvent
+	originalEvent: event.originalEvent || event
 })
 
 /**

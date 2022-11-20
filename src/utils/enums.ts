@@ -756,6 +756,21 @@ export enum CALENDAR_EVENTS_KEYS {
 	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
 }
 
+export enum RESERVATION_STATE {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	DECLINED = 'DECLINED',
+	CANCEL_BY_SALON = 'CANCEL_BY_SALON',
+	CANCEL_BY_CUSTOMER = 'CANCEL_BY_CUSTOMER',
+	REALIZED = 'REALIZED',
+	NOT_REALIZED = 'NOT_REALIZED'
+}
+
+export enum RESERVATION_SOURCE_TYPE {
+	ONLINE = 'ONLINE',
+	OFFLINE = 'OFFLINE'
+}
+
 export const getDayNameFromNumber = (day: number) => {
 	switch (day) {
 		case 0: // prvy den dayjs.day() -> nedela

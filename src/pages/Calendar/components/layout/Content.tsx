@@ -4,7 +4,7 @@ import { Spin } from 'antd'
 import FullCalendar from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW, RESERVATION_STATE } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
@@ -28,6 +28,8 @@ type Props = {
 	employees: Employees
 	onShowAllEmployees: () => void
 	showEmptyState: boolean
+	salonID: string
+	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => void
 }
 
 export type CalendarRefs = {
@@ -37,7 +39,8 @@ export type CalendarRefs = {
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, selectedDate, loading, eventsViewType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState } = props
+	const { view, selectedDate, loading, eventsViewType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState, salonID, handleUpdateReservationState } =
+		props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
@@ -63,6 +66,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					shiftsTimeOffs={shiftsTimeOffs}
 					employees={employees}
 					eventsViewType={eventsViewType}
+					salonID={salonID}
+					handleUpdateReservationState={handleUpdateReservationState}
 				/>
 			)
 		}
@@ -77,6 +82,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					shiftsTimeOffs={shiftsTimeOffs}
 					employees={employees}
 					eventsViewType={eventsViewType}
+					salonID={salonID}
+					handleUpdateReservationState={handleUpdateReservationState}
 				/>
 			)
 		}
@@ -89,7 +96,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				shiftsTimeOffs={shiftsTimeOffs}
 				employees={employees}
 				eventsViewType={eventsViewType}
-				onShowAllEmployees={onShowAllEmployees}
+				salonID={salonID}
+				handleUpdateReservationState={handleUpdateReservationState}
 			/>
 		)
 	}

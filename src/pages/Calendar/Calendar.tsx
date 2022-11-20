@@ -21,7 +21,8 @@ import {
 	ENDS_EVENT,
 	FORM,
 	NOTIFICATION_TYPE,
-	PERMISSION
+	PERMISSION,
+	RESERVATION_STATE
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { computeUntilDate, getAssignedUserLabel } from '../../utils/helper'
@@ -489,6 +490,26 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[query, salonID, setEventManagement, setQuery]
 	)
 
+	const handleUpdateReservationState = useCallback(
+		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => {
+			try {
+				/* await patchReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
+					{ calendarEventID, salonID },
+					{ state, reason },
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				) */
+				console.log({ state })
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			}
+		},
+		[salonID]
+	)
+
 	return (
 		<Layout className='noti-calendar-layout'>
 			<CalendarHeader
@@ -524,6 +545,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							employeeIDs: getEmployeeIDs(employees?.options)
 						})
 					}}
+					salonID={salonID}
+					handleUpdateReservationState={handleUpdateReservationState}
 				/>
 				<SiderEventManagement
 					onChangeEventType={onChangeEventType}

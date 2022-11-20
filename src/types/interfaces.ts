@@ -2,7 +2,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, RESERVATION_STATE } from '../utils/enums'
 
 // types
 import { Paths } from './api'
@@ -566,4 +566,6 @@ export interface ICalendarView {
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees
+	salonID: string
+	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => void
 }

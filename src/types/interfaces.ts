@@ -164,12 +164,15 @@ export interface ICalendarEventForm {
 	date: string
 	timeFrom: string
 	timeTo: string
+	eventType: CALENDAR_EVENT_TYPE
 	recurring?: boolean
 	repeatOn?: any
 	every?: EVERY_REPEAT
 	end?: ENDS_EVENT
 	note?: string
-	eventType: CALENDAR_EVENT_TYPE
+	// NOTE: pre akcie resize a drag and drop
+	eventId?: string
+	calendarBulkEventID?: string
 }
 
 export interface ISupportContactForm {

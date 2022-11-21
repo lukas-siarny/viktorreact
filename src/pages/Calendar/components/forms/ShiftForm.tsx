@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { change, Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
-import { Button, Divider, Form } from 'antd'
+import { Button, Divider, Form, Spin } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
@@ -57,7 +57,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes, eventsViewType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const isLoading = useSelector((state: RootState) => state.calendar.eventDetail.isLoading)
 	const formValues: any = useSelector((state: RootState) => getFormValues(formName)(state))
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
@@ -111,6 +111,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 
 	return (
 		<>
+			<Spin style={{ height: '100%' }} spinning={isLoading} />
 			<div className={'nc-sider-event-management-header justify-between'}>
 				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(t('loc:zmenu')) : STRINGS(t).createRecord(t('loc:zmenu'))}</div>
 				<div className={'flex-center'}>

@@ -5,7 +5,7 @@ import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { debounce, includes, isEmpty } from 'lodash'
-import { initialize, submit } from 'redux-form'
+import { destroy, getFormValues, initialize, submit } from 'redux-form'
 
 // utils
 import { Modal } from 'antd'
@@ -16,6 +16,7 @@ import {
 	CALENDAR_EVENTS_VIEW_TYPE,
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
+	CONFIRM_BULK,
 	DAY,
 	DEFAULT_DATE_INIT_FORMAT,
 	ENDS_EVENT,
@@ -85,9 +86,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
+	const [visibleBulkModal, setVisibleBulkModal] = useState<REQUEST_TYPE | null>(null)
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
+
+	const formValuesBulkForm: any = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
 
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
 		const initData = {
@@ -122,11 +126,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initUpdateEventForm = async () => {
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
+			console.log('data update detail', data)
 			const initData = {
 				date: data?.start.date,
 				timeFrom: data?.start.time,
 				timeTo: data?.end.time,
 				note: data?.note,
+				calendarBulkEventID: data?.calendarBulkEvent?.id,
 				employee: {
 					value: data?.employee.id,
 					key: data?.employee.id,
@@ -137,6 +143,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						email: data?.employee.email
 					})
 				}
+				// TODO: repeat initnut - nechodi z BE zatial
 			}
 			if (!data) {
 				// NOTE: ak by bolo zle ID (zmazane alebo nenajdene) tak zatvorit drawer + zmaz eventId
@@ -248,6 +255,18 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
+	const refreshEvents = () => {
+		// fetch new events
+		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+			Promise.all([
+				dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW)),
+				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
+			])
+		} else if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
+			dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
+		}
+	}
+
 	useEffect(() => {
 		;(async () => {
 			// clear previous events
@@ -259,14 +278,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			// fetch new events
-			if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-				Promise.all([
-					dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW)),
-					dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
-				])
-			} else if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
-			}
+			refreshEvents()
 		})()
 	}, [dispatch, salonID, query.date, query.view, query.eventsViewType, query.employeeIDs, query.categoryIDs])
 
@@ -348,6 +360,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				await deleteReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { salonID, calendarEventID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			}
 			setEventManagement(undefined)
+			refreshEvents()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -382,24 +395,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
 				)
-				setEventManagement(undefined)
 			} else {
 				// CREATE
-				const { data } = await postReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/',
-					{ salonID },
-					reqData,
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
-				// TODO: ked bude detail z kalendara tak toto ZMAZAT!!! - detail sa bude initovat len z bunky kalendara alebo efektu pri skopirovania URL
-				const reservationCalendarEventId = data.reservationCalendarEvent.id
-				setQuery({
-					...query,
-					eventId: reservationCalendarEventId
-				})
+				await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			}
+			// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
+			setEventManagement(undefined)
+			refreshEvents()
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -408,6 +410,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm) => {
+			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
+
+			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
+			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
+				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
+				setVisibleBulkModal(REQUEST_TYPE.EDIT)
+				return
+			}
+
 			try {
 				// NOTE: ak je zapnute opakovanie treba poslat ktore dni a konecny datum opakovania
 				const repeatEvent = values.recurring
@@ -440,8 +451,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					note: values.note
 				}
 				// UPDATE event shift
-				if (query.eventId) {
-					// TODO: ak bude bulkId tak endpoint na bulk
+				if (eventId) {
 					const reqDataUpdate = {
 						start: {
 							date: values.date,
@@ -453,38 +463,66 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						},
 						note: values.note
 					}
-					// NOTE: ak existuje eventId je otvoreny detail a bude sa patchovat
-					await patchReq(
-						'/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}',
-						{ salonID, calendarEventID: query.eventId },
-						reqDataUpdate,
-						undefined,
-						NOTIFICATION_TYPE.NOTIFICATION,
-						true
-					)
-					setEventManagement(undefined)
+					if (formValuesBulkForm?.actionType === CONFIRM_BULK.BULK && values.calendarBulkEventID) {
+						// BULK UPDATE
+						await patchReq(
+							'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
+							{ salonID, calendarBulkEventID: values.calendarBulkEventID },
+							{ ...reqDataUpdate, repeatEvent: repeatEvent as any },
+							undefined,
+							NOTIFICATION_TYPE.NOTIFICATION,
+							true
+						)
+					} else {
+						// SINGLE RECORD UPDATE
+						// NOTE: ak existuje eventId je otvoreny detail a bude sa patchovat
+						await patchReq(
+							'/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}',
+							{ salonID, calendarEventID: eventId },
+							reqDataUpdate,
+							undefined,
+							NOTIFICATION_TYPE.NOTIFICATION,
+							true
+						)
+					}
 				} else {
 					// CREATE event shift
-					const { data } = await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-					// TODO: ked bude detail z kalendara tak toto ZMAZAT!!! - detail sa bude initovat len z bunky kalendara alebo efektu pri skopirovania URL
-					const calendarEventId = data.calendarEvents[0].id
-					setQuery({
-						...query,
-						eventId: calendarEventId
-					})
+					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 				}
+				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
+				setEventManagement(undefined)
+				refreshEvents()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
 			}
 		},
-		[query, salonID, setEventManagement, setQuery]
+		[formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
 	)
-	const [visibleBulkModal, setVisibleBulkModal] = useState<REQUEST_TYPE | null>(null)
 
-	const handleSubmitConfirmModal = (values: IBulkConfirmForm) => {
-		console.log('values', values)
-		// TODO: zistit ci je DELETE / EDIT a ci je SINGLe / BULK
+	const handleSubmitConfirmModal = () => {
+		// EDIT
+		if (visibleBulkModal === REQUEST_TYPE.EDIT) {
+			switch (query.sidebarView) {
+				case CALENDAR_EVENT_TYPE.RESERVATION:
+					dispatch(submit(FORM.CALENDAR_RESERVATION_FORM))
+					break
+				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+					dispatch(submit(FORM.CALENDAR_BREAK_FORM))
+					break
+				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+					dispatch(submit(FORM.CALENDAR_TIME_OFF_FORM))
+					break
+				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+					dispatch(submit(FORM.SALON_HISTORY_FILTER))
+					break
+				default:
+					break
+			}
+		} else {
+			// DELETE
+		}
+		setVisibleBulkModal(null)
 	}
 
 	const modals = (
@@ -495,14 +533,15 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				onCancel={() => setVisibleBulkModal(null)}
 				onOk={() => dispatch(submit(FORM.CONFIRM_BULK_FORM))}
 				closeIcon={<CloseIcon />}
+				destroyOnClose
 			>
 				<ConfirmBulkForm onSubmit={handleSubmitConfirmModal} />
 			</Modal>
 		</>
 	)
+
 	return (
 		<>
-			<button onClick={() => setVisibleBulkModal(REQUEST_TYPE.EDIT)}>test</button>
 			{modals}
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader

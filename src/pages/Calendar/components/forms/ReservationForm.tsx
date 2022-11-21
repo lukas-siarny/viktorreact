@@ -2,7 +2,7 @@ import React, { FC, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { change, Field, Fields, InjectedFormProps, reduxForm, submit } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Divider, Form, Modal } from 'antd'
+import { Button, Divider, Form, Modal, Spin } from 'antd'
 import { flatten, map } from 'lodash'
 
 // validate
@@ -52,6 +52,7 @@ const ReservationForm: FC<Props> = (props) => {
 	const dispatch = useDispatch()
 	const [visibleCustomerModal, setVisibleCustomerModal] = useState(false)
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
+	const isLoading = useSelector((state: RootState) => state.calendar.eventDetail.isLoading)
 
 	const searchServices = useCallback(async () => {
 		try {
@@ -156,6 +157,7 @@ const ReservationForm: FC<Props> = (props) => {
 
 	return (
 		<>
+			<Spin spinning={isLoading} />
 			{modals}
 			<div className={'nc-sider-event-management-header justify-between'}>
 				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(t('loc:rezerváciu')) : STRINGS(t).createRecord(t('loc:rezerváciu'))}</div>
@@ -228,7 +230,6 @@ const ReservationForm: FC<Props> = (props) => {
 							/>
 						)}
 					/>
-
 					<Field
 						component={SelectField}
 						label={t('loc:Služba')}

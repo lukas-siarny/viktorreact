@@ -28,6 +28,7 @@ type Props = WrappedFieldProps &
 		showToday?: any
 		validateTo?: string /** disable podla datumu ktory sa posle na validovanie */
 		pickerClassName?: string
+		showInReservationDrawer?: boolean
 	}
 
 const DateField = (props: Props) => {
@@ -62,7 +63,8 @@ const DateField = (props: Props) => {
 		onSelect,
 		className,
 		pickerClassName,
-		dropdownAlign
+		dropdownAlign,
+		showInReservationDrawer
 	} = props
 
 	let value
@@ -137,10 +139,11 @@ const DateField = (props: Props) => {
 				value={value}
 				defaultPickerValue={defaultPickerValue}
 				size={size}
-				clearIcon={clearIcon || <RemoveIcon className={'text-blue-600'} />}
-				suffixIcon={suffixIcon || <DateSuffixIcon className={'text-blue-600'} />}
+				clearIcon={clearIcon || <RemoveIcon className={'text-gray-600'} />}
+				suffixIcon={suffixIcon || <DateSuffixIcon className={'text-gray-600'} />}
 				placeholder={placeholder}
 				disabledDate={disabledDateWrap}
+				dropdownClassName={cx({ showInReservationDrawer })}
 				disabled={disabled}
 				allowClear={allowClear}
 				getPopupContainer={getPopupContainer || ((node) => node)}

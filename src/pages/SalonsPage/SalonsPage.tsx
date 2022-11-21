@@ -21,10 +21,10 @@ import RejectedSalonSuggestions from './components/RejectedSalonSuggestions'
 // utils
 import { withPermissions, checkPermissions } from '../../utils/Permissions'
 import { FORM, PERMISSION, ROW_GUTTER_X_DEFAULT } from '../../utils/enums'
-import { formatDateByLocale, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
+import { formatDateByLocale, getAssignedUserLabel, getLinkWithEncodedBackUrl, normalizeDirectionKeys, setOrder } from '../../utils/helper'
 import { history } from '../../utils/history'
 import { postReq } from '../../utils/request'
-import { getAssignedUserLabel, getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
+import { getSalonTagChanges, getSalonTagCreateType, getSalonTagPublished, getSalonTagSourceType } from './components/salonUtils'
 
 // reducers
 import { emptySalons, getSalons } from '../../reducers/salons/salonsActions'

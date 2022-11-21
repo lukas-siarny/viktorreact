@@ -2,11 +2,11 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE } from '../utils/enums'
-import { SALON_STATES } from './../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../utils/enums'
 
 // types
 import { Paths } from './api'
+import { ICalendarEventsPayload } from '../reducers/calendar/calendarActions'
 import { IEmployeesPayload } from '../reducers/employees/employeesActions'
 
 export interface IErrorMessage {
@@ -147,20 +147,27 @@ export interface IServiceForm {
 }
 
 export interface ICalendarReservationForm {
-	customerID: string
-	serviceID: string
-	employeeID: string
+	customer: ISelectOptionItem
+	service: ISelectOptionItem
+	employee: ISelectOptionItem
 	date: string
 	timeFrom: string
 	timeTo: string
-	note: string
+	note?: string
 }
 
-export interface ICalendarShiftForm {}
-
-export interface ICalendarTimeOffForm {}
-
-export interface ICalendarBreakForm {}
+export interface ICalendarEventForm {
+	employee: ISelectOptionItem
+	date: string
+	timeFrom: string
+	timeTo: string
+	recurring?: boolean
+	repeatOn?: any
+	every?: EVERY_REPEAT
+	end?: ENDS_EVENT
+	note?: string
+	eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
+}
 
 export interface ISupportContactForm {
 	id: string | null
@@ -294,9 +301,9 @@ export interface ICustomerForm {
 	street?: string
 	streetNumber?: string
 	countryCode?: string
-	salonID: string
-	gallery: any
-	avatar: any
+	salonID?: string
+	gallery?: any
+	avatar?: any
 }
 
 export interface IEmployeeForm {
@@ -562,4 +569,8 @@ export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
 
 export interface ICalendarView {
 	selectedDate: string
+	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
+	reservations: ICalendarEventsPayload['data']
+	shiftsTimeOffs: ICalendarEventsPayload['data']
+	employees: Employees
 }

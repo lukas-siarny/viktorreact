@@ -1,4 +1,4 @@
-import { orderBy } from 'lodash'
+import { filter, orderBy } from 'lodash'
 import i18next, { TFunction } from 'i18next'
 import { Gutter } from 'antd/lib/grid/row'
 import { FormatterInput } from '@fullcalendar/react'
@@ -240,7 +240,13 @@ export const DEFAULT_DATE_INIT_FORMAT = 'YYYY-MM-DD'
 
 export const DEFAULT_TIME_FORMAT = 'HH:mm'
 
+export const DEFAULT_TIME_FORMAT_MINUTES = 'mm'
+
+export const DEFAULT_TIME_FORMAT_HOURS = 'HH'
+
 export const DEFAULT_DATE_FORMAT = 'DD.MM.YYYY'
+
+export const DEFAULT_DAYJS_FORMAT = 'MM.DD.YYYY'
 
 export const DEFAULT_DATE_WITH_TIME_FORMAT = 'DD.MM.YYYY HH:mm'
 
@@ -597,7 +603,13 @@ export const CALENDAR_COMMON_SETTINGS = {
 	} as FormatterInput,
 	SCROLL_TIME: '08:00:00',
 	SLOT_DURATION: '00:15:00',
-	SLOT_LABEL_INTERVAL: '01:00:00'
+	EVENT_MIN_DURATION: 15, // znaci, aky najuzzsi event zobrazime v kalendari (v minutach) (teda ak bude mat event 10 minut, zobrazi v kalendari ako 15 minutovy - jeho realny casovy rozsah to ale neovplyvni, jedna sa len o vizualne zobrazenie)
+	SLOT_LABEL_INTERVAL: '01:00:00',
+	FIXED_MIRROR_PARENT: document.body,
+	EVENT_CONSTRAINT: {
+		startTime: '00:00',
+		endTime: '23:59'
+	}
 }
 
 export enum CALENDAR_VIEW {
@@ -622,7 +634,7 @@ export enum CALENDAR_EVENTS_VIEW_TYPE {
 export enum CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW {
 	RESERVATION = 'RESERVATION',
 	SHIFT = 'SHIFT',
-	TIMEOFF = 'TIMEOFF',
+	TIME_OFF = 'TIME_OFF',
 	BREAK = 'BREAK',
 	COLLAPSED = 'COLLAPSED'
 }
@@ -634,7 +646,8 @@ export enum CALENDAR_DATE_FORMAT {
 	HEADER_WEEK_END = 'D MMM YY',
 	HEADER_WEEK_START_TURN_OF_THE_MONTH = 'D MMM',
 	HEADER_WEEK_END_TURN_OF_THE_MONTH = 'D MMM YY',
-	HEADER_MONTH = 'MMMM YY'
+	HEADER_MONTH = 'MMMM YY',
+	TIME = 'HH:mm'
 }
 
 export enum CALENDAR_SET_NEW_DATE {
@@ -644,10 +657,126 @@ export enum CALENDAR_SET_NEW_DATE {
 	DEFAULT = 'DEFAULT'
 }
 
+export enum REPEAT_ON {
+	// eslint-disable-next-line @typescript-eslint/no-shadow
+	DAY = 'DAY',
+	WEEK = 'WEEK',
+	MONTH = 'MONTH'
+}
+
+export enum ENDS_EVENT {
+	WEEK = 'WEEK',
+	MONTH = 'MONTH',
+	THREE_MONTHS = 'THREE_MONTHS',
+	SIX_MONTHS = 'SIX_MONTHS',
+	YEAR = 'YEAR'
+}
+
+export enum EVERY_REPEAT {
+	ONE_WEEK = 1,
+	TWO_WEEKS = 2
+}
+
+export const EVERY_REPEAT_OPTIONS = () => [
+	{
+		key: EVERY_REPEAT.ONE_WEEK,
+		label: i18next.t('loc:Týždeň')
+	},
+	{
+		key: EVERY_REPEAT.TWO_WEEKS,
+		label: i18next.t('loc:Dva týždne')
+	}
+]
+
+export const ENDS_EVENT_OPTIONS = () => [
+	{
+		key: ENDS_EVENT.WEEK,
+		label: i18next.t('loc:Týždeň')
+	},
+	{
+		key: ENDS_EVENT.MONTH,
+		label: i18next.t('loc:Mesiac')
+	},
+	{
+		key: ENDS_EVENT.THREE_MONTHS,
+		label: i18next.t('loc:Tri mesiace')
+	},
+	{
+		key: ENDS_EVENT.SIX_MONTHS,
+		label: i18next.t('loc:Šesť mesiacov')
+	},
+	{
+		key: ENDS_EVENT.YEAR,
+		label: i18next.t('loc:Rok')
+	}
+]
+
+export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
+	const options = [
+		{
+			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
+			label: i18next.t('loc:Rezervácia')
+		},
+		{
+			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
+			label: i18next.t('loc:Pracovná zmena')
+		},
+		{
+			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
+			label: i18next.t('loc:Absencia')
+		},
+		{
+			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
+			label: i18next.t('loc:Prestávka')
+		}
+	]
+	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+		// rezervacia a break
+		return filter(options, (item) => item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION || item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+	}
+	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
+		// shift, break a vacation
+		return filter(options, (item) => item.key !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+	}
+	// vsetky optiony
+	return options
+}
+
+export const SHORTCUT_DAYS_OPTIONS = (length = 2) => [
+	{ label: i18next.t('loc:Pondelok').substring(0, length), value: DAY.MONDAY },
+	{ label: i18next.t('loc:Utorok').substring(0, length), value: DAY.TUESDAY },
+	{ label: i18next.t('loc:Streda').substring(0, length), value: DAY.WEDNESDAY },
+	{ label: i18next.t('loc:Štvrtok').substring(0, length), value: DAY.THURSDAY },
+	{ label: i18next.t('loc:Piatok').substring(0, length), value: DAY.FRIDAY },
+	{ label: i18next.t('loc:Sobota').substring(0, length), value: DAY.SATURDAY },
+	{ label: i18next.t('loc:Nedeľa').substring(0, length), value: DAY.SUNDAY }
+]
+
 export enum CALENDAR_EVENTS_KEYS {
 	EVENTS = 'events',
 	RESERVATIONS = 'reservations',
 	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
+}
+
+export const getDayNameFromNumber = (day: number) => {
+	switch (day) {
+		case 0: // prvy den dayjs.day() -> nedela
+			return DAY.SUNDAY
+		case 1:
+			return DAY.MONDAY
+		case 2:
+			return DAY.TUESDAY
+		case 3:
+			return DAY.WEDNESDAY
+		case 4:
+			return DAY.THURSDAY
+		case 5:
+			return DAY.FRIDAY
+		case 6:
+			return DAY.SATURDAY
+		default:
+			return null
+	}
 }
 /**
  * @returns localized texts for Sentry report dialog and common EN texts for result view

@@ -1,7 +1,27 @@
-import { ICalendarTimeOffForm } from '../../../../types/interfaces'
+import { FormErrors } from 'redux-form'
+import i18next from 'i18next'
 
-const validateTimeOffForm = (values?: ICalendarTimeOffForm) => {
-	const errors: any = {}
+import { ICalendarEventForm } from '../../../../types/interfaces'
+
+const validateTimeOffForm = (values?: ICalendarEventForm) => {
+	const errors: FormErrors<ICalendarEventForm> = {}
+
+	if (!values?.date) {
+		errors.date = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (!values?.employee) {
+		errors.employee = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (!values?.timeFrom) {
+		errors.timeFrom = i18next.t('loc:Toto pole je povinné')
+	}
+
+	if (!values?.timeTo) {
+		errors.timeTo = i18next.t('loc:Toto pole je povinné')
+	}
+
 	return errors
 }
 

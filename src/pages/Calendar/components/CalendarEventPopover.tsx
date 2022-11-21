@@ -23,6 +23,7 @@ import { ReactComponent as ClockIcon } from '../../../assets/icons/clock.svg'
 
 // components
 import UserAvatar from '../../../components/AvatarComponents'
+import Ellipsis from '../../../atoms/Ellipsis'
 
 // types
 import { CalendarEvent } from '../../../reducers/calendar/calendarActions'
@@ -34,7 +35,6 @@ import { getHoursMinutesFromMinutes, getTimeText } from '../calendarHelpers'
 
 // redux
 import { RootState } from '../../../reducers'
-import Ellipsis from '../../../atoms/Ellipsis'
 
 type Props = {
 	isOpen: boolean

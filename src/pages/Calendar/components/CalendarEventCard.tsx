@@ -26,83 +26,93 @@ interface IEventCardProps {
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 }
 
-interface IEventContentProps {
+interface IEventCardContentProps {
+	calendarView: CALENDAR_VIEW
 	data: EventContentArg
 	diff: number
 	timeText: string
+	isPast?: boolean
 }
 
-const DayEventContent: FC<IEventContentProps> = ({ data, diff, timeText }) => {
+const ReservationCardContent: FC<IEventCardContentProps> = ({ calendarView, data, timeText, isPast }) => {
+	const { event, backgroundColor } = data || {}
+	const { extendedProps } = event || {}
+	const { reservationData, customer, service } = extendedProps || {}
+
+	const bgColor = !isPast ? backgroundColor : undefined
+
+	// NOTE: prehodit logiku, teraz len pre dev uceli vymenena
+	const state = reservationData?.createSourceType !== RESERVATION_SOURCE_TYPE.ONLINE ? <div className={'state'} style={{ backgroundColor: bgColor }} /> : null
+
+	const customerName = getAssignedUserLabel({
+		id: customer?.id,
+		firstName: customer?.firstName,
+		lastName: customer?.lastName,
+		email: customer?.email
+	})
+
+	return (
+		<>
+			<div className={'event-accent'} style={{ backgroundColor: bgColor }} />
+			<div className={'event-background'} style={{ backgroundColor: bgColor }} />
+			<div className={'event-content'}>
+				{(() => {
+					switch (calendarView) {
+						case CALENDAR_VIEW.WEEK: {
+							return (
+								<>
+									<div className={'title-wrapper'}>
+										<span className={'title'}>{customerName}</span>
+										{state}
+									</div>
+									{service?.name && <span className={'desc'}>{service.name}</span>}
+									<div className={'icons'}>
+										<div className={'service-icon'} style={{ backgroundImage: `url("${service?.icon}")` }} />
+										{state}
+									</div>
+								</>
+							)
+						}
+						case CALENDAR_VIEW.DAY:
+						default: {
+							return (
+								<>
+									<div className={'event-info'}>
+										<div className={'title-wrapper'}>
+											<span className={'title'}>{customerName}</span>
+											{state}
+										</div>
+										<span className={'time'}>{timeText}</span>
+										{service?.name && <span className={'desc'}>{service.name}</span>}
+									</div>
+									<div className={'icons'}>
+										<span
+											className={'icon customer'}
+											style={{
+												backgroundImage: customer?.image ? `url("${customer?.resizedImages?.thumbnail}")` : undefined
+											}}
+										/>
+										<span className={'icon service'} style={{ backgroundImage: service?.icon ? `url("${service?.icon}")` : undefined }} />
+									</div>
+								</>
+							)
+						}
+					}
+				})()}
+			</div>
+		</>
+	)
+}
+
+const AbsenceCardContent: FC<IEventCardContentProps> = ({ calendarView, data, diff, timeText }) => {
 	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
 	const { eventType } = extendedProps || {}
 
-	switch (eventType) {
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK: {
-			return (
-				<div className={'event-content'}>
-					<div className={'event-info'}>
-						<div className={'flex items-center gap-1 min-w-0'}>
-							<span className={'color'} style={{ backgroundColor }} />
-							{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
-							{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
-							{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>}
-						</div>
-						<span className={'duration'}>{getHoursMinutesFromMinutes(diff)}</span>
-					</div>
-					{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'time'}>{timeText}</span>}
-				</div>
-			)
-		}
-		case CALENDAR_EVENT_TYPE.RESERVATION:
-		default: {
-			return (
-				<>
-					<div className={'event-accent'} style={{ backgroundColor }} />
-					<div className={'event-background'} style={{ backgroundColor }} />
-					<div className={'event-content'}>
-						<div className={'event-info'}>
-							<div className={'title-wrapper'}>
-								<span className={'title'}>
-									{getAssignedUserLabel({
-										id: extendedProps.customer?.id,
-										firstName: extendedProps.customer?.firstName,
-										lastName: extendedProps.customer?.lastName,
-										email: extendedProps.customer?.email
-									})}
-								</span>
-								<div className={'state'} style={{ backgroundColor }} />
-							</div>
-							<span className={'time'}>{timeText}</span>
-							{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
-						</div>
-						<div className={'icons'}>
-							<span
-								className={'icon customer'}
-								style={{
-									backgroundImage: extendedProps.customer?.image ? `url("${extendedProps.customer?.resizedImages?.thumbnail}")` : undefined
-								}}
-							/>
-							<span className={'icon service'} style={{ backgroundImage: extendedProps.service?.icon ? `url("${extendedProps.service?.icon}")` : undefined }} />
-						</div>
-					</div>
-				</>
-			)
-		}
-	}
-}
+	const duration = getHoursMinutesFromMinutes(diff)
 
-const WeekEventContent: FC<IEventContentProps> = ({ data, diff, timeText }) => {
-	const { event, backgroundColor } = data || {}
-	const { extendedProps } = event || {}
-	const { eventType } = extendedProps || {}
-
-	switch (eventType) {
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK: {
+	switch (calendarView) {
+		case CALENDAR_VIEW.WEEK: {
 			return (
 				<div className={'event-content'}>
 					<div className={'sticky-container'}>
@@ -113,36 +123,25 @@ const WeekEventContent: FC<IEventContentProps> = ({ data, diff, timeText }) => {
 							{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'time'}>{timeText}</span>}
 						</div>
 					</div>
-					<span className={'duration'}>{getHoursMinutesFromMinutes(diff)}</span>
+					<span className={'duration'}>{duration}</span>
 				</div>
 			)
 		}
-		case CALENDAR_EVENT_TYPE.RESERVATION:
+		case CALENDAR_VIEW.DAY:
 		default: {
-			const state = <div className={'state'} style={{ backgroundColor }} />
 			return (
-				<>
-					<div className={'event-accent'} style={{ backgroundColor }} />
-					<div className={'event-background'} style={{ backgroundColor }} />
-					<div className={'event-content'}>
-						<div className={'title-wrapper'}>
-							<span className={'title'}>
-								{getAssignedUserLabel({
-									id: extendedProps.customer?.id,
-									firstName: extendedProps.customer?.firstName,
-									lastName: extendedProps.customer?.lastName,
-									email: extendedProps.customer?.email
-								})}
-							</span>
-							{state}
+				<div className={'event-content'}>
+					<div className={'event-info'}>
+						<div className={'flex items-center gap-1 min-w-0'}>
+							<span className={'color'} style={{ backgroundColor }} />
+							{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
+							{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
+							{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>}
 						</div>
-						{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
-						<div className={'icons'}>
-							<div className={'service-icon'} style={{ backgroundImage: `url("${extendedProps.service?.icon}")` }} />
-							{state}
-						</div>
+						<span className={'duration'}>{duration}</span>
 					</div>
-				</>
+					{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'time'}>{timeText}</span>}
+				</div>
 			)
 		}
 	}
@@ -177,7 +176,8 @@ const CalendarEventCard: FC<IEventCardProps> = ({ calendarView, data, salonID, o
 
 	const diff = dayjs(event.end).diff(event.start, 'minutes')
 	const timeText = getTimeText(event.start, event.end)
-	const isPast = dayjs(originalEvent.endDateTime).isAfter(dayjs())
+	const isPast = dayjs(originalEvent.endDateTime).isBefore(dayjs())
+	const isPending = /* reservationData?.state === RESERVATION_STATE.PENDING */ true
 
 	return (
 		<CalendarEventPopover
@@ -206,7 +206,7 @@ const CalendarEventCard: FC<IEventCardProps> = ({ calendarView, data, salonID, o
 					focused: isCardPopoverOpen,
 					'is-past': isPast,
 					'is-online': reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE,
-					'state-pending': reservationData?.state === RESERVATION_STATE.PENDING,
+					'state-pending': isPending,
 					'state-approved': reservationData?.state === RESERVATION_STATE.APPROVED,
 					'state-realized': reservationData?.state === RESERVATION_STATE.REALIZED || reservationData?.state === RESERVATION_STATE.NOT_REALIZED,
 					// daily view spacific classnames
@@ -221,15 +221,19 @@ const CalendarEventCard: FC<IEventCardProps> = ({ calendarView, data, salonID, o
 						onEditEvent(originalEvent.id || event.id, eventType)
 					}
 				}}
-				// style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
+				style={{
+					outlineColor: eventType === CALENDAR_EVENT_TYPE.RESERVATION && isPending && !isPast ? backgroundColor : undefined
+				}}
 			>
 				{(() => {
-					switch (calendarView) {
-						case CALENDAR_VIEW.WEEK:
-							return <WeekEventContent diff={diff} timeText={timeText} data={data} />
-						case CALENDAR_VIEW.DAY:
+					switch (eventType) {
+						case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+						case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+						case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+							return <AbsenceCardContent calendarView={calendarView} diff={diff} timeText={timeText} data={data} />
+						case CALENDAR_EVENT_TYPE.RESERVATION:
 						default:
-							return <DayEventContent diff={diff} timeText={timeText} data={data} />
+							return <ReservationCardContent calendarView={calendarView} diff={diff} timeText={timeText} data={data} isPast={isPast} />
 					}
 				})()}
 			</div>

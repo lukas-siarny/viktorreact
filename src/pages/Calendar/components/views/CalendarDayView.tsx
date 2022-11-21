@@ -25,7 +25,7 @@ import { getAssignedUserLabel } from '../../../../utils/helper'
 const renderEventContent = (data: EventContentArg) => {
 	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
-	const { eventType } = extendedProps || {}
+	const { eventType, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange } = extendedProps || {}
 
 	if (event.display === 'inverse-background') {
 		return <div className={cx('nc-bg-event not-set-availability')} />
@@ -53,8 +53,12 @@ const renderEventContent = (data: EventContentArg) => {
 				timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
 				break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
 				'min-15': Math.abs(diff) <= 15,
-				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 15
+				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 15,
+				'multiday-event': isMultiDayEvent,
+				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
+				'multiday-event-last': isLastMultiDaylEventInCurrentRange
 			})}
+			// style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
 		>
 			{(() => {
 				switch (eventType) {
@@ -80,12 +84,6 @@ const renderEventContent = (data: EventContentArg) => {
 					}
 					case CALENDAR_EVENT_TYPE.RESERVATION:
 					default: {
-						const customerName = getAssignedUserLabel({
-							id: extendedProps.customer?.id,
-							firstName: extendedProps.customer?.firstName,
-							lastName: extendedProps.customer?.lastName,
-							email: extendedProps.customer?.email
-						})
 						return (
 							<>
 								<div className={'event-accent'} style={{ backgroundColor }} />
@@ -93,7 +91,14 @@ const renderEventContent = (data: EventContentArg) => {
 								<div className={'event-content'}>
 									<div className={'event-info'}>
 										<div className={'title-wrapper'}>
-											<span className={'title'}>{customerName}</span>
+											<span className={'title'}>
+												{getAssignedUserLabel({
+													id: extendedProps.customer?.id,
+													firstName: extendedProps.customer?.firstName,
+													lastName: extendedProps.customer?.lastName,
+													email: extendedProps.customer?.email
+												})}
+											</span>
 											<div className={'state'} style={{ backgroundColor }} />
 										</div>
 										<span className={'time'}>{timeText}</span>
@@ -168,11 +173,12 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	return (
 		<FullCalendar
 			ref={ref}
+			// plugins
+			plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
 			// settings
 			schedulerLicenseKey={CALENDAR_COMMON_SETTINGS.LICENSE_KEY}
 			timeZone={CALENDAR_COMMON_SETTINGS.TIME_ZONE}
 			eventTimeFormat={CALENDAR_COMMON_SETTINGS.TIME_FORMAT}
-			plugins={[interactionPlugin, resourceTimeGridPlugin, scrollGrid]}
 			height='100%'
 			headerToolbar={false}
 			initialView={'resourceTimeGridDay'}
@@ -180,6 +186,11 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			scrollTime={CALENDAR_COMMON_SETTINGS.SCROLL_TIME}
 			slotDuration={CALENDAR_COMMON_SETTINGS.SLOT_DURATION}
 			slotLabelInterval={CALENDAR_COMMON_SETTINGS.SLOT_LABEL_INTERVAL}
+			fixedMirrorParent={CALENDAR_COMMON_SETTINGS.FIXED_MIRROR_PARENT}
+			eventConstraint={CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT}
+			// je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
+			// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
+			eventMinHeight={0}
 			dayMinWidth={240}
 			editable={hasResources}
 			selectable={hasResources}

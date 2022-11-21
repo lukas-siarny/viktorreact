@@ -46,6 +46,8 @@
   "Dátum": "Date",
   "Dátum nesmie byť v minulosti": "The date must not be in the past",
   "Dôvod zamietnutia": "Reason for rejection",
+  "Edit this shift only": "_NEPRELOZENE_",
+  "Edit upcoming shifts": "_NEPRELOZENE_",
   "Email": "Email",
   "Email nie je k dispozícii": "No emial address was provided",
   "Email nie je platný": "Invalid email",

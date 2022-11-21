@@ -5,9 +5,10 @@ import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
 import { debounce, includes, isEmpty } from 'lodash'
-import { initialize } from 'redux-form'
+import { initialize, submit } from 'redux-form'
 
 // utils
+import { Modal } from 'antd'
 import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
@@ -42,6 +43,9 @@ import CalendarContent, { CalendarRefs } from './components/layout/Content'
 
 // types
 import { ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, SalonSubPageProps } from '../../types/interfaces'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
+import NoteForm from '../SalonsPage/components/forms/NoteForm'
+import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -477,56 +481,78 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		},
 		[query, salonID, setEventManagement, setQuery]
 	)
-
+	const [visibleBulkEditModal, setVisibleBulkEditModal] = useState(false)
+	const handleSubmitConfirmModal = (values: any) => {
+		console.log('values', values)
+		// TODO: zistit ci je DELETE / EDIT a ci je SINGLe / BULK
+	}
+	const modals = (
+		<>
+			<Modal
+				title={'Edit shift'}
+				visible={visibleBulkEditModal}
+				onCancel={() => setVisibleBulkEditModal(false)}
+				// footer={null}
+				onOk={() => dispatch(submit(FORM.CONFIRM_BULK_FORM))}
+				closeIcon={<CloseIcon />}
+			>
+				<ConfirmBulkForm onSubmit={handleSubmitConfirmModal} />
+			</Modal>
+		</>
+	)
 	return (
-		<Layout className='noti-calendar-layout'>
-			<CalendarHeader
-				setCollapsed={setEventManagement}
-				selectedDate={query.date}
-				eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
-				calendarView={query.view as CALENDAR_VIEW}
-				siderFilterCollapsed={siderFilterCollapsed}
-				setCalendarView={setNewCalendarView}
-				setSelectedDate={setNewSelectedDate}
-				setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
-			/>
-			<Layout hasSider className={'noti-calendar-main-section'}>
-				<SiderFilter
-					collapsed={siderFilterCollapsed}
-					handleSubmit={handleSubmitFilter}
-					parentPath={parentPath}
-					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
-				/>
-				<CalendarContent
-					ref={calendarRefs}
-					selectedDate={query.date}
-					view={query.view as CALENDAR_VIEW}
-					reservations={reservations?.data || []}
-					shiftsTimeOffs={shiftsTimeOffs?.data || []}
-					loading={loadingData}
-					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
-					employees={filteredEmployees() || []}
-					showEmptyState={query?.employeeIDs === null}
-					onShowAllEmployees={() => {
-						setQuery({
-							...query,
-							employeeIDs: getEmployeeIDs(employees?.options)
-						})
-					}}
-				/>
-				<SiderEventManagement
-					onChangeEventType={onChangeEventType}
-					salonID={salonID}
-					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
-					eventId={query.eventId}
-					handleDeleteEvent={handleDeleteEvent}
-					sidebarView={query.sidebarView as CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW}
+		<>
+			<button onClick={() => setVisibleBulkEditModal(true)}>test</button>
+			{modals}
+			<Layout className='noti-calendar-layout'>
+				<CalendarHeader
 					setCollapsed={setEventManagement}
-					handleSubmitReservation={handleSubmitReservation}
-					handleSubmitEvent={handleSubmitEvent}
+					selectedDate={query.date}
+					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+					calendarView={query.view as CALENDAR_VIEW}
+					siderFilterCollapsed={siderFilterCollapsed}
+					setCalendarView={setNewCalendarView}
+					setSelectedDate={setNewSelectedDate}
+					setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
 				/>
+				<Layout hasSider className={'noti-calendar-main-section'}>
+					<SiderFilter
+						collapsed={siderFilterCollapsed}
+						handleSubmit={handleSubmitFilter}
+						parentPath={parentPath}
+						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+					/>
+					<CalendarContent
+						ref={calendarRefs}
+						selectedDate={query.date}
+						view={query.view as CALENDAR_VIEW}
+						reservations={reservations?.data || []}
+						shiftsTimeOffs={shiftsTimeOffs?.data || []}
+						loading={loadingData}
+						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+						employees={filteredEmployees() || []}
+						showEmptyState={query?.employeeIDs === null}
+						onShowAllEmployees={() => {
+							setQuery({
+								...query,
+								employeeIDs: getEmployeeIDs(employees?.options)
+							})
+						}}
+					/>
+					<SiderEventManagement
+						onChangeEventType={onChangeEventType}
+						salonID={salonID}
+						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
+						eventId={query.eventId}
+						handleDeleteEvent={handleDeleteEvent}
+						sidebarView={query.sidebarView as CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW}
+						setCollapsed={setEventManagement}
+						handleSubmitReservation={handleSubmitReservation}
+						handleSubmitEvent={handleSubmitEvent}
+					/>
+				</Layout>
 			</Layout>
-		</Layout>
+		</>
 	)
 }
 

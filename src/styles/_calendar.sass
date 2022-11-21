@@ -540,196 +540,6 @@
 	.fc-event-main
 		padding: 0
 
-		.nc-day-event
-			width: 100%
-			height: 100%
-			min-height: 12px // ak sa zmeni vyska dielka v tabulke, je potrebne upravit aj tuto min-height (15px (vyska riadika .fc-timegrid-slot) - 2*2px (margin-top + bottom .fc-timegrid-event-harness))
-			background: $backgroundColor-notino-white
-			position: relative
-			border-radius: 4px
-			color: $textColor-notino-black
-			font-size: 10px
-			line-height: 11px
-			contain: paint
-			box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
-			outline: 1px solid transparent
-			outline-offset: -1px
-			&.focused
-				box-shadow: $boxShadow-2xl
-			.event-background
-				content: ''
-				position: absolute
-				top: 0
-				right: 0
-				left: 0
-				bottom: 0
-				background: $backgroundColor-notino-black
-				z-index: 1
-				opacity: 0.05
-			.event-accent
-				content: ''
-				background: $backgroundColor-notino-black
-				position: absolute
-				top: 0
-				bottom: 0
-				left: 0
-				width: 4px
-				border-top-left-radius: 4px
-				border-bottom-left-radius: 4px
-				z-index: 2
-			.event-content
-				width: 100%
-				position: sticky
-				top: 0
-				max-height: 100%
-				z-index: 3
-				word-break: break-all
-				.time
-					font-weight: 400
-					color: $textColor-notino-black
-					flex: 0 0 auto
-				.desc
-					color: $textColor-notino-grayDarker
-					font-weight: 400
-				.title
-					font-weight: 600
-					color: $textColor-notino-black
-			&.multiday-event
-				.time
-					display: inline-flex
-					align-items: center
-					gap: 2px
-				&:not(.multiday-event-first):not(.multiday-event-last)
-					.time
-						&::before
-							content: ''
-							@include arrow-left
-						&::after
-							content: ''
-							@include arrow-right
-				&.multiday-event-first
-					.time
-						&::after
-							content: ''
-							@include arrow-right
-				&.multiday-event-last
-					.time
-						&::before
-							content: ''
-							@include arrow-left
-			&.reservation
-				.event-content
-					padding: 2px 8px
-					.event-info
-						display: flex
-						flex-direction: column
-						align-items: flex-start
-						gap: 4px
-						.title-wrapper
-							display: inline-flex
-							align-items: flex-start
-							margin-right: 24px
-							gap: 4px
-							.state
-								margin-top: 3px
-								width: 4px
-								height: 4px
-								border-radius: 50%
-								background-color: $backgroundColor-notino-black
-								flex: 0 0 auto
-				.icons
-					position: absolute
-					right: 4px
-					top: 2px
-					display: flex
-					gap: 4px
-					.icon
-						width: 10px
-						height: 10px
-						background-size: contain
-						backgrounc-position: center center
-						background-repeat: no-repeat
-						flex: 0 0 auto
-						color: $textColor-notino-black
-						&.service
-							background-image: url("../assets/icons/service-icon-10.svg")
-						&.customer
-							background-image: url("../assets/icons/customer-10.svg")
-				&.min-15
-					.event-content
-						padding-top: 0
-						padding-bottom: 0
-						.event-info
-							flex-direction: row
-							margin-right: 24px
-							.title-wrapper
-								margin-right: 0
-							.desc
-								display: none
-					.icons
-						top: 0
-			&.shift,
-			&.timeoff,
-			&.break
-				outline-color: $borderColor-notino-grayLight
-				// outline-color: $borderColor-notino-gray // tmavsia verzia
-				.event-content
-					display: flex
-					flex-direction: column
-					gap: 4px
-					.event-info
-						display: flex
-						min-width: 0
-						justify-content: space-between
-						gap: 4px
-						.title
-							word-break: keep-all
-							white-space: nowrap
-							overflow: hidden
-							text-overflow: ellipsis
-							line-height: 11px
-						.time
-							color: $textColor-notino-grayDark
-						.color
-							flex: 0 0 auto
-							width: 6px
-							height: 6px
-							border-radius: 50%
-						.icon
-							flex: 0 0 auto
-							width: 16px
-							height: 16px
-							color: $textColor-notino-black
-						.duration
-							display: inline-block
-							white-space: nowrap
-							word-break: keep-all
-							color: $textColor-notino-grayDark
-				&.min-15
-					.event-content
-						padding: 0 4px
-						.event-info
-							.title
-								margin-top: 0
-							.icon
-								width: 11px
-								height: 11px
-							.duration
-								margin-top: 0
-
-			&.shift
-				.event-content
-					padding: 2px 4px
-			&.timeoff,
-			&.break
-				background: url("../assets/images/gray-bold-background-pattern.png")
-				background-size: 100px 50px
-				.event-content
-					padding: 4px
-					.event-info
-						.time
-							color: $textColor-notino-grayDarker
-
 .nc-day-resource-label
 	display: flex
 	gap: 8px
@@ -939,253 +749,6 @@
 		width: 100%
 		height: 100%
 
-		.nc-week-event
-			width: 100%
-			height: 100%
-			background: $backgroundColor-notino-white
-			position: relative
-			border-radius: 4px
-			color: $textColor-notino-black
-			font-size: 10px
-			line-height: 11px
-			box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
-			min-width: 0
-			outline: 1px solid transparent
-			outline-offset: -1px
-			min-width: 21px // ak sa zmeni minimalna sirka najmenjsieho dielika, je potrebne aj toto upravit!!
-			.event-background
-				content: ''
-				position: absolute
-				top: 0
-				right: 0
-				left: 0
-				bottom: 0
-				background: $backgroundColor-notino-black
-				z-index: 1
-				opacity: 0.05
-			.event-accent
-				content: ''
-				background: $backgroundColor-notino-black
-				position: absolute
-				top: 0
-				bottom: 0
-				left: 0
-				width: 4px
-				border-top-left-radius: 4px
-				border-bottom-left-radius: 4px
-				z-index: 2
-			.event-content
-				width: 100%
-				height: 100%
-				position: relative
-				z-index: 3
-				.time
-					white-space: nowrap
-					position: relative
-			&.multiday-event
-				.time
-					display: inline-flex
-					align-items: center
-					gap: 2px
-				&:not(.multiday-event-first):not(.multiday-event-last)
-					.time
-						&::before
-							content: ''
-							@include arrow-left
-						&::after
-							content: ''
-							@include arrow-right
-				&.multiday-event-first
-					.time
-						&::after
-							content: ''
-							@include arrow-right
-				&.multiday-event-last
-					.time
-						&::before
-							content: ''
-							@include arrow-left
-			&.reservation
-				.event-content
-					padding: 2px 4px 2px 8px
-					display: flex
-					flex-direction: column
-					align-items: flex-start
-					min-width: 0
-					.state
-						width: 4px
-						height: 4px
-						border-radius: 50%
-						background-color: $backgroundColor-notino-black
-						flex: 0 0 auto
-					.title-wrapper
-						display: inline-flex
-						align-items: flex-start
-						padding-right: 14px
-						position: sticky
-						left: 2px
-						min-width: 0
-						max-width: 100%
-						margin-bottom: 4px
-						.title
-							max-width: 100%
-							font-weight: 600
-							color: $textColor-notino-black
-							white-space: nowrap
-							overflow: hidden
-							text-overflow: ellipsis
-							display: inline-block
-							min-width: 0
-							min-height: 11px
-							&:not(:empty):not(:last-child)
-								margin-right: 4px
-						.state
-							margin-top: 3px
-					.desc
-						max-width: 100%
-						white-space: nowrap
-						overflow: hidden
-						text-overflow: ellipsis
-						overflow: hidden
-						position: sticky
-						left: 2px
-						display: inline-block
-						min-width: 0
-					.icons
-						position: absolute
-						right: 4px
-						top: 2px
-						.state
-							display: none
-						.service-icon
-							width: 10px
-							height: 10px
-							background-size: contain
-							background-position: center center
-							background-repeat: no-repeat
-							background-image: url("../assets/icons/service-icon-10.svg")
-				&.min-15,
-				&.min-45
-					.event-content
-						.title-wrapper
-							padding-right: 0
-							margin-bottom: 0
-							.title
-								min-height: 0
-								&:not(:empty)
-									margin-bottom: 4px
-							.state
-								display: none
-						.desc
-							display: none
-						.icons
-							top: unset
-							right: unset
-							position: relative
-							display: flex
-							align-items: center
-							gap: 4px
-							flex-direction: row-reverse
-							.state
-								display: block
-				&.min-15
-					.event-content
-						height: 100%
-						padding-bottom: 6px
-						flex-direction: row
-						.title-wrapper
-							display: none
-						.icons
-							height: 100%
-							flex-direction: column
-							align-items: flex-start
-							justify-content: space-between
-
-			&.shift,
-			&.timeoff,
-			&.break
-				outline-color: $borderColor-notino-grayLight
-				// outline-color: $borderColor-notino-gray // tmavsia verzia
-				.event-content
-					padding: 4px
-					display: flex
-					align-items: center
-					.sticky-container
-						flex: 1
-						.event-info
-							display: inline-flex
-							align-items: center
-							gap: 4px
-							min-width: 0
-							position: sticky
-							left: 2px
-							margin-right: 4px
-							.time
-								color: $textColor-notino-black
-							.color
-								flex: 0 0 auto
-								width: 6px
-								height: 6px
-								border-radius: 50%
-							.icon
-								flex: 0 0 auto
-					.duration
-						display: inline-block
-						white-space: nowrap
-						word-break: keep-all
-						color: $textColor-notino-grayDark
-						margin-left: auto
-				&.min-15,
-				&.min-45,
-				&.min-30
-					.event-content
-						padding-left: 2px
-						padding-right: 2px
-						.sticky-container
-							.event-info
-								margin-right: 0
-								.color
-									display: none
-								.time
-									display: none
-				&.min-75
-					.event-content
-						.sticky-container
-							.event-info
-								.time
-									display: none
-
-
-			&.timeoff,
-			&.break
-				background: url("../assets/images/gray-bold-background-pattern.png")
-				&.min-15,
-				&.min-30
-					.event-content
-						.sticky-container
-							display: flex
-							justify-content: center
-						.duration
-							display: none
-			&.shift
-				outline-color: $borderColor-notino-grayLight
-				// outline-color: $borderColor-notino-grayDark
-				&.min-45,
-				&.min-30,
-				&.min-15
-					.event-content
-						justify-content: center
-						.sticky-container
-							display: none
-						.duration
-							margin-left: unset
-							word-break: break-all
-							white-space: normal
-							position: sticky
-							left: 0
-							text-align: center
-
-
 
 .nc-week-slot-label
 	color: $textColor-notino-grayDarker
@@ -1241,6 +804,387 @@
 	.absence-icon
 		margin-left: auto
 		align-self: center
+
+// event card
+.nc-event
+	width: 100%
+	height: 100%
+	background: $backgroundColor-notino-white
+	position: relative
+	border-radius: 4px
+	color: $textColor-notino-black
+	font-size: 10px
+	line-height: 11px
+	box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.05)
+	outline: 1px solid transparent
+	outline-offset: -1px
+	&.focused
+		box-shadow: $boxShadow-2xl
+	.event-background
+		content: ''
+		position: absolute
+		top: 0
+		right: 0
+		left: 0
+		bottom: 0
+		background: $backgroundColor-notino-black
+		z-index: 1
+		opacity: 0.05
+	.event-accent
+		content: ''
+		background: $backgroundColor-notino-black
+		position: absolute
+		top: 0
+		bottom: 0
+		left: 0
+		width: 4px
+		border-top-left-radius: 4px
+		border-bottom-left-radius: 4px
+		z-index: 2
+	&.multiday-event
+		.time
+			display: inline-flex
+			align-items: center
+			gap: 2px
+		&:not(.multiday-event-first):not(.multiday-event-last)
+			.time
+				&::before
+					content: ''
+					@include arrow-left
+				&::after
+					content: ''
+					@include arrow-right
+		&.multiday-event-first
+			.time
+				&::after
+					content: ''
+					@include arrow-right
+		&.multiday-event-last
+			.time
+				&::before
+					content: ''
+					@include arrow-left
+	// event daily view
+	&.nc-day-event
+		contain: paint
+		min-height: 12px // ak sa zmeni vyska dielka v tabulke, je potrebne upravit aj tuto min-height (15px (vyska riadika .fc-timegrid-slot) - 2*2px (margin-top + bottom .fc-timegrid-event-harness))
+		.event-content
+			width: 100%
+			position: sticky
+			top: 0
+			max-height: 100%
+			z-index: 3
+			word-break: break-all
+			.time
+				font-weight: 400
+				color: $textColor-notino-black
+				flex: 0 0 auto
+			.desc
+				color: $textColor-notino-grayDarker
+				font-weight: 400
+			.title
+				font-weight: 600
+				color: $textColor-notino-black
+		&.reservation
+			.event-content
+				padding: 2px 8px
+				.event-info
+					display: flex
+					flex-direction: column
+					align-items: flex-start
+					gap: 4px
+					.title-wrapper
+						display: inline-flex
+						align-items: flex-start
+						margin-right: 24px
+						gap: 4px
+						.state
+							margin-top: 3px
+							width: 4px
+							height: 4px
+							border-radius: 50%
+							background-color: $backgroundColor-notino-black
+							flex: 0 0 auto
+			.icons
+				position: absolute
+				right: 4px
+				top: 2px
+				display: flex
+				gap: 4px
+				.icon
+					width: 10px
+					height: 10px
+					background-size: contain
+					backgrounc-position: center center
+					background-repeat: no-repeat
+					flex: 0 0 auto
+					color: $textColor-notino-black
+					&.service
+						background-image: url("../assets/icons/service-icon-10.svg")
+					&.customer
+						background-image: url("../assets/icons/customer-10.svg")
+			&.min-15
+				.event-content
+					padding-top: 0
+					padding-bottom: 0
+					.event-info
+						flex-direction: row
+						margin-right: 24px
+						.title-wrapper
+							margin-right: 0
+						.desc
+							display: none
+				.icons
+					top: 0
+		&.shift,
+		&.timeoff,
+		&.break
+			outline-color: $borderColor-notino-grayLight
+			// outline-color: $borderColor-notino-gray // tmavsia verzia
+			.event-content
+				display: flex
+				flex-direction: column
+				gap: 4px
+				.event-info
+					display: flex
+					min-width: 0
+					justify-content: space-between
+					gap: 4px
+					.title
+						word-break: keep-all
+						white-space: nowrap
+						overflow: hidden
+						text-overflow: ellipsis
+						line-height: 11px
+					.time
+						color: $textColor-notino-grayDark
+					.color
+						flex: 0 0 auto
+						width: 6px
+						height: 6px
+						border-radius: 50%
+					.icon
+						flex: 0 0 auto
+						width: 16px
+						height: 16px
+						color: $textColor-notino-black
+					.duration
+						display: inline-block
+						white-space: nowrap
+						word-break: keep-all
+						color: $textColor-notino-grayDark
+			&.min-15
+				.event-content
+					padding: 0 4px
+					.event-info
+						.title
+							margin-top: 0
+						.icon
+							width: 11px
+							height: 11px
+						.duration
+							margin-top: 0
+
+		&.shift
+			.event-content
+				padding: 2px 4px
+		&.timeoff,
+		&.break
+			background: url("../assets/images/gray-bold-background-pattern.png")
+			background-size: 100px 50px
+			.event-content
+				padding: 4px
+				.event-info
+					.time
+						color: $textColor-notino-grayDarker
+	// event weekly view
+	&.nc-week-event
+		min-width: 21px // ak sa zmeni minimalna sirka najmenjsieho dielika, je potrebne aj toto upravit!!
+		.event-content
+			width: 100%
+			height: 100%
+			position: relative
+			z-index: 3
+			.time
+				white-space: nowrap
+				position: relative
+		&.reservation
+			.event-content
+				padding: 2px 4px 2px 8px
+				display: flex
+				flex-direction: column
+				align-items: flex-start
+				min-width: 0
+				.state
+					width: 4px
+					height: 4px
+					border-radius: 50%
+					background-color: $backgroundColor-notino-black
+					flex: 0 0 auto
+				.title-wrapper
+					display: inline-flex
+					align-items: flex-start
+					padding-right: 14px
+					position: sticky
+					left: 2px
+					min-width: 0
+					max-width: 100%
+					margin-bottom: 4px
+					.title
+						max-width: 100%
+						font-weight: 600
+						color: $textColor-notino-black
+						white-space: nowrap
+						overflow: hidden
+						text-overflow: ellipsis
+						display: inline-block
+						min-width: 0
+						min-height: 11px
+						&:not(:empty):not(:last-child)
+							margin-right: 4px
+					.state
+						margin-top: 3px
+				.desc
+					max-width: 100%
+					white-space: nowrap
+					overflow: hidden
+					text-overflow: ellipsis
+					overflow: hidden
+					position: sticky
+					left: 2px
+					display: inline-block
+					min-width: 0
+				.icons
+					position: absolute
+					right: 4px
+					top: 2px
+					.state
+						display: none
+					.service-icon
+						width: 10px
+						height: 10px
+						background-size: contain
+						background-position: center center
+						background-repeat: no-repeat
+						background-image: url("../assets/icons/service-icon-10.svg")
+			&.min-15,
+			&.min-45
+				.event-content
+					.title-wrapper
+						padding-right: 0
+						margin-bottom: 0
+						.title
+							min-height: 0
+							&:not(:empty)
+								margin-bottom: 4px
+						.state
+							display: none
+					.desc
+						display: none
+					.icons
+						top: unset
+						right: unset
+						position: relative
+						display: flex
+						align-items: center
+						gap: 4px
+						flex-direction: row-reverse
+						.state
+							display: block
+			&.min-15
+				.event-content
+					height: 100%
+					padding-bottom: 6px
+					flex-direction: row
+					.title-wrapper
+						display: none
+					.icons
+						height: 100%
+						flex-direction: column
+						align-items: flex-start
+						justify-content: space-between
+		&.shift,
+		&.timeoff,
+		&.break
+			outline-color: $borderColor-notino-grayLight
+			// outline-color: $borderColor-notino-gray // tmavsia verzia
+			.event-content
+				padding: 4px
+				display: flex
+				align-items: center
+				.sticky-container
+					flex: 1
+					.event-info
+						display: inline-flex
+						align-items: center
+						gap: 4px
+						min-width: 0
+						position: sticky
+						left: 2px
+						margin-right: 4px
+						.time
+							color: $textColor-notino-black
+						.color
+							flex: 0 0 auto
+							width: 6px
+							height: 6px
+							border-radius: 50%
+						.icon
+							flex: 0 0 auto
+				.duration
+					display: inline-block
+					white-space: nowrap
+					word-break: keep-all
+					color: $textColor-notino-grayDark
+					margin-left: auto
+			&.min-15,
+			&.min-45,
+			&.min-30
+				.event-content
+					padding-left: 2px
+					padding-right: 2px
+					.sticky-container
+						.event-info
+							margin-right: 0
+							.color
+								display: none
+							.time
+								display: none
+			&.min-75
+				.event-content
+					.sticky-container
+						.event-info
+							.time
+								display: none
+		&.timeoff,
+		&.break
+			background: url("../assets/images/gray-bold-background-pattern.png")
+			&.min-15,
+			&.min-30
+				.event-content
+					.sticky-container
+						display: flex
+						justify-content: center
+					.duration
+						display: none
+		&.shift
+			outline-color: $borderColor-notino-grayLight
+			// outline-color: $borderColor-notino-grayDark
+			&.min-45,
+			&.min-30,
+			&.min-15
+				.event-content
+					justify-content: center
+					.sticky-container
+						display: none
+					.duration
+						margin-left: unset
+						word-break: break-all
+						white-space: normal
+						position: sticky
+						left: 0
+						text-align: center
+
 
 // event popover
 .nc-event-popover-overlay
@@ -1302,4 +1246,3 @@
 		&:hover,
 		&:focus-visible
 			background-color: $backgroundColor-notino-grayLight
-

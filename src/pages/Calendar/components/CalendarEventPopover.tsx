@@ -1,5 +1,6 @@
-import React, { FC, useEffect, useMemo, useCallback } from 'react'
-import { Button, Col, Divider, Dropdown, Menu, Popover, Row, Tag } from 'antd'
+/* eslint-disable import/no-cycle */
+import React, { FC, useEffect, useCallback } from 'react'
+import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
@@ -27,12 +28,13 @@ import UserAvatar from '../../../components/AvatarComponents'
 import { CalendarEvent } from '../../../reducers/calendar/calendarActions'
 
 /// utils
-import { ENUMERATIONS_KEYS, RESERVATION_STATE } from '../../../utils/enums'
+import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_STATE } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { getHoursMinutesFromMinutes, getTimeText } from '../calendarHelpers'
 
 // redux
 import { RootState } from '../../../reducers'
+import Ellipsis from '../../../atoms/Ellipsis'
 
 type Props = {
 	isOpen: boolean
@@ -40,12 +42,13 @@ type Props = {
 	start: Date | null
 	end: Date | null
 	event: CalendarEvent
-	isPast: boolean
-	color?: string
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => void
+	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	color?: string
 }
 
 type PopoverNote = {
+	key: string
 	text: string
 	internal?: boolean
 }
@@ -57,7 +60,7 @@ type ContentProps = {
 	end: Date | null
 	onClose: () => void
 	onEdit: () => void
-	headerButtons?: React.ReactNode[]
+	moreMenuItems?: ItemType[]
 	footerButtons?: React.ReactNode[]
 	service?: CalendarEvent['service']
 	customer?: CalendarEvent['customer']
@@ -68,7 +71,7 @@ type ContentProps = {
 
 const PopoverContent: FC<ContentProps> = (props) => {
 	const [t] = useTranslation()
-	const { headerIcon, headerState, headerButtons, footerButtons, start, end, service, customer, employee, notes, color, onEdit, onClose } = props
+	const { headerIcon, headerState, moreMenuItems, footerButtons, start, end, service, customer, employee, notes, color, onEdit, onClose } = props
 
 	const countriesData = useSelector((state: RootState) => state.enumerationsStore?.[ENUMERATIONS_KEYS.COUNTRIES])
 	const prefix = getCountryPrefix(countriesData.data, customer?.phonePrefixCountryCode)
@@ -87,10 +90,20 @@ const PopoverContent: FC<ContentProps> = (props) => {
 					<span className={'text-sm leading-4'}>{headerState}</span>
 				</Row>
 				<Row className={'buttons gap-4'}>
-					{headerButtons}
 					<button className={'nc-event-popover-header-button'} type={'button'} onClick={onEdit}>
 						<EditIcon />
 					</button>
+					{(moreMenuItems || []).length > 0 && (
+						<Dropdown
+							overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} style={{ width: 200 }} items={moreMenuItems} />}
+							placement='bottomRight'
+							trigger={['click']}
+						>
+							<button className={'nc-event-popover-header-button'} type={'button'} onClick={(e) => e.preventDefault()}>
+								<DotsIcon />
+							</button>
+						</Dropdown>
+					)}
 					<button className={'nc-event-popover-header-button'} type={'button'} onClick={onClose}>
 						<CloseIcon />
 					</button>
@@ -98,13 +111,13 @@ const PopoverContent: FC<ContentProps> = (props) => {
 			</header>
 			<Divider className={'m-0'} />
 			{/* footerHeight = 72px, headerHeight = 52px. dividerHeight = 1px (header and footer dividers), padding top and bottom = 2*16px */}
-			<main className={'px-4 overflow-y-auto'} style={{ maxHeight: `calc(95vh - 32px - ${hasFooter ? `${134}px` : `${53}px`})` }}>
+			<main className={'px-4 overflow-y-auto'} style={{ maxHeight: `calc(100vh - 32px - ${hasFooter ? `${134}px` : `${53}px`})` }}>
 				{customer && (
 					<>
 						<section className={'flex py-4'}>
 							<Col flex={'32px'}>
 								{/* TODO: BE musi posielat image */}
-								<UserAvatar size={24} className={'shrink-0'} src={(customer as any).image} />
+								<UserAvatar size={24} className={'shrink-0'} src={customer.profileImage.resizedImages.thumbnail} />
 							</Col>
 							<Col flex={'auto'} className={'flex flex-col gap-2'}>
 								<Row align={'top'} justify={'space-between'} wrap={false} className={'gap-2'}>
@@ -120,7 +133,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 										{prefix && customer.phone && <span className={'text-xxs text-notino-grayDark leading-3'}>{`${prefix} ${customer.phone}`}</span>}
 									</Row>
 									<Row align={'middle'} className={'gap-2 h-8'} wrap={false}>
-										<Tag className={'nc-event-popover-tag tag-new'}>{t('loc:Nový klient')}</Tag>
+										{/* <Tag className={'nc-event-popover-tag tag-new'}>{t('loc:Nový klient')}</Tag> */}
 										{customer.email && (
 											<a href={`mailto:${customer.email}`} className={'leading-3'}>
 												<MessageIcon />
@@ -129,9 +142,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 									</Row>
 								</Row>
 								{customer.note && (
-									<span className={'note p-3 bg-notino-grayLighter text-xs leading-3 rounded-md rounded-t-none break-all whitespace-pre-wrap'}>
-										{customer.note}
-									</span>
+									<Ellipsis text={customer.note} className={'p-3 m-0 bg-notino-grayLighter text-xs leading-4 rounded-md rounded-t-none whitespace-pre-wrap'} />
 								)}
 							</Col>
 						</section>
@@ -153,13 +164,18 @@ const PopoverContent: FC<ContentProps> = (props) => {
 								)})`}</span>
 								{service?.name && <span className={'block text-sm text-notino-black leading-4 break-all'}>{service.name}</span>}
 							</div>
-							<UserAvatar size={24} className={'shrink-0 mt-1'} src={employee?.image} style={{ border: `2px solid ${color || colors.neutral[200]}` }} />
+							<UserAvatar
+								size={24}
+								className={'shrink-0 mt-1'}
+								src={employee?.image.resizedImages.thumbnail}
+								style={{ border: `2px solid ${color || colors.neutral[200]}` }}
+							/>
 						</Row>
 					</Col>
 				</section>
-				{notes?.map((note, i) => {
+				{notes?.map((note) => {
 					return (
-						<React.Fragment key={i}>
+						<React.Fragment key={note.key}>
 							<Divider className={'m-0'} />
 							<section className={'py-4'}>
 								<div className={'note flex break-all text-sm leading-4 break-all'}>
@@ -167,7 +183,10 @@ const PopoverContent: FC<ContentProps> = (props) => {
 										<NoteIcon className={'shrink-0 text-notino-grayDark'} />
 									</Col>
 									<Col flex={'auto'}>
-										<p className={'m-0 p-0 whitespace-pre-wrap'}>{note.text}</p>
+										<Row className={'gap-1'} align={'top'}>
+											<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
+											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interná')}</Tag>}
+										</Row>
 									</Col>
 								</div>
 							</section>
@@ -186,10 +205,14 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarEventPopover: FC<Props> = (props) => {
-	const { isOpen, setIsOpen, children, event, start, end, isPast, color, handleUpdateReservationState } = props
+	const { isOpen, setIsOpen, children, event, start, end, color, handleUpdateReservationState, onEditEvent } = props
 	const { id, reservationData, service, customer, employee, note, noteFromB2CCustomer } = event || {}
 
 	const [t] = useTranslation()
+
+	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+
+	console.log(selectedSalon)
 
 	const overlayClassName = `nc-event-popover-overlay_${id || ''}`
 	const itemClassName = 'p-2 font-medium min-w-0'
@@ -224,83 +247,134 @@ const CalendarEventPopover: FC<Props> = (props) => {
 		[id, handleUpdateReservationState, setIsOpen]
 	)
 
-	const checkoutMenu = useMemo(() => {
+	const getFooterCheckoutButton = () => {
+		// TODO: zatial hardcoded kym to BE neupravi
+		/*
+		const items = []
+
+		if (selectedSalon?.data?.payByCard) {
+			items.push({
+				key: 'realized-card',
+				label: t('loc:Kartou'),
+				icon: <CreditCardIcon />,
+				className: itemClassName,
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+			})
+		}
+
+		if (selectedSalon?.data?.payByCash) {
+			items.push({
+				key: 'realized-cash',
+				label: t('loc:Hotovosťou'),
+				icon: <WalletIcon />,
+				className: itemClassName,
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+			})
+		}
+
+		if (selectedSalon?.data?.otherPaymentMethods) {
+			items.push({
+				key: 'realized-cash',
+				label: selectedSalon?.data?.otherPaymentMethods,
+				icon: <WalletIcon />,
+				className: itemClassName,
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+			})
+		} */
+
+		const items = [
+			{
+				key: 'realized-card',
+				label: t('loc:Kartou'),
+				icon: <CreditCardIcon />,
+				className: itemClassName,
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+			},
+			{
+				key: 'realized-cash',
+				label: t('loc:Hotovosťou'),
+				icon: <WalletIcon />,
+				className: itemClassName,
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+			},
+			{
+				key: 'realized-other',
+				label: t('loc:Iným spôsobom'),
+				icon: <DollarIcon />,
+				className: itemClassName,
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+			}
+		]
+
 		return (
-			<Menu
-				className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'}
-				style={{ width: 200 }}
-				items={[
-					{
-						key: 'realized-card',
-						label: t('loc:Kartou'),
-						icon: <CreditCardIcon />,
-						className: itemClassName,
-						onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-					},
-					{
-						key: 'realized-cash',
-						label: t('loc:Hotovosťou'),
-						icon: <WalletIcon />,
-						className: itemClassName,
-						onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-					},
-					{
-						key: 'realized-other',
-						label: t('loc:Iným spôsobom'),
-						icon: <DollarIcon />,
-						className: itemClassName,
-						onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-					}
-				]}
-			/>
+			<Dropdown
+				key={'footer-checkout-dropdown'}
+				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} style={{ width: 200 }} items={items} />}
+				placement='bottomRight'
+				trigger={['click']}
+			>
+				<Button
+					type={'primary'}
+					icon={<ChevronDown className={'filter-invert max'} />}
+					size={'middle'}
+					className={'noti-btn w-1/2'}
+					htmlType={'button'}
+					onClick={(e) => e.preventDefault()}
+				>
+					{t('loc:Zaplatená')}
+				</Button>
+			</Dropdown>
 		)
-	}, [t, handleUpdateState])
+	}
 
-	const moreMenu = useCallback((items: ItemType[]) => {
-		return <Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} style={{ width: 200 }} items={items} />
-	}, [])
-
-	const headerMoreButton = (items: ItemType[]) => (
-		<Dropdown key={'header-more-dropdown'} overlay={moreMenu(items)} placement='bottomRight' trigger={['click']}>
-			<button className={'nc-event-popover-header-button'} type={'button'} onClick={() => console.log('click')}>
-				<DotsIcon />
-			</button>
-		</Dropdown>
-	)
-
-	const footerCheckoutButton = (
-		<Dropdown key={'footer-checkout-dropdown'} overlay={checkoutMenu} placement='bottomRight' trigger={['click']}>
+	const getFooterCancelButton = (label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
+		const button = (
 			<Button
-				type={'primary'}
-				icon={<ChevronDown className={'filter-invert max'} />}
+				key={'cancel-button'}
+				type={'dashed'}
 				size={'middle'}
 				className={'noti-btn w-1/2'}
 				htmlType={'button'}
-				onClick={(e) => e.preventDefault()}
+				onClick={!popconfirmText ? () => handleUpdateState(state) : undefined}
 			>
-				{t('loc:Zaplatená')}
+				{label}
 			</Button>
-		</Dropdown>
-	)
+		)
 
-	const footerConfirmButton = (
-		<Button
-			key={'confirm-button'}
-			type={'dashed'}
-			size={'middle'}
-			className={'noti-btn w-1/2'}
-			htmlType={'button'}
-			onClick={() => handleUpdateState(RESERVATION_STATE.APPROVED)}
-		>
-			{t('loc:Potvrdiť')}
-		</Button>
-	)
+		return popconfirmText ? (
+			<Popconfirm
+				placement={'bottom'}
+				title={popconfirmText}
+				okButtonProps={{
+					type: 'default',
+					className: 'noti-btn'
+				}}
+				cancelButtonProps={{
+					type: 'primary',
+					className: 'noti-btn'
+				}}
+				okText={t('loc:Zmazať')}
+				onConfirm={() => handleUpdateState(state)}
+				cancelText={t('loc:Zrušiť')}
+			>
+				<Button key={'cancel-button'} type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
+					{label}
+				</Button>
+			</Popconfirm>
+		) : (
+			button
+		)
+	}
 
-	const footerCancelButton = (label: string, state: RESERVATION_STATE) => (
-		<Button key={'cancel-button'} type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'} onClick={() => handleUpdateState(state)}>
-			{label}
-		</Button>
-	)
+	const headerMoreItems = {
+		cancel_by_salon: {
+			key: 'cancel-by-salon',
+			label: t('loc:Zrušiť rezerváciu'),
+			icon: <AlertIcon />,
+			className: itemClassName,
+			onClick: () => handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)
+		}
+	}
 
 	const getPopoverContentSpecificProps = () => {
 		switch (reservationData?.state) {
@@ -308,32 +382,32 @@ const CalendarEventPopover: FC<Props> = (props) => {
 				return {
 					headerIcon: <CheckSuccessIcon />,
 					headerState: t('loc:Potvrdená'),
-					headerButtons: !isPast
-						? [
-								headerMoreButton([
-									{
-										key: 'cancel-by-salon',
-										label: t('loc:Zrušiť rezerváciu'),
-										icon: <AlertIcon />,
-										className: itemClassName,
-										onClick: () => handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)
-									}
-								])
-						  ]
-						: undefined,
-					footerButtons: [footerCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), footerCheckoutButton]
+					headerMoreButtons: [headerMoreItems.cancel_by_salon],
+					footerButtons: [getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
 				}
 			}
 			case RESERVATION_STATE.PENDING:
 				return {
 					headerIcon: <ClockIcon color={'#FF9500'} />,
 					headerState: t('loc:Čakajúca'),
-					footerButtons: [footerCancelButton(t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED), footerConfirmButton]
+					headerMoreButtons: [headerMoreItems.cancel_by_salon],
+					footerButtons: [
+						getFooterCancelButton(t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc: Naozaj chcete zrušiť zamietnuť? Klient dostane notifikáciu.')),
+						<Button
+							key={'confirm-button'}
+							type={'dashed'}
+							size={'middle'}
+							className={'noti-btn w-1/2'}
+							htmlType={'button'}
+							onClick={() => handleUpdateState(RESERVATION_STATE.APPROVED)}
+						>
+							{t('loc:Potvrdiť')}
+						</Button>
+					]
 				}
 			case RESERVATION_STATE.REALIZED:
 				return {
 					headerIcon: <CreditCardIcon className={'text-notino-success'} />,
-					// TODO: ako zistim, ako to bolo zaplatene?
 					headerState: t('loc:Zrealizovaná')
 				}
 			case RESERVATION_STATE.NOT_REALIZED:
@@ -348,10 +422,11 @@ const CalendarEventPopover: FC<Props> = (props) => {
 	const getNotes = () => {
 		const notes = []
 		if (noteFromB2CCustomer) {
-			notes.push({ text: noteFromB2CCustomer, internal: false })
+			notes.push({ key: 'customer-note', text: noteFromB2CCustomer, internal: false })
 		}
 		if (note) {
 			notes.push({
+				key: 'internal-note',
 				text: note,
 				internal: true
 			})
@@ -366,10 +441,6 @@ const CalendarEventPopover: FC<Props> = (props) => {
 			trigger={'click'}
 			placement={'left'}
 			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
-			/* motion={{
-				motionAppear: false,
-				motionLeave: false
-			}} */
 			content={
 				<PopoverContent
 					start={start}
@@ -378,7 +449,10 @@ const CalendarEventPopover: FC<Props> = (props) => {
 					color={color}
 					customer={customer}
 					employee={employee}
-					onEdit={() => console.log('edit')}
+					onEdit={() => {
+						onEditEvent(id, event.eventType as CALENDAR_EVENT_TYPE)
+						setIsOpen(false)
+					}}
 					onClose={() => setIsOpen(false)}
 					notes={getNotes()}
 					{...getPopoverContentSpecificProps()}

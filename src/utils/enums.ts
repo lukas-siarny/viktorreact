@@ -771,6 +771,11 @@ export enum RESERVATION_SOURCE_TYPE {
 	OFFLINE = 'OFFLINE'
 }
 
+export enum RESERVATION_ASSIGNMENT_TYPE {
+	SYSTEM = 'SYSTEM',
+	USER = 'USER'
+}
+
 export const getDayNameFromNumber = (day: number) => {
 	switch (day) {
 		case 0: // prvy den dayjs.day() -> nedela

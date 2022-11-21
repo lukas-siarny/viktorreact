@@ -1,41 +1,57 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, FC } from 'react'
-import cx from 'classnames'
+import React from 'react'
 import dayjs from 'dayjs'
 
 // full calendar
-import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, RESERVATION_SOURCE_TYPE, RESERVATION_STATE } from '../../../../utils/enums'
-import { composeDayViewResources, composeDayViewEvents, getHoursMinutesFromMinutes, getTimeText } from '../../calendarHelpers'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
+import { composeDayViewResources, composeDayViewEvents } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
 
-// utils
-import { getAssignedUserLabel } from '../../../../utils/helper'
-import CalendarEventPopover from '../CalendarEventPopover'
+// components
+import CalendarEvent from '../CalendarEvent'
 
-interface ICardProps {
+/*  interface ICardProps {
 	data: EventContentArg
-	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => void
+	salonID: string
+	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 }
 
-const EventCard: FC<ICardProps> = ({ data, handleUpdateReservationState }) => {
+const EventCard: FC<ICardProps> = ({ data, salonID, onEditEvent }) => {
 	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
 	const { eventType, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange, originalEvent, reservationData } = extendedProps || {}
 
 	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
+
+	const handleUpdateReservationState = useCallback(
+		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => {
+			try {
+				await patchReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
+					{ calendarEventID, salonID },
+					{ state, reason },
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
+				console.log({ state })
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
+			}
+		},
+		[salonID]
+	)
 
 	if (event.display === 'inverse-background') {
 		return <div className={cx('nc-bg-event not-set-availability')} />
@@ -61,13 +77,13 @@ const EventCard: FC<ICardProps> = ({ data, handleUpdateReservationState }) => {
 	return (
 		<CalendarEventPopover
 			event={originalEvent}
-			isPast={isPast}
 			start={event.start}
 			end={event.end}
 			isOpen={isCardPopoverOpen}
 			color={backgroundColor}
 			setIsOpen={setIsCardPopoverOpen}
 			handleUpdateReservationState={handleUpdateReservationState}
+			onEditEvent={onEditEvent}
 		>
 			<div
 				className={cx('nc-day-event', {
@@ -87,7 +103,13 @@ const EventCard: FC<ICardProps> = ({ data, handleUpdateReservationState }) => {
 					'state-approved': reservationData?.state === RESERVATION_STATE.APPROVED,
 					'state-done': reservationData?.state === RESERVATION_STATE.REALIZED || reservationData?.state === RESERVATION_STATE.NOT_REALIZED
 				})}
-				onClick={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? () => setIsCardPopoverOpen(true) : undefined}
+				onClick={() => {
+					if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
+						setIsCardPopoverOpen(true)
+					} else {
+						onEditEvent(originalEvent.id || event.id, eventType)
+					}
+				}}
 				// style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
 			>
 				{(() => {
@@ -137,7 +159,9 @@ const EventCard: FC<ICardProps> = ({ data, handleUpdateReservationState }) => {
 										<div className={'icons'}>
 											<span
 												className={'icon customer'}
-												style={{ backgroundImage: extendedProps.customer?.image ? `url("${extendedProps.customer?.image}")` : undefined }}
+												style={{
+													backgroundImage: extendedProps.customer?.image ? `url("${extendedProps.customer?.resizedImages?.thumbnail}")` : undefined
+												}}
 											/>
 											<span
 												className={'icon service'}
@@ -153,7 +177,7 @@ const EventCard: FC<ICardProps> = ({ data, handleUpdateReservationState }) => {
 			</div>
 		</CalendarEventPopover>
 	)
-}
+} */
 
 const resourceLabelContent = (data: any) => {
 	const { resource } = data || {}
@@ -185,7 +209,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, handleUpdateReservationState } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent } = props
 
 	const handleDateClick = (arg: DateClickArg) => {}
 
@@ -232,7 +256,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			resources={composeDayViewResources(shiftsTimeOffs, employees)}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}
-			eventContent={(data) => <EventCard data={data} handleUpdateReservationState={handleUpdateReservationState} />}
+			eventContent={(data) => <CalendarEvent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
 			slotLabelContent={slotLabelContent}
 			// handlers
 			select={handleSelect}

@@ -490,26 +490,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		[query, salonID, setEventManagement, setQuery]
 	)
 
-	const handleUpdateReservationState = useCallback(
-		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => {
-			try {
-				/* await patchReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
-					{ calendarEventID, salonID },
-					{ state, reason },
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				) */
-				console.log({ state })
-			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.error(e)
-			}
-		},
-		[salonID]
-	)
-
 	return (
 		<Layout className='noti-calendar-layout'>
 			<CalendarHeader
@@ -545,8 +525,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							employeeIDs: getEmployeeIDs(employees?.options)
 						})
 					}}
+					onEditEvent={(eventId: string, eventType: CALENDAR_EVENT_TYPE) => {
+						setQuery({
+							eventId,
+							sidebarView: eventType
+						})
+					}}
 					salonID={salonID}
-					handleUpdateReservationState={handleUpdateReservationState}
 				/>
 				<SiderEventManagement
 					onChangeEventType={onChangeEventType}

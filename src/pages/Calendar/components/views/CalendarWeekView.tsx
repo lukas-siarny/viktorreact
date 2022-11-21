@@ -10,16 +10,17 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
-import { composeWeekResources, composeWeekViewEvents, getHoursMinutesFromMinutes, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_VIEW } from '../../../../utils/enums'
+import { composeWeekResources, composeWeekViewEvents, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
-import { getAssignedUserLabel } from '../../../../utils/helper'
+
+// components
+import CalendarEvent from '../CalendarEvent'
 
 const resourceAreaColumns = [
 	{
@@ -69,7 +70,7 @@ const resourceAreaColumns = [
 	}
 ]
 
-const renderEventContent = (data: EventContentArg) => {
+/* const renderEventContent = (data: EventContentArg) => {
 	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
 	const { eventType, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange } = extendedProps || {}
@@ -160,7 +161,7 @@ const renderEventContent = (data: EventContentArg) => {
 			})()}
 		</div>
 	)
-}
+} */
 
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { date } = data || {}
@@ -168,12 +169,10 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	return <div className={'nc-week-slot-label'}>{dayjs(date).format('HH:mm')}</div>
 }
 
-interface ICalendarWeekView extends ICalendarView {
-	calendarApi?: InstanceType<typeof CalendarApi>
-}
+interface ICalendarWeekView extends ICalendarView {}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { selectedDate, calendarApi, eventsViewType, shiftsTimeOffs, reservations, employees } = props
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent } = props
 
 	const handleDateClick = (arg: DateClickArg) => {
 		console.log({ arg })
@@ -225,7 +224,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
 				slotLabelContent={slotLabelContent}
-				eventContent={renderEventContent}
+				eventContent={(data: EventContentArg) => <CalendarEvent calendarView={CALENDAR_VIEW.WEEK} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
 				// handlers
 				select={handleSelect}
 				dateClick={handleDateClick}

@@ -3,7 +3,7 @@ import Sider from 'antd/lib/layout/Sider'
 import { map } from 'lodash'
 
 // enums
-import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../../../../utils/enums'
+import { CALENDAR_EVENT_TYPE, CALENDAR_EVENTS_VIEW_TYPE } from '../../../../utils/enums'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm } from '../../../../types/interfaces'
@@ -20,11 +20,11 @@ import { formatLongQueryString, getAssignedUserLabel } from '../../../../utils/h
 
 type Props = {
 	salonID: string
-	sidebarView: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
-	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	sidebarView: CALENDAR_EVENT_TYPE
+	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	handleSubmitReservation: (values: ICalendarReservationForm) => void
 	handleSubmitEvent: (values: ICalendarEventForm) => void
-	onChangeEventType: (type: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => any
+	onChangeEventType: (type: CALENDAR_EVENT_TYPE) => any
 	handleDeleteEvent: () => any
 	eventId?: string | null
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
@@ -62,7 +62,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 
 	const getSiderContent = () => {
 		switch (sidebarView) {
-			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION:
+			case CALENDAR_EVENT_TYPE.RESERVATION:
 				return (
 					<ReservationForm
 						onChangeEventType={onChangeEventType}
@@ -75,7 +75,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						eventsViewType={eventsViewType}
 					/>
 				)
-			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT:
+			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
 				return (
 					<ShiftForm
 						onChangeEventType={onChangeEventType}
@@ -87,7 +87,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						eventsViewType={eventsViewType}
 					/>
 				)
-			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF:
+			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 				return (
 					<TimeOffForm
 						onChangeEventType={onChangeEventType}
@@ -99,7 +99,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 						eventsViewType={eventsViewType}
 					/>
 				)
-			case CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK:
+			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				return (
 					<BreakForm
 						onChangeEventType={onChangeEventType}
@@ -117,7 +117,7 @@ const SiderEventManagement: FC<Props> = (props) => {
 	}
 
 	return (
-		<Sider className='nc-sider-event-management' collapsed={sidebarView === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED} width={240} collapsedWidth={0}>
+		<Sider className='nc-sider-event-management' collapsed={!sidebarView} width={240} collapsedWidth={0}>
 			{getSiderContent()}
 		</Sider>
 	)

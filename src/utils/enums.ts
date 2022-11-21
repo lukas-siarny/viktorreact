@@ -52,6 +52,11 @@ export enum FIELD_MODE {
 	FILTER = 'FILTER'
 }
 
+export enum REQUEST_TYPE {
+	DELETE = 'DELETE',
+	EDIT = 'EDIT'
+}
+
 export enum FILTER_ENTITY {
 	EMPLOYEE = 'EMPLOYEE',
 	SALON = 'SALON',
@@ -624,14 +629,6 @@ export enum CALENDAR_EVENTS_VIEW_TYPE {
 	EMPLOYEE_SHIFT_TIME_OFF = 'EMPLOYEE_SHIFT_TIME_OFF'
 }
 
-export enum CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW {
-	RESERVATION = 'RESERVATION',
-	SHIFT = 'SHIFT',
-	TIME_OFF = 'TIME_OFF',
-	BREAK = 'BREAK',
-	COLLAPSED = 'COLLAPSED'
-}
-
 export enum CALENDAR_DATE_FORMAT {
 	QUERY = 'YYYY-MM-DD',
 	HEADER_DAY = 'ddd, D MMM YY',
@@ -707,29 +704,29 @@ export const ENDS_EVENT_OPTIONS = () => [
 export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
 	const options = [
 		{
-			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
+			key: CALENDAR_EVENT_TYPE.RESERVATION,
 			label: i18next.t('loc:Rezervácia')
 		},
 		{
-			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
 			label: i18next.t('loc:Pracovná zmena')
 		},
 		{
-			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
 			label: i18next.t('loc:Absencia')
 		},
 		{
-			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
 			label: i18next.t('loc:Prestávka')
 		}
 	]
 	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 		// rezervacia a break
-		return filter(options, (item) => item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION || item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+		return filter(options, (item) => item.key === CALENDAR_EVENT_TYPE.RESERVATION || item.key === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
 	}
 	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 		// shift, break a vacation
-		return filter(options, (item) => item.key !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+		return filter(options, (item) => item.key !== CALENDAR_EVENT_TYPE.RESERVATION)
 	}
 	// vsetky optiony
 	return options

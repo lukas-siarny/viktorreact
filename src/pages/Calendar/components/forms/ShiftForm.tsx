@@ -12,8 +12,8 @@ import validateShiftForm from './validateShiftForm'
 // utils
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
+	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
 	ENDS_EVENT,
 	ENDS_EVENT_OPTIONS,
 	EVENT_TYPE_OPTIONS,
@@ -43,7 +43,7 @@ import { RootState } from '../../../../reducers'
 import DeleteButton from '../../../../components/DeleteButton'
 
 type ComponentProps = {
-	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	onChangeEventType: (type: any) => any
 	handleDeleteEvent: () => any
 	eventId?: string | null
@@ -128,7 +128,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 					<Button
 						className='button-transparent'
 						onClick={() => {
-							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
+							setCollapsed(undefined)
 						}}
 					>
 						<CloseIcon />

@@ -11,8 +11,8 @@ import { useDispatch } from 'react-redux'
 // enums
 import {
 	CALENDAR_DATE_FORMAT,
+	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
 	DEFAULT_DATE_INIT_FORMAT,
@@ -84,7 +84,7 @@ type Props = {
 	siderFilterCollapsed: boolean
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
-	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	setCollapsed: (view: CALENDAR_EVENT_TYPE) => void
 	setSelectedDate: (newDate: string | dayjs.Dayjs, type?: CALENDAR_SET_NEW_DATE) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
@@ -180,17 +180,17 @@ const CalendarHeader: FC<Props> = (props) => {
 						if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 							const initData = {
 								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-								eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION
+								eventType: CALENDAR_EVENT_TYPE.RESERVATION
 							}
 							dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
-							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+							setCollapsed(CALENDAR_EVENT_TYPE.RESERVATION)
 						} else {
 							const initData = {
 								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-								eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT
+								eventType: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT
 							}
 							dispatch(initialize(FORM.CALENDAR_SHIFT_FORM, initData))
-							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT)
+							setCollapsed(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 						}
 					}}
 					icon={<CreateIcon />}

@@ -20,10 +20,11 @@ import { CONFIRM_BULK, FORM } from '../../../../utils/enums'
 
 // redux
 import RadioGroupField from '../../../../atoms/RadioGroupField'
+import { IBulkConfirmForm } from '../../../../types/interfaces'
 
 type ComponentProps = {}
 
-type Props = InjectedFormProps<any, ComponentProps> & ComponentProps
+type Props = InjectedFormProps<IBulkConfirmForm, ComponentProps> & ComponentProps
 
 const formName = FORM.CONFIRM_BULK_FORM
 
@@ -49,12 +50,12 @@ const ConfirmBulkForm: FC<Props> = (props) => {
 	]
 	return (
 		<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
-			<Field className={'p-0 m-0 nc-radio-event-type'} component={RadioGroupField} name={'eventsViewType'} options={options} direction={'vertical'} size={'small'} />
+			<Field className={'p-0 m-0 nc-radio-event-type'} component={RadioGroupField} name={'actionType'} options={options} direction={'vertical'} size={'small'} />
 		</Form>
 	)
 }
 
-const form = reduxForm<any, ComponentProps>({
+const form = reduxForm<IBulkConfirmForm, ComponentProps>({
 	form: formName,
 	forceUnregisterOnUnmount: true,
 	touchOnChange: true,

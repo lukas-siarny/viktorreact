@@ -763,7 +763,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100 | 1000;
+            export type Limit = number;
             /**
              * Order attributes: lastName, createdAt
              */
@@ -2403,7 +2403,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100 | 1000;
+            export type Limit = number;
             /**
              * Order attributes: userLastName, userEmail, salonName, createdAt
              */
@@ -3114,6 +3114,7 @@ declare namespace Paths {
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     };
                     note?: string;
+                    noteFromB2CCustomer?: string;
                     reservationData?: {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
@@ -3125,6 +3126,7 @@ declare namespace Paths {
                         email?: string;
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
+                        note?: string;
                     };
                     employee: {
                         id: string; // uuid
@@ -3138,6 +3140,9 @@ declare namespace Paths {
                         id: string; // uuid
                         name?: string;
                         icon?: string;
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -3181,6 +3186,7 @@ declare namespace Paths {
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     };
                     note?: string;
+                    noteFromB2CCustomer?: string;
                     reservationData?: {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
@@ -3205,6 +3211,7 @@ declare namespace Paths {
                         email?: string;
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
+                        note?: string;
                     };
                     employee: {
                         id: string; // uuid
@@ -3319,7 +3326,7 @@ declare namespace Paths {
             export type AcceptLanguage = string;
             export type DateFrom = string; // date-time
             export type DateTo = string; // date-time
-            export type Limit = 25 | 50 | 100 | 1000;
+            export type Limit = number;
             export type Page = number;
             export type SalonID = string; // uuid
         }
@@ -3971,7 +3978,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100 | 1000;
+            export type Limit = number;
             /**
              * Order attributes: lastName, createdAt
              */
@@ -6925,6 +6932,7 @@ declare namespace Paths {
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     };
                     note?: string;
+                    noteFromB2CCustomer?: string;
                     reservationData?: {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
@@ -6936,6 +6944,7 @@ declare namespace Paths {
                         email?: string;
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
+                        note?: string;
                     };
                     employee: {
                         id: string; // uuid
@@ -6949,6 +6958,9 @@ declare namespace Paths {
                         id: string; // uuid
                         name?: string;
                         icon?: string;
+                    };
+                    calendarBulkEvent?: {
+                        id?: string; // uuid
                     };
                     createdAt: string; // date-time
                     updatedAt: string; // date-time
@@ -6992,6 +7004,7 @@ declare namespace Paths {
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     };
                     note?: string;
+                    noteFromB2CCustomer?: string;
                     reservationData?: {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
@@ -7016,6 +7029,7 @@ declare namespace Paths {
                         email?: string;
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
+                        note?: string;
                     };
                     employee: {
                         id: string; // uuid
@@ -8166,7 +8180,7 @@ declare namespace Paths {
             export type Lat = number; // float
             export type LatMy = number; // float
             export type Liked = boolean;
-            export type Limit = 20;
+            export type Limit = number;
             export type Lon = number; // float
             export type LonMy = number; // float
             export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
@@ -9364,7 +9378,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100 | 1000;
+            export type Limit = number;
             export type Page = number;
             export type SalonID = string; // uuid
         }
@@ -10358,7 +10372,7 @@ declare namespace Paths {
             export type Lat = number; // float
             export type LatMy = number; // float
             export type Liked = boolean;
-            export type Limit = 20;
+            export type Limit = number;
             export type Lon = number; // float
             export type LonMy = number; // float
             export type OpeningHoursStatus = "ALL" | "OPEN" | "CLOSED";
@@ -10841,7 +10855,7 @@ declare namespace Paths {
              * sk
              */
             export type AcceptLanguage = string;
-            export type Limit = 25 | 50 | 100 | 1000;
+            export type Limit = number;
             export type Page = number;
             export type SalonID = string; // uuid
         }
@@ -56258,6 +56272,7 @@ declare namespace Paths {
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     };
                     note?: string;
+                    noteFromB2CCustomer?: string;
                     reservationData?: {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
@@ -56282,6 +56297,7 @@ declare namespace Paths {
                         email?: string;
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
+                        note?: string;
                     };
                     employee: {
                         id: string; // uuid
@@ -56372,6 +56388,7 @@ declare namespace Paths {
                         time: string; // ^(?:[01]\d|2[0-3]):(?:[0-5]\d)$
                     };
                     note?: string;
+                    noteFromB2CCustomer?: string;
                     reservationData?: {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
@@ -56396,6 +56413,7 @@ declare namespace Paths {
                         email?: string;
                         phonePrefixCountryCode: string;
                         phone: string; // ^\d+$
+                        note?: string;
                     };
                     employee: {
                         id: string; // uuid

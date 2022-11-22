@@ -1,4 +1,6 @@
 /* eslint-disable import/no-cycle */
+import dayjs from 'dayjs'
+
 // types
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
@@ -6,7 +8,7 @@ import { Paths } from '../../types/api'
 
 // enums
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
-import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE } from '../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -17,6 +19,10 @@ export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Res
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
 	endDateTime: string
+	isMultiDayEvent?: boolean
+	isFirstMultiDayEventInCurrentRange?: boolean
+	isLastMultiDaylEventInCurrentRange?: boolean
+	originalEvent?: CalendarEvent
 }
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
@@ -65,14 +71,14 @@ export interface ICalendarEventDetailPayload {
 }
 
 export const getCalendarEvents =
-	(enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS, queryParams?: ICalendarEventsQueryParams, view?: CALENDAR_VIEW): ThunkResult<Promise<ICalendarEventsPayload>> =>
+	(
+		enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS,
+		queryParams: ICalendarEventsQueryParams,
+		view: CALENDAR_VIEW,
+		splitMultidayEventsIntoOneDayEvents = false
+	): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ICalendarEventsPayload
-
-		if (!queryParams || !view) {
-			dispatch({ type: EVENTS.EVENTS_CLEAR })
-			return payload
-		}
 
 		try {
 			const { start, end } = getSelectedDateRange(view, queryParams.date)
@@ -90,12 +96,67 @@ export const getCalendarEvents =
 
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
-			payload = {
-				data: data.calendarEvents.map((event) => ({
+			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
+				const editedEvent: CalendarEvent = {
 					...event,
 					startDateTime: getDateTime(event.start.date, event.start.time),
 					endDateTime: getDateTime(event.end.date, event.end.time)
-				}))
+				}
+
+				if (splitMultidayEventsIntoOneDayEvents) {
+					const eventStartStartOfDay = dayjs(event.start.date).startOf('day')
+					const eventEndStartOfDay = dayjs(event.end.date).startOf('day')
+
+					const isMultipleDayEvent = !eventStartStartOfDay.isSame(eventEndStartOfDay)
+					if (isMultipleDayEvent) {
+						// kontrola, ci je zaciatok a konec multidnoveho eventu vacsi alebo mensi ako aktualne vybraty rozsah
+						// staci nam vytvorit eventy len pre vybrany rozsah
+						const rangeStart = dayjs.max(dayjs(start).startOf('day'), eventStartStartOfDay)
+						const rangeEnd = dayjs.min(dayjs(end).startOf('day'), eventEndStartOfDay)
+						// rozdiel zaciatku multidnoveho eventu a zaciatku vybrateho rozsahu
+						const startDifference = rangeStart.diff(eventStartStartOfDay, 'days')
+						// rozdiel konca multidnoveho eventu a konca vybrateho rozsahu
+						const endDifference = rangeEnd.diff(eventEndStartOfDay, 'days')
+						// pocet eventov, ktore je potrebne vytvorit
+						const currentRangeDaysCount = rangeEnd.diff(rangeStart, 'days')
+
+						const multiDayEvents = []
+
+						for (let i = 0; i <= currentRangeDaysCount; i += 1) {
+							const newStart = {
+								date: dayjs(rangeStart).add(i, 'days').format(DATE_TIME_PARSER_DATE_FORMAT),
+								time: i === 0 && !startDifference ? event.start.time : '00:00'
+							}
+
+							const newEnd = {
+								date: dayjs(rangeStart).add(i, 'days').format(DATE_TIME_PARSER_DATE_FORMAT),
+								time: i === currentRangeDaysCount && !endDifference ? event.end.time : '23:59'
+							}
+
+							const multiDayEvent = {
+								...editedEvent,
+								id: `${i}_${event.id}`,
+								start: newStart,
+								end: newEnd,
+								startDateTime: getDateTime(newStart.date, newStart.time),
+								endDateTime: getDateTime(newEnd.date, newEnd.time),
+								isMultiDayEvent: true,
+								isFirstMultiDayEventInCurrentRange: i === 0 && startDifference === 0,
+								isLastMultiDaylEventInCurrentRange: i === currentRangeDaysCount && !endDifference,
+								originalEvent: editedEvent
+							}
+
+							multiDayEvents.push(multiDayEvent)
+						}
+						return [...newEventsArray, ...multiDayEvents]
+					}
+				}
+
+				return [...newEventsArray, editedEvent]
+			}, [] as CalendarEvent[])
+
+			payload = {
+				data: editedEvents
 			}
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_DONE, enumType, payload })
@@ -107,15 +168,34 @@ export const getCalendarEvents =
 		return payload
 	}
 
-export const getCalendarReservations = (queryParams?: ICalendarReservationsQueryParams, view?: CALENDAR_VIEW): ThunkResult<Promise<ICalendarEventsPayload>> =>
-	getCalendarEvents(CALENDAR_EVENTS_KEYS.RESERVATIONS, queryParams ? { ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION] } : undefined, view)
+export const getCalendarReservations = (
+	queryParams: ICalendarReservationsQueryParams,
+	view: CALENDAR_VIEW,
+	splitMultidayEventsIntoOneDayEvents = false
+): ThunkResult<Promise<ICalendarEventsPayload>> =>
+	getCalendarEvents(CALENDAR_EVENTS_KEYS.RESERVATIONS, { ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION] }, view, splitMultidayEventsIntoOneDayEvents)
 
-export const getCalendarShiftsTimeoff = (queryParams?: ICalendarShiftsTimeOffQueryParams, view?: CALENDAR_VIEW): ThunkResult<Promise<ICalendarEventsPayload>> =>
+export const getCalendarShiftsTimeoff = (
+	queryParams: ICalendarShiftsTimeOffQueryParams,
+	view: CALENDAR_VIEW,
+	splitMultidayEventsIntoOneDayEvents = false
+): ThunkResult<Promise<ICalendarEventsPayload>> =>
 	getCalendarEvents(
 		CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS,
-		queryParams ? { ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK] } : undefined,
-		view
+		{ ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK] },
+		view,
+		splitMultidayEventsIntoOneDayEvents
 	)
+
+export const clearCalendarEvents =
+	(enumType: CALENDAR_EVENTS_KEYS = CALENDAR_EVENTS_KEYS.EVENTS): ThunkResult<Promise<void>> =>
+	async (dispatch) => {
+		dispatch({ type: EVENTS.EVENTS_CLEAR, enumType })
+	}
+
+export const clearCalendarReservations = (): ThunkResult<Promise<void>> => clearCalendarEvents(CALENDAR_EVENTS_KEYS.RESERVATIONS)
+
+export const clearCalendarShiftsTimeoffs = (): ThunkResult<Promise<void>> => clearCalendarEvents(CALENDAR_EVENTS_KEYS.SHIFTS_TIME_OFFS)
 
 export const getCalendarEventDetail =
 	(salonID: string, calendarEventID: string): ThunkResult<Promise<ICalendarEventDetailPayload>> =>

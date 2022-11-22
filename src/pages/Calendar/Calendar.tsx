@@ -32,7 +32,13 @@ import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { isRangeAleardySelected } from './calendarHelpers'
 
 // reducers
-import { getCalendarEventDetail, getCalendarReservations, getCalendarShiftsTimeoff } from '../../reducers/calendar/calendarActions'
+import {
+	clearCalendarReservations,
+	clearCalendarShiftsTimeoffs,
+	getCalendarReservations,
+	getCalendarShiftsTimeoff,
+	getCalendarEventDetail
+} from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
 import { getEmployees, IEmployeesPayload } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
@@ -123,7 +129,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				})
 			}
 		},
-		[dispatch, query, setQuery]
+		[query, setQuery]
 	)
 
 	const initUpdateEventForm = async () => {
@@ -269,19 +275,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// fetch new events
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 			Promise.all([
-				dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW)),
-				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
+				dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW, true)),
+				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
 			])
 		} else if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-			dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW))
+			dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
 		}
 	}
 
 	useEffect(() => {
 		;(async () => {
 			// clear previous events
-			await dispatch(getCalendarShiftsTimeoff())
-			await dispatch(getCalendarReservations())
+			await dispatch(clearCalendarReservations())
+			await dispatch(clearCalendarShiftsTimeoffs())
 
 			// if user uncheck all values from one of the filters => don't fetch new events => just clear store
 			if (query?.categoryIDs === null || query?.employeeIDs === null) {
@@ -331,6 +337,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				break
 		}
 
+		// TODO: toto treba trochu upravit => povolit zmenit query paramater, ale nedotiahnut nove data ak sa jedna o rovnaky range
+		// teraz tam je nesulad, ak uzivatel v tyzdenom view vybere datum z rovnakeho rangu, tak tym ze sa ten datum nesetne do query
+		// tak pri prepnuti na denne view sa potom nedotiahne datum vybraty v kalendari
 		if (isRangeAleardySelected(query.view as CALENDAR_VIEW, query.date, newQueryDate)) {
 			return
 		}

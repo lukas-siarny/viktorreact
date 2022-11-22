@@ -607,7 +607,13 @@ export const CALENDAR_COMMON_SETTINGS = {
 	} as FormatterInput,
 	SCROLL_TIME: '08:00:00',
 	SLOT_DURATION: '00:15:00',
-	SLOT_LABEL_INTERVAL: '01:00:00'
+	EVENT_MIN_DURATION: 15, // znaci, aky najuzzsi event zobrazime v kalendari (v minutach) (teda ak bude mat event 10 minut, zobrazi v kalendari ako 15 minutovy - jeho realny casovy rozsah to ale neovplyvni, jedna sa len o vizualne zobrazenie)
+	SLOT_LABEL_INTERVAL: '01:00:00',
+	FIXED_MIRROR_PARENT: document.body,
+	EVENT_CONSTRAINT: {
+		startTime: '00:00',
+		endTime: '23:59'
+	}
 }
 
 export enum CALENDAR_VIEW {

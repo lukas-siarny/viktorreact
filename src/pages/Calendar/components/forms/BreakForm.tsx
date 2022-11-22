@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { change, Field, Fields, getFormValues, InjectedFormProps, reduxForm, submit } from 'redux-form'
-import { Button, Divider, Form, Spin } from 'antd'
+import { Button, Divider, Form } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import cx from 'classnames'
@@ -60,7 +60,6 @@ const CalendarBreakForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
 	const formValues: any = useSelector((state: RootState) => getFormValues(formName)(state))
-	const isLoading = useSelector((state: RootState) => state.calendar.eventDetail.isLoading)
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
@@ -112,7 +111,6 @@ const CalendarBreakForm: FC<Props> = (props) => {
 
 	return (
 		<>
-			<Spin spinning={isLoading} />
 			<div className={'nc-sider-event-management-header justify-between'}>
 				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(t('loc:prestávku')) : STRINGS(t).createRecord(t('loc:prestávku'))}</div>
 				<div className={'flex-center'}>
@@ -197,7 +195,14 @@ const CalendarBreakForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} disabled={eventId} onChange={onChangeRecurring} className={'pb-0'} component={SwitchField} label={t('loc:Opakovať')} />
+					<Field
+						name={'recurring'}
+						disabled={!formValues?.calendarBulkEventID && eventId}
+						onChange={onChangeRecurring}
+						className={'pb-0'}
+						component={SwitchField}
+						label={t('loc:Opakovať')}
+					/>
 					{recurringFields}
 					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 				</Form>

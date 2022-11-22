@@ -841,12 +841,29 @@
 		border-top-left-radius: 4px
 		border-bottom-left-radius: 4px
 		z-index: 2
-	.state
-		width: 4px
-		height: 4px
-		border-radius: 50%
-		background-color: $backgroundColor-notino-black
-		flex: 0 0 auto
+	&.reservation
+		.title
+			font-weight: 600
+			color: $textColor-notino-black
+		.state
+			width: 4px
+			height: 4px
+			border-radius: 50%
+			background-color: $backgroundColor-notino-black
+			flex: 0 0 auto
+		.icons
+			.icon
+				width: 10px
+				height: 10px
+				&.employee
+					color: $textColor-notino-black
+					display: none
+				&.service
+					color: $textColor-notino-black
+				&.check
+					color: $textColor-notino-success
+				&.question-mark
+					color: $textColor-notino-pink
 	&.multiday-event
 		.time
 			display: inline-flex
@@ -870,18 +887,6 @@
 				&::before
 					content: ''
 					@include arrow-left
-	&.reservation
-		&.is-past
-			.event-background
-				background-color: #6D7483
-			.event-accent
-				background-color: #6D7483
-			.state
-				background-color: #6D7483
-	&.state-pending
-		outline-style: dashed
-		&.is-past
-			outline-color: #6D7483
 	// event daily view
 	&.nc-day-event
 		contain: paint
@@ -900,7 +905,7 @@
 			.desc
 				color: $textColor-notino-grayDarker
 				font-weight: 400
-			.title
+			/* .title
 				font-weight: 600
 				color: $textColor-notino-black
 		&.reservation
@@ -914,7 +919,7 @@
 					.title-wrapper
 						display: inline-flex
 						align-items: flex-start
-						margin-right: 24px
+						margin-right: 14px
 						gap: 4px
 						.state
 							margin-top: 3px
@@ -925,25 +930,13 @@
 				top: 2px
 				display: flex
 				gap: 4px
-				.icon
-					width: 10px
-					height: 10px
-					background-size: contain
-					backgrounc-position: center center
-					background-repeat: no-repeat
-					flex: 0 0 auto
-					color: $textColor-notino-black
-					&.service
-						background-image: url("../assets/icons/service-icon-10.svg")
-					&.customer
-						background-image: url("../assets/icons/customer-10.svg")
 			&.min-15
 				.event-content
 					padding-top: 0
 					padding-bottom: 0
 					.event-info
 						flex-direction: row
-						margin-right: 24px
+						margin-right: 14px
 						.title-wrapper
 							margin-right: 0
 						.desc
@@ -1013,6 +1006,7 @@
 						color: $textColor-notino-grayDarker
 	// event weekly view
 	&.nc-week-event
+		contain: paint
 		min-width: 21px // ak sa zmeni minimalna sirka najmenjsieho dielika, je potrebne aj toto upravit!!
 		.event-content
 			width: 100%
@@ -1040,8 +1034,6 @@
 					margin-bottom: 4px
 					.title
 						max-width: 100%
-						font-weight: 600
-						color: $textColor-notino-black
 						white-space: nowrap
 						overflow: hidden
 						text-overflow: ellipsis
@@ -1066,16 +1058,13 @@
 					position: absolute
 					right: 4px
 					top: 2px
+					display: flex
+					align-items: center
+					gap: 4px
 					.state
 						display: none
-					.service-icon
-						width: 10px
-						height: 10px
-						background-size: contain
-						background-position: center center
-						background-repeat: no-repeat
-						background-image: url("../assets/icons/service-icon-10.svg")
 			&.min-15,
+			&.min-30,
 			&.min-45
 				.event-content
 					.title-wrapper
@@ -1192,7 +1181,66 @@
 						position: sticky
 						left: 0
 						text-align: center
-
+	// reservation state specific styles
+	&.reservation
+		&.is-past
+			background-color: #EEF0F1
+			.event-background
+				display: none
+			.event-accent
+				background-color: #C6CAD1
+			.time
+				color: $textColor-notino-black
+			.state
+				background-color: #8B94A1
+		&.state-pending
+			outline-style: dashed
+			.event-accent
+				background-color: transparent
+				background-size: 5px 5px
+			.title
+				color: $textColor-notino-grayDark
+			.time
+				color: #9F9F9F
+			.desc
+				color: #9F9F9F
+			.icons
+				.employee
+					color: $textColor-notino-grayDark
+				.service
+					color: $textColor-notino-grayDark
+			&.is-past
+				outline-color: #6D7483
+				.event-accent
+					background-image: linear-gradient(135deg, #6d7483 12.50%, transparent 12.50%, transparent 50%, #6d7483 62.50%, #6d7483 62.50%, transparent 60%, transparent 100%)
+		&.is-autoassigned
+			.icons
+				.employee
+					display: block
+			&.nc-day-event
+				.event-content
+					.event-info
+						.title-wrapper
+							margin-right: 24px
+				&.min-15
+					.event-content
+						.event-info
+							margin-right: 24px
+			&.nc-week-event
+				.event-content
+					.title-wrapper
+						padding-right: 26px
+				&.min-15,
+				&.min-30,
+				&.min-45
+					.event-content
+						.title-wrapper
+							padding-right: 0
+				&.min-30,
+				&.min-15
+					.icons
+						.employee
+							display: none
 
 // event popover
 .nc-event-popover-overlay

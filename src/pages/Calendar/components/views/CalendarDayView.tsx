@@ -244,7 +244,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			// je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
 			// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 			eventMinHeight={0}
-			dayMinWidth={240}
+			dayMinWidth={120}
 			editable={hasResources}
 			selectable={hasResources}
 			weekends

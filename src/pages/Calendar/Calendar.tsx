@@ -21,8 +21,7 @@ import {
 	ENDS_EVENT,
 	FORM,
 	NOTIFICATION_TYPE,
-	PERMISSION,
-	RESERVATION_STATE
+	PERMISSION
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { computeUntilDate, getAssignedUserLabel } from '../../utils/helper'

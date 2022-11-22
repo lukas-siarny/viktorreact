@@ -185,7 +185,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 									<Col flex={'auto'}>
 										<Row className={'gap-1'} align={'top'}>
 											<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
-											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interná')}</Tag>}
+											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interna')}</Tag>}
 										</Row>
 									</Col>
 								</div>
@@ -382,7 +382,7 @@ const CalendarEventPopover: FC<Props> = (props) => {
 				return {
 					headerIcon: <CheckSuccessIcon />,
 					headerState: t('loc:Potvrdená'),
-					headerMoreButtons: [headerMoreItems.cancel_by_salon],
+					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
 				}
 			}
@@ -390,7 +390,7 @@ const CalendarEventPopover: FC<Props> = (props) => {
 				return {
 					headerIcon: <ClockIcon color={'#FF9500'} />,
 					headerState: t('loc:Čakajúca'),
-					headerMoreButtons: [headerMoreItems.cancel_by_salon],
+					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
 						getFooterCancelButton(t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc: Naozaj chcete zrušiť zamietnuť? Klient dostane notifikáciu.')),
 						<Button
@@ -408,7 +408,7 @@ const CalendarEventPopover: FC<Props> = (props) => {
 			case RESERVATION_STATE.REALIZED:
 				return {
 					headerIcon: <CreditCardIcon className={'text-notino-success'} />,
-					headerState: t('loc:Zrealizovaná')
+					headerState: t('loc:Zaplatená')
 				}
 			case RESERVATION_STATE.NOT_REALIZED:
 			default:

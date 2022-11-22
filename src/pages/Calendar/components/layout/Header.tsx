@@ -189,7 +189,7 @@ const CalendarHeader: FC<Props> = (props) => {
 								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
 								eventType: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT
 							}
-							dispatch(initialize(FORM.CALENDAR_SHIFT_FORM, initData))
+							dispatch(initialize(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, initData))
 							setCollapsed(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 						}
 					}}

@@ -4,11 +4,11 @@ import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-import { debounce, includes, isEmpty } from 'lodash'
-import { destroy, getFormValues, initialize, submit } from 'redux-form'
+import { compact, debounce, includes, isEmpty, map } from 'lodash'
+import { getFormValues, initialize, submit } from 'redux-form'
+import { Modal } from 'antd'
 
 // utils
-import { Modal } from 'antd'
 import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_TYPE,
@@ -20,13 +20,14 @@ import {
 	DAY,
 	DEFAULT_DATE_INIT_FORMAT,
 	ENDS_EVENT,
+	EVERY_REPEAT,
 	FORM,
 	NOTIFICATION_TYPE,
 	PERMISSION,
 	REQUEST_TYPE
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { computeUntilDate, getAssignedUserLabel } from '../../utils/helper'
+import { computeEndDate, computeUntilDate, getAssignedUserLabel } from '../../utils/helper'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { isRangeAleardySelected } from './calendarHelpers'
 
@@ -41,11 +42,11 @@ import CalendarHeader from './components/layout/Header'
 import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
 import CalendarContent, { CalendarRefs } from './components/layout/Content'
+import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
+import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, SalonSubPageProps } from '../../types/interfaces'
-import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
-import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
+import { ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, SalonSubPageProps } from '../../types/interfaces'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -90,8 +91,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
+	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
 	const formValuesBulkForm: any = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
+	const formValuesDetailEvent: any = useSelector((state: RootState) => getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state))
 
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
 		const initData = {
@@ -126,7 +129,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const initUpdateEventForm = async () => {
 		try {
 			const { data } = await dispatch(getCalendarEventDetail(salonID, query.eventId as string))
-			console.log('data update detail', data)
+			const repeatOptions = data?.calendarBulkEvent?.repeatOptions
+				? {
+						recurring: true,
+						repeatOn: compact(map(data?.calendarBulkEvent?.repeatOptions?.days as any, (item, index) => (item ? index : undefined))),
+						every: data.calendarBulkEvent.repeatOptions.week === 1 ? EVERY_REPEAT.ONE_WEEK : EVERY_REPEAT.TWO_WEEKS,
+						end: computeEndDate(data?.start.date, data?.calendarBulkEvent?.repeatOptions.untilDate)
+				  }
+				: undefined
 			const initData = {
 				date: data?.start.date,
 				timeFrom: data?.start.time,
@@ -142,8 +152,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						lastName: data?.employee.lastName,
 						email: data?.employee.email
 					})
-				}
-				// TODO: repeat initnut - nechodi z BE zatial
+				},
+				...repeatOptions
 			}
 			if (!data) {
 				// NOTE: ak by bolo zle ID (zmazane alebo nenajdene) tak zatvorit drawer + zmaz eventId
@@ -152,13 +162,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 			switch (data.eventType) {
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-					dispatch(initialize(FORM.CALENDAR_SHIFT_FORM, initData))
+					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, initData))
 					break
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-					dispatch(initialize(FORM.CALENDAR_TIME_OFF_FORM, initData))
+					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM, initData))
 					break
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-					dispatch(initialize(FORM.CALENDAR_BREAK_FORM, initData))
+					dispatch(initialize(FORM.CALENDAR_EMPLOYEE_BREAK_FORM, initData))
 					break
 				case CALENDAR_EVENT_TYPE.RESERVATION:
 					dispatch(
@@ -216,21 +226,21 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					...query,
 					sidebarView: type
 				})
-				initCreateEventForm(FORM.CALENDAR_SHIFT_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
+				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 				break
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 				setQuery({
 					...query,
 					sidebarView: type
 				})
-				initCreateEventForm(FORM.CALENDAR_TIME_OFF_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF)
+				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF)
 				break
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 				setQuery({
 					...query,
 					sidebarView: type
 				})
-				initCreateEventForm(FORM.CALENDAR_BREAK_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
+				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_BREAK_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
 				break
 			default:
 				break
@@ -338,8 +348,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			...values
 		})
 	}
-
-	const handleDeleteEvent = async () => {
+	const deleteEventWrapper = async () => {
 		if (isRemoving) {
 			return
 		}
@@ -355,10 +364,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
 				)
+				// DELETE BULK event
+			} else if (eventDetail.data?.calendarBulkEvent?.id && formValuesBulkForm?.actionType === CONFIRM_BULK.BULK) {
+				await deleteReq(
+					'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
+					{ salonID, calendarBulkEventID: formValuesDetailEvent?.calendarBulkEventID },
+					undefined,
+					NOTIFICATION_TYPE.NOTIFICATION,
+					true
+				)
 			} else {
-				// DELETE event shift / vacation / break
+				// DELETE single event
 				await deleteReq('/api/b2b/admin/salons/{salonID}/calendar-events/{calendarEventID}', { salonID, calendarEventID }, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
 			}
+
 			setEventManagement(undefined)
 			refreshEvents()
 		} catch (error: any) {
@@ -369,7 +388,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
+	const handleDeleteEvent = async () => {
+		// Ak existuje bulkID otvorit modal pre dodatocne potvrdenie zmazanie medzi BULK / SINGLE
+		if (formValuesDetailEvent?.calendarBulkEventID) {
+			dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
+			setVisibleBulkModal(REQUEST_TYPE.DELETE)
+		} else {
+			deleteEventWrapper()
+		}
+	}
+
 	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
+		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
+		const eventId = values.eventId ? values.eventId : query.eventId
 		try {
 			const reqData = {
 				start: {
@@ -385,11 +416,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				employeeID: values.employee.key as string,
 				serviceID: values.service.key as string
 			}
-			if (query.eventId) {
+			if (eventId) {
 				// UPDATE
 				await patchReq(
 					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
-					{ salonID, calendarEventID: query.eventId },
+					{ salonID, calendarEventID: eventId },
 					reqData,
 					undefined,
 					NOTIFICATION_TYPE.NOTIFICATION,
@@ -433,7 +464,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								SATURDAY: includes(values.repeatOn, DAY.SATURDAY),
 								SUNDAY: includes(values.repeatOn, DAY.SUNDAY)
 							},
-							week: values.every || undefined
+							week: values.every === EVERY_REPEAT.TWO_WEEKS ? 2 : (1 as 1 | 2 | undefined)
 					  }
 					: undefined
 				const reqData = {
@@ -508,19 +539,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					dispatch(submit(FORM.CALENDAR_RESERVATION_FORM))
 					break
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-					dispatch(submit(FORM.CALENDAR_BREAK_FORM))
+					dispatch(submit(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
 					break
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-					dispatch(submit(FORM.CALENDAR_TIME_OFF_FORM))
+					dispatch(submit(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
 					break
 				case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-					dispatch(submit(FORM.SALON_HISTORY_FILTER))
+					dispatch(submit(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
 					break
 				default:
 					break
 			}
-		} else {
 			// DELETE
+		} else {
+			deleteEventWrapper()
 		}
 		setVisibleBulkModal(null)
 	}

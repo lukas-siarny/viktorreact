@@ -157,6 +157,7 @@ export interface ICalendarReservationForm {
 	timeFrom: string
 	timeTo: string
 	note?: string
+	eventId?: string
 }
 
 export interface ICalendarEventForm {

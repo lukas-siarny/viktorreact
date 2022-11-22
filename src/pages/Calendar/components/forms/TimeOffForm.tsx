@@ -53,7 +53,7 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
-const formName = FORM.CALENDAR_TIME_OFF_FORM
+const formName = FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM
 
 const CalendarTimeOffForm: FC<Props> = (props) => {
 	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes, eventsViewType } = props
@@ -87,7 +87,6 @@ const CalendarTimeOffForm: FC<Props> = (props) => {
 				size={'large'}
 				options={EVERY_REPEAT_OPTIONS()}
 				className={'pb-0'}
-				allowClear
 			/>
 
 			<Field

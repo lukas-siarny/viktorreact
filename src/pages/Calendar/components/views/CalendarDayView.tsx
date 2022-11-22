@@ -165,7 +165,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	}
 
 	const handleEventClick = (info: any) => {
-		console.log('info', info)
 		setQuery({
 			eventId: info.event.id,
 			sidebarView: info.event.extendedProps.eventType

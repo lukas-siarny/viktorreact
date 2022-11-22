@@ -50,7 +50,7 @@ type ComponentProps = {
 	searchEmployes: (search: string, page: number) => Promise<any>
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }
-const formName = FORM.CALENDAR_SHIFT_FORM
+const formName = FORM.CALENDAR_EMPLOYEE_SHIFT_FORM
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
 
 const CalendarShiftForm: FC<Props> = (props) => {
@@ -85,7 +85,6 @@ const CalendarShiftForm: FC<Props> = (props) => {
 				size={'large'}
 				options={EVERY_REPEAT_OPTIONS()}
 				className={'pb-0'}
-				allowClear
 			/>
 
 			<Field
@@ -196,7 +195,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} disabled={eventId} onChange={onChangeRecurring} label={t('loc:Opakovať')} className={'pb-0'} component={SwitchField} />
+					<Field name={'recurring'} onChange={onChangeRecurring} label={t('loc:Opakovať')} className={'pb-0'} component={SwitchField} />
 					{recurringFields}
 				</Form>
 			</div>

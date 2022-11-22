@@ -1,5 +1,4 @@
 {
-  " Naozaj chcete zrušiť zamietnuť? Klient dostane notifikáciu.": "_NEPRELOZENE_",
   "24 hodín": "24 hodin",
   "48 hodín": "48 hodin",
   "Absencia": "_NEPRELOZENE_",
@@ -131,6 +130,9 @@
   "Nahrať": "Nahrát",
   "Naozaj chcete odstrániť súbor?": "Opravdu chcete odstranit soubor?",
   "Naozaj chcete odstrániť {{entity}} ?": "Opravdu chcete odstranit {{entity}}?",
+  "Naozaj chcete označiť rezerváciu za zamietnutú?": "_NEPRELOZENE_",
+  "Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.": "_NEPRELOZENE_",
+  "Naozaj chcete zrušiť rezerváciu?": "_NEPRELOZENE_",
   "Nastala neočakávaná chyba": "Nastala neočekávaná chyba",
   "Nastavenia": "Nastavení",
   "Nastavenie hesla": "Nastavení hesla",

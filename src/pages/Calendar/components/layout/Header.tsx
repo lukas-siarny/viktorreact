@@ -140,12 +140,12 @@ const CalendarHeader: FC<Props> = (props) => {
 						onClick={() => setCalendarView(CALENDAR_VIEW.WEEK)}
 						isSmallerDevice={isSmallerDevice}
 					/>
-					<SwitchViewButton
+					{/* <SwitchViewButton
 						label={t('loc:Mesiac')}
 						className={cx({ active: calendarView === CALENDAR_VIEW.MONTH })}
 						onClick={() => setCalendarView(CALENDAR_VIEW.MONTH)}
 						isSmallerDevice={isSmallerDevice}
-					/>
+					/> */}
 				</div>
 			</div>
 			<div className={'nav-middle'}>

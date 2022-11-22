@@ -57,7 +57,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		}
 
 		if (view === CALENDAR_VIEW.MONTH) {
-			return (
+			return null
+			/* return (
 				<CalendarMonthView
 					ref={monthView}
 					selectedDate={selectedDate}
@@ -68,7 +69,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					salonID={salonID}
 					onEditEvent={onEditEvent}
 				/>
-			)
+			) */
 		}
 
 		if (view === CALENDAR_VIEW.WEEK) {
@@ -103,6 +104,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	return (
 		<Content className={'nc-content'}>
 			<Spin spinning={loading}>
+				<div id={'nc-content-overlay'} />
 				<div className={'nc-content-animate'} key={`${selectedDate} ${view} ${eventsViewType}`}>
 					{getView()}
 				</div>

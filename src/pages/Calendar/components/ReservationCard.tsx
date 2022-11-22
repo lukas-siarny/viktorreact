@@ -5,7 +5,7 @@ import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE } from '../../../utils/enums'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NOTIFICATION_TYPE } from '../../../utils/enums'
 import { getAssignedUserLabel } from '../../../utils/helper'
 
 // assets
@@ -19,6 +19,7 @@ import CalendarEventPopover from './CalendarEventPopover'
 
 // types
 import { IEventCardProps } from '../../../types/interfaces'
+import { patchReq } from '../../../utils/request'
 
 interface IReservationCardProps extends IEventCardProps {
 	salonID: string
@@ -61,21 +62,24 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 			}
 		}
 
+		if (isRealized) {
+			return <CheckIcon className={'icon check'} />
+		}
+
 		return service?.icon ? <img src={service.icon} alt={service?.name} width={10} height={10} className={'object-contain'} /> : <ServiceIcon />
 	}
 
 	const handleUpdateReservationState = useCallback(
 		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => {
 			try {
-				/* await patchReq(
+				await patchReq(
 					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
 					{ calendarEventID, salonID },
 					{ state, reason },
 					undefined,
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
-				) */
-				console.log({ state })
+				)
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)

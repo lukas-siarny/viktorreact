@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { FC, useEffect, useCallback } from 'react'
+import React, { FC, useEffect, useCallback, useState } from 'react'
 import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
@@ -212,23 +212,30 @@ const CalendarEventPopover: FC<Props> = (props) => {
 
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 
-	console.log(selectedSalon)
-
 	const overlayClassName = `nc-event-popover-overlay_${id || ''}`
-	const itemClassName = 'p-2 font-medium min-w-0'
+	const itemClassName = 'p-2 font-medium min-w-0 h-9 w-full relative'
 
 	useEffect(() => {
+		// TODO: toto by este potom chcelo trochu prerobit, teraz to je cez dva overlay spravene
+		// jeden zaistuje ze sa po kliku na neho zavrie popoover (cez &::before na popover elemente)
+		// druhy je pomocny kvoli tomu, ze kvoli uvodnej animacii chvilku trva, kym prvy overlay nabehne a vtedy sa da scrollovat, aj ked by sa nemalo
+		const contentOverlay = document.querySelector('#nc-content-overlay') as HTMLElement
+
 		const listener = (e: Event) => {
 			const overlayElement = document.querySelector(`.${overlayClassName}`)
-
 			if (overlayElement && (e?.target as HTMLElement)?.classList?.contains(overlayClassName)) {
 				setIsOpen(false)
 			}
 		}
 
-		if (isOpen) {
-			document.addEventListener('mousedown', listener)
-			document.addEventListener('touchstart', listener)
+		if (contentOverlay) {
+			if (isOpen) {
+				document.addEventListener('mousedown', listener)
+				document.addEventListener('touchstart', listener)
+				contentOverlay.style.display = 'block'
+			} else {
+				contentOverlay.style.display = 'none'
+			}
 		}
 
 		return () => {
@@ -353,7 +360,7 @@ const CalendarEventPopover: FC<Props> = (props) => {
 					type: 'primary',
 					className: 'noti-btn'
 				}}
-				okText={t('loc:Zmazať')}
+				okText={t('loc:Potvrdiť')}
 				onConfirm={() => handleUpdateState(state)}
 				cancelText={t('loc:Zrušiť')}
 			>
@@ -366,13 +373,46 @@ const CalendarEventPopover: FC<Props> = (props) => {
 		)
 	}
 
+	const [cancelPopconfirm, setCancelPopconfirm] = useState(false)
+
 	const headerMoreItems = {
 		cancel_by_salon: {
 			key: 'cancel-by-salon',
-			label: t('loc:Zrušiť rezerváciu'),
+			label: (
+				<Popconfirm
+					visible={cancelPopconfirm}
+					placement={'bottom'}
+					title={t('loc:Naozaj chcete zrušiť rezerváciu?')}
+					okButtonProps={{
+						type: 'default',
+						className: 'noti-btn'
+					}}
+					cancelButtonProps={{
+						type: 'primary',
+						className: 'noti-btn'
+					}}
+					okText={t('loc:Potvrdiť')}
+					onCancel={() => {
+						setCancelPopconfirm(false)
+					}}
+					onConfirm={() => {
+						handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)
+						setIsOpen(false)
+						setCancelPopconfirm(false)
+					}}
+					cancelText={t('loc:Zrušiť')}
+				>
+					<button
+						type={'button'}
+						className={'bg-transparent p-0 pl-8 m-0 outline-none cursor-pointer border-none inset-0 flex absolute items-center'}
+						onClick={() => setCancelPopconfirm(true)}
+					>
+						{t('loc:Zrušiť rezerváciu')}
+					</button>
+				</Popconfirm>
+			),
 			icon: <AlertIcon />,
-			className: itemClassName,
-			onClick: () => handleUpdateState(RESERVATION_STATE.CANCEL_BY_SALON)
+			className: itemClassName
 		}
 	}
 
@@ -383,7 +423,10 @@ const CalendarEventPopover: FC<Props> = (props) => {
 					headerIcon: <CheckSuccessIcon />,
 					headerState: t('loc:Potvrdená'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
-					footerButtons: [getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED), getFooterCheckoutButton()]
+					footerButtons: [
+						getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED, t('loc:Naozaj chcete označiť rezerváciu za zamietnutú?')),
+						getFooterCheckoutButton()
+					]
 				}
 			}
 			case RESERVATION_STATE.PENDING:
@@ -392,7 +435,7 @@ const CalendarEventPopover: FC<Props> = (props) => {
 					headerState: t('loc:Čakajúca'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc: Naozaj chcete zrušiť zamietnuť? Klient dostane notifikáciu.')),
+						getFooterCancelButton(t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc:Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.')),
 						<Button
 							key={'confirm-button'}
 							type={'dashed'}

@@ -9,6 +9,7 @@ import { getFormValues, initialize, submit } from 'redux-form'
 import { Modal } from 'antd'
 
 // utils
+import { useTranslation } from 'react-i18next'
 import {
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_TYPE,
@@ -24,7 +25,8 @@ import {
 	FORM,
 	NOTIFICATION_TYPE,
 	PERMISSION,
-	REQUEST_TYPE
+	REQUEST_TYPE,
+	STRINGS
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
 import { computeEndDate, computeUntilDate, getAssignedUserLabel } from '../../utils/helper'
@@ -35,9 +37,9 @@ import { isRangeAleardySelected } from './calendarHelpers'
 import {
 	clearCalendarReservations,
 	clearCalendarShiftsTimeoffs,
+	getCalendarEventDetail,
 	getCalendarReservations,
-	getCalendarShiftsTimeoff,
-	getCalendarEventDetail
+	getCalendarShiftsTimeoff
 } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
 import { getEmployees, IEmployeesPayload } from '../../reducers/employees/employeesActions'
@@ -101,6 +103,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const formValuesBulkForm: any = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
 	const formValuesDetailEvent: any = useSelector((state: RootState) => getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state))
+	const [t] = useTranslation()
 
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
 		const initData = {
@@ -569,14 +572,14 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const modals = (
 		<>
 			<Modal
-				title={'Edit shift'}
+				title={visibleBulkModal === REQUEST_TYPE.EDIT ? STRINGS(t).edit(t('loc:záznam')) : STRINGS(t).delete(t('loc:záznam'))}
 				visible={!!visibleBulkModal}
 				onCancel={() => setVisibleBulkModal(null)}
 				onOk={() => dispatch(submit(FORM.CONFIRM_BULK_FORM))}
 				closeIcon={<CloseIcon />}
 				destroyOnClose
 			>
-				<ConfirmBulkForm onSubmit={handleSubmitConfirmModal} />
+				<ConfirmBulkForm requestType={visibleBulkModal as REQUEST_TYPE} onSubmit={handleSubmitConfirmModal} />
 			</Modal>
 		</>
 	)

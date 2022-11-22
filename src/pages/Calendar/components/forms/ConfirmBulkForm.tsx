@@ -5,37 +5,44 @@ import { useTranslation } from 'react-i18next'
 
 // utils
 import { showErrorNotification } from '../../../../utils/helper'
-import { CONFIRM_BULK, FORM } from '../../../../utils/enums'
+import { CONFIRM_BULK, FORM, REQUEST_TYPE, STRINGS } from '../../../../utils/enums'
 
 // components
 import RadioGroupField from '../../../../atoms/RadioGroupField'
 
 import { IBulkConfirmForm } from '../../../../types/interfaces'
 
-type ComponentProps = {}
+type ComponentProps = {
+	requestType: REQUEST_TYPE
+}
 
 type Props = InjectedFormProps<IBulkConfirmForm, ComponentProps> & ComponentProps
 
 const formName = FORM.CONFIRM_BULK_FORM
 
 const ConfirmBulkForm: FC<Props> = (props) => {
-	const { handleSubmit } = props
+	const { handleSubmit, requestType } = props
 	const [t] = useTranslation()
 
 	const options = [
 		{
 			key: CONFIRM_BULK.SINGLE_RECORD,
 			value: CONFIRM_BULK.SINGLE_RECORD,
-			label: t('loc:Edit this shift only')
+			label: requestType === REQUEST_TYPE.EDIT ? STRINGS(t).edit(t('loc:len tento záznam')) : STRINGS(t).delete(t('loc:len tento záznam'))
 		},
 		{
 			key: CONFIRM_BULK.BULK,
 			value: CONFIRM_BULK.BULK,
-			label: t('loc:Edit upcoming shifts')
+			label: requestType === REQUEST_TYPE.EDIT ? STRINGS(t).edit(t('loc:všetky záznamy')) : STRINGS(t).delete(t('loc:všetky záznamy'))
 		}
 	]
 	return (
 		<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
+			<p>
+				{requestType === REQUEST_TYPE.EDIT
+					? t('loc:Úpravujete záznam, ktorý sa opakuje. Aktualizácia nadchádzajúcich zmien prepíše prebiehajúce plánovanie')
+					: t('loc:Odstráňujete záznam, ktorý sa opakuje. Odstránenie nadchádzajúcich zmien prepíše prebiehajúce plánovanie')}
+			</p>
 			<Field className={'p-0 m-0 nc-radio-event-type'} component={RadioGroupField} name={'actionType'} options={options} direction={'vertical'} size={'small'} />
 		</Form>
 	)

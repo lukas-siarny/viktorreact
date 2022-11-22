@@ -27,14 +27,12 @@ import Ellipsis from '../../../atoms/Ellipsis'
 
 // types
 import { CalendarEvent } from '../../../reducers/calendar/calendarActions'
+import { RootState } from '../../../reducers'
 
 /// utils
 import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_STATE } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { getHoursMinutesFromMinutes, getTimeText } from '../calendarHelpers'
-
-// redux
-import { RootState } from '../../../reducers'
 
 type Props = {
 	isOpen: boolean
@@ -382,7 +380,7 @@ const CalendarEventPopover: FC<Props> = (props) => {
 				<Popconfirm
 					visible={cancelPopconfirm}
 					placement={'bottom'}
-					title={t('loc:Naozaj chcete zrušiť rezerváciu?')}
+					title={t('loc:Naozaj chcete zrušiť rezerváciu? Klient dostane notifikáciu.')}
 					okButtonProps={{
 						type: 'default',
 						className: 'noti-btn'
@@ -424,7 +422,7 @@ const CalendarEventPopover: FC<Props> = (props) => {
 					headerState: t('loc:Potvrdená'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED, t('loc:Naozaj chcete označiť rezerváciu za zamietnutú?')),
+						getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED, t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')),
 						getFooterCheckoutButton()
 					]
 				}

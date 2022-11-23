@@ -24,7 +24,7 @@ const ToggleField = (props: Props) => {
 					className={'underline cursor-pointer break-normal outline-none border-none bg-transparent p-0 noti-show-more-button'}
 					onClick={() => setExpaned(!expadned)}
 				>
-					{t(expadned ? 'loc:zobraziť menej' : 'loc:zobraziť viac')}
+					{expadned ? t('loc:zobraziť menej') : t('loc:zobraziť viac')}
 				</button>
 			)}
 		</p>

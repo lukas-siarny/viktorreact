@@ -10,7 +10,7 @@ import colors from 'tailwindcss/colors'
 // assets
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
-import { ReactComponent as DotsIcon } from '../../../assets/icons/dots-icon-16.svg'
+import { ReactComponent as DotsIcon } from '../../../assets/icons/more-info-horizontal-icon.svg'
 import { ReactComponent as MessageIcon } from '../../../assets/icons/message-icon-16-thin.svg'
 import { ReactComponent as ChevronDown } from '../../../assets/icons/chevron-down.svg'
 import { ReactComponent as NoteIcon } from '../../../assets/icons/note-icon.svg'
@@ -32,7 +32,7 @@ import { RootState } from '../../../reducers'
 /// utils
 import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_STATE } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
-import { getHoursMinutesFromMinutes, getTimeText } from '../calendarHelpers'
+import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
 type Props = {
 	isOpen: boolean
@@ -93,12 +93,12 @@ const PopoverContent: FC<ContentProps> = (props) => {
 					</button>
 					{(moreMenuItems || []).length > 0 && (
 						<Dropdown
-							overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} style={{ width: 200 }} items={moreMenuItems} />}
+							overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={moreMenuItems} />}
 							placement='bottomRight'
 							trigger={['click']}
 						>
 							<button className={'nc-event-popover-header-button'} type={'button'} onClick={(e) => e.preventDefault()}>
-								<DotsIcon />
+								<DotsIcon style={{ transform: 'rotate(90deg)' }} />
 							</button>
 						</Dropdown>
 					)}
@@ -157,7 +157,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 					<Col flex={'auto'}>
 						<Row className={'gap-2'} justify={'space-between'} align={'top'} wrap={false}>
 							<div className={'flex flex-col pl-3 gap-1'} style={{ borderLeft: `2px solid ${color || '#000000'}` }}>
-								<span className={'text-notino-grayDark text-xxs leading-3'}>{`${getTimeText(start, end)} (${getHoursMinutesFromMinutes(
+								<span className={'text-notino-grayDark text-xxs leading-3'}>{`${getTimeText(start, end)} (${parseTimeFromMinutes(
 									dayjs(end).diff(start, 'minutes')
 								)})`}</span>
 								{service?.name && <span className={'block text-sm text-notino-black leading-4 break-all'}>{service.name}</span>}
@@ -202,7 +202,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 	)
 }
 
-const CalendarEventPopover: FC<Props> = (props) => {
+const CalendarReservationPopover: FC<Props> = (props) => {
 	const { isOpen, setIsOpen, children, event, start, end, color, handleUpdateReservationState, onEditEvent } = props
 	const { id, reservationData, service, customer, employee, note, noteFromB2CCustomer } = event || {}
 
@@ -505,4 +505,4 @@ const CalendarEventPopover: FC<Props> = (props) => {
 	)
 }
 
-export default CalendarEventPopover
+export default CalendarReservationPopover

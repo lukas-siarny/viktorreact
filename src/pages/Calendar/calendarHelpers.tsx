@@ -28,7 +28,7 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 	}
 
 	switch (view) {
-		case CALENDAR_VIEW.MONTH: {
+		/* case CALENDAR_VIEW.MONTH: {
 			const start = dayjs(selectedDate).startOf('month')
 			const end = dayjs(selectedDate).endOf('month')
 			result = {
@@ -38,7 +38,7 @@ export const getSelectedDateRange = (view: CALENDAR_VIEW, selectedDate: string, 
 				end: monthViewFull ? end.endOf('week').add(1, 'week') : end
 			}
 			break
-		}
+		} */
 		case CALENDAR_VIEW.WEEK: {
 			result = {
 				...result,
@@ -64,7 +64,7 @@ export const isRangeAleardySelected = (view: CALENDAR_VIEW, currentSelectedDate:
 	return dayjs(newSelectedDate).isSameOrAfter(start) && dayjs(newSelectedDate).isSameOrBefore(end)
 }
 
-export const getHoursMinutesFromMinutes = (minutes: number) => {
+export const parseTimeFromMinutes = (minutes: number) => {
 	const days = Math.floor(minutes / 1440)
 	const hoursLeft = minutes % 1440
 	const hours = Math.floor(hoursLeft / 60)

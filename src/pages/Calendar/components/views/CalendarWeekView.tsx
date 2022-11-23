@@ -4,7 +4,7 @@ import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // full calendar
-import FullCalendar, { CalendarApi, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
@@ -70,99 +70,6 @@ const resourceAreaColumns = [
 	}
 ]
 
-/* const renderEventContent = (data: EventContentArg) => {
-	const { event, backgroundColor } = data || {}
-	const { extendedProps } = event || {}
-	const { eventType, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange } = extendedProps || {}
-
-	if (event.display === 'inverse-background') {
-		return <div className={cx('nc-bg-event not-set-availability')} />
-	}
-
-	if (event.display === 'background') {
-		return (
-			<div
-				className={cx('nc-bg-event', {
-					break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-					timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-				})}
-			/>
-		)
-	}
-
-	const diff = dayjs(event.end).diff(event.start, 'minutes')
-	const timeText = `${dayjs(event.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(event.end).format(CALENDAR_DATE_FORMAT.TIME)}`
-
-	return (
-		<div
-			className={cx('nc-week-event fc-event-title-container', {
-				reservation: eventType === CALENDAR_EVENT_TYPE.RESERVATION,
-				shift: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-				timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-				break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-				'min-15': Math.abs(diff) <= 15,
-				'min-30': Math.abs(diff) <= 30 && Math.abs(diff) > 15,
-				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 30,
-				'min-75': Math.abs(diff) <= 75 && Math.abs(diff) > 45,
-				'multiday-event': isMultiDayEvent,
-				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
-				'multiday-event-last': isLastMultiDaylEventInCurrentRange
-			})}
-			// style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
-		>
-			{(() => {
-				switch (eventType) {
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK: {
-						return (
-							<div className={'event-content'}>
-								<div className={'sticky-container'}>
-									<div className={'event-info'}>
-										<span className={'color'} style={{ backgroundColor }} />
-										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
-										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
-										{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'time'}>{timeText}</span>}
-									</div>
-								</div>
-								<span className={'duration'}>{getHoursMinutesFromMinutes(diff)}</span>
-							</div>
-						)
-					}
-					case CALENDAR_EVENT_TYPE.RESERVATION:
-					default: {
-						const state = <div className={'state'} style={{ backgroundColor }} />
-						return (
-							<>
-								<div className={'event-accent'} style={{ backgroundColor }} />
-								<div className={'event-background'} style={{ backgroundColor }} />
-								<div className={'event-content'}>
-									<div className={'title-wrapper'}>
-										<span className={'title'}>
-											{getAssignedUserLabel({
-												id: extendedProps.customer?.id,
-												firstName: extendedProps.customer?.firstName,
-												lastName: extendedProps.customer?.lastName,
-												email: extendedProps.customer?.email
-											})}
-										</span>
-										{state}
-									</div>
-									{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
-									<div className={'icons'}>
-										<div className={'service-icon'} style={{ backgroundImage: `url("${extendedProps.service?.icon}")` }} />
-										{state}
-									</div>
-								</div>
-							</>
-						)
-					}
-				}
-			})()}
-		</div>
-	)
-} */
-
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { date } = data || {}
 
@@ -180,10 +87,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 
 	const handleSelect = (info: any) => {
 		const { start, end, resource = {} } = info
-	}
-
-	const handleEventClick = (info: any) => {
-		const { start, end, resource } = info
 	}
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
@@ -228,7 +131,6 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				// handlers
 				select={handleSelect}
 				dateClick={handleDateClick}
-				eventClick={handleEventClick}
 			/>
 		</div>
 	)

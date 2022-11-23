@@ -5,7 +5,7 @@ import cx from 'classnames'
 
 // utils
 import { CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../utils/enums'
-import { getHoursMinutesFromMinutes } from '../calendarHelpers'
+import { parseTimeFromMinutes } from '../calendarHelpers'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../assets/icons/absence-icon.svg'
@@ -13,15 +13,16 @@ import { ReactComponent as BreakIcon } from '../../../assets/icons/break-icon-16
 
 // types
 import { IEventCardProps } from '../../../types/interfaces'
+import { getAssignedUserLabel } from '../../../utils/helper'
 
 interface IAbsenceCardProps extends IEventCardProps {}
 
 const AbsenceCard: FC<IAbsenceCardProps> = ({ calendarView, data, diff, timeText, onEditEvent }) => {
 	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
-	const { eventType, originalEvent, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange } = extendedProps || {}
+	const { eventType, originalEvent, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange, employee } = extendedProps || {}
 
-	const duration = getHoursMinutesFromMinutes(diff)
+	const duration = parseTimeFromMinutes(diff)
 
 	return (
 		<div
@@ -68,7 +69,14 @@ const AbsenceCard: FC<IAbsenceCardProps> = ({ calendarView, data, diff, timeText
 										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
 										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
 										{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && (
-											<span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>
+											<span className={'title'}>
+												{getAssignedUserLabel({
+													firstName: employee?.firstName,
+													lastName: employee?.lastName,
+													email: employee?.email,
+													id: employee?.id
+												})}
+											</span>
 										)}
 									</div>
 									<span className={'duration'}>{duration}</span>

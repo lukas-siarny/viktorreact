@@ -20,165 +20,6 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 // components
 import CalendarEvent from '../CalendarEvent'
 
-/*  interface ICardProps {
-	data: EventContentArg
-	salonID: string
-	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
-}
-
-const EventCard: FC<ICardProps> = ({ data, salonID, onEditEvent }) => {
-	const { event, backgroundColor } = data || {}
-	const { extendedProps } = event || {}
-	const { eventType, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange, originalEvent, reservationData } = extendedProps || {}
-
-	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
-
-	const handleUpdateReservationState = useCallback(
-		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => {
-			try {
-				await patchReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
-					{ calendarEventID, salonID },
-					{ state, reason },
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
-				console.log({ state })
-			} catch (e) {
-				// eslint-disable-next-line no-console
-				console.error(e)
-			}
-		},
-		[salonID]
-	)
-
-	if (event.display === 'inverse-background') {
-		return <div className={cx('nc-bg-event not-set-availability')} />
-	}
-
-	if (event.display === 'background') {
-		return (
-			<div
-				className={cx('nc-bg-event', {
-					break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-					timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-				})}
-			/>
-		)
-	}
-
-	console.log(event)
-
-	const diff = dayjs(event.end).diff(event.start, 'minutes')
-	const timeText = getTimeText(event.start, event.end)
-	const isPast = dayjs(originalEvent.endDateTime).isAfter(dayjs())
-
-	return (
-		<CalendarEventPopover
-			event={originalEvent}
-			start={event.start}
-			end={event.end}
-			isOpen={isCardPopoverOpen}
-			color={backgroundColor}
-			setIsOpen={setIsCardPopoverOpen}
-			handleUpdateReservationState={handleUpdateReservationState}
-			onEditEvent={onEditEvent}
-		>
-			<div
-				className={cx('nc-day-event', {
-					reservation: eventType === CALENDAR_EVENT_TYPE.RESERVATION,
-					shift: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-					timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-					break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-					'min-15': Math.abs(diff) <= 15,
-					'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 15,
-					'multiday-event': isMultiDayEvent,
-					'multiday-event-first': isFirstMultiDayEventInCurrentRange,
-					'multiday-event-last': isLastMultiDaylEventInCurrentRange,
-					focused: isCardPopoverOpen,
-					'is-past': isPast,
-					'is-online': reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE,
-					'state-pending': reservationData?.state === RESERVATION_STATE.PENDING,
-					'state-approved': reservationData?.state === RESERVATION_STATE.APPROVED,
-					'state-done': reservationData?.state === RESERVATION_STATE.REALIZED || reservationData?.state === RESERVATION_STATE.NOT_REALIZED
-				})}
-				onClick={() => {
-					if (eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-						setIsCardPopoverOpen(true)
-					} else {
-						onEditEvent(originalEvent.id || event.id, eventType)
-					}
-				}}
-				// style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
-			>
-				{(() => {
-					switch (eventType) {
-						case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-						case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-						case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK: {
-							return (
-								<div className={'event-content'}>
-									<div className={'event-info'}>
-										<div className={'flex items-center gap-1 min-w-0'}>
-											<span className={'color'} style={{ backgroundColor }} />
-											{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
-											{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
-											{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && (
-												<span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>
-											)}
-										</div>
-										<span className={'duration'}>{getHoursMinutesFromMinutes(diff)}</span>
-									</div>
-									{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'time'}>{timeText}</span>}
-								</div>
-							)
-						}
-						case CALENDAR_EVENT_TYPE.RESERVATION:
-						default: {
-							return (
-								<>
-									<div className={'event-accent'} style={{ backgroundColor }} />
-									<div className={'event-background'} style={{ backgroundColor }} />
-									<div className={'event-content'}>
-										<div className={'event-info'}>
-											<div className={'title-wrapper'}>
-												<span className={'title'}>
-													{getAssignedUserLabel({
-														id: extendedProps.customer?.id,
-														firstName: extendedProps.customer?.firstName,
-														lastName: extendedProps.customer?.lastName,
-														email: extendedProps.customer?.email
-													})}
-												</span>
-												<div className={'state'} style={{ backgroundColor }} />
-											</div>
-											<span className={'time'}>{timeText}</span>
-											{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
-										</div>
-										<div className={'icons'}>
-											<span
-												className={'icon customer'}
-												style={{
-													backgroundImage: extendedProps.customer?.image ? `url("${extendedProps.customer?.resizedImages?.thumbnail}")` : undefined
-												}}
-											/>
-											<span
-												className={'icon service'}
-												style={{ backgroundImage: extendedProps.service?.icon ? `url("${extendedProps.service?.icon}")` : undefined }}
-											/>
-										</div>
-									</div>
-								</>
-							)
-						}
-					}
-				})()}
-			</div>
-		</CalendarEventPopover>
-	)
-} */
-
 const resourceLabelContent = (data: any) => {
 	const { resource } = data || {}
 	const extendedProps = resource?.extendedProps
@@ -215,10 +56,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 
 	const handleSelect = (info: any) => {
 		const { start, end, resource = {} } = info
-	}
-
-	const handleEventClick = (info: any) => {
-		const { start, end, resource } = info
 	}
 
 	const hasResources = !!employees.length
@@ -261,7 +98,6 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			// handlers
 			select={handleSelect}
 			dateClick={handleDateClick}
-			eventClick={handleEventClick}
 		/>
 	)
 })

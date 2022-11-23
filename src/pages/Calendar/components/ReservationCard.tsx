@@ -15,7 +15,7 @@ import { ReactComponent as ServiceIcon } from '../../../assets/icons/service-ico
 import { ReactComponent as AvatarIcon } from '../../../assets/icons/avatar-10.svg'
 
 // components
-import CalendarEventPopover from './CalendarEventPopover'
+import CalendarReservationPopover from './CalendarReservationPopover'
 
 // types
 import { IEventCardProps } from '../../../types/interfaces'
@@ -89,7 +89,7 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 	)
 
 	return (
-		<CalendarEventPopover
+		<CalendarReservationPopover
 			event={originalEvent}
 			start={event.start}
 			end={event.end}
@@ -176,7 +176,7 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 					})()}
 				</div>
 			</div>
-		</CalendarEventPopover>
+		</CalendarReservationPopover>
 	)
 }
 

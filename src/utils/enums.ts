@@ -613,8 +613,8 @@ export const CALENDAR_COMMON_SETTINGS = {
 export enum CALENDAR_VIEW {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
 	DAY = 'DAY',
-	WEEK = 'WEEK',
-	MONTH = 'MONTH'
+	WEEK = 'WEEK' /* ,
+	MONTH = 'MONTH' */
 }
 
 export enum CALENDAR_EVENT_TYPE {

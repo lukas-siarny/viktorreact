@@ -2,12 +2,13 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, RESERVATION_STATE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../utils/enums'
 
 // types
 import { Paths } from './api'
 import { ICalendarEventsPayload } from '../reducers/calendar/calendarActions'
 import { IEmployeesPayload } from '../reducers/employees/employeesActions'
+import { EventContentArg } from '@fullcalendar/react'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -566,4 +567,14 @@ export interface ICalendarView {
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees
+	salonID: string
+	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+}
+
+export interface IEventCardProps {
+	calendarView: CALENDAR_VIEW
+	data: EventContentArg
+	diff: number
+	timeText: string
+	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 }

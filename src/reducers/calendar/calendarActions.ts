@@ -8,7 +8,7 @@ import { Paths } from '../../types/api'
 
 // enums
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
-import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT } from '../../utils/enums'
+import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
 
 // utils
 import { getReq } from '../../utils/request'
@@ -34,6 +34,7 @@ interface ICalendarEventsQueryParams {
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
 	eventTypes?: (string | null)[] | null
+	reservationStates?: (string | null)[] | null
 }
 
 interface ICalendarReservationsQueryParams {
@@ -41,6 +42,7 @@ interface ICalendarReservationsQueryParams {
 	date: string
 	employeeIDs?: (string | null)[] | null
 	categoryIDs?: (string | null)[] | null
+	reservationStates?: (string | null)[] | null
 }
 
 interface ICalendarShiftsTimeOffQueryParams {
@@ -89,7 +91,8 @@ export const getCalendarEvents =
 				employeeIDs: queryParams.employeeIDs,
 				eventTypes: queryParams.eventTypes,
 				dateFrom: start,
-				dateTo: end
+				dateTo: end,
+				reservationStates: queryParams.reservationStates
 			}
 
 			dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
@@ -173,7 +176,16 @@ export const getCalendarReservations = (
 	view: CALENDAR_VIEW,
 	splitMultidayEventsIntoOneDayEvents = false
 ): ThunkResult<Promise<ICalendarEventsPayload>> =>
-	getCalendarEvents(CALENDAR_EVENTS_KEYS.RESERVATIONS, { ...queryParams, eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION] }, view, splitMultidayEventsIntoOneDayEvents)
+	getCalendarEvents(
+		CALENDAR_EVENTS_KEYS.RESERVATIONS,
+		{
+			...queryParams,
+			eventTypes: [CALENDAR_EVENT_TYPE.RESERVATION],
+			reservationStates: [RESERVATION_STATE.APPROVED, RESERVATION_STATE.PENDING, RESERVATION_STATE.REALIZED, RESERVATION_STATE.NOT_REALIZED]
+		},
+		view,
+		splitMultidayEventsIntoOneDayEvents
+	)
 
 export const getCalendarShiftsTimeoff = (
 	queryParams: ICalendarShiftsTimeOffQueryParams,

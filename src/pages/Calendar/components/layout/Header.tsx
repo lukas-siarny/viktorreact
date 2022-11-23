@@ -50,9 +50,9 @@ const formatHeaderDate = (date: string, view: CALENDAR_VIEW) => {
 
 			return `${firstDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_START)} - ${lastDayOfWeek.format(CALENDAR_DATE_FORMAT.HEADER_WEEK_END)}`
 		}
-		case CALENDAR_VIEW.MONTH: {
+		/* case CALENDAR_VIEW.MONTH: {
 			return dayjs(date).startOf('month').format(CALENDAR_DATE_FORMAT.HEADER_MONTH)
-		}
+		} */
 		default:
 			return ''
 	}
@@ -140,12 +140,12 @@ const CalendarHeader: FC<Props> = (props) => {
 						onClick={() => setCalendarView(CALENDAR_VIEW.WEEK)}
 						isSmallerDevice={isSmallerDevice}
 					/>
-					<SwitchViewButton
+					{/* <SwitchViewButton
 						label={t('loc:Mesiac')}
 						className={cx({ active: calendarView === CALENDAR_VIEW.MONTH })}
 						onClick={() => setCalendarView(CALENDAR_VIEW.MONTH)}
 						isSmallerDevice={isSmallerDevice}
-					/>
+					/> */}
 				</div>
 			</div>
 			<div className={'nav-middle'}>

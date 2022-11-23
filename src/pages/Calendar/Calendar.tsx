@@ -524,6 +524,13 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							employeeIDs: getEmployeeIDs(employees?.options)
 						})
 					}}
+					onEditEvent={(eventId: string, eventType: CALENDAR_EVENT_TYPE) => {
+						setQuery({
+							eventId,
+							sidebarView: eventType
+						})
+					}}
+					salonID={salonID}
 				/>
 				<SiderEventManagement
 					onChangeEventType={onChangeEventType}

@@ -613,8 +613,8 @@ export const CALENDAR_COMMON_SETTINGS = {
 export enum CALENDAR_VIEW {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
 	DAY = 'DAY',
-	WEEK = 'WEEK',
-	MONTH = 'MONTH'
+	WEEK = 'WEEK' /* ,
+	MONTH = 'MONTH' */
 }
 
 export enum CALENDAR_EVENT_TYPE {
@@ -754,6 +754,26 @@ export enum CALENDAR_EVENTS_KEYS {
 	EVENTS = 'events',
 	RESERVATIONS = 'reservations',
 	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
+}
+
+export enum RESERVATION_STATE {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	DECLINED = 'DECLINED',
+	CANCEL_BY_SALON = 'CANCEL_BY_SALON',
+	CANCEL_BY_CUSTOMER = 'CANCEL_BY_CUSTOMER',
+	REALIZED = 'REALIZED',
+	NOT_REALIZED = 'NOT_REALIZED'
+}
+
+export enum RESERVATION_SOURCE_TYPE {
+	ONLINE = 'ONLINE',
+	OFFLINE = 'OFFLINE'
+}
+
+export enum RESERVATION_ASSIGNMENT_TYPE {
+	SYSTEM = 'SYSTEM',
+	USER = 'USER'
 }
 
 export const getDayNameFromNumber = (day: number) => {

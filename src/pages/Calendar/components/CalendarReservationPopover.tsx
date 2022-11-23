@@ -62,7 +62,8 @@ type ContentProps = {
 	footerButtons?: React.ReactNode[]
 	service?: CalendarEvent['service']
 	customer?: CalendarEvent['customer']
-	employee?: CalendarEvent['employee']
+	employee?: any // TODO: ked bude api hotove odkomentovat
+	// employee?: CalendarEvent['employee']
 	color?: string
 	notes?: PopoverNote[]
 }

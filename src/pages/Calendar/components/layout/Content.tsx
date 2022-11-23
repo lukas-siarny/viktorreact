@@ -4,12 +4,12 @@ import { Spin } from 'antd'
 import FullCalendar from '@fullcalendar/react'
 
 // enums
-import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // components
 import CalendarDayView from '../views/CalendarDayView'
 import CalendarWeekView from '../views/CalendarWeekView'
-import CalendarMonthView from '../views/CalendarMonthView'
+// import CalendarMonthView from '../views/CalendarMonthView'
 import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
@@ -28,25 +28,27 @@ type Props = {
 	employees: Employees
 	onShowAllEmployees: () => void
 	showEmptyState: boolean
+	salonID: string
+	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 }
 
 export type CalendarRefs = {
 	[CALENDAR_VIEW.DAY]?: InstanceType<typeof FullCalendar> | null
 	[CALENDAR_VIEW.WEEK]?: InstanceType<typeof FullCalendar> | null
-	[CALENDAR_VIEW.MONTH]?: InstanceType<typeof FullCalendar> | null
+	/* [CALENDAR_VIEW.MONTH]?: InstanceType<typeof FullCalendar> | null */
 }
 
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
-	const { view, selectedDate, loading, eventsViewType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState } = props
+	const { view, selectedDate, loading, eventsViewType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState, salonID, onEditEvent } = props
 
 	const dayView = useRef<InstanceType<typeof FullCalendar>>(null)
 	const weekView = useRef<InstanceType<typeof FullCalendar>>(null)
-	const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
+	// const monthView = useRef<InstanceType<typeof FullCalendar>>(null)
 
 	useImperativeHandle(ref, () => ({
 		[CALENDAR_VIEW.DAY]: dayView?.current,
-		[CALENDAR_VIEW.WEEK]: weekView?.current,
-		[CALENDAR_VIEW.MONTH]: monthView?.current
+		[CALENDAR_VIEW.WEEK]: weekView?.current
+		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
 	const getView = () => {
@@ -54,7 +56,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 			return <CalendarEmptyState onButtonClick={onShowAllEmployees} />
 		}
 
-		if (view === CALENDAR_VIEW.MONTH) {
+		/* if (view === CALENDAR_VIEW.MONTH) {
 			return (
 				<CalendarMonthView
 					ref={monthView}
@@ -63,20 +65,23 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					shiftsTimeOffs={shiftsTimeOffs}
 					employees={employees}
 					eventsViewType={eventsViewType}
+					salonID={salonID}
+					onEditEvent={onEditEvent}
 				/>
 			)
-		}
+		} */
 
 		if (view === CALENDAR_VIEW.WEEK) {
 			return (
 				<CalendarWeekView
-					calendarApi={weekView?.current?.getApi()}
 					ref={weekView}
 					selectedDate={selectedDate}
 					reservations={reservations}
 					shiftsTimeOffs={shiftsTimeOffs}
 					employees={employees}
 					eventsViewType={eventsViewType}
+					salonID={salonID}
+					onEditEvent={onEditEvent}
 				/>
 			)
 		}
@@ -89,7 +94,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				shiftsTimeOffs={shiftsTimeOffs}
 				employees={employees}
 				eventsViewType={eventsViewType}
-				onShowAllEmployees={onShowAllEmployees}
+				salonID={salonID}
+				onEditEvent={onEditEvent}
 			/>
 		)
 	}
@@ -97,6 +103,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	return (
 		<Content className={'nc-content'}>
 			<Spin spinning={loading}>
+				<div id={'nc-content-overlay'} />
 				<div className={'nc-content-animate'} key={`${selectedDate} ${view} ${eventsViewType}`}>
 					{getView()}
 				</div>

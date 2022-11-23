@@ -215,7 +215,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const filteredEmployees = useCallback(() => {
 		// filter employees based on employeeIDs in the url queryParams (if there are any)
 		if (!isEmpty(query.employeeIDs)) {
-			return employees?.data?.employees.filter((employee) => query.employeeIDs?.includes(employee.id))
+			return employees?.data?.employees.filter((employee: any) => query.employeeIDs?.includes(employee.id))
 		}
 
 		// null means empty filter otherwise return all employes as default value
@@ -608,6 +608,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 					/>
 					<CalendarContent
+						salonID={salonID}
 						ref={calendarRefs}
 						selectedDate={query.date}
 						view={query.view as CALENDAR_VIEW}
@@ -621,6 +622,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 							setQuery({
 								...query,
 								employeeIDs: getEmployeeIDs(employees?.options)
+							})
+						}}
+						onEditEvent={(eventId: string, eventType: CALENDAR_EVENT_TYPE) => {
+							setQuery({
+								eventId,
+								sidebarView: eventType
 							})
 						}}
 					/>

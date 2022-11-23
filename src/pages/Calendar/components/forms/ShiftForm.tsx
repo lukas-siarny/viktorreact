@@ -57,7 +57,7 @@ const CalendarShiftForm: FC<Props> = (props) => {
 	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes, eventsViewType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const formValues: any = useSelector((state: RootState) => getFormValues(formName)(state))
+	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
@@ -188,7 +188,6 @@ const CalendarShiftForm: FC<Props> = (props) => {
 						placeholders={[t('loc:čas od'), t('loc:čas do')]}
 						component={TimeRangeField}
 						required
-						disabled={!!formValues?.allDay} // NOTE: ak je cely den tak sa disable stav pre pre nastavenie casu
 						allowClear
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}

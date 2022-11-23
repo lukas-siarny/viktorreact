@@ -1034,7 +1034,7 @@ export const computeEndDate = (startDate: any, endDate: any) => {
 	const weeks = dayjs(endDate).diff(dayjs(startDate), 'weeks')
 	let endsIn
 	// 1 tyzden
-	if (weeks >= 1 && weeks < 4) {
+	if (weeks >= 1 && weeks < 3) {
 		endsIn = ENDS_EVENT.WEEK
 		// 1 mesiac - 4 tyzdne
 	} else if (weeks >= 3 && weeks <= 4) {

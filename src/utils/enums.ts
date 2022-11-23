@@ -54,7 +54,10 @@ export enum FIELD_MODE {
 
 export enum REQUEST_TYPE {
 	DELETE = 'DELETE',
-	EDIT = 'EDIT'
+	PATCH = 'PATCH',
+	PUT = 'PUT',
+	GET = 'GET',
+	POST = 'POST'
 }
 
 export enum FILTER_ENTITY {

@@ -84,7 +84,7 @@ type Props = {
 	siderFilterCollapsed: boolean
 	setCalendarView: (newView: CALENDAR_VIEW) => void
 	setSiderFilterCollapsed: () => void
-	setCollapsed: (view: CALENDAR_EVENT_TYPE) => void
+	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	setSelectedDate: (newDate: string | dayjs.Dayjs, type?: CALENDAR_SET_NEW_DATE) => void
 	eventsViewType: CALENDAR_EVENTS_VIEW_TYPE
 }

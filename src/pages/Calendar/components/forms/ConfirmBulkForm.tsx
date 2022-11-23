@@ -28,18 +28,18 @@ const ConfirmBulkForm: FC<Props> = (props) => {
 		{
 			key: CONFIRM_BULK.SINGLE_RECORD,
 			value: CONFIRM_BULK.SINGLE_RECORD,
-			label: requestType === REQUEST_TYPE.EDIT ? STRINGS(t).edit(t('loc:len tento záznam')) : STRINGS(t).delete(t('loc:len tento záznam'))
+			label: requestType === REQUEST_TYPE.PATCH ? STRINGS(t).edit(t('loc:len tento záznam')) : STRINGS(t).delete(t('loc:len tento záznam'))
 		},
 		{
 			key: CONFIRM_BULK.BULK,
 			value: CONFIRM_BULK.BULK,
-			label: requestType === REQUEST_TYPE.EDIT ? STRINGS(t).edit(t('loc:všetky záznamy')) : STRINGS(t).delete(t('loc:všetky záznamy'))
+			label: requestType === REQUEST_TYPE.PATCH ? STRINGS(t).edit(t('loc:všetky záznamy')) : STRINGS(t).delete(t('loc:všetky záznamy'))
 		}
 	]
 	return (
 		<Form layout='vertical' className='w-full h-full flex flex-col gap-4' onSubmitCapture={handleSubmit}>
 			<p>
-				{requestType === REQUEST_TYPE.EDIT
+				{requestType === REQUEST_TYPE.PATCH
 					? t('loc:Úpravujete záznam, ktorý sa opakuje. Aktualizácia nadchádzajúcich zmien prepíše prebiehajúce plánovanie')
 					: t('loc:Odstráňujete záznam, ktorý sa opakuje. Odstránenie nadchádzajúcich zmien prepíše prebiehajúce plánovanie')}
 			</p>

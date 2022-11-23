@@ -54,7 +54,7 @@ import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, SalonSubPageProps } from '../../types/interfaces'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -101,8 +101,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
 	const eventDetail = useSelector((state: RootState) => state.calendar.eventDetail)
 
-	const formValuesBulkForm: any = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
-	const formValuesDetailEvent: any = useSelector((state: RootState) => getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state))
+	const formValuesBulkForm: Partial<IBulkConfirmForm> = useSelector((state: RootState) => getFormValues(FORM.CONFIRM_BULK_FORM)(state))
+	const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
+		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
+	)
 	const [t] = useTranslation()
 
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
@@ -274,7 +276,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
-	const refreshEvents = () => {
+	const fetchEvents = () => {
 		// fetch new events
 		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 			Promise.all([
@@ -297,7 +299,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			// fetch new events
-			refreshEvents()
+			fetchEvents()
 		})()
 	}, [dispatch, salonID, query.date, query.view, query.eventsViewType, query.employeeIDs, query.categoryIDs])
 
@@ -377,10 +379,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					true
 				)
 				// DELETE BULK event
-			} else if (eventDetail.data?.calendarBulkEvent?.id && formValuesBulkForm?.actionType === CONFIRM_BULK.BULK) {
+			} else if (eventDetail.data?.calendarBulkEvent?.id && formValuesBulkForm.actionType === CONFIRM_BULK.BULK) {
 				await deleteReq(
 					'/api/b2b/admin/salons/{salonID}/calendar-events/bulk/{calendarBulkEventID}',
-					{ salonID, calendarBulkEventID: formValuesDetailEvent?.calendarBulkEventID },
+					{ salonID, calendarBulkEventID: formValuesDetailEvent?.calendarBulkEventID as string },
 					undefined,
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
@@ -391,7 +393,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 
 			setEventManagement(undefined)
-			refreshEvents()
+			fetchEvents()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -444,7 +446,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 			// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
 			setEventManagement(undefined)
-			refreshEvents()
+			fetchEvents()
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -458,7 +460,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
-				setVisibleBulkModal(REQUEST_TYPE.EDIT)
+				setVisibleBulkModal(REQUEST_TYPE.PATCH)
 				return
 			}
 
@@ -534,7 +536,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
 				setEventManagement(undefined)
-				refreshEvents()
+				fetchEvents()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -545,7 +547,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const handleSubmitConfirmModal = () => {
 		// EDIT
-		if (visibleBulkModal === REQUEST_TYPE.EDIT) {
+		if (visibleBulkModal === REQUEST_TYPE.PATCH) {
 			switch (query.sidebarView) {
 				case CALENDAR_EVENT_TYPE.RESERVATION:
 					dispatch(submit(FORM.CALENDAR_RESERVATION_FORM))
@@ -572,7 +574,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const modals = (
 		<>
 			<Modal
-				title={visibleBulkModal === REQUEST_TYPE.EDIT ? STRINGS(t).edit(t('loc:záznam')) : STRINGS(t).delete(t('loc:záznam'))}
+				title={visibleBulkModal === REQUEST_TYPE.PATCH ? STRINGS(t).edit(t('loc:záznam')) : STRINGS(t).delete(t('loc:záznam'))}
 				visible={!!visibleBulkModal}
 				onCancel={() => setVisibleBulkModal(null)}
 				onOk={() => dispatch(submit(FORM.CONFIRM_BULK_FORM))}

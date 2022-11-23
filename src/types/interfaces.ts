@@ -171,6 +171,7 @@ export interface ICalendarEventForm {
 	every?: EVERY_REPEAT
 	end?: ENDS_EVENT
 	note?: string
+	allDay?: boolean
 	// NOTE: pre akcie resize a drag and drop
 	eventId?: string
 	calendarBulkEventID?: string

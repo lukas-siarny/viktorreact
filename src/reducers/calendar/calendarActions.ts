@@ -15,6 +15,7 @@ import { getReq } from '../../utils/request'
 import { getSelectedDateRange } from '../../pages/Calendar/calendarHelpers'
 import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
+type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
 export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
 export type CalendarEvent = CalendarEvents[0] & {
 	startDateTime: string
@@ -23,6 +24,7 @@ export type CalendarEvent = CalendarEvents[0] & {
 	isFirstMultiDayEventInCurrentRange?: boolean
 	isLastMultiDaylEventInCurrentRange?: boolean
 	originalEvent?: CalendarEvent
+	employee: Employee
 }
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
@@ -79,8 +81,12 @@ export const getCalendarEvents =
 		view: CALENDAR_VIEW,
 		splitMultidayEventsIntoOneDayEvents = false
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
-	async (dispatch) => {
+	async (dispatch, getState) => {
+		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
+
 		let payload = {} as ICalendarEventsPayload
+
+		const state = getState()
 
 		try {
 			const { start, end } = getSelectedDateRange(view, queryParams.date)
@@ -95,13 +101,18 @@ export const getCalendarEvents =
 				reservationStates: queryParams.reservationStates
 			}
 
-			dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
+			// employees z Reduxu, budu sa mapovat do eventov
+			const employees = {} as any
+			state.employees.employees.data?.employees.forEach((employee: Employee) => {
+				employees[employee.id] = employee
+			})
 
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
 				const editedEvent: CalendarEvent = {
 					...event,
+					employee: employees[event.employee.id],
 					startDateTime: getDateTime(event.start.date, event.start.time),
 					endDateTime: getDateTime(event.end.date, event.end.time)
 				}

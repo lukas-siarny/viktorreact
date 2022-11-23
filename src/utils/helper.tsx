@@ -1029,3 +1029,25 @@ export const getAssignedUserLabel = (assignedUser?: Paths.GetApiB2BAdminSalons.R
 			return assignedUser.id
 	}
 }
+
+export const computeEndDate = (startDate: any, endDate: any) => {
+	const weeks = dayjs(endDate).diff(dayjs(startDate), 'weeks')
+	let endsIn
+	// 1 tyzden
+	if (weeks >= 1 && weeks < 3) {
+		endsIn = ENDS_EVENT.WEEK
+		// 1 mesiac - 4 tyzdne
+	} else if (weeks >= 3 && weeks <= 4) {
+		endsIn = ENDS_EVENT.MONTH
+		// 3 mesiace -> 12 tydnov
+	} else if (weeks >= 12 && weeks <= 13) {
+		endsIn = ENDS_EVENT.THREE_MONTHS
+		// 6 meiacov -> 24 tyzdnov
+	} else if (weeks >= 24 && weeks <= 25) {
+		endsIn = ENDS_EVENT.SIX_MONTHS
+		// 1 rok
+	} else {
+		endsIn = ENDS_EVENT.YEAR
+	}
+	return endsIn
+}

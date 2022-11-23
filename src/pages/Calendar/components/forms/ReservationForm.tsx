@@ -12,7 +12,7 @@ import validateReservationForm from './validateReservationForm'
 import { formatLongQueryString, getAssignedUserLabel, getCountryPrefix, optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import Permissions from '../../../../utils/Permissions'
 import { getReq, postReq } from '../../../../utils/request'
-import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
+import { CALENDAR_EVENT_TYPE, CALENDAR_EVENTS_VIEW_TYPE, ENUMERATIONS_KEYS, EVENT_TYPE_OPTIONS, FORM, SALON_PERMISSION, STRINGS } from '../../../../utils/enums'
 
 // types
 import { ICalendarReservationForm, ICustomerForm } from '../../../../types/interfaces'
@@ -35,7 +35,7 @@ import DeleteButton from '../../../../components/DeleteButton'
 
 type ComponentProps = {
 	salonID: string
-	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	onChangeEventType: (type: any) => any
 	handleDeleteEvent: () => any
 	searchEmployes: (search: string, page: number) => Promise<any>
@@ -174,7 +174,7 @@ const ReservationForm: FC<Props> = (props) => {
 					<Button
 						className='button-transparent'
 						onClick={() => {
-							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
+							setCollapsed(undefined)
 						}}
 					>
 						<CloseIcon />
@@ -228,7 +228,6 @@ const ReservationForm: FC<Props> = (props) => {
 							/>
 						)}
 					/>
-
 					<Field
 						component={SelectField}
 						label={t('loc:Služba')}

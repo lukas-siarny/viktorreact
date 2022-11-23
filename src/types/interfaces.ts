@@ -2,7 +2,7 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW, RESERVATION_STATE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK } from '../utils/enums'
 
 // types
 import { Paths } from './api'
@@ -155,6 +155,7 @@ export interface ICalendarReservationForm {
 	timeFrom: string
 	timeTo: string
 	note?: string
+	eventId?: string
 }
 
 export interface ICalendarEventForm {
@@ -162,12 +163,16 @@ export interface ICalendarEventForm {
 	date: string
 	timeFrom: string
 	timeTo: string
+	eventType: CALENDAR_EVENT_TYPE
 	recurring?: boolean
 	repeatOn?: any
 	every?: EVERY_REPEAT
 	end?: ENDS_EVENT
 	note?: string
-	eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
+	allDay?: boolean
+	// NOTE: pre akcie resize a drag and drop
+	eventId?: string
+	calendarBulkEventID?: string
 }
 
 export interface ISupportContactForm {
@@ -577,4 +582,8 @@ export interface IEventCardProps {
 	diff: number
 	timeText: string
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+}
+
+export interface IBulkConfirmForm {
+	actionType: CONFIRM_BULK
 }

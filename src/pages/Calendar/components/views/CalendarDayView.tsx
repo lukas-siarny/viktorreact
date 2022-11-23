@@ -8,8 +8,9 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
+import { StringParam, useQueryParams } from 'use-query-params'
+import { composeDayViewEvents, composeDayViewResources } from '../../calendarHelpers'
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
-import { composeDayViewResources, composeDayViewEvents } from '../../calendarHelpers'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
@@ -52,6 +53,10 @@ interface ICalendarDayView extends ICalendarView {}
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
 	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent } = props
 
+	const [_, setQuery] = useQueryParams({
+		eventId: StringParam,
+		sidebarView: StringParam
+	})
 	const handleDateClick = (arg: DateClickArg) => {}
 
 	const handleSelect = (info: any) => {

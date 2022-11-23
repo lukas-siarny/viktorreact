@@ -12,8 +12,8 @@ import validateBreakForm from './validateBreakForm'
 // utils
 import { optionRenderWithAvatar, showErrorNotification } from '../../../../utils/helper'
 import {
+	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW,
 	ENDS_EVENT,
 	ENDS_EVENT_OPTIONS,
 	EVENT_TYPE_OPTIONS,
@@ -44,7 +44,7 @@ import DeleteButton from '../../../../components/DeleteButton'
 import { RootState } from '../../../../reducers'
 
 type ComponentProps = {
-	setCollapsed: (view: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW) => void
+	setCollapsed: (view: CALENDAR_EVENT_TYPE | undefined) => void
 	onChangeEventType: (type: any) => any
 	handleDeleteEvent: () => any
 	eventId?: string | null
@@ -53,13 +53,13 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<ICalendarEventForm, ComponentProps> & ComponentProps
-const formName = FORM.CALENDAR_BREAK_FORM
+const formName = FORM.CALENDAR_EMPLOYEE_BREAK_FORM
 
 const CalendarBreakForm: FC<Props> = (props) => {
 	const { handleSubmit, setCollapsed, onChangeEventType, handleDeleteEvent, eventId, searchEmployes, eventsViewType } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-	const formValues: any = useSelector((state: RootState) => getFormValues(formName)(state))
+	const formValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(formName)(state))
 
 	const checkboxOptionRender = (option: any, checked?: boolean) => {
 		return <div className={cx('w-5 h-5 flex-center bg-notino-grayLighter rounded', { 'bg-notino-pink': checked, 'text-notino-white': checked })}>{option?.label}</div>
@@ -86,7 +86,6 @@ const CalendarBreakForm: FC<Props> = (props) => {
 				size={'large'}
 				options={EVERY_REPEAT_OPTIONS()}
 				className={'pb-0'}
-				allowClear
 			/>
 
 			<Field
@@ -129,7 +128,7 @@ const CalendarBreakForm: FC<Props> = (props) => {
 					<Button
 						className='button-transparent'
 						onClick={() => {
-							setCollapsed(CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.COLLAPSED)
+							setCollapsed(undefined)
 						}}
 					>
 						<CloseIcon />
@@ -196,7 +195,14 @@ const CalendarBreakForm: FC<Props> = (props) => {
 						itemClassName={'m-0 pb-0'}
 						minuteStep={15}
 					/>
-					<Field name={'recurring'} disabled={eventId} onChange={onChangeRecurring} className={'pb-0'} component={SwitchField} label={t('loc:Opakovať')} />
+					<Field
+						name={'recurring'}
+						disabled={!formValues?.calendarBulkEventID && eventId}
+						onChange={onChangeRecurring}
+						className={'pb-0'}
+						component={SwitchField}
+						label={t('loc:Opakovať')}
+					/>
 					{recurringFields}
 					<Field name={'note'} label={t('loc:Poznámka')} className={'pb-0'} component={TextareaField} />
 				</Form>

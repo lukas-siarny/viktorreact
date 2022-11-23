@@ -782,6 +782,12 @@ export enum RESERVATION_ASSIGNMENT_TYPE {
 	USER = 'USER'
 }
 
+export enum RESERVATION_PAYMENT_METHOD {
+	CASH = 'CASH',
+	CARD = 'CARD',
+	OTHER = 'OTHER'
+}
+
 export const getDayNameFromNumber = (day: number) => {
 	switch (day) {
 		case 0: // prvy den dayjs.day() -> nedela

@@ -30,7 +30,7 @@ import { CalendarEvent } from '../../../reducers/calendar/calendarActions'
 import { RootState } from '../../../reducers'
 
 /// utils
-import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_STATE } from '../../../utils/enums'
+import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'
 import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
@@ -40,7 +40,7 @@ type Props = {
 	start: Date | null
 	end: Date | null
 	event: CalendarEvent
-	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => void
+	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 	color?: string
 }
@@ -244,18 +244,16 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 	}, [isOpen, overlayClassName, setIsOpen])
 
 	const handleUpdateState = useCallback(
-		(state: RESERVATION_STATE, closeAfterUpdate = true) => {
-			handleUpdateReservationState(id, state)
-			if (closeAfterUpdate) {
-				setIsOpen(false)
-			}
+		(state: RESERVATION_STATE, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
+			handleUpdateReservationState(id, state, undefined, paymentMethod)
+			setIsOpen(false)
 		},
 		[id, handleUpdateReservationState, setIsOpen]
 	)
 
 	const getFooterCheckoutButton = () => {
-		// TODO: zatial hardcoded kym to BE neupravi
-		/*
+		// TODO: momentalne sa neda prejst do stavu REALIZED ak salon nema vyplneny ziaden sposob platby
+		// disabled button a nejaky tooltip, ktory by informoval, ze je potrebne nastavit sposoby platby v detaile salonu?
 		const items = []
 
 		if (selectedSalon?.data?.payByCard) {
@@ -264,7 +262,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				label: t('loc:Kartou'),
 				icon: <CreditCardIcon />,
 				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CARD)
 			})
 		}
 
@@ -274,43 +272,17 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				label: t('loc:Hotovosťou'),
 				icon: <WalletIcon />,
 				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.CASH)
 			})
 		}
 
-		if (selectedSalon?.data?.otherPaymentMethods) {
-			items.push({
-				key: 'realized-cash',
-				label: selectedSalon?.data?.otherPaymentMethods,
-				icon: <WalletIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-			})
-		} */
-
-		const items = [
-			{
-				key: 'realized-card',
-				label: t('loc:Kartou'),
-				icon: <CreditCardIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-			},
-			{
-				key: 'realized-cash',
-				label: t('loc:Hotovosťou'),
-				icon: <WalletIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-			},
-			{
-				key: 'realized-other',
-				label: t('loc:Iným spôsobom'),
-				icon: <DollarIcon />,
-				className: itemClassName,
-				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED)
-			}
-		]
+		items.push({
+			key: 'realized-other',
+			label: t('loc:Iným spôsobom'),
+			icon: <DollarIcon />,
+			className: itemClassName,
+			onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.OTHER)
+		})
 
 		return (
 			<Dropdown

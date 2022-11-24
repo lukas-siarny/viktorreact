@@ -704,6 +704,23 @@ export const ENDS_EVENT_OPTIONS = () => [
 	}
 ]
 
+export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
+	switch (eventType) {
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+			return i18next.t('loc:prestávku')
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+			return i18next.t('loc:zmenu')
+
+		case CALENDAR_EVENT_TYPE.RESERVATION:
+			return i18next.t('loc:rezerváciu')
+
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+			return i18next.t('loc:dovolenku')
+		default:
+			return ''
+	}
+}
+
 export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
 	const options = [
 		{

@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-import { compact, includes, isEmpty, map, omit } from 'lodash'
+import { compact, includes, isEmpty, map } from 'lodash'
 import { getFormValues, initialize, submit } from 'redux-form'
 import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -19,8 +19,6 @@ import {
 	CALENDAR_VIEW,
 	CONFIRM_BULK,
 	DAY,
-	DEFAULT_DATE_INIT_FORMAT,
-	DEFAULT_TIME_FORMAT,
 	ENDS_EVENT,
 	EVERY_REPEAT,
 	FORM,
@@ -56,7 +54,7 @@ import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, IEventTypeFilterForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, SalonSubPageProps } from '../../types/interfaces'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -107,41 +105,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
 		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
 	)
-	const breakFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_BREAK_FORM)(state))
-	const timeOffFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM)(state))
-	const shiftFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM)(state))
-	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	const [t] = useTranslation()
-
-	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
-		const prevEventType = query.sidebarView
-		// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
-		let prevInitData: any = {}
-		if (prevEventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT) {
-			prevInitData = shiftFormValues
-		} else if (prevEventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK) {
-			prevInitData = breakFormValues
-		} else if (prevEventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF) {
-			prevInitData = timeOffFormValues
-		} else {
-			prevInitData = reservationFormValues
-		}
-		// Nastavi sa aktualny event Type zo selectu
-		setQuery({
-			...query,
-			sidebarView: eventType
-		})
-		// Initne sa event / reservation formular
-		const initData = {
-			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			timeFrom: dayjs().format(DEFAULT_TIME_FORMAT),
-			eventType,
-			...omit(prevInitData, 'eventType')
-		}
-		dispatch(initialize(FORM.EVENT_TYPE_FILTER_FORM, { eventType }))
-		dispatch(initialize(eventForm, initData))
-	}
 
 	const setEventManagement = useCallback(
 		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
@@ -252,20 +217,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		return query?.employeeIDs === null ? [] : employees?.data?.employees
 	}, [employees?.data?.employees, query.employeeIDs])
 
-	// Zmena selectu event type v draweri
-	const onChangeEventType = (type: CALENDAR_EVENT_TYPE) => {
-		initCreateEventForm(`CALENDAR_${type}_FORM` as FORM, type)
-	}
-
 	useEffect(() => {
 		// init pre UPDATE form ak eventId existuje
 		if (query.eventId) {
 			initUpdateEventForm()
-		}
-		// zmena sideBar view
-		if (query.sidebarView !== undefined) {
-			// initnutie defaultu sidebaru pri nacitani bude COLLAPSED a ak bude existovat typ formu tak sa initne dany FORM (pri skopirovani URL na druhy tab)
-			onChangeEventType(query.sidebarView as CALENDAR_EVENT_TYPE)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
@@ -328,7 +283,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			sidebarView: undefined
 		})
 	}
-	const deleteEventWrapper = async () => {
+	const deleteEventWrapper = useCallback(async () => {
 		if (isRemoving) {
 			return
 		}
@@ -366,7 +321,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		} finally {
 			setIsRemoving(false)
 		}
-	}
+	}, [
+		eventDetail?.data?.calendarBulkEvent?.id,
+		fetchEvents,
+		formValuesBulkForm?.actionType,
+		formValuesDetailEvent?.calendarBulkEventID,
+		isRemoving,
+		query?.eventId,
+		query?.sidebarView,
+		salonID,
+		setEventManagement
+	])
 
 	const handleDeleteEvent = async () => {
 		// Ak existuje bulkID otvorit modal pre dodatocne potvrdenie zmazanie medzi BULK / SINGLE
@@ -425,7 +390,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm) => {
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
-
 			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
@@ -602,7 +566,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}}
 					/>
 					<SiderEventManagement
-						onChangeEventType={onChangeEventType}
 						salonID={salonID}
 						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						eventId={query.eventId}

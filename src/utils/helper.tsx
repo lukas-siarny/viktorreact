@@ -1,6 +1,8 @@
 /* eslint-disable import/no-cycle */
 import React from 'react'
 import {
+	chain,
+	filter,
 	first,
 	floor,
 	forEach,
@@ -14,60 +16,57 @@ import {
 	isNaN,
 	isNil,
 	isNumber,
+	isString,
+	lowerCase,
+	map,
 	mapValues,
 	orderBy,
 	pick,
+	repeat,
+	replace,
 	round,
+	size,
 	some,
 	split,
 	toNumber,
-	chain,
-	lowerCase,
-	isString,
-	replace,
-	map,
-	size,
-	filter,
-	trimEnd,
-	repeat
+	trimEnd
 } from 'lodash'
 import { notification } from 'antd'
 import slugify from 'slugify'
-import { submit, SubmissionError } from 'redux-form'
+import { SubmissionError, submit } from 'redux-form'
 import { isEmail, isIpv4, isIpv6, isNaturalNonZero, isNotNumeric } from 'lodash-checkit'
 import i18next from 'i18next'
 import dayjs, { Dayjs } from 'dayjs'
 import { ArgsProps } from 'antd/lib/notification'
 import showNotifications from './tsxHelpers'
 import {
-	DEFAULT_DATE_FORMAT,
-	DEFAULT_DATE_WITH_TIME_FORMAT,
-	DEFAULT_TIME_FORMAT,
-	FORM,
-	INVALID_DATE_FORMAT,
-	MSG_TYPE,
-	DEFAULT_LANGUAGE,
-	BYTE_MULTIPLIER,
-	MONDAY_TO_FRIDAY,
-	DAY,
-	LANGUAGE,
-	EN_DATE_WITH_TIME_FORMAT,
-	EN_DATE_WITHOUT_TIME_FORMAT,
-	IMAGE_UPLOADING_PROP,
-	DEFAULT_PHONE_PREFIX,
-	QUERY_LIMIT,
-	NOTIFICATION_TYPE,
 	ADMIN_PERMISSIONS,
-	SALON_PERMISSION,
-	ENDS_EVENT,
-	DEFAULT_DATE_INIT_FORMAT,
+	BYTE_MULTIPLIER,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
+	DAY,
+	DEFAULT_DATE_FORMAT,
+	DEFAULT_DATE_INIT_FORMAT,
 	DEFAULT_DATE_TIME_OPTIONS,
-	CALENDAR_EVENT_TYPE
+	DEFAULT_DATE_WITH_TIME_FORMAT,
+	DEFAULT_LANGUAGE,
+	DEFAULT_PHONE_PREFIX,
+	DEFAULT_TIME_FORMAT,
+	EN_DATE_WITH_TIME_FORMAT,
+	EN_DATE_WITHOUT_TIME_FORMAT,
+	ENDS_EVENT,
+	FORM,
+	IMAGE_UPLOADING_PROP,
+	INVALID_DATE_FORMAT,
+	LANGUAGE,
+	MONDAY_TO_FRIDAY,
+	MSG_TYPE,
+	NOTIFICATION_TYPE,
+	QUERY_LIMIT,
+	SALON_PERMISSION
 } from './enums'
 
-import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption, CountriesData, IAuthUserPayload, IEmployeePayload } from '../types/interfaces'
+import { CountriesData, IAuthUserPayload, IDateTimeFilterOption, IEmployeePayload, IPrice, ISelectOptionItem, IStructuredAddress } from '../types/interfaces'
 import { phoneRegEx } from './regex'
 
 import { Paths } from '../types/api'
@@ -1051,23 +1050,4 @@ export const computeEndDate = (startDate: any, endDate: any) => {
 		endsIn = ENDS_EVENT.WEEK
 	}
 	return endsIn
-}
-
-export const translateEventName = (eventType: CALENDAR_EVENT_TYPE) => {
-	let eventName = ''
-	switch (eventType) {
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-			eventName = i18next.t('loc:prestávku')
-			break
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-			eventName = i18next.t('loc:zmenu')
-			break
-		case CALENDAR_EVENT_TYPE.RESERVATION:
-			eventName = i18next.t('loc:rezerváciu')
-			break
-		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-			eventName = i18next.t('loc:dovolenku')
-			break
-	}
-	return eventName
 }

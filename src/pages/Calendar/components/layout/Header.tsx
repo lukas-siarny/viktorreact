@@ -4,21 +4,13 @@ import cx from 'classnames'
 import { Header } from 'antd/lib/layout/layout'
 import { Button, Dropdown } from 'antd'
 import dayjs from 'dayjs'
-import { initialize, WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
+import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import Tooltip from 'antd/es/tooltip'
 import { useDispatch } from 'react-redux'
 
 // enums
-import {
-	CALENDAR_DATE_FORMAT,
-	CALENDAR_EVENT_TYPE,
-	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_SET_NEW_DATE,
-	CALENDAR_VIEW,
-	DEFAULT_DATE_INIT_FORMAT,
-	FORM,
-	STRINGS
-} from '../../../../utils/enums'
+import { StringParam, useQueryParams } from 'use-query-params'
+import { CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_SET_NEW_DATE, CALENDAR_VIEW, STRINGS } from '../../../../utils/enums'
 
 // assets
 import { ReactComponent as NavIcon } from '../../../../assets/icons/navicon-16.svg'
@@ -103,6 +95,9 @@ const CalendarHeader: FC<Props> = (props) => {
 	useOnClickOutside([calendarDropdownRef, dateButtonRef], () => {
 		setIsCalendarOpen(false)
 	})
+	const [query] = useQueryParams({
+		eventId: StringParam
+	})
 
 	const isSmallerDevice = useMedia(['(max-width: 1200px)'], [true], false)
 
@@ -175,21 +170,14 @@ const CalendarHeader: FC<Props> = (props) => {
 				<Button
 					type={'primary'}
 					onClick={() => {
-						// Kliknutie na pridat nastavi rezervaciu ako default
+						// Ak je otvoreny detail a klikne sa na pridat button tak sa detail vynujluje
+						if (query.eventId) {
+							setCollapsed(undefined)
+						}
 						// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastv pracovnu zmenu
 						if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-							const initData = {
-								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-								eventType: CALENDAR_EVENT_TYPE.RESERVATION
-							}
-							dispatch(initialize(FORM.CALENDAR_RESERVATION_FORM, initData))
 							setCollapsed(CALENDAR_EVENT_TYPE.RESERVATION)
 						} else {
-							const initData = {
-								date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-								eventType: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT
-							}
-							dispatch(initialize(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, initData))
 							setCollapsed(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 						}
 					}}

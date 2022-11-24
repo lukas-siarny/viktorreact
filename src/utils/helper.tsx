@@ -63,7 +63,8 @@ import {
 	DEFAULT_DATE_INIT_FORMAT,
 	DATE_TIME_PARSER_DATE_FORMAT,
 	DATE_TIME_PARSER_FORMAT,
-	DEFAULT_DATE_TIME_OPTIONS
+	DEFAULT_DATE_TIME_OPTIONS,
+	CALENDAR_EVENT_TYPE
 } from './enums'
 
 import { IPrice, ISelectOptionItem, IStructuredAddress, IDateTimeFilterOption, CountriesData, IAuthUserPayload, IEmployeePayload } from '../types/interfaces'
@@ -1034,8 +1035,8 @@ export const computeEndDate = (startDate: any, endDate: any) => {
 	const weeks = dayjs(endDate).diff(dayjs(startDate), 'weeks')
 	let endsIn
 	// 1 tyzden
-	if (weeks >= 1 && weeks < 3) {
-		endsIn = ENDS_EVENT.WEEK
+	if (weeks > 25) {
+		endsIn = ENDS_EVENT.YEAR
 		// 1 mesiac - 4 tyzdne
 	} else if (weeks >= 3 && weeks <= 4) {
 		endsIn = ENDS_EVENT.MONTH
@@ -1047,7 +1048,26 @@ export const computeEndDate = (startDate: any, endDate: any) => {
 		endsIn = ENDS_EVENT.SIX_MONTHS
 		// 1 rok
 	} else {
-		endsIn = ENDS_EVENT.YEAR
+		endsIn = ENDS_EVENT.WEEK
 	}
 	return endsIn
+}
+
+export const translateEventName = (eventType: CALENDAR_EVENT_TYPE) => {
+	let eventName = ''
+	switch (eventType) {
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+			eventName = i18next.t('loc:prestávku')
+			break
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+			eventName = i18next.t('loc:zmenu')
+			break
+		case CALENDAR_EVENT_TYPE.RESERVATION:
+			eventName = i18next.t('loc:rezerváciu')
+			break
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+			eventName = i18next.t('loc:dovolenku')
+			break
+	}
+	return eventName
 }

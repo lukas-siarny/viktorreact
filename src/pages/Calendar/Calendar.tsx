@@ -4,13 +4,14 @@ import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-import { compact, debounce, includes, isEmpty, map } from 'lodash'
-import { getFormValues, initialize, submit } from 'redux-form'
+import { compact, debounce, includes, isEmpty, map, omit } from 'lodash'
+import { change, getFormValues, initialize, submit } from 'redux-form'
 import { Modal } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 // utils
-import { useTranslation } from 'react-i18next'
 import {
+	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_KEYS,
@@ -20,6 +21,7 @@ import {
 	CONFIRM_BULK,
 	DAY,
 	DEFAULT_DATE_INIT_FORMAT,
+	DEFAULT_TIME_FORMAT,
 	ENDS_EVENT,
 	EVERY_REPEAT,
 	FORM,
@@ -54,7 +56,7 @@ import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEventTypeFilterForm, SalonSubPageProps } from '../../types/interfaces'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -105,18 +107,45 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
 		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
 	)
+	const breakFormValues = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_BREAK_FORM)(state))
+	const timeOffFormValues = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM)(state))
+	const shiftFormValues = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM)(state))
+	const reservationFormValues = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
+	const eventTypeFilterFormValues: Partial<IEventTypeFilterForm> = useSelector((state: RootState) => getFormValues(FORM.EVENT_TYPE_FILTER_FORM)(state))
+
 	const [t] = useTranslation()
 
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
+		const prevEventType = query.sidebarView
+		// Mergnut predchadzajuce data ktore boli vybrane pred zmenou eventTypu
+		let prevInitData: any = {}
+		if (prevEventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT) {
+			prevInitData = shiftFormValues
+		} else if (prevEventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK) {
+			prevInitData = breakFormValues
+		} else if (prevEventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF) {
+			prevInitData = timeOffFormValues
+		} else {
+			prevInitData = reservationFormValues
+		}
+		// Nastavi sa aktualny event Type zo selectu
+		setQuery({
+			...query,
+			sidebarView: eventType
+		})
+		// Initne sa event / reservation formular
 		const initData = {
 			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			eventType
+			timeFrom: dayjs().format(DEFAULT_TIME_FORMAT),
+			eventType,
+			...omit(prevInitData, 'eventType')
 		}
+		dispatch(initialize(FORM.EVENT_TYPE_FILTER_FORM, { eventType }))
 		dispatch(initialize(eventForm, initData))
 	}
 
 	const setEventManagement = useCallback(
-		(newView: CALENDAR_EVENT_TYPE | undefined) => {
+		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
 			// NOTE: ak je collapsed (newView je undefined) tak nastavit sidebarView na COLLAPSED a vynulovat eventId
 			if (!newView) {
 				setQuery({
@@ -129,6 +158,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 				setQuery({
 					...query,
+					eventId,
 					eventsViewType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
 					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
 				})
@@ -154,6 +184,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				timeTo: data?.end.time,
 				note: data?.note,
 				calendarBulkEventID: data?.calendarBulkEvent?.id,
+				allDay: data?.start.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.startTime && data?.end.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.endTime,
 				employee: {
 					value: data?.employee.id,
 					key: data?.employee.id,
@@ -224,38 +255,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	// Zmena selectu event type v draweri
 	const onChangeEventType = (type: CALENDAR_EVENT_TYPE) => {
-		switch (type) {
-			case CALENDAR_EVENT_TYPE.RESERVATION:
-				setQuery({
-					...query,
-					sidebarView: type
-				})
-				initCreateEventForm(FORM.CALENDAR_RESERVATION_FORM, CALENDAR_EVENT_TYPE.RESERVATION)
-				break
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-				setQuery({
-					...query,
-					sidebarView: type
-				})
-				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
-				break
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-				setQuery({
-					...query,
-					sidebarView: type
-				})
-				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF)
-				break
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				setQuery({
-					...query,
-					sidebarView: type
-				})
-				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_BREAK_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
-				break
-			default:
-				break
-		}
+		initCreateEventForm(`CALENDAR_${type}_FORM` as FORM, type)
 	}
 
 	useEffect(() => {
@@ -359,7 +359,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
-			...values
+			...values,
+			eventId: undefined,
+			sidebarView: undefined
 		})
 	}
 	const deleteEventWrapper = async () => {
@@ -482,7 +484,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					  }
 					: undefined
 				const reqData = {
-					eventType: values.eventType as any,
+					eventType: eventTypeFilterFormValues.eventType as any,
 					start: {
 						date: values.date,
 						time: values.timeFrom

@@ -3,7 +3,9 @@ import Sider from 'antd/lib/layout/Sider'
 import { map } from 'lodash'
 
 // enums
-import { CALENDAR_EVENT_TYPE, CALENDAR_EVENTS_VIEW_TYPE } from '../../../../utils/enums'
+import { Button } from 'antd'
+import { useTranslation } from 'react-i18next'
+import { CALENDAR_EVENT_TYPE, CALENDAR_EVENTS_VIEW_TYPE, STRINGS } from '../../../../utils/enums'
 
 // types
 import { ICalendarEventForm, ICalendarReservationForm } from '../../../../types/interfaces'
@@ -16,7 +18,10 @@ import BreakForm from '../forms/BreakForm'
 
 // utils
 import { getReq } from '../../../../utils/request'
-import { formatLongQueryString, getAssignedUserLabel } from '../../../../utils/helper'
+import { formatLongQueryString, getAssignedUserLabel, translateEventName } from '../../../../utils/helper'
+import EventTypeFilterForm from '../forms/EventTypeFilterForm'
+import DeleteButton from '../../../../components/DeleteButton'
+import { ReactComponent as CloseIcon } from '../../../../assets/icons/close-icon.svg'
 
 type Props = {
 	salonID: string
@@ -32,6 +37,8 @@ type Props = {
 
 const SiderEventManagement: FC<Props> = (props) => {
 	const { setCollapsed, handleSubmitReservation, handleSubmitEvent, salonID, onChangeEventType, sidebarView, handleDeleteEvent, eventId, eventsViewType } = props
+	const [t] = useTranslation()
+
 	const searchEmployes = useCallback(
 		async (search: string, page: number) => {
 			try {
@@ -63,54 +70,13 @@ const SiderEventManagement: FC<Props> = (props) => {
 	const getSiderContent = () => {
 		switch (sidebarView) {
 			case CALENDAR_EVENT_TYPE.RESERVATION:
-				return (
-					<ReservationForm
-						onChangeEventType={onChangeEventType}
-						handleDeleteEvent={handleDeleteEvent}
-						setCollapsed={setCollapsed}
-						salonID={salonID}
-						eventId={eventId}
-						searchEmployes={searchEmployes}
-						onSubmit={handleSubmitReservation}
-						eventsViewType={eventsViewType}
-					/>
-				)
+				return <ReservationForm salonID={salonID} eventId={eventId} searchEmployes={searchEmployes} onSubmit={handleSubmitReservation} />
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-				return (
-					<ShiftForm
-						onChangeEventType={onChangeEventType}
-						handleDeleteEvent={handleDeleteEvent}
-						setCollapsed={setCollapsed}
-						searchEmployes={searchEmployes}
-						eventId={eventId}
-						onSubmit={handleSubmitEvent}
-						eventsViewType={eventsViewType}
-					/>
-				)
+				return <ShiftForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-				return (
-					<TimeOffForm
-						onChangeEventType={onChangeEventType}
-						handleDeleteEvent={handleDeleteEvent}
-						setCollapsed={setCollapsed}
-						searchEmployes={searchEmployes}
-						eventId={eventId}
-						onSubmit={handleSubmitEvent}
-						eventsViewType={eventsViewType}
-					/>
-				)
+				return <TimeOffForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
 			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				return (
-					<BreakForm
-						onChangeEventType={onChangeEventType}
-						handleDeleteEvent={handleDeleteEvent}
-						setCollapsed={setCollapsed}
-						searchEmployes={searchEmployes}
-						eventId={eventId}
-						onSubmit={handleSubmitEvent}
-						eventsViewType={eventsViewType}
-					/>
-				)
+				return <BreakForm searchEmployes={searchEmployes} eventId={eventId} onSubmit={handleSubmitEvent} />
 			default:
 				return null
 		}
@@ -118,6 +84,35 @@ const SiderEventManagement: FC<Props> = (props) => {
 
 	return (
 		<Sider className='nc-sider-event-management' collapsed={!sidebarView} width={240} collapsedWidth={0}>
+			<div className={'nc-sider-event-management-header justify-between'}>
+				<div className={'font-semibold'}>{eventId ? STRINGS(t).edit(translateEventName(sidebarView)) : STRINGS(t).createRecord(translateEventName(sidebarView))}</div>
+				<div className={'flex-center'}>
+					{eventId && (
+						<DeleteButton
+							placement={'bottom'}
+							entityName={t('loc:prestávku')}
+							className={'bg-transparent mr-4'}
+							onConfirm={handleDeleteEvent}
+							onlyIcon
+							smallIcon
+							size={'small'}
+						/>
+					)}
+					<Button
+						className='button-transparent'
+						onClick={() => {
+							setCollapsed(undefined)
+						}}
+					>
+						<CloseIcon />
+					</Button>
+				</div>
+			</div>
+			{!eventId && (
+				<div className={'p-4'}>
+					<EventTypeFilterForm eventsViewType={eventsViewType} onChangeEventType={onChangeEventType} />
+				</div>
+			)}
 			{getSiderContent()}
 		</Sider>
 	)

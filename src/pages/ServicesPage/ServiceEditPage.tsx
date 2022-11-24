@@ -87,7 +87,7 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Zamestnanec ${employeeName} je už priradený!`)
+				description: i18next.t('loc:Zamestnanec {{ name }} je už priradený!', { name: employeeName })
 			})
 		} else if (employeeData) {
 			updatedEmployees.push({

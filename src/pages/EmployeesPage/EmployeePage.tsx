@@ -77,7 +77,7 @@ export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFai
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Služba ${serviceData?.label} je už priradená!`)
+				description: i18next.t('loc:Služba {{ label }} je už priradená!', { label: serviceData?.label })
 			})
 		} else if (serviceData) {
 			const newServiceData: ServiceData = {

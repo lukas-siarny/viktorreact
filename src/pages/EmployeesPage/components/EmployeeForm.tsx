@@ -1,5 +1,5 @@
 import React, { FC, MouseEventHandler } from 'react'
-import { Field, FieldArray, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { Divider, Form, Space, Collapse, Tag, Button } from 'antd'
@@ -213,9 +213,8 @@ const renderListFields = (props: any) => {
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, addService } = props
-
-	const form = useSelector((state: RootState) => state.form?.[FORM.EMPLOYEE])
-	const formValues = form?.values
+	
+	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)
 

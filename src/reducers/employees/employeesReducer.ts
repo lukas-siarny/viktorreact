@@ -1,8 +1,8 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ILoadingAndFailure, IEmployeePayload } from '../../types/interfaces'
+import { ILoadingAndFailure, IEmployeePayload, IEmployeesPayload } from '../../types/interfaces'
 import { EMPLOYEE, EMPLOYEES } from './employeesTypes'
-import { IEmployeesActions, IEmployeesPayload } from './employeesActions'
+import { IEmployeesActions } from './employeesActions'
 
 // eslint-disable-next-line import/prefer-default-export
 export const initState = {

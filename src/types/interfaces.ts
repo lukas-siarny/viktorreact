@@ -2,12 +2,11 @@ import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
 
 // utils
-import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW } from '../utils/enums'
+import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK } from '../utils/enums'
 
 // types
 import { Paths } from './api'
-import { ICalendarEventsPayload } from '../reducers/calendar/calendarActions'
-import { IEmployeesPayload } from '../reducers/employees/employeesActions'
+import { EventContentArg } from '@fullcalendar/react'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -154,6 +153,7 @@ export interface ICalendarReservationForm {
 	timeFrom: string
 	timeTo: string
 	note?: string
+	eventId?: string
 }
 
 export interface ICalendarEventForm {
@@ -161,12 +161,20 @@ export interface ICalendarEventForm {
 	date: string
 	timeFrom: string
 	timeTo: string
+	eventType: CALENDAR_EVENT_TYPE
 	recurring?: boolean
 	repeatOn?: any
 	every?: EVERY_REPEAT
 	end?: ENDS_EVENT
 	note?: string
-	eventType: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW
+	allDay?: boolean
+	// NOTE: pre akcie resize a drag and drop
+	eventId?: string
+	calendarBulkEventID?: string
+}
+
+export interface IEventTypeFilterForm {
+	eventType: CALENDAR_EVENT_TYPE
 }
 
 export interface ISupportContactForm {
@@ -314,6 +322,7 @@ export interface IEmployeeForm {
 	phonePrefixCountryCode?: string
 	phone?: string
 	services?: any
+	service?: string[]
 	avatar?: any
 	role: number
 }
@@ -565,7 +574,24 @@ export interface ICalendarFilter {
 	eventsViewType?: CALENDAR_EVENTS_VIEW_TYPE
 }
 
+export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
+
+export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
+export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
+export type CalendarEvent = CalendarEvents[0] & {
+	startDateTime: string
+	endDateTime: string
+	isMultiDayEvent?: boolean
+	isFirstMultiDayEventInCurrentRange?: boolean
+	isLastMultiDaylEventInCurrentRange?: boolean
+	originalEvent?: CalendarEvent
+	employee: Employee
+}
+
+export interface ICalendarEventsPayload {
+	data: CalendarEvent[] | null
+}
 
 export interface ICalendarView {
 	selectedDate: string
@@ -573,4 +599,18 @@ export interface ICalendarView {
 	reservations: ICalendarEventsPayload['data']
 	shiftsTimeOffs: ICalendarEventsPayload['data']
 	employees: Employees
+	salonID: string
+	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+}
+
+export interface IEventCardProps {
+	calendarView: CALENDAR_VIEW
+	data: EventContentArg
+	diff: number
+	timeText: string
+	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+}
+
+export interface IBulkConfirmForm {
+	actionType: CONFIRM_BULK
 }

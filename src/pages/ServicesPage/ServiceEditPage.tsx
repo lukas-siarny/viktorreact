@@ -12,11 +12,10 @@ import ServiceForm from './components/ServiceForm'
 // reducers
 import { RootState } from '../../reducers'
 import { getService } from '../../reducers/services/serviceActions'
-import { IEmployeesPayload } from '../../reducers/employees/employeesActions'
 import { getCategory, ICategoryParameterValue } from '../../reducers/categories/categoriesActions'
 
 // types
-import { IServiceForm, SalonSubPageProps, ILoadingAndFailure } from '../../types/interfaces'
+import { IServiceForm, SalonSubPageProps, ILoadingAndFailure, IEmployeesPayload } from '../../types/interfaces'
 import { Paths } from '../../types/api'
 
 // utils
@@ -87,7 +86,7 @@ export const addEmployee = (employees: IEmployeesPayload & ILoadingAndFailure, f
 
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Zamestnanec ${employeeName} je už priradený!`)
+				description: i18next.t('loc:Zamestnanec {{ name }} je už priradený!', { name: employeeName })
 			})
 		} else if (employeeData) {
 			updatedEmployees.push({

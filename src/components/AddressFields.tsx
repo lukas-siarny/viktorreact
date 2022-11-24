@@ -236,8 +236,6 @@ const AddressFields = (props: Props) => {
 										placeholder={t('loc:Zadajte číslo')}
 										name={'streetNumber'}
 										size={'large'}
-										validate={validationRequired}
-										required
 									/>
 								</Row>
 								<Row justify={'space-between'}>

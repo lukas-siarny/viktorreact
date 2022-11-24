@@ -52,6 +52,14 @@ export enum FIELD_MODE {
 	FILTER = 'FILTER'
 }
 
+export enum REQUEST_TYPE {
+	DELETE = 'DELETE',
+	PATCH = 'PATCH',
+	PUT = 'PUT',
+	GET = 'GET',
+	POST = 'POST'
+}
+
 export enum FILTER_ENTITY {
 	EMPLOYEE = 'EMPLOYEE',
 	SALON = 'SALON',
@@ -132,10 +140,11 @@ export enum FORM {
 	FILTER_REJECTED_SUGGESTIONS = 'FILTER_REJECTED_SUGGESTIONS',
 	CALENDAR_FILTER = 'CALENDAR_FILTER',
 	CALENDAR_RESERVATION_FORM = 'CALENDAR_RESERVATION_FORM',
-	CALENDAR_SHIFT_FORM = 'CALENDAR_SHIFT_FORM',
-	CALENDAR_TIME_OFF_FORM = 'CALENDAR_TIME_OFF_FORM',
-	CALENDAR_BREAK_FORM = 'CALENDAR_BREAK_FORM',
-	RESEVATION_SYSTEM_SETTINGS = 'RESEVATION_SYSTEM_SETTINGS'
+	CALENDAR_EMPLOYEE_SHIFT_FORM = 'CALENDAR_EMPLOYEE_SHIFT_FORM',
+	CALENDAR_EMPLOYEE_TIME_OFF_FORM = 'CALENDAR_EMPLOYEE_TIME_OFF_FORM',
+	CALENDAR_EMPLOYEE_BREAK_FORM = 'CALENDAR_EMPLOYEE_BREAK_FORM',
+	CONFIRM_BULK_FORM = 'CONFIRM_BULK_FORM',
+	EVENT_TYPE_FILTER_FORM = 'EVENT_TYPE_FILTER_FORM'
 }
 
 // System permissions
@@ -615,8 +624,8 @@ export const CALENDAR_COMMON_SETTINGS = {
 export enum CALENDAR_VIEW {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
 	DAY = 'DAY',
-	WEEK = 'WEEK',
-	MONTH = 'MONTH'
+	WEEK = 'WEEK' /* ,
+	MONTH = 'MONTH' */
 }
 
 export enum CALENDAR_EVENT_TYPE {
@@ -629,14 +638,6 @@ export enum CALENDAR_EVENT_TYPE {
 export enum CALENDAR_EVENTS_VIEW_TYPE {
 	RESERVATION = 'RESERVATION',
 	EMPLOYEE_SHIFT_TIME_OFF = 'EMPLOYEE_SHIFT_TIME_OFF'
-}
-
-export enum CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW {
-	RESERVATION = 'RESERVATION',
-	SHIFT = 'SHIFT',
-	TIME_OFF = 'TIME_OFF',
-	BREAK = 'BREAK',
-	COLLAPSED = 'COLLAPSED'
 }
 
 export enum CALENDAR_DATE_FORMAT {
@@ -657,13 +658,6 @@ export enum CALENDAR_SET_NEW_DATE {
 	DEFAULT = 'DEFAULT'
 }
 
-export enum REPEAT_ON {
-	// eslint-disable-next-line @typescript-eslint/no-shadow
-	DAY = 'DAY',
-	WEEK = 'WEEK',
-	MONTH = 'MONTH'
-}
-
 export enum ENDS_EVENT {
 	WEEK = 'WEEK',
 	MONTH = 'MONTH',
@@ -673,8 +667,8 @@ export enum ENDS_EVENT {
 }
 
 export enum EVERY_REPEAT {
-	ONE_WEEK = 1,
-	TWO_WEEKS = 2
+	ONE_WEEK = 'ONE_WEEK',
+	TWO_WEEKS = 'TWO_WEEKS'
 }
 
 export const EVERY_REPEAT_OPTIONS = () => [
@@ -684,7 +678,7 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	},
 	{
 		key: EVERY_REPEAT.TWO_WEEKS,
-		label: i18next.t('loc:Dva týždne')
+		label: i18next.t('loc:Druhý týždeň')
 	}
 ]
 
@@ -711,32 +705,49 @@ export const ENDS_EVENT_OPTIONS = () => [
 	}
 ]
 
+export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
+	switch (eventType) {
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+			return i18next.t('loc:prestávku')
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+			return i18next.t('loc:zmenu')
+
+		case CALENDAR_EVENT_TYPE.RESERVATION:
+			return i18next.t('loc:rezerváciu')
+
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+			return i18next.t('loc:dovolenku')
+		default:
+			return ''
+	}
+}
+
 export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
 	const options = [
 		{
-			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION,
+			key: CALENDAR_EVENT_TYPE.RESERVATION,
 			label: i18next.t('loc:Rezervácia')
 		},
 		{
-			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.SHIFT,
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
 			label: i18next.t('loc:Pracovná zmena')
 		},
 		{
-			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.TIME_OFF,
-			label: i18next.t('loc:Absencia')
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
+			label: i18next.t('loc:Dovolenka')
 		},
 		{
-			key: CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK,
+			key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
 			label: i18next.t('loc:Prestávka')
 		}
 	]
 	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
 		// rezervacia a break
-		return filter(options, (item) => item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION || item.key === CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.BREAK)
+		return filter(options, (item) => item.key === CALENDAR_EVENT_TYPE.RESERVATION || item.key === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
 	}
 	if (eventType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
 		// shift, break a vacation
-		return filter(options, (item) => item.key !== CALENDAR_EVENT_MANAGEMENT_SIDER_VIEW.RESERVATION)
+		return filter(options, (item) => item.key !== CALENDAR_EVENT_TYPE.RESERVATION)
 	}
 	// vsetky optiony
 	return options
@@ -757,6 +768,39 @@ export enum CALENDAR_EVENTS_KEYS {
 	RESERVATIONS = 'reservations',
 	SHIFTS_TIME_OFFS = 'shiftsTimeOffs'
 }
+
+export enum CONFIRM_BULK {
+	BULK = 'BULK',
+	SINGLE_RECORD = 'SINGLE_RECORD'
+}
+
+export enum RESERVATION_STATE {
+	PENDING = 'PENDING',
+	APPROVED = 'APPROVED',
+	DECLINED = 'DECLINED',
+	CANCEL_BY_SALON = 'CANCEL_BY_SALON',
+	CANCEL_BY_CUSTOMER = 'CANCEL_BY_CUSTOMER',
+	REALIZED = 'REALIZED',
+	NOT_REALIZED = 'NOT_REALIZED'
+}
+
+export enum RESERVATION_SOURCE_TYPE {
+	ONLINE = 'ONLINE',
+	OFFLINE = 'OFFLINE'
+}
+
+export enum RESERVATION_ASSIGNMENT_TYPE {
+	SYSTEM = 'SYSTEM',
+	USER = 'USER'
+}
+
+export enum RESERVATION_PAYMENT_METHOD {
+	CASH = 'CASH',
+	CARD = 'CARD',
+	OTHER = 'OTHER'
+}
+
+export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 
 export const getDayNameFromNumber = (day: number) => {
 	switch (day) {

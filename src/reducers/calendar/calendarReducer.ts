@@ -1,7 +1,7 @@
 /* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
-import { ICalendarActions, ICalendarEventsPayload, ICalendarEventDetailPayload } from './calendarActions'
-import { ILoadingAndFailure } from '../../types/interfaces'
+import { ICalendarActions, ICalendarEventDetailPayload } from './calendarActions'
+import { ICalendarEventsPayload, ILoadingAndFailure } from '../../types/interfaces'
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
 import { CALENDAR_EVENTS_KEYS } from '../../utils/enums'
 

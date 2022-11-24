@@ -1,128 +1,25 @@
 import React from 'react'
-import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // full calendar
-import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
 import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENT_TYPE } from '../../../../utils/enums'
-import { composeDayViewResources, composeDayViewEvents, getHoursMinutesFromMinutes } from '../../calendarHelpers'
+import { StringParam, useQueryParams } from 'use-query-params'
+import { composeDayViewEvents, composeDayViewResources } from '../../calendarHelpers'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
 
 // types
 import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-import { ReactComponent as BreakIcon } from '../../../../assets/icons/break-icon-16.svg'
 
-// utils
-import { getAssignedUserLabel } from '../../../../utils/helper'
-
-const renderEventContent = (data: EventContentArg) => {
-	const { event, backgroundColor } = data || {}
-	const { extendedProps } = event || {}
-	const { eventType, isMultiDayEvent, isLastMultiDaylEventInCurrentRange, isFirstMultiDayEventInCurrentRange } = extendedProps || {}
-
-	if (event.display === 'inverse-background') {
-		return <div className={cx('nc-bg-event not-set-availability')} />
-	}
-
-	if (event.display === 'background') {
-		return (
-			<div
-				className={cx('nc-bg-event', {
-					break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-					timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF
-				})}
-			/>
-		)
-	}
-
-	const diff = dayjs(event.end).diff(event.start, 'minutes')
-	const timeText = `${dayjs(event.start).format(CALENDAR_DATE_FORMAT.TIME)}-${dayjs(event.end).format(CALENDAR_DATE_FORMAT.TIME)}`
-
-	return (
-		<div
-			className={cx('nc-day-event', {
-				reservation: eventType === CALENDAR_EVENT_TYPE.RESERVATION,
-				shift: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT,
-				timeoff: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-				break: eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,
-				'min-15': Math.abs(diff) <= 15,
-				'min-45': Math.abs(diff) <= 45 && Math.abs(diff) > 15,
-				'multiday-event': isMultiDayEvent,
-				'multiday-event-first': isFirstMultiDayEventInCurrentRange,
-				'multiday-event-last': isLastMultiDaylEventInCurrentRange
-			})}
-			// style={eventType === CALENDAR_EVENT_TYPE.RESERVATION ? { outlineColor: backgroundColor } : undefined}
-		>
-			{(() => {
-				switch (eventType) {
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-					case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK: {
-						return (
-							<div className={'event-content'}>
-								<div className={'event-info'}>
-									<div className={'flex items-center gap-1 min-w-0'}>
-										<span className={'color'} style={{ backgroundColor }} />
-										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF && <AbsenceIcon className={'icon'} />}
-										{eventType === CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <BreakIcon className={'icon'} />}
-										{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && (
-											<span className={'title'}>{extendedProps.employee?.name || extendedProps.employee?.email}</span>
-										)}
-									</div>
-									<span className={'duration'}>{getHoursMinutesFromMinutes(diff)}</span>
-								</div>
-								{eventType !== CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK && <span className={'time'}>{timeText}</span>}
-							</div>
-						)
-					}
-					case CALENDAR_EVENT_TYPE.RESERVATION:
-					default: {
-						return (
-							<>
-								<div className={'event-accent'} style={{ backgroundColor }} />
-								<div className={'event-background'} style={{ backgroundColor }} />
-								<div className={'event-content'}>
-									<div className={'event-info'}>
-										<div className={'title-wrapper'}>
-											<span className={'title'}>
-												{getAssignedUserLabel({
-													id: extendedProps.customer?.id,
-													firstName: extendedProps.customer?.firstName,
-													lastName: extendedProps.customer?.lastName,
-													email: extendedProps.customer?.email
-												})}
-											</span>
-											<div className={'state'} style={{ backgroundColor }} />
-										</div>
-										<span className={'time'}>{timeText}</span>
-										{extendedProps.service?.name && <span className={'desc'}>{extendedProps.service.name}</span>}
-									</div>
-									<div className={'icons'}>
-										<span
-											className={'icon customer'}
-											style={{ backgroundImage: extendedProps.customer?.image ? `url("${extendedProps.customer?.image}")` : undefined }}
-										/>
-										<span
-											className={'icon service'}
-											style={{ backgroundImage: extendedProps.service?.icon ? `url("${extendedProps.service?.icon}")` : undefined }}
-										/>
-									</div>
-								</div>
-							</>
-						)
-					}
-				}
-			})()}
-		</div>
-	)
-}
+// components
+import CalendarEvent from '../CalendarEvent'
 
 const resourceLabelContent = (data: any) => {
 	const { resource } = data || {}
@@ -151,21 +48,19 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	return <div className={'nc-day-slot-label'}>{dayjs().startOf('day').add(time.milliseconds, 'millisecond').format(CALENDAR_DATE_FORMAT.TIME)}</div>
 }
 
-interface ICalendarDayView extends ICalendarView {
-	onShowAllEmployees: () => void
-}
+interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent } = props
 
+	const [_, setQuery] = useQueryParams({
+		eventId: StringParam,
+		sidebarView: StringParam
+	})
 	const handleDateClick = (arg: DateClickArg) => {}
 
 	const handleSelect = (info: any) => {
 		const { start, end, resource = {} } = info
-	}
-
-	const handleEventClick = (info: any) => {
-		const { start, end, resource } = info
 	}
 
 	const hasResources = !!employees.length
@@ -191,7 +86,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			// je potrebne nechat nastavene na 0, pretoze potom to zle rendruje background eventy, ktore su po 23:45 (snazi sa tam spravit min 15 minutovu vysku aj ked ma event len 1 minutu)
 			// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 			eventMinHeight={0}
-			dayMinWidth={240}
+			dayMinWidth={120}
 			editable={hasResources}
 			selectable={hasResources}
 			weekends
@@ -203,12 +98,11 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			resources={composeDayViewResources(shiftsTimeOffs, employees)}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}
-			eventContent={renderEventContent}
+			eventContent={(data) => <CalendarEvent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
 			slotLabelContent={slotLabelContent}
 			// handlers
 			select={handleSelect}
 			dateClick={handleDateClick}
-			eventClick={handleEventClick}
 		/>
 	)
 })

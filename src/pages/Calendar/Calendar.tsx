@@ -107,11 +107,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
 		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
 	)
-	const breakFormValues = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_BREAK_FORM)(state))
-	const timeOffFormValues = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM)(state))
-	const shiftFormValues = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM)(state))
-	const reservationFormValues = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
-	const eventTypeFilterFormValues: Partial<IEventTypeFilterForm> = useSelector((state: RootState) => getFormValues(FORM.EVENT_TYPE_FILTER_FORM)(state))
+	const breakFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_BREAK_FORM)(state))
+	const timeOffFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM)(state))
+	const shiftFormValues: Partial<ICalendarEventForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM)(state))
+	const reservationFormValues: Partial<ICalendarReservationForm> = useSelector((state: RootState) => getFormValues(FORM.CALENDAR_RESERVATION_FORM)(state))
 
 	const [t] = useTranslation()
 
@@ -449,7 +448,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					  }
 					: undefined
 				const reqData = {
-					eventType: eventTypeFilterFormValues.eventType as any,
+					eventType: values.eventType as any,
 					start: {
 						date: values.date,
 						time: values.timeFrom

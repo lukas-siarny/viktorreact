@@ -115,8 +115,8 @@ export const getServices =
 			const servicesOptions: ISelectOptionItem[] = []
 			const categoriesOptions: ISelectOptionItem[] = []
 
-			data.groupedServicesByCategory.forEach((firstCateogry) =>
-				firstCateogry?.category?.children.forEach((secondCategory) => {
+			data.groupedServicesByCategory.forEach((firstCategory) =>
+				firstCategory?.category?.children.forEach((secondCategory) => {
 					if (secondCategory?.category) {
 						categoriesOptions.push({
 							key: secondCategory.category.id,
@@ -125,7 +125,15 @@ export const getServices =
 						})
 					}
 					secondCategory.category?.children.forEach((service) => {
-						servicesOptions.push({ key: service.service.id, label: service.category.name || service.category.id, value: service.service.id })
+						servicesOptions.push({
+							key: service.service.id,
+							label: service.category.name || service.category.id,
+							value: service.service.id,
+							extra: {
+								firstCategory: firstCategory?.category?.name,
+								secondCategory: secondCategory?.category?.name
+							}
+						})
 					})
 				})
 			)

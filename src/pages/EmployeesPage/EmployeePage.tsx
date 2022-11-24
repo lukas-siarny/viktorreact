@@ -17,13 +17,14 @@ import EditRoleForm from './components/EditRoleForm'
 
 // types
 import { IBreadcrumbs, IComputedMatch, IEditEmployeeRoleForm, IEmployeeForm, IInviteEmployeeForm, ILoadingAndFailure, SalonSubPageProps } from '../../types/interfaces'
+import { Paths } from '../../types/api'
 
 // utils
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import Permissions, { withPermissions } from '../../utils/Permissions'
 import { DELETE_BUTTON_ID, FORM, PERMISSION, SALON_PERMISSION } from '../../utils/enums'
 import { history } from '../../utils/history'
-import { decodePrice, encodePrice, filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
+import { /* decodePrice, encodePrice, */ filterSalonRolesByPermission, formFieldID, hasAuthUserPermissionToEditRole } from '../../utils/helper'
 
 // reducers
 import { RootState } from '../../reducers'
@@ -44,9 +45,16 @@ type Props = SalonSubPageProps & {
 	computedMatch: IComputedMatch<{ employeeID: string }>
 }
 
+export type ServiceData = {
+	id?: string
+	name?: string
+	category?: string
+}
+
 const permissions: PERMISSION[] = [PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN, PERMISSION.PARTNER]
 
-export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
+// TODO - for change duration and price in employee detail
+/* export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
 	return oldServices?.map((service: any) => {
 		return {
 			id: service?.id,
@@ -58,26 +66,26 @@ export const parseServicesForCreateAndUpdate = (oldServices: any[]) => {
 			}
 		}
 	})
-}
+} */
 
-export const addService = (services: IServicesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
+export const addService = (servaddServiceices: IServicesPayload & ILoadingAndFailure, form: any, dispatch: Dispatch<Action>) => {
 	const selectedServiceIDs = form?.values?.service
 	const updatedServices: any[] = []
 	// go through selected services
 	forEach(selectedServiceIDs, (serviceId) => {
-		// TODO - services?.data?.services
-		const test: any[] = []
-		const serviceData = test.find((service: any) => service?.id === serviceId)
+		const serviceData = servaddServiceices?.options?.find((option) => option.key === serviceId)
 		if (form?.values?.services?.find((service: any) => service?.id === serviceId)) {
 			notification.warning({
 				message: i18next.t('loc:Upozornenie'),
-				description: i18next.t(`Služba ${serviceData?.category.name} je už priradená!`)
+				description: i18next.t(`Služba ${serviceData?.label} je už priradená!`)
 			})
 		} else if (serviceData) {
-			let newServiceData = {
-				id: serviceData?.id,
-				name: serviceData?.category.name,
-				salonData: {
+			const newServiceData: ServiceData = {
+				id: serviceData?.key as string,
+				name: serviceData?.label,
+				category: serviceData?.extra?.firstCategory
+				// TODO - for change duration and price in employee detail
+				/* salonData: {
 					durationFrom: serviceData?.durationFrom,
 					durationTo: serviceData?.durationTo,
 					priceFrom: decodePrice(serviceData?.priceFrom),
@@ -91,9 +99,9 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 				},
 				variableDuration: false,
 				variablePrice: false,
-				category: serviceData?.category
+				*/
 			}
-			if (serviceData?.durationFrom && serviceData?.durationTo) {
+			/* if (serviceData?.durationFrom && serviceData?.durationTo) {
 				newServiceData = {
 					...newServiceData,
 					variableDuration: true
@@ -104,7 +112,7 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 					...newServiceData,
 					variablePrice: true
 				}
-			}
+			} */
 			updatedServices.push(newServiceData)
 		}
 	})
@@ -116,6 +124,26 @@ export const addService = (services: IServicesPayload & ILoadingAndFailure, form
 	}
 	// clear selected value
 	dispatch(change(FORM.EMPLOYEE, 'service', null))
+}
+
+type ServiceRootCategory = Paths.GetApiB2BAdminEmployeesEmployeeId.Responses.$200['employee']['categories']
+
+const parseServices = (categories?: ServiceRootCategory): ServiceData[] => {
+	const result: ServiceData[] = []
+	if (categories) {
+		categories?.forEach((firstCategory) =>
+			firstCategory?.children.forEach((secondCategory) => {
+				secondCategory?.children.forEach((service) => {
+					result.push({
+						id: service?.id,
+						name: service?.category?.name,
+						category: firstCategory?.name
+					})
+				})
+			})
+		)
+	}
+	return result
 }
 
 const EmployeePage = (props: Props) => {
@@ -167,7 +195,7 @@ const EmployeePage = (props: Props) => {
 								}
 						  ]
 						: [],
-					services: /* checkAndParseServices(employee.data?.employee?.services) */ [],
+					services: parseServices(data?.employee?.categories),
 					salonID: { label: data.employee?.salon?.name, value: data.employee?.salon?.id },
 					roleID: data.employee?.role?.id
 				})
@@ -195,7 +223,8 @@ const EmployeePage = (props: Props) => {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				email: data?.email,
-				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid')
+				imageID: get(data, 'avatar[0].id') || get(data, 'avatar[0].uid'),
+				serviceIDs: data?.services?.map((service: ServiceData) => service.id)
 			}
 
 			if (data?.phonePrefixCountryCode && data?.phone) {

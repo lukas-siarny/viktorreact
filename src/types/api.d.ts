@@ -3144,6 +3144,7 @@ declare namespace Paths {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
                     };
                     customer?: {
                         id: string; // uuid
@@ -3247,6 +3248,7 @@ declare namespace Paths {
                             exponent: number;
                             significand: number;
                         };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
                     };
                     customer?: {
                         id: string; // uuid
@@ -7060,6 +7062,7 @@ declare namespace Paths {
                         state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
                         createSourceType: "ONLINE" | "OFFLINE";
                         employeeAssignmentType: "USER" | "SYSTEM";
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
                     };
                     customer?: {
                         id: string; // uuid
@@ -7163,6 +7166,7 @@ declare namespace Paths {
                             exponent: number;
                             significand: number;
                         };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
                     };
                     customer?: {
                         id: string; // uuid
@@ -8120,6 +8124,15 @@ declare namespace Paths {
                             phonePrefixCountryCode: string;
                             phone: string; // ^\d+$
                         }[];
+                        address?: {
+                            countryCode?: string;
+                            zipCode?: string;
+                            city?: string;
+                            street?: string;
+                            streetNumber?: string;
+                            latitude?: number; // float
+                            longitude?: number; // float
+                        };
                         formattedAddress?: string;
                     };
                     createdAt: string; // date-time
@@ -10476,6 +10489,15 @@ declare namespace Paths {
                             phonePrefixCountryCode: string;
                             phone: string; // ^\d+$
                         }[];
+                        address?: {
+                            countryCode?: string;
+                            zipCode?: string;
+                            city?: string;
+                            street?: string;
+                            streetNumber?: string;
+                            latitude?: number; // float
+                            longitude?: number; // float
+                        };
                         formattedAddress?: string;
                     };
                     createdAt: string; // date-time
@@ -21576,7 +21598,7 @@ declare namespace Paths {
         export interface RequestBody {
             state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
             reason?: string;
-            paymentMethod?: ("CASH" | "CARD" | "OTHER") | ("CASH" | "CARD" | "OTHER");
+            paymentMethod?: ("CASH" | "CARD" | "OTHER") | string;
         }
         namespace Responses {
             export interface $200 {
@@ -36530,7 +36552,7 @@ declare namespace Paths {
         export interface RequestBody {
             state: "PENDING" | "APPROVED" | "DECLINED" | "CANCEL_BY_SALON" | "CANCEL_BY_CUSTOMER" | "REALIZED" | "NOT_REALIZED";
             reason?: string;
-            paymentMethod?: ("CASH" | "CARD" | "OTHER") | ("CASH" | "CARD" | "OTHER");
+            paymentMethod?: ("CASH" | "CARD" | "OTHER") | string;
         }
         namespace Responses {
             export interface $200 {
@@ -46798,6 +46820,36 @@ declare namespace Paths {
             }
         }
     }
+    namespace PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+        }
+        export interface PathParameters {
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
     namespace PatchApiB2CV1SalonsSalonIdLike {
         export interface HeaderParameters {
             "accept-language"?: /**
@@ -46852,6 +46904,36 @@ declare namespace Paths {
             rate: 1 | 2 | 3 | 4 | 5; // float
             userName: string;
             deviceID: string;
+        }
+        namespace Responses {
+            export interface $200 {
+                messages: {
+                    message: string;
+                    type: "ERROR" | "WARNING" | "SUCCESS" | "INFO";
+                }[];
+            }
+        }
+    }
+    namespace PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel {
+        export interface HeaderParameters {
+            "accept-language"?: /**
+             * example:
+             * sk
+             */
+            Parameters.AcceptLanguage;
+        }
+        namespace Parameters {
+            /**
+             * example:
+             * sk
+             */
+            export type AcceptLanguage = string;
+            export type CalendarEventID = string; // uuid
+        }
+        export interface PathParameters {
+            calendarEventID: Parameters.CalendarEventID /* uuid */;
+        }
+        export interface RequestBody {
         }
         namespace Responses {
             export interface $200 {
@@ -57716,6 +57798,7 @@ declare namespace Paths {
                             exponent: number;
                             significand: number;
                         };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
                     };
                     customer?: {
                         id: string; // uuid
@@ -57879,6 +57962,7 @@ declare namespace Paths {
                             exponent: number;
                             significand: number;
                         };
+                        paymentMethod?: "CASH" | "CARD" | "OTHER";
                     };
                     customer?: {
                         id: string; // uuid
@@ -58939,6 +59023,14 @@ export interface OperationMethods {
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.Responses.$200>
   /**
+   * patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel - permissions: NO
+   */
+  'patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel'(
+    parameters?: Parameters<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+    data?: Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
+  /**
    * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
    */
   'getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable'(
@@ -59154,6 +59246,14 @@ export interface OperationMethods {
     data?: any,
     config?: AxiosRequestConfig  
   ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.Responses.$200>
+  /**
+   * patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel - permissions: NO
+   */
+  'patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel'(
+    parameters?: Parameters<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+    data?: Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.RequestBody,
+    config?: AxiosRequestConfig  
+  ): OperationResponse<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
   /**
    * getApiMaintenanceHealth - permissions: NO
    */
@@ -61015,6 +61115,16 @@ export interface PathsDictionary {
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CWebCalendarEventsReservationsCalendarEventId.Responses.$200>
   }
+  ['/api/b2c/web/calendar-events/reservations/{calendarEventID}/cancel']: {
+    /**
+     * patchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel - permissions: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+      data?: Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2CWebCalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
+  }
   ['/api/b2c/v1/salons/{salonID}/calendar-events/reservations/available']: {
     /**
      * getApiB2CV1SalonsSalonIdCalendarEventsReservationsAvailable - permissions: NO
@@ -61282,6 +61392,16 @@ export interface PathsDictionary {
       data?: any,
       config?: AxiosRequestConfig  
     ): OperationResponse<Paths.GetApiB2CV1CalendarEventsReservationsCalendarEventId.Responses.$200>
+  }
+  ['/api/b2c/v1/calendar-events/reservations/{calendarEventID}/cancel']: {
+    /**
+     * patchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel - permissions: NO
+     */
+    'patch'(
+      parameters?: Parameters<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.PathParameters & Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.HeaderParameters> | null,
+      data?: Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.RequestBody,
+      config?: AxiosRequestConfig  
+    ): OperationResponse<Paths.PatchApiB2CV1CalendarEventsReservationsCalendarEventIdCancel.Responses.$200>
   }
   ['/api/maintenance/health']: {
     /**

@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
 import { TooltipPlacement } from 'antd/es/tooltip'
+import i18next from 'i18next'
 
 // assets
 import { ButtonProps } from 'antd/es/button'
@@ -71,6 +72,31 @@ type ContentProps = {
 	// employee?: CalendarEvent['employee']
 	color?: string
 	notes?: PopoverNote[]
+}
+
+const getPaymentMethodHeaderProps = (method?: NonNullable<CalendarEvent['reservationData']>['paymentMethod']) => {
+	switch (method) {
+		case RESERVATION_PAYMENT_METHOD.CARD:
+			return {
+				headerIcon: <CreditCardIcon className={'text-notino-success'} />,
+				headerState: i18next.t('loc:Platba kartou')
+			}
+		case RESERVATION_PAYMENT_METHOD.CASH:
+			return {
+				headerIcon: <WalletIcon className={'text-notino-success'} />,
+				headerState: i18next.t('loc:Platba v hotovosti')
+			}
+		case RESERVATION_PAYMENT_METHOD.OTHER:
+			return {
+				headerIcon: <DollarIcon className={'text-notino-success'} />,
+				headerState: i18next.t('loc:Iné spôsoby platby')
+			}
+		default:
+			return {
+				headerIcon: <DollarIcon className={'text-notino-success'} />,
+				headerState: i18next.t('loc:Zaplatená')
+			}
+	}
 }
 
 const PopoverContent: FC<ContentProps> = (props) => {
@@ -435,10 +461,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					]
 				}
 			case RESERVATION_STATE.REALIZED:
-				return {
-					headerIcon: <CreditCardIcon className={'text-notino-success'} />,
-					headerState: t('loc:Zaplatená')
-				}
+				return getPaymentMethodHeaderProps(reservationData?.paymentMethod)
 			case RESERVATION_STATE.NOT_REALIZED:
 			default:
 				return {

@@ -58,6 +58,7 @@ const SalonsPage = () => {
 	const [tabKey, setTabKey] = useState<TAB_KEYS | undefined>()
 
 	const formValues = useSelector((state: RootState) => state.form?.[FORM.SALON_IMPORTS_FORM]?.values)
+	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
 	const { data } = useSelector((state: RootState) => state.categories.categories)
 	// transform root categories (industries) into object, where ID is key of record, and content is { image, name }
 	const industries: { [key: string]: any } = useMemo(
@@ -199,6 +200,11 @@ const SalonsPage = () => {
 		query.premiumSourceUserType,
 		query.assignedUserID
 	])
+
+	// change countryCode filter based on selectedCountry in home page 'Dashboard'
+	useEffect(() => {
+		setQuery({ ...query, countryCode: selectedCountry })
+	}, [selectedCountry])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {
 		if (!(sorter instanceof Array)) {

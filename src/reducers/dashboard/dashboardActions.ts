@@ -39,13 +39,13 @@ export interface ISalonsTimeStatsPayload {
 	data: ISalonsTimeStats | null
 }
 
-export const getNotinoDashboard = (): ThunkResult<Promise<INotinoDashboardPayload>> => async (dispatch) => {
+export const getNotinoDashboard = (countryCode?: string): ThunkResult<Promise<INotinoDashboardPayload>> => async (dispatch) => {
 	let payload = {} as INotinoDashboardPayload
 
 	try {
 		dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_START })
 
-		const { data } = await getReq('/api/b2b/admin/notino-dashboard/', null)
+		const { data } = await getReq('/api/b2b/admin/notino-dashboard/', { ...normalizeQueryParams({ countryCode }) })
 		payload = {
 			data: data?.counts
 		}
@@ -60,20 +60,20 @@ export const getNotinoDashboard = (): ThunkResult<Promise<INotinoDashboardPayloa
 	return payload
 }
 
-const getSalonTimeStats = async (year: number, month?: number): Promise<ISalonsTimeStatsPayload> => {
-	const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-development-time-stats', { ...normalizeQueryParams({ year, month }) } as any)
+const getSalonTimeStats = async (year: number, countryCode?: string, month?: number): Promise<ISalonsTimeStatsPayload> => {
+	const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-development-time-stats', { ...normalizeQueryParams({ year, month, countryCode }) } as any)
 	return { data }
 }
 
 export const getSalonsAnnualStats =
-	(year: number): ThunkResult<Promise<ISalonsTimeStatsPayload>> =>
+	(year: number, countryCode?: string): ThunkResult<Promise<ISalonsTimeStatsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsTimeStatsPayload
 
 		try {
 			dispatch({ type: SALONS_ANNUAL_STATS.SALONS_ANNUAL_STATS_LOAD_START })
 
-			payload = await getSalonTimeStats(year)
+			payload = await getSalonTimeStats(year, countryCode)
 
 			dispatch({ type: SALONS_ANNUAL_STATS.SALONS_ANNUAL_STATS_LOAD_DONE, payload })
 		} catch (err) {
@@ -86,14 +86,14 @@ export const getSalonsAnnualStats =
 	}
 
 export const getSalonsMonthStats =
-	(year: number, month?: number): ThunkResult<Promise<ISalonsTimeStatsPayload>> =>
+	(year: number, month?: number, countryCode?: string): ThunkResult<Promise<ISalonsTimeStatsPayload>> =>
 	async (dispatch) => {
 		let payload = {} as ISalonsTimeStatsPayload
 
 		try {
 			dispatch({ type: SALONS_MONTH_STATS.SALONS_MONTH_STATS_LOAD_START })
 
-			payload = await getSalonTimeStats(year, month)
+			payload = await getSalonTimeStats(year, countryCode, month)
 
 			dispatch({ type: SALONS_MONTH_STATS.SALONS_MONTH_STATS_LOAD_DONE, payload })
 		} catch (err) {

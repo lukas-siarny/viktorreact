@@ -41,6 +41,7 @@ import InputField from '../../../../atoms/InputField'
 import SelectField from '../../../../atoms/SelectField'
 import DateRangePickerField from '../../../../atoms/DateRangePickerField'
 import SwitchField from '../../../../atoms/SwitchField'
+import { useEffect } from 'react'
 
 type ComponentProps = {
 	openSalonImportsModal: () => void

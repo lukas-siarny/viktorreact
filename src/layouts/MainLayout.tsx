@@ -1,21 +1,25 @@
-import React, { ReactNode, FC } from 'react'
+import React, { ReactNode, FC, useEffect } from 'react'
 import { Layout, Row, Button, Dropdown, Menu } from 'antd'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
+import { Field, initialize } from 'redux-form'
+import { Header } from 'antd/lib/layout/layout'
 
 // components
-import { Header } from 'antd/lib/layout/layout'
 import LayoutSider, { LayoutSiderProps } from '../components/LayoutComponents/LayoutSider'
+import HeaderSelectCountryForm, { IHeaderCountryForm } from '../components/HeaderSelectCountryForm'
 
 // redux
 import { RootState } from '../reducers'
+import { setSelectedCountry } from '../reducers/selectedCountry/selectedCountryActions'
 
 // utils
 import Permissions from '../utils/Permissions'
-import { PERMISSION } from '../utils/enums'
+import { FORM, PAGE, PERMISSION } from '../utils/enums'
 import { history } from '../utils/history'
+import { optionRenderWithImage } from '../utils/helper'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
@@ -39,12 +43,18 @@ type Props = LayoutSiderProps & {
 
 const MainLayout: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { children, extra } = props
+	const { children, extra, page } = props
+	const dispatch = useDispatch()
 	const { contentClassName = 'p-4 px-10 main-background' } = extra || {}
 	const selectedSalon = useSelector((state: RootState) => state.selectedSalon.selectedSalon.data)
 	const salonID = selectedSalon?.id
 	const salonOptions = useSelector((state: RootState) => state.selectedSalon.selectionOptions.data) || []
+	const selectedCountry = useSelector((state: RootState) => state.selectedCountry.selectedCountry)
+
 	const [backUrl] = useBackUrl(t('paths:salons'))
+
+	// init selected country to header select
+	dispatch(initialize(FORM.HEADER_COUNTRY_FORM, { countryCode: selectedCountry }))
 
 	const getSalonMenuItems = (): ItemType[] => {
 		const salonMenuItems: ItemType[] = salonOptions.map((item) => ({
@@ -142,6 +152,10 @@ const MainLayout: FC<Props> = (props) => {
 		)
 	}
 
+	const getSelectedCountryForDashboard = () => {
+
+	}
+
 	return (
 		<Layout className='min-h-screen noti-main-layout' hasSider>
 			<LayoutSider {...props} salonID={salonID} parentPath={t('paths:salons/{{salonID}}', { salonID })} />
@@ -167,6 +181,20 @@ const MainLayout: FC<Props> = (props) => {
 									)}
 									<Row className='w-1/7 items-center min-w-0' wrap={false}>
 										{getSelectedSalonLabel(hasPermission)}
+									</Row>
+								</Row>
+							</Header>
+						)
+					}
+				/>
+				<Permissions
+					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
+					render={(hasPermission) =>
+						hasPermission && page === PAGE.HOME && !salonID && (
+							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
+								<Row className={'justify-end min-w-0 w-full'} wrap={false}>
+									<Row className='w-1/7 items-center min-w-0' wrap={false}>
+										<HeaderSelectCountryForm onSubmit={(data: IHeaderCountryForm)=> dispatch(setSelectedCountry(data.countryCode))}/>
 									</Row>
 								</Row>
 							</Header>

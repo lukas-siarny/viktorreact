@@ -318,6 +318,7 @@ export interface IEmployeeForm {
 	phonePrefixCountryCode?: string
 	phone?: string
 	services?: any
+	service?: string[]
 	avatar?: any
 	role: number
 }

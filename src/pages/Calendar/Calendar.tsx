@@ -566,6 +566,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 								sidebarView: eventType
 							})
 						}}
+						handleSubmitReservation={handleSubmitReservation}
+						handleSubmitEvent={handleSubmitEvent}
 					/>
 					<SiderEventManagement
 						salonID={salonID}

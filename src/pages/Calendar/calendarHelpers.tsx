@@ -1,4 +1,5 @@
 /* eslint-disable import/no-cycle */
+import { DateSpanApi, EventApi, EventDropArg } from '@fullcalendar/react'
 import dayjs from 'dayjs'
 import { t } from 'i18next'
 import { uniqueId } from 'lodash'
@@ -497,4 +498,17 @@ export const composeWeekViewEvents = (
 		default:
 			return composeWeekViewReservations(selectedDate, weekDays, reservations, shiftsTimeOffs, employees)
 	}
+}
+
+export const eventAllow = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
+	const isReservation = movingEvent?.extendedProps?.eventType === CALENDAR_EVENT_TYPE.RESERVATION
+
+	if (isReservation) {
+		return true
+	}
+
+	const resourceEmployeeId = dropInfo?.resource?.extendedProps?.employee?.id
+	const eventEmployeeId = movingEvent?.extendedProps.employee?.id
+
+	return resourceEmployeeId === eventEmployeeId
 }

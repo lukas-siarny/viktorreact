@@ -213,7 +213,6 @@ const renderListFields = (props: any) => {
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
 	const { handleSubmit, addService } = props
-	
 	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
 	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
 	const services = useSelector((state: RootState) => state.service.services)

@@ -173,6 +173,10 @@ export interface ICalendarEventForm {
 	calendarBulkEventID?: string
 }
 
+export interface IEventTypeFilterForm {
+	eventType: CALENDAR_EVENT_TYPE
+}
+
 export interface ISupportContactForm {
 	id: string | null
 	note: string

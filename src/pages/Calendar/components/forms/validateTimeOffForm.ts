@@ -1,10 +1,15 @@
 import { FormErrors } from 'redux-form'
 import i18next from 'i18next'
+import { isEmpty } from 'lodash'
 
 import { ICalendarEventForm } from '../../../../types/interfaces'
 
 const validateTimeOffForm = (values?: ICalendarEventForm) => {
 	const errors: FormErrors<ICalendarEventForm> = {}
+
+	if (isEmpty(values?.repeatOn)) {
+		errors.repeatOn = i18next.t('loc:Možnosť opakovania musí obsahovať aspoň jeden platný deň')
+	}
 
 	if (!values?.date) {
 		errors.date = i18next.t('loc:Toto pole je povinné')

@@ -143,7 +143,8 @@ export enum FORM {
 	CALENDAR_EMPLOYEE_SHIFT_FORM = 'CALENDAR_EMPLOYEE_SHIFT_FORM',
 	CALENDAR_EMPLOYEE_TIME_OFF_FORM = 'CALENDAR_EMPLOYEE_TIME_OFF_FORM',
 	CALENDAR_EMPLOYEE_BREAK_FORM = 'CALENDAR_EMPLOYEE_BREAK_FORM',
-	CONFIRM_BULK_FORM = 'CONFIRM_BULK_FORM'
+	CONFIRM_BULK_FORM = 'CONFIRM_BULK_FORM',
+	EVENT_TYPE_FILTER_FORM = 'EVENT_TYPE_FILTER_FORM'
 }
 
 // System permissions
@@ -656,13 +657,6 @@ export enum CALENDAR_SET_NEW_DATE {
 	DEFAULT = 'DEFAULT'
 }
 
-export enum REPEAT_ON {
-	// eslint-disable-next-line @typescript-eslint/no-shadow
-	DAY = 'DAY',
-	WEEK = 'WEEK',
-	MONTH = 'MONTH'
-}
-
 export enum ENDS_EVENT {
 	WEEK = 'WEEK',
 	MONTH = 'MONTH',
@@ -683,7 +677,7 @@ export const EVERY_REPEAT_OPTIONS = () => [
 	},
 	{
 		key: EVERY_REPEAT.TWO_WEEKS,
-		label: i18next.t('loc:Dva týždne')
+		label: i18next.t('loc:Druhý týždeň')
 	}
 ]
 
@@ -710,6 +704,23 @@ export const ENDS_EVENT_OPTIONS = () => [
 	}
 ]
 
+export const EVENT_NAMES = (eventType: CALENDAR_EVENT_TYPE) => {
+	switch (eventType) {
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
+			return i18next.t('loc:prestávku')
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
+			return i18next.t('loc:zmenu')
+
+		case CALENDAR_EVENT_TYPE.RESERVATION:
+			return i18next.t('loc:rezerváciu')
+
+		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
+			return i18next.t('loc:dovolenku')
+		default:
+			return ''
+	}
+}
+
 export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
 	const options = [
 		{
@@ -722,7 +733,7 @@ export const EVENT_TYPE_OPTIONS = (eventType?: CALENDAR_EVENTS_VIEW_TYPE) => {
 		},
 		{
 			key: CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF,
-			label: i18next.t('loc:Absencia')
+			label: i18next.t('loc:Dovolenka')
 		},
 		{
 			key: CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK,

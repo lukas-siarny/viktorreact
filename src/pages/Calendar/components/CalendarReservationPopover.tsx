@@ -336,7 +336,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					<span>
 						{t('loc:Je potrebné mať nastavané možnosti platby v')}{' '}
 						<Link to={`${t('paths:salons')}/${salonID}`} className={'text-notino-white underline hover:text-notino-pink'}>
-							{t('loc: detaile salónu')}
+							{t('loc:detaile salónu')}
 						</Link>
 					</span>
 				}

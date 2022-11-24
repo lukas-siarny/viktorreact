@@ -29,8 +29,8 @@ import UserAvatar from '../../../components/AvatarComponents'
 import Ellipsis from '../../../atoms/Ellipsis'
 
 // types
-import { CalendarEvent } from '../../../reducers/calendar/calendarActions'
 import { RootState } from '../../../reducers'
+import { CalendarEvent } from '../../../types/interfaces'
 
 /// utils
 import { CALENDAR_EVENT_TYPE, ENUMERATIONS_KEYS, RESERVATION_PAYMENT_METHOD, RESERVATION_STATE } from '../../../utils/enums'

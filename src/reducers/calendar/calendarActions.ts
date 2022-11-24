@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { CalendarEvent, Employee, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
@@ -15,17 +16,6 @@ import { getReq } from '../../utils/request'
 import { getSelectedDateRange } from '../../pages/Calendar/calendarHelpers'
 import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
-type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
-export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
-export type CalendarEvent = CalendarEvents[0] & {
-	startDateTime: string
-	endDateTime: string
-	isMultiDayEvent?: boolean
-	isFirstMultiDayEventInCurrentRange?: boolean
-	isLastMultiDaylEventInCurrentRange?: boolean
-	originalEvent?: CalendarEvent
-	employee: Employee
-}
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -64,10 +54,6 @@ interface IGetCalendarEvents {
 interface IGetCalendarEventDetail {
 	type: EVENT_DETAIL
 	payload: ICalendarEventDetailPayload
-}
-
-export interface ICalendarEventsPayload {
-	data: CalendarEvent[] | null
 }
 
 export interface ICalendarEventDetailPayload {

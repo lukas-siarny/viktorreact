@@ -788,6 +788,8 @@ export enum RESERVATION_PAYMENT_METHOD {
 	OTHER = 'OTHER'
 }
 
+export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
+
 export const getDayNameFromNumber = (day: number) => {
 	switch (day) {
 		case 0: // prvy den dayjs.day() -> nedela

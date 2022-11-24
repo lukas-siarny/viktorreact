@@ -158,13 +158,17 @@
 					svg
 						width: 16px
 						height: 16px
+			&.edit
+				.nc-sider-event-management-content
+					&.main-panel
+						height: calc(100% - 114px)
 			.nc-sider-event-management-content
-				height: calc(100% - 50px) // 100% - .nc-sider-event-management-header
+				height: calc(100% - 50px) // 100% - .nc-sider-event-management-header + event filter height
 				overflow-y: auto
 				overflow-x: hidden
 				padding: 0 16px 16px 16px
 				&.main-panel
-					height: calc(100% - 114px) // 100% - .nc-sider-event-management-header - .nc-sider-event-management-footer
+					height: calc(100% - (114px + 116px)) // 100% - .nc-sider-event-management-header - .nc-sider-event-management-footer
 			.nc-sider-event-management-footer
 				height: 64px
 				padding: 8px 16px 16px 16px
@@ -1276,6 +1280,19 @@
 		border-radius: 6px
 	.ant-popover-inner-content
 		padding: 0
+// detail event
+#overlay
+	position: absolute
+	display: none
+	width: calc(100% - 240px) /* 100% - 240px (drawer width) */
+	height: 100%
+	top: 0
+	left: 0
+	right: 0
+	bottom: 0
+	background-color: $backgroundColor-notino-gray
+	opacity: .3
+	z-index: $z-index-overlay
 
 .nc-event-popover-content
 	overflow: hidden

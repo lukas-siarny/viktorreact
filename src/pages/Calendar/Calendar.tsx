@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-import { compact, debounce, includes, isEmpty, map, omit } from 'lodash'
+import { compact, includes, isEmpty, map, omit } from 'lodash'
 import { getFormValues, initialize, submit } from 'redux-form'
 import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
@@ -556,7 +556,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			{modals}
-			<div onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
+			<div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					setCollapsed={setEventManagement}

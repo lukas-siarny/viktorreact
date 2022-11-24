@@ -378,46 +378,49 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
-		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
-		const eventId = values.eventId ? values.eventId : query.eventId
-		try {
-			const reqData = {
-				start: {
-					date: values.date,
-					time: values.timeFrom
-				},
-				end: {
-					date: values.date,
-					time: values.timeTo
-				},
-				note: values.note,
-				customerID: values.customer.key as string,
-				employeeID: values.employee.key as string,
-				serviceID: values.service.key as string
+	const handleSubmitReservation = useCallback(
+		async (values: ICalendarReservationForm) => {
+			// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
+			const eventId = values.eventId ? values.eventId : query.eventId
+			try {
+				const reqData = {
+					start: {
+						date: values.date,
+						time: values.timeFrom
+					},
+					end: {
+						date: values.date,
+						time: values.timeTo
+					},
+					note: values.note,
+					customerID: values.customer.key as string,
+					employeeID: values.employee.key as string,
+					serviceID: values.service.key as string
+				}
+				if (eventId) {
+					// UPDATE
+					await patchReq(
+						'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
+						{ salonID, calendarEventID: eventId },
+						reqData,
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				} else {
+					// CREATE
+					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+				}
+				// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
+				setEventManagement(undefined)
+				fetchEvents()
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
 			}
-			if (eventId) {
-				// UPDATE
-				await patchReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
-					{ salonID, calendarEventID: eventId },
-					reqData,
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
-			} else {
-				// CREATE
-				await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			}
-			// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
-			setEventManagement(undefined)
-			fetchEvents()
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
-		}
-	}
+		},
+		[query.eventId, salonID, setEventManagement]
+	)
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm) => {
@@ -508,7 +511,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				console.error(e)
 			}
 		},
-		[formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
+		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
 	)
 
 	const handleSubmitConfirmModal = () => {

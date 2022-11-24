@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import dayjs from 'dayjs'
 
 // full calendar
@@ -50,15 +50,13 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventDrop } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, onEventChange } = props
 
-	const handleDateClick = (arg: DateClickArg) => {}
-
-	const handleSelect = (info: any) => {
-		const { start, end, resource = {} } = info
-	}
-
-	const hasResources = !!employees.length
+	const events = useMemo(
+		() => composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees),
+		[selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees]
+	)
+	const resources = useMemo(() => composeDayViewResources(shiftsTimeOffs, employees), [shiftsTimeOffs, employees])
 
 	return (
 		<FullCalendar
@@ -82,26 +80,25 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			// pre bezne eventy je potom nastavena min-height cez cssko .nc-day-event
 			eventMinHeight={0}
 			dayMinWidth={120}
-			editable={hasResources}
-			selectable={hasResources}
+			editable
+			selectable
 			weekends
 			nowIndicator
 			allDaySlot={false}
 			stickyFooterScrollbar
 			// data sources
-			events={composeDayViewEvents(selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees)}
-			resources={composeDayViewResources(shiftsTimeOffs, employees)}
+			events={events}
+			resources={resources}
 			// render hooks
 			resourceLabelContent={resourceLabelContent}
 			eventContent={(data) => <CalendarEvent calendarView={CALENDAR_VIEW.DAY} data={data} salonID={salonID} onEditEvent={onEditEvent} />}
 			slotLabelContent={slotLabelContent}
 			// handlers
-			select={handleSelect}
-			dateClick={handleDateClick}
 			eventAllow={eventAllow}
-			eventDrop={(arg) => onEventDrop(CALENDAR_VIEW.DAY, arg)}
+			eventDrop={(arg) => onEventChange(CALENDAR_VIEW.DAY, 'drop', arg)}
+			eventResize={(arg) => onEventChange(CALENDAR_VIEW.DAY, 'resize', arg)}
 		/>
 	)
 })
 
-export default CalendarDayView
+export default React.memo(CalendarDayView)

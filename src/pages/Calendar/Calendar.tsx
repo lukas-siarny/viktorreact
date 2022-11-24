@@ -346,9 +346,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	}
 
 	const handleSubmitReservation = useCallback(
-		async (values: ICalendarReservationForm) => {
+		async (values: ICalendarReservationForm, onError?: () => void) => {
 			// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
 			const eventId = values.eventId ? values.eventId : query.eventId
+
 			try {
 				const reqData = {
 					start: {
@@ -384,15 +385,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
+				if (onError) {
+					onError()
+				}
 			}
 		},
 		[query.eventId, salonID, setEventManagement]
 	)
 
 	const handleSubmitEvent = useCallback(
-		async (values: ICalendarEventForm) => {
+		async (values: ICalendarEventForm, onError?: () => void) => {
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
 			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
+
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
 				setVisibleBulkModal(REQUEST_TYPE.PATCH)
@@ -475,6 +480,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
+				if (onError) {
+					onError()
+				}
 			}
 		},
 		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]

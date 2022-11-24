@@ -1,12 +1,13 @@
+import { EventResizeDoneArg } from '@fullcalendar/interaction'
 import { ColumnsType } from 'antd/lib/table'
 import { PaginationProps } from 'antd'
+import { EventContentArg, EventDropArg } from '@fullcalendar/react'
 
 // utils
 import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVENTS_VIEW_TYPE, SALON_STATES, EVERY_REPEAT, ENDS_EVENT, CALENDAR_EVENT_TYPE, CALENDAR_VIEW, CONFIRM_BULK } from '../utils/enums'
 
 // types
 import { Paths } from './api'
-import { DateSpanApi, EventApi, EventContentArg, EventDropArg } from '@fullcalendar/react'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -594,7 +595,7 @@ export interface ICalendarView {
 	employees: Employees
 	salonID: string
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
-	onEventDrop: (calendarView: CALENDAR_VIEW, arg: EventDropArg) => void
+	onEventChange: (calendarView: CALENDAR_VIEW, changeType: 'drop' | 'resize', arg: EventDropArg | EventResizeDoneArg) => void
 }
 
 export interface IEventCardProps {

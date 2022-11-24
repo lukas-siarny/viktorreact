@@ -1,8 +1,11 @@
 import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
-import FullCalendar, { DateSpanApi, EventApi, EventDropArg } from '@fullcalendar/react'
 import dayjs from 'dayjs'
+
+// fullcalendar
+import FullCalendar, { EventDropArg } from '@fullcalendar/react'
+import { EventResizeDoneArg } from '@fullcalendar/interaction'
 
 // enums
 import { CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
@@ -28,8 +31,8 @@ type Props = {
 	showEmptyState: boolean
 	salonID: string
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
-	handleSubmitReservation: (values: ICalendarReservationForm) => void
-	handleSubmitEvent: (values: ICalendarEventForm) => void
+	handleSubmitReservation: (values: ICalendarReservationForm, onError?: () => void) => void
+	handleSubmitEvent: (values: ICalendarEventForm, onError?: () => void) => void
 }
 
 export type CalendarRefs = {
@@ -65,32 +68,35 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
-	const onEventDrop = useCallback(
-		(calendarView: CALENDAR_VIEW, arg: EventDropArg) => {
-			console.log({ arg })
-			const { event, newResource } = arg
+	const onEventChange = useCallback(
+		(calendarView: CALENDAR_VIEW, changeType: 'drop' | 'resize', arg: EventDropArg | EventResizeDoneArg) => {
+			const { event } = arg
 			const { start, end, extendedProps } = event
+			const { newResource } = arg as EventDropArg
 
 			const eventId = extendedProps.originalEvent?.id
 			const calendarBulkEventID = extendedProps.originalEvent?.calendarBulkEvent?.id
 
-			let employeeId = extendedProps?.employee?.id
+			// ak sa zmenil resource, tak updatenut resource (to sa bude diat len pri drope)
+			const employeeId = newResource ? newResource.extendedProps?.employee?.id : extendedProps?.originalEvent?.employee?.id
 
 			// zatial predpokladame, ze nebudu viacdnove eventy - takze start a end date by mal byt rovnaky
 			const startDajys = dayjs(start)
-			let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 			const timeFrom = startDajys.format(CALENDAR_DATE_FORMAT.TIME)
 			const timeTo = dayjs(end).format(CALENDAR_DATE_FORMAT.TIME)
 
-			if (newResource) {
-				employeeId = newResource.extendedProps?.employee?.id
+			let date = startDajys.format(CALENDAR_DATE_FORMAT.QUERY)
 
-				if (calendarView === CALENDAR_VIEW.WEEK) {
-					date = newResource.extendedProps?.day
-				}
+			if (calendarView === CALENDAR_VIEW.WEEK) {
+				// v pripadne tyzdnoveho view je potrebne ziskat datum z resource (kedze realne sa vyuziva denne view a jednotlive dni su resrouces)
+				// (to sa bude diat len pri drope)
+				const resource = event.getResources()[0]
+				date = newResource ? newResource.extendedProps?.day : resource?.extendedProps?.day
 			}
 
-			if (eventId && employeeId) {
+			if (!eventId && !employeeId) {
+				// ak nahodou nemam eventID alebo employeeId tak to vrati na povodne miesto
+				arg.revert()
 				return
 			}
 
@@ -104,11 +110,19 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				eventId
 			}
 
+			const onError = () => {
+				// ak neprejde request tak to vrati na pôvodne miesto
+				arg.revert()
+			}
+
 			if (extendedProps.eventType === CALENDAR_EVENT_TYPE.RESERVATION) {
-				handleSubmitReservation(values as ICalendarReservationForm)
+				const customerId = extendedProps?.originalEvent?.customer?.id
+				const serviceId = extendedProps?.originalEvent?.service?.id
+
+				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
 				return
 			}
-			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm)
+			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
 		},
 		[handleSubmitReservation, handleSubmitEvent]
 	)
@@ -144,7 +158,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					eventsViewType={eventsViewType}
 					salonID={salonID}
 					onEditEvent={onEditEvent}
-					onEventDrop={onEventDrop}
+					onEventChange={onEventChange}
 				/>
 			)
 		}
@@ -159,7 +173,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				eventsViewType={eventsViewType}
 				salonID={salonID}
 				onEditEvent={onEditEvent}
-				onEventDrop={onEventDrop}
+				onEventChange={onEventChange}
 			/>
 		)
 	}
@@ -177,4 +191,4 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	)
 })
 
-export default CalendarContent
+export default React.memo(CalendarContent)

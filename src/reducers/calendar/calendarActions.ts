@@ -8,7 +8,7 @@ import { Paths } from '../../types/api'
 import { CalendarEvent, Employee, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
-import { EVENTS, EVENT_DETAIL } from './calendarTypes'
+import { EVENTS, EVENT_DETAIL, UPDATE_EVENT } from './calendarTypes'
 import { CALENDAR_EVENTS_KEYS, CALENDAR_VIEW, CALENDAR_EVENT_TYPE, DATE_TIME_PARSER_DATE_FORMAT, RESERVATION_STATE } from '../../utils/enums'
 
 // utils
@@ -227,4 +227,19 @@ export const getCalendarEventDetail =
 		}
 
 		return payload
+	}
+
+export const updateCalendarEvent =
+	(updatedEvent: CalendarEvent): ThunkResult<Promise<CalendarEvent[]>> =>
+	async (dispatch, getState) => {
+		const events = getState().calendar.events.data || []
+		const newEvents = events.map((event) => {
+			if (event.id === updatedEvent.id) {
+				return { ...event, ...updatedEvent }
+			}
+			return event
+		})
+
+		dispatch({ type: UPDATE_EVENT, newEvents })
+		return newEvents
 	}

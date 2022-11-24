@@ -107,7 +107,7 @@ const NowIndicator = () => {
 interface ICalendarWeekView extends ICalendarView {}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventDrop } = props
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, onEventChange } = props
 
 	const handleDateClick = useCallback((arg: DateClickArg) => {
 		console.log({ arg })
@@ -119,6 +119,12 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 
 	const weekDays = useMemo(() => getWeekDays(selectedDate), [selectedDate])
 	const weekViewSelectedDate = getWeekViewSelectedDate(selectedDate, weekDays)
+
+	const events = useMemo(
+		() => composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees),
+		[weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees]
+	)
+	const resources = useMemo(() => composeWeekResources(weekDays, shiftsTimeOffs, employees), [weekDays, shiftsTimeOffs, employees])
 
 	return (
 		<div className={'nc-calendar-week-wrapper'}>
@@ -150,8 +156,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				nowIndicator
 				nowIndicatorContent={() => <NowIndicator />}
 				// data sources
-				events={composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)}
-				resources={composeWeekResources(weekDays, shiftsTimeOffs, employees)}
+				events={events}
+				resources={resources}
 				resourceAreaColumns={resourceAreaColumns}
 				// render hooks
 				slotLabelContent={slotLabelContent}
@@ -160,10 +166,11 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				select={handleSelect}
 				dateClick={handleDateClick}
 				eventAllow={eventAllow}
-				eventDrop={(arg) => onEventDrop(CALENDAR_VIEW.WEEK, arg)}
+				eventDrop={(arg) => onEventChange(CALENDAR_VIEW.WEEK, 'drop', arg)}
+				eventResize={(arg) => onEventChange(CALENDAR_VIEW.WEEK, 'resize', arg)}
 			/>
 		</div>
 	)
 })
 
-export default CalendarWeekView
+export default React.memo(CalendarWeekView)

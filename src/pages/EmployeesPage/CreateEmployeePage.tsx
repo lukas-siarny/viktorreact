@@ -16,7 +16,7 @@ import { filterSalonRolesByPermission, getPrefixCountryCode } from '../../utils/
 // components
 import Breadcrumbs from '../../components/Breadcrumbs'
 import EmployeeForm from './components/EmployeeForm'
-import { addService, parseServicesForCreateAndUpdate } from './EmployeePage'
+import { addService, ServiceData /* , parseServicesForCreateAndUpdate */ } from './EmployeePage'
 import InviteForm from './components/InviteForm'
 
 // types
@@ -88,7 +88,9 @@ const CreateEmployeePage = (props: SalonSubPageProps) => {
 				firstName: formData?.firstName,
 				lastName: formData?.lastName,
 				email: formData?.email,
-				services: parseServicesForCreateAndUpdate(formData?.services),
+				serviceIDs: formData?.services?.map((service: ServiceData) => service.id),
+				// TODO - for change duration and price in employee detail
+				// parseServicesForCreateAndUpdate(formData?.services),
 				salonID,
 				imageID: get(formData, 'avatar[0].id') || get(formData, 'avatar[0].uid')
 			}

@@ -5,7 +5,7 @@ import cx from 'classnames'
 import dayjs from 'dayjs'
 
 // utils
-import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NOTIFICATION_TYPE } from '../../../utils/enums'
+import { RESERVATION_SOURCE_TYPE, RESERVATION_STATE, CALENDAR_VIEW, RESERVATION_ASSIGNMENT_TYPE, NOTIFICATION_TYPE, RESERVATION_PAYMENT_METHOD } from '../../../utils/enums'
 import { getAssignedUserLabel } from '../../../utils/helper'
 
 // assets
@@ -66,20 +66,25 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 			return <CheckIcon className={'icon check'} />
 		}
 
-		return service?.icon ? <img src={service.icon} alt={service?.name} width={10} height={10} className={'object-contain'} /> : <ServiceIcon />
+		return service?.icon?.resizedImages ? (
+			<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain'} />
+		) : (
+			<ServiceIcon />
+		)
 	}
 
 	const handleUpdateReservationState = useCallback(
-		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string) => {
+		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
 			try {
 				await patchReq(
 					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}/state',
 					{ calendarEventID, salonID },
-					{ state, reason },
+					{ state, reason, paymentMethod },
 					undefined,
 					NOTIFICATION_TYPE.NOTIFICATION,
 					true
 				)
+				// TODO: load refresh dat po zmene stavu
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -98,6 +103,8 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 			setIsOpen={setIsCardPopoverOpen}
 			handleUpdateReservationState={handleUpdateReservationState}
 			onEditEvent={onEditEvent}
+			salonID={salonID}
+			placement={calendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
 		>
 			<div
 				className={cx('nc-event reservation', {

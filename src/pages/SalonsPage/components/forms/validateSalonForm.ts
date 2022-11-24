@@ -65,9 +65,9 @@ export default (values: ISalonForm) => {
 		]
 	}
 
-	if (!(values?.zipCode && values?.city && values?.street && values?.streetNumber && values?.latitude && values?.longitude && values?.country)) {
+	if (!(values?.zipCode && values?.city && values?.street && values?.latitude && values?.longitude && values?.country)) {
 		errors.address = i18next.t(
-			'loc:Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica (s číslom!), PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.'
+			'loc:Adresa nie je kompletná. Uistite sa, či je vyplnené - Mesto, Ulica, PSČ a Krajina. Upresniť adresu môžete vo vyhľadávaní alebo priamo v mape.'
 		)
 	}
 

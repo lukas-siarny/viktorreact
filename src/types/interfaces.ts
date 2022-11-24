@@ -6,8 +6,6 @@ import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVEN
 
 // types
 import { Paths } from './api'
-import { ICalendarEventsPayload } from '../reducers/calendar/calendarActions'
-import { IEmployeesPayload } from '../reducers/employees/employeesActions'
 import { EventContentArg } from '@fullcalendar/react'
 
 export interface IErrorMessage {
@@ -324,6 +322,7 @@ export interface IEmployeeForm {
 	phonePrefixCountryCode?: string
 	phone?: string
 	services?: any
+	service?: string[]
 	avatar?: any
 	role: number
 }
@@ -568,7 +567,24 @@ export interface ICalendarFilter {
 	eventsViewType?: CALENDAR_EVENTS_VIEW_TYPE
 }
 
+export interface IEmployeesPayload extends ISearchable<Paths.GetApiB2BAdminEmployees.Responses.$200> {}
 export type Employees = NonNullable<IEmployeesPayload['data']>['employees']
+
+export type Employee = Paths.GetApiB2BAdminEmployees.Responses.$200['employees'][0]
+export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
+export type CalendarEvent = CalendarEvents[0] & {
+	startDateTime: string
+	endDateTime: string
+	isMultiDayEvent?: boolean
+	isFirstMultiDayEventInCurrentRange?: boolean
+	isLastMultiDaylEventInCurrentRange?: boolean
+	originalEvent?: CalendarEvent
+	employee: Employee
+}
+
+export interface ICalendarEventsPayload {
+	data: CalendarEvent[] | null
+}
 
 export interface ICalendarView {
 	selectedDate: string

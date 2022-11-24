@@ -181,7 +181,7 @@ const LayoutSider = (props: LayoutSiderProps) => {
 							key: PAGE.SERVICES_SETTINGS,
 							label: t('loc:Nastavenie služieb'),
 							onClick: () => history.push(getPath(t('paths:services-settings'))),
-							icon: <ServiceIcon />
+							icon: <ServiceIcon className={'text-black'} />
 						},
 						{
 							key: PAGE.CUSTOMERS,

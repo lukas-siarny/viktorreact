@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { ThunkResult } from '../index'
 import { IResetStore } from '../generalTypes'
 import { Paths } from '../../types/api'
+import { CalendarEvent, Employee, ICalendarEventsPayload } from '../../types/interfaces'
 
 // enums
 import { EVENTS, EVENT_DETAIL } from './calendarTypes'
@@ -15,15 +16,6 @@ import { getReq } from '../../utils/request'
 import { getSelectedDateRange } from '../../pages/Calendar/calendarHelpers'
 import { getDateTime, normalizeQueryParams } from '../../utils/helper'
 
-export type CalendarEvents = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.Responses.$200['calendarEvents']
-export type CalendarEvent = CalendarEvents[0] & {
-	startDateTime: string
-	endDateTime: string
-	isMultiDayEvent?: boolean
-	isFirstMultiDayEventInCurrentRange?: boolean
-	isLastMultiDaylEventInCurrentRange?: boolean
-	originalEvent?: CalendarEvent
-}
 type CalendarEventsQueryParams = Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.QueryParameters & Paths.GetApiB2BAdminSalonsSalonIdCalendarEvents.PathParameters
 
 export type CalendarEventDetail = Paths.GetApiB2BAdminSalonsSalonIdCalendarEventsCalendarEventId.Responses.$200['calendarEvent']
@@ -64,10 +56,6 @@ interface IGetCalendarEventDetail {
 	payload: ICalendarEventDetailPayload
 }
 
-export interface ICalendarEventsPayload {
-	data: CalendarEvent[] | null
-}
-
 export interface ICalendarEventDetailPayload {
 	data: CalendarEventDetail | null
 }
@@ -79,8 +67,12 @@ export const getCalendarEvents =
 		view: CALENDAR_VIEW,
 		splitMultidayEventsIntoOneDayEvents = false
 	): ThunkResult<Promise<ICalendarEventsPayload>> =>
-	async (dispatch) => {
+	async (dispatch, getState) => {
+		dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
+
 		let payload = {} as ICalendarEventsPayload
+
+		const state = getState()
 
 		try {
 			const { start, end } = getSelectedDateRange(view, queryParams.date)
@@ -95,13 +87,18 @@ export const getCalendarEvents =
 				reservationStates: queryParams.reservationStates
 			}
 
-			dispatch({ type: EVENTS.EVENTS_LOAD_START, enumType })
+			// employees z Reduxu, budu sa mapovat do eventov
+			const employees = {} as any
+			state.employees.employees.data?.employees.forEach((employee: Employee) => {
+				employees[employee.id] = employee
+			})
 
 			const { data } = await getReq('/api/b2b/admin/salons/{salonID}/calendar-events/', normalizeQueryParams(queryParamsEditedForRequest) as CalendarEventsQueryParams)
 
 			const editedEvents = data.calendarEvents.reduce((newEventsArray, event) => {
 				const editedEvent: CalendarEvent = {
 					...event,
+					employee: employees[event.employee.id],
 					startDateTime: getDateTime(event.start.date, event.start.time),
 					endDateTime: getDateTime(event.end.date, event.end.time)
 				}

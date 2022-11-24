@@ -14,7 +14,7 @@ import { ReactComponent as ChevronDownIcon } from '../../../../assets/icons/chev
 import { ReactComponent as ServicesIcon } from '../../../../assets/icons/services-24-icon.svg'
 
 // utils
-import { CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../../../utils/enums'
+import { CALENDAR_DEBOUNCE_DELAY, CALENDAR_EVENTS_VIEW_TYPE, FORM } from '../../../../utils/enums'
 import { history } from '../../../../utils/history'
 
 // atoms
@@ -159,7 +159,7 @@ const form = reduxForm({
 		if (anyTouched) {
 			submit()
 		}
-	}, 600),
+	}, CALENDAR_DEBOUNCE_DELAY),
 	destroyOnUnmount: true
 })(CalendarFilter)
 

@@ -1,7 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useMemo } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
+import useResizeObserver from '@react-hook/resize-observer'
 
 // full calendar
 import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
@@ -10,7 +11,7 @@ import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
@@ -21,6 +22,8 @@ import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-
 
 // components
 import CalendarEvent from '../CalendarEvent'
+
+const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
 
 const resourceAreaColumns = [
 	{
@@ -39,7 +42,7 @@ const resourceAreaColumns = [
 			const isToday = dayjs(date).isToday()
 
 			return (
-				<div className={cx('nc-week-label-day', { 'is-today': isToday })}>
+				<div className={cx('nc-week-label-day', { 'is-today': isToday })} id={isToday ? getTodayLabelId(date) : undefined}>
 					<span>{dayName}</span>
 					{dayNumber}
 				</div>
@@ -74,6 +77,33 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { date } = data || {}
 
 	return <div className={'nc-week-slot-label'}>{dayjs(date).format('HH:mm')}</div>
+}
+
+const NowIndicator = () => {
+	const [size, setSize] = useState<number>(0)
+	const [indicatorDimmensions, setIndicatorDimmensions] = useState({
+		top: 0,
+		height: 0
+	})
+
+	const datagridBody = document.querySelector('.fc-datagrid-body')
+
+	useResizeObserver(datagridBody as HTMLElement | null, (entry) => setSize(entry.contentRect.height))
+
+	useEffect(() => {
+		const todayLabel = document.getElementById(getTodayLabelId(dayjs()))
+		if (todayLabel) {
+			const top = todayLabel?.parentElement?.parentElement?.parentElement?.parentElement?.offsetTop as number
+			const height = todayLabel?.clientHeight
+			setIndicatorDimmensions({ top, height })
+		}
+	}, [size])
+
+	return (
+		<div className={'fc-week-now-indicator'} style={{ top: indicatorDimmensions.top, height: indicatorDimmensions.height }}>
+			<div className={'head'} />
+		</div>
+	)
 }
 
 interface ICalendarWeekView extends ICalendarView {}
@@ -119,8 +149,8 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				editable
 				selectable
 				stickyFooterScrollbar
-				// TODO: now indicator
-				// nowIndicator
+				nowIndicator
+				nowIndicatorContent={() => <NowIndicator />}
 				// data sources
 				events={composeWeekViewEvents(weekViewSelectedDate, weekDays, eventsViewType, reservations, shiftsTimeOffs, employees)}
 				resources={composeWeekResources(weekDays, shiftsTimeOffs, employees)}

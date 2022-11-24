@@ -103,6 +103,8 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 			setIsOpen={setIsCardPopoverOpen}
 			handleUpdateReservationState={handleUpdateReservationState}
 			onEditEvent={onEditEvent}
+			salonID={salonID}
+			placement={calendarView === CALENDAR_VIEW.WEEK ? 'bottom' : 'left'}
 		>
 			<div
 				className={cx('nc-event reservation', {

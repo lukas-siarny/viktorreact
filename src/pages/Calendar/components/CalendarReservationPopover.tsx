@@ -1,13 +1,16 @@
 /* eslint-disable import/no-cycle */
 import React, { FC, useEffect, useCallback, useState } from 'react'
-import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag } from 'antd'
+import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag, Tooltip } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
+import { TooltipPlacement } from 'antd/es/tooltip'
 
 // assets
+import { ButtonProps } from 'antd/es/button'
+import { Link } from 'react-router-dom'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
 import { ReactComponent as DotsIcon } from '../../../assets/icons/more-info-horizontal-icon.svg'
@@ -35,6 +38,7 @@ import { getAssignedUserLabel, getCountryPrefix } from '../../../utils/helper'
 import { parseTimeFromMinutes, getTimeText } from '../calendarHelpers'
 
 type Props = {
+	salonID: string
 	isOpen: boolean
 	setIsOpen: (isOpen: boolean) => void
 	start: Date | null
@@ -43,6 +47,7 @@ type Props = {
 	handleUpdateReservationState: (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => void
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
 	color?: string
+	placement?: TooltipPlacement
 }
 
 type PopoverNote = {
@@ -204,7 +209,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 }
 
 const CalendarReservationPopover: FC<Props> = (props) => {
-	const { isOpen, setIsOpen, children, event, start, end, color, handleUpdateReservationState, onEditEvent } = props
+	const { isOpen, setIsOpen, children, event, start, end, color, handleUpdateReservationState, onEditEvent, salonID, placement = 'left' } = props
 	const { id, reservationData, service, customer, employee, note, noteFromB2CCustomer } = event || {}
 
 	const [t] = useTranslation()
@@ -252,8 +257,6 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 	)
 
 	const getFooterCheckoutButton = () => {
-		// TODO: momentalne sa neda prejst do stavu REALIZED ak salon nema vyplneny ziaden sposob platby
-		// disabled button a nejaky tooltip, ktory by informoval, ze je potrebne nastavit sposoby platby v detaile salonu?
 		const items = []
 
 		if (selectedSalon?.data?.payByCard) {
@@ -276,32 +279,44 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 			})
 		}
 
-		items.push({
-			key: 'realized-other',
-			label: t('loc:Iným spôsobom'),
-			icon: <DollarIcon />,
-			className: itemClassName,
-			onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.OTHER)
-		})
+		if (selectedSalon?.data?.otherPaymentMethods) {
+			items.push({
+				key: 'realized-other',
+				label: t('loc:Iným spôsobom'),
+				icon: <DollarIcon />,
+				className: itemClassName,
+				onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED, RESERVATION_PAYMENT_METHOD.OTHER)
+			})
+		}
 
-		return (
+		const button = (buttonBrops?: ButtonProps) => (
+			<Button type={'primary'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'} onClick={(e) => e.preventDefault()} {...buttonBrops}>
+				{t('loc:Zaplatená')}
+			</Button>
+		)
+
+		return items?.length ? (
 			<Dropdown
 				key={'footer-checkout-dropdown'}
-				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} style={{ width: 200 }} items={items} />}
+				overlay={<Menu className={'shadow-md max-w-xs min-w-48 w-48 mt-1 p-2 flex flex-col gap-2'} items={items} />}
 				placement='bottomRight'
 				trigger={['click']}
 			>
-				<Button
-					type={'primary'}
-					icon={<ChevronDown className={'filter-invert max'} />}
-					size={'middle'}
-					className={'noti-btn w-1/2'}
-					htmlType={'button'}
-					onClick={(e) => e.preventDefault()}
-				>
-					{t('loc:Zaplatená')}
-				</Button>
+				{button({ icon: <ChevronDown className={'filter-invert max'} /> })}
 			</Dropdown>
+		) : (
+			<Tooltip
+				title={
+					<span>
+						{t('loc:Je potrebné mať nastavané možnosti platby v')}{' '}
+						<Link to={`${t('paths:salons')}/${salonID}`} className={'text-notino-white underline hover:text-notino-pink'}>
+							{t('loc: detaile salónu')}
+						</Link>
+					</span>
+				}
+			>
+				{button()}
+			</Tooltip>
 		)
 	}
 
@@ -453,7 +468,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 			visible={isOpen}
 			destroyTooltipOnHide={{ keepParent: false }}
 			trigger={'click'}
-			placement={'left'}
+			placement={placement}
 			overlayClassName={`${overlayClassName} nc-event-popover-overlay`}
 			content={
 				<PopoverContent

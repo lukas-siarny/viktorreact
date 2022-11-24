@@ -1,4 +1,5 @@
 {
+  " detaile salónu": "_NEPRELOZENE_",
   "24 hodín": "24 hodin",
   "48 hodín": "48 hodin",
   "Absencia": "_NEPRELOZENE_",
@@ -90,6 +91,7 @@
   "Jazyk": "Jazyk",
   "Jazyky": "Jazyky",
   "Jazyky, ktorými sa dá v salóne dohovoriť": "Mluvíme těmito jazyky",
+  "Je potrebné mať nastavané možnosti platby v": "_NEPRELOZENE_",
   "Kalendár": "_NEPRELOZENE_",
   "Kalendár neobsahuje žiadne data pre zobrazenie": "_NEPRELOZENE_",
   "Kartou": "_NEPRELOZENE_",

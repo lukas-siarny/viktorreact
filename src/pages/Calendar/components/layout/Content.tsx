@@ -13,10 +13,7 @@ import CalendarWeekView from '../views/CalendarWeekView'
 import CalendarEmptyState from '../CalendarEmptyState'
 
 // types
-import { Employees } from '../../../../types/interfaces'
-
-// reducers
-import { ICalendarEventsPayload } from '../../../../reducers/calendar/calendarActions'
+import { Employees, ICalendarEventsPayload } from '../../../../types/interfaces'
 
 type Props = {
 	view: CALENDAR_VIEW

@@ -4,7 +4,7 @@ import { compose } from 'redux'
 import Layout from 'antd/lib/layout/layout'
 import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'use-query-params'
 import dayjs from 'dayjs'
-import { compact, debounce, includes, isEmpty, map } from 'lodash'
+import { compact, includes, isEmpty, map } from 'lodash'
 import { getFormValues, initialize, submit } from 'redux-form'
 import { Modal, message } from 'antd'
 
@@ -15,7 +15,6 @@ import {
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_KEYS,
 	CALENDAR_EVENTS_VIEW_TYPE,
-	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
 	CONFIRM_BULK,
 	DAY,
@@ -32,7 +31,6 @@ import {
 import { withPermissions } from '../../utils/Permissions'
 import { computeEndDate, computeUntilDate, getAssignedUserLabel, setIntervalImmediately } from '../../utils/helper'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
-import { isRangeAleardySelected } from './calendarHelpers'
 
 // reducers
 import {
@@ -43,7 +41,7 @@ import {
 	getCalendarShiftsTimeoff
 } from '../../reducers/calendar/calendarActions'
 import { RootState } from '../../reducers'
-import { getEmployees, IEmployeesPayload } from '../../reducers/employees/employeesActions'
+import { getEmployees } from '../../reducers/employees/employeesActions'
 import { getServices, IServicesPayload } from '../../reducers/services/serviceActions'
 
 // components
@@ -52,10 +50,12 @@ import SiderFilter from './components/layout/SiderFilter'
 import SiderEventManagement from './components/layout/SiderEventManagement'
 import CalendarContent, { CalendarRefs } from './components/layout/Content'
 import ConfirmBulkForm from './components/forms/ConfirmBulkForm'
+
+// assets
 import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg'
 
 // types
-import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, SalonSubPageProps } from '../../types/interfaces'
+import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, SalonSubPageProps } from '../../types/interfaces'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -369,41 +369,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMainLayoutSiderCollapsed])
 
-	const setNewSelectedDate = debounce((newDate: string | dayjs.Dayjs, type: CALENDAR_SET_NEW_DATE = CALENDAR_SET_NEW_DATE.DEFAULT) => {
-		let newQueryDate: string | dayjs.Dayjs = newDate
-
-		switch (type) {
-			case CALENDAR_SET_NEW_DATE.FIND_START_ADD:
-				newQueryDate = dayjs(newDate)
-					.startOf(query.view.toLowerCase() as dayjs.OpUnitType)
-					.add(1, query.view.toLowerCase() as dayjs.OpUnitType)
-				break
-			case CALENDAR_SET_NEW_DATE.FIND_START_SUBSTRACT:
-				newQueryDate = dayjs(newDate)
-					.startOf(query.view.toLowerCase() as dayjs.OpUnitType)
-					.subtract(1, query.view.toLowerCase() as dayjs.OpUnitType)
-				break
-			case CALENDAR_SET_NEW_DATE.FIND_START:
-				newQueryDate = dayjs(newDate).startOf(query.view.toLowerCase() as dayjs.OpUnitType)
-				break
-			default:
-				break
-		}
-
-		// TODO: toto treba trochu upravit => povolit zmenit query paramater, ale nedotiahnut nove data ak sa jedna o rovnaky range
-		// teraz tam je nesulad, ak uzivatel v tyzdenom view vybere datum z rovnakeho rangu, tak tym ze sa ten datum nesetne do query
-		// tak pri prepnuti na denne view sa potom nedotiahne datum vybraty v kalendari
-		if (isRangeAleardySelected(query.view as CALENDAR_VIEW, query.date, newQueryDate)) {
-			return
-		}
-
-		setQuery({ ...query, date: dayjs(newQueryDate).format(CALENDAR_DATE_FORMAT.QUERY) })
-	}, 300)
-
-	const setNewCalendarView = debounce((newCalendarView: CALENDAR_VIEW) => {
-		setQuery({ ...query, view: newCalendarView })
-	}, 300)
-
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
@@ -644,8 +609,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 					calendarView={query.view as CALENDAR_VIEW}
 					siderFilterCollapsed={siderFilterCollapsed}
-					setCalendarView={setNewCalendarView}
-					setSelectedDate={setNewSelectedDate}
+					setCalendarView={(newView) => setQuery({ ...query, view: newView })}
+					setSelectedDate={(newDate) => setQuery({ ...query, date: newDate })}
 					setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>

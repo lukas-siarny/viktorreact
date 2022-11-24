@@ -3,11 +3,8 @@ import dayjs from 'dayjs'
 import { t } from 'i18next'
 import { uniqueId } from 'lodash'
 
-// reducers
-import { CalendarEvent, ICalendarEventsPayload } from '../../reducers/calendar/calendarActions'
-
 // types
-import { Employees } from '../../types/interfaces'
+import { CalendarEvent, ICalendarEventsPayload, Employees } from '../../types/interfaces'
 
 // utils
 import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../utils/enums'

@@ -135,7 +135,6 @@ const CalendarBreakForm: FC<Props> = (props) => {
 							placeholders={[t('loc:čas od'), t('loc:čas do')]}
 							component={TimeRangeField}
 							required
-							disabled={!!formValues?.allDay} // NOTE: ak je cely den tak sa disable stav pre pre nastavenie casu
 							allowClear
 							itemClassName={'m-0 pb-0'}
 							minuteStep={15}

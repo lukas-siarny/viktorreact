@@ -1,17 +1,18 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState, useEffect, useCallback } from 'react'
 import cx from 'classnames'
 import dayjs from 'dayjs'
 import useResizeObserver from '@react-hook/resize-observer'
 
 // full calendar
-import FullCalendar, { EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
+import FullCalendar, { AllowFunc, DateSpanApi, EventApi, EventContentArg, SlotLabelContentArg } from '@fullcalendar/react' // must go before plugins
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction'
 import resourceTimelinePlugin from '@fullcalendar/resource-timeline'
 import scrollGrid from '@fullcalendar/scrollgrid'
+import CalendarEvent from '../CalendarEvent'
 
 // utils
-import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_VIEW } from '../../../../utils/enums'
+import { CALENDAR_COMMON_SETTINGS, CALENDAR_DATE_FORMAT, CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
 import { composeWeekResources, composeWeekViewEvents, getWeekDays, getWeekViewSelectedDate } from '../../calendarHelpers'
 
 // types
@@ -19,9 +20,6 @@ import { ICalendarView } from '../../../../types/interfaces'
 
 // assets
 import { ReactComponent as AbsenceIcon } from '../../../../assets/icons/absence-icon.svg'
-
-// components
-import CalendarEvent from '../CalendarEvent'
 
 const getTodayLabelId = (date: string | dayjs.Dayjs) => `${dayjs(date).format(CALENDAR_DATE_FORMAT.QUERY)}-is-today`
 
@@ -109,11 +107,11 @@ const NowIndicator = () => {
 interface ICalendarWeekView extends ICalendarView {}
 
 const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarWeekView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent } = props
+	const { salonID, selectedDate, eventsViewType, shiftsTimeOffs, reservations, employees, onEditEvent, eventAllow } = props
 
-	const handleDateClick = (arg: DateClickArg) => {
+	const handleDateClick = useCallback((arg: DateClickArg) => {
 		console.log({ arg })
-	}
+	}, [])
 
 	const handleSelect = (info: any) => {
 		const { start, end, resource = {} } = info
@@ -161,6 +159,7 @@ const CalendarWeekView = React.forwardRef<InstanceType<typeof FullCalendar>, ICa
 				// handlers
 				select={handleSelect}
 				dateClick={handleDateClick}
+				eventAllow={eventAllow}
 			/>
 		</div>
 	)

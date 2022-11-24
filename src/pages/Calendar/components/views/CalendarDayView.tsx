@@ -51,7 +51,7 @@ const slotLabelContent = (data: SlotLabelContentArg) => {
 interface ICalendarDayView extends ICalendarView {}
 
 const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICalendarDayView>((props, ref) => {
-	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent } = props
+	const { salonID, selectedDate, eventsViewType, reservations, shiftsTimeOffs, employees, onEditEvent, eventAllow } = props
 
 	const [_, setQuery] = useQueryParams({
 		eventId: StringParam,
@@ -103,6 +103,7 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 			// handlers
 			select={handleSelect}
 			dateClick={handleDateClick}
+			eventAllow={eventAllow}
 		/>
 	)
 })

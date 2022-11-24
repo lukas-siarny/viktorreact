@@ -6,7 +6,7 @@ import { GENDER, MSG_TYPE, LANGUAGE, PERMISSION, SALON_PERMISSION, CALENDAR_EVEN
 
 // types
 import { Paths } from './api'
-import { EventContentArg } from '@fullcalendar/react'
+import { DateSpanApi, EventApi, EventContentArg } from '@fullcalendar/react'
 
 export interface IErrorMessage {
 	type: MSG_TYPE
@@ -589,6 +589,7 @@ export interface ICalendarView {
 	employees: Employees
 	salonID: string
 	onEditEvent: (eventId: string, eventType: CALENDAR_EVENT_TYPE) => void
+	eventAllow: (dropInfo: DateSpanApi, movingEvent: EventApi | null) => boolean
 }
 
 export interface IEventCardProps {

@@ -306,7 +306,7 @@ export const composeDayViewResources = (shiftsTimeOffs: ICalendarEventsPayload['
 			image: employee.image.resizedImages.thumbnail,
 			description,
 			isTimeOff: !!employeeTimeOff.length,
-			employeeData: employee
+			employee
 		}
 	})
 }
@@ -331,7 +331,7 @@ interface EmployeeWeekResource {
 	image: string
 	employeeColor?: string
 	isTimeOff: boolean
-	employeeData: Employees[0]
+	employee: Employees[0]
 }
 
 type WeekDayResource = { id: string; day: string; employee: EmployeeWeekResource }
@@ -360,7 +360,7 @@ export const composeWeekResources = (weekDays: string[], shiftsTimeOffs: ICalend
 					name: `${employee.lastName ? employee.firstName || '' : ''} ${employee.lastName || ''}`.trim() || employee.email || employee.inviteEmail || employee.id,
 					image: employee.image.resizedImages.thumbnail,
 					isTimeOff: !!timeOffsWeekDay?.filter((timeOff) => timeOff.employee?.id === employee.id).length,
-					employeeData: employee
+					employee
 				}
 			}
 		})

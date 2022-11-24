@@ -1,7 +1,7 @@
-import React, { useImperativeHandle, useRef } from 'react'
+import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
-import FullCalendar from '@fullcalendar/react'
+import FullCalendar, { DateSpanApi, EventApi } from '@fullcalendar/react'
 
 // enums
 import { CALENDAR_EVENTS_VIEW_TYPE, CALENDAR_EVENT_TYPE, CALENDAR_VIEW } from '../../../../utils/enums'
@@ -35,6 +35,20 @@ export type CalendarRefs = {
 	/* [CALENDAR_VIEW.MONTH]?: InstanceType<typeof FullCalendar> | null */
 }
 
+const allowDropAndUpdateData = (dropInfo: DateSpanApi, movingEvent: EventApi | null) => {
+	// TODO: update dat cez CB
+	const isReservation = movingEvent?.extendedProps?.eventType === CALENDAR_EVENT_TYPE.RESERVATION
+
+	if (isReservation) {
+		return true
+	}
+
+	const resourceEmployeeId = dropInfo?.resource?.extendedProps?.employee?.id
+	const eventEmployeeId = movingEvent?.extendedProps.employee?.id
+
+	return resourceEmployeeId === eventEmployeeId
+}
+
 const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 	const { view, selectedDate, loading, eventsViewType, reservations, shiftsTimeOffs, employees, onShowAllEmployees, showEmptyState, salonID, onEditEvent } = props
 
@@ -47,6 +61,8 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		[CALENDAR_VIEW.WEEK]: weekView?.current
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
+
+	const eventAllow = useCallback((dropInfo: DateSpanApi, movingEvent: EventApi | null) => allowDropAndUpdateData(dropInfo, movingEvent), [])
 
 	const getView = () => {
 		if (showEmptyState) {
@@ -79,6 +95,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 					eventsViewType={eventsViewType}
 					salonID={salonID}
 					onEditEvent={onEditEvent}
+					eventAllow={eventAllow}
 				/>
 			)
 		}
@@ -93,6 +110,7 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				eventsViewType={eventsViewType}
 				salonID={salonID}
 				onEditEvent={onEditEvent}
+				eventAllow={eventAllow}
 			/>
 		)
 	}

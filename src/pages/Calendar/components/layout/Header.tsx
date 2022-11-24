@@ -4,7 +4,7 @@ import cx from 'classnames'
 import { Header } from 'antd/lib/layout/layout'
 import { Button, Dropdown } from 'antd'
 import dayjs from 'dayjs'
-import { WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
+import { destroy, WrappedFieldInputProps, WrappedFieldMetaProps } from 'redux-form'
 import Tooltip from 'antd/es/tooltip'
 import { useDispatch } from 'react-redux'
 import { debounce } from 'lodash'
@@ -18,7 +18,8 @@ import {
 	CALENDAR_SET_NEW_DATE,
 	CALENDAR_VIEW,
 	STRINGS,
-	CALENDAR_DEBOUNCE_DELAY
+	CALENDAR_DEBOUNCE_DELAY,
+	FORM
 } from '../../../../utils/enums'
 
 // assets
@@ -222,8 +223,12 @@ const CalendarHeader: FC<Props> = (props) => {
 						}
 						// NOTE: ak je filter eventType na rezervacii nastav rezervaciu ako eventType pre form, v opacnom pripade nastv pracovnu zmenu
 						if (eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+							dispatch(destroy(FORM.CALENDAR_RESERVATION_FORM))
 							setCollapsed(CALENDAR_EVENT_TYPE.RESERVATION)
 						} else {
+							dispatch(destroy(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM))
+							dispatch(destroy(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM))
+							dispatch(destroy(FORM.CALENDAR_EMPLOYEE_BREAK_FORM))
 							setCollapsed(CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
 						}
 					}}

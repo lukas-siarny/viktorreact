@@ -265,7 +265,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, query.eventsViewType, query?.categoryIDs, query?.employeeIDs, services?.categoriesOptions, employees?.options])
+		// only on onmount
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [employees?.options, services?.categoriesOptions])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change

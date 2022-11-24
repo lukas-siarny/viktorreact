@@ -15,14 +15,6 @@
 	100%
 		transform: translateX(0)
 
-@keyframes event-popover-overlay-animation
-	0%
-		opacity: 0
-		transform: scale(0)
-	100%
-		opacity: 1
-		transform: scale(1)
-
 
 @mixin scrollbar-styles
 	@media (pointer:fine)
@@ -942,6 +934,7 @@
 					flex-direction: column
 					align-items: flex-start
 					gap: 4px
+					contain: paint
 					.title-wrapper
 						display: inline-flex
 						align-items: flex-start
@@ -1270,12 +1263,13 @@
 
 // event popover
 .nc-event-popover-overlay
+	padding: 16px
 	&::before
 		content: ''
 		position: fixed
 		inset: 0
 	.ant-popover-content
-		padding: 16px 0 16px 16px
+		padding: 0
 	.ant-popover-inner
 		box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)
 		background-color: $backgroundColor-notino-white

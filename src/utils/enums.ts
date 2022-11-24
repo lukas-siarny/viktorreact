@@ -782,6 +782,12 @@ export enum RESERVATION_ASSIGNMENT_TYPE {
 	USER = 'USER'
 }
 
+export enum RESERVATION_PAYMENT_METHOD {
+	CASH = 'CASH',
+	CARD = 'CARD',
+	OTHER = 'OTHER'
+}
+
 export const CALENDAR_DEBOUNCE_DELAY = 300 // in ms
 
 export const getDayNameFromNumber = (day: number) => {

@@ -6,7 +6,7 @@ import { DelimitedArrayParam, StringParam, useQueryParams, withDefault } from 'u
 import dayjs from 'dayjs'
 import { compact, debounce, includes, isEmpty, map } from 'lodash'
 import { getFormValues, initialize, submit } from 'redux-form'
-import { Modal } from 'antd'
+import { Modal, message } from 'antd'
 
 // utils
 import { useTranslation } from 'react-i18next'
@@ -26,10 +26,11 @@ import {
 	NOTIFICATION_TYPE,
 	PERMISSION,
 	REQUEST_TYPE,
-	STRINGS
+	STRINGS,
+	REFRESH_CALENDAR_INTERVAL
 } from '../../utils/enums'
 import { withPermissions } from '../../utils/Permissions'
-import { computeEndDate, computeUntilDate, getAssignedUserLabel } from '../../utils/helper'
+import { computeEndDate, computeUntilDate, getAssignedUserLabel, setIntervalImmediately } from '../../utils/helper'
 import { deleteReq, patchReq, postReq } from '../../utils/request'
 import { isRangeAleardySelected } from './calendarHelpers'
 
@@ -96,6 +97,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const [siderFilterCollapsed, setSiderFilterCollapsed] = useState<boolean>(false)
 	const [isRemoving, setIsRemoving] = useState(false)
 	const [visibleBulkModal, setVisibleBulkModal] = useState<REQUEST_TYPE | null>(null)
+	const [fetchInterval, setFetchInterval] = useState<number | undefined>(undefined)
+	const [loadInBackground, setLoadInBackground] = useState<boolean>(false)
 
 	const loadingData = employees?.isLoading || services?.isLoading || reservations?.isLoading || shiftsTimeOffs?.isLoading
 	const isMainLayoutSiderCollapsed = useSelector((state: RootState) => state.helperSettings.isSiderCollapsed)
@@ -106,6 +109,62 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
 	)
 	const [t] = useTranslation()
+
+	const fffetchEvents = (): Promise<any> => {
+		// fetch new events
+		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
+			return Promise.all([
+				dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW, true)),
+				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
+			])
+		}
+
+		return dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
+	}
+
+	const restartFetchInterval = () => {
+		if (fetchInterval) {
+			window.clearInterval(fetchInterval)
+		}
+
+		const interval = window.setInterval(async () => {
+			setLoadInBackground(true)
+			message.open({
+				type: 'loading',
+				content: t('loc:Kalendár sa aktualizuje'),
+				duration: 0
+			})
+			await fffetchEvents()
+			setLoadInBackground(false)
+			message.destroy()
+		}, REFRESH_CALENDAR_INTERVAL)
+
+		setFetchInterval(interval)
+
+		// setIntervalImmediately(async () => {
+		// 	setLoadInBackground(true)
+		// 	message.open({
+		// 		type: 'loading',
+		// 		content: t('loc:Kalendár sa aktualizuje'),
+		// 		duration: 0
+		// 	})
+		// 	await fffetchEvents()
+		// 	setLoadInBackground(false)
+		// 	message.destroy()
+		// }, REFRESH_CALENDAR_INTERVAL)
+		// )
+	}
+
+	useEffect(() => {
+		// clear on unmount
+		return () => {
+			if (fetchInterval) {
+				clearInterval(fetchInterval)
+				message.destroy()
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
 
 	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
 		const initData = {
@@ -276,18 +335,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		dispatch(getServices({ salonID }))
 	}, [dispatch, salonID])
 
-	const fetchEvents = () => {
-		// fetch new events
-		if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			Promise.all([
-				dispatch(getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW, true)),
-				dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
-			])
-		} else if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.EMPLOYEE_SHIFT_TIME_OFF) {
-			dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
-		}
-	}
-
 	useEffect(() => {
 		;(async () => {
 			// clear previous events
@@ -299,7 +346,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				return
 			}
 			// fetch new events
-			fetchEvents()
+			// fetchEvents()
+			restartFetchInterval()
 		})()
 	}, [dispatch, salonID, query.date, query.view, query.eventsViewType, query.employeeIDs, query.categoryIDs])
 
@@ -393,7 +441,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 
 			setEventManagement(undefined)
-			fetchEvents()
+			restartFetchInterval()
 		} catch (error: any) {
 			// eslint-disable-next-line no-console
 			console.error(error.message)
@@ -446,7 +494,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			}
 			// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
 			setEventManagement(undefined)
-			fetchEvents()
+			restartFetchInterval()
 		} catch (e) {
 			// eslint-disable-next-line no-console
 			console.error(e)
@@ -536,7 +584,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				}
 				// Po CREATE / UPDATE eventu dotiahnut eventy + zatvorit drawer
 				setEventManagement(undefined)
-				fetchEvents()
+				restartFetchInterval()
 			} catch (e) {
 				// eslint-disable-next-line no-console
 				console.error(e)
@@ -614,7 +662,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						view={query.view as CALENDAR_VIEW}
 						reservations={reservations?.data || []}
 						shiftsTimeOffs={shiftsTimeOffs?.data || []}
-						loading={loadingData}
+						loading={loadingData && !loadInBackground}
 						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						employees={filteredEmployees() || []}
 						showEmptyState={query?.employeeIDs === null}

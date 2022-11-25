@@ -1,11 +1,14 @@
-import React, { FC, MouseEventHandler /* , ReactNode */ } from 'react'
-import { Field, /* FieldArray, */ InjectedFormProps, reduxForm } from 'redux-form'
+import React, { FC, MouseEventHandler } from 'react'
+import { Field, FieldArray, InjectedFormProps, reduxForm, getFormValues } from 'redux-form'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import { Divider, Form, Space } from 'antd'
+import { Divider, Form, Space, Collapse, Tag, Button } from 'antd'
+import cx from 'classnames'
+import { isEmpty } from 'lodash'
 
 // utils
 import { FORM, UPLOAD_IMG_CATEGORIES, URL_UPLOAD_IMAGES } from '../../../utils/enums'
-import { showErrorNotification /* , showServiceCategory, validationNumberMin */ } from '../../../utils/helper'
+import { showErrorNotification /* , validationNumberMin */ } from '../../../utils/helper'
 
 // types
 import { IEmployeeForm } from '../../../types/interfaces'
@@ -15,21 +18,25 @@ import InputField from '../../../atoms/InputField'
 import ImgUploadField from '../../../atoms/ImgUploadField'
 // import InputNumberField from '../../../atoms/InputNumberField'
 // import SwitchField from '../../../atoms/SwitchField'
+import SelectField from '../../../atoms/SelectField'
 
 // components
 import PhoneWithPrefixField from '../../../components/PhoneWithPrefixField'
-// import DeleteButton from '../../../components/DeleteButton'
+import DeleteButton from '../../../components/DeleteButton'
 
 // validations
 import validateEmployeeForm from './validateEmployeeForm'
 
 // assets
-/* import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
-import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
-import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg' */
+// import { ReactComponent as ClockIcon } from '../../../assets/icons/clock-icon.svg'
+// import { ReactComponent as CouponIcon } from '../../../assets/icons/coupon.svg'
+import { ReactComponent as ServiceIcon } from '../../../assets/icons/services-24-icon.svg'
 import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon.svg'
 
-// const { Panel } = Collapse
+// reducers
+import { RootState } from '../../../reducers'
+
+const { Panel } = Collapse
 
 type ComponentProps = {
 	salonID: string
@@ -37,21 +44,21 @@ type ComponentProps = {
 }
 
 type Props = InjectedFormProps<IEmployeeForm, ComponentProps> & ComponentProps
-/**
-const numberMin0 = validationNumberMin(0)
+
+// const numberMin0 = validationNumberMin(0)
 
 const renderListFields = (props: any) => {
 	// eslint-disable-next-line react-hooks/rules-of-hooks
 	const [t] = useTranslation()
-	const { fields, salon } = props
+	const { fields /* , salon */ } = props
 
-	const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => (
+	/* const renderFromTo = (from: number | undefined | null, to: number | undefined | null, variable: boolean, icon: ReactNode, extra?: string) => (
 		<div className={'flex items-center mr-3'}>
 			{icon}
 			{from}
 			{variable && to ? ` - ${to}` : undefined} {extra}
 		</div>
-	)
+	) */
 
 	const compareSalonAndEmployeeData = (data: any): boolean => {
 		const salonData = data?.salonData
@@ -67,12 +74,13 @@ const renderListFields = (props: any) => {
 		return !(salonData?.durationFrom === employeeData?.durationFrom && salonData?.priceFrom === employeeData?.priceFrom && checkVariableDuration && checkVariablePrice)
 	}
 
-	const genExtra = (index: number, field: any) => (
+	const genExtra = (index: number /* , field: any */) => (
 		<div className={'flex'} role={'link'} onKeyDown={(e) => e.stopPropagation()} onClick={(e) => e.stopPropagation()} tabIndex={0}>
-			<div className={'flex'}>
+			{/* TODO - for change duration and price in employee detail */}
+			{/* <div className={'flex'}>
 				{renderFromTo(field?.employeeData?.durationFrom, field?.employeeData?.durationTo, field?.variableDuration, <ClockIcon className={'mr-1'} />, t('loc:min'))}
 				{renderFromTo(field?.employeeData?.priceFrom, field?.employeeData?.priceTo, field?.variablePrice, <CouponIcon className={'mr-1'} />, salon.data?.currency.symbol)}
-			</div>
+			</div> */}
 			<DeleteButton
 				onConfirm={() => {
 					fields.remove(index)
@@ -92,9 +100,10 @@ const renderListFields = (props: any) => {
 			<Collapse className={'collapse-list'} bordered={false}>
 				{fields.map((field: any, index: number) => {
 					const fieldData = fields.get(index)
-					const variableDuration = fieldData?.variableDuration
-					const variablePrice = fieldData?.variablePrice
-					const category = fieldData?.category?.child ? showServiceCategory(fieldData?.category) : fieldData?.category?.name
+					// TODO - for change duration and price in employee detail
+					/* const variableDuration = fieldData?.variableDuration
+					const variablePrice = fieldData?.variablePrice */
+					const collapsible = (fieldData?.durationFrom && fieldData?.priceFrom) || fieldData?.serviceCategoryParameter?.length > 1 ? undefined : 'disabled'
 					return (
 						<Panel
 							header={
@@ -106,12 +115,16 @@ const renderListFields = (props: any) => {
 									>
 										{fieldData?.name}
 									</div>
-									<Tag className={'ml-5'}>{category}</Tag>
+									<Tag className={'ml-5'}>{fieldData?.category}</Tag>
 								</div>
 							}
 							key={index}
-							extra={genExtra(index, fieldData)}
+							extra={genExtra(index /* , fieldData */)}
+							className={cx({ hideIcon: collapsible })}
+							collapsible={collapsible}
 						>
+							{/* TODO - for change duration and price in employee detail */}
+							{/*
 							<Row gutter={8} align='middle'>
 								<Col span={8}>
 									<Field className={'mb-0'} component={SwitchField} label={t('loc:Variabilné trvanie')} name={`${field}.variableDuration`} size={'middle'} />
@@ -188,19 +201,21 @@ const renderListFields = (props: any) => {
 									</Col>
 								)}
 							</Row>
+							*/}
 						</Panel>
 					)
 				})}
 			</Collapse>
 		</>
 	)
-} */
+}
 
 const EmployeeForm: FC<Props> = (props) => {
 	const [t] = useTranslation()
-	const { handleSubmit } = props
-
-	// const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const { handleSubmit, addService } = props
+	const formValues: Partial<IEmployeeForm> = useSelector((state: RootState) => getFormValues(FORM.EMPLOYEE)(state))
+	const salon = useSelector((state: RootState) => state.selectedSalon.selectedSalon)
+	const services = useSelector((state: RootState) => state.service.services)
 
 	return (
 		<Form id={`${FORM.EMPLOYEE}-form`} layout={'vertical'} className={'form'} onSubmitCapture={handleSubmit}>
@@ -236,15 +251,33 @@ const EmployeeForm: FC<Props> = (props) => {
 						formName={FORM.EMPLOYEE}
 					/>
 				</div>
-
-				{/* TODO - refactor assigned services
-						<div>
+				<div>
 					<h3 className={'mb-0 mt-0 flex items-center'}>
 						<ServiceIcon className={'text-notino-black mr-2'} /> {t('loc:Priradené služby')}
 					</h3>
 					<Divider className={'mb-3 mt-3'} />
+					<div className={'flex w-full flex-col md:flex-row md:gap-2'}>
+						<Field
+							label={t('loc:Služby')}
+							size={'large'}
+							className={'flex-1'}
+							component={SelectField}
+							filterOption={true}
+							allowClear
+							placeholder={t('loc:Vyberte službu')}
+							name={'service'}
+							options={services?.options}
+							mode={'multiple'}
+							allowInfinityScroll
+							showSearch
+							loading={services.isLoading}
+						/>
+						<Button type={'primary'} size={'middle'} className={'self-start noti-btn m-regular md:mt-5'} onClick={addService} disabled={isEmpty(formValues?.service)}>
+							{formValues?.services && formValues?.services.length > 1 ? t('loc:Pridať služby') : t('loc:Pridať službu')}
+						</Button>
+					</div>
 					<FieldArray component={renderListFields} name={'services'} salon={salon} />
-					</div> */}
+				</div>
 			</Space>
 		</Form>
 	)

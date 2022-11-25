@@ -7,10 +7,11 @@ import dayjs from 'dayjs'
 import { compact, includes, isEmpty, map } from 'lodash'
 import { getFormValues, initialize, submit } from 'redux-form'
 import { Modal } from 'antd'
-
-// utils
 import { useTranslation } from 'react-i18next'
+import cx from 'classnames'
+// utils
 import {
+	CALENDAR_COMMON_SETTINGS,
 	CALENDAR_DATE_FORMAT,
 	CALENDAR_EVENT_TYPE,
 	CALENDAR_EVENTS_KEYS,
@@ -18,7 +19,6 @@ import {
 	CALENDAR_VIEW,
 	CONFIRM_BULK,
 	DAY,
-	DEFAULT_DATE_INIT_FORMAT,
 	ENDS_EVENT,
 	EVERY_REPEAT,
 	FORM,
@@ -105,18 +105,11 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const formValuesDetailEvent: Partial<ICalendarEventForm & ICalendarReservationForm> = useSelector((state: RootState) =>
 		getFormValues(`CALENDAR_${query.sidebarView}_FORM`)(state)
 	)
+
 	const [t] = useTranslation()
 
-	const initCreateEventForm = (eventForm: FORM, eventType: CALENDAR_EVENT_TYPE) => {
-		const initData = {
-			date: dayjs().format(DEFAULT_DATE_INIT_FORMAT),
-			eventType
-		}
-		dispatch(initialize(eventForm, initData))
-	}
-
 	const setEventManagement = useCallback(
-		(newView: CALENDAR_EVENT_TYPE | undefined) => {
+		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
 			// NOTE: ak je collapsed (newView je undefined) tak nastavit sidebarView na COLLAPSED a vynulovat eventId
 			if (!newView) {
 				setQuery({
@@ -129,6 +122,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 				setQuery({
 					...query,
+					eventId,
 					eventsViewType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
 					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
 				})
@@ -154,6 +148,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				timeTo: data?.end.time,
 				note: data?.note,
 				calendarBulkEventID: data?.calendarBulkEvent?.id,
+				allDay: data?.start.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.startTime && data?.end.time === CALENDAR_COMMON_SETTINGS.EVENT_CONSTRAINT.endTime,
 				employee: {
 					value: data?.employee.id,
 					key: data?.employee.id,
@@ -222,51 +217,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		return query?.employeeIDs === null ? [] : employees?.data?.employees
 	}, [employees?.data?.employees, query.employeeIDs])
 
-	// Zmena selectu event type v draweri
-	const onChangeEventType = (type: CALENDAR_EVENT_TYPE) => {
-		switch (type) {
-			case CALENDAR_EVENT_TYPE.RESERVATION:
-				setQuery({
-					...query,
-					sidebarView: type
-				})
-				initCreateEventForm(FORM.CALENDAR_RESERVATION_FORM, CALENDAR_EVENT_TYPE.RESERVATION)
-				break
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT:
-				setQuery({
-					...query,
-					sidebarView: type
-				})
-				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_SHIFT_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_SHIFT)
-				break
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
-				setQuery({
-					...query,
-					sidebarView: type
-				})
-				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_TIME_OFF_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF)
-				break
-			case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
-				setQuery({
-					...query,
-					sidebarView: type
-				})
-				initCreateEventForm(FORM.CALENDAR_EMPLOYEE_BREAK_FORM, CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK)
-				break
-			default:
-				break
-		}
-	}
-
 	useEffect(() => {
 		// init pre UPDATE form ak eventId existuje
 		if (query.eventId) {
 			initUpdateEventForm()
-		}
-		// zmena sideBar view
-		if (query.sidebarView !== undefined) {
-			// initnutie defaultu sidebaru pri nacitani bude COLLAPSED a ak bude existovat typ formu tak sa initne dany FORM (pri skopirovani URL na druhy tab)
-			onChangeEventType(query.sidebarView as CALENDAR_EVENT_TYPE)
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [query.eventId, query.sidebarView])
@@ -311,7 +265,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				employeeIDs: query?.employeeIDs === undefined ? getEmployeeIDs(employees?.options) : query?.employeeIDs
 			})
 		)
-	}, [dispatch, query.eventsViewType, query?.categoryIDs, query?.employeeIDs, services?.categoriesOptions, employees?.options])
+		// only on onmount
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [employees?.options, services?.categoriesOptions])
 
 	useEffect(() => {
 		// update calendar size when main layout sider change
@@ -324,10 +280,12 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const handleSubmitFilter = (values: ICalendarFilter) => {
 		setQuery({
 			...query,
-			...values
+			...values,
+			eventId: undefined,
+			sidebarView: undefined
 		})
 	}
-	const deleteEventWrapper = async () => {
+	const deleteEventWrapper = useCallback(async () => {
 		if (isRemoving) {
 			return
 		}
@@ -365,7 +323,17 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		} finally {
 			setIsRemoving(false)
 		}
-	}
+	}, [
+		eventDetail?.data?.calendarBulkEvent?.id,
+		fetchEvents,
+		formValuesBulkForm?.actionType,
+		formValuesDetailEvent?.calendarBulkEventID,
+		isRemoving,
+		query?.eventId,
+		query?.sidebarView,
+		salonID,
+		setEventManagement
+	])
 
 	const handleDeleteEvent = async () => {
 		// Ak existuje bulkID otvorit modal pre dodatocne potvrdenie zmazanie medzi BULK / SINGLE
@@ -377,51 +345,53 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		}
 	}
 
-	const handleSubmitReservation = async (values: ICalendarReservationForm) => {
-		// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
-		const eventId = values.eventId ? values.eventId : query.eventId
-		try {
-			const reqData = {
-				start: {
-					date: values.date,
-					time: values.timeFrom
-				},
-				end: {
-					date: values.date,
-					time: values.timeTo
-				},
-				note: values.note,
-				customerID: values.customer.key as string,
-				employeeID: values.employee.key as string,
-				serviceID: values.service.key as string
+	const handleSubmitReservation = useCallback(
+		async (values: ICalendarReservationForm) => {
+			// NOTE: ak je eventID z values tak sa funkcia vola z drag and drop / resize ak ide z query tak je otvoreny detail cez URL / kliknutim na bunku
+			const eventId = values.eventId ? values.eventId : query.eventId
+			try {
+				const reqData = {
+					start: {
+						date: values.date,
+						time: values.timeFrom
+					},
+					end: {
+						date: values.date,
+						time: values.timeTo
+					},
+					note: values.note,
+					customerID: values.customer.key as string,
+					employeeID: values.employee.key as string,
+					serviceID: values.service.key as string
+				}
+				if (eventId) {
+					// UPDATE
+					await patchReq(
+						'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
+						{ salonID, calendarEventID: eventId },
+						reqData,
+						undefined,
+						NOTIFICATION_TYPE.NOTIFICATION,
+						true
+					)
+				} else {
+					// CREATE
+					await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
+				}
+				// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
+				setEventManagement(undefined)
+				fetchEvents()
+			} catch (e) {
+				// eslint-disable-next-line no-console
+				console.error(e)
 			}
-			if (eventId) {
-				// UPDATE
-				await patchReq(
-					'/api/b2b/admin/salons/{salonID}/calendar-events/reservations/{calendarEventID}',
-					{ salonID, calendarEventID: eventId },
-					reqData,
-					undefined,
-					NOTIFICATION_TYPE.NOTIFICATION,
-					true
-				)
-			} else {
-				// CREATE
-				await postReq('/api/b2b/admin/salons/{salonID}/calendar-events/reservations/', { salonID }, reqData, undefined, NOTIFICATION_TYPE.NOTIFICATION, true)
-			}
-			// Po CREATE / UPDATE rezervacie dotiahnut eventy + zatvorit drawer
-			setEventManagement(undefined)
-			fetchEvents()
-		} catch (e) {
-			// eslint-disable-next-line no-console
-			console.error(e)
-		}
-	}
+		},
+		[query.eventId, salonID, setEventManagement]
+	)
 
 	const handleSubmitEvent = useCallback(
 		async (values: ICalendarEventForm) => {
 			const eventId = query.eventId || values.eventId // ak je z query ide sa detail drawer ak je values ide sa cez drag and drop alebo resize
-
 			// NOTE: ak existuje actionType tak sa klikl v modali na moznost bulk / single a uz bol modal submitnuty
 			if (values.calendarBulkEventID && !formValuesBulkForm?.actionType) {
 				dispatch(initialize(FORM.CONFIRM_BULK_FORM, { actionType: CONFIRM_BULK.BULK }))
@@ -507,7 +477,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 				console.error(e)
 			}
 		},
-		[formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
+		[dispatch, fetchEvents, formValuesBulkForm?.actionType, query.eventId, salonID, setEventManagement]
 	)
 
 	const handleSubmitConfirmModal = () => {
@@ -554,6 +524,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	return (
 		<>
 			{modals}
+			<div role={'button'} onClick={() => setEventManagement(undefined)} id={'overlay'} className={cx({ block: query.sidebarView, hidden: !query.sidebarView })} />
 			<Layout className='noti-calendar-layout'>
 				<CalendarHeader
 					setCollapsed={setEventManagement}
@@ -597,7 +568,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						}}
 					/>
 					<SiderEventManagement
-						onChangeEventType={onChangeEventType}
 						salonID={salonID}
 						eventsViewType={query.eventsViewType as CALENDAR_EVENTS_VIEW_TYPE}
 						eventId={query.eventId}

@@ -54,7 +54,8 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 
 	const [isCardPopoverOpen, setIsCardPopoverOpen] = useState(false)
 
-	const isPast = dayjs(originalEvent.endDateTime).isBefore(dayjs())
+	// const isPast = dayjs(originalEvent.endDateTime).isBefore(dayjs())
+	const isPast = dayjs(originalEvent?.endDateTime || event.end).isBefore(dayjs())
 	const isPending = reservationData?.state === RESERVATION_STATE.PENDING
 	const isApproved = reservationData?.state === RESERVATION_STATE.APPROVED
 	const isRealized = reservationData?.state === RESERVATION_STATE.REALIZED || reservationData?.state === RESERVATION_STATE.NOT_REALIZED

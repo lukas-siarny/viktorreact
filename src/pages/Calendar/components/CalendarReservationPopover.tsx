@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import React, { FC, useEffect, useCallback, useState } from 'react'
-import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag, Tooltip } from 'antd'
+import { Button, Col, Divider, Dropdown, Menu, Popconfirm, Popover, Row, Tag } from 'antd'
 import { useTranslation } from 'react-i18next'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
 import { useSelector } from 'react-redux'
@@ -8,10 +8,9 @@ import dayjs from 'dayjs'
 import colors from 'tailwindcss/colors'
 import { TooltipPlacement } from 'antd/es/tooltip'
 import i18next from 'i18next'
+import { ButtonProps } from 'antd/es/button'
 
 // assets
-import { ButtonProps } from 'antd/es/button'
-import { Link } from 'react-router-dom'
 import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon-16.svg'
 import { ReactComponent as CloseIcon } from '../../../assets/icons/close-icon-16.svg'
 import { ReactComponent as DotsIcon } from '../../../assets/icons/more-info-horizontal-icon.svg'
@@ -214,7 +213,7 @@ const PopoverContent: FC<ContentProps> = (props) => {
 									<Col flex={'auto'}>
 										<Row className={'gap-1'} align={'top'}>
 											<Ellipsis text={note.text} className={'m-0 p-0 whitespace-pre-wrap flex-1'} />
-											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interna')}</Tag>}
+											{note.internal && <Tag className={'nc-event-popover-tag'}>{t('loc:Interná')}</Tag>}
 										</Row>
 									</Col>
 								</div>

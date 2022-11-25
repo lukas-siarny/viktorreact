@@ -11,6 +11,7 @@ export interface ISelectedCountry {
 }
 
 export const setSelectedCountry =
-	(countryCode?: string): ThunkResult<void> => (dispatch) => {
+	(countryCode?: string): ThunkResult<void> =>
+	(dispatch) => {
 		dispatch({ type: SELECTED_COUNTRY.SELECTED_COUNTRY_UPDATE, selectedCountry: countryCode })
-}
+	}

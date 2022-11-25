@@ -39,26 +39,28 @@ export interface ISalonsTimeStatsPayload {
 	data: ISalonsTimeStats | null
 }
 
-export const getNotinoDashboard = (countryCode?: string): ThunkResult<Promise<INotinoDashboardPayload>> => async (dispatch) => {
-	let payload = {} as INotinoDashboardPayload
+export const getNotinoDashboard =
+	(countryCode?: string): ThunkResult<Promise<INotinoDashboardPayload>> =>
+	async (dispatch) => {
+		let payload = {} as INotinoDashboardPayload
 
-	try {
-		dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_START })
+		try {
+			dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_START })
 
-		const { data } = await getReq('/api/b2b/admin/notino-dashboard/', { ...normalizeQueryParams({ countryCode }) })
-		payload = {
-			data: data?.counts
+			const { data } = await getReq('/api/b2b/admin/notino-dashboard/', { ...normalizeQueryParams({ countryCode }) })
+			payload = {
+				data: data?.counts
+			}
+
+			dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_DONE, payload })
+		} catch (err) {
+			dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_FAIL })
+			// eslint-disable-next-line no-console
+			console.error(err)
 		}
 
-		dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_DONE, payload })
-	} catch (err) {
-		dispatch({ type: NOTINO_DASHBOARD.NOTINO_DASHBOARD_LOAD_FAIL })
-		// eslint-disable-next-line no-console
-		console.error(err)
+		return payload
 	}
-
-	return payload
-}
 
 const getSalonTimeStats = async (year: number, countryCode?: string, month?: number): Promise<ISalonsTimeStatsPayload> => {
 	const { data } = await getReq('/api/b2b/admin/notino-dashboard/salon-development-time-stats', { ...normalizeQueryParams({ year, month, countryCode }) } as any)

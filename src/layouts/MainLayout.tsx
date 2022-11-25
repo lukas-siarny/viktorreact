@@ -185,11 +185,13 @@ const MainLayout: FC<Props> = (props) => {
 				<Permissions
 					allowed={[PERMISSION.NOTINO_SUPER_ADMIN, PERMISSION.NOTINO_ADMIN]}
 					render={(hasPermission) =>
-						hasPermission && page === PAGE.HOME && !salonID && (
+						hasPermission &&
+						page === PAGE.HOME &&
+						!salonID && (
 							<Header className='shadow-md bg-notino-white sticky top-0 px-4 flex items-center w-full z-40' id={'noti-header'}>
 								<Row className={'justify-end min-w-0 w-full'} wrap={false}>
-									<Row className='w-1/7 items-center min-w-0' wrap={false}>
-										<HeaderSelectCountryForm onSubmit={(data: IHeaderCountryForm)=> dispatch(setSelectedCountry(data.countryCode))}/>
+									<Row className='w-1/7 items-center min-w-0' wrap={false}> 
+										<HeaderSelectCountryForm onSubmit={(data: IHeaderCountryForm) => dispatch(setSelectedCountry(data.countryCode))}/>
 									</Row>
 								</Row>
 							</Header>

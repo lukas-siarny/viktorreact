@@ -337,7 +337,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 	const getFooterCancelButton = (key: string, label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
 		const button = (
 			<Button
-				key={'cancel-button'}
+				key={key}
 				type={'dashed'}
 				size={'middle'}
 				className={'noti-btn w-1/2'}
@@ -350,6 +350,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 
 		return popconfirmText ? (
 			<Popconfirm
+				key={key}
 				placement={'bottom'}
 				title={popconfirmText}
 				okButtonProps={{
@@ -364,7 +365,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				onConfirm={() => handleUpdateState(state)}
 				cancelText={t('loc:Zrušiť')}
 			>
-				<Button key={'cancel-button'} type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
+				<Button type={'dashed'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'}>
 					{label}
 				</Button>
 			</Popconfirm>

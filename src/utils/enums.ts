@@ -26,7 +26,7 @@ export const REFRESH_TOKEN_INTERVAL = 1000 * 60 * 13 // 13 minutes
 
 export const REFRESH_PAGE_INTERVAL = 1000 * 60 * 60 * 4 // 4 hours
 
-export const REFRESH_CALENDAR_INTERVAL = 1000 * 12 // 60 * 2 // 2 minutes
+export const REFRESH_CALENDAR_INTERVAL = 1000 * 15 // 60 * 2 // 2 minutes
 
 export const DEFAULT_LANGUAGE = LANGUAGE.EN
 

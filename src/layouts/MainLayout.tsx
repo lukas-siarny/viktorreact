@@ -1,10 +1,10 @@
-import React, { ReactNode, FC, useEffect } from 'react'
+import React, { ReactNode, FC } from 'react'
 import { Layout, Row, Button, Dropdown, Menu } from 'antd'
 import { useDispatch, useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
 import { ItemType } from 'antd/lib/menu/hooks/useItems'
-import { Field, initialize } from 'redux-form'
+import { initialize } from 'redux-form'
 import { Header } from 'antd/lib/layout/layout'
 
 // components
@@ -19,7 +19,6 @@ import { setSelectedCountry } from '../reducers/selectedCountry/selectedCountryA
 import Permissions from '../utils/Permissions'
 import { FORM, PAGE, PERMISSION } from '../utils/enums'
 import { history } from '../utils/history'
-import { optionRenderWithImage } from '../utils/helper'
 
 // assets
 import { ReactComponent as PlusIcon } from '../assets/icons/plus-icon.svg'
@@ -150,10 +149,6 @@ const MainLayout: FC<Props> = (props) => {
 				<div className={cx(labelClassname)}>{content}</div>
 			</>
 		)
-	}
-
-	const getSelectedCountryForDashboard = () => {
-
 	}
 
 	return (

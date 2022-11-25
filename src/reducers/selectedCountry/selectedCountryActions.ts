@@ -1,6 +1,7 @@
-import { ThunkResult } from '..';
-import { IResetStore } from '../generalTypes';
-import { SELECTED_COUNTRY } from './selectedCountryTypes';
+/* eslint-disable import/no-cycle */
+import { ThunkResult } from '..'
+import { IResetStore } from '../generalTypes'
+import SELECTED_COUNTRY from './selectedCountryTypes'
 
 export type ISelectedCountryActions = IResetStore | ISelectedCountry
 
@@ -9,6 +10,7 @@ export interface ISelectedCountry {
 	selectedCountry: string | undefined
 }
 
-export const setSelectedCountry = (countryCode?: string): ThunkResult<void> => (dispatch) => {
-	dispatch({ type: SELECTED_COUNTRY.SELECTED_COUNTRY_UPDATE, selectedCountry: countryCode })
+export const setSelectedCountry =
+	(countryCode?: string): ThunkResult<void> => (dispatch) => {
+		dispatch({ type: SELECTED_COUNTRY.SELECTED_COUNTRY_UPDATE, selectedCountry: countryCode })
 }

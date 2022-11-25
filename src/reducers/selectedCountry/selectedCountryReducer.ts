@@ -1,8 +1,9 @@
+/* eslint-disable import/no-cycle */
 import { RESET_STORE } from '../generalTypes'
 import { ISelectedCountryActions } from './selectedCountryActions'
 
 // types
-import { SELECTED_COUNTRY } from './selectedCountryTypes'
+import SELECTED_COUNTRY from './selectedCountryTypes'
 
 export const initState = {
 	selectedCountry: undefined as string | undefined

@@ -1,17 +1,15 @@
 import React, { FC } from 'react'
 import { Field, InjectedFormProps, reduxForm } from 'redux-form'
 import { useTranslation } from 'react-i18next'
-import { Col, Divider, Form, Row } from 'antd'
+import { Form } from 'antd'
 import { useSelector } from 'react-redux'
 import { debounce } from 'lodash'
 
 // atoms
-import InputField from '../atoms/InputField'
 import SelectField from '../atoms/SelectField'
 
 // reducers
 import { RootState } from '../reducers'
-import PhoneWithPrefixField from '../components/PhoneWithPrefixField'
 
 // utils
 import { ENUMERATIONS_KEYS, FORM } from '../utils/enums'

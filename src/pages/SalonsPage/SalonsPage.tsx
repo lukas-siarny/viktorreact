@@ -204,6 +204,7 @@ const SalonsPage = () => {
 	// change countryCode filter based on selectedCountry in home page 'Dashboard'
 	useEffect(() => {
 		setQuery({ ...query, countryCode: selectedCountry })
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [selectedCountry])
 
 	const onChangeTable = (_pagination: TablePaginationConfig, _filters: Record<string, (string | number | boolean)[] | null>, sorter: SorterResult<any> | SorterResult<any>[]) => {

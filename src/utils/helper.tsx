@@ -794,8 +794,7 @@ export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactN
 	return (
 		<div className='flex items-center'>
 			{extra?.image ? (
-					<>{console.log('anoo')}
-				<img className={'option-render-image'} style={style} src={extra.image} alt={label} /></>
+				<img className={'option-render-image'} style={style} src={extra.image} alt={label} />
 			) : (
 				<div className={'option-render-image fallback-icon'} style={style}>
 					{fallbackIcon}

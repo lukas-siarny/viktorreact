@@ -116,7 +116,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 
 	const restartFetchInterval = async () => {
 		if (fetchInterval.current) {
-			console.log('🚀 ~ file: Calendar.tsx ~ line 116 ~ restartFetchInterval ~ clear interval')
 			window.clearInterval(fetchInterval.current)
 		}
 
@@ -129,22 +128,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			})
 			// eslint-disable-next-line @typescript-eslint/no-use-before-define
 			await fetchEvents(false)
-			// await fetchPromise
-			// if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-			// 	console.log('🚀 ~ file: Calendar.tsx ~ line 129 ~ interval ~ AWAIT pre REZERVACIE v Intervale')
-			// 	const queries = { salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }
-			// 	console.log('🚀 ~ file: Calendar.tsx ~ line 131 ~ interval ~ queries', queries)
-
-			// 	console.log('🚀 ~ file: Calendar.tsx ~ line 133 ~ interval ~ query.view', query.view)
-
-			// 	await Promise.all([
-			// 		dispatch(getCalendarReservations(queries, query.view as CALENDAR_VIEW, true)),
-			// 		dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
-			// 	])
-			// } else {
-			// 	console.log('🚀 ~ file: Calendar.tsx ~ line 137 ~ interval ~ AWAIT pre ZMENY v Intervale')
-			// 	await dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
-			// }
 			setLoadInBackground(false)
 			message.destroy()
 		}, REFRESH_CALENDAR_INTERVAL)
@@ -156,7 +139,6 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	const fetchEvents: any = useCallback(
 		async (restartInterval = true) => {
 			if (query.eventsViewType === CALENDAR_EVENTS_VIEW_TYPE.RESERVATION) {
-				console.log('🚀 ~ file: Calendar.tsx ~ line 147 ~ constfetchEvents:any=useCallback ~ fetch dat pre Rezervacie')
 				await Promise.all([
 					dispatch(
 						getCalendarReservations({ salonID, date: query.date, employeeIDs: query.employeeIDs, categoryIDs: query.categoryIDs }, query.view as CALENDAR_VIEW, true)
@@ -164,22 +146,20 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
 				])
 			} else {
-				console.log('🚀 ~ file: Calendar.tsx ~ line 153 ~ constfetchEvents:any=useCallback ~ fetch date pre ZMENY')
 				await dispatch(getCalendarShiftsTimeoff({ salonID, date: query.date, employeeIDs: query.employeeIDs }, query.view as CALENDAR_VIEW, true))
 			}
 
 			if (restartInterval) {
 				restartFetchInterval()
 			}
-			// eslint-disable-next-line react-hooks/exhaustive-deps
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[dispatch, salonID, query.date, query.employeeIDs, query.categoryIDs, query.view, query.eventsViewType]
 	)
 
 	useEffect(() => {
 		// clear on unmount
 		return () => {
-			console.log('On onmount: ', fetchInterval)
 			if (fetchInterval.current) {
 				window.clearInterval(fetchInterval.current)
 				message.destroy()
@@ -332,7 +312,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 			fetchEvents()
 		})()
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch, query.employeeIDs, query.categoryIDs])
+	}, [dispatch, query.employeeIDs, query.categoryIDs, query.date, query.eventsViewType])
 
 	useEffect(() => {
 		dispatch(
@@ -610,7 +590,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					calendarView={query.view as CALENDAR_VIEW}
 					siderFilterCollapsed={siderFilterCollapsed}
 					setCalendarView={(newView) => setQuery({ ...query, view: newView })}
-					setSelectedDate={(newDate) => setQuery({ ...query, date: newDate })}
+					setSelectedDate={(newDate) => {
+						setQuery({ ...query, date: newDate })
+						calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi().gotoDate(calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi().formatIso(newDate))
+					}}
 					setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>

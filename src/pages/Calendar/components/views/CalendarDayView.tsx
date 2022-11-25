@@ -107,4 +107,8 @@ const CalendarDayView = React.forwardRef<InstanceType<typeof FullCalendar>, ICal
 	)
 })
 
-export default CalendarDayView
+// export default CalendarDayView
+
+export default React.memo(CalendarDayView, (prevProps, nextProps) => {
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
+})

@@ -56,4 +56,8 @@ const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, o
 	}
 }
 
-export default CalendarEvent
+// export default CalendarEvent
+
+export default React.memo(CalendarEvent, (prevProps, nextProps) => {
+	return JSON.stringify(prevProps) === JSON.stringify(nextProps)
+})

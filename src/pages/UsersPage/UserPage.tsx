@@ -21,7 +21,7 @@ import { getSystemRoles } from '../../reducers/roles/rolesActions'
 import EditUserRoleForm from './components/EditUserRoleForm'
 
 // types
-import { IBreadcrumbs, IComputedMatch, IEditUserRoleForm } from '../../types/interfaces'
+import { IBreadcrumbs, IComputedMatch, IEditUserRoleForm, IUserAccountForm } from '../../types/interfaces'
 
 // utils
 import { deleteReq, patchReq } from '../../utils/request'
@@ -87,14 +87,15 @@ const UserPage: FC<Props> = (props) => {
 		fetchUserData()
 	}, [dispatch, isMyAccountPath, userID])
 
-	const handleUserAccountFormSubmit = async (data: any) => {
+	const handleUserAccountFormSubmit = async (data: IUserAccountForm) => {
 		try {
 			const userData: any = {
 				firstName: data?.firstName,
 				lastName: data?.lastName,
 				phonePrefixCountryCode: data?.phonePrefixCountryCode,
 				phone: data?.phone,
-				imageID: data?.avatar?.[0]?.id || null
+				imageID: data?.avatar?.[0]?.id || null,
+				assignedCountryCode: data?.assignedCountryCode
 			}
 
 			await patchReq('/api/b2b/admin/users/{userID}', { userID }, userData)

@@ -18,6 +18,7 @@ import { normalizeQueryParams } from '../../utils/helper'
 
 // actions
 import { setSelectionOptions } from '../selectedSalon/selectedSalonActions'
+import { setSelectedCountry } from '../selectedCountry/selectedCountryActions'
 
 export type IUserActions = IResetStore | IGetAuthUser | IGetUser | IGetUsers | IGetPendingInvites | IGetNotinoUsers
 
@@ -87,6 +88,9 @@ export const processAuthorizationResult =
 				type: AUTH_USER.AUTH_USER_LOAD_DONE,
 				payload
 			})
+
+			// set selected country code based on assignedCountryCode or phonePrefixCode
+			dispatch(setSelectedCountry(result.user?.assignedCountryCode || result.user?.phonePrefixCountryCode))
 
 			history.push(redirectPath)
 		} catch (e) {

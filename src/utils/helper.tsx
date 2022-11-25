@@ -790,10 +790,12 @@ export const sortData = (a?: any, b?: any) => {
 export const optionRenderWithImage = (itemData: any, fallbackIcon?: React.ReactNode, imageWidth = 24, imageHeight = 24) => {
 	const { label, extra } = itemData
 	const style = { width: imageWidth, height: imageHeight }
+
 	return (
 		<div className='flex items-center'>
 			{extra?.image ? (
-				<img className={'option-render-image'} style={style} src={extra.image} alt={label} />
+					<>{console.log('anoo')}
+				<img className={'option-render-image'} style={style} src={extra.image} alt={label} /></>
 			) : (
 				<div className={'option-render-image fallback-icon'} style={style}>
 					{fallbackIcon}

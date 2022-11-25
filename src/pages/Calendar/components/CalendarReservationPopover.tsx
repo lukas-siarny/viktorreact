@@ -146,7 +146,6 @@ const PopoverContent: FC<ContentProps> = (props) => {
 					<>
 						<section className={'flex py-4'}>
 							<Col flex={'32px'}>
-								{/* TODO: BE musi posielat image */}
 								<UserAvatar size={24} className={'shrink-0'} src={customer.profileImage.resizedImages.thumbnail} />
 							</Col>
 							<Col flex={'auto'} className={'flex flex-col gap-2'}>
@@ -315,7 +314,7 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 			})
 		}
 
-		const button = (buttonBrops?: ButtonProps) => (
+		const button = (buttonBrops?: ButtonProps & { key: string }) => (
 			<Button type={'primary'} size={'middle'} className={'noti-btn w-1/2'} htmlType={'button'} onClick={(e) => e.preventDefault()} {...buttonBrops}>
 				{t('loc:Zaplatená')}
 			</Button>
@@ -328,25 +327,14 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 				placement='bottomRight'
 				trigger={['click']}
 			>
-				{button({ icon: <ChevronDown className={'filter-invert max'} /> })}
+				{button({ key: 'checkout-button-dropdown', icon: <ChevronDown className={'filter-invert max'} /> })}
 			</Dropdown>
 		) : (
-			<Tooltip
-				title={
-					<span>
-						{t('loc:Je potrebné mať nastavané možnosti platby v')}{' '}
-						<Link to={`${t('paths:salons')}/${salonID}`} className={'text-notino-white underline hover:text-notino-pink'}>
-							{t('loc:detaile salónu')}
-						</Link>
-					</span>
-				}
-			>
-				{button()}
-			</Tooltip>
+			button({ key: 'checkout-button-realized', onClick: () => handleUpdateState(RESERVATION_STATE.REALIZED) })
 		)
 	}
 
-	const getFooterCancelButton = (label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
+	const getFooterCancelButton = (key: string, label: string, state: RESERVATION_STATE, popconfirmText?: string) => {
 		const button = (
 			<Button
 				key={'cancel-button'}
@@ -436,7 +424,12 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					headerState: t('loc:Potvrdená'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(t('loc:Nezrealizovaná'), RESERVATION_STATE.NOT_REALIZED, t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')),
+						getFooterCancelButton(
+							'cancel-button-not-realized',
+							t('loc:Nezrealizovaná'),
+							RESERVATION_STATE.NOT_REALIZED,
+							t('loc:Naozaj chcete označiť rezerváciu za nezrealizovanú?')
+						),
 						getFooterCheckoutButton()
 					]
 				}
@@ -447,7 +440,12 @@ const CalendarReservationPopover: FC<Props> = (props) => {
 					headerState: t('loc:Čakajúca'),
 					moreMenuItems: [headerMoreItems.cancel_by_salon],
 					footerButtons: [
-						getFooterCancelButton(t('loc:Zamietnuť'), RESERVATION_STATE.DECLINED, t('loc:Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.')),
+						getFooterCancelButton(
+							'cancel-button-declined',
+							t('loc:Zamietnuť'),
+							RESERVATION_STATE.DECLINED,
+							t('loc:Naozaj chcete zamietnuť rezerváciu? Klient dostane notifikáciu.')
+						),
 						<Button
 							key={'confirm-button'}
 							type={'dashed'}

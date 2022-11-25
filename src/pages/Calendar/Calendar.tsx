@@ -123,6 +123,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 		calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.gotoDate(newCalendarDate)
 	}
 
+	const updateCalendarSize = useRef(() => calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.updateSize())
+
 	const setEventManagement = useCallback(
 		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
 			// NOTE: ak je collapsed (newView je undefined) tak nastavit sidebarView na COLLAPSED a vynulovat eventId
@@ -141,6 +143,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					eventsViewType: newEventType, // Filter v kalendari je bud rezervaci alebo volno
 					sidebarView: newView // siderbar view je rezervacia / volno / prestavka / pracovna zmena
 				})
+			}
+			if (query.view === CALENDAR_VIEW.DAY) {
+				setTimeout(updateCalendarSize.current, 0)
 			}
 		},
 		[query, setQuery]
@@ -287,7 +292,7 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	useEffect(() => {
 		// update calendar size when main layout sider change
 		// wait for the end of sider menu animation and then update size of the calendar
-		const timeout = setTimeout(() => calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.updateSize(), 300)
+		const timeout = setTimeout(updateCalendarSize.current, 300)
 		return () => clearTimeout(timeout)
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [isMainLayoutSiderCollapsed])
@@ -563,7 +568,9 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => {
 						setSiderFilterCollapsed(!siderFilterCollapsed)
-						setTimeout(() => calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.updateSize(), 0)
+						if (query.view === CALENDAR_VIEW.DAY) {
+							setTimeout(updateCalendarSize.current, 0)
+						}
 					}}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>

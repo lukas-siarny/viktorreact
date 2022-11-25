@@ -561,7 +561,10 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 						setQuery({ ...query, view: newView })
 					}}
 					setSelectedDate={setNewSelectedDate}
-					setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
+					setSiderFilterCollapsed={() => {
+						setSiderFilterCollapsed(!siderFilterCollapsed)
+						setTimeout(() => calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.updateSize(), 0)
+					}}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>
 					<SiderFilter

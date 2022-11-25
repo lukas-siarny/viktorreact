@@ -2,6 +2,7 @@ import React, { useCallback, useImperativeHandle, useRef } from 'react'
 import { Content } from 'antd/lib/layout/layout'
 import { Spin } from 'antd'
 import dayjs from 'dayjs'
+import { debounce } from 'lodash'
 
 // fullcalendar
 import FullCalendar, { EventDropArg } from '@fullcalendar/react'
@@ -68,6 +69,9 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 		/* [CALENDAR_VIEW.MONTH]: monthView?.current */
 	}))
 
+	const handleSubmitReservationDebounced = useCallback(debounce(handleSubmitReservation, 1000), [handleSubmitReservation])
+	const handleSubmitEventDebounced = useCallback(debounce(handleSubmitEvent, 1000), [handleSubmitEvent])
+
 	const onEventChange = useCallback(
 		(calendarView: CALENDAR_VIEW, arg: EventDropArg | EventResizeDoneArg) => {
 			const { event } = arg
@@ -120,12 +124,12 @@ const CalendarContent = React.forwardRef<CalendarRefs, Props>((props, ref) => {
 				const customerId = extendedProps?.originalEvent?.customer?.id
 				const serviceId = extendedProps?.originalEvent?.service?.id
 
-				handleSubmitReservation({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
+				handleSubmitReservationDebounced({ ...values, customer: { key: customerId }, service: { key: serviceId } } as any, onError)
 				return
 			}
-			handleSubmitEvent({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
+			handleSubmitEventDebounced({ ...values, calendarBulkEventID } as ICalendarEventForm, onError)
 		},
-		[handleSubmitReservation, handleSubmitEvent]
+		[handleSubmitEventDebounced, handleSubmitReservationDebounced]
 	)
 
 	const getView = () => {

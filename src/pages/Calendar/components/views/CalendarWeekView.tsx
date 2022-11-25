@@ -71,10 +71,12 @@ const resourceAreaColumns = [
 	}
 ]
 
+const LabelContent = React.memo(({ labelDate }: { labelDate: string }) => <div className={'nc-week-slot-label'}>{labelDate}</div>)
+
 const slotLabelContent = (data: SlotLabelContentArg) => {
 	const { date } = data || {}
 
-	return <div className={'nc-week-slot-label'}>{dayjs(date).format('HH:mm')}</div>
+	return <LabelContent labelDate={dayjs(date).format('HH:mm')} />
 }
 
 const NowIndicator = () => {

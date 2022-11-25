@@ -9,6 +9,7 @@ import { getFormValues, initialize, submit } from 'redux-form'
 import { Modal } from 'antd'
 import { useTranslation } from 'react-i18next'
 import cx from 'classnames'
+
 // utils
 import {
 	CALENDAR_COMMON_SETTINGS,
@@ -55,6 +56,7 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close-icon-2.svg
 
 // types
 import { IBulkConfirmForm, ICalendarEventForm, ICalendarFilter, ICalendarReservationForm, IEmployeesPayload, SalonSubPageProps } from '../../types/interfaces'
+import { getWeekDays, getWeekViewSelectedDate } from './calendarHelpers'
 
 const getCategoryIDs = (data: IServicesPayload['categoriesOptions']) => {
 	return data?.map((service) => service.value) as string[]
@@ -107,6 +109,19 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 	)
 
 	const [t] = useTranslation()
+
+	const setNewSelectedDate = (newDate: string) => {
+		setQuery({ ...query, date: newDate })
+		let newCalendarDate = newDate
+		if (query.view === CALENDAR_VIEW.WEEK) {
+			// v tyzdenom view je potrebne skontrolovat, ci sa vramci novo nastaveneho tyzdnoveho rangu nachadza dnesok
+			// ak ano, je potrebne ho nastavit ako aktualny den do kalendara, aby sa ukazal now indicator
+			// kedze realne sa na tyzdenne view pouziva denne view
+			const weekDays = getWeekDays(newDate)
+			newCalendarDate = getWeekViewSelectedDate(newDate, weekDays)
+		}
+		calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.gotoDate(newCalendarDate)
+	}
 
 	const setEventManagement = useCallback(
 		(newView: CALENDAR_EVENT_TYPE | undefined, eventId?: string) => {
@@ -544,9 +559,8 @@ const Calendar: FC<SalonSubPageProps> = (props) => {
 					siderFilterCollapsed={siderFilterCollapsed}
 					setCalendarView={(newView) => {
 						setQuery({ ...query, view: newView })
-						calendarRefs?.current?.[query.view as CALENDAR_VIEW]?.getApi()?.gotoDate(newView.toString())
 					}}
-					setSelectedDate={(newDate) => setQuery({ ...query, date: newDate })}
+					setSelectedDate={setNewSelectedDate}
 					setSiderFilterCollapsed={() => setSiderFilterCollapsed(!siderFilterCollapsed)}
 				/>
 				<Layout hasSider className={'noti-calendar-main-section'}>

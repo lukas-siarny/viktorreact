@@ -25,6 +25,28 @@ interface IReservationCardProps extends IEventCardProps {
 	salonID: string
 }
 
+const getIcon = ({ isPast, isRealized, isApproved, service }: { isPast?: boolean; isRealized?: boolean; isApproved?: boolean; service?: any }) => {
+	if (isPast) {
+		if (isRealized) {
+			return <CheckIcon className={'icon check'} />
+		}
+
+		if (isApproved) {
+			return <QuestionMarkIcon className={'icon question-mark'} />
+		}
+	}
+
+	if (isRealized) {
+		return <CheckIcon className={'icon check'} />
+	}
+
+	return service?.icon?.resizedImages ? (
+		<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain'} />
+	) : (
+		<ServiceIcon />
+	)
+}
+
 const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeText, salonID, diff, onEditEvent }) => {
 	const { event, backgroundColor } = data || {}
 	const { extendedProps } = event || {}
@@ -41,8 +63,7 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 
 	const bgColor = !isPast ? backgroundColor : undefined
 
-	// NOTE: prehodit logiku, teraz len pre dev uceli vymenena
-	const onlineIndicatior = reservationData?.createSourceType !== RESERVATION_SOURCE_TYPE.ONLINE ? <div className={'state'} style={{ backgroundColor: bgColor }} /> : null
+	const onlineIndicatior = reservationData?.createSourceType === RESERVATION_SOURCE_TYPE.ONLINE ? <div className={'state'} style={{ backgroundColor: bgColor }} /> : null
 
 	const customerName = getAssignedUserLabel({
 		id: customer?.id,
@@ -51,27 +72,7 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 		email: customer?.email
 	})
 
-	const getIcon = () => {
-		if (isPast) {
-			if (isRealized) {
-				return <CheckIcon className={'icon check'} />
-			}
-
-			if (isApproved) {
-				return <QuestionMarkIcon className={'icon question-mark'} />
-			}
-		}
-
-		if (isRealized) {
-			return <CheckIcon className={'icon check'} />
-		}
-
-		return service?.icon?.resizedImages ? (
-			<img src={service.icon.resizedImages.thumbnail} alt={service?.name} width={10} height={10} className={'object-contain'} />
-		) : (
-			<ServiceIcon />
-		)
-	}
+	const icon = getIcon({ isPast, isApproved, isRealized, service })
 
 	const handleUpdateReservationState = useCallback(
 		async (calendarEventID: string, state: RESERVATION_STATE, reason?: string, paymentMethod?: RESERVATION_PAYMENT_METHOD) => {
@@ -154,7 +155,7 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 										{service?.name && <span className={'desc'}>{service.name}</span>}
 										<div className={'icons'}>
 											<AvatarIcon className={'icon employee'} />
-											{getIcon()}
+											{icon}
 											{onlineIndicatior}
 										</div>
 									</>
@@ -174,7 +175,7 @@ const ReservationCard: FC<IReservationCardProps> = ({ calendarView, data, timeTe
 										</div>
 										<div className={'icons'}>
 											<AvatarIcon className={'icon employee'} />
-											{getIcon()}
+											{icon}
 										</div>
 									</>
 								)

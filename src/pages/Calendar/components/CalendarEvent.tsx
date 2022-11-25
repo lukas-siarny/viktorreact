@@ -50,9 +50,11 @@ const CalendarEvent: FC<ICalendarEventProps> = ({ calendarView, data, salonID, o
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_TIME_OFF:
 		case CALENDAR_EVENT_TYPE.EMPLOYEE_BREAK:
 			return <AbsenceCard calendarView={calendarView} diff={diff} timeText={timeText} data={data} onEditEvent={onEditEvent} />
-		case CALENDAR_EVENT_TYPE.RESERVATION:
-		default:
+		case CALENDAR_EVENT_TYPE.RESERVATION: {
 			return <ReservationCard calendarView={calendarView} diff={diff} timeText={timeText} data={data} salonID={salonID} onEditEvent={onEditEvent} />
+		}
+		default:
+			return null
 	}
 }
 

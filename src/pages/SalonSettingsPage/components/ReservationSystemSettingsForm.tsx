@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Field, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
+import { Field, FieldArray, getFormValues, InjectedFormProps, reduxForm } from 'redux-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Button, Col, Collapse, Divider, Form, Row, Tooltip } from 'antd'
 
@@ -29,6 +29,8 @@ import { ReactComponent as InfoIcon } from '../../../assets/icons/info-icon-32.s
 
 // redux
 import { RootState } from '../../../reducers'
+import { ReactComponent as EditIcon } from '../../../assets/icons/edit-icon.svg'
+import InputsArrayField from '../../../atoms/InputsArrayField'
 
 type ComponentProps = {
 	salonID: string
@@ -42,13 +44,26 @@ const getFrequencyOption = (minutes: number): ISelectOptionItem => {
 
 const FREQUENCIES: ISelectOptionItem[] = [getFrequencyOption(15), getFrequencyOption(20), getFrequencyOption(30), getFrequencyOption(60)]
 
+// TODO: otifikacia fieldy
+const NotificationFields = (param: any) => {
+	const [t] = useTranslation()
+	const disabled = false
+	const items = param.fields.map((field: any, index: any) => (
+		<div key={field} className={'flex items-center bg-gray-50 rounded mr-2 px-1'}>
+			<Field component={SwitchField} label={t('loc:SMS')} name={`${field}.sms`} size={'middle'} disabled={disabled} />
+		</div>
+	))
+
+	return <div className={'flex items-center'}>{items}</div>
+}
 const ReservationSystemSettingsForm = (props: Props) => {
-	const { salonID, handleSubmit, pristine } = props
+	const { salonID, handleSubmit, pristine, submitting } = props
 	const [t] = useTranslation()
 	const dispatch = useDispatch()
-
+	const disabled = submitting
+	const hasPermission = true // TODO: permissions?
 	// const { enabledReservations } = useSelector((state: RootState) => getFormValues(FORM.RESEVATION_SYSTEM_SETTINGS)(state)) as any
-	const disabled = false // enabledReservations !== true
+	// const disabled = false // enabledReservations !== true
 
 	const getNotificationTitle = useCallback((title: string, tooltip: string) => {
 		return (
@@ -194,6 +209,8 @@ const ReservationSystemSettingsForm = (props: Props) => {
 								t('loc:Rezervácie čakajúce na schválenie'),
 								t('loc:Zákazník dostane notifikáciu, že jeho rezervácia čaká na schválenie salónom.')
 							)}
+							{/* // TODO: doriesit array field */}
+							<FieldArray component={NotificationFields} name={'emails'} />
 						</div>
 					</Row>
 				</div>
@@ -210,6 +227,15 @@ const ReservationSystemSettingsForm = (props: Props) => {
 					<p className='x-regular text-notino-grayDark mb-0'>{t('loc:Vyberte služby, ktoré bude možné rezervovať si online a ktoré budú automaticky potvrdené.')}</p>
 				</div>
 			</Row>
+			{hasPermission && (
+				<div className={'content-footer'}>
+					<Row className='justify-end'>
+						<Button type={'primary'} className={'noti-btn'} htmlType={'submit'} icon={<EditIcon />} disabled={submitting || pristine} loading={submitting}>
+							{t('loc:Uložiť')}
+						</Button>
+					</Row>
+				</div>
+			)}
 		</Form>
 	)
 }

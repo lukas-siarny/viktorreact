@@ -475,6 +475,7 @@ export interface IReservationSystemSettingsForm {
 	maxDaysB2cCreateReservation?: number | null
 	maxHoursB2cCreateReservationBeforeStart?: number | null
 	maxHoursB2cCancelReservationBeforeStart?: number | null
+	// TODO: ostatne typy
 }
 
 export type NameLocalizationsItem = {
